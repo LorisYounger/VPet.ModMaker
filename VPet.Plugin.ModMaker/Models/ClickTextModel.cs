@@ -8,26 +8,19 @@ using VPet_Simulator.Windows.Interface;
 
 namespace VPet.Plugin.ModMaker.Models;
 
-public class ClickTextModel : II18nData<I18nClickTextModel>
+public class ClickTextModel : I18nModel<I18nClickTextModel>
 {
+    public string Text { get; set; }
     public ObservableValue<string> Id { get; } = new();
     public ObservableValue<ClickText.ModeType> Mode { get; } = new();
 
     public ObservableValue<string> Working { get; } = new();
-    public ObservableValue<int> LikeMin { get; } = new();
-    public ObservableValue<int> LikeMax { get; } = new();
+    public ObservableValue<double> LikeMin { get; } = new();
+    public ObservableValue<double> LikeMax { get; } = new();
     public ObservableValue<VPet_Simulator.Core.Main.WorkingState> WorkingState { get; } = new();
     public ObservableValue<ClickText.DayTime> DayTime { get; } = new();
 
-    public ObservableValue<I18nClickTextModel> CurrentI18nData { get; } = new();
-    public Dictionary<string, I18nClickTextModel> I18nDatas { get; } = new();
-
-    public ClickTextModel()
-    {
-        foreach (var lang in I18nHelper.Current.CultureNames)
-            I18nDatas.Add(lang, new());
-        CurrentI18nData.Value = I18nDatas[I18nHelper.Current.CultureName.Value];
-    }
+    public ClickTextModel() { }
 
     public ClickTextModel(ClickTextModel clickText)
         : this()
@@ -38,15 +31,25 @@ public class ClickTextModel : II18nData<I18nClickTextModel>
         LikeMax.Value = clickText.LikeMax.Value;
         LikeMin.Value = clickText.LikeMin.Value;
         DayTime.Value = clickText.DayTime.Value;
-        foreach (var item in clickText.I18nDatas)
-            I18nDatas[item.Key] = item.Value;
-        CurrentI18nData.Value = I18nDatas[I18nHelper.Current.CultureName.Value];
+    }
+
+    public ClickTextModel(ClickText clickText)
+        : this()
+    {
+        Text = clickText.Text;
+        Mode.Value = clickText.Mode;
+        Working.Value = clickText.Working;
+        WorkingState.Value = clickText.State;
+        DayTime.Value = clickText.DaiTime;
+        LikeMax.Value = clickText.LikeMax;
+        LikeMin.Value = clickText.LikeMin;
     }
 
     public ClickText ToClickText()
     {
         return new()
         {
+            Text = Text,
             Mode = Mode.Value,
             Working = Working.Value,
             State = WorkingState.Value,

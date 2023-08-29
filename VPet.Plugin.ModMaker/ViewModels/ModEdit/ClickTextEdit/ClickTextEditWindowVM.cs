@@ -12,7 +12,6 @@ namespace VPet.Plugin.ModMaker.ViewModels.ModEdit.ClickTextEdit;
 
 public class ClickTextEditWindowVM
 {
-    public ObservableCollection<ClickTextModel> ClickTexts { get; set; }
     #region Value
     public ObservableValue<ClickTextModel> ClickText { get; } = new(new());
     public ObservableCollection<ClickText.ModeType> ModeTypes { get; } = new();

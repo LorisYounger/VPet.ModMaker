@@ -9,12 +9,22 @@ using System.Windows.Media.Imaging;
 
 namespace VPet.Plugin.ModMaker.Models;
 
-public class PetModel
+public class PetModel : I18nModel<I18nPetInfoModel>
 {
+    public ObservableValue<string> Id { get; } = new();
     public ObservableValue<BitmapImage> Image { get; } = new();
     public ObservableValue<ObservableInt32Rect> TouchHeadRect { get; } = new(new());
     public ObservableValue<MultiStateRect> TouchRaisedRect { get; } = new(new());
     public ObservableValue<MultiStatePoint> RaisePoint { get; } = new(new());
+
+    public ObservableValue<I18nPetInfoModel> CurrentI18nData { get; } = new();
+    public Dictionary<string, I18nPetInfoModel> I18nDatas { get; } = new();
+}
+
+public class I18nPetInfoModel
+{
+    public ObservableValue<string> Name { get; set; } = new();
+    public ObservableValue<string> Description { get; set; } = new();
 }
 
 public class MultiStateRect

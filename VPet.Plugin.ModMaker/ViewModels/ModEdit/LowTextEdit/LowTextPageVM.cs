@@ -19,7 +19,8 @@ public class LowTextPageVM
     #region Value
     public ObservableValue<string> FilterLowText { get; } = new();
     public ObservableValue<ObservableCollection<LowTextModel>> ShowLowTexts { get; } = new();
-    public ObservableCollection<LowTextModel> LowTexts { get; } = new();
+    public ObservableCollection<LowTextModel> LowTexts { get; } =
+        new(ModInfoModel.Current.LowTexts);
     #endregion
     #region Command
     public ObservableCommand AddLowTextCommand { get; } = new();
@@ -34,11 +35,6 @@ public class LowTextPageVM
         AddLowTextCommand.ExecuteAction = AddLowText;
         EditLowTextCommand.ExecuteAction = EditLowText;
         RemoveLowTextCommand.ExecuteAction = RemoveLowText;
-
-        I18nHelper.Current.CultureName.ValueChanged += CurrentLang_ValueChanged;
-        I18nHelper.Current.AddLang += Instance_AddLang;
-        I18nHelper.Current.RemoveLang += Instance_RemoveLang;
-        I18nHelper.Current.ReplaceLang += Instance_ReplaceLang;
     }
 
     private void FilterLowText_ValueChanged(string value)
@@ -57,7 +53,7 @@ public class LowTextPageVM
 
     private void AddLowText()
     {
-        var window = CreateLowTextEditWindow();
+        var window = new LowTextEditWindow();
         var vm = window.ViewModel;
         window.ShowDialog();
         if (window.IsCancel)
@@ -67,7 +63,7 @@ public class LowTextPageVM
 
     public void EditLowText(LowTextModel lowText)
     {
-        var window = CreateLowTextEditWindow();
+        var window = new LowTextEditWindow();
         var vm = window.ViewModel;
         var newLowTest = vm.LowText.Value = new(lowText);
         window.ShowDialog();
@@ -97,46 +93,5 @@ public class LowTextPageVM
             ShowLowTexts.Value.Remove(lowText);
             LowTexts.Remove(lowText);
         }
-    }
-
-    private void CurrentLang_ValueChanged(string value)
-    {
-        foreach (var lowText in LowTexts)
-        {
-            lowText.CurrentI18nData.Value = lowText.I18nDatas[value];
-        }
-    }
-
-    private void Instance_AddLang(string lang)
-    {
-        foreach (var lowText in LowTexts)
-        {
-            lowText.I18nDatas.Add(lang, new());
-        }
-    }
-
-    private void Instance_RemoveLang(string lang)
-    {
-        foreach (var lowText in LowTexts)
-        {
-            lowText.I18nDatas.Remove(lang);
-        }
-    }
-
-    private void Instance_ReplaceLang(string oldLang, string newLang)
-    {
-        foreach (var lowText in LowTexts)
-        {
-            var item = lowText.I18nDatas[oldLang];
-            lowText.I18nDatas.Remove(oldLang);
-            lowText.I18nDatas.Add(newLang, item);
-        }
-    }
-
-    private LowTextEditWindow CreateLowTextEditWindow()
-    {
-        var window = new LowTextEditWindow();
-        window.ViewModel.LowTexts = LowTexts;
-        return window;
     }
 }

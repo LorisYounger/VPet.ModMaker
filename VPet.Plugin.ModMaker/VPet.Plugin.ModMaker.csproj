@@ -61,8 +61,8 @@
     <Reference Include="Panuon.WPF, Version=1.0.2.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Panuon.WPF.1.0.2\lib\net462\Panuon.WPF.dll</HintPath>
     </Reference>
-    <Reference Include="Panuon.WPF.UI, Version=1.1.15.6, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Panuon.WPF.UI.1.1.15.6\lib\net462\Panuon.WPF.UI.dll</HintPath>
+    <Reference Include="Panuon.WPF.UI, Version=1.1.15.7, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Panuon.WPF.UI.1.1.15.7\lib\net462\Panuon.WPF.UI.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
@@ -76,10 +76,10 @@
       <RequiredTargetFramework>4.0</RequiredTargetFramework>
     </Reference>
     <Reference Include="VPet-Simulator.Core, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\VPet-Simulator.Core.1.0.0\lib\net462\VPet-Simulator.Core.dll</HintPath>
+      <HintPath>..\packages\VPet-Simulator.Core.1.0.2\lib\net462\VPet-Simulator.Core.dll</HintPath>
     </Reference>
     <Reference Include="VPet-Simulator.Windows.Interface, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\VPet-Simulator.Windows.Interface.1.0.0\lib\net462\VPet-Simulator.Windows.Interface.dll</HintPath>
+      <HintPath>..\packages\VPet-Simulator.Windows.Interface.1.0.2\lib\net462\VPet-Simulator.Windows.Interface.dll</HintPath>
     </Reference>
     <Reference Include="WindowsBase" />
     <Reference Include="PresentationCore" />
@@ -94,8 +94,11 @@
     <Compile Include="Models\ClickTextModel.cs" />
     <Compile Include="Models\FoodModel.cs" />
     <Compile Include="Models\I18nHelper.cs" />
-    <Compile Include="Models\II18nData.cs" />
+    <Compile Include="Models\I18nModel.cs" />
     <Compile Include="Models\LowTextModel.cs" />
+    <Compile Include="Models\ModLoader.cs" />
+    <Compile Include="Models\ModMakeHistory.cs" />
+    <Compile Include="Models\ModMakerInfo.cs" />
     <Compile Include="Models\PetModel.cs" />
     <Compile Include="ViewModels\ModEdit\ClickTextEdit\ClickTextEditWindowVM.cs" />
     <Compile Include="ViewModels\ModEdit\ClickTextEdit\ClickTextPageVM.cs" />

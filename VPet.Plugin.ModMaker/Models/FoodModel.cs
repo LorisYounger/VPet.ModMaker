@@ -10,8 +10,10 @@ using VPet_Simulator.Windows.Interface;
 
 namespace VPet.Plugin.ModMaker.Models;
 
-public class FoodModel : II18nData<I18nFoodModel>
+public class FoodModel : I18nModel<I18nFoodModel>
 {
+    public string Name { get; set; }
+    public string Description { get; set; }
     public ObservableValue<string> Id { get; } = new();
     public ObservableValue<Food.FoodType> Type { get; } = new();
     public ObservableValue<double> Strength { get; } = new();
@@ -23,15 +25,8 @@ public class FoodModel : II18nData<I18nFoodModel>
     public ObservableValue<double> Price { get; } = new();
     public ObservableValue<int> Exp { get; } = new();
     public ObservableValue<BitmapImage> Image { get; } = new();
-    public ObservableValue<I18nFoodModel> CurrentI18nData { get; } = new();
-    public Dictionary<string, I18nFoodModel> I18nDatas { get; } = new();
 
-    public FoodModel()
-    {
-        foreach (var lang in I18nHelper.Current.CultureNames)
-            I18nDatas.Add(lang, new());
-        CurrentI18nData.Value = I18nDatas[I18nHelper.Current.CultureName.Value];
-    }
+    public FoodModel() { }
 
     public FoodModel(FoodModel food)
         : this()
@@ -47,9 +42,24 @@ public class FoodModel : II18nData<I18nFoodModel>
         Price.Value = food.Price.Value;
         Exp.Value = food.Exp.Value;
         Image.Value = Utils.LoadImageToStream(food.Image.Value);
-        foreach (var item in food.I18nDatas)
-            I18nDatas[item.Key] = item.Value;
-        CurrentI18nData.Value = I18nDatas[I18nHelper.Current.CultureName.Value];
+    }
+
+    public FoodModel(Food food)
+        : this()
+    {
+        Name = food.Name;
+        Description = food.Description;
+        Type.Value = food.Type;
+        Strength.Value = food.Strength;
+        StrengthDrink.Value = food.StrengthDrink;
+        StrengthFood.Value = food.StrengthFood;
+        Feeling.Value = food.Feeling;
+        Health.Value = food.Health;
+        Likability.Value = food.Likability;
+        Price.Value = food.Price;
+        Exp.Value = food.Exp;
+        if (File.Exists(food.Image))
+            Image.Value = Utils.LoadImageToStream(food.Image);
     }
 
     public Food ToFood()

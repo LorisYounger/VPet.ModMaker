@@ -17,7 +17,7 @@ public class FoodPageVM
 {
     #region Value
     public ObservableValue<ObservableCollection<FoodModel>> ShowFoods { get; } = new();
-    public ObservableCollection<FoodModel> Foods { get; } = new();
+    public ObservableCollection<FoodModel> Foods { get; } = new(ModInfoModel.Current.Foods);
     public ObservableValue<string> FilterFoodText { get; } = new();
     #endregion
     #region Command
@@ -33,45 +33,6 @@ public class FoodPageVM
         AddFoodCommand.ExecuteAction = AddFood;
         EditFoodCommand.ExecuteAction = EditFood;
         RemoveFoodCommand.ExecuteAction = RemoveFood;
-
-        I18nHelper.Current.CultureName.ValueChanged += CurrentLang_ValueChanged;
-        I18nHelper.Current.AddLang += Instance_AddLang;
-        I18nHelper.Current.RemoveLang += Instance_RemoveLang;
-        I18nHelper.Current.ReplaceLang += Instance_ReplaceLang;
-    }
-
-    private void CurrentLang_ValueChanged(string value)
-    {
-        foreach (var food in Foods)
-        {
-            food.CurrentI18nData.Value = food.I18nDatas[value];
-        }
-    }
-
-    private void Instance_AddLang(string lang)
-    {
-        foreach (var food in Foods)
-        {
-            food.I18nDatas.Add(lang, new());
-        }
-    }
-
-    private void Instance_RemoveLang(string lang)
-    {
-        foreach (var food in Foods)
-        {
-            food.I18nDatas.Remove(lang);
-        }
-    }
-
-    private void Instance_ReplaceLang(string oldLang, string newLang)
-    {
-        foreach (var food in Foods)
-        {
-            var item = food.I18nDatas[oldLang];
-            food.I18nDatas.Remove(oldLang);
-            food.I18nDatas.Add(newLang, item);
-        }
     }
 
     private void FilterFoodText_ValueChanged(string value)
@@ -92,7 +53,7 @@ public class FoodPageVM
 
     private void AddFood()
     {
-        var window = CreateAddFoodWindow();
+        var window = new FoodEditWindow();
         var vm = window.ViewModel;
         window.ShowDialog();
         if (window.IsCancel)
@@ -102,7 +63,7 @@ public class FoodPageVM
 
     public void EditFood(FoodModel food)
     {
-        var window = CreateAddFoodWindow();
+        var window = new FoodEditWindow();
         var vm = window.ViewModel;
         var newFood = vm.Food.Value = new(food);
         window.ShowDialog();
@@ -133,12 +94,5 @@ public class FoodPageVM
             ShowFoods.Value.Remove(food);
             Foods.Remove(food);
         }
-    }
-
-    private FoodEditWindow CreateAddFoodWindow()
-    {
-        var window = new FoodEditWindow();
-        window.ViewModel.Foods = Foods;
-        return window;
     }
 }

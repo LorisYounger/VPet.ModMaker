@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using VPet.Plugin.ModMaker.Models;
 using VPet.Plugin.ModMaker.ViewModels.ModEdit.LowTextEdit;
 
 namespace VPet.Plugin.ModMaker.Views.ModEdit.LowTextEdit;
@@ -42,7 +43,7 @@ public partial class LowTextEditWindow : Window
             MessageBox.Show("Id不可为空", "", MessageBoxButton.OK, MessageBoxImage.Warning);
             return;
         }
-        if (ViewModel.LowTexts.Any(i => i.Id.Value == ViewModel.LowText.Value.Id.Value))
+        if (ModInfoModel.Current.LowTexts.Any(i => i.Id.Value == ViewModel.LowText.Value.Id.Value))
         {
             MessageBox.Show("此Id已存在", "", MessageBoxButton.OK, MessageBoxImage.Warning);
             return;

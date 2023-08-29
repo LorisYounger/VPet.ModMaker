@@ -4,36 +4,36 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Serialization;
 using VPet_Simulator.Windows.Interface;
 
 namespace VPet.Plugin.ModMaker.Models;
 
-public class LowTextModel : II18nData<I18nLowTextModel>
+public class LowTextModel : I18nModel<I18nLowTextModel>
 {
+    public string Text { get; set; }
     public ObservableValue<string> Id { get; } = new();
     public ObservableValue<LowText.ModeType> Mode { get; } = new();
     public ObservableValue<LowText.StrengthType> Strength { get; } = new();
     public ObservableValue<LowText.LikeType> Like { get; } = new();
 
-    public ObservableValue<I18nLowTextModel> CurrentI18nData { get; } = new();
-    public Dictionary<string, I18nLowTextModel> I18nDatas { get; } = new();
-
-    public LowTextModel()
-    {
-        foreach (var lang in I18nHelper.Current.CultureNames)
-            I18nDatas.Add(lang, new());
-        CurrentI18nData.Value = I18nDatas[I18nHelper.Current.CultureName.Value];
-    }
+    public LowTextModel() { }
 
     public LowTextModel(LowTextModel lowText)
         : this()
     {
-        Mode = lowText.Mode;
-        Strength = lowText.Strength;
-        Like = lowText.Like;
-        foreach (var item in lowText.I18nDatas)
-            I18nDatas[item.Key] = item.Value;
-        CurrentI18nData.Value = I18nDatas[I18nHelper.Current.CultureName.Value];
+        Mode.Value = lowText.Mode.Value;
+        Strength.Value = lowText.Strength.Value;
+        Like.Value = lowText.Like.Value;
+    }
+
+    public LowTextModel(LowText lowText)
+        : this()
+    {
+        Text = lowText.Text;
+        Mode.Value = lowText.Mode;
+        Strength.Value = lowText.Strength;
+        Like.Value = lowText.Like;
     }
 
     public void Close() { }
@@ -43,6 +43,7 @@ public class LowTextModel : II18nData<I18nLowTextModel>
         // 没有 Text
         return new()
         {
+            Text = Text,
             Mode = Mode.Value,
             Strength = Strength.Value,
             Like = Like.Value,

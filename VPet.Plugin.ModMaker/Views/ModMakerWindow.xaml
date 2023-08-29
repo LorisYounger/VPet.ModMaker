@@ -14,7 +14,7 @@
   FontSize="16"
   mc:Ignorable="d">
   <d:Window.DataContext>
-    <vm:WindowVM_ModMaker />
+    <vm:ModMakerWindowVM />
   </d:Window.DataContext>
   <Grid>
     <Grid.ColumnDefinitions>
@@ -32,7 +32,36 @@
       <ListBox
         Grid.Row="2"
         d:ItemsSource="{d:SampleData ItemCount=5}"
-        Style="{StaticResource SideMenuListBoxStyle}" />
+        ItemsSource="{Binding Mods}"
+        Style="{StaticResource SideMenuListBoxStyle}">
+        <ListBox.ItemContainerStyle>
+          <Style BasedOn="{StaticResource {x:Type ListBoxItem}}" TargetType="ListBoxItem">
+            <Setter Property="Height" Value="64" />
+            <EventSetter Event="MouseDoubleClick" Handler="ListBoxItem_MouseDoubleClick" />
+            <Setter Property="Template">
+              <Setter.Value>
+                <ControlTemplate>
+                  <Grid ToolTip="{Binding Summary.Value}">
+                    <Grid.ColumnDefinitions>
+                      <ColumnDefinition Width="Auto" />
+                      <ColumnDefinition />
+                    </Grid.ColumnDefinitions>
+                    <Image Width="64" Source="{Binding ModImage.Value}" />
+                    <Grid Grid.Column="1">
+                      <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition />
+                      </Grid.RowDefinitions>
+                      <TextBlock d:Text="Mod名称" Text="{Binding Id.Value}" />
+                      <TextBlock Grid.Row="1" d:Text="Mod描述" />
+                    </Grid>
+                  </Grid>
+                </ControlTemplate>
+              </Setter.Value>
+            </Setter>
+          </Style>
+        </ListBox.ItemContainerStyle>
+      </ListBox>
     </Grid>
     <Grid Grid.Column="1">
       <Grid.RowDefinitions>

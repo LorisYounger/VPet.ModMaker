@@ -15,7 +15,8 @@ public class ClickTextPageVM
 {
     #region Value
     public ObservableValue<ObservableCollection<ClickTextModel>> ShowClickTexts { get; } = new();
-    public ObservableCollection<ClickTextModel> ClickTexts { get; } = new();
+    public ObservableCollection<ClickTextModel> ClickTexts { get; } =
+        new(ModInfoModel.Current.ClickTexts);
     public ObservableValue<string> FilterClickText { get; } = new();
     #endregion
     #region Command
@@ -31,11 +32,6 @@ public class ClickTextPageVM
         AddClickTextCommand.ExecuteAction = AddClickText;
         EditClickTextCommand.ExecuteAction = EditClickText;
         RemoveClickTextCommand.ExecuteAction = RemoveClickText;
-
-        I18nHelper.Current.CultureName.ValueChanged += CurrentLang_ValueChanged;
-        I18nHelper.Current.AddLang += Instance_AddLang;
-        I18nHelper.Current.RemoveLang += Instance_RemoveLang;
-        I18nHelper.Current.ReplaceLang += Instance_ReplaceLang;
     }
 
     private void FilterClickText_ValueChanged(string value)
@@ -54,7 +50,7 @@ public class ClickTextPageVM
 
     private void AddClickText()
     {
-        var window = CreateClickTextEditWindow();
+        var window = new ClickTextEditWindow();
         var vm = window.ViewModel;
         window.ShowDialog();
         if (window.IsCancel)
@@ -64,7 +60,7 @@ public class ClickTextPageVM
 
     public void EditClickText(ClickTextModel clickText)
     {
-        var window = CreateClickTextEditWindow();
+        var window = new ClickTextEditWindow();
         var vm = window.ViewModel;
         var newLowTest = vm.ClickText.Value = new(clickText);
         window.ShowDialog();
@@ -94,46 +90,5 @@ public class ClickTextPageVM
             ShowClickTexts.Value.Remove(clickText);
             ClickTexts.Remove(clickText);
         }
-    }
-
-    private void CurrentLang_ValueChanged(string value)
-    {
-        foreach (var lowText in ClickTexts)
-        {
-            lowText.CurrentI18nData.Value = lowText.I18nDatas[value];
-        }
-    }
-
-    private void Instance_AddLang(string lang)
-    {
-        foreach (var lowText in ClickTexts)
-        {
-            lowText.I18nDatas.Add(lang, new());
-        }
-    }
-
-    private void Instance_RemoveLang(string lang)
-    {
-        foreach (var lowText in ClickTexts)
-        {
-            lowText.I18nDatas.Remove(lang);
-        }
-    }
-
-    private void Instance_ReplaceLang(string oldLang, string newLang)
-    {
-        foreach (var lowText in ClickTexts)
-        {
-            var item = lowText.I18nDatas[oldLang];
-            lowText.I18nDatas.Remove(oldLang);
-            lowText.I18nDatas.Add(newLang, item);
-        }
-    }
-
-    private ClickTextEditWindow CreateClickTextEditWindow()
-    {
-        var window = new ClickTextEditWindow();
-        window.ViewModel.ClickTexts = ClickTexts;
-        return window;
     }
 }

@@ -29,7 +29,7 @@ namespace VPet.Plugin.ModMaker.Views.ModEdit;
 /// </summary>
 public partial class ModEditWindow : Window
 {
-    public ModEditWindowVM ViewModel => (ModEditWindowVM)this.DataContext;
+    public ModEditWindowVM ViewModel => (ModEditWindowVM)DataContext;
     public FoodPage FoodPage { get; } = new();
     public LowTextPage LowTextPage { get; } = new();
     public ClickTextPage ClickTextPage { get; } = new();
@@ -37,11 +37,16 @@ public partial class ModEditWindow : Window
     public ModEditWindow()
     {
         InitializeComponent();
-        DataContext = new ModEditWindowVM(this);
         Closed += Window_ModEdit_Closed;
+        DataContext = new ModEditWindowVM(this);
+
         FoodPage.ViewModel.Foods.CollectionChanged += Foods_CollectionChanged;
         LowTextPage.ViewModel.LowTexts.CollectionChanged += LowTexts_CollectionChanged;
         ClickTextPage.ViewModel.ClickTexts.CollectionChanged += ClickTexts_CollectionChanged;
+        TabItem_ClickText.Header =
+            $"{TabItem_ClickText.Tag} ({ClickTextPage.ViewModel.ClickTexts.Count})";
+        TabItem_LowText.Header = $"{TabItem_LowText.Tag} ({LowTextPage.ViewModel.LowTexts.Count})";
+        TabItem_Food.Header = $"{TabItem_Food.Tag} ({FoodPage.ViewModel.Foods.Count})";
     }
 
     private void ClickTexts_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)

@@ -11,6 +11,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using VPet.Plugin.ModMaker.Models;
 using VPet.Plugin.ModMaker.ViewModels.ModEdit.ClickTextEdit;
 
 namespace VPet.Plugin.ModMaker.Views.ModEdit.ClickTextEdit;
@@ -41,7 +42,11 @@ public partial class ClickTextEditWindow : Window
             MessageBox.Show("Id不可为空", "", MessageBoxButton.OK, MessageBoxImage.Warning);
             return;
         }
-        if (ViewModel.ClickTexts.Any(i => i.Id.Value == ViewModel.ClickText.Value.Id.Value))
+        if (
+            ModInfoModel.Current.ClickTexts.Any(
+                i => i.Id.Value == ViewModel.ClickText.Value.Id.Value
+            )
+        )
         {
             MessageBox.Show("此Id已存在", "", MessageBoxButton.OK, MessageBoxImage.Warning);
             return;

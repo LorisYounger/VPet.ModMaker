@@ -42,7 +42,7 @@
       AutoGenerateColumns="False"
       CanUserAddRows="False"
       GridLinesVisibility="Horizontal"
-      ItemsSource="{Binding Foods}"
+      ItemsSource="{Binding ShowFoods.Value}"
       MouseDoubleClick="DataGrid_Food_MouseDoubleClick"
       RowDetailsVisibilityMode="Visible"
       RowHeight="64"
@@ -76,7 +76,7 @@
                 Height="64"
                 HorizontalAlignment="Center"
                 VerticalAlignment="Center"
-                Source="{Binding Image.Value, IsAsync=True}"
+                Source="{Binding Image.Value}"
                 Stretch="Uniform">
                 <Image.ToolTip>
                   <Image
@@ -84,7 +84,7 @@
                     Height="256"
                     HorizontalAlignment="Center"
                     VerticalAlignment="Center"
-                    Source="{Binding Image.Value, IsAsync=True}"
+                    Source="{Binding Image.Value}"
                     Stretch="Uniform" />
                 </Image.ToolTip>
               </Image>
@@ -104,7 +104,7 @@
           Binding="{Binding Type.Value}"
           CanUserSort="True"
           IsReadOnly="True"
-          SortMemberPath="Type">
+          SortMemberPath="Type.Value">
           <DataGridTextColumn.Header>
             <Label Content="食物类型" />
           </DataGridTextColumn.Header>

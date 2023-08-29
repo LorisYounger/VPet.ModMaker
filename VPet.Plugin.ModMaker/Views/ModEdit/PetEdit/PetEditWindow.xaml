@@ -221,29 +221,112 @@
           </Label.Style>
         </Label>
       </Grid>
-      <!--<Grid Grid.Row="1" >
-        <TextBox/>
-      </Grid>-->
+      <Grid Grid.Row="1">
+        <Grid.ColumnDefinitions>
+          <ColumnDefinition Width="Auto" />
+          <ColumnDefinition />
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+          <RowDefinition Height="Auto" />
+          <RowDefinition Height="Auto" />
+          <RowDefinition />
+        </Grid.RowDefinitions>
+        <Label Content="宠物Id:" />
+        <TextBox
+          Grid.Column="1"
+          pu:TextBoxHelper.Watermark="宠物Id"
+          Text="{Binding Pet.Value.Id.Value}" />
+        <Label Grid.Row="1" Content="宠物名称:" />
+        <TextBox
+          Grid.Row="1"
+          Grid.Column="1"
+          pu:TextBoxHelper.Watermark="宠物名称"
+          Text="{Binding Pet.Value.CurrentI18nData.Value.Name.Value}" />
+        <Label Grid.Row="2" Content="宠物描述:" />
+        <TextBox
+          Grid.Row="2"
+          Grid.Column="1"
+          pu:TextBoxHelper.Watermark="宠物描述"
+          Text="{Binding Pet.Value.CurrentI18nData.Value.Description.Value}" />
+      </Grid>
     </Grid>
     <Grid Grid.Column="1">
       <ScrollViewer VerticalScrollBarVisibility="Auto">
         <StackPanel>
-          <ToggleButton
-            x:Name="ToggleButton_TouchHead"
-            Padding="5"
-            HorizontalContentAlignment="Stretch"
-            DataContext="{Binding Pet.Value.TouchHeadRect.Value}">
+          <Grid>
+            <Grid.ColumnDefinitions>
+              <ColumnDefinition Width="Auto" />
+              <ColumnDefinition />
+            </Grid.ColumnDefinitions>
+            <ToggleButton
+              x:Name="ToggleButton_TouchHead"
+              Padding="5"
+              HorizontalContentAlignment="Stretch"
+              Content="TouchHead:" />
+            <Grid Grid.Column="1" Margin="5">
+              <Grid.RowDefinitions>
+                <RowDefinition />
+                <RowDefinition />
+              </Grid.RowDefinitions>
+              <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition />
+              </Grid.ColumnDefinitions>
+              <Label Background="{x:Null}" Content="x:" />
+              <pu:NumberInput
+                Grid.Column="1"
+                d:Value="100"
+                Value="{Binding Pet.Value.TouchHeadRect.Value.X.Value, Mode=TwoWay}" />
+              <Label
+                Grid.Column="2"
+                Background="{x:Null}"
+                Content="y:" />
+              <pu:NumberInput
+                Grid.Column="3"
+                d:Value="100"
+                Value="{Binding Pet.Value.TouchHeadRect.Value.Y.Value, Mode=TwoWay}" />
+              <Label
+                Grid.Row="1"
+                Background="{x:Null}"
+                Content="w:" />
+              <pu:NumberInput
+                Grid.Row="1"
+                Grid.Column="1"
+                d:Value="100"
+                Value="{Binding Pet.Value.TouchHeadRect.Value.Width.Value, Mode=TwoWay}" />
+              <Label
+                Grid.Row="1"
+                Grid.Column="2"
+                Background="{x:Null}"
+                Content="h:" />
+              <pu:NumberInput
+                Grid.Row="1"
+                Grid.Column="3"
+                d:Value="100"
+                Value="{Binding Pet.Value.TouchHeadRect.Value.Height.Value, Mode=TwoWay}" />
+            </Grid>
+          </Grid>
+          <Expander Header="TouchRaisedRect">
             <Grid>
               <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto" />
                 <ColumnDefinition />
               </Grid.ColumnDefinitions>
-              <Label
-                HorizontalContentAlignment="Center"
-                VerticalContentAlignment="Center"
-                Background="{x:Null}"
-                Content="TouchHead:" />
-              <Grid Grid.Column="1">
+              <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+              </Grid.RowDefinitions>
+              <ToggleButton
+                x:Name="ToggleButton_TouchRaisedRect_HappyState"
+                Padding="5"
+                HorizontalContentAlignment="Stretch"
+                d:IsChecked="True"
+                Content="HappyState:" />
+              <Grid Grid.Column="1" Margin="5">
                 <Grid.RowDefinitions>
                   <RowDefinition />
                   <RowDefinition />
@@ -258,7 +341,7 @@
                 <pu:NumberInput
                   Grid.Column="1"
                   d:Value="100"
-                  Value="{Binding X.Value, Mode=TwoWay}" />
+                  Value="{Binding Pet.Value.TouchRaisedRect.Value.Happy.Value.X.Value, Mode=TwoWay}" />
                 <Label
                   Grid.Column="2"
                   Background="{x:Null}"
@@ -266,7 +349,7 @@
                 <pu:NumberInput
                   Grid.Column="3"
                   d:Value="100"
-                  Value="{Binding Y.Value, Mode=TwoWay}" />
+                  Value="{Binding Pet.Value.TouchRaisedRect.Value.Happy.Value.X.Value, Mode=TwoWay}" />
                 <Label
                   Grid.Row="1"
                   Background="{x:Null}"
@@ -275,7 +358,7 @@
                   Grid.Row="1"
                   Grid.Column="1"
                   d:Value="100"
-                  Value="{Binding Width.Value, Mode=TwoWay}" />
+                  Value="{Binding Pet.Value.TouchRaisedRect.Value.Happy.Value.X.Value, Mode=TwoWay}" />
                 <Label
                   Grid.Row="1"
                   Grid.Column="2"
@@ -285,433 +368,317 @@
                   Grid.Row="1"
                   Grid.Column="3"
                   d:Value="100"
-                  Value="{Binding Height.Value, Mode=TwoWay}" />
+                  Value="{Binding Pet.Value.TouchRaisedRect.Value.Happy.Value.X.Value, Mode=TwoWay}" />
               </Grid>
-            </Grid>
-          </ToggleButton>
-          <Expander Header="TouchRaisedRect">
-            <StackPanel>
-              <ToggleButton
-                x:Name="ToggleButton_TouchRaisedRect_HappyState"
-                Padding="5"
-                HorizontalContentAlignment="Stretch"
-                d:IsChecked="True"
-                DataContext="{Binding Pet.Value.TouchRaisedRect.Value.Happy.Value}">
-                <Grid>
-                  <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="Auto" />
-                    <ColumnDefinition />
-                  </Grid.ColumnDefinitions>
-                  <Label
-                    HorizontalContentAlignment="Center"
-                    VerticalContentAlignment="Center"
-                    Background="{x:Null}"
-                    Content="HappyState:" />
-                  <Grid Grid.Column="1">
-                    <Grid.RowDefinitions>
-                      <RowDefinition />
-                      <RowDefinition />
-                    </Grid.RowDefinitions>
-                    <Grid.ColumnDefinitions>
-                      <ColumnDefinition Width="Auto" />
-                      <ColumnDefinition />
-                      <ColumnDefinition Width="Auto" />
-                      <ColumnDefinition />
-                    </Grid.ColumnDefinitions>
-                    <Label Background="{x:Null}" Content="x:" />
-                    <pu:NumberInput
-                      Grid.Column="1"
-                      d:Value="100"
-                      Value="{Binding X.Value, Mode=TwoWay}" />
-                    <Label
-                      Grid.Column="2"
-                      Background="{x:Null}"
-                      Content="y:" />
-                    <pu:NumberInput
-                      Grid.Column="3"
-                      d:Value="100"
-                      Value="{Binding Y.Value, Mode=TwoWay}" />
-                    <Label
-                      Grid.Row="1"
-                      Background="{x:Null}"
-                      Content="w:" />
-                    <pu:NumberInput
-                      Grid.Row="1"
-                      Grid.Column="1"
-                      d:Value="100"
-                      Value="{Binding Width.Value, Mode=TwoWay}" />
-                    <Label
-                      Grid.Row="1"
-                      Grid.Column="2"
-                      Background="{x:Null}"
-                      Content="h:" />
-                    <pu:NumberInput
-                      Grid.Row="1"
-                      Grid.Column="3"
-                      d:Value="100"
-                      Value="{Binding Height.Value, Mode=TwoWay}" />
-                  </Grid>
-                </Grid>
-              </ToggleButton>
               <ToggleButton
                 x:Name="ToggleButton_TouchRaisedRect_NomalState"
+                Grid.Row="1"
                 Padding="5"
                 HorizontalContentAlignment="Stretch"
                 d:IsChecked="True"
-                DataContext="{Binding Pet.Value.TouchRaisedRect.Value.Nomal.Value}">
-                <Grid>
-                  <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="Auto" />
-                    <ColumnDefinition />
-                  </Grid.ColumnDefinitions>
-                  <Label
-                    HorizontalContentAlignment="Center"
-                    VerticalContentAlignment="Center"
-                    Background="{x:Null}"
-                    Content="NomalState:" />
-                  <Grid Grid.Column="1">
-                    <Grid.RowDefinitions>
-                      <RowDefinition />
-                      <RowDefinition />
-                    </Grid.RowDefinitions>
-                    <Grid.ColumnDefinitions>
-                      <ColumnDefinition Width="Auto" />
-                      <ColumnDefinition />
-                      <ColumnDefinition Width="Auto" />
-                      <ColumnDefinition />
-                    </Grid.ColumnDefinitions>
-                    <Label Background="{x:Null}" Content="x:" />
-                    <pu:NumberInput
-                      Grid.Column="1"
-                      d:Value="100"
-                      Value="{Binding X.Value, Mode=TwoWay}" />
-                    <Label
-                      Grid.Column="2"
-                      Background="{x:Null}"
-                      Content="y:" />
-                    <pu:NumberInput
-                      Grid.Column="3"
-                      d:Value="100"
-                      Value="{Binding Y.Value, Mode=TwoWay}" />
-                    <Label
-                      Grid.Row="1"
-                      Background="{x:Null}"
-                      Content="w:" />
-                    <pu:NumberInput
-                      Grid.Row="1"
-                      Grid.Column="1"
-                      d:Value="100"
-                      Value="{Binding Width.Value, Mode=TwoWay}" />
-                    <Label
-                      Grid.Row="1"
-                      Grid.Column="2"
-                      Background="{x:Null}"
-                      Content="h:" />
-                    <pu:NumberInput
-                      Grid.Row="1"
-                      Grid.Column="3"
-                      d:Value="100"
-                      Value="{Binding Height.Value, Mode=TwoWay}" />
-                  </Grid>
-                </Grid>
-              </ToggleButton>
+                Content="NomalState:" />
+              <Grid
+                Grid.Row="1"
+                Grid.Column="1"
+                Margin="5">
+                <Grid.RowDefinitions>
+                  <RowDefinition />
+                  <RowDefinition />
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                  <ColumnDefinition Width="Auto" />
+                  <ColumnDefinition />
+                  <ColumnDefinition Width="Auto" />
+                  <ColumnDefinition />
+                </Grid.ColumnDefinitions>
+                <Label Background="{x:Null}" Content="x:" />
+                <pu:NumberInput
+                  Grid.Column="1"
+                  d:Value="100"
+                  Value="{Binding Pet.Value.TouchRaisedRect.Value.Nomal.Value.X.Value, Mode=TwoWay}" />
+                <Label
+                  Grid.Column="2"
+                  Background="{x:Null}"
+                  Content="y:" />
+                <pu:NumberInput
+                  Grid.Column="3"
+                  d:Value="100"
+                  Value="{Binding Pet.Value.TouchRaisedRect.Value.Nomal.Value.Y.Value, Mode=TwoWay}" />
+                <Label
+                  Grid.Row="1"
+                  Background="{x:Null}"
+                  Content="w:" />
+                <pu:NumberInput
+                  Grid.Row="1"
+                  Grid.Column="1"
+                  d:Value="100"
+                  Value="{Binding Pet.Value.TouchRaisedRect.Value.Nomal.Value.Width.Value, Mode=TwoWay}" />
+                <Label
+                  Grid.Row="1"
+                  Grid.Column="2"
+                  Background="{x:Null}"
+                  Content="h:" />
+                <pu:NumberInput
+                  Grid.Row="1"
+                  Grid.Column="3"
+                  d:Value="100"
+                  Value="{Binding Pet.Value.TouchRaisedRect.Value.Nomal.Value.Height.Value, Mode=TwoWay}" />
+              </Grid>
               <ToggleButton
                 x:Name="ToggleButton_TouchRaisedRect_PoorConditionState"
+                Grid.Row="2"
                 Padding="5"
                 HorizontalContentAlignment="Stretch"
                 d:IsChecked="True"
-                DataContext="{Binding Pet.Value.TouchRaisedRect.Value.PoorCondition.Value}">
-                <Grid>
-                  <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="Auto" />
-                    <ColumnDefinition />
-                  </Grid.ColumnDefinitions>
-                  <Label
-                    HorizontalContentAlignment="Center"
-                    VerticalContentAlignment="Center"
-                    Background="{x:Null}"
-                    Content="PoorConditionState:" />
-                  <Grid Grid.Column="1">
-                    <Grid.RowDefinitions>
-                      <RowDefinition />
-                      <RowDefinition />
-                    </Grid.RowDefinitions>
-                    <Grid.ColumnDefinitions>
-                      <ColumnDefinition Width="Auto" />
-                      <ColumnDefinition />
-                      <ColumnDefinition Width="Auto" />
-                      <ColumnDefinition />
-                    </Grid.ColumnDefinitions>
-                    <Label Background="{x:Null}" Content="x:" />
-                    <pu:NumberInput
-                      Grid.Column="1"
-                      d:Value="100"
-                      Value="{Binding X.Value, Mode=TwoWay}" />
-                    <Label
-                      Grid.Column="2"
-                      Background="{x:Null}"
-                      Content="y:" />
-                    <pu:NumberInput
-                      Grid.Column="3"
-                      d:Value="100"
-                      Value="{Binding Y.Value, Mode=TwoWay}" />
-                    <Label
-                      Grid.Row="1"
-                      Background="{x:Null}"
-                      Content="w:" />
-                    <pu:NumberInput
-                      Grid.Row="1"
-                      Grid.Column="1"
-                      d:Value="100"
-                      Value="{Binding Width.Value, Mode=TwoWay}" />
-                    <Label
-                      Grid.Row="1"
-                      Grid.Column="2"
-                      Background="{x:Null}"
-                      Content="h:" />
-                    <pu:NumberInput
-                      Grid.Row="1"
-                      Grid.Column="3"
-                      d:Value="100"
-                      Value="{Binding Height.Value, Mode=TwoWay}" />
-                  </Grid>
-                </Grid>
-              </ToggleButton>
+                Content="PoorConditionState:" />
+              <Grid
+                Grid.Row="2"
+                Grid.Column="1"
+                Margin="5">
+                <Grid.RowDefinitions>
+                  <RowDefinition />
+                  <RowDefinition />
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                  <ColumnDefinition Width="Auto" />
+                  <ColumnDefinition />
+                  <ColumnDefinition Width="Auto" />
+                  <ColumnDefinition />
+                </Grid.ColumnDefinitions>
+                <Label Background="{x:Null}" Content="x:" />
+                <pu:NumberInput
+                  Grid.Column="1"
+                  d:Value="100"
+                  Value="{Binding Pet.Value.TouchRaisedRect.Value.PoorCondition.Value.X.Value, Mode=TwoWay}" />
+                <Label
+                  Grid.Column="2"
+                  Background="{x:Null}"
+                  Content="y:" />
+                <pu:NumberInput
+                  Grid.Column="3"
+                  d:Value="100"
+                  Value="{Binding Pet.Value.TouchRaisedRect.Value.PoorCondition.Value.Y.Value, Mode=TwoWay}" />
+                <Label
+                  Grid.Row="1"
+                  Background="{x:Null}"
+                  Content="w:" />
+                <pu:NumberInput
+                  Grid.Row="1"
+                  Grid.Column="1"
+                  d:Value="100"
+                  Value="{Binding Pet.Value.TouchRaisedRect.Value.PoorCondition.Value.Width.Value, Mode=TwoWay}" />
+                <Label
+                  Grid.Row="1"
+                  Grid.Column="2"
+                  Background="{x:Null}"
+                  Content="h:" />
+                <pu:NumberInput
+                  Grid.Row="1"
+                  Grid.Column="3"
+                  d:Value="100"
+                  Value="{Binding Pet.Value.TouchRaisedRect.Value.PoorCondition.Value.Height.Value, Mode=TwoWay}" />
+              </Grid>
               <ToggleButton
                 x:Name="ToggleButton_TouchRaisedRect_IllState"
+                Grid.Row="3"
                 Padding="5"
                 HorizontalContentAlignment="Stretch"
                 d:IsChecked="True"
-                DataContext="{Binding Pet.Value.TouchRaisedRect.Value.Ill.Value}">
-                <Grid>
-                  <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="Auto" />
-                    <ColumnDefinition />
-                  </Grid.ColumnDefinitions>
-                  <Label
-                    HorizontalContentAlignment="Center"
-                    VerticalContentAlignment="Center"
-                    Background="{x:Null}"
-                    Content="IllState:" />
-                  <Grid Grid.Column="1">
-                    <Grid.RowDefinitions>
-                      <RowDefinition />
-                      <RowDefinition />
-                    </Grid.RowDefinitions>
-                    <Grid.ColumnDefinitions>
-                      <ColumnDefinition Width="Auto" />
-                      <ColumnDefinition />
-                      <ColumnDefinition Width="Auto" />
-                      <ColumnDefinition />
-                    </Grid.ColumnDefinitions>
-                    <Label Background="{x:Null}" Content="x:" />
-                    <pu:NumberInput
-                      Grid.Column="1"
-                      d:Value="100"
-                      Value="{Binding X.Value, Mode=TwoWay}" />
-                    <Label
-                      Grid.Column="2"
-                      Background="{x:Null}"
-                      Content="y:" />
-                    <pu:NumberInput
-                      Grid.Column="3"
-                      d:Value="100"
-                      Value="{Binding Y.Value, Mode=TwoWay}" />
-                    <Label
-                      Grid.Row="1"
-                      Background="{x:Null}"
-                      Content="w:" />
-                    <pu:NumberInput
-                      Grid.Row="1"
-                      Grid.Column="1"
-                      d:Value="100"
-                      Value="{Binding Width.Value, Mode=TwoWay}" />
-                    <Label
-                      Grid.Row="1"
-                      Grid.Column="2"
-                      Background="{x:Null}"
-                      Content="h:" />
-                    <pu:NumberInput
-                      Grid.Row="1"
-                      Grid.Column="3"
-                      d:Value="100"
-                      Value="{Binding Height.Value, Mode=TwoWay}" />
-                  </Grid>
-                </Grid>
-              </ToggleButton>
-            </StackPanel>
+                Content="IllState:" />
+              <Grid
+                Grid.Row="3"
+                Grid.Column="1"
+                Margin="5">
+                <Grid.RowDefinitions>
+                  <RowDefinition />
+                  <RowDefinition />
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                  <ColumnDefinition Width="Auto" />
+                  <ColumnDefinition />
+                  <ColumnDefinition Width="Auto" />
+                  <ColumnDefinition />
+                </Grid.ColumnDefinitions>
+                <Label Background="{x:Null}" Content="x:" />
+                <pu:NumberInput
+                  Grid.Column="1"
+                  d:Value="100"
+                  Value="{Binding Pet.Value.TouchRaisedRect.Value.Ill.Value.X.Value, Mode=TwoWay}" />
+                <Label
+                  Grid.Column="2"
+                  Background="{x:Null}"
+                  Content="y:" />
+                <pu:NumberInput
+                  Grid.Column="3"
+                  d:Value="100"
+                  Value="{Binding Pet.Value.TouchRaisedRect.Value.Ill.Value.Y.Value, Mode=TwoWay}" />
+                <Label
+                  Grid.Row="1"
+                  Background="{x:Null}"
+                  Content="w:" />
+                <pu:NumberInput
+                  Grid.Row="1"
+                  Grid.Column="1"
+                  d:Value="100"
+                  Value="{Binding Pet.Value.TouchRaisedRect.Value.Ill.Value.Width.Value, Mode=TwoWay}" />
+                <Label
+                  Grid.Row="1"
+                  Grid.Column="2"
+                  Background="{x:Null}"
+                  Content="h:" />
+                <pu:NumberInput
+                  Grid.Row="1"
+                  Grid.Column="3"
+                  d:Value="100"
+                  Value="{Binding Pet.Value.TouchRaisedRect.Value.Ill.Value.Height.Value, Mode=TwoWay}" />
+              </Grid>
+            </Grid>
           </Expander>
           <Expander Header="RaisePoint">
-            <StackPanel>
+            <Grid>
+              <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition />
+              </Grid.ColumnDefinitions>
+              <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+              </Grid.RowDefinitions>
               <ToggleButton
                 x:Name="ToggleButton_RaisePoint_Happy"
                 Padding="5"
                 HorizontalContentAlignment="Stretch"
-                DataContext="{Binding Pet.Value.RaisePoint.Value.Happy.Value}">
-                <Grid>
-                  <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="Auto" />
-                    <ColumnDefinition />
-                  </Grid.ColumnDefinitions>
-                  <Label
-                    HorizontalContentAlignment="Center"
-                    VerticalContentAlignment="Center"
-                    Background="{x:Null}"
-                    Content="HappyState:" />
-                  <Grid Grid.Column="1">
-                    <Grid.RowDefinitions>
-                      <RowDefinition />
-                      <RowDefinition />
-                    </Grid.RowDefinitions>
-                    <Grid.ColumnDefinitions>
-                      <ColumnDefinition Width="Auto" />
-                      <ColumnDefinition />
-                      <ColumnDefinition Width="Auto" />
-                      <ColumnDefinition />
-                    </Grid.ColumnDefinitions>
-                    <Label Background="{x:Null}" Content="x:" />
-                    <pu:NumberInput
-                      Grid.Column="1"
-                      d:Value="100"
-                      Value="{Binding X.Value, Mode=TwoWay}" />
-                    <Label
-                      Grid.Column="2"
-                      Background="{x:Null}"
-                      Content="y:" />
-                    <pu:NumberInput
-                      Grid.Column="3"
-                      d:Value="100"
-                      Value="{Binding Y.Value, Mode=TwoWay}" />
-                  </Grid>
-                </Grid>
-              </ToggleButton>
+                Content="HappyState:" />
+              <Grid Grid.Column="1" Margin="5">
+                <Grid.RowDefinitions>
+                  <RowDefinition />
+                  <RowDefinition />
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                  <ColumnDefinition Width="Auto" />
+                  <ColumnDefinition />
+                  <ColumnDefinition Width="Auto" />
+                  <ColumnDefinition />
+                </Grid.ColumnDefinitions>
+                <Label Background="{x:Null}" Content="x:" />
+                <pu:NumberInput
+                  Grid.Column="1"
+                  d:Value="100"
+                  Value="{Binding Pet.Value.RaisePoint.Value.Happy.Value.X.Value, Mode=TwoWay}" />
+                <Label
+                  Grid.Column="2"
+                  Background="{x:Null}"
+                  Content="y:" />
+                <pu:NumberInput
+                  Grid.Column="3"
+                  d:Value="100"
+                  Value="{Binding Pet.Value.RaisePoint.Value.Happy.Value.Y.Value, Mode=TwoWay}" />
+              </Grid>
               <ToggleButton
                 x:Name="ToggleButton_RaisePoint_Nomal"
+                Grid.Row="1"
                 Padding="5"
                 HorizontalContentAlignment="Stretch"
-                DataContext="{Binding Pet.Value.RaisePoint.Value.Nomal.Value}">
-                <Grid>
-                  <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="Auto" />
-                    <ColumnDefinition />
-                  </Grid.ColumnDefinitions>
-                  <Label
-                    HorizontalContentAlignment="Center"
-                    VerticalContentAlignment="Center"
-                    Background="{x:Null}"
-                    Content="NomalState:" />
-                  <Grid Grid.Column="1">
-                    <Grid.RowDefinitions>
-                      <RowDefinition />
-                      <RowDefinition />
-                    </Grid.RowDefinitions>
-                    <Grid.ColumnDefinitions>
-                      <ColumnDefinition Width="Auto" />
-                      <ColumnDefinition />
-                      <ColumnDefinition Width="Auto" />
-                      <ColumnDefinition />
-                    </Grid.ColumnDefinitions>
-                    <Label Background="{x:Null}" Content="x:" />
-                    <pu:NumberInput
-                      Grid.Column="1"
-                      d:Value="100"
-                      Value="{Binding X.Value, Mode=TwoWay}" />
-                    <Label
-                      Grid.Column="2"
-                      Background="{x:Null}"
-                      Content="y:" />
-                    <pu:NumberInput
-                      Grid.Column="3"
-                      d:Value="100"
-                      Value="{Binding Y.Value, Mode=TwoWay}" />
-                  </Grid>
-                </Grid>
-              </ToggleButton>
+                Content="NomalState:" />
+              <Grid
+                Grid.Row="1"
+                Grid.Column="1"
+                Margin="5">
+                <Grid.RowDefinitions>
+                  <RowDefinition />
+                  <RowDefinition />
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                  <ColumnDefinition Width="Auto" />
+                  <ColumnDefinition />
+                  <ColumnDefinition Width="Auto" />
+                  <ColumnDefinition />
+                </Grid.ColumnDefinitions>
+                <Label Background="{x:Null}" Content="x:" />
+                <pu:NumberInput
+                  Grid.Column="1"
+                  d:Value="100"
+                  Value="{Binding Pet.Value.RaisePoint.Value.Nomal.Value.X.Value, Mode=TwoWay}" />
+                <Label
+                  Grid.Column="2"
+                  Background="{x:Null}"
+                  Content="y:" />
+                <pu:NumberInput
+                  Grid.Column="3"
+                  d:Value="100"
+                  Value="{Binding Pet.Value.RaisePoint.Value.Nomal.Value.Y.Value, Mode=TwoWay}" />
+              </Grid>
               <ToggleButton
                 x:Name="ToggleButton_RaisePoint_PoorCondition"
+                Grid.Row="2"
                 Padding="5"
                 HorizontalContentAlignment="Stretch"
-                DataContext="{Binding Pet.Value.RaisePoint.Value.PoorCondition.Value}">
-                <Grid>
-                  <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="Auto" />
-                    <ColumnDefinition />
-                  </Grid.ColumnDefinitions>
-                  <Label
-                    HorizontalContentAlignment="Center"
-                    VerticalContentAlignment="Center"
-                    Background="{x:Null}"
-                    Content="PoorConditionState:" />
-                  <Grid Grid.Column="1">
-                    <Grid.RowDefinitions>
-                      <RowDefinition />
-                      <RowDefinition />
-                    </Grid.RowDefinitions>
-                    <Grid.ColumnDefinitions>
-                      <ColumnDefinition Width="Auto" />
-                      <ColumnDefinition />
-                      <ColumnDefinition Width="Auto" />
-                      <ColumnDefinition />
-                    </Grid.ColumnDefinitions>
-                    <Label Background="{x:Null}" Content="x:" />
-                    <pu:NumberInput
-                      Grid.Column="1"
-                      d:Value="100"
-                      Value="{Binding X.Value, Mode=TwoWay}" />
-                    <Label
-                      Grid.Column="2"
-                      Background="{x:Null}"
-                      Content="y:" />
-                    <pu:NumberInput
-                      Grid.Column="3"
-                      d:Value="100"
-                      Value="{Binding Y.Value, Mode=TwoWay}" />
-                  </Grid>
-                </Grid>
-              </ToggleButton>
+                Content="PoorConditionState:" />
+              <Grid
+                Grid.Row="2"
+                Grid.Column="1"
+                Margin="5">
+                <Grid.RowDefinitions>
+                  <RowDefinition />
+                  <RowDefinition />
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                  <ColumnDefinition Width="Auto" />
+                  <ColumnDefinition />
+                  <ColumnDefinition Width="Auto" />
+                  <ColumnDefinition />
+                </Grid.ColumnDefinitions>
+                <Label Background="{x:Null}" Content="x:" />
+                <pu:NumberInput
+                  Grid.Column="1"
+                  d:Value="100"
+                  Value="{Binding Pet.Value.RaisePoint.Value.PoorCondition.Value.X.Value, Mode=TwoWay}" />
+                <Label
+                  Grid.Column="2"
+                  Background="{x:Null}"
+                  Content="y:" />
+                <pu:NumberInput
+                  Grid.Column="3"
+                  d:Value="100"
+                  Value="{Binding Pet.Value.RaisePoint.Value.PoorCondition.Value.Y.Value, Mode=TwoWay}" />
+              </Grid>
               <ToggleButton
                 x:Name="ToggleButton_RaisePoint_Ill"
+                Grid.Row="3"
                 Padding="5"
                 HorizontalContentAlignment="Stretch"
-                DataContext="{Binding Pet.Value.RaisePoint.Value.Ill.Value}">
-                <Grid>
-                  <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="Auto" />
-                    <ColumnDefinition />
-                  </Grid.ColumnDefinitions>
-                  <Label
-                    HorizontalContentAlignment="Center"
-                    VerticalContentAlignment="Center"
-                    Background="{x:Null}"
-                    Content="IllState:" />
-                  <Grid Grid.Column="1">
-                    <Grid.RowDefinitions>
-                      <RowDefinition />
-                      <RowDefinition />
-                    </Grid.RowDefinitions>
-                    <Grid.ColumnDefinitions>
-                      <ColumnDefinition Width="Auto" />
-                      <ColumnDefinition />
-                      <ColumnDefinition Width="Auto" />
-                      <ColumnDefinition />
-                    </Grid.ColumnDefinitions>
-                    <Label Background="{x:Null}" Content="x:" />
-                    <pu:NumberInput
-                      Grid.Column="1"
-                      d:Value="100"
-                      Value="{Binding X.Value, Mode=TwoWay}" />
-                    <Label
-                      Grid.Column="2"
-                      Background="{x:Null}"
-                      Content="y:" />
-                    <pu:NumberInput
-                      Grid.Column="3"
-                      d:Value="100"
-                      Value="{Binding Y.Value, Mode=TwoWay}" />
-                  </Grid>
-                </Grid>
-              </ToggleButton>
-            </StackPanel>
+                Content="IllState:" />
+              <Grid
+                Grid.Row="3"
+                Grid.Column="1"
+                Margin="5">
+                <Grid.RowDefinitions>
+                  <RowDefinition />
+                  <RowDefinition />
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                  <ColumnDefinition Width="Auto" />
+                  <ColumnDefinition />
+                  <ColumnDefinition Width="Auto" />
+                  <ColumnDefinition />
+                </Grid.ColumnDefinitions>
+                <Label Background="{x:Null}" Content="x:" />
+                <pu:NumberInput
+                  Grid.Column="1"
+                  d:Value="100"
+                  Value="{Binding Pet.Value.RaisePoint.Value.Ill.Value.X.Value, Mode=TwoWay}" />
+                <Label
+                  Grid.Column="2"
+                  Background="{x:Null}"
+                  Content="y:" />
+                <pu:NumberInput
+                  Grid.Column="3"
+                  d:Value="100"
+                  Value="{Binding Pet.Value.RaisePoint.Value.Ill.Value.Y.Value, Mode=TwoWay}" />
+              </Grid>
+            </Grid>
           </Expander>
         </StackPanel>
       </ScrollViewer>

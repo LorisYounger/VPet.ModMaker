@@ -12,6 +12,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using VPet.Plugin.ModMaker.Models;
 using VPet.Plugin.ModMaker.ViewModels.ModEdit.FoodEdit;
 using VPet_Simulator.Windows.Interface;
 
@@ -60,7 +61,7 @@ public partial class FoodEditWindow : Window
             MessageBox.Show("图像不可为空", "", MessageBoxButton.OK, MessageBoxImage.Warning);
             return;
         }
-        if (ViewModel.Foods.Any(i => i.Id.Value == ViewModel.Food.Value.Id.Value))
+        if (ModInfoModel.Current.Foods.Any(i => i.Id.Value == ViewModel.Food.Value.Id.Value))
         {
             MessageBox.Show("此Id已存在", "", MessageBoxButton.OK, MessageBoxImage.Warning);
             return;

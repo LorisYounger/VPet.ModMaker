@@ -48,7 +48,7 @@
           </Style.Triggers>
         </Style>
       </Grid.Style>
-      <Grid>
+      <Grid MaxWidth="256">
         <Grid.RowDefinitions>
           <RowDefinition Height="Auto" />
           <RowDefinition />
@@ -130,8 +130,12 @@
               x:Name="TextBox_Description"
               Grid.Row="4"
               Grid.Column="1"
+              HorizontalContentAlignment="Left"
+              VerticalContentAlignment="Top"
+              d:Text="AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
               pu:TextBoxHelper.Watermark="模组介绍"
-              Text="{Binding ModInfo.Value.CurrentI18nData.Value.Description.Value}" />
+              Text="{Binding ModInfo.Value.CurrentI18nData.Value.Description.Value}"
+              TextWrapping="Wrap" />
           </Grid>
         </ScrollViewer>
       </Grid>
@@ -216,6 +220,7 @@
       <Grid.RowDefinitions>
         <RowDefinition Height="Auto" />
         <RowDefinition />
+        <RowDefinition Height="Auto" />
       </Grid.RowDefinitions>
       <Button
         x:Name="Button_AddLang"
@@ -235,6 +240,10 @@
           </Style>
         </ListBox.ItemContainerStyle>
       </ListBox>
+      <StackPanel Grid.Row="2">
+        <Button x:Name="Button_Save" Content="保存" />
+        <Button x:Name="Button_SaveTo" Content="保存至" />
+      </StackPanel>
     </Grid>
   </Grid>
 </Window>

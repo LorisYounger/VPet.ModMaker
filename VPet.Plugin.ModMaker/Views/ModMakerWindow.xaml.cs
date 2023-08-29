@@ -1,4 +1,5 @@
-﻿using System;
+﻿using LinePutScript;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.CompilerServices;
@@ -24,14 +25,21 @@ namespace VPet.Plugin.ModMaker.Views;
 /// </summary>
 public partial class ModMakerWindow : Window
 {
-    public WindowVM_ModMaker ViewModel => (WindowVM_ModMaker)DataContext;
-    public Models.ModMaker ModMaker { get; set; }
+    public ModMakerWindowVM ViewModel => (ModMakerWindowVM)DataContext;
     public ModEditWindow ModEditWindow { get; set; }
+    public Models.ModMaker ModMaker { get; internal set; }
 
     public ModMakerWindow()
     {
         InitializeComponent();
-        DataContext = new WindowVM_ModMaker(this);
-        new PetEditWindow().Show();
+        DataContext = new ModMakerWindowVM(this);
+    }
+
+    private void ListBoxItem_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+    {
+        if (sender is not ListBoxItem item)
+            return;
+        ModInfoModel.Current = (ModInfoModel)item.DataContext;
+        ViewModel.CreateNewMod();
     }
 }

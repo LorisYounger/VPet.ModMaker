@@ -15,8 +15,6 @@ namespace VPet.Plugin.ModMaker.ViewModels.ModEdit.FoodEdit;
 
 public class FoodEditWindowVM
 {
-    public ObservableCollection<FoodModel> Foods { get; set; }
-
     #region Value
     public ObservableValue<FoodModel> Food { get; } = new(new());
     public ObservableCollection<Food.FoodType> FoodTypes { get; } = new();

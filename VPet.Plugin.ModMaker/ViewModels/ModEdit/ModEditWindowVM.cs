@@ -20,8 +20,7 @@ public class ModEditWindowVM
     public ModEditWindow ModEditWindow { get; }
 
     #region Value
-    public ObservableValue<BitmapImage> ModImage { get; } = new();
-    public ObservableValue<ModInfoModel> ModInfo { get; } = new(new());
+    public ObservableValue<ModInfoModel> ModInfo { get; } = new(ModInfoModel.Current);
     public ObservableValue<string> CurrentLang { get; } = new();
     public I18nHelper I18nData => I18nHelper.Current;
     #endregion
@@ -33,16 +32,48 @@ public class ModEditWindowVM
 
     public ObservableCommand<string> EditLangCommand { get; } = new();
     public ObservableCommand<string> RemoveLangCommand { get; } = new();
+
+    public ObservableCommand SaveCommand { get; } = new();
+    public ObservableCommand SaveToCommand { get; } = new();
     #endregion
 
     public ModEditWindowVM() { }
 
     public ModEditWindowVM(ModEditWindow window)
     {
-#if DEBUG
-        I18nHelper.Current.CultureNames.Add("zh-CN");
-        I18nHelper.Current.CultureName.Value = I18nHelper.Current.CultureNames.First();
-#endif
+        foreach (var lang in ModInfo.Value.I18nDatas)
+        {
+            if (I18nHelper.Current.CultureNames.Contains(lang.Key) is false)
+                I18nHelper.Current.CultureNames.Add(lang.Key);
+        }
+        if (I18nHelper.Current.CultureNames.Count > 0)
+        {
+            I18nHelper.Current.CultureName.Value = I18nHelper.Current.CultureNames.First();
+            foreach (var i18n in ModInfo.Value.OtherI18nDatas)
+            {
+                foreach (var food in ModInfo.Value.Foods)
+                {
+                    var foodI18n = food.I18nDatas[i18n.Key];
+                    if (i18n.Value.TryGetValue(food.Name, out var i18nName))
+                        foodI18n.Name.Value = i18nName;
+                    if (i18n.Value.TryGetValue(food.Description, out var i18nDescription))
+                        foodI18n.Description.Value = i18nDescription;
+                }
+                foreach (var lowText in ModInfo.Value.LowTexts)
+                {
+                    var lowTextI18n = lowText.I18nDatas[i18n.Key];
+                    if (i18n.Value.TryGetValue(lowText.Text, out var text))
+                        lowTextI18n.Text.Value = text;
+                }
+                foreach (var clickText in ModInfo.Value.ClickTexts)
+                {
+                    var clickTextI18n = clickText.I18nDatas[i18n.Key];
+                    if (i18n.Value.TryGetValue(clickText.Text, out var text))
+                        clickTextI18n.Text.Value = text;
+                }
+            }
+        }
+
         ModEditWindow = window;
 
         I18nHelper.Current.AddLang += I18nData_AddLang;
@@ -50,11 +81,13 @@ public class ModEditWindowVM
         I18nHelper.Current.ReplaceLang += I18nData_ReplaceLang;
         CurrentLang.ValueChanged += CurrentLang_ValueChanged;
 
-        AddImageCommand.ExecuteAction = AddImage;
-        ChangeImageCommand.ExecuteAction = ChangeImage;
-        AddLangCommand.ExecuteAction = AddLang;
-        EditLangCommand.ExecuteAction = EditLang;
-        RemoveLangCommand.ExecuteAction = RemoveLang;
+        AddImageCommand.ExecuteAction += AddImage;
+        ChangeImageCommand.ExecuteAction += ChangeImage;
+        AddLangCommand.ExecuteAction += AddLang;
+        EditLangCommand.ExecuteAction += EditLang;
+        RemoveLangCommand.ExecuteAction += RemoveLang;
+        SaveCommand.ExecuteAction += Save;
+        SaveToCommand.ExecuteAction += SaveTo;
     }
 
     private void I18nData_AddLang(string lang)
@@ -134,5 +167,15 @@ public class ModEditWindowVM
         if (MessageBox.Show("确定删除吗", "", MessageBoxButton.YesNo) is MessageBoxResult.No)
             return;
         I18nHelper.Current.CultureNames.Remove(oldLang);
+    }
+
+    private void Save()
+    {
+        return;
+    }
+
+    private void SaveTo()
+    {
+        return;
     }
 }
