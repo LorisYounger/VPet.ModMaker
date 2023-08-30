@@ -241,8 +241,14 @@
         </ListBox.ItemContainerStyle>
       </ListBox>
       <StackPanel Grid.Row="2">
-        <Button x:Name="Button_Save" Content="保存" />
-        <Button x:Name="Button_SaveTo" Content="保存至" />
+        <Button
+          x:Name="Button_Save"
+          Command="{Binding SaveCommand}"
+          Content="保存" />
+        <Button
+          x:Name="Button_SaveTo"
+          Command="{Binding SaveToCommand}"
+          Content="保存至" />
       </StackPanel>
     </Grid>
   </Grid>

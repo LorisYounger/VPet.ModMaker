@@ -1,4 +1,6 @@
 ﻿using HKW.HKWViewModels.SimpleObservable;
+using LinePutScript;
+using LinePutScript.Converter;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -16,8 +18,8 @@ public class ModInfoModel : I18nModel<I18nModInfoModel>
 {
     public static ModInfoModel Current { get; set; }
 
-    public ObservableValue<string> Id { get; } = new();
-
+    public ObservableValue<string> Name { get; } = new();
+    public ObservableValue<string> Description { get; } = new();
     public ObservableValue<string> Summary { get; } = new();
     public ObservableValue<string> Author { get; } = new();
     public ObservableValue<string> GameVersion { get; } = new();
@@ -35,13 +37,14 @@ public class ModInfoModel : I18nModel<I18nModInfoModel>
     public ModInfoModel(ModLoader loader)
     {
         SourcePath.Value = loader.Path.FullName;
-        Id.Value = loader.Name;
-        var imagePath = Path.Combine(loader.Path.FullName, "icon.png");
-        if (File.Exists(imagePath))
-            ModImage.Value = Utils.LoadImageToStream(imagePath);
+        Name.Value = loader.Name;
+        Description.Value = loader.Intro;
         Author.Value = loader.Author;
         GameVersion.Value = loader.GameVer.ToString();
         ModVersion.Value = loader.Ver.ToString();
+        var imagePath = Path.Combine(loader.Path.FullName, "icon.png");
+        if (File.Exists(imagePath))
+            ModImage.Value = Utils.LoadImageToStream(imagePath);
         foreach (var food in loader.Foods)
             Foods.Add(new(food));
         foreach (var clickText in loader.ClickTexts)
@@ -60,6 +63,77 @@ public class ModInfoModel : I18nModel<I18nModInfoModel>
 食物: {Foods.Count}
 点击文本: {ClickTexts.Count}
 低状态文本: {LowTexts.Count}";
+    }
+
+    public const string ModInfoFile = "info.lps";
+
+    public void Save()
+    {
+        SaveTo(SourcePath.Value);
+    }
+
+    public void SaveTo(string path)
+    {
+        var modInfoFile = Path.Combine(path, ModInfoFile);
+        if (File.Exists(modInfoFile) is false)
+            File.Create(modInfoFile).Close();
+        //var lps = new LpsDocument(File.ReadAllText(modInfoFile));
+        var lps = new LPS()
+        {
+            new Line("vupmod", Name.Value)
+            {
+                new Sub("author", Author.Value),
+                new Sub("gamever", GameVersion.Value),
+                new Sub("ver", ModVersion.Value)
+            },
+            new Line("authorid", "0"),
+            new Line("itemid", "0"),
+            new Line("cachedate", DateTime.Now.Date.ToString())
+        };
+        //lps.FindLine("vupmod").Info = Name.Value;
+        //lps.FindLine("intro").Info = Description.Value;
+        //lps.FindSub("gamever").Info = GameVersion.Value;
+        //lps.FindSub("ver").Info = ModVersion.Value;
+        //lps.FindSub("author").Info = Author.Value;
+        //lps.FindorAddLine("authorid").InfoToInt64 = 0;
+        //lps.FindorAddLine("itemid").info = "0";
+        File.WriteAllText(modInfoFile, lps.ToString());
+        SaveFoods(path);
+        SaveLang(path);
+    }
+
+    public void SaveFoods(string path)
+    {
+        if (Foods.Count == 0)
+            return;
+        var foodPath = Path.Combine(path, "food");
+        Directory.CreateDirectory(foodPath);
+        var foodFile = Path.Combine(foodPath, "food.lps");
+        if (File.Exists(foodFile) is false)
+            File.Create(foodFile).Close();
+        var lps = new LPS();
+        foreach (var food in Foods)
+            lps.Add(LPSConvert.SerializeObjectToLine<Line>(food.ToFood(), "food"));
+        File.WriteAllText(foodFile, lps.ToString());
+    }
+
+    public void SaveLang(string path)
+    {
+        var langPath = Path.Combine(path, "lang");
+        Directory.CreateDirectory(langPath);
+        foreach (var cultureName in I18nHelper.Current.CultureNames)
+        {
+            var culturePath = Path.Combine(langPath, cultureName);
+            Directory.CreateDirectory(culturePath);
+            var cultureFile = Path.Combine(culturePath, $"{cultureName}.lps");
+            File.Create(cultureFile).Close();
+            var lps = new LPS();
+            foreach (var food in Foods)
+            {
+                lps.Add(new Line(food.Name, food.I18nDatas[cultureName].Name.Value));
+                lps.Add(new Line(food.Description, food.I18nDatas[cultureName].Description.Value));
+            }
+        }
     }
 }
 

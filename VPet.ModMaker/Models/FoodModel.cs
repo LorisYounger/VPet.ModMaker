@@ -48,7 +48,7 @@ public class FoodModel : I18nModel<I18nFoodModel>
         : this()
     {
         Name = food.Name;
-        Description = food.Description;
+        Description = food.Desc;
         Type.Value = food.Type;
         Strength.Value = food.Strength;
         StrengthDrink.Value = food.StrengthDrink;

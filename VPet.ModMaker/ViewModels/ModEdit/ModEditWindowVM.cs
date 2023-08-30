@@ -12,6 +12,7 @@ using System.Collections.Specialized;
 using System.ComponentModel;
 using VPet.ModMaker.Views.ModEdit;
 using System.Windows;
+using System.IO;
 
 namespace VPet.ModMaker.ViewModels.ModEdit;
 
@@ -176,6 +177,17 @@ public class ModEditWindowVM
 
     private void SaveTo()
     {
+        SaveFileDialog saveFileDialog =
+            new()
+            {
+                Title = "保存 模组信息文件,并在文件夹内保存模组数据",
+                Filter = $"LPS文件|*.lps;",
+                DefaultExt = "info.lps"
+            };
+        if (saveFileDialog.ShowDialog() is true)
+        {
+            ModInfo.Value.SaveTo(Path.GetDirectoryName(saveFileDialog.FileName));
+        }
         return;
     }
 }

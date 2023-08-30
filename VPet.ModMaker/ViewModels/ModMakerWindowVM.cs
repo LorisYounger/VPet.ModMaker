@@ -56,7 +56,7 @@ public class ModMakerWindowVM
         if (string.IsNullOrEmpty(value))
             ShowMods = Mods;
         else
-            ShowMods = new(Mods.Where(i => i.Id.Value.Contains(value)));
+            ShowMods = new(Mods.Where(i => i.Name.Value.Contains(value)));
     }
 
     public void CreateNewMod()
