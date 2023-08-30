@@ -46,14 +46,21 @@
                       <ColumnDefinition Width="Auto" />
                       <ColumnDefinition />
                     </Grid.ColumnDefinitions>
-                    <Image Width="64" Source="{Binding ModImage.Value}" />
+                    <Image Width="64" Source="{Binding Image.Value}" />
                     <Grid Grid.Column="1">
                       <Grid.RowDefinitions>
                         <RowDefinition Height="Auto" />
                         <RowDefinition />
                       </Grid.RowDefinitions>
-                      <TextBlock d:Text="Mod名称" Text="{Binding Id.Value}" />
-                      <TextBlock Grid.Row="1" d:Text="Mod描述" />
+                      <TextBlock
+                        d:Text="Mod名称"
+                        Text="{Binding Name.Value}"
+                        TextWrapping="Wrap" />
+                      <TextBlock
+                        Grid.Row="1"
+                        d:Text="Mod描述"
+                        Text="{Binding Description.Value}"
+                        TextWrapping="Wrap" />
                     </Grid>
                   </Grid>
                 </ControlTemplate>
@@ -74,6 +81,10 @@
           x:Name="Button_CreateNewMod"
           Command="{Binding CreateNewModCommand}"
           Content="创建新的模组" />
+        <Button
+          x:Name="Button_OpenFromFile"
+          Command="{Binding LoadModFromFileCommand}"
+          Content="从文件中载入" />
       </StackPanel>
     </Grid>
   </Grid>

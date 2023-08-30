@@ -51,28 +51,18 @@ public partial class ModEditWindow : Window
 
     private void ClickTexts_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
     {
-        ClickTextPage.ViewModel.ClickTexts.CollectionChanged += (s, e) =>
-        {
-            TabItem_ClickText.Header =
-                $"{TabItem_ClickText.Tag} ({ClickTextPage.ViewModel.ClickTexts.Count})";
-        };
+        TabItem_ClickText.Header =
+            $"{TabItem_ClickText.Tag} ({ClickTextPage.ViewModel.ClickTexts.Count})";
     }
 
     private void LowTexts_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
     {
-        LowTextPage.ViewModel.LowTexts.CollectionChanged += (s, e) =>
-        {
-            TabItem_LowText.Header =
-                $"{TabItem_LowText.Tag} ({LowTextPage.ViewModel.LowTexts.Count})";
-        };
+        TabItem_LowText.Header = $"{TabItem_LowText.Tag} ({LowTextPage.ViewModel.LowTexts.Count})";
     }
 
     private void Foods_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
     {
-        FoodPage.ViewModel.Foods.CollectionChanged += (s, e) =>
-        {
-            TabItem_Food.Header = $"{TabItem_Food.Tag} ({FoodPage.ViewModel.Foods.Count})";
-        };
+        TabItem_Food.Header = $"{TabItem_Food.Tag} ({FoodPage.ViewModel.Foods.Count})";
     }
 
     private void Window_ModEdit_Closed(object sender, EventArgs e)

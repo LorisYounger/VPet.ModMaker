@@ -17,7 +17,7 @@ public class FoodPageVM
 {
     #region Value
     public ObservableValue<ObservableCollection<FoodModel>> ShowFoods { get; } = new();
-    public ObservableCollection<FoodModel> Foods { get; } = new(ModInfoModel.Current.Foods);
+    public ObservableCollection<FoodModel> Foods => ModInfoModel.Current.Foods;
     public ObservableValue<string> FilterFoodText { get; } = new();
     #endregion
     #region Command

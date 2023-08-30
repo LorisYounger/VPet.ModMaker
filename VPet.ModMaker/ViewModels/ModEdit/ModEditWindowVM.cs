@@ -55,9 +55,9 @@ public class ModEditWindowVM
                 foreach (var food in ModInfo.Value.Foods)
                 {
                     var foodI18n = food.I18nDatas[i18n.Key];
-                    if (i18n.Value.TryGetValue(food.Name, out var i18nName))
+                    if (i18n.Value.TryGetValue(food.Name.Value, out var i18nName))
                         foodI18n.Name.Value = i18nName;
-                    if (i18n.Value.TryGetValue(food.Description, out var i18nDescription))
+                    if (i18n.Value.TryGetValue(food.Description.Value, out var i18nDescription))
                         foodI18n.Description.Value = i18nDescription;
                 }
                 foreach (var lowText in ModInfo.Value.LowTexts)
@@ -117,7 +117,7 @@ public class ModEditWindowVM
 
     public void Close()
     {
-        ModInfo.Value.ModImage.Value?.StreamSource?.Close();
+        ModInfo.Value.Image.Value?.StreamSource?.Close();
     }
 
     private void AddImage()
@@ -126,7 +126,7 @@ public class ModEditWindowVM
             new() { Title = "选择图片", Filter = $"图片|*.jpg;*.jpeg;*.png;*.bmp" };
         if (openFileDialog.ShowDialog() is true)
         {
-            ModInfo.Value.ModImage.Value = Utils.LoadImageToStream(openFileDialog.FileName);
+            ModInfo.Value.Image.Value = Utils.LoadImageToStream(openFileDialog.FileName);
         }
     }
 
@@ -136,8 +136,8 @@ public class ModEditWindowVM
             new() { Title = "选择图片", Filter = $"图片|*.jpg;*.jpeg;*.png;*.bmp" };
         if (openFileDialog.ShowDialog() is true)
         {
-            ModInfo.Value.ModImage.Value?.StreamSource?.Close();
-            ModInfo.Value.ModImage.Value = Utils.LoadImageToStream(openFileDialog.FileName);
+            ModInfo.Value.Image.Value?.StreamSource?.Close();
+            ModInfo.Value.Image.Value = Utils.LoadImageToStream(openFileDialog.FileName);
         }
     }
 
@@ -172,7 +172,21 @@ public class ModEditWindowVM
 
     private void Save()
     {
-        return;
+        if (string.IsNullOrEmpty(ModInfo.Value.SourcePath.Value))
+        {
+            MessageBox.Show("源路径为空, 请使用 保存至");
+            return;
+        }
+        try
+        {
+            ModInfo.Value.SaveTo(Path.GetDirectoryName(ModInfo.Value.SourcePath.Value));
+        }
+        catch (Exception ex)
+        {
+            MessageBox.Show($"保存失败 错误信息:\n{ex}");
+            return;
+        }
+        MessageBox.Show("保存成功");
     }
 
     private void SaveTo()
@@ -182,12 +196,21 @@ public class ModEditWindowVM
             {
                 Title = "保存 模组信息文件,并在文件夹内保存模组数据",
                 Filter = $"LPS文件|*.lps;",
-                DefaultExt = "info.lps"
+                FileName = "info.lps"
             };
         if (saveFileDialog.ShowDialog() is true)
         {
-            ModInfo.Value.SaveTo(Path.GetDirectoryName(saveFileDialog.FileName));
+            try
+            {
+                ModInfo.Value.SaveTo(Path.GetDirectoryName(saveFileDialog.FileName));
+                ModInfo.Value.SourcePath.Value = saveFileDialog.FileName;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"保存失败 错误信息:\n{ex}");
+                return;
+            }
         }
-        return;
+        MessageBox.Show("保存成功");
     }
 }

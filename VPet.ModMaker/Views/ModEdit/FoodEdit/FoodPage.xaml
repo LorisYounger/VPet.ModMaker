@@ -57,7 +57,7 @@
       </DataGrid.RowStyle>
       <DataGrid.Columns>
         <DataGridTextColumn
-          Binding="{Binding Id.Value}"
+          Binding="{Binding Name.Value}"
           CanUserSort="True"
           IsReadOnly="True"
           SortMemberPath="Name">

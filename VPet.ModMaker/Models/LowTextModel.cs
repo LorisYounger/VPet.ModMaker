@@ -25,6 +25,12 @@ public class LowTextModel : I18nModel<I18nLowTextModel>
         Mode.Value = lowText.Mode.Value;
         Strength.Value = lowText.Strength.Value;
         Like.Value = lowText.Like.Value;
+        foreach (var item in lowText.I18nDatas)
+        {
+            I18nDatas[item.Key] = item.Value;
+            I18nDatas[item.Key].Text.Value = lowText.I18nDatas[item.Key].Text.Value;
+        }
+        CurrentI18nData.Value = I18nDatas[I18nHelper.Current.CultureName.Value];
     }
 
     public LowTextModel(LowText lowText)
@@ -40,7 +46,6 @@ public class LowTextModel : I18nModel<I18nLowTextModel>
 
     public LowText ToLowText()
     {
-        // 没有 Text
         return new()
         {
             Text = Text,

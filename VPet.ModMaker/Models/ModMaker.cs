@@ -14,10 +14,15 @@ namespace VPet.ModMaker.Models;
 
 public class ModMaker : MainPlugin
 {
+    public ILine Set;
+
+    public override string PluginName => "ModMaker";
+
+    public ModMakerWindow Maker;
+
     public ModMaker(IMainWindow mainwin)
         : base(mainwin) { }
 
-    public ILine Set;
 
     public override void LoadPlugin()
     {
@@ -36,8 +41,6 @@ public class ModMaker : MainPlugin
         modset.Items.Add(menuset);
     }
 
-    public override string PluginName => "ModMaker";
-    public ModMakerWindow Maker;
 
     public override void Setting()
     {

@@ -46,11 +46,11 @@ public partial class FoodEditWindow : Window
 
     private void Button_Yes_Click(object sender, RoutedEventArgs e)
     {
-        if (string.IsNullOrEmpty(ViewModel.Food.Value.Id.Value))
-        {
-            MessageBox.Show("Id不可为空", "", MessageBoxButton.OK, MessageBoxImage.Warning);
-            return;
-        }
+        //if (string.IsNullOrEmpty(ViewModel.Food.Value.Id.Value))
+        //{
+        //    MessageBox.Show("Id不可为空", "", MessageBoxButton.OK, MessageBoxImage.Warning);
+        //    return;
+        //}
         if (ViewModel.Food.Value.CurrentI18nData.Value.Name.Value is null)
         {
             MessageBox.Show("名称不可为空", "", MessageBoxButton.OK, MessageBoxImage.Warning);
@@ -61,7 +61,7 @@ public partial class FoodEditWindow : Window
             MessageBox.Show("图像不可为空", "", MessageBoxButton.OK, MessageBoxImage.Warning);
             return;
         }
-        if (ModInfoModel.Current.Foods.Any(i => i.Id.Value == ViewModel.Food.Value.Id.Value))
+        if (ModInfoModel.Current.Foods.Any(i => i.Name == ViewModel.Food.Value.Name))
         {
             MessageBox.Show("此Id已存在", "", MessageBoxButton.OK, MessageBoxImage.Warning);
             return;

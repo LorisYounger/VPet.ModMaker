@@ -57,7 +57,7 @@
           x:Name="Image_ModImage"
           Width="256"
           Height="256"
-          Source="{Binding ModInfo.Value.ModImage.Value}"
+          Source="{Binding ModInfo.Value.Image.Value}"
           Stretch="Uniform">
           <Image.ContextMenu>
             <ContextMenu>
@@ -78,7 +78,7 @@
             <Style BasedOn="{StaticResource {x:Type Button}}" TargetType="Button">
               <Setter Property="Visibility" Value="Hidden" />
               <Style.Triggers>
-                <DataTrigger Binding="{Binding ModInfo.Value.ModImage.Value}" Value="{x:Null}">
+                <DataTrigger Binding="{Binding ModInfo.Value.Image.Value}" Value="{x:Null}">
                   <Setter Property="Visibility" Value="Visible" />
                 </DataTrigger>
               </Style.Triggers>

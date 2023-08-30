@@ -1,0 +1,4 @@
+﻿[*.cs]
+
+# RCS1049: Simplify boolean comparison.
+dotnet_diagnostic.RCS1049.severity = none

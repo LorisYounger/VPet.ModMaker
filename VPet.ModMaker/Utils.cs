@@ -11,6 +11,11 @@ namespace VPet.ModMaker;
 
 internal static class Utils
 {
+    public static string GetImageSourceFile(BitmapImage image)
+    {
+        return ((FileStream)image.StreamSource).Name;
+    }
+
     public static BitmapImage LoadImageToStream(string imagePath)
     {
         BitmapImage bitmapImage = new();
@@ -22,7 +27,7 @@ internal static class Utils
 
     public static BitmapImage LoadImageToStream(BitmapImage image)
     {
-        return LoadImageToStream(((FileStream)image.StreamSource).Name);
+        return LoadImageToStream(GetImageSourceFile(image));
     }
 
     public static BitmapImage LoadImageToMemoryStream(string imagePath)
@@ -39,7 +44,7 @@ internal static class Utils
 
     public static BitmapImage LoadImageToMemoryStream(BitmapImage image)
     {
-        return LoadImageToMemoryStream(((FileStream)image.StreamSource).Name);
+        return LoadImageToMemoryStream(GetImageSourceFile(image));
     }
 
     public static void ShowDialogX(this Window window, Window owner)

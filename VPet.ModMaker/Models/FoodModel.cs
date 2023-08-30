@@ -12,9 +12,8 @@ namespace VPet.ModMaker.Models;
 
 public class FoodModel : I18nModel<I18nFoodModel>
 {
-    public string Name { get; set; }
-    public string Description { get; set; }
-    public ObservableValue<string> Id { get; } = new();
+    public ObservableValue<string> Name { get; } = new();
+    public ObservableValue<string> Description { get; } = new();
     public ObservableValue<Food.FoodType> Type { get; } = new();
     public ObservableValue<double> Strength { get; } = new();
     public ObservableValue<double> StrengthFood { get; } = new();
@@ -31,7 +30,8 @@ public class FoodModel : I18nModel<I18nFoodModel>
     public FoodModel(FoodModel food)
         : this()
     {
-        Id.Value = food.Id.Value;
+        Name.Value = food.Name.Value;
+        Description.Value = food.Description.Value;
         Type.Value = food.Type.Value;
         Strength.Value = food.Strength.Value;
         StrengthFood.Value = food.StrengthFood.Value;
@@ -42,13 +42,20 @@ public class FoodModel : I18nModel<I18nFoodModel>
         Price.Value = food.Price.Value;
         Exp.Value = food.Exp.Value;
         Image.Value = Utils.LoadImageToStream(food.Image.Value);
+        foreach (var item in food.I18nDatas)
+        {
+            I18nDatas[item.Key] = new();
+            I18nDatas[item.Key].Name.Value = food.I18nDatas[item.Key].Name.Value;
+            I18nDatas[item.Key].Description.Value = food.I18nDatas[item.Key].Description.Value;
+        }
+        CurrentI18nData.Value = I18nDatas[I18nHelper.Current.CultureName.Value];
     }
 
     public FoodModel(Food food)
         : this()
     {
-        Name = food.Name;
-        Description = food.Desc;
+        Name.Value = food.Name;
+        Description.Value = food.Desc;
         Type.Value = food.Type;
         Strength.Value = food.Strength;
         StrengthDrink.Value = food.StrengthDrink;
@@ -64,9 +71,10 @@ public class FoodModel : I18nModel<I18nFoodModel>
 
     public Food ToFood()
     {
-        // 没有 Name 和 Description
         return new Food()
         {
+            Name = Name.Value,
+            Desc = $"{Name.Value}_{nameof(Description)}",
             Type = Type.Value,
             Strength = Strength.Value,
             StrengthFood = StrengthFood.Value,

@@ -19,8 +19,7 @@ public class LowTextPageVM
     #region Value
     public ObservableValue<string> FilterLowText { get; } = new();
     public ObservableValue<ObservableCollection<LowTextModel>> ShowLowTexts { get; } = new();
-    public ObservableCollection<LowTextModel> LowTexts { get; } =
-        new(ModInfoModel.Current.LowTexts);
+    public ObservableCollection<LowTextModel> LowTexts => ModInfoModel.Current.LowTexts;
     #endregion
     #region Command
     public ObservableCommand AddLowTextCommand { get; } = new();

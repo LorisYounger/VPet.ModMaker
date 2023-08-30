@@ -31,6 +31,12 @@ public class ClickTextModel : I18nModel<I18nClickTextModel>
         LikeMax.Value = clickText.LikeMax.Value;
         LikeMin.Value = clickText.LikeMin.Value;
         DayTime.Value = clickText.DayTime.Value;
+        foreach (var item in clickText.I18nDatas)
+        {
+            I18nDatas[item.Key] = new();
+            I18nDatas[item.Key].Text.Value = clickText.I18nDatas[item.Key].Text.Value;
+        }
+        CurrentI18nData.Value = I18nDatas[I18nHelper.Current.CultureName.Value];
     }
 
     public ClickTextModel(ClickText clickText)

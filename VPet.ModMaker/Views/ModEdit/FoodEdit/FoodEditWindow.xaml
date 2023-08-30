@@ -68,7 +68,7 @@
           <TextBox
             Grid.Column="1"
             pu:TextBoxHelper.Watermark="Id"
-            Text="{Binding Food.Value.Id.Value}" />
+            Text="{Binding Food.Value.Name.Value, UpdateSourceTrigger=PropertyChanged}" />
           <Label Grid.Row="1" Content="食物类型:" />
           <ComboBox
             x:Name="ComboBox_FoodType"
@@ -81,13 +81,13 @@
             Grid.Row="2"
             Grid.Column="1"
             pu:TextBoxHelper.Watermark="食物名称"
-            Text="{Binding Food.Value.CurrentI18nData.Value.Name.Value}" />
+            Text="{Binding Food.Value.CurrentI18nData.Value.Name.Value, UpdateSourceTrigger=PropertyChanged}" />
           <Label Grid.Row="3" Content="食物描述:" />
           <TextBox
             Grid.Row="3"
             Grid.Column="1"
             pu:TextBoxHelper.Watermark="食物描述"
-            Text="{Binding Food.Value.CurrentI18nData.Value.Description.Value}" />
+            Text="{Binding Food.Value.CurrentI18nData.Value.Description.Value, UpdateSourceTrigger=PropertyChanged}" />
         </Grid>
       </ScrollViewer>
     </Grid>

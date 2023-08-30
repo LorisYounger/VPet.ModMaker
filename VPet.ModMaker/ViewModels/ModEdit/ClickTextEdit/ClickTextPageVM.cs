@@ -15,8 +15,7 @@ public class ClickTextPageVM
 {
     #region Value
     public ObservableValue<ObservableCollection<ClickTextModel>> ShowClickTexts { get; } = new();
-    public ObservableCollection<ClickTextModel> ClickTexts { get; } =
-        new(ModInfoModel.Current.ClickTexts);
+    public ObservableCollection<ClickTextModel> ClickTexts => ModInfoModel.Current.ClickTexts;
     public ObservableValue<string> FilterClickText { get; } = new();
     #endregion
     #region Command

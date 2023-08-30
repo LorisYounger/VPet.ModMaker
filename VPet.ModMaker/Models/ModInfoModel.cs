@@ -24,7 +24,7 @@ public class ModInfoModel : I18nModel<I18nModInfoModel>
     public ObservableValue<string> Author { get; } = new();
     public ObservableValue<string> GameVersion { get; } = new();
     public ObservableValue<string> ModVersion { get; } = new();
-    public ObservableValue<BitmapImage> ModImage { get; } = new();
+    public ObservableValue<BitmapImage> Image { get; } = new();
     public ObservableCollection<FoodModel> Foods { get; } = new();
     public ObservableCollection<ClickTextModel> ClickTexts { get; } = new();
     public ObservableCollection<LowTextModel> LowTexts { get; } = new();
@@ -44,7 +44,7 @@ public class ModInfoModel : I18nModel<I18nModInfoModel>
         ModVersion.Value = loader.Ver.ToString();
         var imagePath = Path.Combine(loader.Path.FullName, "icon.png");
         if (File.Exists(imagePath))
-            ModImage.Value = Utils.LoadImageToStream(imagePath);
+            Image.Value = Utils.LoadImageToStream(imagePath);
         foreach (var food in loader.Foods)
             Foods.Add(new(food));
         foreach (var clickText in loader.ClickTexts)
@@ -86,10 +86,25 @@ public class ModInfoModel : I18nModel<I18nModInfoModel>
                 new Sub("gamever", GameVersion.Value),
                 new Sub("ver", ModVersion.Value)
             },
+            new Line("intro", Description.Value),
             new Line("authorid", "0"),
             new Line("itemid", "0"),
             new Line("cachedate", DateTime.Now.Date.ToString())
         };
+        foreach (var cultureName in I18nHelper.Current.CultureNames)
+        {
+            lps.Add(
+                new Line("lang", cultureName)
+                {
+                    new Sub(Name.Value, I18nDatas[cultureName].Name.Value),
+                    new Sub(Description.Value, I18nDatas[cultureName].Description.Value),
+                }
+            );
+        }
+        var imagePath = Utils.GetImageSourceFile(Image.Value);
+        var targetImagePath = Path.Combine(path, Path.GetFileName(imagePath));
+        if (imagePath != targetImagePath)
+            File.Copy(imagePath, targetImagePath, true);
         //lps.FindLine("vupmod").Info = Name.Value;
         //lps.FindLine("intro").Info = Description.Value;
         //lps.FindSub("gamever").Info = GameVersion.Value;
@@ -100,6 +115,7 @@ public class ModInfoModel : I18nModel<I18nModInfoModel>
         File.WriteAllText(modInfoFile, lps.ToString());
         SaveFoods(path);
         SaveLang(path);
+        SaveImage(path);
     }
 
     public void SaveFoods(string path)
@@ -130,8 +146,30 @@ public class ModInfoModel : I18nModel<I18nModInfoModel>
             var lps = new LPS();
             foreach (var food in Foods)
             {
-                lps.Add(new Line(food.Name, food.I18nDatas[cultureName].Name.Value));
-                lps.Add(new Line(food.Description, food.I18nDatas[cultureName].Description.Value));
+                lps.Add(new Line(food.Name.Value, food.I18nDatas[cultureName].Name.Value));
+                lps.Add(
+                    new Line(food.Description.Value, food.I18nDatas[cultureName].Description.Value)
+                );
+            }
+            if (lps.Count > 0)
+                File.WriteAllText(cultureFile, lps.ToString());
+        }
+    }
+
+    public void SaveImage(string path)
+    {
+        var imagePath = Path.Combine(path, "image");
+        Directory.CreateDirectory(imagePath);
+        if (Foods.Count > 0)
+        {
+            var foodPath = Path.Combine(imagePath, "food");
+            Directory.CreateDirectory(foodPath);
+            foreach (var food in Foods)
+            {
+                var foodImagePath = Utils.GetImageSourceFile(food.Image.Value);
+                var targetImagePath = Path.Combine(foodPath, Path.GetFileName(foodImagePath));
+                if (foodImagePath != targetImagePath)
+                    File.Copy(foodImagePath, targetImagePath, true);
             }
         }
     }

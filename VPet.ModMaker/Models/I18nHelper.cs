@@ -11,6 +11,8 @@ namespace VPet.ModMaker.Models;
 public class I18nHelper
 {
     public static I18nHelper Current { get; set; } = new();
+
+    public ObservableValue<string> MainCulture { get; } = new();
     public ObservableValue<string> CultureName { get; } = new();
     public ObservableCollection<string> CultureNames { get; } = new();
 
