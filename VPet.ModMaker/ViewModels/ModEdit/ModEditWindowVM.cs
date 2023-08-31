@@ -13,6 +13,7 @@ using System.ComponentModel;
 using VPet.ModMaker.Views.ModEdit;
 using System.Windows;
 using System.IO;
+using LinePutScript.Localization.WPF;
 
 namespace VPet.ModMaker.ViewModels.ModEdit;
 
@@ -56,21 +57,21 @@ public class ModEditWindowVM
                 {
                     var foodI18n = food.I18nDatas[i18n.Key];
                     if (i18n.Value.TryGetValue(food.Name.Value, out var i18nName))
-                        foodI18n.Name.Value = i18nName;
+                        foodI18n.Name.Value = i18nName.Translate();
                     if (i18n.Value.TryGetValue(food.Description.Value, out var i18nDescription))
-                        foodI18n.Description.Value = i18nDescription;
+                        foodI18n.Description.Value = i18nDescription.Translate();
                 }
                 foreach (var lowText in ModInfo.Value.LowTexts)
                 {
                     var lowTextI18n = lowText.I18nDatas[i18n.Key];
                     if (i18n.Value.TryGetValue(lowText.Name.Value, out var text))
-                        lowTextI18n.Text.Value = text;
+                        lowTextI18n.Text.Value = text.Translate();
                 }
                 foreach (var clickText in ModInfo.Value.ClickTexts)
                 {
                     var clickTextI18n = clickText.I18nDatas[i18n.Key];
                     if (i18n.Value.TryGetValue(clickText.Name.Value, out var text))
-                        clickTextI18n.Text.Value = text;
+                        clickTextI18n.Text.Value = text.Translate();
                 }
             }
         }
@@ -123,7 +124,11 @@ public class ModEditWindowVM
     private void AddImage()
     {
         OpenFileDialog openFileDialog =
-            new() { Title = "选择图片", Filter = $"图片|*.jpg;*.jpeg;*.png;*.bmp" };
+            new()
+            {
+                Title = "选择图片".Translate(),
+                Filter = $"图片|*.jpg;*.jpeg;*.png;*.bmp".Translate()
+            };
         if (openFileDialog.ShowDialog() is true)
         {
             ModInfo.Value.Image.Value = Utils.LoadImageToStream(openFileDialog.FileName);
@@ -133,7 +138,11 @@ public class ModEditWindowVM
     private void ChangeImage()
     {
         OpenFileDialog openFileDialog =
-            new() { Title = "选择图片", Filter = $"图片|*.jpg;*.jpeg;*.png;*.bmp" };
+            new()
+            {
+                Title = "选择图片".Translate(),
+                Filter = $"图片|*.jpg;*.jpeg;*.png;*.bmp".Translate()
+            };
         if (openFileDialog.ShowDialog() is true)
         {
             ModInfo.Value.Image.Value?.StreamSource?.Close();
@@ -153,7 +162,7 @@ public class ModEditWindowVM
     private void EditLang(string oldLang)
     {
         var window = new Window_AddLang();
-        window.Lang.Value = oldLang;
+        window.Lang.Value = oldLang.Translate();
         window.ShowDialog();
         if (window.IsCancel)
             return;
@@ -165,7 +174,10 @@ public class ModEditWindowVM
 
     private void RemoveLang(string oldLang)
     {
-        if (MessageBox.Show("确定删除吗", "", MessageBoxButton.YesNo) is MessageBoxResult.No)
+        if (
+            MessageBox.Show("确定删除吗".Translate(), "".Translate(), MessageBoxButton.YesNo)
+            is MessageBoxResult.No
+        )
             return;
         I18nHelper.Current.CultureNames.Remove(oldLang);
     }
@@ -174,19 +186,19 @@ public class ModEditWindowVM
     {
         if (string.IsNullOrEmpty(ModInfo.Value.SourcePath.Value))
         {
-            MessageBox.Show("源路径为空, 请使用 保存至");
+            MessageBox.Show("源路径为空, 请使用 保存至".Translate());
             return;
         }
         try
         {
-            ModInfo.Value.SaveTo(Path.GetDirectoryName(ModInfo.Value.SourcePath.Value));
+            ModInfo.Value.SaveTo(ModInfo.Value.SourcePath.Value);
         }
         catch (Exception ex)
         {
             MessageBox.Show($"保存失败 错误信息:\n{ex}");
             return;
         }
-        MessageBox.Show("保存成功");
+        MessageBox.Show("保存成功".Translate());
     }
 
     private void SaveTo()
@@ -194,23 +206,24 @@ public class ModEditWindowVM
         SaveFileDialog saveFileDialog =
             new()
             {
-                Title = "保存 模组信息文件,并在文件夹内保存模组数据",
-                Filter = $"LPS文件|*.lps;",
-                FileName = "info.lps"
+                Title = "保存 模组信息文件,并在文件夹内保存模组数据".Translate(),
+                Filter = $"LPS文件|*.lps;".Translate(),
+                FileName = "info.lps".Translate()
             };
         if (saveFileDialog.ShowDialog() is true)
         {
             try
             {
-                ModInfo.Value.SaveTo(Path.GetDirectoryName(saveFileDialog.FileName));
-                ModInfo.Value.SourcePath.Value = saveFileDialog.FileName;
+                var path = Path.GetDirectoryName(saveFileDialog.FileName);
+                ModInfo.Value.SaveTo(path);
+                ModInfo.Value.SourcePath.Value = path.Translate();
             }
             catch (Exception ex)
             {
                 MessageBox.Show($"保存失败 错误信息:\n{ex}");
                 return;
             }
+            MessageBox.Show("保存成功".Translate());
         }
-        MessageBox.Show("保存成功");
     }
 }

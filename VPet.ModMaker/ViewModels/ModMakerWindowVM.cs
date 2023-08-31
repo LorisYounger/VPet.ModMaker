@@ -65,7 +65,7 @@ public class ModMakerWindowVM
 
     public void CreateNewMod()
     {
-        ModInfoModel.Current = new();
+        ModInfoModel.Current ??= new();
         // I18nHelper.Current = new();
         ModEditWindow = new();
         ModEditWindow.Show();
