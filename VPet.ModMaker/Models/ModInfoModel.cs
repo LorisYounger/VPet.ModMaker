@@ -1,6 +1,7 @@
 ﻿using HKW.HKWViewModels.SimpleObservable;
 using LinePutScript;
 using LinePutScript.Converter;
+using LinePutScript.Localization.WPF;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -59,10 +60,10 @@ public class ModInfoModel : I18nModel<I18nModInfoModel>
 
     public string GetSummary()
     {
-        return $@"包含以下内容:
-食物: {Foods.Count}
-点击文本: {ClickTexts.Count}
-低状态文本: {LowTexts.Count}";
+        return @"包含以下内容:
+食物: {0}
+点击文本: {1}
+低状态文本: {2}".Translate(Foods.Count, ClickTexts.Count, LowTexts.Count);
     }
 
     public const string ModInfoFile = "info.lps";
