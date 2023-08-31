@@ -3,6 +3,7 @@
   xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
   xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
   xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+  xmlns:ll="clr-namespace:LinePutScript.Localization.WPF;assembly=LinePutScript.Localization.WPF"
   xmlns:local="clr-namespace:VPet.ModMaker.Views.ModEdit.FoodEdit"
   xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
   xmlns:pu="https://opensource.panuon.com/wpf-ui"
@@ -20,11 +21,11 @@
         <MenuItem
           Command="{Binding DataContext.EditFoodCommand, RelativeSource={RelativeSource AncestorType=Page, Mode=FindAncestor}}"
           CommandParameter="{Binding DataContext, RelativeSource={RelativeSource AncestorType=DataGridRow, Mode=FindAncestor}}"
-          Header="修改食物" />
+          Header="{ll:Str 修改食物}" />
         <MenuItem
           Command="{Binding DataContext.RemoveFoodCommand, RelativeSource={RelativeSource AncestorType=Page, Mode=FindAncestor}}"
           CommandParameter="{Binding DataContext, RelativeSource={RelativeSource AncestorType=DataGridRow, Mode=FindAncestor}}"
-          Header="删除食物" />
+          Header="{ll:Str 删除食物}" />
       </ContextMenu>
     </ResourceDictionary>
   </Page.Resources>
@@ -33,7 +34,7 @@
       <RowDefinition Height="Auto" />
       <RowDefinition />
     </Grid.RowDefinitions>
-    <TextBox pu:TextBoxHelper.Watermark="搜索食物" Text="{Binding FilterFoodText.Value, UpdateSourceTrigger=PropertyChanged}" />
+    <TextBox pu:TextBoxHelper.Watermark="{ll:Str 搜索食物}" Text="{Binding FilterFoodText.Value, UpdateSourceTrigger=PropertyChanged}" />
     <DataGrid
       x:Name="DataGrid_Food"
       Grid.Row="1"
@@ -62,12 +63,12 @@
           IsReadOnly="True"
           SortMemberPath="Name.Value">
           <DataGridTextColumn.Header>
-            <Label Content="食物ID" />
+            <Label Content="{ll:Str 食物Id}" />
           </DataGridTextColumn.Header>
         </DataGridTextColumn>
         <DataGridTemplateColumn IsReadOnly="True">
           <DataGridTemplateColumn.Header>
-            <Label Content="食物图片" />
+            <Label Content="{ll:Str 食物图片}" />
           </DataGridTemplateColumn.Header>
           <DataGridTemplateColumn.CellTemplate>
             <DataTemplate>
@@ -97,7 +98,7 @@
           IsReadOnly="True"
           SortMemberPath="CurrentI18nData.Value.Name.Value">
           <DataGridTextColumn.Header>
-            <Label Content="食物名称" />
+            <Label Content="{ll:Str 食物名称}" />
           </DataGridTextColumn.Header>
         </DataGridTextColumn>
         <DataGridTextColumn
@@ -106,7 +107,7 @@
           IsReadOnly="True"
           SortMemberPath="Type.Value">
           <DataGridTextColumn.Header>
-            <Label Content="食物类型" />
+            <Label Content="{ll:Str 食物类型}" />
           </DataGridTextColumn.Header>
         </DataGridTextColumn>
         <DataGridTextColumn
@@ -115,7 +116,7 @@
           IsReadOnly="True"
           SortMemberPath="StrengthFood.Value">
           <DataGridTextColumn.Header>
-            <Label Content="饱腹值" />
+            <Label Content="{ll:Str 饱腹值}" />
           </DataGridTextColumn.Header>
         </DataGridTextColumn>
         <DataGridTextColumn
@@ -124,7 +125,7 @@
           IsReadOnly="True"
           SortMemberPath="StrengthDrink.Value">
           <DataGridTextColumn.Header>
-            <Label Content="口渴值" />
+            <Label Content="{ll:Str 口渴值}" />
           </DataGridTextColumn.Header>
         </DataGridTextColumn>
         <DataGridTextColumn
@@ -133,7 +134,7 @@
           IsReadOnly="True"
           SortMemberPath="Health.Value">
           <DataGridTextColumn.Header>
-            <Label Content="健康值" />
+            <Label Content="{ll:Str 健康值}" />
           </DataGridTextColumn.Header>
         </DataGridTextColumn>
         <DataGridTextColumn
@@ -142,7 +143,7 @@
           IsReadOnly="True"
           SortMemberPath="Strength.Value">
           <DataGridTextColumn.Header>
-            <Label Content="体力值" />
+            <Label Content="{ll:Str 体力值}" />
           </DataGridTextColumn.Header>
         </DataGridTextColumn>
         <DataGridTextColumn
@@ -151,7 +152,7 @@
           IsReadOnly="True"
           SortMemberPath="Feeling.Value">
           <DataGridTextColumn.Header>
-            <Label Content="心情值" />
+            <Label Content="{ll:Str 心情值}" />
           </DataGridTextColumn.Header>
         </DataGridTextColumn>
         <DataGridTextColumn
@@ -160,7 +161,7 @@
           IsReadOnly="True"
           SortMemberPath="Likability.Value">
           <DataGridTextColumn.Header>
-            <Label Content="好感值" />
+            <Label Content="{ll:Str 好感值}" />
           </DataGridTextColumn.Header>
         </DataGridTextColumn>
         <DataGridTextColumn
@@ -169,7 +170,7 @@
           IsReadOnly="True"
           SortMemberPath="Exp.Value">
           <DataGridTextColumn.Header>
-            <Label Content="经验值" />
+            <Label Content="{ll:Str 经验值}" />
           </DataGridTextColumn.Header>
         </DataGridTextColumn>
         <DataGridTextColumn
@@ -178,7 +179,7 @@
           IsReadOnly="True"
           SortMemberPath="Price.Value">
           <DataGridTextColumn.Header>
-            <Label Content="价格" />
+            <Label Content="{ll:Str 价格}" />
           </DataGridTextColumn.Header>
         </DataGridTextColumn>
         <DataGridTextColumn
@@ -187,7 +188,7 @@
           IsReadOnly="True"
           SortMemberPath="CurrentI18nData.Value.Description.Value">
           <DataGridTextColumn.Header>
-            <Label Content="描述" />
+            <Label Content="{ll:Str 描述}" />
           </DataGridTextColumn.Header>
         </DataGridTextColumn>
       </DataGrid.Columns>

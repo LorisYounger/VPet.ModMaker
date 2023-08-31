@@ -13,4 +13,18 @@
     <Setter Property="Margin" Value="10" />
     <Setter Property="pu:ButtonHelper.CornerRadius" Value="24" />
   </Style>
+  <Style
+    x:Key="TextBlock_Wrap"
+    BasedOn="{StaticResource {x:Type TextBlock}}"
+    TargetType="TextBlock">
+    <Setter Property="TextWrapping" Value="Wrap" />
+  </Style>
+  <Style
+    x:Key="TextBox_Wrap"
+    BasedOn="{StaticResource {x:Type TextBox}}"
+    TargetType="TextBox">
+    <Setter Property="TextWrapping" Value="Wrap" />
+    <Setter Property="HorizontalContentAlignment" Value="Left" />
+    <Setter Property="VerticalContentAlignment" Value="Top" />
+  </Style>
 </ResourceDictionary>

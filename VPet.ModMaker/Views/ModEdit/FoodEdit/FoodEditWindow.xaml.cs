@@ -1,4 +1,5 @@
-﻿using Microsoft.Win32;
+﻿using LinePutScript.Localization.WPF;
+using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -48,17 +49,17 @@ public partial class FoodEditWindow : Window
     {
         if (string.IsNullOrEmpty(ViewModel.Food.Value.Name.Value))
         {
-            MessageBox.Show("Id不可为空", "", MessageBoxButton.OK, MessageBoxImage.Warning);
+            MessageBox.Show("Id不可为空".Translate(), "", MessageBoxButton.OK, MessageBoxImage.Warning);
             return;
         }
         if (ViewModel.Food.Value.CurrentI18nData.Value.Name.Value is null)
         {
-            MessageBox.Show("名称不可为空", "", MessageBoxButton.OK, MessageBoxImage.Warning);
+            MessageBox.Show("名称不可为空".Translate(), "", MessageBoxButton.OK, MessageBoxImage.Warning);
             return;
         }
         if (ViewModel.Food.Value.Image.Value is null)
         {
-            MessageBox.Show("图像不可为空", "", MessageBoxButton.OK, MessageBoxImage.Warning);
+            MessageBox.Show("图像不可为空".Translate(), "", MessageBoxButton.OK, MessageBoxImage.Warning);
             return;
         }
         if (

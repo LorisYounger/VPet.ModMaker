@@ -1,4 +1,5 @@
 ﻿using HKW.HKWViewModels.SimpleObservable;
+using LinePutScript.Localization.WPF;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -82,7 +83,7 @@ public class LowTextPageVM
 
     private void RemoveLowText(LowTextModel lowText)
     {
-        if (MessageBox.Show("确定删除吗", "", MessageBoxButton.YesNo) is MessageBoxResult.No)
+        if (MessageBox.Show("确定删除吗".Translate(), "", MessageBoxButton.YesNo) is MessageBoxResult.No)
             return;
         if (ShowLowTexts.Value.Count == LowTexts.Count)
         {

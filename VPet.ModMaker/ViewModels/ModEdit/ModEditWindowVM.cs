@@ -56,22 +56,22 @@ public class ModEditWindowVM
                 foreach (var food in ModInfo.Value.Foods)
                 {
                     var foodI18n = food.I18nDatas[i18n.Key];
-                    if (i18n.Value.TryGetValue(food.Name.Value, out var i18nName))
-                        foodI18n.Name.Value = i18nName.Translate();
-                    if (i18n.Value.TryGetValue(food.Description.Value, out var i18nDescription))
-                        foodI18n.Description.Value = i18nDescription.Translate();
+                    if (i18n.Value.TryGetValue(food.Name.Value, out var name))
+                        foodI18n.Name.Value = name;
+                    if (i18n.Value.TryGetValue(food.Description.Value, out var description))
+                        foodI18n.Description.Value = description;
                 }
                 foreach (var lowText in ModInfo.Value.LowTexts)
                 {
                     var lowTextI18n = lowText.I18nDatas[i18n.Key];
                     if (i18n.Value.TryGetValue(lowText.Name.Value, out var text))
-                        lowTextI18n.Text.Value = text.Translate();
+                        lowTextI18n.Text.Value = text;
                 }
                 foreach (var clickText in ModInfo.Value.ClickTexts)
                 {
                     var clickTextI18n = clickText.I18nDatas[i18n.Key];
                     if (i18n.Value.TryGetValue(clickText.Name.Value, out var text))
-                        clickTextI18n.Text.Value = text.Translate();
+                        clickTextI18n.Text.Value = text;
                 }
             }
         }
@@ -195,7 +195,7 @@ public class ModEditWindowVM
         }
         catch (Exception ex)
         {
-            MessageBox.Show($"保存失败 错误信息:\n{ex}");
+            MessageBox.Show("保存失败 错误信息:\n{0}".Translate(ex));
             return;
         }
         MessageBox.Show("保存成功".Translate());
@@ -220,7 +220,7 @@ public class ModEditWindowVM
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"保存失败 错误信息:\n{ex}");
+                MessageBox.Show($"保存失败 错误信息:\n{0}".Translate(ex));
                 return;
             }
             MessageBox.Show("保存成功".Translate());

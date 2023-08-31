@@ -1,4 +1,5 @@
 ﻿using HKW.HKWViewModels.SimpleObservable;
+using LinePutScript.Localization.WPF;
 using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
@@ -81,8 +82,8 @@ public class ModMakerWindowVM
         OpenFileDialog openFileDialog =
             new()
             {
-                Title = "模组信息文件",
-                Filter = $"LPS文件|*.lps;",
+                Title = "模组信息文件".Translate(),
+                Filter = $"LPS文件|*.lps;".Translate(),
                 FileName = "info.lps"
             };
         if (openFileDialog.ShowDialog() is true)
@@ -93,7 +94,7 @@ public class ModMakerWindowVM
                 var mod = new ModLoader(new DirectoryInfo(path));
                 if (mod.SuccessLoad is false)
                 {
-                    MessageBox.Show("模组载入失败");
+                    MessageBox.Show("模组载入失败".Translate());
                     return;
                 }
                 ModInfoModel.Current = new ModInfoModel(mod);
@@ -101,7 +102,7 @@ public class ModMakerWindowVM
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"模组载入失败:\n{ex}");
+                MessageBox.Show("模组载入失败:\n{0}".Translate(ex));
             }
         }
     }

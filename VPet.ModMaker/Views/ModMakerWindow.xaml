@@ -27,8 +27,8 @@
         <RowDefinition Height="Auto" />
         <RowDefinition />
       </Grid.RowDefinitions>
-      <Label Background="{x:Null}" Content="打开最近的内容" />
-      <TextBox Grid.Row="1" pu:TextBoxHelper.Watermark="最近的内容" />
+      <Label Background="{x:Null}" Content="{ll:Str 打开最近的内容}" />
+      <TextBox Grid.Row="1" pu:TextBoxHelper.Watermark="{ll:Str 最近的内容}" />
       <ListBox
         Grid.Row="2"
         d:ItemsSource="{d:SampleData ItemCount=5}"
@@ -53,12 +53,12 @@
                         <RowDefinition />
                       </Grid.RowDefinitions>
                       <TextBlock
-                        d:Text="Mod名称"
+                        d:Text="{ll:Str Mod名称}"
                         Text="{Binding Name.Value}"
                         TextWrapping="Wrap" />
                       <TextBlock
                         Grid.Row="1"
-                        d:Text="Mod描述"
+                        d:Text="{ll:Str Mod描述}"
                         Text="{Binding Description.Value}"
                         TextWrapping="Wrap" />
                     </Grid>
@@ -75,16 +75,16 @@
         <RowDefinition Height="Auto" />
         <RowDefinition />
       </Grid.RowDefinitions>
-      <Label Background="{x:Null}" Content="开始使用" />
+      <Label Background="{x:Null}" Content="{ll:Str 开始使用}" />
       <StackPanel Grid.Row="1">
         <Button
           x:Name="Button_CreateNewMod"
           Command="{Binding CreateNewModCommand}"
-          Content="创建新的模组" />
+          Content="{ll:Str 创建新的模组}" />
         <Button
           x:Name="Button_OpenFromFile"
           Command="{Binding LoadModFromFileCommand}"
-          Content="从文件中载入" />
+          Content="{ll:Str 从文件中载入}" />
       </StackPanel>
     </Grid>
   </Grid>

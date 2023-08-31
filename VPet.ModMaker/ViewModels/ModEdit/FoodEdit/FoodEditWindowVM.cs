@@ -1,4 +1,5 @@
 ﻿using HKW.HKWViewModels.SimpleObservable;
+using LinePutScript.Localization.WPF;
 using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
@@ -46,7 +47,11 @@ public class FoodEditWindowVM
     private void AddImage()
     {
         OpenFileDialog openFileDialog =
-            new() { Title = "选择图片", Filter = $"图片|*.jpg;*.jpeg;*.png;*.bmp" };
+            new()
+            {
+                Title = "选择图片".Translate(),
+                Filter = $"图片|*.jpg;*.jpeg;*.png;*.bmp".Translate()
+            };
         if (openFileDialog.ShowDialog() is true)
         {
             Food.Value.Image.Value = Utils.LoadImageToStream(openFileDialog.FileName);
@@ -56,7 +61,11 @@ public class FoodEditWindowVM
     private void ChangeImage()
     {
         OpenFileDialog openFileDialog =
-            new() { Title = "选择图片", Filter = $"图片|*.jpg;*.jpeg;*.png;*.bmp" };
+            new()
+            {
+                Title = "选择图片".Translate(),
+                Filter = $"图片|*.jpg;*.jpeg;*.png;*.bmp".Translate()
+            };
         if (openFileDialog.ShowDialog() is true)
         {
             Food.Value.Image.Value?.StreamSource?.Close();
