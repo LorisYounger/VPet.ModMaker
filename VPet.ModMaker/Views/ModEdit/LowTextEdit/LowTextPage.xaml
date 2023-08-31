@@ -57,10 +57,10 @@
       </DataGrid.RowStyle>
       <DataGrid.Columns>
         <DataGridTextColumn
-          Binding="{Binding Id.Value}"
+          Binding="{Binding Name.Value}"
           CanUserSort="True"
           IsReadOnly="True"
-          SortMemberPath="Id">
+          SortMemberPath="Id.Value">
           <DataGridTextColumn.Header>
             <Label Content="Id" />
           </DataGridTextColumn.Header>
@@ -69,7 +69,7 @@
           Binding="{Binding CurrentI18nData.Value.Text.Value}"
           CanUserSort="True"
           IsReadOnly="True"
-          SortMemberPath="Name">
+          SortMemberPath="CurrentI18nData.Value.Text.Value">
           <DataGridTextColumn.Header>
             <Label Content="文本" />
           </DataGridTextColumn.Header>
@@ -78,7 +78,7 @@
           Binding="{Binding Mode.Value}"
           CanUserSort="True"
           IsReadOnly="True"
-          SortMemberPath="Mode">
+          SortMemberPath="Mode.Value">
           <DataGridTextColumn.Header>
             <Label Content="状态" />
           </DataGridTextColumn.Header>
@@ -87,7 +87,7 @@
           Binding="{Binding Strength.Value}"
           CanUserSort="True"
           IsReadOnly="True"
-          SortMemberPath="StrengthFood">
+          SortMemberPath="Strength.Value">
           <DataGridTextColumn.Header>
             <Label Content="口渴/饥饿需求" />
           </DataGridTextColumn.Header>
@@ -96,7 +96,7 @@
           Binding="{Binding Like.Value}"
           CanUserSort="True"
           IsReadOnly="True"
-          SortMemberPath="Like">
+          SortMemberPath="Like.Value">
           <DataGridTextColumn.Header>
             <Label Content="好感需求" />
           </DataGridTextColumn.Header>

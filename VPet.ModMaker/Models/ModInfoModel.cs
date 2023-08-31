@@ -114,11 +114,12 @@ public class ModInfoModel : I18nModel<I18nModInfoModel>
         //lps.FindorAddLine("itemid").info = "0";
         File.WriteAllText(modInfoFile, lps.ToString());
         SaveFoods(path);
+        SaveText(path);
         SaveLang(path);
         SaveImage(path);
     }
 
-    public void SaveFoods(string path)
+    private void SaveFoods(string path)
     {
         if (Foods.Count == 0)
             return;
@@ -133,7 +134,45 @@ public class ModInfoModel : I18nModel<I18nModInfoModel>
         File.WriteAllText(foodFile, lps.ToString());
     }
 
-    public void SaveLang(string path)
+    private void SaveText(string path)
+    {
+        if (LowTexts.Count == 0 && ClickTexts.Count == 0)
+            return;
+        var textPath = Path.Combine(path, "text");
+        Directory.CreateDirectory(textPath);
+        SaveLowText(textPath);
+        SaveClickText(textPath);
+    }
+
+    private void SaveLowText(string textPath)
+    {
+        if (LowTexts.Count == 0)
+            return;
+        var textFile = Path.Combine(textPath, "lowText.lps");
+        File.Create(textFile).Close();
+        var lps = new LPS();
+        foreach (var text in LowTexts)
+        {
+            lps.Add(LPSConvert.SerializeObjectToLine<Line>(text.ToLowText(), "lowfoodtext"));
+        }
+        File.WriteAllText(textFile, lps.ToString());
+    }
+
+    private void SaveClickText(string textPath)
+    {
+        if (ClickTexts.Count == 0)
+            return;
+        var textFile = Path.Combine(textPath, "clickText.lps");
+        File.Create(textFile).Close();
+        var lps = new LPS();
+        foreach (var text in ClickTexts)
+        {
+            lps.Add(LPSConvert.SerializeObjectToLine<Line>(text.ToClickText(), "clicktext"));
+        }
+        File.WriteAllText(textFile, lps.ToString());
+    }
+
+    private void SaveLang(string path)
     {
         var langPath = Path.Combine(path, "lang");
         Directory.CreateDirectory(langPath);
@@ -151,12 +190,21 @@ public class ModInfoModel : I18nModel<I18nModInfoModel>
                     new Line(food.Description.Value, food.I18nDatas[cultureName].Description.Value)
                 );
             }
-            if (lps.Count > 0)
-                File.WriteAllText(cultureFile, lps.ToString());
+            foreach (var lowText in LowTexts)
+            {
+                lps.Add(new Line(lowText.Name.Value, lowText.I18nDatas[cultureName].Text.Value));
+            }
+            foreach (var clickText in ClickTexts)
+            {
+                lps.Add(
+                    new Line(clickText.Name.Value, clickText.I18nDatas[cultureName].Text.Value)
+                );
+            }
+            File.WriteAllText(cultureFile, lps.ToString());
         }
     }
 
-    public void SaveImage(string path)
+    private void SaveImage(string path)
     {
         var imagePath = Path.Combine(path, "image");
         Directory.CreateDirectory(imagePath);

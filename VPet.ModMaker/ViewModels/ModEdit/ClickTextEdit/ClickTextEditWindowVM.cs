@@ -13,6 +13,8 @@ namespace VPet.ModMaker.ViewModels.ModEdit.ClickTextEdit;
 public class ClickTextEditWindowVM
 {
     #region Value
+
+    public ClickTextModel OldClickText { get; set; }
     public ObservableValue<ClickTextModel> ClickText { get; } = new(new());
     public ObservableCollection<ClickText.ModeType> ModeTypes { get; } = new();
     public ObservableCollection<ClickText.DayTime> DayTimes { get; } = new();

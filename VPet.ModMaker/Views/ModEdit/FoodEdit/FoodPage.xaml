@@ -60,7 +60,7 @@
           Binding="{Binding Name.Value}"
           CanUserSort="True"
           IsReadOnly="True"
-          SortMemberPath="Name">
+          SortMemberPath="Name.Value">
           <DataGridTextColumn.Header>
             <Label Content="食物ID" />
           </DataGridTextColumn.Header>
@@ -95,7 +95,7 @@
           Binding="{Binding CurrentI18nData.Value.Name.Value}"
           CanUserSort="True"
           IsReadOnly="True"
-          SortMemberPath="Name">
+          SortMemberPath="CurrentI18nData.Value.Name.Value">
           <DataGridTextColumn.Header>
             <Label Content="食物名称" />
           </DataGridTextColumn.Header>
@@ -113,7 +113,7 @@
           Binding="{Binding StrengthFood.Value}"
           CanUserSort="True"
           IsReadOnly="True"
-          SortMemberPath="StrengthFood">
+          SortMemberPath="StrengthFood.Value">
           <DataGridTextColumn.Header>
             <Label Content="饱腹值" />
           </DataGridTextColumn.Header>
@@ -122,7 +122,7 @@
           Binding="{Binding StrengthDrink.Value}"
           CanUserSort="True"
           IsReadOnly="True"
-          SortMemberPath="StrengthDrink">
+          SortMemberPath="StrengthDrink.Value">
           <DataGridTextColumn.Header>
             <Label Content="口渴值" />
           </DataGridTextColumn.Header>
@@ -131,7 +131,7 @@
           Binding="{Binding Health.Value}"
           CanUserSort="True"
           IsReadOnly="True"
-          SortMemberPath="Health">
+          SortMemberPath="Health.Value">
           <DataGridTextColumn.Header>
             <Label Content="健康值" />
           </DataGridTextColumn.Header>
@@ -140,7 +140,7 @@
           Binding="{Binding Strength.Value}"
           CanUserSort="True"
           IsReadOnly="True"
-          SortMemberPath="Strength">
+          SortMemberPath="Strength.Value">
           <DataGridTextColumn.Header>
             <Label Content="体力值" />
           </DataGridTextColumn.Header>
@@ -149,7 +149,7 @@
           Binding="{Binding Feeling.Value}"
           CanUserSort="True"
           IsReadOnly="True"
-          SortMemberPath="Feeling">
+          SortMemberPath="Feeling.Value">
           <DataGridTextColumn.Header>
             <Label Content="心情值" />
           </DataGridTextColumn.Header>
@@ -158,7 +158,7 @@
           Binding="{Binding Likability.Value}"
           CanUserSort="True"
           IsReadOnly="True"
-          SortMemberPath="Likability">
+          SortMemberPath="Likability.Value">
           <DataGridTextColumn.Header>
             <Label Content="好感值" />
           </DataGridTextColumn.Header>
@@ -167,7 +167,7 @@
           Binding="{Binding Exp.Value}"
           CanUserSort="True"
           IsReadOnly="True"
-          SortMemberPath="Exp">
+          SortMemberPath="Exp.Value">
           <DataGridTextColumn.Header>
             <Label Content="经验值" />
           </DataGridTextColumn.Header>
@@ -176,7 +176,7 @@
           Binding="{Binding Price.Value}"
           CanUserSort="True"
           IsReadOnly="True"
-          SortMemberPath="Price">
+          SortMemberPath="Price.Value">
           <DataGridTextColumn.Header>
             <Label Content="价格" />
           </DataGridTextColumn.Header>
@@ -185,7 +185,7 @@
           Binding="{Binding CurrentI18nData.Value.Description.Value}"
           CanUserSort="True"
           IsReadOnly="True"
-          SortMemberPath="Description">
+          SortMemberPath="CurrentI18nData.Value.Description.Value">
           <DataGridTextColumn.Header>
             <Label Content="描述" />
           </DataGridTextColumn.Header>

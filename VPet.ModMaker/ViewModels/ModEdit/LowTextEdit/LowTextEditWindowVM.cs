@@ -13,6 +13,7 @@ namespace VPet.ModMaker.ViewModels.ModEdit.LowTextEdit;
 public class LowTextEditWindowVM
 {
     #region Value
+    public LowTextModel OldLowText { get; set; }
     public ObservableValue<LowTextModel> LowText { get; } = new(new());
 
     public ObservableCollection<LowText.ModeType> ModeTypes { get; } = new();

@@ -38,12 +38,17 @@ public partial class LowTextEditWindow : Window
 
     private void Button_Yes_Click(object sender, RoutedEventArgs e)
     {
-        if (string.IsNullOrEmpty(ViewModel.LowText.Value.Id.Value))
+        if (string.IsNullOrEmpty(ViewModel.LowText.Value.Name.Value))
         {
             MessageBox.Show("Id不可为空", "", MessageBoxButton.OK, MessageBoxImage.Warning);
             return;
         }
-        if (ModInfoModel.Current.LowTexts.Any(i => i.Id.Value == ViewModel.LowText.Value.Id.Value))
+        if (
+            ViewModel.OldLowText?.Name.Value != ViewModel.LowText.Value.Name.Value
+            && ModInfoModel.Current.LowTexts.Any(
+                i => i.Name.Value == ViewModel.LowText.Value.Name.Value
+            )
+        )
         {
             MessageBox.Show("此Id已存在", "", MessageBoxButton.OK, MessageBoxImage.Warning);
             return;

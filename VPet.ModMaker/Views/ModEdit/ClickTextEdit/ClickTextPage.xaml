@@ -60,10 +60,10 @@
       </DataGrid.RowStyle>
       <DataGrid.Columns>
         <DataGridTextColumn
-          Binding="{Binding Id.Value}"
+          Binding="{Binding Name.Value}"
           CanUserSort="True"
           IsReadOnly="True"
-          SortMemberPath="Id">
+          SortMemberPath="Name.Value">
           <DataGridTextColumn.Header>
             <Label Content="Id" />
           </DataGridTextColumn.Header>
@@ -72,7 +72,7 @@
           Binding="{Binding CurrentI18nData.Value.Text.Value}"
           CanUserSort="True"
           IsReadOnly="True"
-          SortMemberPath="Text">
+          SortMemberPath="CurrentI18nData.Value.Text.Value">
           <DataGridTextColumn.Header>
             <Label Content="文本" />
           </DataGridTextColumn.Header>
@@ -81,7 +81,7 @@
           Binding="{Binding Mode.Value}"
           CanUserSort="True"
           IsReadOnly="True"
-          SortMemberPath="Mode">
+          SortMemberPath="Mode.Value">
           <DataGridTextColumn.Header>
             <Label Content="状态" />
           </DataGridTextColumn.Header>
@@ -90,7 +90,7 @@
           Binding="{Binding Working.Value}"
           CanUserSort="True"
           IsReadOnly="True"
-          SortMemberPath="Working">
+          SortMemberPath="Working.Value">
           <DataGridTextColumn.Header>
             <Label Content="指定工作" />
           </DataGridTextColumn.Header>
@@ -99,7 +99,7 @@
           Binding="{Binding WorkingState.Value}"
           CanUserSort="True"
           IsReadOnly="True"
-          SortMemberPath="WorkingState">
+          SortMemberPath="WorkingState.Value">
           <DataGridTextColumn.Header>
             <Label Content="工作状态" />
           </DataGridTextColumn.Header>
@@ -108,7 +108,7 @@
           Binding="{Binding LikeMin.Value}"
           CanUserSort="True"
           IsReadOnly="True"
-          SortMemberPath="LikeMin">
+          SortMemberPath="LikeMin.Value">
           <DataGridTextColumn.Header>
             <Label Content="最小好感" />
           </DataGridTextColumn.Header>
@@ -117,7 +117,7 @@
           Binding="{Binding LikeMax.Value}"
           CanUserSort="True"
           IsReadOnly="True"
-          SortMemberPath="LikeMax">
+          SortMemberPath="LikeMax.Value">
           <DataGridTextColumn.Header>
             <Label Content="最大好感" />
           </DataGridTextColumn.Header>
@@ -126,7 +126,7 @@
           Binding="{Binding DayTime.Value}"
           CanUserSort="True"
           IsReadOnly="True"
-          SortMemberPath="DayTime">
+          SortMemberPath="DayTime.Value">
           <DataGridTextColumn.Header>
             <Label Content="时间" />
           </DataGridTextColumn.Header>

@@ -63,13 +63,13 @@ public class ModEditWindowVM
                 foreach (var lowText in ModInfo.Value.LowTexts)
                 {
                     var lowTextI18n = lowText.I18nDatas[i18n.Key];
-                    if (i18n.Value.TryGetValue(lowText.Text, out var text))
+                    if (i18n.Value.TryGetValue(lowText.Name.Value, out var text))
                         lowTextI18n.Text.Value = text;
                 }
                 foreach (var clickText in ModInfo.Value.ClickTexts)
                 {
                     var clickTextI18n = clickText.I18nDatas[i18n.Key];
-                    if (i18n.Value.TryGetValue(clickText.Text, out var text))
+                    if (i18n.Value.TryGetValue(clickText.Name.Value, out var text))
                         clickTextI18n.Text.Value = text;
                 }
             }

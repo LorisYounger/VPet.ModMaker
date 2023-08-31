@@ -64,6 +64,7 @@ public class LowTextPageVM
     {
         var window = new LowTextEditWindow();
         var vm = window.ViewModel;
+        vm.OldLowText = lowText;
         var newLowTest = vm.LowText.Value = new(lowText);
         window.ShowDialog();
         if (window.IsCancel)

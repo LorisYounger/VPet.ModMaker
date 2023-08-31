@@ -65,6 +65,7 @@ public class FoodPageVM
     {
         var window = new FoodEditWindow();
         var vm = window.ViewModel;
+        vm.OldFood = food;
         var newFood = vm.Food.Value = new(food);
         window.ShowDialog();
         if (window.IsCancel)

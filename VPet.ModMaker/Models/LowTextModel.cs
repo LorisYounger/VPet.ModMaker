@@ -11,8 +11,7 @@ namespace VPet.ModMaker.Models;
 
 public class LowTextModel : I18nModel<I18nLowTextModel>
 {
-    public string Text { get; set; }
-    public ObservableValue<string> Id { get; } = new();
+    public ObservableValue<string> Name { get; } = new();
     public ObservableValue<LowText.ModeType> Mode { get; } = new();
     public ObservableValue<LowText.StrengthType> Strength { get; } = new();
     public ObservableValue<LowText.LikeType> Like { get; } = new();
@@ -22,6 +21,7 @@ public class LowTextModel : I18nModel<I18nLowTextModel>
     public LowTextModel(LowTextModel lowText)
         : this()
     {
+        Name.Value = lowText.Name.Value;
         Mode.Value = lowText.Mode.Value;
         Strength.Value = lowText.Strength.Value;
         Like.Value = lowText.Like.Value;
@@ -36,7 +36,7 @@ public class LowTextModel : I18nModel<I18nLowTextModel>
     public LowTextModel(LowText lowText)
         : this()
     {
-        Text = lowText.Text;
+        Name.Value = lowText.Text;
         Mode.Value = lowText.Mode;
         Strength.Value = lowText.Strength;
         Like.Value = lowText.Like;
@@ -48,7 +48,7 @@ public class LowTextModel : I18nModel<I18nLowTextModel>
     {
         return new()
         {
-            Text = Text,
+            Text = Name.Value,
             Mode = Mode.Value,
             Strength = Strength.Value,
             Like = Like.Value,

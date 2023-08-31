@@ -45,7 +45,7 @@
           <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
         <Label Content="Id" />
-        <TextBox Grid.Column="1" Text="{Binding LowText.Value.Id.Value, UpdateSourceTrigger=PropertyChanged}" />
+        <TextBox Grid.Column="1" Text="{Binding LowText.Value.Name.Value, UpdateSourceTrigger=PropertyChanged}" />
         <Label Grid.Row="1" Content="口渴/饥饿状态" />
         <Label Grid.Row="1" Content="状态" />
         <ComboBox

@@ -61,6 +61,7 @@ public class ClickTextPageVM
     {
         var window = new ClickTextEditWindow();
         var vm = window.ViewModel;
+        vm.OldClickText = clickText;
         var newLowTest = vm.ClickText.Value = new(clickText);
         window.ShowDialog();
         if (window.IsCancel)

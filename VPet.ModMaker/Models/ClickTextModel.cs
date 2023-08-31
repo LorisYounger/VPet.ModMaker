@@ -1,4 +1,5 @@
 ﻿using HKW.HKWViewModels.SimpleObservable;
+using LinePutScript.Converter;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,8 +11,7 @@ namespace VPet.ModMaker.Models;
 
 public class ClickTextModel : I18nModel<I18nClickTextModel>
 {
-    public string Text { get; set; }
-    public ObservableValue<string> Id { get; } = new();
+    public ObservableValue<string> Name { get; } = new();
     public ObservableValue<ClickText.ModeType> Mode { get; } = new();
 
     public ObservableValue<string> Working { get; } = new();
@@ -25,6 +25,7 @@ public class ClickTextModel : I18nModel<I18nClickTextModel>
     public ClickTextModel(ClickTextModel clickText)
         : this()
     {
+        Name.Value = clickText.Name.Value;
         Mode.Value = clickText.Mode.Value;
         Working.Value = clickText.Working.Value;
         WorkingState.Value = clickText.WorkingState.Value;
@@ -42,7 +43,7 @@ public class ClickTextModel : I18nModel<I18nClickTextModel>
     public ClickTextModel(ClickText clickText)
         : this()
     {
-        Text = clickText.Text;
+        Name.Value = clickText.Text;
         Mode.Value = clickText.Mode;
         Working.Value = clickText.Working;
         WorkingState.Value = clickText.State;
@@ -55,7 +56,7 @@ public class ClickTextModel : I18nModel<I18nClickTextModel>
     {
         return new()
         {
-            Text = Text,
+            Text = Name.Value,
             Mode = Mode.Value,
             Working = Working.Value,
             State = WorkingState.Value,

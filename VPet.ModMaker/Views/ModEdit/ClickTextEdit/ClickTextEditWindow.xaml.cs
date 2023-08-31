@@ -37,18 +37,24 @@ public partial class ClickTextEditWindow : Window
 
     private void Button_Yes_Click(object sender, RoutedEventArgs e)
     {
-        if (string.IsNullOrEmpty(ViewModel.ClickText.Value.Id.Value))
+        if (string.IsNullOrEmpty(ViewModel.ClickText.Value.Name.Value))
         {
             MessageBox.Show("Id不可为空", "", MessageBoxButton.OK, MessageBoxImage.Warning);
             return;
         }
         if (
-            ModInfoModel.Current.ClickTexts.Any(
-                i => i.Id.Value == ViewModel.ClickText.Value.Id.Value
+            ViewModel.OldClickText?.Name.Value != ViewModel.ClickText.Value.Name.Value
+            && ModInfoModel.Current.ClickTexts.Any(
+                i => i.Name.Value == ViewModel.ClickText.Value.Name.Value
             )
         )
         {
             MessageBox.Show("此Id已存在", "", MessageBoxButton.OK, MessageBoxImage.Warning);
+            return;
+        }
+        if (string.IsNullOrEmpty(ViewModel.ClickText.Value.CurrentI18nData.Value.Text.Value))
+        {
+            MessageBox.Show("文本不可为空", "", MessageBoxButton.OK, MessageBoxImage.Warning);
             return;
         }
         IsCancel = false;

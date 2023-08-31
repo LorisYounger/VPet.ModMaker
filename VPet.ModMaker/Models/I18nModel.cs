@@ -19,10 +19,12 @@ public class I18nModel<T>
         I18nHelper.Current.AddLang += AddLang;
         I18nHelper.Current.RemoveLang += RemoveLang;
         I18nHelper.Current.ReplaceLang += ReplaceLang;
-        if (I18nDatas.Count == 0)
+        if (I18nHelper.Current.CultureNames.Count == 0)
             return;
-        foreach (var item in I18nDatas)
-            I18nDatas[item.Key] = item.Value;
+        foreach (var item in I18nHelper.Current.CultureNames)
+        {
+            I18nDatas.Add(item, new());
+        }
         CurrentI18nData.Value = I18nDatas[I18nHelper.Current.CultureName.Value];
     }
 
