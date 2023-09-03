@@ -97,7 +97,7 @@
     <Compile Include="Models\I18nModel.cs" />
     <Compile Include="Models\LowTextModel.cs" />
     <Compile Include="Models\ModLoader.cs" />
-    <Compile Include="Models\ModMakeHistory.cs" />
+    <Compile Include="Models\ModMakerHistory.cs" />
     <Compile Include="Models\ModMakerInfo.cs" />
     <Compile Include="Models\PetModel.cs" />
     <Compile Include="ViewModels\ModEdit\ClickTextEdit\ClickTextEditWindowVM.cs" />

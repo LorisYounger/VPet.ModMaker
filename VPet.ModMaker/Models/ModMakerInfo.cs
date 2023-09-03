@@ -8,7 +8,6 @@ namespace VPet.ModMaker.Models;
 
 public static class ModMakerInfo
 {
-    // TODO: 可修改的主要文化 ?
-    public const string MainCulture = "zh-Hans";
     public const string BaseDirectory = nameof(ModMaker);
+    public const string HistoryFile = $"{BaseDirectory}\\history.lps";
 }

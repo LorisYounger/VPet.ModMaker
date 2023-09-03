@@ -1,4 +1,5 @@
 ﻿using LinePutScript;
+using LinePutScript.Localization.WPF;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -39,7 +40,15 @@ public partial class ModMakerWindow : Window
     {
         if (sender is not ListBoxItem item)
             return;
-        ModInfoModel.Current = (ModInfoModel)item.DataContext;
-        ViewModel.CreateNewMod();
+        if (item.DataContext is not ModMakerHistory history)
+            return;
+        var loader = new ModLoader(new(history.SourcePath));
+        if (loader.SuccessLoad)
+        {
+            ModInfoModel.Current = new(loader);
+            ViewModel.CreateNewMod();
+        }
+        else
+            MessageBox.Show($"载入失败".Translate());
     }
 }

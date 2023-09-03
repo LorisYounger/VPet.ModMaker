@@ -1,4 +1,6 @@
 ﻿using HKW.HKWViewModels.SimpleObservable;
+using LinePutScript;
+using LinePutScript.Converter;
 using LinePutScript.Localization.WPF;
 using Microsoft.Win32;
 using System;
@@ -26,6 +28,8 @@ public class ModMakerWindowVM
 
     public ObservableCollection<ModInfoModel> ShowMods { get; set; }
     public ObservableCollection<ModInfoModel> Mods { get; } = new();
+
+    public ObservableCollection<ModMakerHistory> Histories { get; } = new();
     #endregion
     #region Command
     public ObservableCommand CreateNewModCommand { get; } = new();
@@ -35,7 +39,7 @@ public class ModMakerWindowVM
 
     public ModMakerWindowVM(ModMakerWindow window)
     {
-        LoadMods();
+        LoadHistories();
         ModMakerWindow = window;
         ShowMods = Mods;
         CreateNewModCommand.ExecuteAction = CreateNewMod;
@@ -43,16 +47,49 @@ public class ModMakerWindowVM
         ModFilterText.ValueChanged += ModFilterText_ValueChanged;
     }
 
-    private void LoadMods()
+    private void LoadHistories()
     {
-        var dic = Directory.CreateDirectory(ModMakerInfo.BaseDirectory);
-        foreach (var modDic in dic.EnumerateDirectories())
+        if (File.Exists(ModMakerInfo.HistoryFile) is false)
+            return;
+        var lps = new LPS(File.ReadAllText(ModMakerInfo.HistoryFile));
+        foreach (var line in lps)
+            Histories.Add(LPSConvert.DeserializeObject<ModMakerHistory>(line));
+    }
+
+    private void SaveHistories()
+    {
+        if (File.Exists(ModMakerInfo.HistoryFile) is false)
+            File.Create(ModMakerInfo.HistoryFile).Close();
+        var lps = new LPS();
+        foreach (var history in Histories)
+            lps.Add(
+                new Line(nameof(history))
+                {
+                    new Sub("Name", history.Name),
+                    new Sub("SourcePath", history.SourcePath),
+                    new Sub("LastTime", history.LastTimeString)
+                }
+            );
+        File.WriteAllText(ModMakerInfo.HistoryFile, lps.ToString());
+    }
+
+    private void AddHistories(ModInfoModel modInfo)
+    {
+        if (Histories.FirstOrDefault(h => h.Name == modInfo.Name.Value) is ModMakerHistory history)
         {
-            var mod = new ModLoader(modDic);
-            if (mod.SuccessLoad is false)
-                continue;
-            var modModel = new ModInfoModel(mod);
-            Mods.Add(modModel);
+            history.SourcePath = modInfo.SourcePath.Value;
+            history.LastTime = DateTime.Now;
+        }
+        else
+        {
+            Histories.Add(
+                new()
+                {
+                    Name = modInfo.Name.Value,
+                    SourcePath = modInfo.SourcePath.Value,
+                    LastTime = DateTime.Now,
+                }
+            );
         }
     }
 
@@ -67,12 +104,15 @@ public class ModMakerWindowVM
     public void CreateNewMod()
     {
         ModInfoModel.Current ??= new();
-        // I18nHelper.Current = new();
         ModEditWindow = new();
         ModEditWindow.Show();
         ModMakerWindow.Hide();
         ModEditWindow.Closed += (s, e) =>
         {
+            var modInfo = ModInfoModel.Current;
+            if (string.IsNullOrEmpty(modInfo.SourcePath.Value) is false)
+                AddHistories(modInfo);
+            SaveHistories();
             ModMakerWindow.Close();
         };
     }

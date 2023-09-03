@@ -32,7 +32,7 @@
       <ListBox
         Grid.Row="2"
         d:ItemsSource="{d:SampleData ItemCount=5}"
-        ItemsSource="{Binding Mods}"
+        ItemsSource="{Binding Histories}"
         Style="{StaticResource SideMenuListBoxStyle}">
         <ListBox.ItemContainerStyle>
           <Style BasedOn="{StaticResource {x:Type ListBoxItem}}" TargetType="ListBoxItem">
@@ -41,12 +41,12 @@
             <Setter Property="Template">
               <Setter.Value>
                 <ControlTemplate>
-                  <Grid ToolTip="{Binding Summary.Value}">
+                  <Grid Background="White">
                     <Grid.ColumnDefinitions>
                       <ColumnDefinition Width="Auto" />
                       <ColumnDefinition />
                     </Grid.ColumnDefinitions>
-                    <Image Width="64" Source="{Binding Image.Value}" />
+                    <Image Width="64" Source="{Binding Image}" />
                     <Grid Grid.Column="1">
                       <Grid.RowDefinitions>
                         <RowDefinition Height="Auto" />
@@ -54,12 +54,18 @@
                       </Grid.RowDefinitions>
                       <TextBlock
                         d:Text="{ll:Str Mod名称}"
-                        Text="{Binding Name.Value}"
+                        FontWeight="Bold"
+                        Text="{Binding Name}"
                         TextWrapping="Wrap" />
                       <TextBlock
+                        HorizontalAlignment="Right"
+                        VerticalAlignment="Top"
+                        Text="{Binding LastTimeString}" />
+                      <TextBlock
                         Grid.Row="1"
+                        VerticalAlignment="Bottom"
                         d:Text="{ll:Str Mod描述}"
-                        Text="{Binding Description.Value}"
+                        Text="{Binding SourcePath}"
                         TextWrapping="Wrap" />
                     </Grid>
                   </Grid>
