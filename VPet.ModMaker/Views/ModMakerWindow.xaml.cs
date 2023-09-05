@@ -57,8 +57,7 @@ public partial class ModMakerWindow : Window
         var loader = new ModLoader(new(history.SourcePath));
         if (loader.SuccessLoad)
         {
-            ModInfoModel.Current = new(loader);
-            ViewModel.CreateNewMod();
+            ViewModel.EditMod(new(loader));
         }
         else
             MessageBox.Show($"载入失败".Translate());

@@ -17,7 +17,7 @@ namespace VPet.ModMaker.Models;
 
 public class ModInfoModel : I18nModel<I18nModInfoModel>
 {
-    public static ModInfoModel Current { get; set; }
+    public static ModInfoModel Current { get; set; } = new();
 
     public ObservableValue<string> Name { get; } = new();
     public ObservableValue<string> Description { get; } = new();

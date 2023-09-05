@@ -63,6 +63,7 @@
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
             <RowDefinition />
           </Grid.RowDefinitions>
           <Label Content="{ll:Str 食物Id}" />
@@ -77,15 +78,21 @@
             Grid.Column="1"
             ItemsSource="{Binding Food.Value.FoodTypes}"
             SelectedItem="{Binding Food.Value.Type.Value}" />
-          <Label Grid.Row="2" Content="{ll:Str 食物名称}" />
+          <Label Grid.Row="2" Content="{ll:Str 动画名称}" />
           <TextBox
             Grid.Row="2"
             Grid.Column="1"
-            pu:TextBoxHelper.Watermark="{ll:Str 食物名称}"
-            Text="{Binding Food.Value.CurrentI18nData.Value.Name.Value, UpdateSourceTrigger=PropertyChanged}" />
-          <Label Grid.Row="3" Content="{ll:Str 食物描述}" />
+            pu:TextBoxHelper.Watermark="{ll:Str 动画名称(非必要)}"
+            Text="{Binding Food.Value.Graph.Value, UpdateSourceTrigger=PropertyChanged}" />
+          <Label Grid.Row="3" Content="{ll:Str 食物名称}" />
           <TextBox
             Grid.Row="3"
+            Grid.Column="1"
+            pu:TextBoxHelper.Watermark="{ll:Str 食物名称}"
+            Text="{Binding Food.Value.CurrentI18nData.Value.Name.Value, UpdateSourceTrigger=PropertyChanged}" />
+          <Label Grid.Row="4" Content="{ll:Str 食物描述}" />
+          <TextBox
+            Grid.Row="4"
             Grid.Column="1"
             pu:TextBoxHelper.Watermark="{ll:Str 食物描述}"
             Text="{Binding Food.Value.CurrentI18nData.Value.Description.Value, UpdateSourceTrigger=PropertyChanged}" />

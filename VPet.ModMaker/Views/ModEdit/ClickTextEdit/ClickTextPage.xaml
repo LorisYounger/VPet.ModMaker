@@ -68,7 +68,7 @@
           IsReadOnly="True"
           SortMemberPath="Name.Value">
           <DataGridTextColumn.Header>
-            <Label Content="Id" />
+            <TextBlock Text="Id" />
           </DataGridTextColumn.Header>
         </DataGridTextColumn>
         <DataGridTextColumn
@@ -79,7 +79,7 @@
           IsReadOnly="True"
           SortMemberPath="CurrentI18nData.Value.Text.Value">
           <DataGridTextColumn.Header>
-            <Label Content="{ll:Str 文本}" />
+            <TextBlock Text="{ll:Str 文本}" />
           </DataGridTextColumn.Header>
         </DataGridTextColumn>
         <DataGridTextColumn
@@ -88,7 +88,7 @@
           IsReadOnly="True"
           SortMemberPath="Mode.Value">
           <DataGridTextColumn.Header>
-            <Label Content="{ll:Str 状态}" />
+            <TextBlock Text="{ll:Str 状态}" />
           </DataGridTextColumn.Header>
         </DataGridTextColumn>
         <DataGridTextColumn
@@ -97,7 +97,7 @@
           IsReadOnly="True"
           SortMemberPath="Working.Value">
           <DataGridTextColumn.Header>
-            <Label Content="{ll:Str 指定工作}" />
+            <TextBlock Text="{ll:Str 指定工作}" />
           </DataGridTextColumn.Header>
         </DataGridTextColumn>
         <DataGridTextColumn
@@ -106,7 +106,7 @@
           IsReadOnly="True"
           SortMemberPath="WorkingState.Value">
           <DataGridTextColumn.Header>
-            <Label Content="{ll:Str 工作状态}" />
+            <TextBlock Text="{ll:Str 工作状态}" />
           </DataGridTextColumn.Header>
         </DataGridTextColumn>
         <DataGridTextColumn

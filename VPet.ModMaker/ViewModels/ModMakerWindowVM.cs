@@ -104,7 +104,18 @@ public class ModMakerWindowVM
 
     public void CreateNewMod()
     {
-        ModInfoModel.Current ??= new();
+        ModInfoModel.Current = new();
+        ShowEditWindow();
+    }
+
+    public void EditMod(ModInfoModel modInfo)
+    {
+        ModInfoModel.Current = modInfo;
+        ShowEditWindow();
+    }
+
+    private void ShowEditWindow()
+    {
         ModEditWindow = new();
         ModEditWindow.Show();
         ModMakerWindow.Hide();

@@ -18,6 +18,7 @@ public class FoodModel : I18nModel<I18nFoodModel>
 
     public ObservableValue<string> Name { get; } = new();
     public ObservableValue<string> Description { get; } = new();
+    public ObservableValue<string> Graph { get; } = new();
     public ObservableValue<Food.FoodType> Type { get; } = new();
     public ObservableValue<double> Strength { get; } = new();
     public ObservableValue<double> StrengthFood { get; } = new();
@@ -36,6 +37,7 @@ public class FoodModel : I18nModel<I18nFoodModel>
     {
         Name.Value = food.Name.Value;
         Description.Value = food.Description.Value;
+        Graph.Value = food.Graph.Value;
         Type.Value = food.Type.Value;
         Strength.Value = food.Strength.Value;
         StrengthFood.Value = food.StrengthFood.Value;
@@ -60,6 +62,7 @@ public class FoodModel : I18nModel<I18nFoodModel>
     {
         Name.Value = food.Name;
         Description.Value = food.Desc;
+        Graph.Value = food.Graph;
         Type.Value = food.Type;
         Strength.Value = food.Strength;
         StrengthDrink.Value = food.StrengthDrink;
@@ -79,6 +82,7 @@ public class FoodModel : I18nModel<I18nFoodModel>
         {
             Name = Name.Value,
             Desc = $"{Name.Value}_{nameof(Description)}",
+            Graph = Graph.Value,
             Type = Type.Value,
             Strength = Strength.Value,
             StrengthFood = StrengthFood.Value,

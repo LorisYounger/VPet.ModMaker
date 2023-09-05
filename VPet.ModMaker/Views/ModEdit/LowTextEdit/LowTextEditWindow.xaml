@@ -21,8 +21,24 @@
       <ColumnDefinition Width="200" />
     </Grid.ColumnDefinitions>
     <Grid>
+      <Grid.RowDefinitions>
+        <RowDefinition Height="Auto" />
+        <RowDefinition />
+      </Grid.RowDefinitions>
+      <Grid>
+        <Grid.ColumnDefinitions>
+          <ColumnDefinition Width="Auto" />
+          <ColumnDefinition />
+        </Grid.ColumnDefinitions>
+        <Label Content="Id" />
+        <TextBox
+          Grid.Column="1"
+          Style="{StaticResource TextBox_Wrap}"
+          Text="{Binding LowText.Value.Name.Value, UpdateSourceTrigger=PropertyChanged}" />
+      </Grid>
       <TextBox
         x:Name="TextBox_Text"
+        Grid.Row="1"
         d:Text="这是一个测试文本,这是一个测试文本,这是一个测试文本,这是一个测试文本,这是一个测试文本,这是一个测试文本,这是一个测试文本,"
         pu:TextBoxHelper.Watermark="{ll:Str 文本}"
         Style="{StaticResource TextBox_Wrap}"
@@ -39,31 +55,24 @@
           <ColumnDefinition />
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
-          <RowDefinition Height="*" />
           <RowDefinition Height="Auto" />
           <RowDefinition Height="Auto" />
           <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
-        <Label Content="Id" />
-        <TextBox
-          Grid.Column="1"
-          Style="{StaticResource TextBox_Wrap}"
-          Text="{Binding LowText.Value.Name.Value, UpdateSourceTrigger=PropertyChanged}" />
-        <Label Grid.Row="1" Content="{ll:Str 状态}" />
+        <Label Content="{ll:Str 状态}" />
         <ComboBox
-          Grid.Row="1"
           Grid.Column="1"
           ItemsSource="{Binding LowText.Value.ModeTypes}"
           SelectedItem="{Binding LowText.Value.Mode.Value}" />
-        <Label Grid.Row="2" Content="{ll:Str 饥渴状态}" />
+        <Label Grid.Row="1" Content="{ll:Str 饥渴状态}" />
         <ComboBox
-          Grid.Row="2"
+          Grid.Row="1"
           Grid.Column="1"
           ItemsSource="{Binding LowText.Value.StrengthTypes}"
           SelectedItem="{Binding LowText.Value.Strength.Value}" />
-        <Label Grid.Row="3" Content="{ll:Str 好感度需求}" />
+        <Label Grid.Row="2" Content="{ll:Str 好感度需求}" />
         <ComboBox
-          Grid.Row="3"
+          Grid.Row="2"
           Grid.Column="1"
           ItemsSource="{Binding LowText.Value.LikeTypes}"
           SelectedItem="{Binding LowText.Value.Like.Value}" />
