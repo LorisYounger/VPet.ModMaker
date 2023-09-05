@@ -29,6 +29,7 @@ public class ModInfoModel : I18nModel<I18nModInfoModel>
     public ObservableCollection<FoodModel> Foods { get; } = new();
     public ObservableCollection<ClickTextModel> ClickTexts { get; } = new();
     public ObservableCollection<LowTextModel> LowTexts { get; } = new();
+    public ObservableCollection<SelectTextModel> SelectTexts { get; } = new();
     public ObservableValue<string> SourcePath { get; } = new();
 
     public Dictionary<string, Dictionary<string, string>> OtherI18nDatas { get; } = new();

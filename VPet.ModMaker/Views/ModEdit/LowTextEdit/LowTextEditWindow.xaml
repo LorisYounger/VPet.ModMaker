@@ -53,19 +53,19 @@
         <ComboBox
           Grid.Row="1"
           Grid.Column="1"
-          ItemsSource="{Binding ModeTypes}"
+          ItemsSource="{Binding LowText.Value.ModeTypes}"
           SelectedItem="{Binding LowText.Value.Mode.Value}" />
         <Label Grid.Row="2" Content="{ll:Str 饥渴状态}" />
         <ComboBox
           Grid.Row="2"
           Grid.Column="1"
-          ItemsSource="{Binding StrengthTypes}"
+          ItemsSource="{Binding LowText.Value.StrengthTypes}"
           SelectedItem="{Binding LowText.Value.Strength.Value}" />
         <Label Grid.Row="3" Content="{ll:Str 好感度需求}" />
         <ComboBox
           Grid.Row="3"
           Grid.Column="1"
-          ItemsSource="{Binding LikeTypes}"
+          ItemsSource="{Binding LowText.Value.LikeTypes}"
           SelectedItem="{Binding LowText.Value.Like.Value}" />
       </Grid>
       <Grid Grid.Row="1">

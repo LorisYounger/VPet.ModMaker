@@ -24,16 +24,16 @@ public class ModMakerWindowVM
 
     public ModEditWindow ModEditWindow { get; private set; }
 
-    public ObservableValue<string> ModFilterText { get; } = new();
+    public ObservableValue<string> HistoriesFilterText { get; } = new();
 
-    public ObservableCollection<ModInfoModel> ShowMods { get; set; }
     public ObservableCollection<ModInfoModel> Mods { get; } = new();
-
+    public ObservableValue<ObservableCollection<ModMakerHistory>> ShowHistories { get; } = new();
     public ObservableCollection<ModMakerHistory> Histories { get; } = new();
     #endregion
     #region Command
     public ObservableCommand CreateNewModCommand { get; } = new();
     public ObservableCommand LoadModFromFileCommand { get; } = new();
+    public ObservableCommand ClearHistoriesCommand { get; } = new();
     #endregion
     public ModMakerWindowVM() { }
 
@@ -41,10 +41,11 @@ public class ModMakerWindowVM
     {
         LoadHistories();
         ModMakerWindow = window;
-        ShowMods = Mods;
+        ShowHistories.Value = Histories;
         CreateNewModCommand.ExecuteAction = CreateNewMod;
         LoadModFromFileCommand.ExecuteAction = LoadModFromFile;
-        ModFilterText.ValueChanged += ModFilterText_ValueChanged;
+        ClearHistoriesCommand.ExecuteAction = ClearHistories;
+        HistoriesFilterText.ValueChanged += ModFilterText_ValueChanged;
     }
 
     private void LoadHistories()
@@ -96,9 +97,9 @@ public class ModMakerWindowVM
     private void ModFilterText_ValueChanged(string value)
     {
         if (string.IsNullOrEmpty(value))
-            ShowMods = Mods;
+            ShowHistories.Value = Histories;
         else
-            ShowMods = new(Mods.Where(i => i.Name.Value.Contains(value)));
+            ShowHistories.Value = new(Histories.Where(i => i.Name.Contains(value)));
     }
 
     public void CreateNewMod()
@@ -115,6 +116,12 @@ public class ModMakerWindowVM
             SaveHistories();
             ModMakerWindow.Close();
         };
+    }
+
+    private void ClearHistories()
+    {
+        ShowHistories.Value.Clear();
+        Histories.Clear();
     }
 
     public void LoadModFromFile()

@@ -75,7 +75,7 @@
             x:Name="ComboBox_FoodType"
             Grid.Row="1"
             Grid.Column="1"
-            ItemsSource="{Binding FoodTypes}"
+            ItemsSource="{Binding Food.Value.FoodTypes}"
             SelectedItem="{Binding Food.Value.Type.Value}" />
           <Label Grid.Row="2" Content="{ll:Str 食物名称}" />
           <TextBox

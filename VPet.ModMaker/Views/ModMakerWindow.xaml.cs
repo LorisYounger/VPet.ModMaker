@@ -2,6 +2,7 @@
 using LinePutScript.Localization.WPF;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
@@ -42,6 +43,17 @@ public partial class ModMakerWindow : Window
             return;
         if (item.DataContext is not ModMakerHistory history)
             return;
+        if (Directory.Exists(history.SourcePath) is false)
+        {
+            if (
+                MessageBox.Show($"路径不存在, 是否删除?".Translate(), "", MessageBoxButton.YesNo)
+                is MessageBoxResult.Yes
+            )
+            {
+                ViewModel.Histories.Remove(history);
+                ViewModel.ShowHistories.Value.Remove(history);
+            }
+        }
         var loader = new ModLoader(new(history.SourcePath));
         if (loader.SuccessLoad)
         {

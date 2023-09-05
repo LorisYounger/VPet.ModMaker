@@ -28,11 +28,21 @@
         <RowDefinition />
       </Grid.RowDefinitions>
       <Label Background="{x:Null}" Content="{ll:Str 打开最近的内容}" />
-      <TextBox Grid.Row="1" pu:TextBoxHelper.Watermark="{ll:Str 最近的内容}" />
+      <Grid Grid.Row="1">
+        <Grid.ColumnDefinitions>
+          <ColumnDefinition />
+          <ColumnDefinition Width="Auto" />
+        </Grid.ColumnDefinitions>
+        <TextBox pu:TextBoxHelper.Watermark="{ll:Str 最近的内容}" Text="{Binding HistoriesFilterText.Value}" />
+        <Button
+          Grid.Column="1"
+          Command="{Binding ClearHistoriesCommand}"
+          Content="清空历史" />
+      </Grid>
       <ListBox
         Grid.Row="2"
         d:ItemsSource="{d:SampleData ItemCount=5}"
-        ItemsSource="{Binding Histories}"
+        ItemsSource="{Binding ShowHistories.Value}"
         Style="{StaticResource SideMenuListBoxStyle}">
         <ListBox.ItemContainerStyle>
           <Style BasedOn="{StaticResource {x:Type ListBoxItem}}" TargetType="ListBoxItem">
@@ -41,7 +51,10 @@
             <Setter Property="Template">
               <Setter.Value>
                 <ControlTemplate>
-                  <Grid Background="White">
+                  <Grid
+                    Margin="5"
+                    Background="{DynamicResource PrimaryDark}"
+                    ToolTip="{Binding InfoFile}">
                     <Grid.ColumnDefinitions>
                       <ColumnDefinition Width="Auto" />
                       <ColumnDefinition />

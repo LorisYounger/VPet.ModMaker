@@ -1,20 +1,16 @@
 ﻿<Window
-  x:Class="VPet.ModMaker.Views.ModEdit.ClickTextEdit.ClickTextEditWindow"
+  x:Class="VPet.ModMaker.Views.ModEdit.SelectTextEdit.SelectTextEditWindow"
   xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
   xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
   xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
   xmlns:ll="clr-namespace:LinePutScript.Localization.WPF;assembly=LinePutScript.Localization.WPF"
-  xmlns:local="clr-namespace:VPet.ModMaker.Views.ModEdit.ClickTextEdit"
+  xmlns:local="clr-namespace:VPet.ModMaker.Views.ModEdit.SelectTextEdit"
   xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
   xmlns:pu="https://opensource.panuon.com/wpf-ui"
-  xmlns:vm="clr-namespace:VPet.ModMaker.ViewModels.ModEdit.ClickTextEdit"
-  Title="ClickTextWindow"
+  Title="SelectTextWindow"
   Width="800"
   Height="450"
   mc:Ignorable="d">
-  <d:Window.DataContext>
-    <vm:ClickTextEditWindowVM />
-  </d:Window.DataContext>
   <Grid>
     <Grid.ColumnDefinitions>
       <ColumnDefinition />
@@ -63,62 +59,39 @@
           <RowDefinition Height="Auto" />
           <RowDefinition Height="Auto" />
           <RowDefinition Height="Auto" />
-          <RowDefinition />
+          <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
         <Label Content="{ll:Str 指定工作}" />
         <TextBox Grid.Column="1" Text="{Binding ClickText.Value.Working.Value, UpdateSourceTrigger=PropertyChanged}" />
+        <Label Grid.Row="1" Content="{ll:Str 最小好感度}" />
+        <pu:NumberInput
+          Grid.Row="1"
+          Grid.Column="1"
+          Margin="0"
+          Value="{Binding ClickText.Value.LikeMin.Value}" />
+        <Label Grid.Row="2" Content="{ll:Str 最大好感度}" />
+        <pu:NumberInput
+          Grid.Row="2"
+          Grid.Column="1"
+          Value="{Binding ClickText.Value.LikeMax.Value}" />
         <Label Grid.Row="3" Content="{ll:Str 模式}" />
         <ComboBox
           Grid.Row="3"
           Grid.Column="1"
-          ItemsSource="{Binding ClickText.Value.ModeTypes}"
+          ItemsSource="{Binding ModeTypes}"
           SelectedItem="{Binding ClickText.Value.Mode.Value}" />
         <Label Grid.Row="4" Content="{ll:Str 工作状态}" />
         <ComboBox
           Grid.Row="4"
           Grid.Column="1"
-          ItemsSource="{Binding ClickText.Value.WorkingStates}"
+          ItemsSource="{Binding WorkingStates}"
           SelectedItem="{Binding ClickText.Value.WorkingState.Value}" />
         <Label Grid.Row="5" Content="{ll:Str 日期区间}" />
         <ComboBox
           Grid.Row="5"
           Grid.Column="1"
-          ItemsSource="{Binding ClickText.Value.DayTimes}"
+          ItemsSource="{Binding DayTimes}"
           SelectedItem="{Binding ClickText.Value.DayTime.Value}" />
-        <ListBox Grid.Row="6" Grid.ColumnSpan="2">
-          <ListBoxItem
-            DataContext="{Binding ClickText.Value.Like}"
-            Tag="{ll:Str 好感度范围}"
-            Template="{StaticResource ListBoxItem_RangeData}" />
-          <ListBoxItem
-            DataContext="{Binding ClickText.Value.Health}"
-            Tag="{ll:Str 健康度范围}"
-            Template="{StaticResource ListBoxItem_RangeData}" />
-          <ListBoxItem
-            DataContext="{Binding ClickText.Value.Level}"
-            Tag="{ll:Str 等级范围}"
-            Template="{StaticResource ListBoxItem_RangeData}" />
-          <ListBoxItem
-            DataContext="{Binding ClickText.Value.Money}"
-            Tag="{ll:Str 金钱范围}"
-            Template="{StaticResource ListBoxItem_RangeData}" />
-          <ListBoxItem
-            DataContext="{Binding ClickText.Value.Food}"
-            Tag="{ll:Str 食物范围}"
-            Template="{StaticResource ListBoxItem_RangeData}" />
-          <ListBoxItem
-            DataContext="{Binding ClickText.Value.Drink}"
-            Tag="{ll:Str 口渴范围}"
-            Template="{StaticResource ListBoxItem_RangeData}" />
-          <ListBoxItem
-            DataContext="{Binding ClickText.Value.Feel}"
-            Tag="{ll:Str 心情范围}"
-            Template="{StaticResource ListBoxItem_RangeData}" />
-          <ListBoxItem
-            DataContext="{Binding ClickText.Value.Strength}"
-            Tag="{ll:Str 体力范围}"
-            Template="{StaticResource ListBoxItem_RangeData}" />
-        </ListBox>
       </Grid>
       <Grid Grid.Row="1">
         <Grid.ColumnDefinitions>

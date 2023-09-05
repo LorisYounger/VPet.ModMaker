@@ -1,6 +1,7 @@
 ﻿using HKW.HKWViewModels.SimpleObservable;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -12,6 +13,9 @@ namespace VPet.ModMaker.Models;
 
 public class FoodModel : I18nModel<I18nFoodModel>
 {
+    public static ObservableCollection<Food.FoodType> FoodTypes { get; } =
+        new(Enum.GetValues(typeof(Food.FoodType)).Cast<Food.FoodType>());
+
     public ObservableValue<string> Name { get; } = new();
     public ObservableValue<string> Description { get; } = new();
     public ObservableValue<Food.FoodType> Type { get; } = new();

@@ -16,9 +16,6 @@ public class PetModel : I18nModel<I18nPetInfoModel>
     public ObservableValue<ObservableInt32Rect> TouchHeadRect { get; } = new(new());
     public ObservableValue<MultiStateRect> TouchRaisedRect { get; } = new(new());
     public ObservableValue<MultiStatePoint> RaisePoint { get; } = new(new());
-
-    public ObservableValue<I18nPetInfoModel> CurrentI18nData { get; } = new();
-    public Dictionary<string, I18nPetInfoModel> I18nDatas { get; } = new();
 }
 
 public class I18nPetInfoModel

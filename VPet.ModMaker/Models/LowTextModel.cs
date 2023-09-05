@@ -1,6 +1,7 @@
 ﻿using HKW.HKWViewModels.SimpleObservable;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -11,6 +12,13 @@ namespace VPet.ModMaker.Models;
 
 public class LowTextModel : I18nModel<I18nLowTextModel>
 {
+    public static ObservableCollection<LowText.ModeType> ModeTypes { get; } =
+        new(Enum.GetValues(typeof(LowText.ModeType)).Cast<LowText.ModeType>());
+    public static ObservableCollection<LowText.LikeType> LikeTypes { get; } =
+        new(Enum.GetValues(typeof(LowText.LikeType)).Cast<LowText.LikeType>());
+    public static ObservableCollection<LowText.StrengthType> StrengthTypes { get; } =
+        new(Enum.GetValues(typeof(LowText.StrengthType)).Cast<LowText.StrengthType>());
+
     public ObservableValue<string> Name { get; } = new();
     public ObservableValue<LowText.ModeType> Mode { get; } = new();
     public ObservableValue<LowText.StrengthType> Strength { get; } = new();

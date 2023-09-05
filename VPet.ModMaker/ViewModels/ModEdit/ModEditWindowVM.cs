@@ -77,10 +77,6 @@ public class ModEditWindowVM
         }
 
         ModEditWindow = window;
-
-        I18nHelper.Current.AddLang += I18nData_AddLang;
-        I18nHelper.Current.RemoveLang += I18nData_RemoveLang;
-        I18nHelper.Current.ReplaceLang += I18nData_ReplaceLang;
         CurrentLang.ValueChanged += CurrentLang_ValueChanged;
 
         AddImageCommand.ExecuteAction += AddImage;
@@ -90,23 +86,6 @@ public class ModEditWindowVM
         RemoveLangCommand.ExecuteAction += RemoveLang;
         SaveCommand.ExecuteAction += Save;
         SaveToCommand.ExecuteAction += SaveTo;
-    }
-
-    private void I18nData_AddLang(string lang)
-    {
-        ModInfo.Value.I18nDatas.Add(lang, new());
-    }
-
-    private void I18nData_RemoveLang(string lang)
-    {
-        ModInfo.Value.I18nDatas.Remove(lang);
-    }
-
-    private void I18nData_ReplaceLang(string oldLang, string newLang)
-    {
-        var info = ModInfo.Value.I18nDatas[oldLang];
-        ModInfo.Value.I18nDatas.Remove(oldLang);
-        ModInfo.Value.I18nDatas.Add(newLang, info);
     }
 
     private void CurrentLang_ValueChanged(string value)

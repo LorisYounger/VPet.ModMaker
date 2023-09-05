@@ -6,8 +6,8 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{8F804A27-A57E-4799-801C-4DE96BA153BC}</ProjectGuid>
     <OutputType>WinExe</OutputType>
-    <RootNamespace>VPet.Plugin.ModMaker</RootNamespace>
-    <AssemblyName>VPet.Plugin.ModMaker</AssemblyName>
+    <RootNamespace>VPet.ModMaker</RootNamespace>
+    <AssemblyName>VPet.ModMaker</AssemblyName>
     <TargetFrameworkVersion>v4.6.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
@@ -99,7 +99,9 @@
     <Compile Include="Models\ModLoader.cs" />
     <Compile Include="Models\ModMakerHistory.cs" />
     <Compile Include="Models\ModMakerInfo.cs" />
+    <Compile Include="Models\ObservableRange.cs" />
     <Compile Include="Models\PetModel.cs" />
+    <Compile Include="Models\SelectTextModel.cs" />
     <Compile Include="ViewModels\ModEdit\ClickTextEdit\ClickTextEditWindowVM.cs" />
     <Compile Include="ViewModels\ModEdit\ClickTextEdit\ClickTextPageVM.cs" />
     <Compile Include="ViewModels\ModEdit\FoodEdit\FoodPageVM.cs" />
@@ -159,6 +161,12 @@
     <Compile Include="Views\ModEdit\PetEdit\PetPage.xaml.cs">
       <DependentUpon>PetPage.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\ModEdit\SelectTextEdit\SelectTextPage.xaml.cs">
+      <DependentUpon>SelectTextPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\ModEdit\SelectTextEdit\SelectTextEditWindow.xaml.cs">
+      <DependentUpon>SelectTextEditWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\ModMakerWindow.xaml.cs">
       <DependentUpon>ModMakerWindow.xaml</DependentUpon>
     </Compile>
@@ -178,6 +186,10 @@
       <Generator>MSBuild:Compile</Generator>
     </ApplicationDefinition>
     <Page Include="Converters.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Templates.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -221,6 +233,14 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Views\ModEdit\SelectTextEdit\SelectTextPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\ModEdit\SelectTextEdit\SelectTextEditWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\ModMakerWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -242,6 +262,8 @@
       <Install>false</Install>
     </BootstrapperPackage>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="ViewModels\ModEdit\SelectTextEdit\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -19,7 +19,6 @@ public class FoodEditWindowVM
     #region Value
     public FoodModel OldFood { get; set; }
     public ObservableValue<FoodModel> Food { get; } = new(new());
-    public ObservableCollection<Food.FoodType> FoodTypes { get; } = new();
     #endregion
 
     #region Command
@@ -36,13 +35,7 @@ public class FoodEditWindowVM
 
     public void Close() { }
 
-    private void InitializeFoodTypes()
-    {
-        foreach (Food.FoodType foodType in Enum.GetValues(typeof(Food.FoodType)))
-        {
-            FoodTypes.Add(foodType);
-        }
-    }
+    private void InitializeFoodTypes() { }
 
     private void AddImage()
     {

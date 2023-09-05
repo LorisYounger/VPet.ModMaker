@@ -148,7 +148,25 @@
             Tag="{ll:Str 食物}">
             <Frame Content="{Binding ModEditWindow.FoodPage}" />
           </TabItem>
-          <TabItem Header="物品 (0)" Tag="{ll:Str 物品}">
+          <TabItem
+            x:Name="TabItem_ClickText"
+            Header="点击文本 (0)"
+            Tag="{ll:Str 点击文本}">
+            <Frame Content="{Binding ModEditWindow.ClickTextPage}" />
+          </TabItem>
+          <TabItem
+            x:Name="TabItem_LowText"
+            Header="低状态文本 (0)"
+            Tag="{ll:Str 低状态文本}">
+            <Frame Content="{Binding ModEditWindow.LowTextPage}" />
+          </TabItem>
+          <!--<TabItem
+            x:Name="TabItem_SelectText"
+            Header="选择文本 (0)"
+            Tag="{ll:Str 选择文本}">
+            <Frame Content="{Binding ModEditWindow.LowTextPage}" />
+          </TabItem>-->
+          <!--<TabItem Header="物品 (0)" Tag="{ll:Str 物品}">
             <Grid>
               <Grid.RowDefinitions>
                 <RowDefinition Height="Auto" />
@@ -165,8 +183,8 @@
                 Content="➕"
                 Style="{StaticResource AddButton}" />
             </Grid>
-          </TabItem>
-          <TabItem Header="动画 (0)">
+          </TabItem>-->
+          <!--<TabItem Header="动画 (0)">
             <Grid>
               <Grid.RowDefinitions>
                 <RowDefinition Height="Auto" />
@@ -201,19 +219,7 @@
                 Content="➕"
                 Style="{StaticResource AddButton}" />
             </Grid>
-          </TabItem>
-          <TabItem
-            x:Name="TabItem_ClickText"
-            Header="点击文本 (0)"
-            Tag="{ll:Str 点击文本}">
-            <Frame Content="{Binding ModEditWindow.ClickTextPage}" />
-          </TabItem>
-          <TabItem
-            x:Name="TabItem_LowText"
-            Header="低状态文本 (0)"
-            Tag="{ll:Str 低状态文本}">
-            <Frame Content="{Binding ModEditWindow.LowTextPage}" />
-          </TabItem>
+          </TabItem>-->
         </TabControl>
       </Grid>
     </Grid>
