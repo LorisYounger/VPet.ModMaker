@@ -32,9 +32,9 @@ public class LowTextPageVM
     {
         ShowLowTexts.Value = LowTexts;
         FilterLowText.ValueChanged += FilterLowText_ValueChanged;
-        AddLowTextCommand.ExecuteAction = AddLowText;
-        EditLowTextCommand.ExecuteAction = EditLowText;
-        RemoveLowTextCommand.ExecuteAction = RemoveLowText;
+        AddLowTextCommand.ExecuteEvent += AddLowText;
+        EditLowTextCommand.ExecuteEvent += EditLowText;
+        RemoveLowTextCommand.ExecuteEvent += RemoveLowText;
     }
 
     private void FilterLowText_ValueChanged(string value)

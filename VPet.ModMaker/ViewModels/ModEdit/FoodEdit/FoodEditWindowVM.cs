@@ -29,8 +29,8 @@ public class FoodEditWindowVM
     public FoodEditWindowVM()
     {
         InitializeFoodTypes();
-        AddImageCommand.ExecuteAction = AddImage;
-        ChangeImageCommand.ExecuteAction = ChangeImage;
+        AddImageCommand.ExecuteEvent += AddImage;
+        ChangeImageCommand.ExecuteEvent += ChangeImage;
     }
 
     public void Close() { }

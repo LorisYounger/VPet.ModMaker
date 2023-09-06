@@ -29,9 +29,9 @@ public class ClickTextPageVM
     {
         ShowClickTexts.Value = ClickTexts;
         FilterClickText.ValueChanged += FilterClickText_ValueChanged;
-        AddClickTextCommand.ExecuteAction = AddClickText;
-        EditClickTextCommand.ExecuteAction = EditClickText;
-        RemoveClickTextCommand.ExecuteAction = RemoveClickText;
+        AddClickTextCommand.ExecuteEvent += AddClickText;
+        EditClickTextCommand.ExecuteEvent += EditClickText;
+        RemoveClickTextCommand.ExecuteEvent += RemoveClickText;
     }
 
     private void FilterClickText_ValueChanged(string value)

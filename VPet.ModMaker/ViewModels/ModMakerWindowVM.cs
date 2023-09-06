@@ -42,9 +42,9 @@ public class ModMakerWindowVM
         LoadHistories();
         ModMakerWindow = window;
         ShowHistories.Value = Histories;
-        CreateNewModCommand.ExecuteAction = CreateNewMod;
-        LoadModFromFileCommand.ExecuteAction = LoadModFromFile;
-        ClearHistoriesCommand.ExecuteAction = ClearHistories;
+        CreateNewModCommand.ExecuteEvent += CreateNewMod;
+        LoadModFromFileCommand.ExecuteEvent += LoadModFromFile;
+        ClearHistoriesCommand.ExecuteEvent += ClearHistories;
         HistoriesFilterText.ValueChanged += ModFilterText_ValueChanged;
     }
 

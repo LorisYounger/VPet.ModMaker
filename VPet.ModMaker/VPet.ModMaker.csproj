@@ -102,6 +102,7 @@
     <Compile Include="Models\ObservableRange.cs" />
     <Compile Include="Models\PetModel.cs" />
     <Compile Include="Models\SelectTextModel.cs" />
+    <Compile Include="SimpleObservable\ObservableCommandT.cs" />
     <Compile Include="ViewModels\ModEdit\ClickTextEdit\ClickTextEditWindowVM.cs" />
     <Compile Include="ViewModels\ModEdit\ClickTextEdit\ClickTextPageVM.cs" />
     <Compile Include="ViewModels\ModEdit\FoodEdit\FoodPageVM.cs" />
@@ -145,7 +146,6 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
     <Compile Include="SimpleObservable\ObservableCommand.cs" />
-    <Compile Include="SimpleObservable\ObservableCommand{T}.cs" />
     <Compile Include="SimpleObservable\ObservableValue.cs" />
     <Compile Include="Utils.cs" />
     <Compile Include="Views\ModEdit\FoodEdit\FoodEditWindow.xaml.cs">

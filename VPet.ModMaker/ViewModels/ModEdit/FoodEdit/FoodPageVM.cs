@@ -31,9 +31,9 @@ public class FoodPageVM
         ShowFoods.Value = Foods;
         FilterFoodText.ValueChanged += FilterFoodText_ValueChanged;
 
-        AddFoodCommand.ExecuteAction = AddFood;
-        EditFoodCommand.ExecuteAction = EditFood;
-        RemoveFoodCommand.ExecuteAction = RemoveFood;
+        AddFoodCommand.ExecuteEvent += AddFood;
+        EditFoodCommand.ExecuteEvent += EditFood;
+        RemoveFoodCommand.ExecuteEvent += RemoveFood;
     }
 
     private void FilterFoodText_ValueChanged(string value)

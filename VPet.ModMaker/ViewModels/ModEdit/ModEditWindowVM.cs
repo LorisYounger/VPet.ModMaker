@@ -79,13 +79,13 @@ public class ModEditWindowVM
         ModEditWindow = window;
         CurrentLang.ValueChanged += CurrentLang_ValueChanged;
 
-        AddImageCommand.ExecuteAction += AddImage;
-        ChangeImageCommand.ExecuteAction += ChangeImage;
-        AddLangCommand.ExecuteAction += AddLang;
-        EditLangCommand.ExecuteAction += EditLang;
-        RemoveLangCommand.ExecuteAction += RemoveLang;
-        SaveCommand.ExecuteAction += Save;
-        SaveToCommand.ExecuteAction += SaveTo;
+        AddImageCommand.ExecuteEvent += AddImage;
+        ChangeImageCommand.ExecuteEvent += ChangeImage;
+        AddLangCommand.ExecuteEvent += AddLang;
+        EditLangCommand.ExecuteEvent += EditLang;
+        RemoveLangCommand.ExecuteEvent += RemoveLang;
+        SaveCommand.ExecuteEvent += Save;
+        SaveToCommand.ExecuteEvent += SaveTo;
     }
 
     private void CurrentLang_ValueChanged(string value)

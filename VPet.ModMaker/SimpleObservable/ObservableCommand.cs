@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -13,25 +14,7 @@ namespace HKW.HKWViewModels.SimpleObservable;
 public class ObservableCommand : ICommand
 {
     /// <summary>
-    /// 执行的方法
-    /// </summary>
-    public Action? ExecuteAction { get; set; }
-
-    /// <summary>
-    /// 执行的异步方法
-    /// </summary>
-    public Func<Task>? ExecuteActionAsync { get; set; }
-
-    /// <summary>
-    /// 获取能否执行的方法
-    /// </summary>
-    public Func<bool>? CanExecuteAction { get; set; }
-
-    /// <summary>
     /// 能执行的属性
-    /// <para>
-    /// 注意: 仅当 <see cref="CanExecuteAction"/> 为 <see langword="null"/> 时, 此属性才会被使用
-    /// </para>
     /// </summary>
     public ObservableValue<bool> CanExecuteProperty { get; } = new(true);
 
@@ -64,9 +47,7 @@ public class ObservableCommand : ICommand
     {
         if (r_waiting.Value is true)
             return false;
-        return CanExecuteAction is null
-            ? CanExecuteProperty.Value
-            : CanExecuteAction?.Invoke() is not false;
+        return CanExecuteProperty.Value;
     }
 
     /// <summary>
@@ -75,7 +56,7 @@ public class ObservableCommand : ICommand
     /// <param name="parameter">参数</param>
     public async void Execute(object? parameter)
     {
-        ExecuteAction?.Invoke();
+        ExecuteEvent?.Invoke();
         await ExecuteAsync();
     }
 
@@ -85,15 +66,39 @@ public class ObservableCommand : ICommand
     /// <returns>等待</returns>
     private async Task ExecuteAsync()
     {
-        if (ExecuteActionAsync is null)
+        if (AsyncExecuteEvent is null)
             return;
         r_waiting.Value = true;
-        await ExecuteActionAsync.Invoke();
+        foreach (
+            var asyncEvent in AsyncExecuteEvent.GetInvocationList().Cast<AsyncExecuteHandler>()
+        )
+            await asyncEvent.Invoke();
         r_waiting.Value = false;
     }
 
     /// <summary>
-    /// 能否执行属性被改变事件
+    /// 能否执行属性改变后事件
     /// </summary>
     public event EventHandler? CanExecuteChanged;
+
+    /// <summary>
+    /// 执行事件
+    /// </summary>
+    public event ExecuteHandler? ExecuteEvent;
+
+    /// <summary>
+    /// 异步执行事件
+    /// </summary>
+    public event AsyncExecuteHandler? AsyncExecuteEvent;
+
+    /// <summary>
+    /// 执行
+    /// </summary>
+    public delegate void ExecuteHandler();
+
+    /// <summary>
+    /// 异步执行
+    /// </summary>
+    /// <returns></returns>
+    public delegate Task AsyncExecuteHandler();
 }
