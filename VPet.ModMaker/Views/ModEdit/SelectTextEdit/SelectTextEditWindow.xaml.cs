@@ -1,4 +1,5 @@
-﻿using System;
+﻿using LinePutScript.Localization.WPF;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -11,6 +12,8 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using VPet.ModMaker.Models;
+using VPet.ModMaker.ViewModels.ModEdit.SelectTextEdit;
 
 namespace VPet.ModMaker.Views.ModEdit.SelectTextEdit;
 
@@ -19,9 +22,13 @@ namespace VPet.ModMaker.Views.ModEdit.SelectTextEdit;
 /// </summary>
 public partial class SelectTextEditWindow : Window
 {
+    public bool IsCancel { get; private set; } = true;
+    public SelectTextEditWindowVM ViewModel => (SelectTextEditWindowVM)DataContext;
+
     public SelectTextEditWindow()
     {
         InitializeComponent();
+        DataContext = new SelectTextEditWindowVM();
     }
 
     private void Button_Cancel_Click(object sender, RoutedEventArgs e)
@@ -31,27 +38,39 @@ public partial class SelectTextEditWindow : Window
 
     private void Button_Yes_Click(object sender, RoutedEventArgs e)
     {
-        //if (string.IsNullOrEmpty(ViewModel.ClickText.Value.Name.Value))
-        //{
-        //    MessageBox.Show("Id不可为空".Translate(), "", MessageBoxButton.OK, MessageBoxImage.Warning);
-        //    return;
-        //}
-        //if (
-        //    ViewModel.OldClickText?.Name.Value != ViewModel.ClickText.Value.Name.Value
-        //    && ModInfoModel.Current.ClickTexts.Any(
-        //        i => i.Name.Value == ViewModel.ClickText.Value.Name.Value
-        //    )
-        //)
-        //{
-        //    MessageBox.Show("此Id已存在".Translate(), "", MessageBoxButton.OK, MessageBoxImage.Warning);
-        //    return;
-        //}
-        //if (string.IsNullOrEmpty(ViewModel.ClickText.Value.CurrentI18nData.Value.Text.Value))
-        //{
-        //    MessageBox.Show("文本不可为空".Translate(), "", MessageBoxButton.OK, MessageBoxImage.Warning);
-        //    return;
-        //}
-        //IsCancel = false;
+        if (string.IsNullOrWhiteSpace(ViewModel.SelectText.Value.Name.Value))
+        {
+            MessageBox.Show("Id不可为空".Translate(), "", MessageBoxButton.OK, MessageBoxImage.Warning);
+            return;
+        }
+        if (
+            ViewModel.OldSelectText?.Name.Value != ViewModel.SelectText.Value.Name.Value
+            && ModInfoModel.Current.SelectTexts.Any(
+                i => i.Name.Value == ViewModel.SelectText.Value.Name.Value
+            )
+        )
+        {
+            MessageBox.Show("此Id已存在".Translate(), "", MessageBoxButton.OK, MessageBoxImage.Warning);
+            return;
+        }
+        if (
+            string.IsNullOrWhiteSpace(ViewModel.SelectText.Value.CurrentI18nData.Value.Choose.Value)
+        )
+        {
+            MessageBox.Show(
+                "选项名不可为空".Translate(),
+                "",
+                MessageBoxButton.OK,
+                MessageBoxImage.Warning
+            );
+            return;
+        }
+        if (string.IsNullOrWhiteSpace(ViewModel.SelectText.Value.CurrentI18nData.Value.Text.Value))
+        {
+            MessageBox.Show("文本不可为空".Translate(), "", MessageBoxButton.OK, MessageBoxImage.Warning);
+            return;
+        }
+        IsCancel = false;
         Close();
     }
 }

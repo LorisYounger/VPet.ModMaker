@@ -42,7 +42,7 @@
         x:Name="TextBox_Text"
         Grid.Row="1"
         d:Text="这是一个测试文本,这是一个测试文本,这是一个测试文本,这是一个测试文本,这是一个测试文本,这是一个测试文本,这是一个测试文本,"
-        pu:TextBoxHelper.Watermark="文本"
+        pu:TextBoxHelper.Watermark="{ll:Str 文本}"
         Style="{StaticResource TextBox_Wrap}"
         Text="{Binding ClickText.Value.CurrentI18nData.Value.Text.Value, UpdateSourceTrigger=PropertyChanged}" />
     </Grid>
@@ -66,7 +66,10 @@
           <RowDefinition />
         </Grid.RowDefinitions>
         <Label Content="{ll:Str 指定工作}" />
-        <TextBox Grid.Column="1" Text="{Binding ClickText.Value.Working.Value, UpdateSourceTrigger=PropertyChanged}" />
+        <TextBox
+          Grid.Column="1"
+          pu:TextBoxHelper.Watermark="{ll:Str 非必要}"
+          Text="{Binding ClickText.Value.Working.Value, UpdateSourceTrigger=PropertyChanged}" />
         <Label Grid.Row="3" Content="{ll:Str 模式}" />
         <ComboBox
           Grid.Row="3"

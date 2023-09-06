@@ -34,9 +34,17 @@ public class ModInfoModel : I18nModel<I18nModInfoModel>
 
     public Dictionary<string, Dictionary<string, string>> OtherI18nDatas { get; } = new();
 
-    public ModInfoModel() { }
+    public ModInfoModel()
+    {
+        Description.Value = $"{Name.Value}_{nameof(Description)}";
+        Name.ValueChanged += (v) =>
+        {
+            Description.Value = $"{v}_{nameof(Description)}";
+        };
+    }
 
     public ModInfoModel(ModLoader loader)
+        : this()
     {
         SourcePath.Value = loader.Path.FullName;
         Name.Value = loader.Name;
@@ -53,6 +61,9 @@ public class ModInfoModel : I18nModel<I18nModInfoModel>
             ClickTexts.Add(new(clickText));
         foreach (var lowText in loader.LowTexts)
             LowTexts.Add(new(lowText));
+        foreach (var selectText in loader.SelectTexts)
+            SelectTexts.Add(new(selectText));
+
         Summary.Value = GetSummary();
         foreach (var lang in loader.I18nDatas)
             I18nDatas.Add(lang.Key, lang.Value);
@@ -123,9 +134,13 @@ public class ModInfoModel : I18nModel<I18nModInfoModel>
 
     private void SaveFoods(string path)
     {
-        if (Foods.Count == 0)
-            return;
         var foodPath = Path.Combine(path, "food");
+        if (Foods.Count == 0)
+        {
+            if (Directory.Exists(foodPath))
+                Directory.Delete(foodPath, true);
+            return;
+        }
         Directory.CreateDirectory(foodPath);
         var foodFile = Path.Combine(foodPath, "food.lps");
         if (File.Exists(foodFile) is false)
@@ -138,12 +153,31 @@ public class ModInfoModel : I18nModel<I18nModInfoModel>
 
     private void SaveText(string path)
     {
-        if (LowTexts.Count == 0 && ClickTexts.Count == 0)
-            return;
         var textPath = Path.Combine(path, "text");
+        if (LowTexts.Count == 0 && ClickTexts.Count == 0 && SelectTexts.Count == 0)
+        {
+            if (Directory.Exists(textPath))
+                Directory.Delete(textPath, true);
+            return;
+        }
         Directory.CreateDirectory(textPath);
         SaveLowText(textPath);
         SaveClickText(textPath);
+        SaveSelectText(textPath);
+    }
+
+    private void SaveSelectText(string textPath)
+    {
+        if (SelectTexts.Count == 0)
+            return;
+        var textFile = Path.Combine(textPath, "selectText.lps");
+        File.Create(textFile).Close();
+        var lps = new LPS();
+        foreach (var text in SelectTexts)
+        {
+            lps.Add(LPSConvert.SerializeObjectToLine<Line>(text.ToSelectText(), "SelectText"));
+        }
+        File.WriteAllText(textFile, lps.ToString());
     }
 
     private void SaveLowText(string textPath)
@@ -192,15 +226,18 @@ public class ModInfoModel : I18nModel<I18nModInfoModel>
                     new Line(food.Description.Value, food.I18nDatas[cultureName].Description.Value)
                 );
             }
-            foreach (var lowText in LowTexts)
+            foreach (var text in LowTexts)
             {
-                lps.Add(new Line(lowText.Name.Value, lowText.I18nDatas[cultureName].Text.Value));
+                lps.Add(new Line(text.Name.Value, text.I18nDatas[cultureName].Text.Value));
             }
-            foreach (var clickText in ClickTexts)
+            foreach (var text in ClickTexts)
             {
-                lps.Add(
-                    new Line(clickText.Name.Value, clickText.I18nDatas[cultureName].Text.Value)
-                );
+                lps.Add(new Line(text.Name.Value, text.I18nDatas[cultureName].Text.Value));
+            }
+            foreach (var text in SelectTexts)
+            {
+                lps.Add(new Line(text.Name.Value, text.I18nDatas[cultureName].Text.Value));
+                lps.Add(new Line(text.Choose.Value, text.I18nDatas[cultureName].Choose.Value));
             }
             File.WriteAllText(cultureFile, lps.ToString());
         }
@@ -217,7 +254,10 @@ public class ModInfoModel : I18nModel<I18nModInfoModel>
             foreach (var food in Foods)
             {
                 var foodImagePath = Utils.GetImageSourceFile(food.Image.Value);
-                var targetImagePath = Path.Combine(foodPath, Path.GetFileName(foodImagePath));
+                var targetImagePath = Path.Combine(
+                    foodPath,
+                    $"{food.Name.Value}{Path.GetExtension(foodImagePath)}"
+                );
                 if (foodImagePath != targetImagePath)
                     File.Copy(foodImagePath, targetImagePath, true);
             }

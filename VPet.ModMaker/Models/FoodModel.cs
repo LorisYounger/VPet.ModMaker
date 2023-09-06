@@ -30,7 +30,14 @@ public class FoodModel : I18nModel<I18nFoodModel>
     public ObservableValue<int> Exp { get; } = new();
     public ObservableValue<BitmapImage> Image { get; } = new();
 
-    public FoodModel() { }
+    public FoodModel()
+    {
+        Description.Value = $"{Name.Value}_{nameof(Description)}";
+        Name.ValueChanged += (v) =>
+        {
+            Description.Value = $"{v}_{nameof(Description)}";
+        };
+    }
 
     public FoodModel(FoodModel food)
         : this()
@@ -81,7 +88,7 @@ public class FoodModel : I18nModel<I18nFoodModel>
         return new Food()
         {
             Name = Name.Value,
-            Desc = $"{Name.Value}_{nameof(Description)}",
+            Desc = Description.Value,
             Graph = Graph.Value,
             Type = Type.Value,
             Strength = Strength.Value,

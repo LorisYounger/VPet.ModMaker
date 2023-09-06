@@ -7,27 +7,30 @@
   xmlns:local="clr-namespace:VPet.ModMaker.Views.ModEdit.SelectTextEdit"
   xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
   xmlns:pu="https://opensource.panuon.com/wpf-ui"
+  xmlns:vm="clr-namespace:VPet.ModMaker.ViewModels.ModEdit.SelectTextEdit"
   Title="SelectTextPage"
   d:DesignHeight="450"
   d:DesignWidth="800"
   mc:Ignorable="d">
-
+  <d:Page.DataContext>
+    <vm:SelectTextPageVM />
+  </d:Page.DataContext>
   <Grid>
     <Grid.RowDefinitions>
       <RowDefinition Height="Auto" />
       <RowDefinition />
     </Grid.RowDefinitions>
-    <TextBox />
+    <TextBox pu:TextBoxHelper.Watermark="{ll:Str 搜索文本}" Text="{Binding FilterSelectText.Value, UpdateSourceTrigger=PropertyChanged}" />
     <DataGrid
-      x:Name="DataGrid_ClickText"
+      x:Name="DataGrid_SelectText"
       Grid.Row="1"
       d:ItemsSource="{d:SampleData ItemCount=5}"
       pu:DataGridHelper.ColumnHeaderHorizontalContentAlignment="Center"
       AutoGenerateColumns="False"
       CanUserAddRows="False"
       GridLinesVisibility="Horizontal"
-      ItemsSource="{Binding ShowClickTexts.Value}"
-      MouseDoubleClick="DataGrid_ClickText_MouseDoubleClick"
+      ItemsSource="{Binding ShowSelectTexts.Value}"
+      MouseDoubleClick="DataGrid_SelectText_MouseDoubleClick"
       RowDetailsVisibilityMode="Visible"
       RowHeight="64"
       VirtualizingStackPanel.IsVirtualizing="True"
@@ -48,7 +51,18 @@
           IsReadOnly="True"
           SortMemberPath="Name.Value">
           <DataGridTextColumn.Header>
-            <Label Content="Id" />
+            <TextBlock Text="Id" />
+          </DataGridTextColumn.Header>
+        </DataGridTextColumn>
+        <DataGridTextColumn
+          MaxWidth="200"
+          Binding="{Binding CurrentI18nData.Value.Choose.Value}"
+          CanUserSort="True"
+          ElementStyle="{StaticResource TextBlock_Wrap}"
+          IsReadOnly="True"
+          SortMemberPath="CurrentI18nData.Value.Choose.Value">
+          <DataGridTextColumn.Header>
+            <TextBlock Text="{ll:Str 选择名}" />
           </DataGridTextColumn.Header>
         </DataGridTextColumn>
         <DataGridTextColumn
@@ -59,7 +73,29 @@
           IsReadOnly="True"
           SortMemberPath="CurrentI18nData.Value.Text.Value">
           <DataGridTextColumn.Header>
-            <Label Content="{ll:Str 文本}" />
+            <TextBlock Text="{ll:Str 文本}" />
+          </DataGridTextColumn.Header>
+        </DataGridTextColumn>
+        <DataGridTextColumn
+          MaxWidth="200"
+          Binding="{Binding Tags.Value}"
+          CanUserSort="True"
+          ElementStyle="{StaticResource TextBlock_Wrap}"
+          IsReadOnly="True"
+          SortMemberPath="Tags.Value">
+          <DataGridTextColumn.Header>
+            <TextBlock Text="{ll:Str 标签}" />
+          </DataGridTextColumn.Header>
+        </DataGridTextColumn>
+        <DataGridTextColumn
+          MaxWidth="200"
+          Binding="{Binding ToTags.Value}"
+          CanUserSort="True"
+          ElementStyle="{StaticResource TextBlock_Wrap}"
+          IsReadOnly="True"
+          SortMemberPath="ToTags.Value">
+          <DataGridTextColumn.Header>
+            <TextBlock Text="{ll:Str 跳转标签}" />
           </DataGridTextColumn.Header>
         </DataGridTextColumn>
         <DataGridTextColumn
@@ -68,55 +104,89 @@
           IsReadOnly="True"
           SortMemberPath="Mode.Value">
           <DataGridTextColumn.Header>
-            <Label Content="{ll:Str 状态}" />
+            <TextBlock Text="{ll:Str 状态}" />
           </DataGridTextColumn.Header>
         </DataGridTextColumn>
         <DataGridTextColumn
-          Binding="{Binding Working.Value}"
+          Binding="{Binding Like.Info.Value}"
           CanUserSort="True"
           IsReadOnly="True"
-          SortMemberPath="Working.Value">
+          SortMemberPath="Like.Info.Value">
           <DataGridTextColumn.Header>
-            <Label Content="{ll:Str 指定工作}" />
+            <TextBlock Text="{ll:Str 好感度范围}" />
           </DataGridTextColumn.Header>
         </DataGridTextColumn>
         <DataGridTextColumn
-          Binding="{Binding WorkingState.Value}"
+          Binding="{Binding Health.Info.Value}"
           CanUserSort="True"
           IsReadOnly="True"
-          SortMemberPath="WorkingState.Value">
+          SortMemberPath="Health.Info.Value">
           <DataGridTextColumn.Header>
-            <Label Content="{ll:Str 工作状态}" />
+            <TextBlock Text="{ll:Str 健康度范围}" />
           </DataGridTextColumn.Header>
         </DataGridTextColumn>
         <DataGridTextColumn
-          Binding="{Binding LikeMin.Value}"
+          Binding="{Binding Level.Info.Value}"
           CanUserSort="True"
           IsReadOnly="True"
-          SortMemberPath="LikeMin.Value">
+          SortMemberPath="Level.Info.Value">
           <DataGridTextColumn.Header>
-            <Label Content="{ll:Str 最小好感}" />
+            <TextBlock Text="{ll:Str 等级范围}" />
           </DataGridTextColumn.Header>
         </DataGridTextColumn>
         <DataGridTextColumn
-          Binding="{Binding LikeMax.Value}"
+          Binding="{Binding Money.Info.Value}"
           CanUserSort="True"
           IsReadOnly="True"
-          SortMemberPath="LikeMax.Value">
+          SortMemberPath="Money.Info.Value">
           <DataGridTextColumn.Header>
-            <Label Content="{ll:Str 最大好感}" />
+            <TextBlock Text="{ll:Str 金钱范围}" />
           </DataGridTextColumn.Header>
         </DataGridTextColumn>
         <DataGridTextColumn
-          Binding="{Binding DayTime.Value}"
+          Binding="{Binding Food.Info.Value}"
           CanUserSort="True"
           IsReadOnly="True"
-          SortMemberPath="DayTime.Value">
+          SortMemberPath="Food.Info.Value">
           <DataGridTextColumn.Header>
-            <Label Content="{ll:Str 时间}" />
+            <TextBlock Text="{ll:Str 食物范围}" />
+          </DataGridTextColumn.Header>
+        </DataGridTextColumn>
+        <DataGridTextColumn
+          Binding="{Binding Drink.Info.Value}"
+          CanUserSort="True"
+          IsReadOnly="True"
+          SortMemberPath="Drink.Info.Value">
+          <DataGridTextColumn.Header>
+            <TextBlock Text="{ll:Str 口渴范围}" />
+          </DataGridTextColumn.Header>
+        </DataGridTextColumn>
+        <DataGridTextColumn
+          Binding="{Binding Feel.Info.Value}"
+          CanUserSort="True"
+          IsReadOnly="True"
+          SortMemberPath="Feel.Info.Value">
+          <DataGridTextColumn.Header>
+            <TextBlock Text="{ll:Str 心情范围}" />
+          </DataGridTextColumn.Header>
+        </DataGridTextColumn>
+        <DataGridTextColumn
+          Binding="{Binding Strength.Info.Value}"
+          CanUserSort="True"
+          IsReadOnly="True"
+          SortMemberPath="Strength.Info.Value">
+          <DataGridTextColumn.Header>
+            <TextBlock Text="{ll:Str 体力范围}" />
           </DataGridTextColumn.Header>
         </DataGridTextColumn>
       </DataGrid.Columns>
     </DataGrid>
+    <Button
+      Grid.Row="1"
+      HorizontalAlignment="Right"
+      VerticalAlignment="Bottom"
+      Command="{Binding AddSelectTextCommand}"
+      Content="➕"
+      Style="{StaticResource AddButton}" />
   </Grid>
 </Page>

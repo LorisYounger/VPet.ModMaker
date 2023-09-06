@@ -36,10 +36,12 @@ public class ModLoader
     public List<PetLoader> Pets { get; } = new();
     public List<Food> Foods { get; } = new();
     public List<LowText> LowTexts { get; } = new();
+    public List<ClickText> ClickTexts { get; } = new();
+    public List<SelectText> SelectTexts { get; } = new();
+
     public Dictionary<string, I18nModInfoModel> I18nDatas { get; } = new();
 
     public Dictionary<string, Dictionary<string, string>> OtherI18nDatas { get; } = new();
-    public List<ClickText> ClickTexts { get; } = new();
 
     public ModLoader(DirectoryInfo directory)
     {
@@ -142,11 +144,11 @@ public class ModLoader
                                     case "clicktext":
                                         ClickTexts.Add(LPSConvert.DeserializeObject<ClickText>(li));
                                         break;
-                                    //case "selecttext":
-                                    //    mw.SelectTexts.Add(
-                                    //        LPSConvert.DeserializeObject<SelectText>(li)
-                                    //    );
-                                    //    break;
+                                    case "selecttext":
+                                        SelectTexts.Add(
+                                            LPSConvert.DeserializeObject<SelectText>(li)
+                                        );
+                                        break;
                                 }
                             }
                         }

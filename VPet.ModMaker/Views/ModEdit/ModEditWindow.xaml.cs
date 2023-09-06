@@ -20,6 +20,7 @@ using VPet.ModMaker.ViewModels.ModEdit;
 using VPet.ModMaker.Views.ModEdit.ClickTextEdit;
 using VPet.ModMaker.Views.ModEdit.FoodEdit;
 using VPet.ModMaker.Views.ModEdit.LowTextEdit;
+using VPet.ModMaker.Views.ModEdit.SelectTextEdit;
 using VPet_Simulator.Windows.Interface;
 
 namespace VPet.ModMaker.Views.ModEdit;
@@ -34,6 +35,8 @@ public partial class ModEditWindow : Window
     public LowTextPage LowTextPage { get; } = new();
     public ClickTextPage ClickTextPage { get; } = new();
 
+    public SelectTextPage SelectTextPage { get; } = new();
+
     public ModEditWindow()
     {
         InitializeComponent();
@@ -43,10 +46,19 @@ public partial class ModEditWindow : Window
         FoodPage.ViewModel.Foods.CollectionChanged += Foods_CollectionChanged;
         LowTextPage.ViewModel.LowTexts.CollectionChanged += LowTexts_CollectionChanged;
         ClickTextPage.ViewModel.ClickTexts.CollectionChanged += ClickTexts_CollectionChanged;
+        SelectTextPage.ViewModel.SelectTexts.CollectionChanged += SelectTexts_CollectionChanged;
         TabItem_ClickText.Header =
             $"{TabItem_ClickText.Tag} ({ClickTextPage.ViewModel.ClickTexts.Count})";
         TabItem_LowText.Header = $"{TabItem_LowText.Tag} ({LowTextPage.ViewModel.LowTexts.Count})";
         TabItem_Food.Header = $"{TabItem_Food.Tag} ({FoodPage.ViewModel.Foods.Count})";
+        TabItem_SelectText.Header =
+            $"{TabItem_SelectText.Tag} ({SelectTextPage.ViewModel.SelectTexts.Count})";
+    }
+
+    private void SelectTexts_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
+    {
+        TabItem_SelectText.Header =
+            $"{TabItem_SelectText.Tag} ({SelectTextPage.ViewModel.SelectTexts.Count})";
     }
 
     private void ClickTexts_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)

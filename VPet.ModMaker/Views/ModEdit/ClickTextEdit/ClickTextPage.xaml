@@ -34,10 +34,7 @@
       <RowDefinition Height="Auto" />
       <RowDefinition />
     </Grid.RowDefinitions>
-    <TextBox
-      x:Name="TextBox_SearchFood"
-      pu:TextBoxHelper.Watermark="{ll:Str 搜索文本}"
-      Text="{Binding FilterClickText.Value, UpdateSourceTrigger=PropertyChanged}" />
+    <TextBox pu:TextBoxHelper.Watermark="{ll:Str 搜索文本}" Text="{Binding FilterClickText.Value, UpdateSourceTrigger=PropertyChanged}" />
     <DataGrid
       x:Name="DataGrid_ClickText"
       Grid.Row="1"

@@ -112,6 +112,8 @@
     <Compile Include="ViewModels\ModEdit\ModEditWindowVM.cs" />
     <Compile Include="ViewModels\ModEdit\PetEdit\PetEditWindowVM.cs" />
     <Compile Include="ViewModels\ModEdit\PetEdit\PetPageVM.cs" />
+    <Compile Include="ViewModels\ModEdit\SelectTextEdit\SelectTextEditWindowVM.cs" />
+    <Compile Include="ViewModels\ModEdit\SelectTextEdit\SelectTextPageVM.cs" />
     <Compile Include="Views\ModEdit\ClickTextEdit\ClickTextPage.xaml.cs">
       <DependentUpon>ClickTextPage.xaml</DependentUpon>
     </Compile>
@@ -262,8 +264,6 @@
       <Install>false</Install>
     </BootstrapperPackage>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="ViewModels\ModEdit\SelectTextEdit\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -7,10 +7,14 @@
   xmlns:local="clr-namespace:VPet.ModMaker.Views.ModEdit.SelectTextEdit"
   xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
   xmlns:pu="https://opensource.panuon.com/wpf-ui"
+  xmlns:vm="clr-namespace:VPet.ModMaker.ViewModels.ModEdit.SelectTextEdit"
   Title="SelectTextWindow"
   Width="800"
   Height="450"
   mc:Ignorable="d">
+  <d:Window.DataContext>
+    <vm:SelectTextEditWindowVM />
+  </d:Window.DataContext>
   <Grid>
     <Grid.ColumnDefinitions>
       <ColumnDefinition />
@@ -26,21 +30,33 @@
           <ColumnDefinition Width="Auto" />
           <ColumnDefinition />
         </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+          <RowDefinition Height="Auto" />
+          <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
         <Label Content="Id" />
         <TextBox
           Grid.Column="1"
           pu:TextBoxHelper.Watermark="Id"
           Style="{StaticResource TextBox_Wrap}"
-          Text="{Binding ClickText.Value.Name.Value, UpdateSourceTrigger=PropertyChanged}"
+          Text="{Binding SelectText.Value.Name.Value, UpdateSourceTrigger=PropertyChanged}"
+          TextWrapping="Wrap" />
+        <Label Grid.Row="1" Content="{ll:Str 选项名}" />
+        <TextBox
+          Grid.Row="1"
+          Grid.Column="1"
+          pu:TextBoxHelper.Watermark="{ll:Str 显示在选项列表中的名称}"
+          Style="{StaticResource TextBox_Wrap}"
+          Text="{Binding SelectText.Value.CurrentI18nData.Value.Choose.Value, UpdateSourceTrigger=PropertyChanged}"
           TextWrapping="Wrap" />
       </Grid>
       <TextBox
         x:Name="TextBox_Text"
-        Grid.Row="1"
+        Grid.Row="2"
         d:Text="这是一个测试文本,这是一个测试文本,这是一个测试文本,这是一个测试文本,这是一个测试文本,这是一个测试文本,这是一个测试文本,"
-        pu:TextBoxHelper.Watermark="文本"
+        pu:TextBoxHelper.Watermark="{ll:Str 文本}"
         Style="{StaticResource TextBox_Wrap}"
-        Text="{Binding ClickText.Value.CurrentI18nData.Value.Text.Value, UpdateSourceTrigger=PropertyChanged}" />
+        Text="{Binding SelectText.Value.CurrentI18nData.Value.Text.Value, UpdateSourceTrigger=PropertyChanged}" />
     </Grid>
     <Grid Grid.Column="1">
       <Grid.RowDefinitions>
@@ -60,38 +76,77 @@
           <RowDefinition Height="Auto" />
           <RowDefinition Height="Auto" />
           <RowDefinition Height="Auto" />
+          <RowDefinition />
         </Grid.RowDefinitions>
-        <Label Content="{ll:Str 指定工作}" />
-        <TextBox Grid.Column="1" Text="{Binding ClickText.Value.Working.Value, UpdateSourceTrigger=PropertyChanged}" />
-        <Label Grid.Row="1" Content="{ll:Str 最小好感度}" />
-        <pu:NumberInput
-          Grid.Row="1"
+        <!--<Label Content="{ll:Str 指定工作}" />
+        <TextBox
           Grid.Column="1"
-          Margin="0"
-          Value="{Binding ClickText.Value.LikeMin.Value}" />
-        <Label Grid.Row="2" Content="{ll:Str 最大好感度}" />
-        <pu:NumberInput
+          pu:TextBoxHelper.Watermark="{ll:Str 非必要}"
+          Text="{Binding SelectText.Value.Working.Value, UpdateSourceTrigger=PropertyChanged}" />-->
+        <Label Grid.Row="2" Content="{ll:Str 标签}" />
+        <TextBox
           Grid.Row="2"
           Grid.Column="1"
-          Value="{Binding ClickText.Value.LikeMax.Value}" />
-        <Label Grid.Row="3" Content="{ll:Str 模式}" />
-        <ComboBox
+          pu:TextBoxHelper.Watermark="{ll:Str 多标签使用逗号分隔}"
+          Text="{Binding SelectText.Value.Tags.Value, UpdateSourceTrigger=PropertyChanged}" />
+        <Label Grid.Row="3" Content="{ll:Str 跳转标签}" />
+        <TextBox
           Grid.Row="3"
           Grid.Column="1"
-          ItemsSource="{Binding ModeTypes}"
-          SelectedItem="{Binding ClickText.Value.Mode.Value}" />
-        <Label Grid.Row="4" Content="{ll:Str 工作状态}" />
+          pu:TextBoxHelper.Watermark="{ll:Str 多标签使用逗号分隔}"
+          Text="{Binding SelectText.Value.ToTags.Value, UpdateSourceTrigger=PropertyChanged}" />
+        <Label Grid.Row="4" Content="{ll:Str 模式}" />
         <ComboBox
           Grid.Row="4"
           Grid.Column="1"
-          ItemsSource="{Binding WorkingStates}"
-          SelectedItem="{Binding ClickText.Value.WorkingState.Value}" />
-        <Label Grid.Row="5" Content="{ll:Str 日期区间}" />
+          ItemsSource="{Binding SelectText.Value.ModeTypes}"
+          SelectedItem="{Binding SelectText.Value.Mode.Value}" />
+        <!--<Label Grid.Row="5" Content="{ll:Str 工作状态}" />
         <ComboBox
           Grid.Row="5"
           Grid.Column="1"
-          ItemsSource="{Binding DayTimes}"
-          SelectedItem="{Binding ClickText.Value.DayTime.Value}" />
+          ItemsSource="{Binding SelectText.Value.WorkingStates}"
+          SelectedItem="{Binding SelectText.Value.WorkingState.Value}" />
+        <Label Grid.Row="6" Content="{ll:Str 日期区间}" />
+        <ComboBox
+          Grid.Row="6"
+          Grid.Column="1"
+          ItemsSource="{Binding SelectText.Value.DayTimes}"
+          SelectedItem="{Binding SelectText.Value.DayTime.Value}" />-->
+        <ListBox Grid.Row="7" Grid.ColumnSpan="2">
+          <ListBoxItem
+            DataContext="{Binding SelectText.Value.Like}"
+            Tag="{ll:Str 好感度范围}"
+            Template="{StaticResource ListBoxItem_RangeData}" />
+          <ListBoxItem
+            DataContext="{Binding SelectText.Value.Health}"
+            Tag="{ll:Str 健康度范围}"
+            Template="{StaticResource ListBoxItem_RangeData}" />
+          <ListBoxItem
+            DataContext="{Binding SelectText.Value.Level}"
+            Tag="{ll:Str 等级范围}"
+            Template="{StaticResource ListBoxItem_RangeData}" />
+          <ListBoxItem
+            DataContext="{Binding SelectText.Value.Money}"
+            Tag="{ll:Str 金钱范围}"
+            Template="{StaticResource ListBoxItem_RangeData}" />
+          <ListBoxItem
+            DataContext="{Binding SelectText.Value.Food}"
+            Tag="{ll:Str 食物范围}"
+            Template="{StaticResource ListBoxItem_RangeData}" />
+          <ListBoxItem
+            DataContext="{Binding SelectText.Value.Drink}"
+            Tag="{ll:Str 口渴范围}"
+            Template="{StaticResource ListBoxItem_RangeData}" />
+          <ListBoxItem
+            DataContext="{Binding SelectText.Value.Feel}"
+            Tag="{ll:Str 心情范围}"
+            Template="{StaticResource ListBoxItem_RangeData}" />
+          <ListBoxItem
+            DataContext="{Binding SelectText.Value.Strength}"
+            Tag="{ll:Str 体力范围}"
+            Template="{StaticResource ListBoxItem_RangeData}" />
+        </ListBox>
       </Grid>
       <Grid Grid.Row="1">
         <Grid.ColumnDefinitions>

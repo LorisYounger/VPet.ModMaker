@@ -12,6 +12,8 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using VPet.ModMaker.Models;
+using VPet.ModMaker.ViewModels.ModEdit.SelectTextEdit;
 
 namespace VPet.ModMaker.Views.ModEdit.SelectTextEdit;
 
@@ -20,17 +22,21 @@ namespace VPet.ModMaker.Views.ModEdit.SelectTextEdit;
 /// </summary>
 public partial class SelectTextPage : Page
 {
+    public SelectTextPageVM ViewModel => (SelectTextPageVM)DataContext;
+
     public SelectTextPage()
     {
         InitializeComponent();
+        DataContext = new SelectTextPageVM();
     }
 
-    private void DataGrid_ClickText_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+    private void DataGrid_SelectText_MouseDoubleClick(object sender, MouseButtonEventArgs e)
     {
-        //if (
-        //    sender is not DataGrid dataGrid || dataGrid.SelectedItem is not ClickTextModel clickText
-        //)
-        //    return;
-        //ViewModel.EditClickText(clickText);
+        if (
+            sender is not DataGrid dataGrid
+            || dataGrid.SelectedItem is not SelectTextModel clickText
+        )
+            return;
+        ViewModel.EditSelectText(clickText);
     }
 }
