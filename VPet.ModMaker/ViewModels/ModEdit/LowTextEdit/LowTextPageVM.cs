@@ -18,40 +18,42 @@ namespace VPet.ModMaker.ViewModels.ModEdit.LowTextEdit;
 public class LowTextPageVM
 {
     #region Value
-    public ObservableValue<string> FilterLowText { get; } = new();
     public ObservableValue<ObservableCollection<LowTextModel>> ShowLowTexts { get; } = new();
     public ObservableCollection<LowTextModel> LowTexts => ModInfoModel.Current.LowTexts;
+    public ObservableValue<string> Filter { get; } = new();
     #endregion
     #region Command
-    public ObservableCommand AddLowTextCommand { get; } = new();
-    public ObservableCommand<LowTextModel> EditLowTextCommand { get; } = new();
-    public ObservableCommand<LowTextModel> RemoveLowTextCommand { get; } = new();
+    public ObservableCommand AddCommand { get; } = new();
+    public ObservableCommand<LowTextModel> EditCommand { get; } = new();
+    public ObservableCommand<LowTextModel> RemoveCommand { get; } = new();
     #endregion
 
     public LowTextPageVM()
     {
         ShowLowTexts.Value = LowTexts;
-        FilterLowText.ValueChanged += FilterLowText_ValueChanged;
-        AddLowTextCommand.ExecuteEvent += AddLowText;
-        EditLowTextCommand.ExecuteEvent += EditLowText;
-        RemoveLowTextCommand.ExecuteEvent += RemoveLowText;
+        Filter.ValueChanged += Filter_ValueChanged;
+        AddCommand.ExecuteEvent += Add;
+        EditCommand.ExecuteEvent += Edit;
+        RemoveCommand.ExecuteEvent += Remove;
     }
 
-    private void FilterLowText_ValueChanged(string value)
+    private void Filter_ValueChanged(string value)
     {
-        if (string.IsNullOrEmpty(value))
+        if (string.IsNullOrWhiteSpace(value))
         {
             ShowLowTexts.Value = LowTexts;
         }
         else
         {
             ShowLowTexts.Value = new(
-                LowTexts.Where(f => f.CurrentI18nData.Value.Text.Value.Contains(value))
+                LowTexts.Where(
+                    m => m.Name.Value.Contains(value, StringComparison.OrdinalIgnoreCase)
+                )
             );
         }
     }
 
-    private void AddLowText()
+    private void Add()
     {
         var window = new LowTextEditWindow();
         var vm = window.ViewModel;
@@ -61,38 +63,38 @@ public class LowTextPageVM
         LowTexts.Add(vm.LowText.Value);
     }
 
-    public void EditLowText(LowTextModel lowText)
+    public void Edit(LowTextModel model)
     {
         var window = new LowTextEditWindow();
         var vm = window.ViewModel;
-        vm.OldLowText = lowText;
-        var newLowTest = vm.LowText.Value = new(lowText);
+        vm.OldLowText = model;
+        var newLowTest = vm.LowText.Value = new(model);
         window.ShowDialog();
         if (window.IsCancel)
             return;
         if (ShowLowTexts.Value.Count == LowTexts.Count)
         {
-            LowTexts[LowTexts.IndexOf(lowText)] = newLowTest;
+            LowTexts[LowTexts.IndexOf(model)] = newLowTest;
         }
         else
         {
-            LowTexts[LowTexts.IndexOf(lowText)] = newLowTest;
-            ShowLowTexts.Value[ShowLowTexts.Value.IndexOf(lowText)] = newLowTest;
+            LowTexts[LowTexts.IndexOf(model)] = newLowTest;
+            ShowLowTexts.Value[ShowLowTexts.Value.IndexOf(model)] = newLowTest;
         }
     }
 
-    private void RemoveLowText(LowTextModel lowText)
+    private void Remove(LowTextModel model)
     {
         if (MessageBox.Show("确定删除吗".Translate(), "", MessageBoxButton.YesNo) is MessageBoxResult.No)
             return;
         if (ShowLowTexts.Value.Count == LowTexts.Count)
         {
-            LowTexts.Remove(lowText);
+            LowTexts.Remove(model);
         }
         else
         {
-            ShowLowTexts.Value.Remove(lowText);
-            LowTexts.Remove(lowText);
+            ShowLowTexts.Value.Remove(model);
+            LowTexts.Remove(model);
         }
     }
 }

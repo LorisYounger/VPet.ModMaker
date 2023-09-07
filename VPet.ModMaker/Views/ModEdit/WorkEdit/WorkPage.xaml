@@ -1,0 +1,204 @@
+﻿<Page
+  x:Class="VPet.ModMaker.Views.ModEdit.WorkEdit.WorkPage"
+  xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+  xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+  xmlns:ll="clr-namespace:LinePutScript.Localization.WPF;assembly=LinePutScript.Localization.WPF"
+  xmlns:local="clr-namespace:VPet.ModMaker.Views.ModEdit.WorkEdit"
+  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+  xmlns:pu="https://opensource.panuon.com/wpf-ui"
+  xmlns:vm="clr-namespace:VPet.ModMaker.ViewModels.ModEdit.WorkEdit"
+  Title="WorkPage"
+  d:DesignHeight="450"
+  d:DesignWidth="800"
+  mc:Ignorable="d">
+  <d:Page.DataContext>
+    <vm:WorkPageVM />
+  </d:Page.DataContext>
+  <Grid>
+    <Grid.RowDefinitions>
+      <RowDefinition Height="Auto" />
+      <RowDefinition />
+    </Grid.RowDefinitions>
+    <Grid>
+      <Grid.ColumnDefinitions>
+        <ColumnDefinition />
+        <ColumnDefinition Width="Auto" />
+      </Grid.ColumnDefinitions>
+      <TextBox pu:TextBoxHelper.Watermark="{ll:Str 搜索Id}" Text="{Binding Filter.Value, UpdateSourceTrigger=PropertyChanged}">
+        <TextBox.Style>
+          <Style BasedOn="{StaticResource {x:Type TextBox}}" TargetType="TextBox">
+            <Setter Property="IsEnabled" Value="True" />
+            <Style.Triggers>
+              <DataTrigger Binding="{Binding SelectedItem, ElementName=ComboBox_Pet}" Value="{x:Null}">
+                <Setter Property="IsEnabled" Value="False" />
+              </DataTrigger>
+            </Style.Triggers>
+          </Style>
+        </TextBox.Style>
+      </TextBox>
+      <ComboBox
+        x:Name="ComboBox_Pet"
+        Grid.Column="1"
+        pu:ComboBoxHelper.Watermark="{ll:Str 选择宠物}"
+        DisplayMemberPath="Name.Value"
+        ItemsSource="{Binding Pets}"
+        SelectedItem="{Binding CurrentPet.Value}">
+        <ComboBox.ItemContainerStyle>
+          <Style BasedOn="{StaticResource {x:Type ComboBoxItem}}" TargetType="ComboBoxItem">
+            <Setter Property="ToolTip" Value="{Binding CurrentI18nData.Value.Name.Value}" />
+          </Style>
+        </ComboBox.ItemContainerStyle>
+      </ComboBox>
+    </Grid>
+    <Grid Grid.Row="1">
+      <Grid.Style>
+        <Style TargetType="Grid">
+          <Setter Property="IsEnabled" Value="True" />
+          <Style.Triggers>
+            <DataTrigger Binding="{Binding SelectedItem, ElementName=ComboBox_Pet}" Value="{x:Null}">
+              <Setter Property="IsEnabled" Value="False" />
+            </DataTrigger>
+          </Style.Triggers>
+        </Style>
+      </Grid.Style>
+      <DataGrid
+        d:ItemsSource="{d:SampleData ItemCount=5}"
+        pu:DataGridHelper.ColumnHeaderHorizontalContentAlignment="Center"
+        AutoGenerateColumns="False"
+        CanUserAddRows="False"
+        GridLinesVisibility="Horizontal"
+        ItemsSource="{Binding ShowWorks.Value}"
+        MouseDoubleClick="DataGrid_MouseDoubleClick"
+        RowDetailsVisibilityMode="Visible"
+        RowHeight="64"
+        VirtualizingStackPanel.IsVirtualizing="True"
+        VirtualizingStackPanel.VirtualizationMode="Recycling">
+        <DataGrid.RowStyle>
+          <Style BasedOn="{StaticResource {x:Type DataGridRow}}" TargetType="DataGridRow">
+            <Setter Property="Height" Value="64" />
+            <Setter Property="Tag" Value="{Binding}" />
+            <Setter Property="ContextMenu" Value="{StaticResource ContextMenu_DataGridRow}" />
+          </Style>
+        </DataGrid.RowStyle>
+        <DataGrid.Columns>
+          <DataGridTextColumn
+            Binding="{Binding Name.Value}"
+            CanUserSort="True"
+            IsReadOnly="True"
+            SortMemberPath="Name.Value">
+            <DataGridTextColumn.Header>
+              <TextBlock Text="Id" />
+            </DataGridTextColumn.Header>
+          </DataGridTextColumn>
+          <DataGridTextColumn
+            Binding="{Binding CurrentI18nData.Value.Name.Value}"
+            CanUserSort="True"
+            IsReadOnly="True"
+            SortMemberPath="CurrentI18nData.Value.Name.Value">
+            <DataGridTextColumn.Header>
+              <TextBlock Text="{ll:Str 工作名称}" />
+            </DataGridTextColumn.Header>
+          </DataGridTextColumn>
+          <DataGridTextColumn
+            Binding="{Binding WorkType.Value}"
+            CanUserSort="True"
+            IsReadOnly="True"
+            SortMemberPath="WorkType.Value">
+            <DataGridTextColumn.Header>
+              <TextBlock Text="{ll:Str 工作类型}" />
+            </DataGridTextColumn.Header>
+          </DataGridTextColumn>
+          <DataGridTextColumn
+            Binding="{Binding Graph.Value}"
+            CanUserSort="True"
+            IsReadOnly="True"
+            SortMemberPath="Graph.Value">
+            <DataGridTextColumn.Header>
+              <TextBlock Text="{ll:Str 动画名称}" />
+            </DataGridTextColumn.Header>
+          </DataGridTextColumn>
+          <DataGridTextColumn
+            Binding="{Binding MoneyBase.Value}"
+            CanUserSort="True"
+            IsReadOnly="True"
+            SortMemberPath="MoneyBase.Value">
+            <DataGridTextColumn.Header>
+              <TextBlock Text="{ll:Str 基本倍率}" />
+            </DataGridTextColumn.Header>
+          </DataGridTextColumn>
+          <DataGridTextColumn
+            Binding="{Binding MoneyLevel.Value}"
+            CanUserSort="True"
+            IsReadOnly="True"
+            SortMemberPath="MoneyLevel.Value">
+            <DataGridTextColumn.Header>
+              <TextBlock Text="{ll:Str 等级倍率}" />
+            </DataGridTextColumn.Header>
+          </DataGridTextColumn>
+          <DataGridTextColumn
+            Binding="{Binding StrengthFood.Value}"
+            CanUserSort="True"
+            IsReadOnly="True"
+            SortMemberPath="StrengthFood.Value">
+            <DataGridTextColumn.Header>
+              <TextBlock Text="{ll:Str 饱食度消耗倍率}" />
+            </DataGridTextColumn.Header>
+          </DataGridTextColumn>
+          <DataGridTextColumn
+            Binding="{Binding StrengthDrink.Value}"
+            CanUserSort="True"
+            IsReadOnly="True"
+            SortMemberPath="StrengthDrink.Value">
+            <DataGridTextColumn.Header>
+              <TextBlock Text="{ll:Str 口渴度消耗倍率}" />
+            </DataGridTextColumn.Header>
+          </DataGridTextColumn>
+          <DataGridTextColumn
+            Binding="{Binding Feeling.Value}"
+            CanUserSort="True"
+            IsReadOnly="True"
+            SortMemberPath="Feeling.Value">
+            <DataGridTextColumn.Header>
+              <TextBlock Text="{ll:Str 心情消耗倍率}" />
+            </DataGridTextColumn.Header>
+          </DataGridTextColumn>
+          <DataGridTextColumn
+            Binding="{Binding LevelLimit.Value}"
+            CanUserSort="True"
+            IsReadOnly="True"
+            SortMemberPath="LevelLimit.Value">
+            <DataGridTextColumn.Header>
+              <TextBlock Text="{ll:Str 等级限制}" />
+            </DataGridTextColumn.Header>
+          </DataGridTextColumn>
+          <DataGridTextColumn
+            Binding="{Binding Time.Value}"
+            CanUserSort="True"
+            IsReadOnly="True"
+            SortMemberPath="Time.Value">
+            <DataGridTextColumn.Header>
+              <TextBlock Text="{ll:Str 花费时间}" />
+            </DataGridTextColumn.Header>
+          </DataGridTextColumn>
+          <DataGridTextColumn
+            Binding="{Binding FinishBonus.Value}"
+            CanUserSort="True"
+            IsReadOnly="True"
+            SortMemberPath="FinishBonus.Value">
+            <DataGridTextColumn.Header>
+              <TextBlock Text="{ll:Str 奖励倍率}" />
+            </DataGridTextColumn.Header>
+          </DataGridTextColumn>
+        </DataGrid.Columns>
+      </DataGrid>
+      <Button
+        Grid.Row="1"
+        HorizontalAlignment="Right"
+        VerticalAlignment="Bottom"
+        Command="{Binding AddCommand}"
+        Content="➕"
+        Style="{StaticResource AddButton}" />
+    </Grid>
+  </Grid>
+</Page>

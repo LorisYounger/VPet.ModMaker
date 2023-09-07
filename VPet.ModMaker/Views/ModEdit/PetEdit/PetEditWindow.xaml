@@ -3,6 +3,7 @@
   xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
   xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
   xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+  xmlns:ll="clr-namespace:LinePutScript.Localization.WPF;assembly=LinePutScript.Localization.WPF"
   xmlns:local="clr-namespace:VPet.ModMaker.Views.ModEdit.PetEdit"
   xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
   xmlns:pu="https://opensource.panuon.com/wpf-ui"
@@ -47,179 +48,202 @@
         <RowDefinition />
       </Grid.RowDefinitions>
       <Grid>
-        <!--
-          Width="{Binding Pet.Value.Image.Value.Width}"
-          Height="{Binding Pet.Value.Image.Value.Height}"
-        -->
-        <Image
-          d:Height="250"
-          d:Width="250"
-          Source="C:\Users\HKW\Desktop\测试肖像文件夹\10500.png" />
-        <Label
-          Content="TouchHeadRect"
-          DataContext="{Binding Pet.Value.TouchHeadRect.Value}"
-          Tag="{Binding IsChecked, ElementName=ToggleButton_TouchHead}">
-          <Label.Style>
-            <Style BasedOn="{StaticResource Label_ThouchRect}" TargetType="Label">
-              <Setter Property="Margin">
-                <Setter.Value>
-                  <MultiBinding Converter="{StaticResource MarginConverter}">
-                    <Binding Path="X.Value" />
-                    <Binding Path="Y.Value" />
-                  </MultiBinding>
-                </Setter.Value>
-              </Setter>
-            </Style>
-          </Label.Style>
-        </Label>
-        <Label
-          Content="TouchRaisedRect_Happy"
-          DataContext="{Binding Pet.Value.TouchRaisedRect.Value.Happy.Value}"
-          Tag="{Binding IsChecked, ElementName=ToggleButton_TouchRaisedRect_HappyState}">
-          <Label.Style>
-            <Style BasedOn="{StaticResource Label_ThouchRect}" TargetType="Label">
-              <Setter Property="Margin">
-                <Setter.Value>
-                  <MultiBinding Converter="{StaticResource MarginConverter}">
-                    <Binding Path="X.Value" />
-                    <Binding Path="Y.Value" />
-                  </MultiBinding>
-                </Setter.Value>
-              </Setter>
-            </Style>
-          </Label.Style>
-        </Label>
-        <Label
-          Content="TouchRaisedRect_Nomal"
-          DataContext="{Binding Pet.Value.TouchRaisedRect.Value.Nomal.Value}"
-          Tag="{Binding IsChecked, ElementName=ToggleButton_TouchRaisedRect_NomalState}">
-          <Label.Style>
-            <Style BasedOn="{StaticResource Label_ThouchRect}" TargetType="Label">
-              <Setter Property="Margin">
-                <Setter.Value>
-                  <MultiBinding Converter="{StaticResource MarginConverter}">
-                    <Binding Path="X.Value" />
-                    <Binding Path="Y.Value" />
-                  </MultiBinding>
-                </Setter.Value>
-              </Setter>
-            </Style>
-          </Label.Style>
-        </Label>
-        <Label
-          Content="TouchRaisedRect_PoorCondition"
-          DataContext="{Binding Pet.Value.TouchRaisedRect.Value.PoorCondition.Value}"
-          Tag="{Binding IsChecked, ElementName=ToggleButton_TouchRaisedRect_PoorConditionState}">
-          <Label.Style>
-            <Style BasedOn="{StaticResource Label_ThouchRect}" TargetType="Label">
-              <Setter Property="Margin">
-                <Setter.Value>
-                  <MultiBinding Converter="{StaticResource MarginConverter}">
-                    <Binding Path="X.Value" />
-                    <Binding Path="Y.Value" />
-                  </MultiBinding>
-                </Setter.Value>
-              </Setter>
-            </Style>
-          </Label.Style>
-        </Label>
-        <Label
-          Content="TouchRaisedRect_Ill"
-          DataContext="{Binding Pet.Value.TouchRaisedRect.Value.Ill.Value}"
-          Tag="{Binding IsChecked, ElementName=ToggleButton_TouchRaisedRect_IllState}">
-          <Label.Style>
-            <Style BasedOn="{StaticResource Label_ThouchRect}" TargetType="Label">
-              <Setter Property="Margin">
-                <Setter.Value>
-                  <MultiBinding Converter="{StaticResource MarginConverter}">
-                    <Binding Path="X.Value" />
-                    <Binding Path="Y.Value" />
-                  </MultiBinding>
-                </Setter.Value>
-              </Setter>
-            </Style>
-          </Label.Style>
-        </Label>
-        <Label
-          Width="5"
-          Height="5"
-          Background="Red"
-          Content="RaisePoint_Happy"
-          DataContext="{Binding Pet.Value.RaisePoint.Value.Happy.Value}"
-          Tag="{Binding IsChecked, ElementName=ToggleButton_RaisePoint_Happy}">
-          <Label.Style>
-            <Style BasedOn="{StaticResource Label_ThouchRect}" TargetType="Label">
-              <Setter Property="Margin">
-                <Setter.Value>
-                  <MultiBinding Converter="{StaticResource MarginConverter}">
-                    <Binding Path="X.Value" />
-                    <Binding Path="Y.Value" />
-                  </MultiBinding>
-                </Setter.Value>
-              </Setter>
-            </Style>
-          </Label.Style>
-        </Label>
-        <Label
-          Width="5"
-          Height="5"
-          Background="Red"
-          Content="RaisePoint_Nomal"
-          DataContext="{Binding Pet.Value.RaisePoint.Value.Nomal.Value}"
-          Tag="{Binding IsChecked, ElementName=ToggleButton_RaisePoint_Nomal}">
-          <Label.Style>
-            <Style BasedOn="{StaticResource Label_ThouchRect}" TargetType="Label">
-              <Setter Property="Margin">
-                <Setter.Value>
-                  <MultiBinding Converter="{StaticResource MarginConverter}">
-                    <Binding Path="X.Value" />
-                    <Binding Path="Y.Value" />
-                  </MultiBinding>
-                </Setter.Value>
-              </Setter>
-            </Style>
-          </Label.Style>
-        </Label>
-        <Label
-          Width="5"
-          Height="5"
-          Background="Red"
-          Content="RaisePoint_PoorCondition"
-          DataContext="{Binding Pet.Value.RaisePoint.Value.PoorCondition.Value}"
-          Tag="{Binding IsChecked, ElementName=ToggleButton_RaisePoint_PoorCondition}">
-          <Label.Style>
-            <Style BasedOn="{StaticResource Label_ThouchRect}" TargetType="Label">
-              <Setter Property="Margin">
-                <Setter.Value>
-                  <MultiBinding Converter="{StaticResource MarginConverter}">
-                    <Binding Path="X.Value" />
-                    <Binding Path="Y.Value" />
-                  </MultiBinding>
-                </Setter.Value>
-              </Setter>
-            </Style>
-          </Label.Style>
-        </Label>
-        <Label
-          Width="5"
-          Height="5"
-          Background="Red"
-          Content="RaisePoint_Ill"
-          DataContext="{Binding Pet.Value.RaisePoint.Value.Ill.Value}"
-          Tag="{Binding IsChecked, ElementName=ToggleButton_RaisePoint_Ill}">
-          <Label.Style>
-            <Style BasedOn="{StaticResource Label_ThouchRect}" TargetType="Label">
-              <Setter Property="Margin">
-                <Setter.Value>
-                  <MultiBinding Converter="{StaticResource MarginConverter}">
-                    <Binding Path="X.Value" />
-                    <Binding Path="Y.Value" />
-                  </MultiBinding>
-                </Setter.Value>
-              </Setter>
-            </Style>
-          </Label.Style>
-        </Label>
+        <Grid>
+          <Image
+            Width="500"
+            Height="500"
+            Source="{Binding Image.Value}"
+            Stretch="Uniform">
+            <Image.ContextMenu>
+              <ContextMenu>
+                <MenuItem Command="{Binding ChangeImageCommand}" Header="{ll:Str 修改测试图片}" />
+              </ContextMenu>
+            </Image.ContextMenu>
+          </Image>
+          <Button
+            HorizontalAlignment="Center"
+            VerticalAlignment="Center"
+            Command="{Binding AddImageCommand}"
+            Content="{ll:Str 添加测试图片}">
+            <Button.Style>
+              <Style BasedOn="{StaticResource {x:Type Button}}" TargetType="Button">
+                <Setter Property="Visibility" Value="Hidden" />
+                <Style.Triggers>
+                  <DataTrigger Binding="{Binding Image.Value}" Value="{x:Null}">
+                    <Setter Property="Visibility" Value="Visible" />
+                  </DataTrigger>
+                </Style.Triggers>
+              </Style>
+            </Button.Style>
+          </Button>
+        </Grid>
+        <Grid>
+          <Label
+            Content="TouchHeadRect"
+            DataContext="{Binding Pet.Value.TouchHeadRect.Value}"
+            Tag="{Binding IsChecked, ElementName=ToggleButton_TouchHead}">
+            <Label.Style>
+              <Style BasedOn="{StaticResource Label_ThouchRect}" TargetType="Label">
+                <Setter Property="Margin">
+                  <Setter.Value>
+                    <MultiBinding Converter="{StaticResource MarginConverter}">
+                      <Binding Path="X.Value" />
+                      <Binding Path="Y.Value" />
+                    </MultiBinding>
+                  </Setter.Value>
+                </Setter>
+              </Style>
+            </Label.Style>
+          </Label>
+          <Label
+            Content="TouchRaisedRect_Happy"
+            DataContext="{Binding Pet.Value.TouchRaisedRect.Value.Happy.Value}"
+            Tag="{Binding IsChecked, ElementName=ToggleButton_TouchRaisedRect_HappyState}">
+            <Label.Style>
+              <Style BasedOn="{StaticResource Label_ThouchRect}" TargetType="Label">
+                <Setter Property="Margin">
+                  <Setter.Value>
+                    <MultiBinding Converter="{StaticResource MarginConverter}">
+                      <Binding Path="X.Value" />
+                      <Binding Path="Y.Value" />
+                    </MultiBinding>
+                  </Setter.Value>
+                </Setter>
+              </Style>
+            </Label.Style>
+          </Label>
+          <Label
+            Content="TouchRaisedRect_Nomal"
+            DataContext="{Binding Pet.Value.TouchRaisedRect.Value.Nomal.Value}"
+            Tag="{Binding IsChecked, ElementName=ToggleButton_TouchRaisedRect_NomalState}">
+            <Label.Style>
+              <Style BasedOn="{StaticResource Label_ThouchRect}" TargetType="Label">
+                <Setter Property="Margin">
+                  <Setter.Value>
+                    <MultiBinding Converter="{StaticResource MarginConverter}">
+                      <Binding Path="X.Value" />
+                      <Binding Path="Y.Value" />
+                    </MultiBinding>
+                  </Setter.Value>
+                </Setter>
+              </Style>
+            </Label.Style>
+          </Label>
+          <Label
+            Content="TouchRaisedRect_PoorCondition"
+            DataContext="{Binding Pet.Value.TouchRaisedRect.Value.PoorCondition.Value}"
+            Tag="{Binding IsChecked, ElementName=ToggleButton_TouchRaisedRect_PoorConditionState}">
+            <Label.Style>
+              <Style BasedOn="{StaticResource Label_ThouchRect}" TargetType="Label">
+                <Setter Property="Margin">
+                  <Setter.Value>
+                    <MultiBinding Converter="{StaticResource MarginConverter}">
+                      <Binding Path="X.Value" />
+                      <Binding Path="Y.Value" />
+                    </MultiBinding>
+                  </Setter.Value>
+                </Setter>
+              </Style>
+            </Label.Style>
+          </Label>
+          <Label
+            Content="TouchRaisedRect_Ill"
+            DataContext="{Binding Pet.Value.TouchRaisedRect.Value.Ill.Value}"
+            Tag="{Binding IsChecked, ElementName=ToggleButton_TouchRaisedRect_IllState}">
+            <Label.Style>
+              <Style BasedOn="{StaticResource Label_ThouchRect}" TargetType="Label">
+                <Setter Property="Margin">
+                  <Setter.Value>
+                    <MultiBinding Converter="{StaticResource MarginConverter}">
+                      <Binding Path="X.Value" />
+                      <Binding Path="Y.Value" />
+                    </MultiBinding>
+                  </Setter.Value>
+                </Setter>
+              </Style>
+            </Label.Style>
+          </Label>
+          <Label
+            Width="5"
+            Height="5"
+            Background="Red"
+            Content="RaisePoint_Happy"
+            DataContext="{Binding Pet.Value.RaisePoint.Value.Happy.Value}"
+            Tag="{Binding IsChecked, ElementName=ToggleButton_RaisePoint_Happy}">
+            <Label.Style>
+              <Style BasedOn="{StaticResource Label_ThouchRect}" TargetType="Label">
+                <Setter Property="Margin">
+                  <Setter.Value>
+                    <MultiBinding Converter="{StaticResource MarginConverter}">
+                      <Binding Path="X.Value" />
+                      <Binding Path="Y.Value" />
+                    </MultiBinding>
+                  </Setter.Value>
+                </Setter>
+              </Style>
+            </Label.Style>
+          </Label>
+          <Label
+            Width="5"
+            Height="5"
+            Background="Red"
+            Content="RaisePoint_Nomal"
+            DataContext="{Binding Pet.Value.RaisePoint.Value.Nomal.Value}"
+            Tag="{Binding IsChecked, ElementName=ToggleButton_RaisePoint_Nomal}">
+            <Label.Style>
+              <Style BasedOn="{StaticResource Label_ThouchRect}" TargetType="Label">
+                <Setter Property="Margin">
+                  <Setter.Value>
+                    <MultiBinding Converter="{StaticResource MarginConverter}">
+                      <Binding Path="X.Value" />
+                      <Binding Path="Y.Value" />
+                    </MultiBinding>
+                  </Setter.Value>
+                </Setter>
+              </Style>
+            </Label.Style>
+          </Label>
+          <Label
+            Width="5"
+            Height="5"
+            Background="Red"
+            Content="RaisePoint_PoorCondition"
+            DataContext="{Binding Pet.Value.RaisePoint.Value.PoorCondition.Value}"
+            Tag="{Binding IsChecked, ElementName=ToggleButton_RaisePoint_PoorCondition}">
+            <Label.Style>
+              <Style BasedOn="{StaticResource Label_ThouchRect}" TargetType="Label">
+                <Setter Property="Margin">
+                  <Setter.Value>
+                    <MultiBinding Converter="{StaticResource MarginConverter}">
+                      <Binding Path="X.Value" />
+                      <Binding Path="Y.Value" />
+                    </MultiBinding>
+                  </Setter.Value>
+                </Setter>
+              </Style>
+            </Label.Style>
+          </Label>
+          <Label
+            Width="5"
+            Height="5"
+            Background="Red"
+            Content="RaisePoint_Ill"
+            DataContext="{Binding Pet.Value.RaisePoint.Value.Ill.Value}"
+            Tag="{Binding IsChecked, ElementName=ToggleButton_RaisePoint_Ill}">
+            <Label.Style>
+              <Style BasedOn="{StaticResource Label_ThouchRect}" TargetType="Label">
+                <Setter Property="Margin">
+                  <Setter.Value>
+                    <MultiBinding Converter="{StaticResource MarginConverter}">
+                      <Binding Path="X.Value" />
+                      <Binding Path="Y.Value" />
+                    </MultiBinding>
+                  </Setter.Value>
+                </Setter>
+              </Style>
+            </Label.Style>
+          </Label>
+        </Grid>
       </Grid>
       <Grid Grid.Row="1">
         <Grid.ColumnDefinitions>
@@ -229,28 +253,33 @@
         <Grid.RowDefinitions>
           <RowDefinition Height="Auto" />
           <RowDefinition Height="Auto" />
+          <RowDefinition Height="Auto" />
           <RowDefinition />
         </Grid.RowDefinitions>
-        <Label Content="宠物Id:" />
-        <TextBox
-          Grid.Column="1"
-          pu:TextBoxHelper.Watermark="宠物Id"
-          Text="{Binding Pet.Value.Id.Value}" />
-        <Label Grid.Row="1" Content="宠物名称:" />
+        <Label Content="Id" />
+        <TextBox Grid.Column="1" Text="{Binding Pet.Value.Name.Value}" />
+        <Label Grid.Row="1" Content="{ll:Str 名称}" />
         <TextBox
           Grid.Row="1"
           Grid.Column="1"
-          pu:TextBoxHelper.Watermark="宠物名称"
-          Text="{Binding Pet.Value.CurrentI18nData.Value.Name.Value}" />
-        <Label Grid.Row="2" Content="宠物描述:" />
+          Text="{Binding Pet.Value.CurrentI18nData.Value.PetName.Value}" />
+        <Label Grid.Row="2" Content="{ll:Str 宠物名称}" />
         <TextBox
           Grid.Row="2"
           Grid.Column="1"
-          pu:TextBoxHelper.Watermark="宠物描述"
+          Text="{Binding Pet.Value.CurrentI18nData.Value.Description.Value}" />
+        <Label Grid.Row="3" Content="{ll:Str 宠物描述}" />
+        <TextBox
+          Grid.Row="3"
+          Grid.Column="1"
           Text="{Binding Pet.Value.CurrentI18nData.Value.Description.Value}" />
       </Grid>
     </Grid>
     <Grid Grid.Column="1">
+      <Grid.RowDefinitions>
+        <RowDefinition />
+        <RowDefinition Height="Auto" />
+      </Grid.RowDefinitions>
       <ScrollViewer VerticalScrollBarVisibility="Auto">
         <StackPanel>
           <Grid>
@@ -349,7 +378,7 @@
                 <pu:NumberInput
                   Grid.Column="3"
                   d:Value="100"
-                  Value="{Binding Pet.Value.TouchRaisedRect.Value.Happy.Value.X.Value, Mode=TwoWay}" />
+                  Value="{Binding Pet.Value.TouchRaisedRect.Value.Happy.Value.Y.Value, Mode=TwoWay}" />
                 <Label
                   Grid.Row="1"
                   Background="{x:Null}"
@@ -358,7 +387,7 @@
                   Grid.Row="1"
                   Grid.Column="1"
                   d:Value="100"
-                  Value="{Binding Pet.Value.TouchRaisedRect.Value.Happy.Value.X.Value, Mode=TwoWay}" />
+                  Value="{Binding Pet.Value.TouchRaisedRect.Value.Happy.Value.Width.Value, Mode=TwoWay}" />
                 <Label
                   Grid.Row="1"
                   Grid.Column="2"
@@ -368,7 +397,7 @@
                   Grid.Row="1"
                   Grid.Column="3"
                   d:Value="100"
-                  Value="{Binding Pet.Value.TouchRaisedRect.Value.Happy.Value.X.Value, Mode=TwoWay}" />
+                  Value="{Binding Pet.Value.TouchRaisedRect.Value.Happy.Value.Height.Value, Mode=TwoWay}" />
               </Grid>
               <ToggleButton
                 x:Name="ToggleButton_TouchRaisedRect_NomalState"
@@ -682,6 +711,23 @@
           </Expander>
         </StackPanel>
       </ScrollViewer>
+      <Grid Grid.Row="1">
+        <Grid.ColumnDefinitions>
+          <ColumnDefinition />
+          <ColumnDefinition />
+        </Grid.ColumnDefinitions>
+        <Button
+          x:Name="Button_Cancel"
+          Margin="10"
+          Click="Button_Cancel_Click"
+          Content="{ll:Str 取消}" />
+        <Button
+          x:Name="Button_Yes"
+          Grid.Column="1"
+          Margin="10"
+          Click="Button_Yes_Click"
+          Content="{ll:Str 确定}" />
+      </Grid>
     </Grid>
   </Grid>
 </Window>

@@ -17,6 +17,7 @@ namespace VPet.ModMaker.Models;
 
 public class ModInfoModel : I18nModel<I18nModInfoModel>
 {
+    public const string ModInfoFile = "info.lps";
     public static ModInfoModel Current { get; set; } = new();
 
     public ObservableValue<string> Name { get; } = new();
@@ -26,11 +27,13 @@ public class ModInfoModel : I18nModel<I18nModInfoModel>
     public ObservableValue<string> GameVersion { get; } = new();
     public ObservableValue<string> ModVersion { get; } = new();
     public ObservableValue<BitmapImage> Image { get; } = new();
+    public ObservableValue<string> SourcePath { get; } = new();
+
     public ObservableCollection<FoodModel> Foods { get; } = new();
     public ObservableCollection<ClickTextModel> ClickTexts { get; } = new();
     public ObservableCollection<LowTextModel> LowTexts { get; } = new();
     public ObservableCollection<SelectTextModel> SelectTexts { get; } = new();
-    public ObservableValue<string> SourcePath { get; } = new();
+    public ObservableCollection<PetModel> Pets { get; } = new();
 
     public Dictionary<string, Dictionary<string, string>> OtherI18nDatas { get; } = new();
 
@@ -63,22 +66,75 @@ public class ModInfoModel : I18nModel<I18nModInfoModel>
             LowTexts.Add(new(lowText));
         foreach (var selectText in loader.SelectTexts)
             SelectTexts.Add(new(selectText));
+        foreach (var pet in loader.Pets)
+            Pets.Add(new(pet));
 
-        Summary.Value = GetSummary();
         foreach (var lang in loader.I18nDatas)
             I18nDatas.Add(lang.Key, lang.Value);
         OtherI18nDatas = loader.OtherI18nDatas;
+
+        LoadI18nData();
     }
 
-    public string GetSummary()
+    private void LoadI18nData()
     {
-        return @"包含以下内容:
-食物: {0}
-点击文本: {1}
-低状态文本: {2}".Translate(Foods.Count, ClickTexts.Count, LowTexts.Count);
+        foreach (var lang in I18nDatas)
+        {
+            if (I18nHelper.Current.CultureNames.Contains(lang.Key) is false)
+                I18nHelper.Current.CultureNames.Add(lang.Key);
+        }
+        if (I18nHelper.Current.CultureNames.Count > 0)
+        {
+            I18nHelper.Current.CultureName.Value = I18nHelper.Current.CultureNames.First();
+            foreach (var i18nData in OtherI18nDatas)
+            {
+                foreach (var food in Foods)
+                {
+                    var foodI18n = food.I18nDatas[i18nData.Key];
+                    if (i18nData.Value.TryGetValue(food.Name.Value, out var name))
+                        foodI18n.Name.Value = name;
+                    if (i18nData.Value.TryGetValue(food.Description.Value, out var description))
+                        foodI18n.Description.Value = description;
+                }
+                foreach (var lowText in LowTexts)
+                {
+                    var lowTextI18n = lowText.I18nDatas[i18nData.Key];
+                    if (i18nData.Value.TryGetValue(lowText.Name.Value, out var text))
+                        lowTextI18n.Text.Value = text;
+                }
+                foreach (var clickText in ClickTexts)
+                {
+                    var clickTextI18n = clickText.I18nDatas[i18nData.Key];
+                    if (i18nData.Value.TryGetValue(clickText.Name.Value, out var text))
+                        clickTextI18n.Text.Value = text;
+                }
+                foreach (var selectText in SelectTexts)
+                {
+                    var selectTextI18n = selectText.I18nDatas[i18nData.Key];
+                    if (i18nData.Value.TryGetValue(selectText.Name.Value, out var text))
+                        selectTextI18n.Text.Value = text;
+                    if (i18nData.Value.TryGetValue(selectText.Choose.Value, out var choose))
+                        selectTextI18n.Choose.Value = choose;
+                }
+                foreach (var pet in Pets)
+                {
+                    var petI18n = pet.I18nDatas[i18nData.Key];
+                    if (i18nData.Value.TryGetValue(pet.Name.Value, out var name))
+                        petI18n.Name.Value = name;
+                    if (i18nData.Value.TryGetValue(pet.PetName.Value, out var petName))
+                        petI18n.PetName.Value = petName;
+                    if (i18nData.Value.TryGetValue(pet.Description.Value, out var description))
+                        petI18n.Description.Value = description;
+                    foreach (var work in pet.Works)
+                    {
+                        var workI18n = work.I18nDatas[i18nData.Key];
+                        if (i18nData.Value.TryGetValue(work.Name.Value, out var workName))
+                            workI18n.Name.Value = workName;
+                    }
+                }
+            }
+        }
     }
-
-    public const string ModInfoFile = "info.lps";
 
     public void Save()
     {

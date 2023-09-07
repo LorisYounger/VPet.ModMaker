@@ -15,26 +15,12 @@
   <d:Page.DataContext>
     <vm:LowTextPageVM />
   </d:Page.DataContext>
-  <Page.Resources>
-    <ResourceDictionary>
-      <ContextMenu x:Key="ContextMenu_DataGridRow" x:Shared="false">
-        <MenuItem
-          Command="{Binding DataContext.EditLowTextCommand, RelativeSource={RelativeSource AncestorType=Page, Mode=FindAncestor}}"
-          CommandParameter="{Binding DataContext, RelativeSource={RelativeSource AncestorType=DataGridRow, Mode=FindAncestor}}"
-          Header="{ll:Str 修改低状态文本}" />
-        <MenuItem
-          Command="{Binding DataContext.RemoveLowTextCommand, RelativeSource={RelativeSource AncestorType=Page, Mode=FindAncestor}}"
-          CommandParameter="{Binding DataContext, RelativeSource={RelativeSource AncestorType=DataGridRow, Mode=FindAncestor}}"
-          Header="{ll:Str 删除低状态文本}" />
-      </ContextMenu>
-    </ResourceDictionary>
-  </Page.Resources>
   <Grid>
     <Grid.RowDefinitions>
       <RowDefinition Height="Auto" />
       <RowDefinition />
     </Grid.RowDefinitions>
-    <TextBox pu:TextBoxHelper.Watermark="{ll:Str 搜索文本}" Text="{Binding FilterLowText.Value, UpdateSourceTrigger=PropertyChanged}" />
+    <TextBox pu:TextBoxHelper.Watermark="{ll:Str 搜索Id}" Text="{Binding Filter.Value, UpdateSourceTrigger=PropertyChanged}" />
     <DataGrid
       x:Name="DataGrid_LowText"
       Grid.Row="1"
@@ -63,7 +49,7 @@
           CanUserSort="True"
           ElementStyle="{StaticResource TextBlock_Wrap}"
           IsReadOnly="True"
-          SortMemberPath="Id.Value">
+          SortMemberPath="Name.Value">
           <DataGridTextColumn.Header>
             <TextBlock Text="Id" />
           </DataGridTextColumn.Header>
@@ -109,11 +95,10 @@
       </DataGrid.Columns>
     </DataGrid>
     <Button
-      x:Name="Button_AddLowText"
       Grid.Row="1"
       HorizontalAlignment="Right"
       VerticalAlignment="Bottom"
-      Command="{Binding AddLowTextCommand}"
+      Command="{Binding AddCommand}"
       Content="➕"
       Style="{StaticResource AddButton}" />
   </Grid>
