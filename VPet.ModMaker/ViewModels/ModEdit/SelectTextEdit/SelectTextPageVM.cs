@@ -17,24 +17,24 @@ public class SelectTextPageVM
     #region Value
     public ObservableValue<ObservableCollection<SelectTextModel>> ShowSelectTexts { get; } = new();
     public ObservableCollection<SelectTextModel> SelectTexts => ModInfoModel.Current.SelectTexts;
-    public ObservableValue<string> FilterSelectText { get; } = new();
+    public ObservableValue<string> Filter { get; } = new();
     #endregion
     #region Command
-    public ObservableCommand AddSelectTextCommand { get; } = new();
-    public ObservableCommand<SelectTextModel> EditSelectTextCommand { get; } = new();
-    public ObservableCommand<SelectTextModel> RemoveSelectTextCommand { get; } = new();
+    public ObservableCommand AddCommand { get; } = new();
+    public ObservableCommand<SelectTextModel> EditCommand { get; } = new();
+    public ObservableCommand<SelectTextModel> RemoveCommand { get; } = new();
     #endregion
 
     public SelectTextPageVM()
     {
         ShowSelectTexts.Value = SelectTexts;
-        FilterSelectText.ValueChanged += FilterSelectText_ValueChanged;
-        AddSelectTextCommand.ExecuteEvent += AddSelectText;
-        EditSelectTextCommand.ExecuteEvent += EditSelectText;
-        RemoveSelectTextCommand.ExecuteEvent += RemoveSelectText;
+        Filter.ValueChanged += Filter_ValueChanged;
+        AddCommand.ExecuteEvent += Add;
+        EditCommand.ExecuteEvent += Edit;
+        RemoveCommand.ExecuteEvent += Remove;
     }
 
-    private void FilterSelectText_ValueChanged(string value)
+    private void Filter_ValueChanged(string value)
     {
         if (string.IsNullOrWhiteSpace(value))
         {
@@ -43,12 +43,14 @@ public class SelectTextPageVM
         else
         {
             ShowSelectTexts.Value = new(
-                SelectTexts.Where(f => f.CurrentI18nData.Value.Text.Value.Contains(value))
+                SelectTexts.Where(
+                    m => m.Name.Value.Contains(value, StringComparison.OrdinalIgnoreCase)
+                )
             );
         }
     }
 
-    private void AddSelectText()
+    private void Add()
     {
         var window = new SelectTextEditWindow();
         var vm = window.ViewModel;
@@ -58,7 +60,7 @@ public class SelectTextPageVM
         SelectTexts.Add(vm.SelectText.Value);
     }
 
-    public void EditSelectText(SelectTextModel model)
+    public void Edit(SelectTextModel model)
     {
         var window = new SelectTextEditWindow();
         var vm = window.ViewModel;
@@ -78,7 +80,7 @@ public class SelectTextPageVM
         }
     }
 
-    private void RemoveSelectText(SelectTextModel model)
+    private void Remove(SelectTextModel model)
     {
         if (MessageBox.Show("确定删除吗".Translate(), "", MessageBoxButton.YesNo) is MessageBoxResult.No)
             return;

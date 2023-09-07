@@ -54,12 +54,6 @@ public partial class ModMakerWindow : Window
                 ViewModel.ShowHistories.Value.Remove(history);
             }
         }
-        var loader = new ModLoader(new(history.SourcePath));
-        if (loader.SuccessLoad)
-        {
-            ViewModel.EditMod(new(loader));
-        }
-        else
-            MessageBox.Show($"载入失败".Translate());
+        ViewModel.LoadMod(history.SourcePath);
     }
 }

@@ -25,34 +25,36 @@
         <RowDefinition Height="Auto" />
         <RowDefinition />
       </Grid.RowDefinitions>
-      <Image
-        x:Name="Image_FoodImage"
-        Width="256"
-        Height="256"
-        Source="{Binding Food.Value.Image.Value}"
-        Stretch="Uniform">
-        <Image.ContextMenu>
-          <ContextMenu>
-            <MenuItem Command="{Binding ChangeImageCommand}" Header="{ll:Str 修改图片}" />
-          </ContextMenu>
-        </Image.ContextMenu>
-      </Image>
-      <Button
-        HorizontalAlignment="Center"
-        VerticalAlignment="Center"
-        Command="{Binding AddImageCommand}"
-        Content="{ll:Str 添加图片}">
-        <Button.Style>
-          <Style BasedOn="{StaticResource {x:Type Button}}" TargetType="Button">
-            <Setter Property="Visibility" Value="Hidden" />
-            <Style.Triggers>
-              <DataTrigger Binding="{Binding Food.Value.Image.Value}" Value="{x:Null}">
-                <Setter Property="Visibility" Value="Visible" />
-              </DataTrigger>
-            </Style.Triggers>
-          </Style>
-        </Button.Style>
-      </Button>
+      <Grid>
+        <Image
+          x:Name="Image_FoodImage"
+          Width="256"
+          Height="256"
+          Source="{Binding Food.Value.Image.Value}"
+          Stretch="Uniform">
+          <Image.ContextMenu>
+            <ContextMenu>
+              <MenuItem Command="{Binding ChangeImageCommand}" Header="{ll:Str 修改图片}" />
+            </ContextMenu>
+          </Image.ContextMenu>
+        </Image>
+        <Button
+          HorizontalAlignment="Center"
+          VerticalAlignment="Center"
+          Command="{Binding AddImageCommand}"
+          Content="{ll:Str 添加图片}">
+          <Button.Style>
+            <Style BasedOn="{StaticResource {x:Type Button}}" TargetType="Button">
+              <Setter Property="Visibility" Value="Hidden" />
+              <Style.Triggers>
+                <DataTrigger Binding="{Binding Food.Value.Image.Value}" Value="{x:Null}">
+                  <Setter Property="Visibility" Value="Visible" />
+                </DataTrigger>
+              </Style.Triggers>
+            </Style>
+          </Button.Style>
+        </Button>
+      </Grid>
       <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
         <Grid>
           <Grid.ColumnDefinitions>

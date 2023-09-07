@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -15,27 +13,26 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using VPet.ModMaker.Models;
-using VPet.ModMaker.ViewModels.ModEdit.FoodEdit;
-using VPet_Simulator.Windows.Interface;
+using VPet.ModMaker.ViewModels.ModEdit.WorkEdit;
 
-namespace VPet.ModMaker.Views.ModEdit.FoodEdit;
+namespace VPet.ModMaker.Views.ModEdit.WorkEdit;
 
 /// <summary>
-/// Page_Food.xaml 的交互逻辑
+/// WorkPage.xaml 的交互逻辑
 /// </summary>
-public partial class FoodPage : Page
+public partial class WorkPage : Page
 {
-    public FoodPageVM ViewModel => (FoodPageVM)DataContext;
+    public WorkPageVM ViewModel => (WorkPageVM)DataContext;
 
-    public FoodPage()
+    public WorkPage()
     {
         InitializeComponent();
-        DataContext = new FoodPageVM();
+        DataContext = new WorkPageVM();
     }
 
     private void DataGrid_MouseDoubleClick(object sender, MouseButtonEventArgs e)
     {
-        if (sender is not DataGrid dataGrid || dataGrid.SelectedItem is not FoodModel model)
+        if (sender is not DataGrid dataGrid || dataGrid.SelectedItem is not WorkModel model)
             return;
         ViewModel.Edit(model);
     }

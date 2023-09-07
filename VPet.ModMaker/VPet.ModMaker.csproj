@@ -92,6 +92,7 @@
     <Compile Include="Converters\MaxConverter.cs" />
     <Compile Include="Converters\MarginConverter.cs" />
     <Compile Include="Models\ClickTextModel.cs" />
+    <Compile Include="Models\Expansions.cs" />
     <Compile Include="Models\FoodModel.cs" />
     <Compile Include="Models\I18nHelper.cs" />
     <Compile Include="Models\I18nModel.cs" />
@@ -102,6 +103,7 @@
     <Compile Include="Models\ObservableRange.cs" />
     <Compile Include="Models\PetModel.cs" />
     <Compile Include="Models\SelectTextModel.cs" />
+    <Compile Include="Models\WorkModel.cs" />
     <Compile Include="SimpleObservable\ObservableCommandT.cs" />
     <Compile Include="ViewModels\ModEdit\ClickTextEdit\ClickTextEditWindowVM.cs" />
     <Compile Include="ViewModels\ModEdit\ClickTextEdit\ClickTextPageVM.cs" />
@@ -114,6 +116,8 @@
     <Compile Include="ViewModels\ModEdit\PetEdit\PetPageVM.cs" />
     <Compile Include="ViewModels\ModEdit\SelectTextEdit\SelectTextEditWindowVM.cs" />
     <Compile Include="ViewModels\ModEdit\SelectTextEdit\SelectTextPageVM.cs" />
+    <Compile Include="ViewModels\ModEdit\WorkEdit\WorkEditWindowVM.cs" />
+    <Compile Include="ViewModels\ModEdit\WorkEdit\WorkPageVM.cs" />
     <Compile Include="Views\ModEdit\ClickTextEdit\ClickTextPage.xaml.cs">
       <DependentUpon>ClickTextPage.xaml</DependentUpon>
     </Compile>
@@ -168,6 +172,12 @@
     </Compile>
     <Compile Include="Views\ModEdit\SelectTextEdit\SelectTextEditWindow.xaml.cs">
       <DependentUpon>SelectTextEditWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\ModEdit\WorkEdit\WorkEditWindow.xaml.cs">
+      <DependentUpon>WorkEditWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\ModEdit\WorkEdit\WorkPage.xaml.cs">
+      <DependentUpon>WorkPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\ModMakerWindow.xaml.cs">
       <DependentUpon>ModMakerWindow.xaml</DependentUpon>
@@ -240,6 +250,14 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\ModEdit\SelectTextEdit\SelectTextEditWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\ModEdit\WorkEdit\WorkEditWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\ModEdit\WorkEdit\WorkPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

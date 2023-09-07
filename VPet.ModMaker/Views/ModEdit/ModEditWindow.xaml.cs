@@ -20,7 +20,9 @@ using VPet.ModMaker.ViewModels.ModEdit;
 using VPet.ModMaker.Views.ModEdit.ClickTextEdit;
 using VPet.ModMaker.Views.ModEdit.FoodEdit;
 using VPet.ModMaker.Views.ModEdit.LowTextEdit;
+using VPet.ModMaker.Views.ModEdit.PetEdit;
 using VPet.ModMaker.Views.ModEdit.SelectTextEdit;
+using VPet.ModMaker.Views.ModEdit.WorkEdit;
 using VPet_Simulator.Windows.Interface;
 
 namespace VPet.ModMaker.Views.ModEdit;
@@ -34,8 +36,10 @@ public partial class ModEditWindow : Window
     public FoodPage FoodPage { get; } = new();
     public LowTextPage LowTextPage { get; } = new();
     public ClickTextPage ClickTextPage { get; } = new();
-
     public SelectTextPage SelectTextPage { get; } = new();
+    public PetPage PetPage { get; } = new();
+
+    public WorkPage WorkPage { get; } = new();
 
     public ModEditWindow()
     {
@@ -47,12 +51,26 @@ public partial class ModEditWindow : Window
         LowTextPage.ViewModel.LowTexts.CollectionChanged += LowTexts_CollectionChanged;
         ClickTextPage.ViewModel.ClickTexts.CollectionChanged += ClickTexts_CollectionChanged;
         SelectTextPage.ViewModel.SelectTexts.CollectionChanged += SelectTexts_CollectionChanged;
+        PetPage.ViewModel.Pets.CollectionChanged += Pets_CollectionChanged;
+        //WorkPage.ViewModel.Works.CollectionChanged += Works_CollectionChanged;
+
         TabItem_ClickText.Header =
             $"{TabItem_ClickText.Tag} ({ClickTextPage.ViewModel.ClickTexts.Count})";
         TabItem_LowText.Header = $"{TabItem_LowText.Tag} ({LowTextPage.ViewModel.LowTexts.Count})";
         TabItem_Food.Header = $"{TabItem_Food.Tag} ({FoodPage.ViewModel.Foods.Count})";
         TabItem_SelectText.Header =
             $"{TabItem_SelectText.Tag} ({SelectTextPage.ViewModel.SelectTexts.Count})";
+        TabItem_Pet.Header = $"{TabItem_Pet.Tag} ({PetPage.ViewModel.Pets.Count})";
+    }
+
+    private void Works_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
+    {
+        TabItem_Work.Header = $"{TabItem_Work.Tag} ({WorkPage.ViewModel.Works.Count})";
+    }
+
+    private void Pets_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
+    {
+        TabItem_Pet.Header = $"{TabItem_Pet.Tag} ({PetPage.ViewModel.Pets.Count})";
     }
 
     private void SelectTexts_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
@@ -81,14 +99,4 @@ public partial class ModEditWindow : Window
     {
         ViewModel.Close();
     }
-
-    private void Button_AddItem_Click(object sender, RoutedEventArgs e) { }
-
-    private void Button_AddAnime_Click(object sender, RoutedEventArgs e) { }
-
-    private void Button_AddAudio_Click(object sender, RoutedEventArgs e) { }
-
-    private void Button_AddClickText_Click(object sender, RoutedEventArgs e) { }
-
-    private void Button_AddLang_Click(object sender, RoutedEventArgs e) { }
 }

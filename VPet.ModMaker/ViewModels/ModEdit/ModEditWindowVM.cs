@@ -43,47 +43,6 @@ public class ModEditWindowVM
 
     public ModEditWindowVM(ModEditWindow window)
     {
-        foreach (var lang in ModInfo.Value.I18nDatas)
-        {
-            if (I18nHelper.Current.CultureNames.Contains(lang.Key) is false)
-                I18nHelper.Current.CultureNames.Add(lang.Key);
-        }
-        if (I18nHelper.Current.CultureNames.Count > 0)
-        {
-            I18nHelper.Current.CultureName.Value = I18nHelper.Current.CultureNames.First();
-            foreach (var i18nData in ModInfo.Value.OtherI18nDatas)
-            {
-                foreach (var food in ModInfo.Value.Foods)
-                {
-                    var foodI18n = food.I18nDatas[i18nData.Key];
-                    if (i18nData.Value.TryGetValue(food.Name.Value, out var name))
-                        foodI18n.Name.Value = name;
-                    if (i18nData.Value.TryGetValue(food.Description.Value, out var description))
-                        foodI18n.Description.Value = description;
-                }
-                foreach (var lowText in ModInfo.Value.LowTexts)
-                {
-                    var lowTextI18n = lowText.I18nDatas[i18nData.Key];
-                    if (i18nData.Value.TryGetValue(lowText.Name.Value, out var text))
-                        lowTextI18n.Text.Value = text;
-                }
-                foreach (var clickText in ModInfo.Value.ClickTexts)
-                {
-                    var clickTextI18n = clickText.I18nDatas[i18nData.Key];
-                    if (i18nData.Value.TryGetValue(clickText.Name.Value, out var text))
-                        clickTextI18n.Text.Value = text;
-                }
-                foreach (var selectText in ModInfo.Value.SelectTexts)
-                {
-                    var selectTextI18n = selectText.I18nDatas[i18nData.Key];
-                    if (i18nData.Value.TryGetValue(selectText.Name.Value, out var text))
-                        selectTextI18n.Text.Value = text;
-                    if (i18nData.Value.TryGetValue(selectText.Choose.Value, out var choose))
-                        selectTextI18n.Choose.Value = choose;
-                }
-            }
-        }
-
         ModEditWindow = window;
         CurrentLang.ValueChanged += CurrentLang_ValueChanged;
 

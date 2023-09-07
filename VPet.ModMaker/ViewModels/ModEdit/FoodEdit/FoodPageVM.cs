@@ -19,40 +19,40 @@ public class FoodPageVM
     #region Value
     public ObservableValue<ObservableCollection<FoodModel>> ShowFoods { get; } = new();
     public ObservableCollection<FoodModel> Foods => ModInfoModel.Current.Foods;
-    public ObservableValue<string> FilterFoodText { get; } = new();
+    public ObservableValue<string> Filter { get; } = new();
     #endregion
     #region Command
-    public ObservableCommand AddFoodCommand { get; } = new();
-    public ObservableCommand<FoodModel> EditFoodCommand { get; } = new();
-    public ObservableCommand<FoodModel> RemoveFoodCommand { get; } = new();
+    public ObservableCommand AddCommand { get; } = new();
+    public ObservableCommand<FoodModel> EditCommand { get; } = new();
+    public ObservableCommand<FoodModel> RemoveCommand { get; } = new();
     #endregion
     public FoodPageVM()
     {
         ShowFoods.Value = Foods;
-        FilterFoodText.ValueChanged += FilterFoodText_ValueChanged;
+        Filter.ValueChanged += Filter_ValueChanged;
 
-        AddFoodCommand.ExecuteEvent += AddFood;
-        EditFoodCommand.ExecuteEvent += EditFood;
-        RemoveFoodCommand.ExecuteEvent += RemoveFood;
+        AddCommand.ExecuteEvent += Add;
+        EditCommand.ExecuteEvent += Edit;
+        RemoveCommand.ExecuteEvent += Remove;
     }
 
-    private void FilterFoodText_ValueChanged(string value)
+    private void Filter_ValueChanged(string value)
     {
-        if (string.IsNullOrEmpty(value))
+        if (string.IsNullOrWhiteSpace(value))
         {
             ShowFoods.Value = Foods;
         }
         else
         {
             ShowFoods.Value = new(
-                Foods.Where(f => f.CurrentI18nData.Value.Name.Value.Contains(value))
+                Foods.Where(m => m.Name.Value.Contains(value, StringComparison.OrdinalIgnoreCase))
             );
         }
     }
 
     public void Close() { }
 
-    private void AddFood()
+    private void Add()
     {
         var window = new FoodEditWindow();
         var vm = window.ViewModel;
@@ -62,7 +62,7 @@ public class FoodPageVM
         Foods.Add(vm.Food.Value);
     }
 
-    public void EditFood(FoodModel food)
+    public void Edit(FoodModel food)
     {
         var window = new FoodEditWindow();
         var vm = window.ViewModel;
@@ -83,7 +83,7 @@ public class FoodPageVM
         food.Close();
     }
 
-    private void RemoveFood(FoodModel food)
+    private void Remove(FoodModel food)
     {
         if (MessageBox.Show("确定删除吗".Translate(), "", MessageBoxButton.YesNo) is MessageBoxResult.No)
             return;

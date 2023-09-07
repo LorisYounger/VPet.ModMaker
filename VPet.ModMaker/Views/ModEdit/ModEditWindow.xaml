@@ -9,8 +9,9 @@
   xmlns:pu="https://opensource.panuon.com/wpf-ui"
   xmlns:vm="clr-namespace:VPet.ModMaker.ViewModels.ModEdit"
   Title="ModEditWindow"
-  Width="800"
-  Height="450"
+  Width="1000"
+  Height="500"
+  WindowStartupLocation="CenterOwner"
   mc:Ignorable="d">
   <d:Window.DataContext>
     <vm:ModEditWindowVM />
@@ -165,6 +166,18 @@
             Header="选择文本 (0)"
             Tag="{ll:Str 选择文本}">
             <Frame Content="{Binding ModEditWindow.SelectTextPage}" />
+          </TabItem>
+          <TabItem
+            x:Name="TabItem_Pet"
+            Header="宠物 (0)"
+            Tag="{ll:Str 宠物}">
+            <Frame Content="{Binding ModEditWindow.PetPage}" />
+          </TabItem>
+          <TabItem
+            x:Name="TabItem_Work"
+            Header="工作 (0)"
+            Tag="{ll:Str 工作}">
+            <Frame Content="{Binding ModEditWindow.WorkPage}" />
           </TabItem>
           <!--<TabItem Header="物品 (0)" Tag="{ll:Str 物品}">
             <Grid>

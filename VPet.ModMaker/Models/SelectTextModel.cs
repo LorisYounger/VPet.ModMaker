@@ -57,6 +57,8 @@ public class SelectTextModel : I18nModel<I18nSelectTextModel>
     {
         Name.Value = model.Name.Value;
         Mode.Value = model.Mode.Value;
+        Tags.Value = model.Tags.Value;
+        ToTags.Value = model.ToTags.Value;
         //Working.Value = model.Working.Value;
         //WorkingState.Value = model.WorkingState.Value;
         //DayTime.Value = model.DayTime.Value;
@@ -68,12 +70,9 @@ public class SelectTextModel : I18nModel<I18nSelectTextModel>
         Drink = model.Drink.Copy();
         Feel = model.Feel.Copy();
         Strength = model.Strength.Copy();
+
         foreach (var item in model.I18nDatas)
-        {
-            I18nDatas[item.Key] = new();
-            I18nDatas[item.Key].Text.Value = model.I18nDatas[item.Key].Text.Value;
-            I18nDatas[item.Key].Choose.Value = model.I18nDatas[item.Key].Choose.Value;
-        }
+            I18nDatas[item.Key] = item.Value.Copy();
         CurrentI18nData.Value = I18nDatas[I18nHelper.Current.CultureName.Value];
     }
 
@@ -83,6 +82,8 @@ public class SelectTextModel : I18nModel<I18nSelectTextModel>
         Name.Value = text.Text;
         Choose.Value = text.Choose ?? string.Empty;
         Mode.Value = text.Mode;
+        Tags.Value = text.Tags is null ? string.Empty : string.Join(", ", text.Tags);
+        ToTags.Value = text.ToTags is null ? string.Empty : string.Join(", ", text.ToTags);
         //Working.Value = text.Working;
         //WorkingState.Value = text.State;
         //DayTime.Value = text.DaiTime;
@@ -96,6 +97,8 @@ public class SelectTextModel : I18nModel<I18nSelectTextModel>
         Strength.SetValue(text.StrengthMin, text.StrengthMax);
     }
 
+    private readonly static char[] rs_splitChar = { ',', ' ' };
+
     public SelectText ToSelectText()
     {
         return new()
@@ -103,6 +106,8 @@ public class SelectTextModel : I18nModel<I18nSelectTextModel>
             Text = Name.Value,
             Choose = Choose.Value,
             Mode = Mode.Value,
+            Tags = new(Tags.Value.Split(rs_splitChar, StringSplitOptions.RemoveEmptyEntries)),
+            ToTags = new(ToTags.Value.Split(rs_splitChar, StringSplitOptions.RemoveEmptyEntries)),
             //Working = Working.Value,
             //State = WorkingState.Value,
             //DaiTime = DayTime.Value,
@@ -130,4 +135,12 @@ public class I18nSelectTextModel
 {
     public ObservableValue<string> Choose { get; } = new();
     public ObservableValue<string> Text { get; } = new();
+
+    public I18nSelectTextModel Copy()
+    {
+        var result = new I18nSelectTextModel();
+        result.Text.Value = Text.Value;
+        result.Choose.Value = Choose.Value;
+        return result;
+    }
 }

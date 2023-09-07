@@ -33,11 +33,9 @@ public class LowTextModel : I18nModel<I18nLowTextModel>
         Mode.Value = lowText.Mode.Value;
         Strength.Value = lowText.Strength.Value;
         Like.Value = lowText.Like.Value;
+
         foreach (var item in lowText.I18nDatas)
-        {
-            I18nDatas[item.Key] = item.Value;
-            I18nDatas[item.Key].Text.Value = lowText.I18nDatas[item.Key].Text.Value;
-        }
+            I18nDatas[item.Key] = item.Value.Copy();
         CurrentI18nData.Value = I18nDatas[I18nHelper.Current.CultureName.Value];
     }
 
@@ -67,4 +65,11 @@ public class LowTextModel : I18nModel<I18nLowTextModel>
 public class I18nLowTextModel
 {
     public ObservableValue<string> Text { get; } = new();
+
+    public I18nLowTextModel Copy()
+    {
+        var result = new I18nLowTextModel();
+        result.Text.Value = Text.Value;
+        return result;
+    }
 }

@@ -24,7 +24,7 @@ namespace VPet.ModMaker.Views.ModEdit.FoodEdit;
 /// </summary>
 public partial class FoodEditWindow : Window
 {
-    public bool IsCancel { get; internal set; } = true;
+    public bool IsCancel { get; private set; } = true;
 
     public FoodEditWindowVM ViewModel => (FoodEditWindowVM)DataContext;
 
@@ -34,9 +34,8 @@ public partial class FoodEditWindow : Window
         DataContext = new FoodEditWindowVM();
         Closed += (s, e) =>
         {
-            ViewModel.Close();
             if (IsCancel)
-                ViewModel.Food.Value.Image.Value?.StreamSource?.Close();
+                ViewModel.Close();
         };
     }
 
@@ -47,19 +46,19 @@ public partial class FoodEditWindow : Window
 
     private void Button_Yes_Click(object sender, RoutedEventArgs e)
     {
-        if (string.IsNullOrEmpty(ViewModel.Food.Value.Name.Value))
+        if (string.IsNullOrWhiteSpace(ViewModel.Food.Value.Name.Value))
         {
             MessageBox.Show("Id不可为空".Translate(), "", MessageBoxButton.OK, MessageBoxImage.Warning);
-            return;
-        }
-        if (ViewModel.Food.Value.CurrentI18nData.Value.Name.Value is null)
-        {
-            MessageBox.Show("名称不可为空".Translate(), "", MessageBoxButton.OK, MessageBoxImage.Warning);
             return;
         }
         if (ViewModel.Food.Value.Image.Value is null)
         {
             MessageBox.Show("图像不可为空".Translate(), "", MessageBoxButton.OK, MessageBoxImage.Warning);
+            return;
+        }
+        if (string.IsNullOrWhiteSpace(ViewModel.Food.Value.CurrentI18nData.Value.Name.Value))
+        {
+            MessageBox.Show("名称不可为空".Translate(), "", MessageBoxButton.OK, MessageBoxImage.Warning);
             return;
         }
         if (

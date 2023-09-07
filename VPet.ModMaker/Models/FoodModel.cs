@@ -39,28 +39,24 @@ public class FoodModel : I18nModel<I18nFoodModel>
         };
     }
 
-    public FoodModel(FoodModel food)
+    public FoodModel(FoodModel model)
         : this()
     {
-        Name.Value = food.Name.Value;
-        Description.Value = food.Description.Value;
-        Graph.Value = food.Graph.Value;
-        Type.Value = food.Type.Value;
-        Strength.Value = food.Strength.Value;
-        StrengthFood.Value = food.StrengthFood.Value;
-        StrengthDrink.Value = food.StrengthDrink.Value;
-        Feeling.Value = food.Feeling.Value;
-        Health.Value = food.Health.Value;
-        Likability.Value = food.Likability.Value;
-        Price.Value = food.Price.Value;
-        Exp.Value = food.Exp.Value;
-        Image.Value = Utils.LoadImageToStream(food.Image.Value);
-        foreach (var item in food.I18nDatas)
-        {
-            I18nDatas[item.Key] = new();
-            I18nDatas[item.Key].Name.Value = food.I18nDatas[item.Key].Name.Value;
-            I18nDatas[item.Key].Description.Value = food.I18nDatas[item.Key].Description.Value;
-        }
+        Name.Value = model.Name.Value;
+        Description.Value = model.Description.Value;
+        Graph.Value = model.Graph.Value;
+        Type.Value = model.Type.Value;
+        Strength.Value = model.Strength.Value;
+        StrengthFood.Value = model.StrengthFood.Value;
+        StrengthDrink.Value = model.StrengthDrink.Value;
+        Feeling.Value = model.Feeling.Value;
+        Health.Value = model.Health.Value;
+        Likability.Value = model.Likability.Value;
+        Price.Value = model.Price.Value;
+        Exp.Value = model.Exp.Value;
+        Image.Value = Utils.LoadImageToStream(model.Image.Value);
+        foreach (var item in model.I18nDatas)
+            I18nDatas[item.Key] = item.Value.Copy();
         CurrentI18nData.Value = I18nDatas[I18nHelper.Current.CultureName.Value];
     }
 
@@ -112,4 +108,12 @@ public class I18nFoodModel
 {
     public ObservableValue<string> Name { get; } = new();
     public ObservableValue<string> Description { get; } = new();
+
+    public I18nFoodModel Copy()
+    {
+        var result = new I18nFoodModel();
+        result.Name.Value = Name.Value;
+        result.Description.Value = Description.Value;
+        return result;
+    }
 }

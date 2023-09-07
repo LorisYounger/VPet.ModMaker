@@ -28,14 +28,14 @@ public class FoodEditWindowVM
 
     public FoodEditWindowVM()
     {
-        InitializeFoodTypes();
         AddImageCommand.ExecuteEvent += AddImage;
         ChangeImageCommand.ExecuteEvent += ChangeImage;
     }
 
-    public void Close() { }
-
-    private void InitializeFoodTypes() { }
+    public void Close()
+    {
+        Food.Value.Close();
+    }
 
     private void AddImage()
     {

@@ -146,22 +146,26 @@ public class ModMakerWindowVM
             };
         if (openFileDialog.ShowDialog() is true)
         {
-            try
+            LoadMod(Path.GetDirectoryName(openFileDialog.FileName));
+        }
+    }
+
+    public void LoadMod(string path)
+    {
+        try
+        {
+            var mod = new ModLoader(new DirectoryInfo(path));
+            if (mod.SuccessLoad is false)
             {
-                var path = Path.GetDirectoryName(openFileDialog.FileName);
-                var mod = new ModLoader(new DirectoryInfo(path));
-                if (mod.SuccessLoad is false)
-                {
-                    MessageBox.Show("模组载入失败".Translate());
-                    return;
-                }
-                ModInfoModel.Current = new ModInfoModel(mod);
-                CreateNewMod();
+                MessageBox.Show("模组载入失败".Translate());
+                return;
             }
-            catch (Exception ex)
-            {
-                MessageBox.Show("模组载入失败:\n{0}".Translate(ex));
-            }
+            var modInfo = new ModInfoModel(mod);
+            EditMod(modInfo);
+        }
+        catch (Exception ex)
+        {
+            MessageBox.Show("模组载入失败:\n{0}".Translate(ex));
         }
     }
 }

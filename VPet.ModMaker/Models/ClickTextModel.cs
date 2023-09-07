@@ -56,10 +56,7 @@ public class ClickTextModel : I18nModel<I18nClickTextModel>
         Feel = clickText.Feel.Copy();
         Strength = clickText.Strength.Copy();
         foreach (var item in clickText.I18nDatas)
-        {
-            I18nDatas[item.Key] = new();
-            I18nDatas[item.Key].Text.Value = clickText.I18nDatas[item.Key].Text.Value;
-        }
+            I18nDatas[item.Key] = item.Value.Copy();
         CurrentI18nData.Value = I18nDatas[I18nHelper.Current.CultureName.Value];
     }
 
@@ -113,4 +110,11 @@ public class ClickTextModel : I18nModel<I18nClickTextModel>
 public class I18nClickTextModel
 {
     public ObservableValue<string> Text { get; } = new();
+
+    public I18nClickTextModel Copy()
+    {
+        var result = new I18nClickTextModel();
+        result.Text.Value = Text.Value;
+        return result;
+    }
 }

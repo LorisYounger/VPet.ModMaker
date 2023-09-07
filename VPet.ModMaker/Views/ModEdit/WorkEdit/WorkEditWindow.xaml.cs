@@ -13,27 +13,22 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using VPet.ModMaker.Models;
-using VPet.ModMaker.ViewModels.ModEdit.PetEdit;
+using VPet.ModMaker.ViewModels.ModEdit.WorkEdit;
 
-namespace VPet.ModMaker.Views.ModEdit.PetEdit;
+namespace VPet.ModMaker.Views.ModEdit.WorkEdit;
 
 /// <summary>
-/// PetEditWindow.xaml 的交互逻辑
+/// WorkEditWindow.xaml 的交互逻辑
 /// </summary>
-public partial class PetEditWindow : Window
+public partial class WorkEditWindow : Window
 {
-    public PetEditWindowVM ViewModel => (PetEditWindowVM)DataContext;
     public bool IsCancel { get; private set; } = true;
+    public WorkEditWindowVM ViewModel => (WorkEditWindowVM)DataContext;
 
-    public PetEditWindow()
+    public WorkEditWindow()
     {
-        DataContext = new PetEditWindowVM();
         InitializeComponent();
-        Closed += (s, e) =>
-        {
-            if (IsCancel)
-                ViewModel.Close();
-        };
+        DataContext = new WorkEditWindowVM();
     }
 
     private void Button_Cancel_Click(object sender, RoutedEventArgs e)
@@ -43,20 +38,15 @@ public partial class PetEditWindow : Window
 
     private void Button_Yes_Click(object sender, RoutedEventArgs e)
     {
-        if (string.IsNullOrWhiteSpace(ViewModel.Pet.Value.Name.Value))
+        if (string.IsNullOrEmpty(ViewModel.Work.Value.Name.Value))
         {
             MessageBox.Show("Id不可为空".Translate(), "", MessageBoxButton.OK, MessageBoxImage.Warning);
             return;
         }
-        if (string.IsNullOrWhiteSpace(ViewModel.Pet.Value.CurrentI18nData.Value.Name.Value))
-        {
-            MessageBox.Show("名称不可为空".Translate(), "", MessageBoxButton.OK, MessageBoxImage.Warning);
-            return;
-        }
-        if (string.IsNullOrWhiteSpace(ViewModel.Pet.Value.CurrentI18nData.Value.PetName.Value))
+        if (string.IsNullOrEmpty(ViewModel.Work.Value.Graph.Value))
         {
             MessageBox.Show(
-                "宠物名称不可为空".Translate(),
+                "指定动画Id不可为空".Translate(),
                 "",
                 MessageBoxButton.OK,
                 MessageBoxImage.Warning
@@ -64,11 +54,11 @@ public partial class PetEditWindow : Window
             return;
         }
         if (
-            ViewModel.OldPet?.Name.Value != ViewModel.Pet.Value.Name.Value
-            && ModInfoModel.Current.Pets.Any(i => i.Name == ViewModel.Pet.Value.Name)
+            ViewModel.OldWork?.Name.Value != ViewModel.Work.Value.Name.Value
+            && ViewModel.CurrentPet.Works.Any(i => i.Name.Value == ViewModel.Work.Value.Name.Value)
         )
         {
-            MessageBox.Show("此Id已存在", "", MessageBoxButton.OK, MessageBoxImage.Warning);
+            MessageBox.Show("此Id已存在".Translate(), "", MessageBoxButton.OK, MessageBoxImage.Warning);
             return;
         }
         IsCancel = false;

@@ -17,38 +17,40 @@ public class ClickTextPageVM
     #region Value
     public ObservableValue<ObservableCollection<ClickTextModel>> ShowClickTexts { get; } = new();
     public ObservableCollection<ClickTextModel> ClickTexts => ModInfoModel.Current.ClickTexts;
-    public ObservableValue<string> FilterClickText { get; } = new();
+    public ObservableValue<string> Filter { get; } = new();
     #endregion
     #region Command
-    public ObservableCommand AddClickTextCommand { get; } = new();
-    public ObservableCommand<ClickTextModel> EditClickTextCommand { get; } = new();
-    public ObservableCommand<ClickTextModel> RemoveClickTextCommand { get; } = new();
+    public ObservableCommand AddCommand { get; } = new();
+    public ObservableCommand<ClickTextModel> EditCommand { get; } = new();
+    public ObservableCommand<ClickTextModel> RemoveCommand { get; } = new();
     #endregion
 
     public ClickTextPageVM()
     {
         ShowClickTexts.Value = ClickTexts;
-        FilterClickText.ValueChanged += FilterClickText_ValueChanged;
-        AddClickTextCommand.ExecuteEvent += AddClickText;
-        EditClickTextCommand.ExecuteEvent += EditClickText;
-        RemoveClickTextCommand.ExecuteEvent += RemoveClickText;
+        Filter.ValueChanged += Filter_ValueChanged;
+        AddCommand.ExecuteEvent += Add;
+        EditCommand.ExecuteEvent += Edit;
+        RemoveCommand.ExecuteEvent += Remove;
     }
 
-    private void FilterClickText_ValueChanged(string value)
+    private void Filter_ValueChanged(string value)
     {
-        if (string.IsNullOrEmpty(value))
+        if (string.IsNullOrWhiteSpace(value))
         {
             ShowClickTexts.Value = ClickTexts;
         }
         else
         {
             ShowClickTexts.Value = new(
-                ClickTexts.Where(f => f.CurrentI18nData.Value.Text.Value.Contains(value))
+                ClickTexts.Where(
+                    m => m.Name.Value.Contains(value, StringComparison.OrdinalIgnoreCase)
+                )
             );
         }
     }
 
-    private void AddClickText()
+    private void Add()
     {
         var window = new ClickTextEditWindow();
         var vm = window.ViewModel;
@@ -58,38 +60,38 @@ public class ClickTextPageVM
         ClickTexts.Add(vm.ClickText.Value);
     }
 
-    public void EditClickText(ClickTextModel clickText)
+    public void Edit(ClickTextModel model)
     {
         var window = new ClickTextEditWindow();
         var vm = window.ViewModel;
-        vm.OldClickText = clickText;
-        var newLowTest = vm.ClickText.Value = new(clickText);
+        vm.OldClickText = model;
+        var newLowTest = vm.ClickText.Value = new(model);
         window.ShowDialog();
         if (window.IsCancel)
             return;
         if (ShowClickTexts.Value.Count == ClickTexts.Count)
         {
-            ClickTexts[ClickTexts.IndexOf(clickText)] = newLowTest;
+            ClickTexts[ClickTexts.IndexOf(model)] = newLowTest;
         }
         else
         {
-            ClickTexts[ClickTexts.IndexOf(clickText)] = newLowTest;
-            ShowClickTexts.Value[ShowClickTexts.Value.IndexOf(clickText)] = newLowTest;
+            ClickTexts[ClickTexts.IndexOf(model)] = newLowTest;
+            ShowClickTexts.Value[ShowClickTexts.Value.IndexOf(model)] = newLowTest;
         }
     }
 
-    private void RemoveClickText(ClickTextModel clickText)
+    private void Remove(ClickTextModel model)
     {
         if (MessageBox.Show("确定删除吗".Translate(), "", MessageBoxButton.YesNo) is MessageBoxResult.No)
             return;
         if (ShowClickTexts.Value.Count == ClickTexts.Count)
         {
-            ClickTexts.Remove(clickText);
+            ClickTexts.Remove(model);
         }
         else
         {
-            ShowClickTexts.Value.Remove(clickText);
-            ClickTexts.Remove(clickText);
+            ShowClickTexts.Value.Remove(model);
+            ClickTexts.Remove(model);
         }
     }
 }
