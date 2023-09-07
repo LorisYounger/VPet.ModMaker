@@ -23,7 +23,6 @@ public class ModMaker : MainPlugin
     public ModMaker(IMainWindow mainwin)
         : base(mainwin) { }
 
-
     public override void LoadPlugin()
     {
         Set = MW.Set.FindLine("ModMaker");
@@ -41,11 +40,12 @@ public class ModMaker : MainPlugin
         modset.Items.Add(menuset);
     }
 
-
     public override void Setting()
     {
         if (Maker == null)
         {
+            // 载入ModMaker资源
+            Application.Current.Resources.MergedDictionaries.Add(new ModMakerStyles());
             Maker = new ModMakerWindow();
             Maker.ModMaker = this;
             Maker.Show();

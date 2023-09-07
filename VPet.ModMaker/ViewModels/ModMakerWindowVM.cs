@@ -59,6 +59,7 @@ public class ModMakerWindowVM
 
     private void SaveHistories()
     {
+        Directory.CreateDirectory(nameof(ModMaker));
         if (File.Exists(ModMakerInfo.HistoryFile) is false)
             File.Create(ModMakerInfo.HistoryFile).Close();
         var lps = new LPS();
