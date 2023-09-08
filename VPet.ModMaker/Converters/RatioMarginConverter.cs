@@ -12,7 +12,7 @@ namespace VPet.ModMaker.Converters;
 /// 边距转换器
 /// <para>示例:
 /// <code><![CDATA[
-/// <MultiBinding Converter="{StaticResource MarginConverter}">
+/// <MultiBinding Converter="{StaticResource RatioMarginConverter}">
 ///   <Binding Path="Left" />
 ///   <Binding Path="Top" />
 ///   <Binding Path="Right" />
@@ -20,7 +20,7 @@ namespace VPet.ModMaker.Converters;
 /// </MultiBinding>
 /// ]]></code></para>
 /// </summary>
-public class MarginConverter : IMultiValueConverter
+public class RatioMarginConverter : IMultiValueConverter
 {
     public object Convert(
         object[] values,
@@ -35,20 +35,15 @@ public class MarginConverter : IMultiValueConverter
         }
         else if (values.Length == 1)
         {
-            return new Thickness()
-            {
-                Left = System.Convert.ToDouble(values[0]),
-                Top = default,
-                Right = default,
-                Bottom = default
-            };
+            return new Thickness();
         }
-        else if (values.Length == 2)
+        var ratio = System.Convert.ToDouble(values[0]);
+        if (values.Length == 2)
         {
             return new Thickness()
             {
-                Left = System.Convert.ToDouble(values[0]),
-                Top = System.Convert.ToDouble(values[1]),
+                Left = System.Convert.ToDouble(values[1]) * ratio,
+                Top = default,
                 Right = default,
                 Bottom = default
             };
@@ -57,9 +52,9 @@ public class MarginConverter : IMultiValueConverter
         {
             return new Thickness()
             {
-                Left = System.Convert.ToDouble(values[0]),
-                Top = System.Convert.ToDouble(values[1]),
-                Right = System.Convert.ToDouble(values[2]),
+                Left = System.Convert.ToDouble(values[1]) * ratio,
+                Top = System.Convert.ToDouble(values[2]) * ratio,
+                Right = default,
                 Bottom = default
             };
         }
@@ -67,10 +62,20 @@ public class MarginConverter : IMultiValueConverter
         {
             return new Thickness()
             {
-                Left = System.Convert.ToDouble(values[0]),
-                Top = System.Convert.ToDouble(values[1]),
-                Right = System.Convert.ToDouble(values[2]),
-                Bottom = System.Convert.ToDouble(values[3])
+                Left = System.Convert.ToDouble(values[1]) * ratio,
+                Top = System.Convert.ToDouble(values[2]) * ratio,
+                Right = System.Convert.ToDouble(values[3]) * ratio,
+                Bottom = default
+            };
+        }
+        else if (values.Length == 5)
+        {
+            return new Thickness()
+            {
+                Left = System.Convert.ToDouble(values[1]) * ratio,
+                Top = System.Convert.ToDouble(values[2]) * ratio,
+                Right = System.Convert.ToDouble(values[3]) * ratio,
+                Bottom = System.Convert.ToDouble(values[4]) * ratio
             };
         }
         else

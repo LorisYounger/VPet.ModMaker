@@ -28,8 +28,6 @@
       <Setter Property="BorderThickness" Value="1" />
       <Setter Property="Background" Value="#19FF0000" />
       <Setter Property="BorderBrush" Value="Red" />
-      <Setter Property="Width" Value="{Binding Width.Value}" />
-      <Setter Property="Height" Value="{Binding Height.Value}" />
       <Style.Triggers>
         <DataTrigger Binding="{Binding Tag, RelativeSource={RelativeSource Mode=Self}}" Value="True">
           <Setter Property="Visibility" Value="Visible" />
@@ -50,8 +48,8 @@
       <Grid>
         <Grid>
           <Image
-            Width="500"
-            Height="500"
+            Width="250"
+            Height="250"
             Source="{Binding Image.Value}"
             Stretch="Uniform">
             <Image.ContextMenu>
@@ -78,85 +76,165 @@
           </Button>
         </Grid>
         <Grid>
-          <Label
-            Content="TouchHeadRect"
-            DataContext="{Binding Pet.Value.TouchHeadRect.Value}"
-            Tag="{Binding IsChecked, ElementName=ToggleButton_TouchHead}">
+          <Label Content="TouchHeadRect" Tag="{Binding IsChecked, ElementName=ToggleButton_TouchHead}">
             <Label.Style>
               <Style BasedOn="{StaticResource Label_ThouchRect}" TargetType="Label">
+                <Setter Property="Width">
+                  <Setter.Value>
+                    <MultiBinding Converter="{StaticResource CalculatorConverter}">
+                      <Binding Path="Pet.Value.TouchHeadRect.Value.Width.Value" />
+                      <Binding Source="*" />
+                      <Binding Path="LengthRatio.Value" />
+                    </MultiBinding>
+                  </Setter.Value>
+                </Setter>
+                <Setter Property="Height">
+                  <Setter.Value>
+                    <MultiBinding Converter="{StaticResource CalculatorConverter}">
+                      <Binding Path="Pet.Value.TouchHeadRect.Value.Height.Value" />
+                      <Binding Source="*" />
+                      <Binding Path="LengthRatio.Value" />
+                    </MultiBinding>
+                  </Setter.Value>
+                </Setter>
                 <Setter Property="Margin">
                   <Setter.Value>
-                    <MultiBinding Converter="{StaticResource MarginConverter}">
-                      <Binding Path="X.Value" />
-                      <Binding Path="Y.Value" />
+                    <MultiBinding Converter="{StaticResource RatioMarginConverter}">
+                      <Binding Path="LengthRatio.Value" />
+                      <Binding Path="Pet.Value.TouchHeadRect.Value.X.Value" />
+                      <Binding Path="Pet.Value.TouchHeadRect.Value.Y.Value" />
                     </MultiBinding>
                   </Setter.Value>
                 </Setter>
               </Style>
             </Label.Style>
           </Label>
-          <Label
-            Content="TouchRaisedRect_Happy"
-            DataContext="{Binding Pet.Value.TouchRaisedRect.Value.Happy.Value}"
-            Tag="{Binding IsChecked, ElementName=ToggleButton_TouchRaisedRect_HappyState}">
+          <Label Content="TouchRaisedRect_Happy" Tag="{Binding IsChecked, ElementName=ToggleButton_TouchRaisedRect_HappyState}">
             <Label.Style>
               <Style BasedOn="{StaticResource Label_ThouchRect}" TargetType="Label">
+                <Setter Property="Width">
+                  <Setter.Value>
+                    <MultiBinding Converter="{StaticResource CalculatorConverter}">
+                      <Binding Path="Pet.Value.TouchRaisedRect.Value.Happy.Value.Width.Value" />
+                      <Binding Source="*" />
+                      <Binding Path="LengthRatio.Value" />
+                    </MultiBinding>
+                  </Setter.Value>
+                </Setter>
+                <Setter Property="Height">
+                  <Setter.Value>
+                    <MultiBinding Converter="{StaticResource CalculatorConverter}">
+                      <Binding Path="Pet.Value.TouchRaisedRect.Value.Happy.Value.Height.Value" />
+                      <Binding Source="*" />
+                      <Binding Path="LengthRatio.Value" />
+                    </MultiBinding>
+                  </Setter.Value>
+                </Setter>
                 <Setter Property="Margin">
                   <Setter.Value>
-                    <MultiBinding Converter="{StaticResource MarginConverter}">
-                      <Binding Path="X.Value" />
-                      <Binding Path="Y.Value" />
+                    <MultiBinding Converter="{StaticResource RatioMarginConverter}">
+                      <Binding Path="LengthRatio.Value" />
+                      <Binding Path="Pet.Value.TouchRaisedRect.Value.Happy.Value.X.Value" />
+                      <Binding Path="Pet.Value.TouchRaisedRect.Value.Happy.Value.Y.Value" />
                     </MultiBinding>
                   </Setter.Value>
                 </Setter>
               </Style>
             </Label.Style>
           </Label>
-          <Label
-            Content="TouchRaisedRect_Nomal"
-            DataContext="{Binding Pet.Value.TouchRaisedRect.Value.Nomal.Value}"
-            Tag="{Binding IsChecked, ElementName=ToggleButton_TouchRaisedRect_NomalState}">
+          <Label Content="TouchRaisedRect_Nomal" Tag="{Binding IsChecked, ElementName=ToggleButton_TouchRaisedRect_NomalState}">
             <Label.Style>
               <Style BasedOn="{StaticResource Label_ThouchRect}" TargetType="Label">
+                <Setter Property="Width">
+                  <Setter.Value>
+                    <MultiBinding Converter="{StaticResource CalculatorConverter}">
+                      <Binding Path="Pet.Value.TouchRaisedRect.Value.Nomal.Value.Width.Value" />
+                      <Binding Source="*" />
+                      <Binding Path="LengthRatio.Value" />
+                    </MultiBinding>
+                  </Setter.Value>
+                </Setter>
+                <Setter Property="Height">
+                  <Setter.Value>
+                    <MultiBinding Converter="{StaticResource CalculatorConverter}">
+                      <Binding Path="Pet.Value.TouchRaisedRect.Value.Nomal.Value.Height.Value" />
+                      <Binding Source="*" />
+                      <Binding Path="LengthRatio.Value" />
+                    </MultiBinding>
+                  </Setter.Value>
+                </Setter>
                 <Setter Property="Margin">
                   <Setter.Value>
-                    <MultiBinding Converter="{StaticResource MarginConverter}">
-                      <Binding Path="X.Value" />
-                      <Binding Path="Y.Value" />
+                    <MultiBinding Converter="{StaticResource RatioMarginConverter}">
+                      <Binding Path="LengthRatio.Value" />
+                      <Binding Path="Pet.Value.TouchRaisedRect.Value.Nomal.Value.X.Value" />
+                      <Binding Path="Pet.Value.TouchRaisedRect.Value.Nomal.Value.Y.Value" />
                     </MultiBinding>
                   </Setter.Value>
                 </Setter>
               </Style>
             </Label.Style>
           </Label>
-          <Label
-            Content="TouchRaisedRect_PoorCondition"
-            DataContext="{Binding Pet.Value.TouchRaisedRect.Value.PoorCondition.Value}"
-            Tag="{Binding IsChecked, ElementName=ToggleButton_TouchRaisedRect_PoorConditionState}">
+          <Label Content="TouchRaisedRect_PoorCondition" Tag="{Binding IsChecked, ElementName=ToggleButton_TouchRaisedRect_PoorConditionState}">
             <Label.Style>
               <Style BasedOn="{StaticResource Label_ThouchRect}" TargetType="Label">
+                <Setter Property="Width">
+                  <Setter.Value>
+                    <MultiBinding Converter="{StaticResource CalculatorConverter}">
+                      <Binding Path="Pet.Value.TouchRaisedRect.Value.PoorCondition.Value.Width.Value" />
+                      <Binding Source="*" />
+                      <Binding Path="LengthRatio.Value" />
+                    </MultiBinding>
+                  </Setter.Value>
+                </Setter>
+                <Setter Property="Height">
+                  <Setter.Value>
+                    <MultiBinding Converter="{StaticResource CalculatorConverter}">
+                      <Binding Path="Pet.Value.TouchRaisedRect.Value.PoorCondition.Value.Height.Value" />
+                      <Binding Source="*" />
+                      <Binding Path="LengthRatio.Value" />
+                    </MultiBinding>
+                  </Setter.Value>
+                </Setter>
                 <Setter Property="Margin">
                   <Setter.Value>
-                    <MultiBinding Converter="{StaticResource MarginConverter}">
-                      <Binding Path="X.Value" />
-                      <Binding Path="Y.Value" />
+                    <MultiBinding Converter="{StaticResource RatioMarginConverter}">
+                      <Binding Path="LengthRatio.Value" />
+                      <Binding Path="Pet.Value.TouchRaisedRect.Value.PoorCondition.Value.X.Value" />
+                      <Binding Path="Pet.Value.TouchRaisedRect.Value.PoorCondition.Value.Y.Value" />
                     </MultiBinding>
                   </Setter.Value>
                 </Setter>
               </Style>
             </Label.Style>
           </Label>
-          <Label
-            Content="TouchRaisedRect_Ill"
-            DataContext="{Binding Pet.Value.TouchRaisedRect.Value.Ill.Value}"
-            Tag="{Binding IsChecked, ElementName=ToggleButton_TouchRaisedRect_IllState}">
+          <Label Content="TouchRaisedRect_Ill" Tag="{Binding IsChecked, ElementName=ToggleButton_TouchRaisedRect_IllState}">
             <Label.Style>
               <Style BasedOn="{StaticResource Label_ThouchRect}" TargetType="Label">
+                <Setter Property="Width">
+                  <Setter.Value>
+                    <MultiBinding Converter="{StaticResource CalculatorConverter}">
+                      <Binding Path="Pet.Value.TouchRaisedRect.Value.Ill.Value.Width.Value" />
+                      <Binding Source="*" />
+                      <Binding Path="LengthRatio.Value" />
+                    </MultiBinding>
+                  </Setter.Value>
+                </Setter>
+                <Setter Property="Height">
+                  <Setter.Value>
+                    <MultiBinding Converter="{StaticResource CalculatorConverter}">
+                      <Binding Path="Pet.Value.TouchRaisedRect.Value.Ill.Value.Height.Value" />
+                      <Binding Source="*" />
+                      <Binding Path="LengthRatio.Value" />
+                    </MultiBinding>
+                  </Setter.Value>
+                </Setter>
                 <Setter Property="Margin">
                   <Setter.Value>
-                    <MultiBinding Converter="{StaticResource MarginConverter}">
-                      <Binding Path="X.Value" />
-                      <Binding Path="Y.Value" />
+                    <MultiBinding Converter="{StaticResource RatioMarginConverter}">
+                      <Binding Path="LengthRatio.Value" />
+                      <Binding Path="Pet.Value.TouchRaisedRect.Value.Ill.Value.X.Value" />
+                      <Binding Path="Pet.Value.TouchRaisedRect.Value.Ill.Value.Y.Value" />
                     </MultiBinding>
                   </Setter.Value>
                 </Setter>
@@ -168,15 +246,15 @@
             Height="5"
             Background="Red"
             Content="RaisePoint_Happy"
-            DataContext="{Binding Pet.Value.RaisePoint.Value.Happy.Value}"
             Tag="{Binding IsChecked, ElementName=ToggleButton_RaisePoint_Happy}">
             <Label.Style>
               <Style BasedOn="{StaticResource Label_ThouchRect}" TargetType="Label">
                 <Setter Property="Margin">
                   <Setter.Value>
-                    <MultiBinding Converter="{StaticResource MarginConverter}">
-                      <Binding Path="X.Value" />
-                      <Binding Path="Y.Value" />
+                    <MultiBinding Converter="{StaticResource RatioMarginConverter}">
+                      <Binding Path="LengthRatio.Value" />
+                      <Binding Path="Pet.Value.RaisePoint.Value.Happy.Value.X.Value" />
+                      <Binding Path="Pet.Value.RaisePoint.Value.Happy.Value.Y.Value" />
                     </MultiBinding>
                   </Setter.Value>
                 </Setter>
@@ -188,15 +266,15 @@
             Height="5"
             Background="Red"
             Content="RaisePoint_Nomal"
-            DataContext="{Binding Pet.Value.RaisePoint.Value.Nomal.Value}"
             Tag="{Binding IsChecked, ElementName=ToggleButton_RaisePoint_Nomal}">
             <Label.Style>
               <Style BasedOn="{StaticResource Label_ThouchRect}" TargetType="Label">
                 <Setter Property="Margin">
                   <Setter.Value>
-                    <MultiBinding Converter="{StaticResource MarginConverter}">
-                      <Binding Path="X.Value" />
-                      <Binding Path="Y.Value" />
+                    <MultiBinding Converter="{StaticResource RatioMarginConverter}">
+                      <Binding Path="LengthRatio.Value" />
+                      <Binding Path="Pet.Value.RaisePoint.Value.Nomal.Value.X.Value" />
+                      <Binding Path="Pet.Value.RaisePoint.Value.Nomal.Value.Y.Value" />
                     </MultiBinding>
                   </Setter.Value>
                 </Setter>
@@ -208,15 +286,15 @@
             Height="5"
             Background="Red"
             Content="RaisePoint_PoorCondition"
-            DataContext="{Binding Pet.Value.RaisePoint.Value.PoorCondition.Value}"
             Tag="{Binding IsChecked, ElementName=ToggleButton_RaisePoint_PoorCondition}">
             <Label.Style>
               <Style BasedOn="{StaticResource Label_ThouchRect}" TargetType="Label">
                 <Setter Property="Margin">
                   <Setter.Value>
-                    <MultiBinding Converter="{StaticResource MarginConverter}">
-                      <Binding Path="X.Value" />
-                      <Binding Path="Y.Value" />
+                    <MultiBinding Converter="{StaticResource RatioMarginConverter}">
+                      <Binding Path="LengthRatio.Value" />
+                      <Binding Path="Pet.Value.RaisePoint.Value.PoorCondition.Value.X.Value" />
+                      <Binding Path="Pet.Value.RaisePoint.Value.PoorCondition.Value.Y.Value" />
                     </MultiBinding>
                   </Setter.Value>
                 </Setter>
@@ -228,15 +306,15 @@
             Height="5"
             Background="Red"
             Content="RaisePoint_Ill"
-            DataContext="{Binding Pet.Value.RaisePoint.Value.Ill.Value}"
             Tag="{Binding IsChecked, ElementName=ToggleButton_RaisePoint_Ill}">
             <Label.Style>
               <Style BasedOn="{StaticResource Label_ThouchRect}" TargetType="Label">
                 <Setter Property="Margin">
                   <Setter.Value>
-                    <MultiBinding Converter="{StaticResource MarginConverter}">
-                      <Binding Path="X.Value" />
-                      <Binding Path="Y.Value" />
+                    <MultiBinding Converter="{StaticResource RatioMarginConverter}">
+                      <Binding Path="LengthRatio.Value" />
+                      <Binding Path="Pet.Value.RaisePoint.Value.Ill.Value.X.Value" />
+                      <Binding Path="Pet.Value.RaisePoint.Value.Ill.Value.Y.Value" />
                     </MultiBinding>
                   </Setter.Value>
                 </Setter>
@@ -307,7 +385,7 @@
               <pu:NumberInput
                 Grid.Column="1"
                 d:Value="100"
-                Value="{Binding Pet.Value.TouchHeadRect.Value.X.Value, Mode=TwoWay}" />
+                Value="{Binding Pet.Value.TouchHeadRect.Value.X.Value}" />
               <Label
                 Grid.Column="2"
                 Background="{x:Null}"

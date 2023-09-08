@@ -52,7 +52,7 @@ public class WorkPageVM
         else
         {
             ShowWorks.Value = new(
-                Works.Where(m => m.Name.Value.Contains(value, StringComparison.OrdinalIgnoreCase))
+                Works.Where(m => m.Id.Value.Contains(value, StringComparison.OrdinalIgnoreCase))
             );
         }
     }

@@ -17,6 +17,8 @@ public class PetEditWindowVM
     public PetModel OldPet { get; set; }
     public ObservableValue<PetModel> Pet { get; } = new(new());
 
+    public ObservableValue<double> BorderLength { get; } = new(250);
+    public ObservableValue<double> LengthRatio { get; } = new(250.0 / 500.0);
     public ObservableValue<BitmapImage> Image { get; } = new();
     #region Command
     public ObservableCommand AddImageCommand { get; } = new();
@@ -26,6 +28,12 @@ public class PetEditWindowVM
     {
         AddImageCommand.ExecuteEvent += AddImage;
         ChangeImageCommand.ExecuteEvent += ChangeImage;
+        Image.ValueChanged += Image_ValueChanged;
+    }
+
+    private void Image_ValueChanged(BitmapImage value)
+    {
+        LengthRatio.Value = BorderLength.Value / value.PixelWidth;
     }
 
     public void Close()

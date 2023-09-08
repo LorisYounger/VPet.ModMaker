@@ -94,7 +94,7 @@ public class ModLoader
                             {
                                 var name = lps.First().Info;
                                 Pets.Add(new PetLoader(lps, di));
-                                //var p = mw.Pets.FirstOrDefault(x => x.Name == name);
+                                //var p = mw.Pets.FirstOrDefault(x => x.Id == name);
                                 //if (p == null)
                                 //    mw.Pets.Add(new PetLoader(lps, di));
                                 //else
@@ -118,7 +118,7 @@ public class ModLoader
                                     food.Image = imagePath;
                                 Foods.Add(food);
                                 //string tmps = li.Find("name").info;
-                                //mw.Foods.RemoveAll(x => x.Name == tmps);
+                                //mw.Foods.RemoveAll(x => x.Id == tmps);
                                 //mw.Foods.Add(LPSConvert.DeserializeObject<Food>(li));
                             }
                         }
@@ -159,7 +159,7 @@ public class ModLoader
                         //foreach (FileInfo fi in di.EnumerateFiles("*.lps"))
                         //{
                         //    //LocalizeCore.AddCulture(
-                        //    //    fi.Name.Substring(0, fi.Name.Length - fi.Extension.Length),
+                        //    //    fi.Id.Substring(0, fi.Id.Length - fi.Extension.Length),
                         //    //    new LPS_D(File.ReadAllText(fi.FullName))
                         //    //);
                         //}
@@ -168,7 +168,7 @@ public class ModLoader
                         //    foreach (FileInfo fi in dis.EnumerateFiles("*.lps"))
                         //    {
                         //        //LocalizeCore.AddCulture(
-                        //        //    dis.Name,
+                        //        //    dis.Id,
                         //        //    new LPS_D(File.ReadAllText(fi.FullName))
                         //        //);
                         //    }

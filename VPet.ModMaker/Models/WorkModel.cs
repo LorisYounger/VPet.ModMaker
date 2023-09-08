@@ -20,9 +20,9 @@ public class WorkModel : I18nModel<I18nWorkModel>
     public ObservableValue<VPet_Simulator.Core.GraphHelper.Work.WorkType> WorkType { get; } =
         new(VPet_Simulator.Core.GraphHelper.Work.WorkType.Work);
 
-    public ObservableValue<string> Name { get; } = new();
-    public ObservableValue<string> Graph { get; } = new();
+    public ObservableValue<string> Id { get; } = new();
 
+    public ObservableValue<string> Graph { get; } = new();
     public ObservableValue<double> MoneyLevel { get; } = new();
     public ObservableValue<double> MoneyBase { get; } = new();
     public ObservableValue<double> StrengthFood { get; } = new();
@@ -48,7 +48,7 @@ public class WorkModel : I18nModel<I18nWorkModel>
         : this()
     {
         WorkType.Value = model.WorkType.Value;
-        Name.Value = model.Name.Value;
+        Id.Value = model.Id.Value;
         Graph.Value = model.Graph.Value;
         MoneyLevel.Value = model.MoneyLevel.Value;
         MoneyBase.Value = model.MoneyBase.Value;
@@ -78,7 +78,7 @@ public class WorkModel : I18nModel<I18nWorkModel>
         : this()
     {
         WorkType.Value = work.Type;
-        Name.Value = work.Name;
+        Id.Value = work.Name;
         Graph.Value = work.Graph;
         MoneyLevel.Value = work.MoneyLevel;
         MoneyBase.Value = work.MoneyBase;
@@ -105,7 +105,7 @@ public class WorkModel : I18nModel<I18nWorkModel>
         return new()
         {
             Type = WorkType.Value,
-            Name = Name.Value,
+            Name = Id.Value,
             Graph = Graph.Value,
             MoneyLevel = MoneyLevel.Value,
             MoneyBase = MoneyBase.Value,

@@ -128,7 +128,7 @@ public class ModInfoModel : I18nModel<I18nModInfoModel>
                     foreach (var work in pet.Works)
                     {
                         var workI18n = work.I18nDatas[i18nData.Key];
-                        if (i18nData.Value.TryGetValue(work.Name.Value, out var workName))
+                        if (i18nData.Value.TryGetValue(work.Id.Value, out var workName))
                             workI18n.Name.Value = workName;
                     }
                 }
@@ -174,7 +174,7 @@ public class ModInfoModel : I18nModel<I18nModInfoModel>
         var targetImagePath = Path.Combine(path, Path.GetFileName(imagePath));
         if (imagePath != targetImagePath)
             File.Copy(imagePath, targetImagePath, true);
-        //lps.FindLine("vupmod").Info = Name.Value;
+        //lps.FindLine("vupmod").Info = Id.Value;
         //lps.FindLine("intro").Info = Description.Value;
         //lps.FindSub("gamever").Info = GameVersion.Value;
         //lps.FindSub("ver").Info = ModVersion.Value;

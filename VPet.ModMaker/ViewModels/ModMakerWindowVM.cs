@@ -67,7 +67,7 @@ public class ModMakerWindowVM
             lps.Add(
                 new Line(nameof(history))
                 {
-                    new Sub("Name", history.Name),
+                    new Sub("Id", history.Name),
                     new Sub("SourcePath", history.SourcePath),
                     new Sub("LastTime", history.LastTimeString)
                 }

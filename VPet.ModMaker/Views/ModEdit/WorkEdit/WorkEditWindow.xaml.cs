@@ -38,7 +38,7 @@ public partial class WorkEditWindow : Window
 
     private void Button_Yes_Click(object sender, RoutedEventArgs e)
     {
-        if (string.IsNullOrEmpty(ViewModel.Work.Value.Name.Value))
+        if (string.IsNullOrEmpty(ViewModel.Work.Value.Id.Value))
         {
             MessageBox.Show("Id不可为空".Translate(), "", MessageBoxButton.OK, MessageBoxImage.Warning);
             return;
@@ -54,8 +54,8 @@ public partial class WorkEditWindow : Window
             return;
         }
         if (
-            ViewModel.OldWork?.Name.Value != ViewModel.Work.Value.Name.Value
-            && ViewModel.CurrentPet.Works.Any(i => i.Name.Value == ViewModel.Work.Value.Name.Value)
+            ViewModel.OldWork?.Id.Value != ViewModel.Work.Value.Id.Value
+            && ViewModel.CurrentPet.Works.Any(i => i.Id.Value == ViewModel.Work.Value.Id.Value)
         )
         {
             MessageBox.Show("此Id已存在".Translate(), "", MessageBoxButton.OK, MessageBoxImage.Warning);
