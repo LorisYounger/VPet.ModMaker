@@ -20,9 +20,8 @@ public class ModInfoModel : I18nModel<I18nModInfoModel>
     public const string ModInfoFile = "info.lps";
     public static ModInfoModel Current { get; set; } = new();
 
-    public ObservableValue<string> Name { get; } = new();
-    public ObservableValue<string> Description { get; } = new();
-    public ObservableValue<string> Summary { get; } = new();
+    public ObservableValue<string> Id { get; } = new();
+    public ObservableValue<string> DescriptionId { get; } = new();
     public ObservableValue<string> Author { get; } = new();
     public ObservableValue<string> GameVersion { get; } = new();
     public ObservableValue<string> ModVersion { get; } = new();
@@ -39,10 +38,10 @@ public class ModInfoModel : I18nModel<I18nModInfoModel>
 
     public ModInfoModel()
     {
-        Description.Value = $"{Name.Value}_{nameof(Description)}";
-        Name.ValueChanged += (v) =>
+        DescriptionId.Value = $"{Id.Value}_{nameof(DescriptionId)}";
+        Id.ValueChanged += (v) =>
         {
-            Description.Value = $"{v}_{nameof(Description)}";
+            DescriptionId.Value = $"{v}_{nameof(DescriptionId)}";
         };
     }
 
@@ -50,8 +49,8 @@ public class ModInfoModel : I18nModel<I18nModInfoModel>
         : this()
     {
         SourcePath.Value = loader.Path.FullName;
-        Name.Value = loader.Name;
-        Description.Value = loader.Intro;
+        Id.Value = loader.Name;
+        DescriptionId.Value = loader.Intro;
         Author.Value = loader.Author;
         GameVersion.Value = loader.GameVer.ToString();
         ModVersion.Value = loader.Ver.ToString();
@@ -91,39 +90,39 @@ public class ModInfoModel : I18nModel<I18nModInfoModel>
                 foreach (var food in Foods)
                 {
                     var foodI18n = food.I18nDatas[i18nData.Key];
-                    if (i18nData.Value.TryGetValue(food.Name.Value, out var name))
+                    if (i18nData.Value.TryGetValue(food.Id.Value, out var name))
                         foodI18n.Name.Value = name;
-                    if (i18nData.Value.TryGetValue(food.Description.Value, out var description))
+                    if (i18nData.Value.TryGetValue(food.DescriptionId.Value, out var description))
                         foodI18n.Description.Value = description;
                 }
                 foreach (var lowText in LowTexts)
                 {
                     var lowTextI18n = lowText.I18nDatas[i18nData.Key];
-                    if (i18nData.Value.TryGetValue(lowText.Name.Value, out var text))
+                    if (i18nData.Value.TryGetValue(lowText.Id.Value, out var text))
                         lowTextI18n.Text.Value = text;
                 }
                 foreach (var clickText in ClickTexts)
                 {
                     var clickTextI18n = clickText.I18nDatas[i18nData.Key];
-                    if (i18nData.Value.TryGetValue(clickText.Name.Value, out var text))
+                    if (i18nData.Value.TryGetValue(clickText.Id.Value, out var text))
                         clickTextI18n.Text.Value = text;
                 }
                 foreach (var selectText in SelectTexts)
                 {
                     var selectTextI18n = selectText.I18nDatas[i18nData.Key];
-                    if (i18nData.Value.TryGetValue(selectText.Name.Value, out var text))
+                    if (i18nData.Value.TryGetValue(selectText.Id.Value, out var text))
                         selectTextI18n.Text.Value = text;
-                    if (i18nData.Value.TryGetValue(selectText.Choose.Value, out var choose))
+                    if (i18nData.Value.TryGetValue(selectText.ChooseId.Value, out var choose))
                         selectTextI18n.Choose.Value = choose;
                 }
                 foreach (var pet in Pets)
                 {
                     var petI18n = pet.I18nDatas[i18nData.Key];
-                    if (i18nData.Value.TryGetValue(pet.Name.Value, out var name))
+                    if (i18nData.Value.TryGetValue(pet.Id.Value, out var name))
                         petI18n.Name.Value = name;
-                    if (i18nData.Value.TryGetValue(pet.PetName.Value, out var petName))
+                    if (i18nData.Value.TryGetValue(pet.PetNameId.Value, out var petName))
                         petI18n.PetName.Value = petName;
-                    if (i18nData.Value.TryGetValue(pet.Description.Value, out var description))
+                    if (i18nData.Value.TryGetValue(pet.DescriptionId.Value, out var description))
                         petI18n.Description.Value = description;
                     foreach (var work in pet.Works)
                     {
@@ -149,13 +148,13 @@ public class ModInfoModel : I18nModel<I18nModInfoModel>
         //var lps = new LpsDocument(File.ReadAllText(modInfoFile));
         var lps = new LPS()
         {
-            new Line("vupmod", Name.Value)
+            new Line("vupmod", Id.Value)
             {
                 new Sub("author", Author.Value),
                 new Sub("gamever", GameVersion.Value),
                 new Sub("ver", ModVersion.Value)
             },
-            new Line("intro", Description.Value),
+            new Line("intro", DescriptionId.Value),
             new Line("authorid", "0"),
             new Line("itemid", "0"),
             new Line("cachedate", DateTime.Now.Date.ToString())
@@ -165,8 +164,8 @@ public class ModInfoModel : I18nModel<I18nModInfoModel>
             lps.Add(
                 new Line("lang", cultureName)
                 {
-                    new Sub(Name.Value, I18nDatas[cultureName].Name.Value),
-                    new Sub(Description.Value, I18nDatas[cultureName].Description.Value),
+                    new Sub(Id.Value, I18nDatas[cultureName].Name.Value),
+                    new Sub(DescriptionId.Value, I18nDatas[cultureName].Description.Value),
                 }
             );
         }
@@ -175,7 +174,7 @@ public class ModInfoModel : I18nModel<I18nModInfoModel>
         if (imagePath != targetImagePath)
             File.Copy(imagePath, targetImagePath, true);
         //lps.FindLine("vupmod").Info = Id.Value;
-        //lps.FindLine("intro").Info = Description.Value;
+        //lps.FindLine("intro").Info = DescriptionId.Value;
         //lps.FindSub("gamever").Info = GameVersion.Value;
         //lps.FindSub("ver").Info = ModVersion.Value;
         //lps.FindSub("author").Info = Author.Value;
@@ -277,23 +276,26 @@ public class ModInfoModel : I18nModel<I18nModInfoModel>
             var lps = new LPS();
             foreach (var food in Foods)
             {
-                lps.Add(new Line(food.Name.Value, food.I18nDatas[cultureName].Name.Value));
+                lps.Add(new Line(food.Id.Value, food.I18nDatas[cultureName].Name.Value));
                 lps.Add(
-                    new Line(food.Description.Value, food.I18nDatas[cultureName].Description.Value)
+                    new Line(
+                        food.DescriptionId.Value,
+                        food.I18nDatas[cultureName].Description.Value
+                    )
                 );
             }
             foreach (var text in LowTexts)
             {
-                lps.Add(new Line(text.Name.Value, text.I18nDatas[cultureName].Text.Value));
+                lps.Add(new Line(text.Id.Value, text.I18nDatas[cultureName].Text.Value));
             }
             foreach (var text in ClickTexts)
             {
-                lps.Add(new Line(text.Name.Value, text.I18nDatas[cultureName].Text.Value));
+                lps.Add(new Line(text.Id.Value, text.I18nDatas[cultureName].Text.Value));
             }
             foreach (var text in SelectTexts)
             {
-                lps.Add(new Line(text.Name.Value, text.I18nDatas[cultureName].Text.Value));
-                lps.Add(new Line(text.Choose.Value, text.I18nDatas[cultureName].Choose.Value));
+                lps.Add(new Line(text.Id.Value, text.I18nDatas[cultureName].Text.Value));
+                lps.Add(new Line(text.ChooseId.Value, text.I18nDatas[cultureName].Choose.Value));
             }
             File.WriteAllText(cultureFile, lps.ToString());
         }
@@ -312,7 +314,7 @@ public class ModInfoModel : I18nModel<I18nModInfoModel>
                 var foodImagePath = Utils.GetImageSourceFile(food.Image.Value);
                 var targetImagePath = Path.Combine(
                     foodPath,
-                    $"{food.Name.Value}{Path.GetExtension(foodImagePath)}"
+                    $"{food.Id.Value}{Path.GetExtension(foodImagePath)}"
                 );
                 if (foodImagePath != targetImagePath)
                     File.Copy(foodImagePath, targetImagePath, true);

@@ -45,11 +45,11 @@
       <DataGrid.Columns>
         <DataGridTextColumn
           MaxWidth="200"
-          Binding="{Binding Name.Value}"
+          Binding="{Binding Id.Value}"
           CanUserSort="True"
           ElementStyle="{StaticResource TextBlock_Wrap}"
           IsReadOnly="True"
-          SortMemberPath="Name.Value">
+          SortMemberPath="Id.Value">
           <DataGridTextColumn.Header>
             <TextBlock Text="Id" />
           </DataGridTextColumn.Header>

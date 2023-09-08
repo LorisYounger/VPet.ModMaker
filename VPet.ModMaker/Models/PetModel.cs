@@ -13,9 +13,9 @@ namespace VPet.ModMaker.Models;
 
 public class PetModel : I18nModel<I18nPetInfoModel>
 {
-    public ObservableValue<string> Name { get; } = new();
-    public ObservableValue<string> PetName { get; } = new();
-    public ObservableValue<string> Description { get; } = new();
+    public ObservableValue<string> Id { get; } = new();
+    public ObservableValue<string> PetNameId { get; } = new();
+    public ObservableValue<string> DescriptionId { get; } = new();
     public ObservableValue<ObservableRect<double>> TouchHeadRect { get; } = new(new());
     public ObservableValue<ObservableMultiStateRect> TouchRaisedRect { get; } = new(new());
     public ObservableValue<ObservableMultiStatePoint> RaisePoint { get; } = new(new());
@@ -24,19 +24,19 @@ public class PetModel : I18nModel<I18nPetInfoModel>
 
     public PetModel()
     {
-        PetName.Value = $"{Name.Value}_{nameof(PetName)}";
-        Description.Value = $"{Name.Value}_{nameof(Description)}";
-        Name.ValueChanged += (v) =>
+        PetNameId.Value = $"{Id.Value}_{nameof(PetNameId)}";
+        DescriptionId.Value = $"{Id.Value}_{nameof(DescriptionId)}";
+        Id.ValueChanged += (v) =>
         {
-            PetName.Value = $"{v}_{nameof(PetName)}";
-            Description.Value = $"{v}_{nameof(Description)}";
+            PetNameId.Value = $"{v}_{nameof(PetNameId)}";
+            DescriptionId.Value = $"{v}_{nameof(DescriptionId)}";
         };
     }
 
     public PetModel(PetModel model)
         : this()
     {
-        Name.Value = model.Name.Value;
+        Id.Value = model.Id.Value;
         TouchHeadRect.Value = model.TouchHeadRect.Value.Copy();
         TouchRaisedRect.Value = model.TouchRaisedRect.Value.Copy();
         RaisePoint.Value = model.RaisePoint.Value.Copy();
@@ -51,9 +51,9 @@ public class PetModel : I18nModel<I18nPetInfoModel>
     public PetModel(PetLoader loader)
         : this()
     {
-        Name.Value = loader.Name;
-        PetName.Value = loader.PetName;
-        Description.Value = loader.Intor;
+        Id.Value = loader.Name;
+        PetNameId.Value = loader.PetName;
+        DescriptionId.Value = loader.Intor;
 
         TouchHeadRect.Value.SetValue(
             loader.Config.TouchHeadLocate.X,

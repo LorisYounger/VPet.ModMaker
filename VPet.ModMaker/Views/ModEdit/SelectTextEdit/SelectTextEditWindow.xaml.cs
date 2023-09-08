@@ -38,15 +38,15 @@ public partial class SelectTextEditWindow : Window
 
     private void Button_Yes_Click(object sender, RoutedEventArgs e)
     {
-        if (string.IsNullOrWhiteSpace(ViewModel.SelectText.Value.Name.Value))
+        if (string.IsNullOrWhiteSpace(ViewModel.SelectText.Value.Id.Value))
         {
             MessageBox.Show("Id不可为空".Translate(), "", MessageBoxButton.OK, MessageBoxImage.Warning);
             return;
         }
         if (
-            ViewModel.OldSelectText?.Name.Value != ViewModel.SelectText.Value.Name.Value
+            ViewModel.OldSelectText?.Id.Value != ViewModel.SelectText.Value.Id.Value
             && ModInfoModel.Current.SelectTexts.Any(
-                i => i.Name.Value == ViewModel.SelectText.Value.Name.Value
+                i => i.Id.Value == ViewModel.SelectText.Value.Id.Value
             )
         )
         {

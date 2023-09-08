@@ -29,6 +29,10 @@ public partial class WorkEditWindow : Window
     {
         InitializeComponent();
         DataContext = new WorkEditWindowVM();
+        Closed += (s, e) =>
+        {
+            ViewModel.Close();
+        };
     }
 
     private void Button_Cancel_Click(object sender, RoutedEventArgs e)

@@ -39,15 +39,15 @@ public partial class LowTextEditWindow : Window
 
     private void Button_Yes_Click(object sender, RoutedEventArgs e)
     {
-        if (string.IsNullOrEmpty(ViewModel.LowText.Value.Name.Value))
+        if (string.IsNullOrEmpty(ViewModel.LowText.Value.Id.Value))
         {
             MessageBox.Show("Id不可为空".Translate(), "", MessageBoxButton.OK, MessageBoxImage.Warning);
             return;
         }
         if (
-            ViewModel.OldLowText?.Name.Value != ViewModel.LowText.Value.Name.Value
+            ViewModel.OldLowText?.Id.Value != ViewModel.LowText.Value.Id.Value
             && ModInfoModel.Current.LowTexts.Any(
-                i => i.Name.Value == ViewModel.LowText.Value.Name.Value
+                i => i.Id.Value == ViewModel.LowText.Value.Id.Value
             )
         )
         {

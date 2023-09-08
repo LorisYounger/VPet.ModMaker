@@ -44,7 +44,7 @@ public class ClickTextPageVM
         {
             ShowClickTexts.Value = new(
                 ClickTexts.Where(
-                    m => m.Name.Value.Contains(value, StringComparison.OrdinalIgnoreCase)
+                    m => m.Id.Value.Contains(value, StringComparison.OrdinalIgnoreCase)
                 )
             );
         }

@@ -46,9 +46,7 @@ public class LowTextPageVM
         else
         {
             ShowLowTexts.Value = new(
-                LowTexts.Where(
-                    m => m.Name.Value.Contains(value, StringComparison.OrdinalIgnoreCase)
-                )
+                LowTexts.Where(m => m.Id.Value.Contains(value, StringComparison.OrdinalIgnoreCase))
             );
         }
     }

@@ -26,8 +26,8 @@ public class SelectTextModel : I18nModel<I18nSelectTextModel>
     public ObservableValue<string> Tags { get; } = new();
     public ObservableValue<string> ToTags { get; } = new();
 
-    public ObservableValue<string> Name { get; } = new();
-    public ObservableValue<string> Choose { get; } = new();
+    public ObservableValue<string> Id { get; } = new();
+    public ObservableValue<string> ChooseId { get; } = new();
     public ObservableValue<ClickText.ModeType> Mode { get; } = new();
 
     //public ObservableValue<string> Working { get; } = new();
@@ -45,17 +45,17 @@ public class SelectTextModel : I18nModel<I18nSelectTextModel>
 
     public SelectTextModel()
     {
-        Choose.Value = $"{Name.Value}_{nameof(Choose)}";
-        Name.ValueChanged += (v) =>
+        ChooseId.Value = $"{Id.Value}_{nameof(ChooseId)}";
+        Id.ValueChanged += (v) =>
         {
-            Choose.Value = $"{v}_{nameof(Choose)}";
+            ChooseId.Value = $"{v}_{nameof(ChooseId)}";
         };
     }
 
     public SelectTextModel(SelectTextModel model)
         : this()
     {
-        Name.Value = model.Name.Value;
+        Id.Value = model.Id.Value;
         Mode.Value = model.Mode.Value;
         Tags.Value = model.Tags.Value;
         ToTags.Value = model.ToTags.Value;
@@ -79,8 +79,8 @@ public class SelectTextModel : I18nModel<I18nSelectTextModel>
     public SelectTextModel(SelectText text)
         : this()
     {
-        Name.Value = text.Text;
-        Choose.Value = text.Choose ?? string.Empty;
+        Id.Value = text.Text;
+        ChooseId.Value = text.Choose ?? string.Empty;
         Mode.Value = text.Mode;
         Tags.Value = text.Tags is null ? string.Empty : string.Join(", ", text.Tags);
         ToTags.Value = text.ToTags is null ? string.Empty : string.Join(", ", text.ToTags);
@@ -103,8 +103,8 @@ public class SelectTextModel : I18nModel<I18nSelectTextModel>
     {
         return new()
         {
-            Text = Name.Value,
-            Choose = Choose.Value,
+            Text = Id.Value,
+            Choose = ChooseId.Value,
             Mode = Mode.Value,
             Tags = new(Tags.Value.Split(rs_splitChar, StringSplitOptions.RemoveEmptyEntries)),
             ToTags = new(ToTags.Value.Split(rs_splitChar, StringSplitOptions.RemoveEmptyEntries)),

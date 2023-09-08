@@ -43,10 +43,10 @@
       </DataGrid.RowStyle>
       <DataGrid.Columns>
         <DataGridTextColumn
-          Binding="{Binding Name.Value}"
+          Binding="{Binding Id.Value}"
           CanUserSort="True"
           IsReadOnly="True"
-          SortMemberPath="Name.Value">
+          SortMemberPath="Id.Value">
           <DataGridTextColumn.Header>
             <TextBlock Text="Id" />
           </DataGridTextColumn.Header>

@@ -22,7 +22,7 @@ public class ClickTextModel : I18nModel<I18nClickTextModel>
                 .Cast<VPet_Simulator.Core.Main.WorkingState>()
         );
 
-    public ObservableValue<string> Name { get; } = new();
+    public ObservableValue<string> Id { get; } = new();
     public ObservableValue<string> Working { get; } = new();
     public ObservableValue<ClickText.ModeType> Mode { get; } = new();
     public ObservableValue<VPet_Simulator.Core.Main.WorkingState> WorkingState { get; } = new();
@@ -42,7 +42,7 @@ public class ClickTextModel : I18nModel<I18nClickTextModel>
     public ClickTextModel(ClickTextModel clickText)
         : this()
     {
-        Name.Value = clickText.Name.Value;
+        Id.Value = clickText.Id.Value;
         Mode.Value = clickText.Mode.Value;
         Working.Value = clickText.Working.Value;
         WorkingState.Value = clickText.WorkingState.Value;
@@ -63,7 +63,7 @@ public class ClickTextModel : I18nModel<I18nClickTextModel>
     public ClickTextModel(ClickText clickText)
         : this()
     {
-        Name.Value = clickText.Text;
+        Id.Value = clickText.Text;
         Mode.Value = clickText.Mode;
         Working.Value = clickText.Working;
         WorkingState.Value = clickText.State;
@@ -82,7 +82,7 @@ public class ClickTextModel : I18nModel<I18nClickTextModel>
     {
         return new()
         {
-            Text = Name.Value,
+            Text = Id.Value,
             Mode = Mode.Value,
             Working = Working.Value,
             State = WorkingState.Value,

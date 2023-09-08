@@ -31,8 +31,7 @@ public partial class PetEditWindow : Window
         InitializeComponent();
         Closed += (s, e) =>
         {
-            if (IsCancel)
-                ViewModel.Close();
+            ViewModel.Close();
         };
     }
 
@@ -43,7 +42,7 @@ public partial class PetEditWindow : Window
 
     private void Button_Yes_Click(object sender, RoutedEventArgs e)
     {
-        if (string.IsNullOrWhiteSpace(ViewModel.Pet.Value.Name.Value))
+        if (string.IsNullOrWhiteSpace(ViewModel.Pet.Value.Id.Value))
         {
             MessageBox.Show("Id不可为空".Translate(), "", MessageBoxButton.OK, MessageBoxImage.Warning);
             return;
@@ -64,8 +63,8 @@ public partial class PetEditWindow : Window
             return;
         }
         if (
-            ViewModel.OldPet?.Name.Value != ViewModel.Pet.Value.Name.Value
-            && ModInfoModel.Current.Pets.Any(i => i.Name == ViewModel.Pet.Value.Name)
+            ViewModel.OldPet?.Id.Value != ViewModel.Pet.Value.Id.Value
+            && ModInfoModel.Current.Pets.Any(i => i.Id == ViewModel.Pet.Value.Id)
         )
         {
             MessageBox.Show("此Id已存在", "", MessageBoxButton.OK, MessageBoxImage.Warning);

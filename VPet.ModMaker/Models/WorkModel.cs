@@ -5,6 +5,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Media;
 
 namespace VPet.ModMaker.Models;
 
@@ -32,11 +33,16 @@ public class WorkModel : I18nModel<I18nWorkModel>
     public ObservableValue<int> Time { get; } = new();
     public ObservableValue<double> FinishBonus { get; } = new();
 
-    public ObservableValue<string> BorderBrush { get; } = new("0290D5");
-    public ObservableValue<string> Background { get; } = new("81d4fa");
-    public ObservableValue<string> ButtonBackground { get; } = new("0286C6");
-    public ObservableValue<string> ButtonForeground { get; } = new("ffffff");
-    public ObservableValue<string> Foreground { get; } = new("0286C6");
+    public ObservableValue<SolidColorBrush> BorderBrush { get; } =
+        new(new((Color)ColorConverter.ConvertFromString("#FF0290D5")));
+    public ObservableValue<SolidColorBrush> Background { get; } =
+        new(new((Color)ColorConverter.ConvertFromString("#FF81d4fa")));
+    public ObservableValue<SolidColorBrush> Foreground { get; } =
+        new(new((Color)ColorConverter.ConvertFromString("#FF0286C6")));
+    public ObservableValue<SolidColorBrush> ButtonBackground { get; } =
+        new(new((Color)ColorConverter.ConvertFromString("#AA0286C6")));
+    public ObservableValue<SolidColorBrush> ButtonForeground { get; } =
+        new(new((Color)ColorConverter.ConvertFromString("#FFffffff")));
 
     public ObservableValue<double> Left { get; } = new(100);
     public ObservableValue<double> Top { get; } = new(160);
@@ -89,11 +95,15 @@ public class WorkModel : I18nModel<I18nWorkModel>
         Time.Value = work.Time;
         FinishBonus.Value = work.FinishBonus;
 
-        BorderBrush.Value = work.BorderBrush;
-        Background.Value = work.Background;
-        ButtonBackground.Value = work.ButtonBackground;
-        ButtonForeground.Value = work.ButtonForeground;
-        Foreground.Value = work.Foreground;
+        BorderBrush.Value = new((Color)ColorConverter.ConvertFromString("#FF" + work.BorderBrush));
+        Background.Value = new((Color)ColorConverter.ConvertFromString("#FF" + work.Background));
+        Foreground.Value = new((Color)ColorConverter.ConvertFromString("#FF" + work.Foreground));
+        ButtonBackground.Value = new(
+            (Color)ColorConverter.ConvertFromString("#AA" + work.ButtonBackground)
+        );
+        ButtonForeground.Value = new(
+            (Color)ColorConverter.ConvertFromString("#FF" + work.ButtonForeground)
+        );
 
         Left.Value = work.Left;
         Top.Value = work.Top;
@@ -116,11 +126,11 @@ public class WorkModel : I18nModel<I18nWorkModel>
             Time = Time.Value,
             FinishBonus = FinishBonus.Value,
             //
-            BorderBrush = BorderBrush.Value,
-            Background = Background.Value,
-            ButtonBackground = ButtonBackground.Value,
-            ButtonForeground = ButtonForeground.Value,
-            Foreground = Foreground.Value,
+            BorderBrush = BorderBrush.Value.ToString().Substring(3),
+            Background = Background.Value.ToString().Substring(3),
+            ButtonBackground = ButtonBackground.Value.ToString().Substring(3),
+            ButtonForeground = ButtonForeground.Value.ToString().Substring(3),
+            Foreground = Foreground.Value.ToString().Substring(3),
             //
             Left = Left.Value,
             Top = Top.Value,

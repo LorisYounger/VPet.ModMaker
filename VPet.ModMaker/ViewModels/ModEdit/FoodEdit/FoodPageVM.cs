@@ -45,7 +45,7 @@ public class FoodPageVM
         else
         {
             ShowFoods.Value = new(
-                Foods.Where(m => m.Name.Value.Contains(value, StringComparison.OrdinalIgnoreCase))
+                Foods.Where(m => m.Id.Value.Contains(value, StringComparison.OrdinalIgnoreCase))
             );
         }
     }

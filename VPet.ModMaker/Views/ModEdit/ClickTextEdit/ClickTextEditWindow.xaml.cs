@@ -38,15 +38,15 @@ public partial class ClickTextEditWindow : Window
 
     private void Button_Yes_Click(object sender, RoutedEventArgs e)
     {
-        if (string.IsNullOrEmpty(ViewModel.ClickText.Value.Name.Value))
+        if (string.IsNullOrEmpty(ViewModel.ClickText.Value.Id.Value))
         {
             MessageBox.Show("Id不可为空".Translate(), "", MessageBoxButton.OK, MessageBoxImage.Warning);
             return;
         }
         if (
-            ViewModel.OldClickText?.Name.Value != ViewModel.ClickText.Value.Name.Value
+            ViewModel.OldClickText?.Id.Value != ViewModel.ClickText.Value.Id.Value
             && ModInfoModel.Current.ClickTexts.Any(
-                i => i.Name.Value == ViewModel.ClickText.Value.Name.Value
+                i => i.Id.Value == ViewModel.ClickText.Value.Id.Value
             )
         )
         {

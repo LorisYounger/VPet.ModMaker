@@ -27,5 +27,4 @@
     <Setter Property="HorizontalContentAlignment" Value="Left" />
     <Setter Property="VerticalContentAlignment" Value="Top" />
   </Style>
-  <Style x:Key="Grid_Style" TargetType="Grid" />
 </ResourceDictionary>

@@ -39,7 +39,7 @@
           Grid.Column="1"
           pu:TextBoxHelper.Watermark="Id"
           Style="{StaticResource TextBox_Wrap}"
-          Text="{Binding SelectText.Value.Name.Value, UpdateSourceTrigger=PropertyChanged}"
+          Text="{Binding SelectText.Value.Id.Value, UpdateSourceTrigger=PropertyChanged}"
           TextWrapping="Wrap" />
         <Label Grid.Row="1" Content="{ll:Str 选项名}" />
         <TextBox

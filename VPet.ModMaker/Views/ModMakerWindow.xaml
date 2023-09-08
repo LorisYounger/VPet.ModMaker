@@ -68,7 +68,7 @@
                       <TextBlock
                         d:Text="{ll:Str Mod名称}"
                         FontWeight="Bold"
-                        Text="{Binding Name}"
+                        Text="{Binding Id}"
                         TextWrapping="Wrap" />
                       <TextBlock
                         HorizontalAlignment="Right"

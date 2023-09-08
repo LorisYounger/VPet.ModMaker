@@ -44,7 +44,7 @@ public class SelectTextPageVM
         {
             ShowSelectTexts.Value = new(
                 SelectTexts.Where(
-                    m => m.Name.Value.Contains(value, StringComparison.OrdinalIgnoreCase)
+                    m => m.Id.Value.Contains(value, StringComparison.OrdinalIgnoreCase)
                 )
             );
         }

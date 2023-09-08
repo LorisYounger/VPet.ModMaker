@@ -14,7 +14,7 @@ public class ModMakerHistory
     public BitmapImage Image { get; set; }
 
     [Line(ignoreCase: true)]
-    public string Name { get; set; }
+    public string Id { get; set; }
 
     private string _path;
 

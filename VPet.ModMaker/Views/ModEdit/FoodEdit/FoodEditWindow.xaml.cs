@@ -46,7 +46,7 @@ public partial class FoodEditWindow : Window
 
     private void Button_Yes_Click(object sender, RoutedEventArgs e)
     {
-        if (string.IsNullOrWhiteSpace(ViewModel.Food.Value.Name.Value))
+        if (string.IsNullOrWhiteSpace(ViewModel.Food.Value.Id.Value))
         {
             MessageBox.Show("Id不可为空".Translate(), "", MessageBoxButton.OK, MessageBoxImage.Warning);
             return;
@@ -62,8 +62,8 @@ public partial class FoodEditWindow : Window
             return;
         }
         if (
-            ViewModel.OldFood?.Name.Value != ViewModel.Food.Value.Name.Value
-            && ModInfoModel.Current.Foods.Any(i => i.Name == ViewModel.Food.Value.Name)
+            ViewModel.OldFood?.Id.Value != ViewModel.Food.Value.Id.Value
+            && ModInfoModel.Current.Foods.Any(i => i.Id == ViewModel.Food.Value.Id)
         )
         {
             MessageBox.Show("此Id已存在", "", MessageBoxButton.OK, MessageBoxImage.Warning);

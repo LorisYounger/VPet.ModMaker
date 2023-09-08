@@ -43,7 +43,7 @@ public class PetPageVM
         else
         {
             ShowPets.Value = new(
-                Pets.Where(m => m.Name.Value.Contains(value, StringComparison.OrdinalIgnoreCase))
+                Pets.Where(m => m.Id.Value.Contains(value, StringComparison.OrdinalIgnoreCase))
             );
         }
     }

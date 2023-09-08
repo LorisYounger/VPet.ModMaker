@@ -16,8 +16,8 @@ public class FoodModel : I18nModel<I18nFoodModel>
     public static ObservableCollection<Food.FoodType> FoodTypes { get; } =
         new(Enum.GetValues(typeof(Food.FoodType)).Cast<Food.FoodType>());
 
-    public ObservableValue<string> Name { get; } = new();
-    public ObservableValue<string> Description { get; } = new();
+    public ObservableValue<string> Id { get; } = new();
+    public ObservableValue<string> DescriptionId { get; } = new();
     public ObservableValue<string> Graph { get; } = new();
     public ObservableValue<Food.FoodType> Type { get; } = new();
     public ObservableValue<double> Strength { get; } = new();
@@ -32,18 +32,18 @@ public class FoodModel : I18nModel<I18nFoodModel>
 
     public FoodModel()
     {
-        Description.Value = $"{Name.Value}_{nameof(Description)}";
-        Name.ValueChanged += (v) =>
+        DescriptionId.Value = $"{Id.Value}_{nameof(DescriptionId)}";
+        Id.ValueChanged += (v) =>
         {
-            Description.Value = $"{v}_{nameof(Description)}";
+            DescriptionId.Value = $"{v}_{nameof(DescriptionId)}";
         };
     }
 
     public FoodModel(FoodModel model)
         : this()
     {
-        Name.Value = model.Name.Value;
-        Description.Value = model.Description.Value;
+        Id.Value = model.Id.Value;
+        DescriptionId.Value = model.DescriptionId.Value;
         Graph.Value = model.Graph.Value;
         Type.Value = model.Type.Value;
         Strength.Value = model.Strength.Value;
@@ -63,8 +63,8 @@ public class FoodModel : I18nModel<I18nFoodModel>
     public FoodModel(Food food)
         : this()
     {
-        Name.Value = food.Name;
-        Description.Value = food.Desc;
+        Id.Value = food.Name;
+        DescriptionId.Value = food.Desc;
         Graph.Value = food.Graph;
         Type.Value = food.Type;
         Strength.Value = food.Strength;
@@ -83,8 +83,8 @@ public class FoodModel : I18nModel<I18nFoodModel>
     {
         return new Food()
         {
-            Name = Name.Value,
-            Desc = Description.Value,
+            Name = Id.Value,
+            Desc = DescriptionId.Value,
             Graph = Graph.Value,
             Type = Type.Value,
             Strength = Strength.Value,

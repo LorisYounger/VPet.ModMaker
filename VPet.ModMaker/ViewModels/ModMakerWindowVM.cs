@@ -54,7 +54,11 @@ public class ModMakerWindowVM
             return;
         var lps = new LPS(File.ReadAllText(ModMakerInfo.HistoryFile));
         foreach (var line in lps)
-            Histories.Add(LPSConvert.DeserializeObject<ModMakerHistory>(line));
+        {
+            var history = LPSConvert.DeserializeObject<ModMakerHistory>(line);
+            if (Histories.All(h => h.InfoFile != history.InfoFile))
+                Histories.Add(history);
+        }
     }
 
     private void SaveHistories()
@@ -67,7 +71,7 @@ public class ModMakerWindowVM
             lps.Add(
                 new Line(nameof(history))
                 {
-                    new Sub("Id", history.Name),
+                    new Sub("Id", history.Id),
                     new Sub("SourcePath", history.SourcePath),
                     new Sub("LastTime", history.LastTimeString)
                 }
@@ -77,7 +81,7 @@ public class ModMakerWindowVM
 
     private void AddHistories(ModInfoModel modInfo)
     {
-        if (Histories.FirstOrDefault(h => h.Name == modInfo.Name.Value) is ModMakerHistory history)
+        if (Histories.FirstOrDefault(h => h.Id == modInfo.Id.Value) is ModMakerHistory history)
         {
             history.SourcePath = modInfo.SourcePath.Value;
             history.LastTime = DateTime.Now;
@@ -87,7 +91,7 @@ public class ModMakerWindowVM
             Histories.Add(
                 new()
                 {
-                    Name = modInfo.Name.Value,
+                    Id = modInfo.Id.Value,
                     SourcePath = modInfo.SourcePath.Value,
                     LastTime = DateTime.Now,
                 }
@@ -100,7 +104,7 @@ public class ModMakerWindowVM
         if (string.IsNullOrEmpty(value))
             ShowHistories.Value = Histories;
         else
-            ShowHistories.Value = new(Histories.Where(i => i.Name.Contains(value)));
+            ShowHistories.Value = new(Histories.Where(i => i.Id.Contains(value)));
     }
 
     public void CreateNewMod()

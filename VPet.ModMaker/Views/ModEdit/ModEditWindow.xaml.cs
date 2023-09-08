@@ -38,61 +38,13 @@ public partial class ModEditWindow : Window
     public ClickTextPage ClickTextPage { get; } = new();
     public SelectTextPage SelectTextPage { get; } = new();
     public PetPage PetPage { get; } = new();
-
     public WorkPage WorkPage { get; } = new();
 
     public ModEditWindow()
     {
         InitializeComponent();
-        Closed += Window_ModEdit_Closed;
         DataContext = new ModEditWindowVM(this);
-
-        FoodPage.ViewModel.Foods.CollectionChanged += Foods_CollectionChanged;
-        LowTextPage.ViewModel.LowTexts.CollectionChanged += LowTexts_CollectionChanged;
-        ClickTextPage.ViewModel.ClickTexts.CollectionChanged += ClickTexts_CollectionChanged;
-        SelectTextPage.ViewModel.SelectTexts.CollectionChanged += SelectTexts_CollectionChanged;
-        PetPage.ViewModel.Pets.CollectionChanged += Pets_CollectionChanged;
-        //WorkPage.ViewModel.Works.CollectionChanged += Works_CollectionChanged;
-
-        TabItem_ClickText.Header =
-            $"{TabItem_ClickText.Tag} ({ClickTextPage.ViewModel.ClickTexts.Count})";
-        TabItem_LowText.Header = $"{TabItem_LowText.Tag} ({LowTextPage.ViewModel.LowTexts.Count})";
-        TabItem_Food.Header = $"{TabItem_Food.Tag} ({FoodPage.ViewModel.Foods.Count})";
-        TabItem_SelectText.Header =
-            $"{TabItem_SelectText.Tag} ({SelectTextPage.ViewModel.SelectTexts.Count})";
-        TabItem_Pet.Header = $"{TabItem_Pet.Tag} ({PetPage.ViewModel.Pets.Count})";
-    }
-
-    private void Works_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
-    {
-        TabItem_Work.Header = $"{TabItem_Work.Tag} ({WorkPage.ViewModel.Works.Count})";
-    }
-
-    private void Pets_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
-    {
-        TabItem_Pet.Header = $"{TabItem_Pet.Tag} ({PetPage.ViewModel.Pets.Count})";
-    }
-
-    private void SelectTexts_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
-    {
-        TabItem_SelectText.Header =
-            $"{TabItem_SelectText.Tag} ({SelectTextPage.ViewModel.SelectTexts.Count})";
-    }
-
-    private void ClickTexts_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
-    {
-        TabItem_ClickText.Header =
-            $"{TabItem_ClickText.Tag} ({ClickTextPage.ViewModel.ClickTexts.Count})";
-    }
-
-    private void LowTexts_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
-    {
-        TabItem_LowText.Header = $"{TabItem_LowText.Tag} ({LowTextPage.ViewModel.LowTexts.Count})";
-    }
-
-    private void Foods_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
-    {
-        TabItem_Food.Header = $"{TabItem_Food.Tag} ({FoodPage.ViewModel.Foods.Count})";
+        Closed += Window_ModEdit_Closed;
     }
 
     private void Window_ModEdit_Closed(object sender, EventArgs e)

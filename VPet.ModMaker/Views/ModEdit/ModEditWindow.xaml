@@ -143,40 +143,58 @@
       </Grid>
       <Grid Grid.Column="1">
         <TabControl>
-          <TabItem
-            x:Name="TabItem_Food"
-            Header="食物 (0)"
-            Tag="{ll:Str 食物}">
+          <TabItem Tag="{ll:Str 食物}">
+            <TabItem.Header>
+              <MultiBinding Converter="{StaticResource StringFormatConverter}" ConverterParameter="{}{0} ({1})">
+                <Binding Path="Tag" RelativeSource="{RelativeSource Mode=Self}" />
+                <Binding Path="ModInfo.Value.Foods.Count" />
+              </MultiBinding>
+            </TabItem.Header>
             <Frame Content="{Binding ModEditWindow.FoodPage}" />
           </TabItem>
-          <TabItem
-            x:Name="TabItem_ClickText"
-            Header="点击文本 (0)"
-            Tag="{ll:Str 点击文本}">
+          <TabItem Tag="{ll:Str 点击文本}">
+            <TabItem.Header>
+              <MultiBinding Converter="{StaticResource StringFormatConverter}" ConverterParameter="{}{0} ({1})">
+                <Binding Path="Tag" RelativeSource="{RelativeSource Mode=Self}" />
+                <Binding Path="ModInfo.Value.ClickTexts.Count" />
+              </MultiBinding>
+            </TabItem.Header>
             <Frame Content="{Binding ModEditWindow.ClickTextPage}" />
           </TabItem>
-          <TabItem
-            x:Name="TabItem_LowText"
-            Header="低状态文本 (0)"
-            Tag="{ll:Str 低状态文本}">
+          <TabItem Tag="{ll:Str 低状态文本}">
+            <TabItem.Header>
+              <MultiBinding Converter="{StaticResource StringFormatConverter}" ConverterParameter="{}{0} ({1})">
+                <Binding Path="Tag" RelativeSource="{RelativeSource Mode=Self}" />
+                <Binding Path="ModInfo.Value.LowTexts.Count" />
+              </MultiBinding>
+            </TabItem.Header>
             <Frame Content="{Binding ModEditWindow.LowTextPage}" />
           </TabItem>
-          <TabItem
-            x:Name="TabItem_SelectText"
-            Header="选择文本 (0)"
-            Tag="{ll:Str 选择文本}">
+          <TabItem Tag="{ll:Str 选择文本}">
+            <TabItem.Header>
+              <MultiBinding Converter="{StaticResource StringFormatConverter}" ConverterParameter="{}{0} ({1})">
+                <Binding Path="Tag" RelativeSource="{RelativeSource Mode=Self}" />
+                <Binding Path="ModInfo.Value.SelectTexts.Count" />
+              </MultiBinding>
+            </TabItem.Header>
             <Frame Content="{Binding ModEditWindow.SelectTextPage}" />
           </TabItem>
-          <TabItem
-            x:Name="TabItem_Pet"
-            Header="宠物 (0)"
-            Tag="{ll:Str 宠物}">
+          <TabItem Tag="{ll:Str 宠物}">
+            <TabItem.Header>
+              <MultiBinding Converter="{StaticResource StringFormatConverter}" ConverterParameter="{}{0} ({1})">
+                <Binding Path="Tag" RelativeSource="{RelativeSource Mode=Self}" />
+                <Binding Path="ModInfo.Value.Pets.Count" />
+              </MultiBinding>
+            </TabItem.Header>
             <Frame Content="{Binding ModEditWindow.PetPage}" />
           </TabItem>
-          <TabItem
-            x:Name="TabItem_Work"
-            Header="工作 (0)"
-            Tag="{ll:Str 工作}">
+          <TabItem Tag="{ll:Str 工作}">
+            <TabItem.Header>
+              <MultiBinding Converter="{StaticResource StringFormatConverter}" ConverterParameter="{}{0} ({1})">
+                <Binding Path="Tag" RelativeSource="{RelativeSource Mode=Self}" />
+                <Binding Path="ModEditWindow.WorkPage.ViewModel.CurrentPet.Value.Works.Count" />
+              </MultiBinding>
+            </TabItem.Header>
             <Frame Content="{Binding ModEditWindow.WorkPage}" />
           </TabItem>
           <!--<TabItem Header="物品 (0)" Tag="{ll:Str 物品}">

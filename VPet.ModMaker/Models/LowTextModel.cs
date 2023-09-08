@@ -19,7 +19,7 @@ public class LowTextModel : I18nModel<I18nLowTextModel>
     public static ObservableCollection<LowText.StrengthType> StrengthTypes { get; } =
         new(Enum.GetValues(typeof(LowText.StrengthType)).Cast<LowText.StrengthType>());
 
-    public ObservableValue<string> Name { get; } = new();
+    public ObservableValue<string> Id { get; } = new();
     public ObservableValue<LowText.ModeType> Mode { get; } = new();
     public ObservableValue<LowText.StrengthType> Strength { get; } = new();
     public ObservableValue<LowText.LikeType> Like { get; } = new();
@@ -29,7 +29,7 @@ public class LowTextModel : I18nModel<I18nLowTextModel>
     public LowTextModel(LowTextModel lowText)
         : this()
     {
-        Name.Value = lowText.Name.Value;
+        Id.Value = lowText.Id.Value;
         Mode.Value = lowText.Mode.Value;
         Strength.Value = lowText.Strength.Value;
         Like.Value = lowText.Like.Value;
@@ -42,7 +42,7 @@ public class LowTextModel : I18nModel<I18nLowTextModel>
     public LowTextModel(LowText lowText)
         : this()
     {
-        Name.Value = lowText.Text;
+        Id.Value = lowText.Text;
         Mode.Value = lowText.Mode;
         Strength.Value = lowText.Strength;
         Like.Value = lowText.Like;
@@ -54,7 +54,7 @@ public class LowTextModel : I18nModel<I18nLowTextModel>
     {
         return new()
         {
-            Text = Name.Value,
+            Text = Id.Value,
             Mode = Mode.Value,
             Strength = Strength.Value,
             Like = Like.Value,
