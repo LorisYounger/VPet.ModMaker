@@ -31,6 +31,16 @@
             宠物加载器列表
             </summary>
         </member>
+        <member name="P:VPet_Simulator.Windows.Interface.IMainWindow.TalkAPI">
+            <summary>
+            所有可用聊天API
+            </summary>
+        </member>
+        <member name="P:VPet_Simulator.Windows.Interface.IMainWindow.TalkBoxCurr">
+            <summary>
+            当前正在使用的TalkBox
+            </summary>
+        </member>
         <member name="P:VPet_Simulator.Windows.Interface.IMainWindow.Core">
             <summary>
             桌宠数据核心
@@ -931,6 +941,60 @@
         <member name="M:VPet_Simulator.Windows.Interface.Statistics.ToSubs">
             <summary>
             输出统计数据
+            </summary>
+        </member>
+        <member name="T:VPet_Simulator.Windows.Interface.TalkBox">
+            <summary>
+            聊天API接口/显示类
+            </summary>
+            <summary>
+            TalkBox
+            </summary>
+        </member>
+        <member name="F:VPet_Simulator.Windows.Interface.TalkBox.MainPlugin">
+            <summary>
+            插件主体
+            </summary>
+        </member>
+        <member name="M:VPet_Simulator.Windows.Interface.TalkBox.Responded(System.String)">
+            <summary>
+            根据内容进行回应 (异步)
+            </summary>
+            <param name="text">内容</param>
+        </member>
+        <member name="P:VPet_Simulator.Windows.Interface.TalkBox.APIName">
+            <summary>
+            该聊天接口名字
+            </summary>
+        </member>
+        <member name="M:VPet_Simulator.Windows.Interface.TalkBox.Setting">
+            <summary>
+            聊天设置
+            </summary>
+        </member>
+        <member name="F:VPet_Simulator.Windows.Interface.TalkBox.PublicGrid">
+            <summary>
+            PublicGrid Name Field
+            </summary>
+        </member>
+        <member name="M:VPet_Simulator.Windows.Interface.TalkBox.InitializeComponent">
+            <summary>
+            InitializeComponent
+            </summary>
+        </member>
+        <member name="P:VPet_Simulator.Windows.Interface.ITalkAPI.This">
+            <summary>
+            显示的窗口
+            </summary>
+        </member>
+        <member name="P:VPet_Simulator.Windows.Interface.ITalkAPI.APIName">
+            <summary>
+            该聊天接口名字
+            </summary>
+        </member>
+        <member name="M:VPet_Simulator.Windows.Interface.ITalkAPI.Setting">
+            <summary>
+            聊天设置
             </summary>
         </member>
     </members>

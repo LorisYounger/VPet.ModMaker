@@ -1374,6 +1374,11 @@
             <param name="paths">文件内容列表</param>
             <param name="isLoop">是否循环</param>
         </member>
+        <member name="F:VPet_Simulator.Core.PNGAnimation.MaxLoadNumber">
+            <summary>
+            最大同时加载数
+            </summary>
+        </member>
         <member name="T:VPet_Simulator.Core.PNGAnimation.Animation">
             <summary>
             单帧动画
