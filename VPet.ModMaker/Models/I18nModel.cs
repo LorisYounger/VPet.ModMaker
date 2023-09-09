@@ -28,9 +28,9 @@ public class I18nModel<T>
         CurrentI18nData.Value = I18nDatas[I18nHelper.Current.CultureName.Value];
     }
 
-    private void LangChanged(string value)
+    private void LangChanged(string oldValue, string newValue)
     {
-        if (I18nDatas.TryGetValue(value, out var result))
+        if (I18nDatas.TryGetValue(newValue, out var result))
             CurrentI18nData.Value = result;
     }
 

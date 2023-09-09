@@ -38,6 +38,7 @@ public class ModMaker : MainPlugin
             Setting();
         };
         modset.Items.Add(menuset);
+        Application.Current.Resources.MergedDictionaries.Add(new ModMakerStyles());
     }
 
     public override void Setting()
@@ -45,14 +46,19 @@ public class ModMaker : MainPlugin
         if (Maker == null)
         {
             // 载入ModMaker资源
-            Application.Current.Resources.MergedDictionaries.Add(new ModMakerStyles());
             Maker = new ModMakerWindow();
-            Maker.ModMaker = this;
+            //Maker.ModMaker = this;
             Maker.Show();
+            Maker.Closed += Maker_Closed;
         }
         else
         {
             Maker.Topmost = true;
         }
+    }
+
+    private void Maker_Closed(object sender, EventArgs e)
+    {
+        Maker = null;
     }
 }

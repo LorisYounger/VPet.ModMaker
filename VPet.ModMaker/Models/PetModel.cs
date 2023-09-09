@@ -26,10 +26,10 @@ public class PetModel : I18nModel<I18nPetInfoModel>
     {
         PetNameId.Value = $"{Id.Value}_{nameof(PetNameId)}";
         DescriptionId.Value = $"{Id.Value}_{nameof(DescriptionId)}";
-        Id.ValueChanged += (v) =>
+        Id.ValueChanged += (o, n) =>
         {
-            PetNameId.Value = $"{v}_{nameof(PetNameId)}";
-            DescriptionId.Value = $"{v}_{nameof(DescriptionId)}";
+            PetNameId.Value = $"{n}_{nameof(PetNameId)}";
+            DescriptionId.Value = $"{n}_{nameof(DescriptionId)}";
         };
     }
 

@@ -31,7 +31,7 @@ public class PetEditWindowVM
         Image.ValueChanged += Image_ValueChanged;
     }
 
-    private void Image_ValueChanged(BitmapImage value)
+    private void Image_ValueChanged(BitmapImage oldValue, BitmapImage newValue)
     {
         //LengthRatio.Value = BorderLength.Value / value.PixelWidth;
     }

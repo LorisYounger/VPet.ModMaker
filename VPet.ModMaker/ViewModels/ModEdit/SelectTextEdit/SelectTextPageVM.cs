@@ -34,9 +34,9 @@ public class SelectTextPageVM
         RemoveCommand.ExecuteEvent += Remove;
     }
 
-    private void Filter_ValueChanged(string value)
+    private void Filter_ValueChanged(string oldValue, string newValue)
     {
-        if (string.IsNullOrWhiteSpace(value))
+        if (string.IsNullOrWhiteSpace(newValue))
         {
             ShowSelectTexts.Value = SelectTexts;
         }
@@ -44,7 +44,7 @@ public class SelectTextPageVM
         {
             ShowSelectTexts.Value = new(
                 SelectTexts.Where(
-                    m => m.Id.Value.Contains(value, StringComparison.OrdinalIgnoreCase)
+                    m => m.Id.Value.Contains(newValue, StringComparison.OrdinalIgnoreCase)
                 )
             );
         }

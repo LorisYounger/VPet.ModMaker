@@ -37,16 +37,18 @@ public class LowTextPageVM
         RemoveCommand.ExecuteEvent += Remove;
     }
 
-    private void Filter_ValueChanged(string value)
+    private void Filter_ValueChanged(string oldValue, string newValue)
     {
-        if (string.IsNullOrWhiteSpace(value))
+        if (string.IsNullOrWhiteSpace(newValue))
         {
             ShowLowTexts.Value = LowTexts;
         }
         else
         {
             ShowLowTexts.Value = new(
-                LowTexts.Where(m => m.Id.Value.Contains(value, StringComparison.OrdinalIgnoreCase))
+                LowTexts.Where(
+                    m => m.Id.Value.Contains(newValue, StringComparison.OrdinalIgnoreCase)
+                )
             );
         }
     }

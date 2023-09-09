@@ -36,16 +36,16 @@ public class FoodPageVM
         RemoveCommand.ExecuteEvent += Remove;
     }
 
-    private void Filter_ValueChanged(string value)
+    private void Filter_ValueChanged(string oldValue, string newValue)
     {
-        if (string.IsNullOrWhiteSpace(value))
+        if (string.IsNullOrWhiteSpace(newValue))
         {
             ShowFoods.Value = Foods;
         }
         else
         {
             ShowFoods.Value = new(
-                Foods.Where(m => m.Id.Value.Contains(value, StringComparison.OrdinalIgnoreCase))
+                Foods.Where(m => m.Id.Value.Contains(newValue, StringComparison.OrdinalIgnoreCase))
             );
         }
     }

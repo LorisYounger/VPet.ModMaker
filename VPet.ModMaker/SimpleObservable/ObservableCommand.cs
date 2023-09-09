@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
@@ -11,6 +12,9 @@ namespace HKW.HKWViewModels.SimpleObservable;
 /// <summary>
 /// 可观察命令
 /// </summary>
+[DebuggerDisplay(
+    "CanExecute = {CanExecuteProperty.Value}, EventCount =  {ExecuteEvent.GetInvocationList().Length}, AsyncEventCount = {AsyncExecuteEvent.GetInvocationList().Length}"
+)]
 public class ObservableCommand : ICommand
 {
     /// <summary>
@@ -21,6 +25,7 @@ public class ObservableCommand : ICommand
     /// <summary>
     /// 等待异步执行完成
     /// </summary>
+    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
     private readonly ObservableValue<bool> r_waiting = new(false);
 
     /// <inheritdoc/>
@@ -30,14 +35,12 @@ public class ObservableCommand : ICommand
         r_waiting.PropertyChanged += InvokeCanExecuteChanged;
     }
 
-    private void InvokeCanExecuteChanged(
-        object? sender,
-        System.ComponentModel.PropertyChangedEventArgs e
-    )
+    private void InvokeCanExecuteChanged(object? sender, PropertyChangedEventArgs e)
     {
         CanExecuteChanged?.Invoke(sender, e);
     }
 
+    #region ICommand
     /// <summary>
     /// 能否被执行
     /// </summary>
@@ -75,7 +78,54 @@ public class ObservableCommand : ICommand
             await asyncEvent.Invoke();
         r_waiting.Value = false;
     }
+    #endregion
 
+    #region NotifyReceiver
+    /// <summary>
+    /// 添加通知属性改变后接收器
+    /// <para>
+    /// 添加的接口触发后会执行 <see cref="NotifyCanExecuteReceived"/>
+    /// </para>
+    /// <para>示例:
+    /// <code><![CDATA[
+    /// ObservableValue<string> value = new();
+    /// ObservableCommand command = new();
+    /// command.AddNotifyReceiver(value);
+    /// command.NotifyCanExecuteReceived += (ref bool canExecute) =>
+    /// {
+    ///     canExecute = false; // trigger this
+    /// };
+    /// value.Value = "A"; // execute this
+    /// // result: value.Value == "A" , command.CanExecuteProperty == false
+    /// ]]>
+    /// </code></para>
+    /// </summary>
+    /// <param name="notifies">通知属性改变后接口</param>
+    public void AddNotifyReceiver(params INotifyPropertyChanged[] notifies)
+    {
+        foreach (var notify in notifies)
+            notify.PropertyChanged += Notify_PropertyChanged;
+    }
+
+    /// <summary>
+    /// 删除通知属性改变后接收器
+    /// </summary>
+    /// <param name="notifies">通知属性改变后接口</param>
+    public void RemoveNotifyReceiver(params INotifyPropertyChanged[] notifies)
+    {
+        foreach (var notify in notifies)
+            notify.PropertyChanged -= Notify_PropertyChanged;
+    }
+
+    private void Notify_PropertyChanged(object? sender, PropertyChangedEventArgs e)
+    {
+        var temp = CanExecuteProperty.Value;
+        NotifyCanExecuteReceived?.Invoke(ref temp);
+        CanExecuteProperty.Value = temp;
+    }
+    #endregion
+
+    #region Event
     /// <summary>
     /// 能否执行属性改变后事件
     /// </summary>
@@ -92,6 +142,13 @@ public class ObservableCommand : ICommand
     public event AsyncExecuteHandler? AsyncExecuteEvent;
 
     /// <summary>
+    /// 可执行通知接收器事件
+    /// </summary>
+    public event NotifyReceivedHandler? NotifyCanExecuteReceived;
+    #endregion
+
+    #region Delegate
+    /// <summary>
     /// 执行
     /// </summary>
     public delegate void ExecuteHandler();
@@ -101,4 +158,11 @@ public class ObservableCommand : ICommand
     /// </summary>
     /// <returns></returns>
     public delegate Task AsyncExecuteHandler();
+
+    /// <summary>
+    /// 通知接收器
+    /// </summary>
+    /// <param name="value">引用值</param>
+    public delegate void NotifyReceivedHandler(ref bool value);
+    #endregion
 }

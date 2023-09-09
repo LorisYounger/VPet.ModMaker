@@ -46,9 +46,9 @@ public class SelectTextModel : I18nModel<I18nSelectTextModel>
     public SelectTextModel()
     {
         ChooseId.Value = $"{Id.Value}_{nameof(ChooseId)}";
-        Id.ValueChanged += (v) =>
+        Id.ValueChanged += (o, n) =>
         {
-            ChooseId.Value = $"{v}_{nameof(ChooseId)}";
+            ChooseId.Value = $"{n}_{nameof(ChooseId)}";
         };
     }
 

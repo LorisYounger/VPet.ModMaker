@@ -34,16 +34,16 @@ public class PetPageVM
         RemoveCommand.ExecuteEvent += Remove;
     }
 
-    private void Filter_ValueChanged(string value)
+    private void Filter_ValueChanged(string oldValue, string newValue)
     {
-        if (string.IsNullOrWhiteSpace(value))
+        if (string.IsNullOrWhiteSpace(newValue))
         {
             ShowPets.Value = Pets;
         }
         else
         {
             ShowPets.Value = new(
-                Pets.Where(m => m.Id.Value.Contains(value, StringComparison.OrdinalIgnoreCase))
+                Pets.Where(m => m.Id.Value.Contains(newValue, StringComparison.OrdinalIgnoreCase))
             );
         }
     }

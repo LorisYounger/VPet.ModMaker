@@ -99,12 +99,12 @@ public class ModMakerWindowVM
         }
     }
 
-    private void ModFilterText_ValueChanged(string value)
+    private void ModFilterText_ValueChanged(string oldValue, string newValue)
     {
-        if (string.IsNullOrEmpty(value))
+        if (string.IsNullOrEmpty(newValue))
             ShowHistories.Value = Histories;
         else
-            ShowHistories.Value = new(Histories.Where(i => i.Id.Contains(value)));
+            ShowHistories.Value = new(Histories.Where(i => i.Id.Contains(newValue)));
     }
 
     public void CreateNewMod()

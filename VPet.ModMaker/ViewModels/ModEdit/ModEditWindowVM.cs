@@ -55,11 +55,11 @@ public class ModEditWindowVM
         SaveToCommand.ExecuteEvent += SaveTo;
     }
 
-    private void CurrentLang_ValueChanged(string value)
+    private void CurrentLang_ValueChanged(string oldValue, string newValue)
     {
-        if (value is null)
+        if (newValue is null)
             return;
-        ModInfo.Value.CurrentI18nData.Value = ModInfo.Value.I18nDatas[value];
+        ModInfo.Value.CurrentI18nData.Value = ModInfo.Value.I18nDatas[newValue];
     }
 
     public void Close()

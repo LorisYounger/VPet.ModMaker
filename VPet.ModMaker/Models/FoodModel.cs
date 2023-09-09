@@ -33,9 +33,9 @@ public class FoodModel : I18nModel<I18nFoodModel>
     public FoodModel()
     {
         DescriptionId.Value = $"{Id.Value}_{nameof(DescriptionId)}";
-        Id.ValueChanged += (v) =>
+        Id.ValueChanged += (o, n) =>
         {
-            DescriptionId.Value = $"{v}_{nameof(DescriptionId)}";
+            DescriptionId.Value = $"{n}_{nameof(DescriptionId)}";
         };
     }
 
