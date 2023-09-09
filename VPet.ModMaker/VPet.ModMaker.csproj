@@ -160,7 +160,7 @@
     </Compile>
     <Compile Include="SimpleObservable\ObservableCommand.cs" />
     <Compile Include="SimpleObservable\ObservableValue.cs" />
-    <Compile Include="Utils.cs" />
+    <Compile Include="Models\Utils.cs" />
     <Compile Include="Views\ModEdit\FoodEdit\FoodEditWindow.xaml.cs">
       <DependentUpon>FoodEditWindow.xaml</DependentUpon>
     </Compile>

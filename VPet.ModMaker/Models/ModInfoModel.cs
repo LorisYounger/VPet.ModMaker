@@ -169,7 +169,7 @@ public class ModInfoModel : I18nModel<I18nModInfoModel>
                 }
             );
         }
-        var imagePath = Utils.GetImageSourceFile(Image.Value);
+        var imagePath = Image.Value.GetSourceFile();
         var targetImagePath = Path.Combine(path, Path.GetFileName(imagePath));
         if (imagePath != targetImagePath)
             File.Copy(imagePath, targetImagePath, true);
@@ -311,7 +311,7 @@ public class ModInfoModel : I18nModel<I18nModInfoModel>
             Directory.CreateDirectory(foodPath);
             foreach (var food in Foods)
             {
-                var foodImagePath = Utils.GetImageSourceFile(food.Image.Value);
+                var foodImagePath = food.Image.Value.GetSourceFile();
                 var targetImagePath = Path.Combine(
                     foodPath,
                     $"{food.Id.Value}{Path.GetExtension(foodImagePath)}"

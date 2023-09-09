@@ -7,15 +7,10 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Media.Imaging;
 
-namespace VPet.ModMaker;
+namespace VPet.ModMaker.Models;
 
-internal static class Utils
+public static class Utils
 {
-    public static string GetImageSourceFile(BitmapImage image)
-    {
-        return ((FileStream)image.StreamSource).Name;
-    }
-
     public static BitmapImage LoadImageToStream(string imagePath)
     {
         BitmapImage bitmapImage = new();
@@ -25,9 +20,9 @@ internal static class Utils
         return bitmapImage;
     }
 
-    public static BitmapImage LoadImageToStream(BitmapImage image)
+    public static BitmapImage LoadImageToStream(this BitmapImage image)
     {
-        return LoadImageToStream(GetImageSourceFile(image));
+        return LoadImageToStream(image.GetSourceFile());
     }
 
     public static BitmapImage LoadImageToMemoryStream(string imagePath)
@@ -42,21 +37,8 @@ internal static class Utils
         return bitmapImage;
     }
 
-    public static BitmapImage LoadImageToMemoryStream(BitmapImage image)
+    public static BitmapImage LoadImageToMemoryStream(this BitmapImage image)
     {
-        return LoadImageToMemoryStream(GetImageSourceFile(image));
-    }
-
-    public static void ShowDialogX(this Window window, Window owner)
-    {
-        owner.IsEnabled = false;
-        window.Owner = owner;
-        window.Closed += (s, e) =>
-        {
-            owner.IsEnabled = true;
-        };
-        window.ShowDialog();
+        return LoadImageToMemoryStream(image.GetSourceFile());
     }
 }
-
-public delegate void ShowDialogXHandler(Window window);
