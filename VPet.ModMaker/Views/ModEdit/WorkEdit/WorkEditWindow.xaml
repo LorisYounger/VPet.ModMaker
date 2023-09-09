@@ -46,8 +46,7 @@
           pu:LabelHelper.CornerRadius="5"
           Background="{Binding Work.Value.Background.Value}"
           BorderBrush="{Binding Work.Value.BorderBrush.Value}"
-          BorderThickness="3"
-          Tag="{Binding IsChecked, ElementName=ToggleButton_TouchHead}">
+          BorderThickness="3">
           <Label.Style>
             <Style BasedOn="{StaticResource {x:Type Label}}" TargetType="Label">
               <Setter Property="Width">
@@ -234,26 +233,33 @@
                 <RowDefinition Height="Auto" />
               </Grid.RowDefinitions>
               <Label Content="{ll:Str 边框颜色}" />
-              <pu:ColorPicker Grid.Column="1" SelectedColor="{Binding Work.Value.BorderBrush.Value, Converter={StaticResource BrushToMediaColorConverter}}" />
+              <pu:ColorPicker
+                Grid.Column="1"
+                ColorChannels="RGB"
+                SelectedColor="{Binding Work.Value.BorderBrush.Value, Converter={StaticResource BrushToMediaColorConverter}}" />
               <Label Grid.Row="1" Content="{ll:Str 背景颜色}" />
               <pu:ColorPicker
                 Grid.Row="1"
                 Grid.Column="1"
+                ColorChannels="RGB"
                 SelectedColor="{Binding Work.Value.Background.Value, Converter={StaticResource BrushToMediaColorConverter}}" />
               <Label Grid.Row="2" Content="{ll:Str 字体颜色}" />
               <pu:ColorPicker
                 Grid.Row="2"
                 Grid.Column="1"
+                ColorChannels="RGB"
                 SelectedColor="{Binding Work.Value.Foreground.Value, Converter={StaticResource BrushToMediaColorConverter}}" />
               <Label Grid.Row="3" Content="{ll:Str 按钮背景颜色}" />
               <pu:ColorPicker
                 Grid.Row="3"
                 Grid.Column="1"
+                ColorChannels="RGB"
                 SelectedColor="{Binding Work.Value.ButtonBackground.Value, Converter={StaticResource BrushToMediaColorConverter}}" />
               <Label Grid.Row="4" Content="{ll:Str 按钮字体颜色}" />
               <pu:ColorPicker
                 Grid.Row="4"
                 Grid.Column="1"
+                ColorChannels="RGB"
                 SelectedColor="{Binding Work.Value.ButtonForeground.Value, Converter={StaticResource BrushToMediaColorConverter}}" />
               <Label Grid.Row="5" Content="X" />
               <pu:NumberInput

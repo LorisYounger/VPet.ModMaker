@@ -36,6 +36,8 @@ public class ModInfoModel : I18nModel<I18nModInfoModel>
 
     public Dictionary<string, Dictionary<string, string>> OtherI18nDatas { get; } = new();
 
+    private readonly Dictionary<string, Dictionary<string, string>> _saveI18nDatas = new();
+
     public ModInfoModel()
     {
         DescriptionId.Value = $"{Id.Value}_{nameof(DescriptionId)}";
@@ -145,6 +147,11 @@ public class ModInfoModel : I18nModel<I18nModInfoModel>
         var modInfoFile = Path.Combine(path, ModInfoFile);
         if (File.Exists(modInfoFile) is false)
             File.Create(modInfoFile).Close();
+
+        _saveI18nDatas.Clear();
+        foreach (var cultureName in I18nHelper.Current.CultureNames)
+            _saveI18nDatas.Add(cultureName, new());
+
         //var lps = new LpsDocument(File.ReadAllText(modInfoFile));
         var lps = new LPS()
         {
@@ -173,18 +180,116 @@ public class ModInfoModel : I18nModel<I18nModInfoModel>
         var targetImagePath = Path.Combine(path, Path.GetFileName(imagePath));
         if (imagePath != targetImagePath)
             File.Copy(imagePath, targetImagePath, true);
-        //lps.FindLine("vupmod").Info = Id.Value;
-        //lps.FindLine("intro").Info = DescriptionId.Value;
-        //lps.FindSub("gamever").Info = GameVersion.Value;
-        //lps.FindSub("ver").Info = ModVersion.Value;
-        //lps.FindSub("author").Info = Author.Value;
-        //lps.FindorAddLine("authorid").InfoToInt64 = 0;
-        //lps.FindorAddLine("itemid").info = "0";
         File.WriteAllText(modInfoFile, lps.ToString());
+        SavePets(path);
         SaveFoods(path);
         SaveText(path);
         SaveLang(path);
         SaveImage(path);
+    }
+
+    private void SavePets(string path)
+    {
+        var petPath = Path.Combine(path, "pet");
+        if (Pets.Count == 0)
+        {
+            if (Directory.Exists(petPath))
+                Directory.Delete(petPath, true);
+            return;
+        }
+        Directory.CreateDirectory(petPath);
+        foreach (var pet in Pets)
+        {
+            var petFile = Path.Combine(petPath, $"{pet.Id.Value}.lps");
+            if (File.Exists(petFile) is false)
+                File.Create(petFile).Close();
+            var lps = new LPS();
+            GetPetInfo(lps, pet);
+            GetWorksInfo(lps, pet);
+            File.WriteAllText(petFile, lps.ToString());
+        }
+    }
+
+    void GetWorksInfo(LPS lps, PetModel pet)
+    {
+        foreach (var work in pet.Works)
+        {
+            lps.Add(LPSConvert.SerializeObjectToLine<Line>(work.ToWork(), "work"));
+            foreach (var cultureName in I18nHelper.Current.CultureNames)
+            {
+                _saveI18nDatas[cultureName].TryAdd(
+                    work.Id.Value,
+                    work.I18nDatas[cultureName].Name.Value
+                );
+            }
+        }
+    }
+
+    private void GetPetInfo(LPS lps, PetModel pet)
+    {
+        lps.Add(
+            new Line("pet", pet.Id.Value)
+            {
+                new Sub("intor", pet.DescriptionId.Value),
+                new Sub("path", pet.Id.Value),
+                new Sub("petname", pet.PetNameId.Value)
+            }
+        );
+        lps.Add(
+            new Line("touchhead")
+            {
+                new Sub("px", pet.TouchHeadRect.Value.X.Value),
+                new Sub("py", pet.TouchHeadRect.Value.Y.Value),
+                new Sub("sw", pet.TouchHeadRect.Value.Width.Value),
+                new Sub("sh", pet.TouchHeadRect.Value.Height.Value),
+            }
+        );
+        lps.Add(
+            new Line("touchraised")
+            {
+                new Sub("happy_px", pet.TouchRaisedRect.Value.Happy.Value.X.Value),
+                new Sub("happy_py", pet.TouchRaisedRect.Value.Happy.Value.Y.Value),
+                new Sub("happy_sw", pet.TouchRaisedRect.Value.Happy.Value.Width.Value),
+                new Sub("happy_sh", pet.TouchRaisedRect.Value.Happy.Value.Height.Value),
+                //
+                new Sub("nomal_px", pet.TouchRaisedRect.Value.Nomal.Value.X.Value),
+                new Sub("nomal_py", pet.TouchRaisedRect.Value.Nomal.Value.Y.Value),
+                new Sub("nomal_sw", pet.TouchRaisedRect.Value.Nomal.Value.Width.Value),
+                new Sub("nomal_sh", pet.TouchRaisedRect.Value.Nomal.Value.Height.Value),
+                //
+                new Sub("poorcondition_px", pet.TouchRaisedRect.Value.PoorCondition.Value.X.Value),
+                new Sub("poorcondition_py", pet.TouchRaisedRect.Value.PoorCondition.Value.Y.Value),
+                new Sub(
+                    "poorcondition_sw",
+                    pet.TouchRaisedRect.Value.PoorCondition.Value.Width.Value
+                ),
+                new Sub(
+                    "poorcondition_sh",
+                    pet.TouchRaisedRect.Value.PoorCondition.Value.Height.Value
+                ),
+                //
+                new Sub("ill_px", pet.TouchRaisedRect.Value.Ill.Value.X.Value),
+                new Sub("ill_py", pet.TouchRaisedRect.Value.Ill.Value.Y.Value),
+                new Sub("ill_sw", pet.TouchRaisedRect.Value.Ill.Value.Width.Value),
+                new Sub("ill_sh", pet.TouchRaisedRect.Value.Ill.Value.Height.Value),
+            }
+        );
+        lps.Add(
+            new Line("raisepoint")
+            {
+                new Sub("happy_x", pet.RaisePoint.Value.Happy.Value.X.Value),
+                new Sub("happy_y", pet.RaisePoint.Value.Happy.Value.Y.Value),
+                //
+                new Sub("nomal_x", pet.RaisePoint.Value.Nomal.Value.X.Value),
+                new Sub("nomal_y", pet.RaisePoint.Value.Nomal.Value.Y.Value),
+                //
+                new Sub("poorcondition_x", pet.RaisePoint.Value.PoorCondition.Value.X.Value),
+                new Sub("poorcondition_y", pet.RaisePoint.Value.PoorCondition.Value.Y.Value),
+                //
+                new Sub("ill_x", pet.RaisePoint.Value.Ill.Value.X.Value),
+                new Sub("ill_y", pet.RaisePoint.Value.Ill.Value.Y.Value),
+            }
+        );
     }
 
     private void SaveFoods(string path)
@@ -202,7 +307,20 @@ public class ModInfoModel : I18nModel<I18nModInfoModel>
             File.Create(foodFile).Close();
         var lps = new LPS();
         foreach (var food in Foods)
+        {
             lps.Add(LPSConvert.SerializeObjectToLine<Line>(food.ToFood(), "food"));
+            foreach (var cultureName in I18nHelper.Current.CultureNames)
+            {
+                _saveI18nDatas[cultureName].TryAdd(
+                    food.Id.Value,
+                    food.I18nDatas[cultureName].Name.Value
+                );
+                _saveI18nDatas[cultureName].TryAdd(
+                    food.DescriptionId.Value,
+                    food.I18nDatas[cultureName].Description.Value
+                );
+            }
+        }
         File.WriteAllText(foodFile, lps.ToString());
     }
 
@@ -231,6 +349,17 @@ public class ModInfoModel : I18nModel<I18nModInfoModel>
         foreach (var text in SelectTexts)
         {
             lps.Add(LPSConvert.SerializeObjectToLine<Line>(text.ToSelectText(), "SelectText"));
+            foreach (var cultureName in I18nHelper.Current.CultureNames)
+            {
+                _saveI18nDatas[cultureName].TryAdd(
+                    text.Id.Value,
+                    text.I18nDatas[cultureName].Text.Value
+                );
+                _saveI18nDatas[cultureName].TryAdd(
+                    text.ChooseId.Value,
+                    text.I18nDatas[cultureName].Choose.Value
+                );
+            }
         }
         File.WriteAllText(textFile, lps.ToString());
     }
@@ -245,6 +374,13 @@ public class ModInfoModel : I18nModel<I18nModInfoModel>
         foreach (var text in LowTexts)
         {
             lps.Add(LPSConvert.SerializeObjectToLine<Line>(text.ToLowText(), "lowfoodtext"));
+            foreach (var cultureName in I18nHelper.Current.CultureNames)
+            {
+                _saveI18nDatas[cultureName].TryAdd(
+                    text.Id.Value,
+                    text.I18nDatas[cultureName].Text.Value
+                );
+            }
         }
         File.WriteAllText(textFile, lps.ToString());
     }
@@ -259,6 +395,13 @@ public class ModInfoModel : I18nModel<I18nModInfoModel>
         foreach (var text in ClickTexts)
         {
             lps.Add(LPSConvert.SerializeObjectToLine<Line>(text.ToClickText(), "clicktext"));
+            foreach (var cultureName in I18nHelper.Current.CultureNames)
+            {
+                _saveI18nDatas[cultureName].TryAdd(
+                    text.Id.Value,
+                    text.I18nDatas[cultureName].Text.Value
+                );
+            }
         }
         File.WriteAllText(textFile, lps.ToString());
     }
@@ -274,29 +417,8 @@ public class ModInfoModel : I18nModel<I18nModInfoModel>
             var cultureFile = Path.Combine(culturePath, $"{cultureName}.lps");
             File.Create(cultureFile).Close();
             var lps = new LPS();
-            foreach (var food in Foods)
-            {
-                lps.Add(new Line(food.Id.Value, food.I18nDatas[cultureName].Name.Value));
-                lps.Add(
-                    new Line(
-                        food.DescriptionId.Value,
-                        food.I18nDatas[cultureName].Description.Value
-                    )
-                );
-            }
-            foreach (var text in LowTexts)
-            {
-                lps.Add(new Line(text.Id.Value, text.I18nDatas[cultureName].Text.Value));
-            }
-            foreach (var text in ClickTexts)
-            {
-                lps.Add(new Line(text.Id.Value, text.I18nDatas[cultureName].Text.Value));
-            }
-            foreach (var text in SelectTexts)
-            {
-                lps.Add(new Line(text.Id.Value, text.I18nDatas[cultureName].Text.Value));
-                lps.Add(new Line(text.ChooseId.Value, text.I18nDatas[cultureName].Choose.Value));
-            }
+            foreach (var data in _saveI18nDatas[cultureName])
+                lps.Add(new Line(data.Key, data.Value));
             File.WriteAllText(cultureFile, lps.ToString());
         }
     }

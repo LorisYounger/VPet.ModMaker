@@ -46,35 +46,17 @@
         <RowDefinition />
       </Grid.RowDefinitions>
       <Grid>
-        <Grid>
-          <Image
-            Width="250"
-            Height="250"
-            Source="{Binding Image.Value}"
-            Stretch="Uniform">
-            <Image.ContextMenu>
-              <ContextMenu>
-                <MenuItem Command="{Binding ChangeImageCommand}" Header="{ll:Str 修改测试图片}" />
-              </ContextMenu>
-            </Image.ContextMenu>
-          </Image>
-          <Button
-            HorizontalAlignment="Center"
-            VerticalAlignment="Center"
-            Command="{Binding AddImageCommand}"
-            Content="{ll:Str 添加测试图片}">
-            <Button.Style>
-              <Style BasedOn="{StaticResource {x:Type Button}}" TargetType="Button">
-                <Setter Property="Visibility" Value="Hidden" />
-                <Style.Triggers>
-                  <DataTrigger Binding="{Binding Image.Value}" Value="{x:Null}">
-                    <Setter Property="Visibility" Value="Visible" />
-                  </DataTrigger>
-                </Style.Triggers>
-              </Style>
-            </Button.Style>
-          </Button>
-        </Grid>
+        <Image
+          Width="250"
+          Height="250"
+          Source="{Binding Image.Value}"
+          Stretch="Uniform">
+          <Image.ContextMenu>
+            <ContextMenu>
+              <MenuItem Command="{Binding ChangeImageCommand}" Header="{ll:Str 修改测试图片}" />
+            </ContextMenu>
+          </Image.ContextMenu>
+        </Image>
         <Grid>
           <Label Content="TouchHeadRect" Tag="{Binding IsChecked, ElementName=ToggleButton_TouchHead}">
             <Label.Style>
@@ -322,6 +304,22 @@
             </Label.Style>
           </Label>
         </Grid>
+        <Button
+          HorizontalAlignment="Center"
+          VerticalAlignment="Center"
+          Command="{Binding AddImageCommand}"
+          Content="{ll:Str 添加测试图片}">
+          <Button.Style>
+            <Style BasedOn="{StaticResource {x:Type Button}}" TargetType="Button">
+              <Setter Property="Visibility" Value="Hidden" />
+              <Style.Triggers>
+                <DataTrigger Binding="{Binding Image.Value}" Value="{x:Null}">
+                  <Setter Property="Visibility" Value="Visible" />
+                </DataTrigger>
+              </Style.Triggers>
+            </Style>
+          </Button.Style>
+        </Button>
       </Grid>
       <Grid Grid.Row="1">
         <Grid.ColumnDefinitions>
