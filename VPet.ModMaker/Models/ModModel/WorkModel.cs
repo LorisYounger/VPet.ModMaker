@@ -17,7 +17,6 @@ public class WorkModel : I18nModel<I18nWorkModel>
                 .Cast<VPet_Simulator.Core.GraphHelper.Work.WorkType>()
         );
 
-    //public VPet_Simulator.Core.GraphHelper.Work
     public ObservableValue<VPet_Simulator.Core.GraphHelper.Work.WorkType> WorkType { get; } =
         new(VPet_Simulator.Core.GraphHelper.Work.WorkType.Work);
 

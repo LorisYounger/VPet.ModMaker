@@ -97,19 +97,20 @@
     <Compile Include="Converters\RatioMarginConverter.cs" />
     <Compile Include="Converters\MaxConverter.cs" />
     <Compile Include="Converters\MarginConverter.cs" />
-    <Compile Include="Models\ClickTextModel.cs" />
+    <Compile Include="Models\ModModel\ClickTextModel.cs" />
     <Compile Include="Models\Expansions.cs" />
-    <Compile Include="Models\FoodModel.cs" />
+    <Compile Include="Models\ModModel\FoodModel.cs" />
     <Compile Include="Models\I18nHelper.cs" />
     <Compile Include="Models\I18nModel.cs" />
-    <Compile Include="Models\LowTextModel.cs" />
+    <Compile Include="Models\ModModel\LowTextModel.cs" />
     <Compile Include="Models\ModLoader.cs" />
     <Compile Include="Models\ModMakerHistory.cs" />
     <Compile Include="Models\ModMakerInfo.cs" />
+    <Compile Include="Models\ModModel\MoveModel.cs" />
     <Compile Include="Models\ObservableRange.cs" />
-    <Compile Include="Models\PetModel.cs" />
-    <Compile Include="Models\SelectTextModel.cs" />
-    <Compile Include="Models\WorkModel.cs" />
+    <Compile Include="Models\ModModel\PetModel.cs" />
+    <Compile Include="Models\ModModel\SelectTextModel.cs" />
+    <Compile Include="Models\ModModel\WorkModel.cs" />
     <Compile Include="SimpleObservable\ObservableCommandT.cs" />
     <Compile Include="Styles.cs" />
     <Compile Include="ViewModels\ModEdit\ClickTextEdit\ClickTextEditWindowVM.cs" />
@@ -143,7 +144,7 @@
     <Compile Include="Views\ModEdit\AddLangWindow.xaml.cs">
       <DependentUpon>AddLangWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Models\ModInfoModel.cs" />
+    <Compile Include="Models\ModModel\ModInfoModel.cs" />
     <Compile Include="Models\ModMaker.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>

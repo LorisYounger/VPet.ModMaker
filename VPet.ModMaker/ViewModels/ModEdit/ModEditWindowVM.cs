@@ -162,7 +162,8 @@ public class ModEditWindowVM
             {
                 var path = Path.GetDirectoryName(saveFileDialog.FileName);
                 ModInfo.Value.SaveTo(path);
-                ModInfo.Value.SourcePath.Value = path.Translate();
+                if (string.IsNullOrWhiteSpace(ModInfo.Value.SourcePath.Value))
+                    ModInfo.Value.SourcePath.Value = path;
             }
             catch (Exception ex)
             {
