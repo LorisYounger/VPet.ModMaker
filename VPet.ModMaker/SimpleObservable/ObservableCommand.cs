@@ -13,7 +13,7 @@ namespace HKW.HKWViewModels.SimpleObservable;
 /// 可观察命令
 /// </summary>
 [DebuggerDisplay(
-    "CanExecute = {CanExecuteProperty.Value}, EventCount =  {ExecuteEvent.GetInvocationList().Length}, AsyncEventCount = {AsyncExecuteEvent.GetInvocationList().Length}"
+    "CanExecute = {CanExecuteProperty.EnumValue}, EventCount =  {ExecuteEvent.GetInvocationList().Length}, AsyncEventCount = {AsyncExecuteEvent.GetInvocationList().Length}"
 )]
 public class ObservableCommand : ICommand
 {
@@ -95,8 +95,8 @@ public class ObservableCommand : ICommand
     /// {
     ///     canExecute = false; // trigger this
     /// };
-    /// value.Value = "A"; // execute this
-    /// // result: value.Value == "A" , command.CanExecuteProperty == false
+    /// value.EnumValue = "A"; // execute this
+    /// // result: value.EnumValue == "A" , command.CanExecuteProperty == false
     /// ]]>
     /// </code></para>
     /// </summary>

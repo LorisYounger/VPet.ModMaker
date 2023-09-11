@@ -7,7 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using VPet_Simulator.Core;
 
-namespace VPet.ModMaker.Models.ModModel;
+namespace VPet.ModMaker.Models;
 
 public class MoveModel
 {
@@ -24,28 +24,32 @@ public class MoveModel
     public ObservableValue<string> Graph { get; } = new();
     public ObservableValue<int> Distance { get; } = new(5);
     public ObservableValue<int> Interval { get; } = new(125);
+    public ObservableValue<int> LocateLength { get; } = new();
+    public ObservableValue<int> SpeedX { get; } = new();
+    public ObservableValue<int> SpeedY { get; } = new();
     public ObservableValue<int> CheckLeft { get; } = new(100);
     public ObservableValue<int> CheckRight { get; } = new(100);
     public ObservableValue<int> CheckTop { get; } = new(100);
     public ObservableValue<int> CheckBottom { get; } = new(100);
-    public ObservableValue<int> SpeedX { get; } = new();
-    public ObservableValue<int> SpeedY { get; } = new();
-    public ObservableValue<int> LocateLength { get; } = new();
     public ObservableValue<int> TriggerLeft { get; } = new(100);
     public ObservableValue<int> TriggerRight { get; } = new(100);
     public ObservableValue<int> TriggerTop { get; } = new(100);
     public ObservableValue<int> TriggerBottom { get; } = new(100);
 
-    public ObservableValue<GraphHelper.Move.DirectionType> DirectionType { get; } = new();
+    public EnumFlagsVM<GraphHelper.Move.DirectionType> LocateType { get; } =
+        new(GraphHelper.Move.DirectionType.None);
+    public EnumFlagsVM<GraphHelper.Move.DirectionType> TriggerType { get; } =
+        new(GraphHelper.Move.DirectionType.None);
 
-    public ObservableValue<GraphHelper.Move.ModeType> ModeType { get; } = new();
+    public EnumFlagsVM<GraphHelper.Move.ModeType> ModeType { get; } =
+        new(GraphHelper.Move.ModeType.Nomal);
 
     public MoveModel() { }
 
     public MoveModel(MoveModel model)
         : this()
     {
-        //Id.Value = model.Id.Value;
+        //Id.EnumValue = model.Id.EnumValue;
         Graph.Value = model.Graph.Value;
         Distance.Value = model.Distance.Value;
         Interval.Value = model.Interval.Value;
@@ -60,14 +64,15 @@ public class MoveModel
         TriggerRight.Value = model.TriggerRight.Value;
         TriggerTop.Value = model.TriggerTop.Value;
         TriggerBottom.Value = model.TriggerBottom.Value;
-        DirectionType.Value = model.DirectionType.Value;
-        ModeType.Value = model.ModeType.Value;
+        LocateType.EnumValue.Value = model.LocateType.EnumValue.Value;
+        TriggerType.EnumValue.Value = model.TriggerType.EnumValue.Value;
+        ModeType.EnumValue.Value = model.ModeType.EnumValue.Value;
     }
 
     public MoveModel(GraphHelper.Move move)
         : this()
     {
-        //Id.Value = move.Id.Value;
+        //Id.EnumValue = move.Id.EnumValue;
         Graph.Value = move.Graph;
         Distance.Value = move.Distance;
         Interval.Value = move.Interval;
@@ -82,8 +87,9 @@ public class MoveModel
         TriggerRight.Value = move.TriggerRight;
         TriggerTop.Value = move.TriggerTop;
         TriggerBottom.Value = move.TriggerBottom;
-        DirectionType.Value = move.TriggerType;
-        ModeType.Value = move.Mode;
+        LocateType.EnumValue.Value = move.LocateType;
+        TriggerType.EnumValue.Value = move.TriggerType;
+        ModeType.EnumValue.Value = move.Mode;
     }
 
     public GraphHelper.Move ToMove()
@@ -104,8 +110,9 @@ public class MoveModel
             TriggerRight = TriggerRight.Value,
             TriggerTop = TriggerTop.Value,
             TriggerBottom = TriggerBottom.Value,
-            TriggerType = DirectionType.Value,
-            Mode = ModeType.Value,
+            LocateType = LocateType.EnumValue.Value,
+            TriggerType = TriggerType.EnumValue.Value,
+            Mode = ModeType.EnumValue.Value,
         };
     }
 }

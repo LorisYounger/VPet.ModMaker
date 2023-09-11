@@ -97,6 +97,7 @@
             Grid.Row="4"
             Grid.Column="1"
             pu:TextBoxHelper.Watermark="{ll:Str 食物描述}"
+            Style="{StaticResource TextBox_Wrap}"
             Text="{Binding Food.Value.CurrentI18nData.Value.Description.Value, UpdateSourceTrigger=PropertyChanged}" />
         </Grid>
       </ScrollViewer>

@@ -6,17 +6,18 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.Windows;
 using System.Windows.Media.Imaging;
 using VPet.ModMaker.Models;
 
-namespace VPet.ModMaker.ViewModels.ModEdit.PetEdit;
+namespace VPet.ModMaker.ViewModels.ModEdit.MoveEdit;
 
-public class PetEditWindowVM
+public class MoveEditWindowVM
 {
-    public PetModel OldPet { get; set; }
-    public ObservableValue<PetModel> Pet { get; } = new(new());
-
+    #region Value
+    public PetModel CurrentPet { get; set; }
+    public MoveModel OldMove { get; set; }
+    public ObservableValue<MoveModel> Move { get; } = new(new());
+    #endregion
     public ObservableValue<double> BorderLength { get; } = new(250);
     public ObservableValue<double> LengthRatio { get; } = new(250.0 / 500.0);
     public ObservableValue<BitmapImage> Image { get; } = new();
@@ -24,7 +25,7 @@ public class PetEditWindowVM
     public ObservableCommand AddImageCommand { get; } = new();
     public ObservableCommand ChangeImageCommand { get; } = new();
     #endregion
-    public PetEditWindowVM()
+    public MoveEditWindowVM()
     {
         AddImageCommand.ExecuteEvent += AddImage;
         ChangeImageCommand.ExecuteEvent += ChangeImage;

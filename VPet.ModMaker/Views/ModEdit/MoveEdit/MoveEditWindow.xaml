@@ -1,0 +1,293 @@
+﻿<Window
+  x:Class="VPet.ModMaker.Views.ModEdit.MoveEdit.MoveEditWindow"
+  xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+  xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+  xmlns:ll="clr-namespace:LinePutScript.Localization.WPF;assembly=LinePutScript.Localization.WPF"
+  xmlns:local="clr-namespace:VPet.ModMaker.Views.ModEdit.MoveEdit"
+  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+  xmlns:pu="https://opensource.panuon.com/wpf-ui"
+  xmlns:vm="clr-namespace:VPet.ModMaker.ViewModels.ModEdit.MoveEdit"
+  Title="MoveEditWindow"
+  Width="800"
+  Height="450"
+  mc:Ignorable="d">
+  <d:Window.DataContext>
+    <vm:MoveEditWindowVM />
+  </d:Window.DataContext>
+  <Grid>
+    <Grid.ColumnDefinitions>
+      <ColumnDefinition Width="Auto" />
+      <ColumnDefinition />
+    </Grid.ColumnDefinitions>
+    <Grid>
+      <Grid.RowDefinitions>
+        <RowDefinition Height="Auto" />
+        <RowDefinition />
+      </Grid.RowDefinitions>
+      <Grid>
+        <Image
+          Width="250"
+          Height="250"
+          Source="{Binding Image.Value}"
+          Stretch="Uniform">
+          <Image.ContextMenu>
+            <ContextMenu>
+              <MenuItem Command="{Binding ChangeImageCommand}" Header="{ll:Str 修改测试图片}" />
+            </ContextMenu>
+          </Image.ContextMenu>
+        </Image>
+        <Button
+          HorizontalAlignment="Center"
+          VerticalAlignment="Center"
+          Command="{Binding AddImageCommand}"
+          Content="{ll:Str 添加测试图片}">
+          <Button.Style>
+            <Style BasedOn="{StaticResource {x:Type Button}}" TargetType="Button">
+              <Setter Property="Visibility" Value="Hidden" />
+              <Style.Triggers>
+                <DataTrigger Binding="{Binding Image.Value}" Value="{x:Null}">
+                  <Setter Property="Visibility" Value="Visible" />
+                </DataTrigger>
+              </Style.Triggers>
+            </Style>
+          </Button.Style>
+        </Button>
+      </Grid>
+      <Grid Grid.Row="1">
+        <Grid.ColumnDefinitions>
+          <ColumnDefinition Width="Auto" />
+          <ColumnDefinition />
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+          <RowDefinition Height="Auto" />
+          <RowDefinition Height="Auto" />
+          <RowDefinition Height="Auto" />
+          <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+        <Label Grid.Row="3" Content="{ll:Str 指定动画}" />
+        <TextBox
+          Grid.Row="3"
+          Grid.Column="1"
+          Text="{Binding Move.Value.Graph.Value}" />
+        <!--<Label Grid.Row="3" Content="{ll:Str 宠物描述}" />
+      <TextBox
+        Grid.Row="3"
+        Grid.Column="1"
+        Text="{Binding Pet.Value.CurrentI18nData.Value.Description.Value}" />-->
+      </Grid>
+    </Grid>
+    <Grid Grid.Column="1">
+      <Grid.RowDefinitions>
+        <RowDefinition />
+        <RowDefinition Height="Auto" />
+      </Grid.RowDefinitions>
+      <ScrollViewer VerticalScrollBarVisibility="Auto">
+        <Grid>
+          <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+          </Grid.RowDefinitions>
+          <Grid>
+            <Grid.ColumnDefinitions>
+              <ColumnDefinition Width="Auto" />
+              <ColumnDefinition />
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+              <RowDefinition Height="Auto" />
+              <RowDefinition Height="Auto" />
+              <RowDefinition Height="Auto" />
+              <RowDefinition Height="Auto" />
+              <RowDefinition Height="Auto" />
+              <RowDefinition Height="Auto" />
+              <RowDefinition Height="Auto" />
+              <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+            <Label Content="{ll:Str 定位类型}" />
+            <Grid Grid.Column="1">
+              <Grid.ColumnDefinitions>
+                <ColumnDefinition />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto" />
+              </Grid.ColumnDefinitions>
+              <TextBlock Text="{Binding Move.Value.LocateType.EnumValue.Value}" />
+              <ComboBox
+                x:Name="ComboBox_LocateType"
+                Grid.Column="1"
+                ItemsSource="{Binding Move.Value.DirectionTypes}"
+                SelectedIndex="0" />
+              <Button
+                Grid.Column="2"
+                Command="{Binding Move.Value.LocateType.AddCommand}"
+                CommandParameter="{Binding SelectedItem, ElementName=ComboBox_LocateType}"
+                Content="+" />
+              <Button
+                Grid.Column="3"
+                Command="{Binding Move.Value.LocateType.RemoveCommand}"
+                CommandParameter="{Binding SelectedItem, ElementName=ComboBox_LocateType}"
+                Content="-" />
+            </Grid>
+            <Label Grid.Row="1" Content="{ll:Str 触发类型}" />
+            <Grid Grid.Row="1" Grid.Column="1">
+              <Grid.ColumnDefinitions>
+                <ColumnDefinition />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto" />
+              </Grid.ColumnDefinitions>
+              <TextBlock Text="{Binding Move.Value.TriggerType.EnumValue.Value}" />
+              <ComboBox
+                x:Name="ComboBox_TriggerType"
+                Grid.Column="1"
+                ItemsSource="{Binding Move.Value.DirectionTypes}"
+                SelectedIndex="0" />
+              <Button
+                Grid.Column="2"
+                Command="{Binding Move.Value.TriggerType.AddCommand}"
+                CommandParameter="{Binding SelectedItem, ElementName=ComboBox_TriggerType}"
+                Content="+" />
+              <Button
+                Grid.Column="3"
+                Command="{Binding Move.Value.TriggerType.RemoveCommand}"
+                CommandParameter="{Binding SelectedItem, ElementName=ComboBox_TriggerType}"
+                Content="-" />
+            </Grid>
+            <Label Grid.Row="2" Content="{ll:Str 状态类型}" />
+            <Grid Grid.Row="2" Grid.Column="1">
+              <Grid.ColumnDefinitions>
+                <ColumnDefinition />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto" />
+              </Grid.ColumnDefinitions>
+              <TextBlock Text="{Binding Move.Value.ModeType.EnumValue.Value}" />
+              <ComboBox
+                x:Name="ComboBox_ModeType"
+                Grid.Column="1"
+                ItemsSource="{Binding Move.Value.DirectionTypes}"
+                SelectedIndex="0" />
+              <Button
+                Grid.Column="2"
+                Command="{Binding Move.Value.ModeType.AddCommand}"
+                CommandParameter="{Binding SelectedItem, ElementName=ComboBox_ModeType}"
+                Content="+" />
+              <Button
+                Grid.Column="3"
+                Command="{Binding Move.Value.ModeType.RemoveCommand}"
+                CommandParameter="{Binding SelectedItem, ElementName=ComboBox_ModeType}"
+                Content="-" />
+            </Grid>
+            <Label Grid.Row="3" Content="{ll:Str 移动距离}" />
+            <pu:NumberInput
+              Grid.Row="3"
+              Grid.Column="1"
+              Value="{Binding Move.Value.Distance.Value}" />
+            <Label Grid.Row="4" Content="{ll:Str 移动间隔(ms)}" />
+            <pu:NumberInput
+              Grid.Row="4"
+              Grid.Column="1"
+              Value="{Binding Move.Value.Interval.Value}" />
+            <Label Grid.Row="5" Content="{ll:Str 定位长度}" />
+            <pu:NumberInput
+              Grid.Row="5"
+              Grid.Column="1"
+              Value="{Binding Move.Value.LocateLength.Value}" />
+            <Expander
+              Grid.Row="6"
+              Grid.ColumnSpan="2"
+              Header="{ll:Str 触发距离}">
+              <Grid>
+                <Grid.ColumnDefinitions>
+                  <ColumnDefinition Width="Auto" />
+                  <ColumnDefinition />
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                  <RowDefinition Height="Auto" />
+                  <RowDefinition Height="Auto" />
+                  <RowDefinition Height="Auto" />
+                  <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+                <Label Grid.Row="0" Content="{ll:Str 左}" />
+                <pu:NumberInput
+                  Grid.Row="0"
+                  Grid.Column="1"
+                  Value="{Binding Move.Value.TriggerLeft.Value}" />
+                <Label Grid.Row="1" Content="{ll:Str 上}" />
+                <pu:NumberInput
+                  Grid.Row="1"
+                  Grid.Column="1"
+                  Value="{Binding Move.Value.TriggerTop.Value}" />
+                <Label Grid.Row="2" Content="{ll:Str 右}" />
+                <pu:NumberInput
+                  Grid.Row="2"
+                  Grid.Column="1"
+                  Value="{Binding Move.Value.TriggerRight.Value}" />
+                <Label Grid.Row="3" Content="{ll:Str 下}" />
+                <pu:NumberInput
+                  Grid.Row="3"
+                  Grid.Column="1"
+                  Value="{Binding Move.Value.TriggerBottom.Value}" />
+              </Grid>
+            </Expander>
+            <Expander
+              Grid.Row="7"
+              Grid.ColumnSpan="2"
+              Header="{ll:Str 检测距离}">
+              <Grid>
+                <Grid.ColumnDefinitions>
+                  <ColumnDefinition Width="Auto" />
+                  <ColumnDefinition />
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                  <RowDefinition Height="Auto" />
+                  <RowDefinition Height="Auto" />
+                  <RowDefinition Height="Auto" />
+                  <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+                <Label Grid.Row="0" Content="{ll:Str 左}" />
+                <pu:NumberInput
+                  Grid.Row="0"
+                  Grid.Column="1"
+                  Value="{Binding Move.Value.CheckLeft.Value}" />
+                <Label Grid.Row="1" Content="{ll:Str 上}" />
+                <pu:NumberInput
+                  Grid.Row="1"
+                  Grid.Column="1"
+                  Value="{Binding Move.Value.CheckTop.Value}" />
+                <Label Grid.Row="2" Content="{ll:Str 右}" />
+                <pu:NumberInput
+                  Grid.Row="2"
+                  Grid.Column="1"
+                  Value="{Binding Move.Value.CheckRight.Value}" />
+                <Label Grid.Row="3" Content="{ll:Str 下}" />
+                <pu:NumberInput
+                  Grid.Row="3"
+                  Grid.Column="1"
+                  Value="{Binding Move.Value.CheckBottom.Value}" />
+              </Grid>
+            </Expander>
+          </Grid>
+        </Grid>
+      </ScrollViewer>
+      <Grid Grid.Row="1">
+        <Grid.ColumnDefinitions>
+          <ColumnDefinition />
+          <ColumnDefinition />
+        </Grid.ColumnDefinitions>
+        <Button
+          x:Name="Button_Cancel"
+          Margin="10"
+          Click="Button_Cancel_Click"
+          Content="{ll:Str 取消}" />
+        <Button
+          x:Name="Button_Yes"
+          Grid.Column="1"
+          Margin="10"
+          Click="Button_Yes_Click"
+          Content="{ll:Str 确定}" />
+      </Grid>
+    </Grid>
+  </Grid>
+</Window>

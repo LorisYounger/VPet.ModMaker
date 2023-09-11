@@ -34,7 +34,7 @@ public class WorkEditWindowVM
 
     private void Image_ValueChanged(BitmapImage oldValue, BitmapImage newValue)
     {
-        //LengthRatio.Value = BorderLength.Value / value.PixelWidth;
+        //LengthRatio.EnumValue = BorderLength.EnumValue / value.PixelWidth;
     }
 
     public void Close()

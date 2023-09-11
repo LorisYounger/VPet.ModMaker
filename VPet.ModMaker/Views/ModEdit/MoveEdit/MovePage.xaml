@@ -1,0 +1,160 @@
+﻿<Page
+  x:Class="VPet.ModMaker.Views.ModEdit.MoveEdit.MovePage"
+  xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+  xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+  xmlns:ll="clr-namespace:LinePutScript.Localization.WPF;assembly=LinePutScript.Localization.WPF"
+  xmlns:local="clr-namespace:VPet.ModMaker.Views.ModEdit.MoveEdit"
+  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+  xmlns:pu="https://opensource.panuon.com/wpf-ui"
+  xmlns:vm="clr-namespace:VPet.ModMaker.ViewModels.ModEdit.MoveEdit"
+  Title="MovePage"
+  d:DesignHeight="450"
+  d:DesignWidth="800"
+  mc:Ignorable="d">
+
+  <d:Page.DataContext>
+    <vm:MovePageVM />
+  </d:Page.DataContext>
+  <Grid>
+    <Grid.RowDefinitions>
+      <RowDefinition Height="Auto" />
+      <RowDefinition />
+    </Grid.RowDefinitions>
+    <Grid>
+      <Grid.ColumnDefinitions>
+        <ColumnDefinition />
+        <ColumnDefinition Width="Auto" />
+      </Grid.ColumnDefinitions>
+      <!--<TextBox pu:TextBoxHelper.Watermark="{ll:Str 搜索Id}" Text="{Binding Filter.Value, UpdateSourceTrigger=PropertyChanged}">
+        <TextBox.Style>
+          <Style BasedOn="{StaticResource {x:Type TextBox}}" TargetType="TextBox">
+            <Setter Property="IsEnabled" Value="True" />
+            <Style.Triggers>
+              <DataTrigger Binding="{Binding SelectedItem, ElementName=ComboBox_Pet}" Value="{x:Null}">
+                <Setter Property="IsEnabled" Value="False" />
+              </DataTrigger>
+            </Style.Triggers>
+          </Style>
+        </TextBox.Style>
+      </TextBox>-->
+      <ComboBox
+        x:Name="ComboBox_Pet"
+        Grid.Column="1"
+        pu:ComboBoxHelper.Watermark="{ll:Str 选择宠物}"
+        DisplayMemberPath="Id.Value"
+        ItemsSource="{Binding Pets}"
+        SelectedItem="{Binding CurrentPet.Value}">
+        <ComboBox.ItemContainerStyle>
+          <Style BasedOn="{StaticResource {x:Type ComboBoxItem}}" TargetType="ComboBoxItem">
+            <Setter Property="ToolTip" Value="{Binding CurrentI18nData.Value.Name.Value}" />
+          </Style>
+        </ComboBox.ItemContainerStyle>
+      </ComboBox>
+    </Grid>
+    <Grid Grid.Row="1">
+      <Grid.Style>
+        <Style TargetType="Grid">
+          <Setter Property="IsEnabled" Value="True" />
+          <Style.Triggers>
+            <DataTrigger Binding="{Binding SelectedItem, ElementName=ComboBox_Pet}" Value="{x:Null}">
+              <Setter Property="IsEnabled" Value="False" />
+            </DataTrigger>
+          </Style.Triggers>
+        </Style>
+      </Grid.Style>
+      <DataGrid
+        d:ItemsSource="{d:SampleData ItemCount=5}"
+        pu:DataGridHelper.ColumnHeaderHorizontalContentAlignment="Center"
+        AutoGenerateColumns="False"
+        CanUserAddRows="False"
+        GridLinesVisibility="Horizontal"
+        ItemsSource="{Binding ShowMoves.Value}"
+        MouseDoubleClick="DataGrid_MouseDoubleClick"
+        RowDetailsVisibilityMode="Visible"
+        RowHeight="64"
+        VirtualizingStackPanel.IsVirtualizing="True"
+        VirtualizingStackPanel.VirtualizationMode="Recycling">
+        <DataGrid.RowStyle>
+          <Style BasedOn="{StaticResource {x:Type DataGridRow}}" TargetType="DataGridRow">
+            <Setter Property="Height" Value="64" />
+            <Setter Property="Tag" Value="{Binding}" />
+            <Setter Property="ContextMenu" Value="{StaticResource ContextMenu_DataGridRow}" />
+          </Style>
+        </DataGrid.RowStyle>
+        <DataGrid.Columns>
+          <DataGridTextColumn
+            Binding="{Binding Graph.Value}"
+            CanUserSort="True"
+            IsReadOnly="True"
+            SortMemberPath="Graph.Value">
+            <DataGridTextColumn.Header>
+              <TextBlock Text="{ll:Str 绑定动画}" />
+            </DataGridTextColumn.Header>
+          </DataGridTextColumn>
+          <DataGridTextColumn
+            Binding="{Binding LocateType.EnumValue.Value}"
+            CanUserSort="True"
+            IsReadOnly="True"
+            SortMemberPath="LocateType.EnumValue.Value">
+            <DataGridTextColumn.Header>
+              <TextBlock Text="{ll:Str 定位类型}" />
+            </DataGridTextColumn.Header>
+          </DataGridTextColumn>
+          <DataGridTextColumn
+            Binding="{Binding TriggerType.EnumValue.Value}"
+            CanUserSort="True"
+            IsReadOnly="True"
+            SortMemberPath="TriggerType.EnumValue.Value">
+            <DataGridTextColumn.Header>
+              <TextBlock Text="{ll:Str 触发类型}" />
+            </DataGridTextColumn.Header>
+          </DataGridTextColumn>
+          <DataGridTextColumn
+            Binding="{Binding ModeType.EnumValue.Value}"
+            CanUserSort="True"
+            IsReadOnly="True"
+            SortMemberPath="ModeType.EnumValue.Value">
+            <DataGridTextColumn.Header>
+              <TextBlock Text="{ll:Str 状态类型}" />
+            </DataGridTextColumn.Header>
+          </DataGridTextColumn>
+          <DataGridTextColumn
+            Binding="{Binding Distance.Value}"
+            CanUserSort="True"
+            IsReadOnly="True"
+            SortMemberPath="Distance.Value">
+            <DataGridTextColumn.Header>
+              <TextBlock Text="{ll:Str 移动距离}" />
+            </DataGridTextColumn.Header>
+          </DataGridTextColumn>
+          <DataGridTextColumn
+            Binding="{Binding Interval.Value}"
+            CanUserSort="True"
+            IsReadOnly="True"
+            SortMemberPath="Interval.Value">
+            <DataGridTextColumn.Header>
+              <TextBlock Text="{ll:Str 移动间隔}" />
+            </DataGridTextColumn.Header>
+          </DataGridTextColumn>
+          <DataGridTextColumn
+            Binding="{Binding LocateLength.Value}"
+            CanUserSort="True"
+            IsReadOnly="True"
+            SortMemberPath="LocateLength.Value">
+            <DataGridTextColumn.Header>
+              <TextBlock Text="{ll:Str 定位长度}" />
+            </DataGridTextColumn.Header>
+          </DataGridTextColumn>
+        </DataGrid.Columns>
+      </DataGrid>
+      <Button
+        Grid.Row="1"
+        HorizontalAlignment="Right"
+        VerticalAlignment="Bottom"
+        Command="{Binding AddCommand}"
+        Content="➕"
+        Style="{StaticResource AddButton}" />
+    </Grid>
+  </Grid>
+</Page>

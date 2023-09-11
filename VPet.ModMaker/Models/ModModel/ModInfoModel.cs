@@ -176,10 +176,13 @@ public class ModInfoModel : I18nModel<I18nModInfoModel>
                 }
             );
         }
-        var imagePath = Image.Value.GetSourceFile();
-        var targetImagePath = Path.Combine(path, Path.GetFileName(imagePath));
-        if (imagePath != targetImagePath)
-            File.Copy(imagePath, targetImagePath, true);
+        if (Image.Value is not null)
+        {
+            var imagePath = Image.Value.GetSourceFile();
+            var targetImagePath = Path.Combine(path, Path.GetFileName(imagePath));
+            if (imagePath != targetImagePath)
+                File.Copy(imagePath, targetImagePath, true);
+        }
         File.WriteAllText(modInfoFile, lps.ToString());
         SavePets(path);
         SaveFoods(path);
@@ -206,7 +209,16 @@ public class ModInfoModel : I18nModel<I18nModInfoModel>
             var lps = new LPS();
             GetPetInfo(lps, pet);
             GetWorksInfo(lps, pet);
+            GetMoveInfo(lps, pet);
             File.WriteAllText(petFile, lps.ToString());
+        }
+    }
+
+    void GetMoveInfo(LPS lps, PetModel pet)
+    {
+        foreach (var move in pet.Moves)
+        {
+            lps.Add(LPSConvert.SerializeObjectToLine<Line>(move.ToMove(), "move"));
         }
     }
 

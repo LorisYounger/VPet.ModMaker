@@ -59,9 +59,9 @@ public class SelectTextModel : I18nModel<I18nSelectTextModel>
         Mode.Value = model.Mode.Value;
         Tags.Value = model.Tags.Value;
         ToTags.Value = model.ToTags.Value;
-        //Working.Value = model.Working.Value;
-        //WorkingState.Value = model.WorkingState.Value;
-        //DayTime.Value = model.DayTime.Value;
+        //Working.EnumValue = model.Working.EnumValue;
+        //WorkingState.EnumValue = model.WorkingState.EnumValue;
+        //DayTime.EnumValue = model.DayTime.EnumValue;
         Like = model.Like.Copy();
         Health = model.Health.Copy();
         Level = model.Level.Copy();
@@ -84,9 +84,9 @@ public class SelectTextModel : I18nModel<I18nSelectTextModel>
         Mode.Value = text.Mode;
         Tags.Value = text.Tags is null ? string.Empty : string.Join(", ", text.Tags);
         ToTags.Value = text.ToTags is null ? string.Empty : string.Join(", ", text.ToTags);
-        //Working.Value = text.Working;
-        //WorkingState.Value = text.State;
-        //DayTime.Value = text.DaiTime;
+        //Working.EnumValue = text.Working;
+        //WorkingState.EnumValue = text.State;
+        //DayTime.EnumValue = text.DaiTime;
         Like.SetValue(text.LikeMin, text.LikeMax);
         Health.SetValue(text.HealthMin, text.HealthMax);
         Level.SetValue(text.LevelMin, text.LevelMax);
@@ -108,9 +108,9 @@ public class SelectTextModel : I18nModel<I18nSelectTextModel>
             Mode = Mode.Value,
             Tags = new(Tags.Value.Split(rs_splitChar, StringSplitOptions.RemoveEmptyEntries)),
             ToTags = new(ToTags.Value.Split(rs_splitChar, StringSplitOptions.RemoveEmptyEntries)),
-            //Working = Working.Value,
-            //State = WorkingState.Value,
-            //DaiTime = DayTime.Value,
+            //Working = Working.EnumValue,
+            //State = WorkingState.EnumValue,
+            //DaiTime = DayTime.EnumValue,
             LikeMax = Like.Max.Value,
             LikeMin = Like.Min.Value,
             HealthMin = Health.Min.Value,

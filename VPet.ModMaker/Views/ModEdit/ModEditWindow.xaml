@@ -98,14 +98,14 @@
               <RowDefinition Height="Auto" />
               <RowDefinition Height="Auto" />
               <RowDefinition Height="Auto" />
+              <RowDefinition Height="Auto" />
               <RowDefinition />
             </Grid.RowDefinitions>
-            <Label Content="{ll:Str 模组名称}" />
+            <Label Content="{ll:Str 模组Id}" />
             <TextBox
-              x:Name="TextBox_ModName"
               Grid.Column="1"
-              pu:TextBoxHelper.Watermark="{ll:Str 模组名称}"
-              Text="{Binding ModInfo.Value.CurrentI18nData.Value.Name.Value}" />
+              pu:TextBoxHelper.Watermark="{ll:Str 模组Id}"
+              Text="{Binding ModInfo.Value.Id.Value}" />
             <Label Grid.Row="1" Content="{ll:Str 作者}" />
             <TextBox
               x:Name="TextBox_Author"
@@ -127,10 +127,16 @@
               Grid.Column="1"
               pu:TextBoxHelper.Watermark="{ll:Str 模组版本}"
               Text="{Binding ModInfo.Value.ModVersion.Value}" />
-            <Label Grid.Row="4" Content="{ll:Str 模组介绍}" />
+            <Label Grid.Row="4" Content="{ll:Str 模组名称}" />
+            <TextBox
+              Grid.Row="4"
+              Grid.Column="1"
+              pu:TextBoxHelper.Watermark="{ll:Str 模组名称}"
+              Text="{Binding ModInfo.Value.CurrentI18nData.Value.Name.Value}" />
+            <Label Grid.Row="5" Content="{ll:Str 模组介绍}" />
             <TextBox
               x:Name="TextBox_Description"
-              Grid.Row="4"
+              Grid.Row="5"
               Grid.Column="1"
               HorizontalContentAlignment="Left"
               VerticalContentAlignment="Top"
@@ -196,6 +202,15 @@
               </MultiBinding>
             </TabItem.Header>
             <Frame Content="{Binding ModEditWindow.WorkPage}" />
+          </TabItem>
+          <TabItem Tag="{ll:Str 移动}">
+            <TabItem.Header>
+              <MultiBinding Converter="{StaticResource StringFormatConverter}" ConverterParameter="{}{0} ({1})">
+                <Binding Path="Tag" RelativeSource="{RelativeSource Mode=Self}" />
+                <Binding Path="ModEditWindow.MovePage.ViewModel.CurrentPet.Value.Moves.Count" />
+              </MultiBinding>
+            </TabItem.Header>
+            <Frame Content="{Binding ModEditWindow.MovePage}" />
           </TabItem>
           <!--<TabItem Header="物品 (0)" Tag="{ll:Str 物品}">
             <Grid>

@@ -22,6 +22,8 @@ public class PetModel : I18nModel<I18nPetInfoModel>
 
     public ObservableCollection<WorkModel> Works { get; } = new();
 
+    public ObservableCollection<MoveModel> Moves { get; } = new();
+
     public PetModel()
     {
         PetNameId.Value = $"{Id.Value}_{nameof(PetNameId)}";
@@ -106,6 +108,8 @@ public class PetModel : I18nModel<I18nPetInfoModel>
 
         foreach (var work in loader.Config.Works)
             Works.Add(new(work));
+        foreach (var move in loader.Config.Moves)
+            Moves.Add(new(move));
     }
 
     public void Close() { }

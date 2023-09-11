@@ -14,7 +14,7 @@ namespace HKW.HKWViewModels.SimpleObservable;
 /// </summary>
 /// <typeparam name="T">参数类型</typeparam>
 [DebuggerDisplay(
-    "CanExecute = {CanExecuteProperty.Value}, EventCount =  {ExecuteEvent.GetInvocationList().Length}, AsyncEventCount = {AsyncExecuteEvent.GetInvocationList().Length}"
+    "CanExecute = {CanExecuteProperty.EnumValue}, EventCount =  {ExecuteEvent.GetInvocationList().Length}, AsyncEventCount = {AsyncExecuteEvent.GetInvocationList().Length}"
 )]
 public class ObservableCommand<T> : ICommand
     where T : notnull

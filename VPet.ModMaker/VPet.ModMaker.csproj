@@ -97,6 +97,7 @@
     <Compile Include="Converters\RatioMarginConverter.cs" />
     <Compile Include="Converters\MaxConverter.cs" />
     <Compile Include="Converters\MarginConverter.cs" />
+    <Compile Include="Models\EnumFlagsVM.cs" />
     <Compile Include="Models\ModModel\ClickTextModel.cs" />
     <Compile Include="Models\Expansions.cs" />
     <Compile Include="Models\ModModel\FoodModel.cs" />
@@ -120,6 +121,8 @@
     <Compile Include="ViewModels\ModEdit\LowTextEdit\LowTextEditWindowVM.cs" />
     <Compile Include="ViewModels\ModEdit\LowTextEdit\LowTextPageVM.cs" />
     <Compile Include="ViewModels\ModEdit\ModEditWindowVM.cs" />
+    <Compile Include="ViewModels\ModEdit\MoveEdit\MoveEditWindowVM.cs" />
+    <Compile Include="ViewModels\ModEdit\MoveEdit\MovePageVM.cs" />
     <Compile Include="ViewModels\ModEdit\PetEdit\PetEditWindowVM.cs" />
     <Compile Include="ViewModels\ModEdit\PetEdit\PetPageVM.cs" />
     <Compile Include="ViewModels\ModEdit\SelectTextEdit\SelectTextEditWindowVM.cs" />
@@ -169,6 +172,12 @@
       <DependentUpon>ModEditWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="ViewModels\ModMakerWindowVM.cs" />
+    <Compile Include="Views\ModEdit\MoveEdit\MoveEditWindow.xaml.cs">
+      <DependentUpon>MoveEditWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\ModEdit\MoveEdit\MovePage.xaml.cs">
+      <DependentUpon>MovePage.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\ModEdit\PetEdit\PetEditWindow.xaml.cs">
       <DependentUpon>PetEditWindow.xaml</DependentUpon>
     </Compile>
@@ -247,6 +256,14 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\ModEdit\ModEditWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\ModEdit\MoveEdit\MoveEditWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\ModEdit\MoveEdit\MovePage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

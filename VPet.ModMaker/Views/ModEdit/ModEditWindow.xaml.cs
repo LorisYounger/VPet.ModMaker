@@ -20,6 +20,7 @@ using VPet.ModMaker.ViewModels.ModEdit;
 using VPet.ModMaker.Views.ModEdit.ClickTextEdit;
 using VPet.ModMaker.Views.ModEdit.FoodEdit;
 using VPet.ModMaker.Views.ModEdit.LowTextEdit;
+using VPet.ModMaker.Views.ModEdit.MoveEdit;
 using VPet.ModMaker.Views.ModEdit.PetEdit;
 using VPet.ModMaker.Views.ModEdit.SelectTextEdit;
 using VPet.ModMaker.Views.ModEdit.WorkEdit;
@@ -39,6 +40,8 @@ public partial class ModEditWindow : Window
     public SelectTextPage SelectTextPage { get; } = new();
     public PetPage PetPage { get; } = new();
     public WorkPage WorkPage { get; } = new();
+
+    public MovePage MovePage { get; } = new();
 
     public ModEditWindow()
     {
