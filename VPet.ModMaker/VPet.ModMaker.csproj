@@ -98,11 +98,13 @@
     <Compile Include="Converters\MaxConverter.cs" />
     <Compile Include="Converters\MarginConverter.cs" />
     <Compile Include="Models\EnumFlagsVM.cs" />
+    <Compile Include="Models\ModModel\AnimeModel.cs" />
     <Compile Include="Models\ModModel\ClickTextModel.cs" />
     <Compile Include="Models\Expansions.cs" />
     <Compile Include="Models\ModModel\FoodModel.cs" />
     <Compile Include="Models\I18nHelper.cs" />
     <Compile Include="Models\I18nModel.cs" />
+    <Compile Include="Models\ModModel\ImageModel.cs" />
     <Compile Include="Models\ModModel\LowTextModel.cs" />
     <Compile Include="Models\ModLoader.cs" />
     <Compile Include="Models\ModMakerHistory.cs" />
@@ -114,6 +116,7 @@
     <Compile Include="Models\ModModel\WorkModel.cs" />
     <Compile Include="SimpleObservable\ObservableCommandT.cs" />
     <Compile Include="Styles.cs" />
+    <Compile Include="ViewModels\ModEdit\AnimeEdit\AnimeEditWindowVM.cs" />
     <Compile Include="ViewModels\ModEdit\ClickTextEdit\ClickTextEditWindowVM.cs" />
     <Compile Include="ViewModels\ModEdit\ClickTextEdit\ClickTextPageVM.cs" />
     <Compile Include="ViewModels\ModEdit\FoodEdit\FoodPageVM.cs" />
@@ -129,6 +132,9 @@
     <Compile Include="ViewModels\ModEdit\SelectTextEdit\SelectTextPageVM.cs" />
     <Compile Include="ViewModels\ModEdit\WorkEdit\WorkEditWindowVM.cs" />
     <Compile Include="ViewModels\ModEdit\WorkEdit\WorkPageVM.cs" />
+    <Compile Include="Views\ModEdit\AnimeEdit\AnimeEditWindow.xaml.cs">
+      <DependentUpon>AnimeEditWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\ModEdit\ClickTextEdit\ClickTextPage.xaml.cs">
       <DependentUpon>ClickTextPage.xaml</DependentUpon>
     </Compile>
@@ -224,6 +230,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Templates.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\ModEdit\AnimeEdit\AnimeEditWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

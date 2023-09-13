@@ -1,0 +1,128 @@
+﻿<Window
+  x:Class="VPet.ModMaker.Views.ModEdit.AnimeEdit.AnimeEditWindow"
+  xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+  xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+  xmlns:ll="clr-namespace:LinePutScript.Localization.WPF;assembly=LinePutScript.Localization.WPF"
+  xmlns:local="clr-namespace:VPet.ModMaker.Views.ModEdit.AnimeEdit"
+  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+  xmlns:pu="https://opensource.panuon.com/wpf-ui"
+  xmlns:vm="clr-namespace:VPet.ModMaker.ViewModels.ModEdit.AnimeEdit"
+  Title="AnimeEditWindow"
+  Width="800"
+  Height="450"
+  mc:Ignorable="d">
+  <d:Window.DataContext>
+    <vm:AnimeEditWindowVM />
+  </d:Window.DataContext>
+  <Grid>
+    <Grid.ColumnDefinitions>
+      <ColumnDefinition Width="Auto" />
+      <ColumnDefinition />
+    </Grid.ColumnDefinitions>
+    <Grid>
+      <Grid.RowDefinitions>
+        <RowDefinition Height="Auto" />
+        <RowDefinition Height="Auto" />
+        <RowDefinition />
+      </Grid.RowDefinitions>
+      <Image
+        Width="250"
+        Height="250"
+        Source="{Binding Anime.Value.CurrentImageModel.Value.Image.Value}" />
+      <Grid Grid.Row="1">
+        <Grid.ColumnDefinitions>
+          <ColumnDefinition />
+          <ColumnDefinition />
+          <ColumnDefinition />
+        </Grid.ColumnDefinitions>
+        <Button Command="{Binding PauseCommand}" Content="{ll:Str 停止}" />
+        <Button
+          Grid.Column="1"
+          Command="{Binding PlayCommand}"
+          Content="{ll:Str 播放}" />
+        <ToggleButton Grid.Column="2" Content="{ll:Str 循环}" />
+      </Grid>
+      <Grid Grid.Row="2">
+        <Grid.ColumnDefinitions>
+          <ColumnDefinition Width="Auto" />
+          <ColumnDefinition />
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+          <RowDefinition Height="Auto" />
+          <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+        <Label Content="{ll:Str 动画Id}" />
+        <TextBox Grid.Column="1" />
+        <Label Grid.Row="1" Content="{ll:Str 动画类型}" />
+        <ComboBox Grid.Row="1" Grid.Column="1" />
+      </Grid>
+    </Grid>
+    <Grid Grid.Column="1">
+      <Grid.RowDefinitions>
+        <RowDefinition />
+        <RowDefinition Height="Auto" />
+      </Grid.RowDefinitions>
+      <ListBox
+        x:Name="ListBox_Images"
+        d:ItemsSource="{d:SampleData ItemCount=5}"
+        d:SelectedIndex="0"
+        ItemsSource="{Binding Anime.Value.ImageModels}"
+        SelectedItem="{Binding Anime.Value.CurrentImageModel.Value}">
+        <ListBox.ItemsPanel>
+          <ItemsPanelTemplate>
+            <WrapPanel />
+          </ItemsPanelTemplate>
+        </ListBox.ItemsPanel>
+        <ListBox.ItemTemplate>
+          <DataTemplate>
+            <Grid Width="150" Height="200">
+              <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition />
+              </Grid.RowDefinitions>
+              <Image
+                Width="150"
+                Height="150"
+                Source="{Binding Image.Value}">
+                <Image.ToolTip>
+                  <Image
+                    Width="250"
+                    Height="250"
+                    Source="{Binding Image.Value}" />
+                </Image.ToolTip>
+              </Image>
+              <Grid Grid.Row="1">
+                <Grid.ColumnDefinitions>
+                  <ColumnDefinition Width="Auto" />
+                  <ColumnDefinition />
+                </Grid.ColumnDefinitions>
+                <Label Content="持续时间" />
+                <pu:NumberInput Grid.Column="1" Value="{Binding Duration.Value}" />
+              </Grid>
+              <TextBox Grid.Row="2" Text="ImageName" />
+            </Grid>
+          </DataTemplate>
+        </ListBox.ItemTemplate>
+      </ListBox>
+      <Grid Grid.Row="1">
+        <Grid.ColumnDefinitions>
+          <ColumnDefinition />
+          <ColumnDefinition />
+        </Grid.ColumnDefinitions>
+        <Button
+          x:Name="Button_Cancel"
+          Margin="10"
+          Click="Button_Cancel_Click"
+          Content="{ll:Str 取消}" />
+        <Button
+          x:Name="Button_Yes"
+          Grid.Column="1"
+          Margin="10"
+          Click="Button_Yes_Click"
+          Content="{ll:Str 确定}" />
+      </Grid>
+    </Grid>
+  </Grid>
+</Window>

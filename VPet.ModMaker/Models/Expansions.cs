@@ -40,4 +40,43 @@ public static class Extensions
         dictionary.Add(key, value);
         return true;
     }
+
+    /// <summary>
+    /// 流内容对比
+    /// </summary>
+    /// <param name="source">原始流</param>
+    /// <param name="target">目标流</param>
+    /// <param name="bufferLength">缓冲区大小 (越大速度越快(流内容越大效果越明显), 但会提高内存占用 (bufferSize = bufferLength * sizeof(long) * 2))</param>
+    /// <returns>内容相同为 <see langword="true"/> 否则为 <see langword="false"/></returns>
+    public static bool ContentsEqual(this Stream source, Stream target, int bufferLength = 8)
+    {
+        int bufferSize = bufferLength * sizeof(long);
+        var sourceBuffer = new byte[bufferSize];
+        var targetBuffer = new byte[bufferSize];
+        while (true)
+        {
+            int sourceCount = ReadFullBuffer(source, sourceBuffer);
+            int targetCount = ReadFullBuffer(target, targetBuffer);
+            if (sourceCount != targetCount)
+                return false;
+            if (sourceCount == 0)
+                return true;
+
+            for (int i = 0; i < sourceCount; i += sizeof(long))
+                if (BitConverter.ToInt64(sourceBuffer, i) != BitConverter.ToInt64(targetBuffer, i))
+                    return false;
+        }
+        static int ReadFullBuffer(Stream stream, byte[] buffer)
+        {
+            int bytesRead = 0;
+            while (bytesRead < buffer.Length)
+            {
+                int read = stream.Read(buffer, bytesRead, buffer.Length - bytesRead);
+                if (read == 0)
+                    return bytesRead;
+                bytesRead += read;
+            }
+            return bytesRead;
+        }
+    }
 }

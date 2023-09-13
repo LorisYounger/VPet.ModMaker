@@ -18,6 +18,7 @@ using System.Windows.Shapes;
 using VPet.ModMaker.Models;
 using VPet.ModMaker.ViewModels;
 using VPet.ModMaker.Views.ModEdit;
+using VPet.ModMaker.Views.ModEdit.AnimeEdit;
 using VPet.ModMaker.Views.ModEdit.PetEdit;
 
 namespace VPet.ModMaker.Views;
@@ -35,6 +36,7 @@ public partial class ModMakerWindow : Window
     {
         InitializeComponent();
         DataContext = new ModMakerWindowVM(this);
+        new AnimeEditWindow().Show();
     }
 
     private void ListBoxItem_MouseDoubleClick(object sender, MouseButtonEventArgs e)
