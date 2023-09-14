@@ -9,6 +9,7 @@ using System.Collections.Specialized;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Media.Imaging;
 using VPet_Simulator.Windows.Interface;
@@ -50,13 +51,15 @@ public class ModInfoModel : I18nModel<I18nModInfoModel>
     public ModInfoModel(ModLoader loader)
         : this()
     {
-        SourcePath.Value = loader.Path.FullName;
+        SourcePath.Value = loader.ModPath.FullName;
         Id.Value = loader.Name;
         DescriptionId.Value = loader.Intro;
         Author.Value = loader.Author;
         GameVersion.Value = loader.GameVer.ToString();
         ModVersion.Value = loader.Ver.ToString();
-        var imagePath = Path.Combine(loader.Path.FullName, "icon.png");
+        var imagePath = Path.Combine(loader.ModPath.FullName, "icon.png");
+        Thread.Sleep(1000);
+        GC.Collect();
         if (File.Exists(imagePath))
             Image.Value = Utils.LoadImageToStream(imagePath);
         foreach (var food in loader.Foods)
@@ -243,7 +246,7 @@ public class ModInfoModel : I18nModel<I18nModInfoModel>
             new Line("pet", pet.Id.Value)
             {
                 new Sub("intor", pet.DescriptionId.Value),
-                new Sub("path", pet.Id.Value),
+                new Sub("ModPath", pet.Id.Value),
                 new Sub("petname", pet.PetNameId.Value)
             }
         );

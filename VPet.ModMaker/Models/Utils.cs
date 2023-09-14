@@ -15,8 +15,14 @@ public static class Utils
     {
         BitmapImage bitmapImage = new();
         bitmapImage.BeginInit();
-        bitmapImage.StreamSource = new StreamReader(imagePath).BaseStream;
-        bitmapImage.EndInit();
+        try
+        {
+            bitmapImage.StreamSource = new StreamReader(imagePath).BaseStream;
+        }
+        finally
+        {
+            bitmapImage.EndInit();
+        }
         return bitmapImage;
     }
 
@@ -29,11 +35,17 @@ public static class Utils
     {
         BitmapImage bitmapImage = new();
         bitmapImage.BeginInit();
-        var ms = new MemoryStream();
-        using var sr = new StreamReader(imagePath);
-        sr.BaseStream.CopyTo(ms);
-        bitmapImage.StreamSource = ms;
-        bitmapImage.EndInit();
+        try
+        {
+            var ms = new MemoryStream();
+            using var sr = new StreamReader(imagePath);
+            sr.BaseStream.CopyTo(ms);
+            bitmapImage.StreamSource = ms;
+        }
+        finally
+        {
+            bitmapImage.EndInit();
+        }
         return bitmapImage;
     }
 

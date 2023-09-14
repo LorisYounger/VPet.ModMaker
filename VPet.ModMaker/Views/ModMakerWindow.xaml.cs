@@ -36,7 +36,7 @@ public partial class ModMakerWindow : Window
     {
         InitializeComponent();
         DataContext = new ModMakerWindowVM(this);
-        new AnimeEditWindow().Show();
+        //new AnimeEditWindow().Show();
     }
 
     private void ListBoxItem_MouseDoubleClick(object sender, MouseButtonEventArgs e)

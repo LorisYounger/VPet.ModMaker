@@ -10,4 +10,5 @@ public static class ModMakerInfo
 {
     public const string BaseDirectory = nameof(ModMaker);
     public const string HistoryFile = $"{BaseDirectory}\\history.lps";
+    public const string InfoFile = "info.lps";
 }

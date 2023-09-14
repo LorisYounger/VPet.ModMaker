@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Media.Imaging;
+using VPet.ModMaker.Models.ModModel;
 using VPet_Simulator.Core;
 
 namespace VPet.ModMaker.Models;
@@ -23,6 +24,10 @@ public class PetModel : I18nModel<I18nPetInfoModel>
     public ObservableCollection<WorkModel> Works { get; } = new();
 
     public ObservableCollection<MoveModel> Moves { get; } = new();
+
+    public ObservableValue<AnimeModel> CurrentAnime { get; } = new();
+    public Dictionary<GraphInfo.GraphType, ObservableCollection<AnimeModel>> Animes { get; } =
+        new();
 
     public PetModel()
     {
@@ -110,6 +115,20 @@ public class PetModel : I18nModel<I18nPetInfoModel>
             Works.Add(new(work));
         foreach (var move in loader.Config.Moves)
             Moves.Add(new(move));
+    }
+
+    public void LoadAnime(GraphCore core)
+    {
+        foreach (var info in core.GraphsName)
+        {
+            var list = new ObservableCollection<AnimeModel>();
+            foreach (var name in info.Value)
+            {
+                foreach (var graph in core.GraphsList[name])
+                    list.Add(new AnimeModel(name, graph.Key, graph.Value));
+            }
+            Animes.Add(info.Key, list);
+        }
     }
 
     public void Close() { }

@@ -14,6 +14,8 @@ public class AnimeEditWindowVM
 {
     public AnimeModel OldAnime { get; set; }
     public ObservableValue<AnimeModel> Anime { get; } = new(new());
+
+    public ObservableValue<ImageModel> CurrentImageModel { get; } = new();
     #region Command
     public ObservableCommand PlayCommand { get; } = new();
     public ObservableCommand PauseCommand { get; } = new();
@@ -24,14 +26,14 @@ public class AnimeEditWindowVM
 
     public AnimeEditWindowVM()
     {
-        foreach (
-            var file in Directory.EnumerateFiles(
-                @"C:\Users\HKW\Desktop\TestPicture\0000_core\pet\vup\Default\Happy\1"
-            )
-        )
-        {
-            Anime.Value.ImageModels.Add(new(Utils.LoadImageToMemoryStream(file)));
-        }
+        //foreach (
+        //    var file in Directory.EnumerateFiles(
+        //        @"C:\Users\HKW\Desktop\TestPicture\0000_core\pet\vup\Default\Happy\1"
+        //    )
+        //)
+        //{
+        //    Anime.Value.MultiImageModels.Add(new(Utils.LoadImageToMemoryStream(file)));
+        //}
         _playerTask = new(Play);
         PlayCommand.ExecuteEvent += PlayCommand_ExecuteEvent;
         PauseCommand.ExecuteEvent += PauseCommand_ExecuteEvent;
@@ -49,13 +51,13 @@ public class AnimeEditWindowVM
 
     private void Play()
     {
-        while (_pause is false)
-        {
-            foreach (var model in Anime.Value.ImageModels)
-            {
-                Anime.Value.CurrentImageModel.Value = model;
-                Task.Delay(model.Duration.Value).Wait();
-            }
-        }
+        //while (_pause is false)
+        //{
+        //    foreach (var model in Anime.Value.ImageModels)
+        //    {
+        //        Anime.Value.CurrentImageModel.Value = model;
+        //        Task.Delay(model.Duration.Value).Wait();
+        //    }
+        //}
     }
 }

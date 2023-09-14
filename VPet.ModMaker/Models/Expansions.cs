@@ -21,7 +21,7 @@ public static class Extensions
         return ((FileStream)image.StreamSource).Name;
     }
 
-    public static void CloseString(this ImageSource source)
+    public static void CloseStream(this ImageSource source)
     {
         if (source is BitmapImage image)
         {

@@ -27,7 +27,7 @@ public class ModLoader
     /// </summary>
     public ulong ItemID { get; }
     public string Intro { get; }
-    public DirectoryInfo Path { get; }
+    public DirectoryInfo ModPath { get; }
     public int GameVer { get; }
     public int Ver { get; }
     public HashSet<string> Tag { get; } = new();
@@ -38,19 +38,18 @@ public class ModLoader
     public List<LowText> LowTexts { get; } = new();
     public List<ClickText> ClickTexts { get; } = new();
     public List<SelectText> SelectTexts { get; } = new();
+    public Dictionary<string, GraphCore> MultiGraphs { get; } = new();
 
     public Dictionary<string, I18nModInfoModel> I18nDatas { get; } = new();
 
     public Dictionary<string, Dictionary<string, string>> OtherI18nDatas { get; } = new();
 
-    public ModLoader(DirectoryInfo directory)
+    public ModLoader(DirectoryInfo path)
     {
         try
         {
-            Path = directory;
-            LpsDocument modlps = new LpsDocument(
-                File.ReadAllText(directory.FullName + @"\info.lps")
-            );
+            ModPath = path;
+            LpsDocument modlps = new LpsDocument(File.ReadAllText(path.FullName + @"\info.lps"));
             Name = modlps.FindLine("vupmod").Info;
             Intro = modlps.FindLine("intro").Info;
             GameVer = modlps.FindSub("gamever").InfoToInt;
@@ -80,7 +79,7 @@ public class ModLoader
                 I18nDatas.Add(line.Info, i18nData);
             }
             DirectoryInfo? langDirectory = null;
-            foreach (DirectoryInfo di in Path.EnumerateDirectories())
+            foreach (DirectoryInfo di in path.EnumerateDirectories())
             {
                 switch (di.Name.ToLower())
                 {
@@ -93,7 +92,16 @@ public class ModLoader
                             if (lps.First().Name.ToLower() == "pet")
                             {
                                 var name = lps.First().Info;
-                                Pets.Add(new PetLoader(lps, di));
+                                var pet = new PetLoader(lps, di);
+                                Pets.Add(pet);
+                                // 此方法会导致 LoadImageToStream 无法使用
+                                //var graphCore = new GraphCore(0);
+                                //foreach (var p in pet.path)
+                                //    PetLoader.LoadGraph(graphCore, di, p);
+                                //MultiGraphs.Add(pet.Name, graphCore);
+
+
+
                                 //var p = mw.Pets.FirstOrDefault(x => x.Id == name);
                                 //if (p == null)
                                 //    mw.Pets.Add(new PetLoader(lps, di));
@@ -113,7 +121,7 @@ public class ModLoader
                             foreach (ILine li in tmp)
                             {
                                 var food = LPSConvert.DeserializeObject<Food>(li);
-                                var imagePath = $"{Path.FullName}\\image\\food\\{food.Name}.png";
+                                var imagePath = $"{path.FullName}\\image\\food\\{food.Name}.png";
                                 if (File.Exists(imagePath))
                                     food.Image = imagePath;
                                 Foods.Add(food);
@@ -208,7 +216,7 @@ public class ModLoader
 
     public void WriteFile()
     {
-        var lps = new LpsDocument(File.ReadAllText(Path.FullName + @"\info.lps"));
+        var lps = new LpsDocument(File.ReadAllText(ModPath.FullName + @"\info.lps"));
         lps.FindLine("vupmod").Info = Name;
         lps.FindLine("intro").Info = Intro;
         lps.FindSub("gamever").InfoToInt = GameVer;
@@ -216,6 +224,6 @@ public class ModLoader
         lps.FindSub("author").Info = Author;
         lps.FindorAddLine("authorid").InfoToInt64 = AuthorID;
         lps.FindorAddLine("itemid").info = ItemID.ToString();
-        File.WriteAllText(Path.FullName + @"\info.lps", lps.ToString());
+        File.WriteAllText(ModPath.FullName + @"\info.lps", lps.ToString());
     }
 }
