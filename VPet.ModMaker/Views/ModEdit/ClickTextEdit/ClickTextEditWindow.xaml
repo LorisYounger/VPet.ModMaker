@@ -11,14 +11,16 @@
   Title="ClickTextWindow"
   Width="800"
   Height="450"
+  WindowStartupLocation="CenterScreen"
   mc:Ignorable="d">
   <d:Window.DataContext>
     <vm:ClickTextEditWindowVM />
   </d:Window.DataContext>
   <Grid>
     <Grid.ColumnDefinitions>
-      <ColumnDefinition />
-      <ColumnDefinition Width="200" />
+      <ColumnDefinition MinWidth="300" />
+      <ColumnDefinition Width="Auto" MinWidth="300" />
+      <ColumnDefinition Width="Auto" />
     </Grid.ColumnDefinitions>
     <Grid>
       <Grid.RowDefinitions>
@@ -71,11 +73,30 @@
           pu:TextBoxHelper.Watermark="{ll:Str 非必要}"
           Text="{Binding ClickText.Value.Working.Value, UpdateSourceTrigger=PropertyChanged}" />
         <Label Grid.Row="3" Content="{ll:Str 模式}" />
-        <ComboBox
-          Grid.Row="3"
-          Grid.Column="1"
-          ItemsSource="{Binding ClickText.Value.ModeTypes}"
-          SelectedItem="{Binding ClickText.Value.Mode.Value}" />
+        <Grid Grid.Row="3" Grid.Column="1">
+          <Grid.ColumnDefinitions>
+            <ColumnDefinition />
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="Auto" />
+          </Grid.ColumnDefinitions>
+          <TextBlock Text="{Binding ClickText.Value.Mode.EnumValue.Value}" />
+          <ComboBox
+            x:Name="ComboBox_Mode"
+            Grid.Column="1"
+            ItemsSource="{Binding ClickText.Value.ModeTypes}"
+            SelectedIndex="0" />
+          <Button
+            Grid.Column="2"
+            Command="{Binding ClickText.Value.Mode.AddCommand}"
+            CommandParameter="{Binding SelectedItem, ElementName=ComboBox_Mode}"
+            Content="+" />
+          <Button
+            Grid.Column="3"
+            Command="{Binding ClickText.Value.Mode.RemoveCommand}"
+            CommandParameter="{Binding SelectedItem, ElementName=ComboBox_Mode}"
+            Content="-" />
+        </Grid>
         <Label Grid.Row="4" Content="{ll:Str 工作状态}" />
         <ComboBox
           Grid.Row="4"
@@ -83,11 +104,30 @@
           ItemsSource="{Binding ClickText.Value.WorkingStates}"
           SelectedItem="{Binding ClickText.Value.WorkingState.Value}" />
         <Label Grid.Row="5" Content="{ll:Str 日期区间}" />
-        <ComboBox
-          Grid.Row="5"
-          Grid.Column="1"
-          ItemsSource="{Binding ClickText.Value.DayTimes}"
-          SelectedItem="{Binding ClickText.Value.DayTime.Value}" />
+        <Grid Grid.Row="5" Grid.Column="1">
+          <Grid.ColumnDefinitions>
+            <ColumnDefinition />
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="Auto" />
+          </Grid.ColumnDefinitions>
+          <TextBlock Text="{Binding ClickText.Value.DayTime.EnumValue.Value}" />
+          <ComboBox
+            x:Name="ComboBox_DayTime"
+            Grid.Column="1"
+            ItemsSource="{Binding ClickText.Value.DayTimes}"
+            SelectedIndex="0" />
+          <Button
+            Grid.Column="2"
+            Command="{Binding ClickText.Value.DayTime.AddCommand}"
+            CommandParameter="{Binding SelectedItem, ElementName=ComboBox_DayTime}"
+            Content="+" />
+          <Button
+            Grid.Column="3"
+            Command="{Binding ClickText.Value.DayTime.RemoveCommand}"
+            CommandParameter="{Binding SelectedItem, ElementName=ComboBox_DayTime}"
+            Content="-" />
+        </Grid>
         <ListBox Grid.Row="6" Grid.ColumnSpan="2">
           <ListBoxItem
             DataContext="{Binding ClickText.Value.Like}"
@@ -141,5 +181,6 @@
           Content="{ll:Str 确定}" />
       </Grid>
     </Grid>
+    <ListBox Grid.Column="2" Template="{StaticResource ListBox_ShowLangs}" />
   </Grid>
 </Window>

@@ -24,6 +24,14 @@ public partial class AnimeEditWindow : Window
     {
         InitializeComponent();
         DataContext = new AnimeEditWindowVM();
+        Closed += (s, e) =>
+        {
+            try
+            {
+                DataContext = null;
+            }
+            catch { }
+        };
     }
 
     public AnimeEditWindowVM ViewModel => (AnimeEditWindowVM)DataContext;

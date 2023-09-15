@@ -11,6 +11,7 @@
   Title="PetEditWindow"
   Width="800"
   Height="450"
+  WindowStartupLocation="CenterScreen"
   mc:Ignorable="d">
   <d:Window.DataContext>
     <vm:PetEditWindowVM />
@@ -37,8 +38,9 @@
   </Window.Resources>
   <Grid>
     <Grid.ColumnDefinitions>
-      <ColumnDefinition Width="Auto" />
+      <ColumnDefinition Width="250" />
       <ColumnDefinition />
+      <ColumnDefinition Width="Auto" />
     </Grid.ColumnDefinitions>
     <Grid>
       <Grid.RowDefinitions>
@@ -63,18 +65,16 @@
               <Style BasedOn="{StaticResource Label_ThouchRect}" TargetType="Label">
                 <Setter Property="Width">
                   <Setter.Value>
-                    <MultiBinding Converter="{StaticResource CalculatorConverter}">
+                    <MultiBinding Converter="{StaticResource CalculatorConverter}" ConverterParameter="*">
                       <Binding Path="Pet.Value.TouchHeadRect.Value.Width.Value" />
-                      <Binding Source="*" />
                       <Binding Path="LengthRatio.Value" />
                     </MultiBinding>
                   </Setter.Value>
                 </Setter>
                 <Setter Property="Height">
                   <Setter.Value>
-                    <MultiBinding Converter="{StaticResource CalculatorConverter}">
+                    <MultiBinding Converter="{StaticResource CalculatorConverter}" ConverterParameter="*">
                       <Binding Path="Pet.Value.TouchHeadRect.Value.Height.Value" />
-                      <Binding Source="*" />
                       <Binding Path="LengthRatio.Value" />
                     </MultiBinding>
                   </Setter.Value>
@@ -96,18 +96,16 @@
               <Style BasedOn="{StaticResource Label_ThouchRect}" TargetType="Label">
                 <Setter Property="Width">
                   <Setter.Value>
-                    <MultiBinding Converter="{StaticResource CalculatorConverter}">
+                    <MultiBinding Converter="{StaticResource CalculatorConverter}" ConverterParameter="*">
                       <Binding Path="Pet.Value.TouchRaisedRect.Value.Happy.Value.Width.Value" />
-                      <Binding Source="*" />
                       <Binding Path="LengthRatio.Value" />
                     </MultiBinding>
                   </Setter.Value>
                 </Setter>
                 <Setter Property="Height">
                   <Setter.Value>
-                    <MultiBinding Converter="{StaticResource CalculatorConverter}">
+                    <MultiBinding Converter="{StaticResource CalculatorConverter}" ConverterParameter="*">
                       <Binding Path="Pet.Value.TouchRaisedRect.Value.Happy.Value.Height.Value" />
-                      <Binding Source="*" />
                       <Binding Path="LengthRatio.Value" />
                     </MultiBinding>
                   </Setter.Value>
@@ -129,18 +127,16 @@
               <Style BasedOn="{StaticResource Label_ThouchRect}" TargetType="Label">
                 <Setter Property="Width">
                   <Setter.Value>
-                    <MultiBinding Converter="{StaticResource CalculatorConverter}">
+                    <MultiBinding Converter="{StaticResource CalculatorConverter}" ConverterParameter="*">
                       <Binding Path="Pet.Value.TouchRaisedRect.Value.Nomal.Value.Width.Value" />
-                      <Binding Source="*" />
                       <Binding Path="LengthRatio.Value" />
                     </MultiBinding>
                   </Setter.Value>
                 </Setter>
                 <Setter Property="Height">
                   <Setter.Value>
-                    <MultiBinding Converter="{StaticResource CalculatorConverter}">
+                    <MultiBinding Converter="{StaticResource CalculatorConverter}" ConverterParameter="*">
                       <Binding Path="Pet.Value.TouchRaisedRect.Value.Nomal.Value.Height.Value" />
-                      <Binding Source="*" />
                       <Binding Path="LengthRatio.Value" />
                     </MultiBinding>
                   </Setter.Value>
@@ -162,18 +158,16 @@
               <Style BasedOn="{StaticResource Label_ThouchRect}" TargetType="Label">
                 <Setter Property="Width">
                   <Setter.Value>
-                    <MultiBinding Converter="{StaticResource CalculatorConverter}">
+                    <MultiBinding Converter="{StaticResource CalculatorConverter}" ConverterParameter="*">
                       <Binding Path="Pet.Value.TouchRaisedRect.Value.PoorCondition.Value.Width.Value" />
-                      <Binding Source="*" />
                       <Binding Path="LengthRatio.Value" />
                     </MultiBinding>
                   </Setter.Value>
                 </Setter>
                 <Setter Property="Height">
                   <Setter.Value>
-                    <MultiBinding Converter="{StaticResource CalculatorConverter}">
+                    <MultiBinding Converter="{StaticResource CalculatorConverter}" ConverterParameter="*">
                       <Binding Path="Pet.Value.TouchRaisedRect.Value.PoorCondition.Value.Height.Value" />
-                      <Binding Source="*" />
                       <Binding Path="LengthRatio.Value" />
                     </MultiBinding>
                   </Setter.Value>
@@ -195,18 +189,16 @@
               <Style BasedOn="{StaticResource Label_ThouchRect}" TargetType="Label">
                 <Setter Property="Width">
                   <Setter.Value>
-                    <MultiBinding Converter="{StaticResource CalculatorConverter}">
+                    <MultiBinding Converter="{StaticResource CalculatorConverter}" ConverterParameter="*">
                       <Binding Path="Pet.Value.TouchRaisedRect.Value.Ill.Value.Width.Value" />
-                      <Binding Source="*" />
                       <Binding Path="LengthRatio.Value" />
                     </MultiBinding>
                   </Setter.Value>
                 </Setter>
                 <Setter Property="Height">
                   <Setter.Value>
-                    <MultiBinding Converter="{StaticResource CalculatorConverter}">
+                    <MultiBinding Converter="{StaticResource CalculatorConverter}" ConverterParameter="*">
                       <Binding Path="Pet.Value.TouchRaisedRect.Value.Ill.Value.Height.Value" />
-                      <Binding Source="*" />
                       <Binding Path="LengthRatio.Value" />
                     </MultiBinding>
                   </Setter.Value>
@@ -348,6 +340,7 @@
         <TextBox
           Grid.Row="3"
           Grid.Column="1"
+          Style="{StaticResource TextBox_Wrap}"
           Text="{Binding Pet.Value.CurrentI18nData.Value.Description.Value}" />
       </Grid>
     </Grid>
@@ -805,5 +798,6 @@
           Content="{ll:Str 确定}" />
       </Grid>
     </Grid>
+    <ListBox Grid.Column="2" Template="{StaticResource ListBox_ShowLangs}" />
   </Grid>
 </Window>

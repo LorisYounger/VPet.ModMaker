@@ -11,14 +11,16 @@
   Title="SelectTextWindow"
   Width="800"
   Height="450"
+  WindowStartupLocation="CenterScreen"
   mc:Ignorable="d">
   <d:Window.DataContext>
     <vm:SelectTextEditWindowVM />
   </d:Window.DataContext>
   <Grid>
     <Grid.ColumnDefinitions>
-      <ColumnDefinition />
-      <ColumnDefinition Width="200" />
+      <ColumnDefinition MinWidth="300" />
+      <ColumnDefinition Width="Auto" MinWidth="300" />
+      <ColumnDefinition Width="Auto" />
     </Grid.ColumnDefinitions>
     <Grid>
       <Grid.RowDefinitions>
@@ -78,11 +80,6 @@
           <RowDefinition Height="Auto" />
           <RowDefinition />
         </Grid.RowDefinitions>
-        <!--<Label Content="{ll:Str 指定工作}" />
-        <TextBox
-          Grid.Column="1"
-          pu:TextBoxHelper.Watermark="{ll:Str 非必要}"
-          Text="{Binding SelectText.Value.Working.Value, UpdateSourceTrigger=PropertyChanged}" />-->
         <Label Grid.Row="2" Content="{ll:Str 标签}" />
         <TextBox
           Grid.Row="2"
@@ -96,23 +93,30 @@
           pu:TextBoxHelper.Watermark="{ll:Str 多标签使用逗号分隔}"
           Text="{Binding SelectText.Value.ToTags.Value, UpdateSourceTrigger=PropertyChanged}" />
         <Label Grid.Row="4" Content="{ll:Str 模式}" />
-        <ComboBox
-          Grid.Row="4"
-          Grid.Column="1"
-          ItemsSource="{Binding SelectText.Value.ModeTypes}"
-          SelectedItem="{Binding SelectText.Value.Mode.Value}" />
-        <!--<Label Grid.Row="5" Content="{ll:Str 工作状态}" />
-        <ComboBox
-          Grid.Row="5"
-          Grid.Column="1"
-          ItemsSource="{Binding SelectText.Value.WorkingStates}"
-          SelectedItem="{Binding SelectText.Value.WorkingState.Value}" />
-        <Label Grid.Row="6" Content="{ll:Str 日期区间}" />
-        <ComboBox
-          Grid.Row="6"
-          Grid.Column="1"
-          ItemsSource="{Binding SelectText.Value.DayTimes}"
-          SelectedItem="{Binding SelectText.Value.DayTime.Value}" />-->
+        <Grid Grid.Row="4" Grid.Column="1">
+          <Grid.ColumnDefinitions>
+            <ColumnDefinition />
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="Auto" />
+          </Grid.ColumnDefinitions>
+          <TextBlock Text="{Binding SelectText.Value.Mode.EnumValue.Value}" />
+          <ComboBox
+            x:Name="ComboBox_Mode"
+            Grid.Column="1"
+            ItemsSource="{Binding SelectText.Value.ModeTypes}"
+            SelectedIndex="0" />
+          <Button
+            Grid.Column="2"
+            Command="{Binding SelectText.Value.Mode.AddCommand}"
+            CommandParameter="{Binding SelectedItem, ElementName=ComboBox_Mode}"
+            Content="+" />
+          <Button
+            Grid.Column="3"
+            Command="{Binding SelectText.Value.Mode.RemoveCommand}"
+            CommandParameter="{Binding SelectedItem, ElementName=ComboBox_Mode}"
+            Content="-" />
+        </Grid>
         <ListBox Grid.Row="7" Grid.ColumnSpan="2">
           <ListBoxItem
             DataContext="{Binding SelectText.Value.Like}"
@@ -166,5 +170,6 @@
           Content="{ll:Str 确定}" />
       </Grid>
     </Grid>
+    <ListBox Grid.Column="2" Template="{StaticResource ListBox_ShowLangs}" />
   </Grid>
 </Window>

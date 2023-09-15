@@ -12,6 +12,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Media.Imaging;
+using VPet.ModMaker.Models.ModModel;
 using VPet_Simulator.Windows.Interface;
 
 namespace VPet.ModMaker.Models;
@@ -58,8 +59,6 @@ public class ModInfoModel : I18nModel<I18nModInfoModel>
         GameVersion.Value = loader.GameVer.ToString();
         ModVersion.Value = loader.Ver.ToString();
         var imagePath = Path.Combine(loader.ModPath.FullName, "icon.png");
-        Thread.Sleep(1000);
-        GC.Collect();
         if (File.Exists(imagePath))
             Image.Value = Utils.LoadImageToStream(imagePath);
         foreach (var food in loader.Foods)
@@ -71,7 +70,22 @@ public class ModInfoModel : I18nModel<I18nModInfoModel>
         foreach (var selectText in loader.SelectTexts)
             SelectTexts.Add(new(selectText));
         foreach (var pet in loader.Pets)
-            Pets.Add(new(pet));
+        {
+            var petModel = new PetModel(pet);
+            Pets.Add(petModel);
+            // TODO: 动画加载
+            //foreach (var p in pet.path)
+            //{
+            //    foreach (var dir in Directory.EnumerateDirectories(p))
+            //    {
+            //        var animeModel = AnimeModel.Load(dir);
+            //        if (animeModel != null)
+            //        {
+            //            petModel.Animes.TryAdd(animeModel.GraphType.Value, animeModel);
+            //        }
+            //    }
+            //}
+        }
 
         foreach (var lang in loader.I18nDatas)
             I18nDatas.Add(lang.Key, lang.Value);
@@ -214,6 +228,21 @@ public class ModInfoModel : I18nModel<I18nModInfoModel>
             GetWorksInfo(lps, pet);
             GetMoveInfo(lps, pet);
             File.WriteAllText(petFile, lps.ToString());
+            foreach (var cultureName in I18nHelper.Current.CultureNames)
+            {
+                _saveI18nDatas[cultureName].TryAdd(
+                    pet.Id.Value,
+                    pet.I18nDatas[cultureName].Name.Value
+                );
+                _saveI18nDatas[cultureName].TryAdd(
+                    pet.PetNameId.Value,
+                    pet.I18nDatas[cultureName].PetName.Value
+                );
+                _saveI18nDatas[cultureName].TryAdd(
+                    pet.DescriptionId.Value,
+                    pet.I18nDatas[cultureName].Description.Value
+                );
+            }
         }
     }
 
@@ -457,6 +486,15 @@ public class ModInfoModel : I18nModel<I18nModInfoModel>
                     File.Copy(foodImagePath, targetImagePath, true);
             }
         }
+    }
+
+    public void Close()
+    {
+        Image.Value.CloseStream();
+        foreach (var food in Foods)
+            food.Close();
+        //foreach (var pet in Pets)
+        //    pet.Close();
     }
 }
 

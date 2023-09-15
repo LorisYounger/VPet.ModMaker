@@ -119,6 +119,15 @@
             </DataGridTextColumn.Header>
           </DataGridTextColumn>
           <DataGridTextColumn
+            Binding="{Binding IsOverLoad.Value}"
+            CanUserSort="True"
+            IsReadOnly="True"
+            SortMemberPath="Graph.Value">
+            <DataGridTextColumn.Header>
+              <TextBlock Text="{ll:Str 是否超模}" />
+            </DataGridTextColumn.Header>
+          </DataGridTextColumn>
+          <DataGridTextColumn
             Binding="{Binding MoneyBase.Value}"
             CanUserSort="True"
             IsReadOnly="True"

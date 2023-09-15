@@ -11,14 +11,16 @@
   Title="Window_FoodEdit"
   Width="800"
   Height="450"
+  WindowStartupLocation="CenterScreen"
   mc:Ignorable="d">
   <d:Window.DataContext>
     <vm:FoodEditWindowVM />
   </d:Window.DataContext>
   <Grid>
     <Grid.ColumnDefinitions>
-      <ColumnDefinition Width="Auto" />
+      <ColumnDefinition Width="250" />
       <ColumnDefinition />
+      <ColumnDefinition Width="Auto" />
     </Grid.ColumnDefinitions>
     <Grid>
       <Grid.RowDefinitions>
@@ -28,8 +30,8 @@
       <Grid>
         <Image
           x:Name="Image_FoodImage"
-          Width="256"
-          Height="256"
+          Width="250"
+          Height="250"
           Source="{Binding Food.Value.Image.Value}"
           Stretch="Uniform">
           <Image.ContextMenu>
@@ -187,5 +189,6 @@
           Content="{ll:Str 确定}" />
       </Grid>
     </Grid>
+    <ListBox Grid.Column="2" Template="{StaticResource ListBox_ShowLangs}" />
   </Grid>
 </Window>

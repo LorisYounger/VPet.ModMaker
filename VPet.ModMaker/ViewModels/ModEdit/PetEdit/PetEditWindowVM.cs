@@ -14,6 +14,7 @@ namespace VPet.ModMaker.ViewModels.ModEdit.PetEdit;
 
 public class PetEditWindowVM
 {
+    public I18nHelper I18nData => I18nHelper.Current;
     public PetModel OldPet { get; set; }
     public ObservableValue<PetModel> Pet { get; } = new(new());
 
@@ -38,7 +39,7 @@ public class PetEditWindowVM
 
     public void Close()
     {
-        Image.Value?.StreamSource?.Close();
+        Image.Value?.CloseStream();
     }
 
     private void AddImage()

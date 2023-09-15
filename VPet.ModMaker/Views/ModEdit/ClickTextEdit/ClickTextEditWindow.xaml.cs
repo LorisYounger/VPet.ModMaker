@@ -29,6 +29,14 @@ public partial class ClickTextEditWindow : Window
     {
         InitializeComponent();
         DataContext = new ClickTextEditWindowVM();
+        Closed += (s, e) =>
+        {
+            try
+            {
+                DataContext = null;
+            }
+            catch { }
+        };
     }
 
     private void Button_Cancel_Click(object sender, RoutedEventArgs e)

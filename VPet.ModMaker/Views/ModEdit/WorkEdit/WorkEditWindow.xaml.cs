@@ -32,6 +32,11 @@ public partial class WorkEditWindow : Window
         Closed += (s, e) =>
         {
             ViewModel.Close();
+            try
+            {
+                DataContext = null;
+            }
+            catch { }
         };
     }
 

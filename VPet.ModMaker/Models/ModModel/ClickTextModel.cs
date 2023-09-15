@@ -24,9 +24,9 @@ public class ClickTextModel : I18nModel<I18nClickTextModel>
 
     public ObservableValue<string> Id { get; } = new();
     public ObservableValue<string> Working { get; } = new();
-    public ObservableValue<ClickText.ModeType> Mode { get; } = new();
+    public ObservableEnumFlagsVM<ClickText.ModeType> Mode { get; } = new();
     public ObservableValue<VPet_Simulator.Core.Main.WorkingState> WorkingState { get; } = new();
-    public ObservableValue<ClickText.DayTime> DayTime { get; } = new();
+    public ObservableEnumFlagsVM<ClickText.DayTime> DayTime { get; } = new();
 
     public ObservableRange<double> Like { get; } = new(0, int.MaxValue);
     public ObservableRange<double> Health { get; } = new(0, int.MaxValue);
@@ -43,10 +43,10 @@ public class ClickTextModel : I18nModel<I18nClickTextModel>
         : this()
     {
         Id.Value = clickText.Id.Value;
-        Mode.Value = clickText.Mode.Value;
+        Mode.EnumValue.Value = clickText.Mode.EnumValue.Value;
         Working.Value = clickText.Working.Value;
         WorkingState.Value = clickText.WorkingState.Value;
-        DayTime.Value = clickText.DayTime.Value;
+        DayTime.EnumValue.Value = clickText.DayTime.EnumValue.Value;
         Like = clickText.Like.Copy();
         Health = clickText.Health.Copy();
         Level = clickText.Level.Copy();
@@ -64,10 +64,10 @@ public class ClickTextModel : I18nModel<I18nClickTextModel>
         : this()
     {
         Id.Value = clickText.Text;
-        Mode.Value = clickText.Mode;
+        Mode.EnumValue.Value = clickText.Mode;
         Working.Value = clickText.Working;
         WorkingState.Value = clickText.State;
-        DayTime.Value = clickText.DaiTime;
+        DayTime.EnumValue.Value = clickText.DaiTime;
         Like.SetValue(clickText.LikeMin, clickText.LikeMax);
         Health.SetValue(clickText.HealthMin, clickText.HealthMax);
         Level.SetValue(clickText.LevelMin, clickText.LevelMax);
@@ -83,10 +83,10 @@ public class ClickTextModel : I18nModel<I18nClickTextModel>
         return new()
         {
             Text = Id.Value,
-            Mode = Mode.Value,
+            Mode = Mode.EnumValue.Value,
             Working = Working.Value,
             State = WorkingState.Value,
-            DaiTime = DayTime.Value,
+            DaiTime = DayTime.EnumValue.Value,
             LikeMax = Like.Max.Value,
             LikeMin = Like.Min.Value,
             HealthMin = Health.Min.Value,

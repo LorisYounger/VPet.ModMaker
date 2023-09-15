@@ -12,7 +12,7 @@ namespace HKW.HKWViewModels.SimpleObservable;
 /// 可观察值
 /// </summary>
 /// <typeparam name="T"></typeparam>
-[DebuggerDisplay("{EnumValue}")]
+[DebuggerDisplay("{Value}")]
 public class ObservableValue<T> : INotifyPropertyChanging, INotifyPropertyChanged
 {
     [DebuggerBrowsable(DebuggerBrowsableState.Never)]

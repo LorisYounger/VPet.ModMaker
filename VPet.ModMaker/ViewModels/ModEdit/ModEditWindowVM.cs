@@ -103,6 +103,8 @@ public class ModEditWindowVM
         if (window.IsCancel)
             return;
         I18nHelper.Current.CultureNames.Add(window.Lang.Value);
+        if (I18nHelper.Current.CultureNames.Count == 1)
+            I18nHelper.Current.CultureName.Value = window.Lang.Value;
     }
 
     private void EditLang(string oldLang)
@@ -149,6 +151,8 @@ public class ModEditWindowVM
 
     private void SaveTo()
     {
+        if (ValidationData(ModInfo.Value) is false)
+            return;
         SaveFileDialog saveFileDialog =
             new()
             {
@@ -172,5 +176,30 @@ public class ModEditWindowVM
             }
             MessageBox.Show("保存成功".Translate());
         }
+    }
+
+    private bool ValidationData(ModInfoModel model)
+    {
+        if (I18nHelper.Current.CultureNames.Count == 0)
+        {
+            MessageBox.Show(
+                "未添加任何语言".Translate(),
+                "",
+                MessageBoxButton.OK,
+                MessageBoxImage.Warning
+            );
+            return false;
+        }
+        if (string.IsNullOrWhiteSpace(model.Id.Value))
+        {
+            MessageBox.Show("Id不可为空".Translate(), "", MessageBoxButton.OK, MessageBoxImage.Warning);
+            return false;
+        }
+        if (string.IsNullOrWhiteSpace(model.Author.Value))
+        {
+            MessageBox.Show("作者不可为空".Translate(), "", MessageBoxButton.OK, MessageBoxImage.Warning);
+            return false;
+        }
+        return true;
     }
 }

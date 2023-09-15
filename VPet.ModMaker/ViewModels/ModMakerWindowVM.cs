@@ -81,8 +81,12 @@ public class ModMakerWindowVM
 
     private void AddHistories(ModInfoModel modInfo)
     {
-        if (Histories.FirstOrDefault(h => h.Id == modInfo.Id.Value) is ModMakerHistory history)
+        if (
+            Histories.FirstOrDefault(h => h.SourcePath == modInfo.SourcePath.Value)
+            is ModMakerHistory history
+        )
         {
+            history.Id = modInfo.Id.Value;
             history.SourcePath = modInfo.SourcePath.Value;
             history.LastTime = DateTime.Now;
         }
@@ -121,6 +125,9 @@ public class ModMakerWindowVM
 
     private void ShowEditWindow()
     {
+        if (string.IsNullOrEmpty(ModInfoModel.Current.SourcePath.Value) is false)
+            AddHistories(ModInfoModel.Current);
+        SaveHistories();
         ModEditWindow = new();
         ModEditWindow.Show();
         ModMakerWindow.Hide();
@@ -130,7 +137,10 @@ public class ModMakerWindowVM
             if (string.IsNullOrEmpty(modInfo.SourcePath.Value) is false)
                 AddHistories(modInfo);
             SaveHistories();
-            ModMakerWindow.Close();
+            ModInfoModel.Current.Close();
+            ModInfoModel.Current = null;
+            I18nHelper.Current = new();
+            ModMakerWindow.Show();
         };
     }
 
@@ -138,6 +148,7 @@ public class ModMakerWindowVM
     {
         ShowHistories.Value.Clear();
         Histories.Clear();
+        File.WriteAllText(ModMakerInfo.HistoryFile, string.Empty);
     }
 
     public void LoadModFromFile()

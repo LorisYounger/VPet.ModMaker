@@ -11,6 +11,7 @@
   Title="WorkEditWindow"
   Width="800"
   Height="450"
+  WindowStartupLocation="CenterScreen"
   mc:Ignorable="d">
   <d:Window.DataContext>
     <vm:WorkEditWindowVM />
@@ -19,6 +20,7 @@
     <Grid.ColumnDefinitions>
       <ColumnDefinition Width="Auto" />
       <ColumnDefinition />
+      <ColumnDefinition Width="Auto" />
     </Grid.ColumnDefinitions>
     <Grid>
       <Grid.RowDefinitions>
@@ -51,22 +53,18 @@
             <Style BasedOn="{StaticResource {x:Type Label}}" TargetType="Label">
               <Setter Property="Width">
                 <Setter.Value>
-                  <MultiBinding Converter="{StaticResource CalculatorConverter}">
+                  <MultiBinding Converter="{StaticResource CalculatorConverter}" ConverterParameter="*">
                     <Binding Path="Work.Value.Width.Value" />
-                    <Binding Source="*" />
                     <Binding Path="LengthRatio.Value" />
                   </MultiBinding>
                 </Setter.Value>
               </Setter>
               <Setter Property="Height">
                 <Setter.Value>
-                  <MultiBinding Converter="{StaticResource CalculatorConverter}">
+                  <MultiBinding Converter="{StaticResource CalculatorConverter}" ConverterParameter="*/*">
                     <Binding Path="Work.Value.Width.Value" />
-                    <Binding Source="*" />
                     <Binding Path="LengthRatio.Value" />
-                    <Binding Source="/" />
                     <Binding Source="300" />
-                    <Binding Source="*" />
                     <Binding Source="180" />
                   </MultiBinding>
                 </Setter.Value>
@@ -125,6 +123,7 @@
           <RowDefinition Height="Auto" />
           <RowDefinition Height="Auto" />
           <RowDefinition Height="Auto" />
+          <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
         <Label Content="Id" />
         <TextBox Grid.Column="1" Text="{Binding Work.Value.Id.Value}" />
@@ -144,6 +143,11 @@
           Grid.Row="3"
           Grid.Column="1"
           Text="{Binding Work.Value.Graph.Value}" />
+        <Label Grid.Row="4" Content="{ll:Str 是否超模}" />
+        <TextBlock
+          Grid.Row="4"
+          Grid.Column="1"
+          Text="{Binding Work.Value.IsOverLoad.Value}" />
         <!--<Label Grid.Row="3" Content="{ll:Str 宠物描述}" />
         <TextBox
           Grid.Row="3"
@@ -298,5 +302,6 @@
           Content="{ll:Str 确定}" />
       </Grid>
     </Grid>
+    <ListBox Grid.Column="2" Template="{StaticResource ListBox_ShowLangs}" />
   </Grid>
 </Window>

@@ -11,7 +11,7 @@
   Title="ModEditWindow"
   Width="1000"
   Height="500"
-  WindowStartupLocation="CenterOwner"
+  WindowStartupLocation="CenterScreen"
   mc:Ignorable="d">
   <d:Window.DataContext>
     <vm:ModEditWindowVM />

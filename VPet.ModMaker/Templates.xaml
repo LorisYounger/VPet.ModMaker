@@ -43,4 +43,16 @@
       </Grid>
     </Grid>
   </ControlTemplate>
+  <ControlTemplate x:Key="ListBox_ShowLangs" TargetType="ListBox">
+    <ListBox
+      ItemsSource="{Binding I18nData.CultureNames}"
+      ScrollViewer.VerticalScrollBarVisibility="Auto"
+      SelectedItem="{Binding I18nData.CultureName.Value}">
+      <ListBox.ItemContainerStyle>
+        <Style BasedOn="{StaticResource {x:Type ListBoxItem}}" TargetType="ListBoxItem">
+          <Setter Property="Content" Value="{Binding}" />
+        </Style>
+      </ListBox.ItemContainerStyle>
+    </ListBox>
+  </ControlTemplate>
 </ResourceDictionary>

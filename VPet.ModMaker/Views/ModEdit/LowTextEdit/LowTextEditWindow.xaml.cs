@@ -30,6 +30,14 @@ public partial class LowTextEditWindow : Window
     {
         InitializeComponent();
         DataContext = new LowTextEditWindowVM();
+        Closed += (s, e) =>
+        {
+            try
+            {
+                DataContext = null;
+            }
+            catch { }
+        };
     }
 
     private void Button_Cancel_Click(object sender, RoutedEventArgs e)

@@ -65,10 +65,10 @@
           </DataGridTextColumn.Header>
         </DataGridTextColumn>
         <DataGridTextColumn
-          Binding="{Binding Mode.Value}"
+          Binding="{Binding Mode.EnumValue.Value}"
           CanUserSort="True"
           IsReadOnly="True"
-          SortMemberPath="Mode.Value">
+          SortMemberPath="Mode.EnumValue.Value">
           <DataGridTextColumn.Header>
             <TextBlock Text="{ll:Str 状态}" />
           </DataGridTextColumn.Header>
@@ -92,10 +92,10 @@
           </DataGridTextColumn.Header>
         </DataGridTextColumn>
         <DataGridTextColumn
-          Binding="{Binding DayTime.Value}"
+          Binding="{Binding DayTime.EnumValue.Value}"
           CanUserSort="True"
           IsReadOnly="True"
-          SortMemberPath="DayTime.Value">
+          SortMemberPath="DayTime.EnumValue.Value">
           <DataGridTextColumn.Header>
             <TextBlock Text="{ll:Str 时间}" />
           </DataGridTextColumn.Header>

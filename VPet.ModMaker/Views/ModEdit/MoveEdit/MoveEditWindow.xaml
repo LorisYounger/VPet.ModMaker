@@ -11,6 +11,7 @@
   Title="MoveEditWindow"
   Width="800"
   Height="450"
+  WindowStartupLocation="CenterScreen"
   mc:Ignorable="d">
   <d:Window.DataContext>
     <vm:MoveEditWindowVM />

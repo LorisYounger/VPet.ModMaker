@@ -12,6 +12,8 @@ namespace VPet.ModMaker.ViewModels.ModEdit.ClickTextEdit;
 
 public class ClickTextEditWindowVM
 {
+    public I18nHelper I18nData => I18nHelper.Current;
+
     #region Value
 
     public ClickTextModel OldClickText { get; set; }

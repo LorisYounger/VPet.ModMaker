@@ -11,6 +11,7 @@
   Title="Page_LowText"
   Width="800"
   Height="450"
+  WindowStartupLocation="CenterScreen"
   mc:Ignorable="d">
   <d:Window.DataContext>
     <vm:LowTextEditWindowVM />
@@ -18,7 +19,8 @@
   <Grid>
     <Grid.ColumnDefinitions>
       <ColumnDefinition MinWidth="300" />
-      <ColumnDefinition Width="200" />
+      <ColumnDefinition Width="Auto" MinWidth="200" />
+      <ColumnDefinition Width="Auto" />
     </Grid.ColumnDefinitions>
     <Grid>
       <Grid.RowDefinitions>
@@ -95,5 +97,6 @@
           Content="{ll:Str 确定}" />
       </Grid>
     </Grid>
+    <ListBox Grid.Column="2" Template="{StaticResource ListBox_ShowLangs}" />
   </Grid>
 </Window>

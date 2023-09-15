@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace VPet.ModMaker.Models;
 
-public class EnumFlagsVM<T>
+public class ObservableEnumFlagsVM<T>
     where T : Enum
 {
     public ObservableValue<T> EnumValue { get; } = new();
@@ -18,13 +18,13 @@ public class EnumFlagsVM<T>
     public Type EnumType = typeof(T);
     public Type UnderlyingType { get; } = Enum.GetUnderlyingType(typeof(T));
 
-    public EnumFlagsVM()
+    public ObservableEnumFlagsVM()
     {
         AddCommand.ExecuteEvent += AddCommand_ExecuteEvent;
         RemoveCommand.ExecuteEvent += RemoveCommand_ExecuteEvent;
     }
 
-    public EnumFlagsVM(T value)
+    public ObservableEnumFlagsVM(T value)
         : this()
     {
         EnumValue.Value = value;

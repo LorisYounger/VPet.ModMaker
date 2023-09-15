@@ -12,6 +12,7 @@
   Width="600"
   Height="450"
   FontSize="16"
+  WindowStartupLocation="CenterScreen"
   mc:Ignorable="d">
   <d:Window.DataContext>
     <vm:ModMakerWindowVM />

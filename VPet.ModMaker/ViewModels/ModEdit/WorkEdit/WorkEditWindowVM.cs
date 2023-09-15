@@ -13,6 +13,7 @@ namespace VPet.ModMaker.ViewModels.ModEdit.WorkEdit;
 
 public class WorkEditWindowVM
 {
+    public I18nHelper I18nData => I18nHelper.Current;
     #region Value
     public PetModel CurrentPet { get; set; }
     public WorkModel OldWork { get; set; }
@@ -39,7 +40,7 @@ public class WorkEditWindowVM
 
     public void Close()
     {
-        Image.Value?.StreamSource?.Close();
+        Image.Value?.CloseStream();
     }
 
     private void AddImage()

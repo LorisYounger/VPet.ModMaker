@@ -53,5 +53,17 @@ public partial class ModEditWindow : Window
     private void Window_ModEdit_Closed(object sender, EventArgs e)
     {
         ViewModel.Close();
+        try
+        {
+            DataContext = null;
+            FoodPage.DataContext = null;
+            LowTextPage.DataContext = null;
+            ClickTextPage.DataContext = null;
+            SelectTextPage.DataContext = null;
+            PetPage.DataContext = null;
+            WorkPage.DataContext = null;
+            MovePage.DataContext = null;
+        }
+        catch { }
     }
 }

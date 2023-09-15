@@ -36,6 +36,11 @@ public partial class FoodEditWindow : Window
         {
             if (IsCancel)
                 ViewModel.Close();
+            try
+            {
+                DataContext = null;
+            }
+            catch { }
         };
     }
 
@@ -54,11 +59,6 @@ public partial class FoodEditWindow : Window
         if (ViewModel.Food.Value.Image.Value is null)
         {
             MessageBox.Show("图像不可为空".Translate(), "", MessageBoxButton.OK, MessageBoxImage.Warning);
-            return;
-        }
-        if (string.IsNullOrWhiteSpace(ViewModel.Food.Value.CurrentI18nData.Value.Name.Value))
-        {
-            MessageBox.Show("名称不可为空".Translate(), "", MessageBoxButton.OK, MessageBoxImage.Warning);
             return;
         }
         if (

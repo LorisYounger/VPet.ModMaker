@@ -31,6 +31,11 @@ public partial class MoveEditWindow : Window
         Closed += (s, e) =>
         {
             ViewModel.Close();
+            try
+            {
+                DataContext = null;
+            }
+            catch { }
         };
     }
 

@@ -31,6 +31,7 @@ public class WorkModel : I18nModel<I18nWorkModel>
     public ObservableValue<int> LevelLimit { get; } = new();
     public ObservableValue<int> Time { get; } = new();
     public ObservableValue<double> FinishBonus { get; } = new();
+    public ObservableValue<bool> IsOverLoad { get; } = new();
 
     public ObservableValue<SolidColorBrush> BorderBrush { get; } =
         new(new((Color)ColorConverter.ConvertFromString("#FF0290D5")));
@@ -47,7 +48,23 @@ public class WorkModel : I18nModel<I18nWorkModel>
     public ObservableValue<double> Top { get; } = new(160);
     public ObservableValue<double> Width { get; } = new(300);
 
-    public WorkModel() { }
+    public WorkModel()
+    {
+        IsOverLoad.AddNotifyReceiver(
+            WorkType,
+            MoneyBase,
+            MoneyLevel,
+            StrengthFood,
+            StrengthDrink,
+            Feeling,
+            LevelLimit,
+            FinishBonus
+        );
+        IsOverLoad.NotifyReceived += (ref bool v) =>
+        {
+            v = VPet_Simulator.Windows.Interface.ExtensionFunction.IsOverLoad(ToWork());
+        };
+    }
 
     public WorkModel(WorkModel model)
         : this()

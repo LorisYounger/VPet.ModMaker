@@ -16,6 +16,7 @@ namespace VPet.ModMaker.ViewModels.ModEdit.FoodEdit;
 
 public class FoodEditWindowVM
 {
+    public I18nHelper I18nData => I18nHelper.Current;
     #region Value
     public FoodModel OldFood { get; set; }
     public ObservableValue<FoodModel> Food { get; } = new(new());

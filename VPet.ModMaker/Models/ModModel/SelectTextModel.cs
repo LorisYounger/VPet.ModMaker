@@ -28,7 +28,7 @@ public class SelectTextModel : I18nModel<I18nSelectTextModel>
 
     public ObservableValue<string> Id { get; } = new();
     public ObservableValue<string> ChooseId { get; } = new();
-    public ObservableValue<ClickText.ModeType> Mode { get; } = new();
+    public ObservableEnumFlagsVM<ClickText.ModeType> Mode { get; } = new();
 
     //public ObservableValue<string> Working { get; } = new();
     //public ObservableValue<VPet_Simulator.Core.Main.WorkingState> WorkingState { get; } = new();
@@ -56,7 +56,7 @@ public class SelectTextModel : I18nModel<I18nSelectTextModel>
         : this()
     {
         Id.Value = model.Id.Value;
-        Mode.Value = model.Mode.Value;
+        Mode.EnumValue.Value = model.Mode.EnumValue.Value;
         Tags.Value = model.Tags.Value;
         ToTags.Value = model.ToTags.Value;
         //Working.EnumValue = model.Working.EnumValue;
@@ -81,7 +81,7 @@ public class SelectTextModel : I18nModel<I18nSelectTextModel>
     {
         Id.Value = text.Text;
         ChooseId.Value = text.Choose ?? string.Empty;
-        Mode.Value = text.Mode;
+        Mode.EnumValue.Value = text.Mode;
         Tags.Value = text.Tags is null ? string.Empty : string.Join(", ", text.Tags);
         ToTags.Value = text.ToTags is null ? string.Empty : string.Join(", ", text.ToTags);
         //Working.EnumValue = text.Working;
@@ -105,7 +105,7 @@ public class SelectTextModel : I18nModel<I18nSelectTextModel>
         {
             Text = Id.Value,
             Choose = ChooseId.Value,
-            Mode = Mode.Value,
+            Mode = Mode.EnumValue.Value,
             Tags = new(Tags.Value.Split(rs_splitChar, StringSplitOptions.RemoveEmptyEntries)),
             ToTags = new(ToTags.Value.Split(rs_splitChar, StringSplitOptions.RemoveEmptyEntries)),
             //Working = Working.EnumValue,

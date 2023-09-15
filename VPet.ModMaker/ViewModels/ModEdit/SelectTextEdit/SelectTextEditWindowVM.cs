@@ -10,6 +10,7 @@ namespace VPet.ModMaker.ViewModels.ModEdit.SelectTextEdit;
 
 public class SelectTextEditWindowVM
 {
+    public I18nHelper I18nData => I18nHelper.Current;
     #region Value
     public SelectTextModel OldSelectText { get; set; }
     public ObservableValue<SelectTextModel> SelectText { get; } = new(new());
