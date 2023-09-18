@@ -62,7 +62,7 @@
                 Height="64"
                 HorizontalAlignment="Center"
                 VerticalAlignment="Center"
-                Source="{Binding Image.Value}"
+                Source="{Binding Image.Value, IsAsync=True}"
                 Stretch="Uniform">
                 <Image.ToolTip>
                   <Image
@@ -70,7 +70,7 @@
                     Height="256"
                     HorizontalAlignment="Center"
                     VerticalAlignment="Center"
-                    Source="{Binding Image.Value}"
+                    Source="{Binding Image.Value, IsAsync=True}"
                     Stretch="Uniform" />
                 </Image.ToolTip>
               </Image>

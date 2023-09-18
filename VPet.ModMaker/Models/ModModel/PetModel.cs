@@ -25,8 +25,7 @@ public class PetModel : I18nModel<I18nPetInfoModel>
 
     public ObservableCollection<MoveModel> Moves { get; } = new();
 
-    public ObservableValue<AnimeModel> CurrentAnime { get; } = new();
-    public Dictionary<GraphInfo.GraphType, AnimeModel> Animes { get; } = new();
+    public ObservableCollection<AnimeTypeModel> Animes { get; } = new();
 
     public PetModel()
     {

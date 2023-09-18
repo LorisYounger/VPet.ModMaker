@@ -11,10 +11,14 @@ namespace VPet.ModMaker.Models;
 
 public static class Utils
 {
+    public const int DecodePixelWidth = 250;
+    public const int DecodePixelHeight = 250;
+
     public static BitmapImage LoadImageToStream(string imagePath)
     {
         BitmapImage bitmapImage = new();
         bitmapImage.BeginInit();
+        bitmapImage.DecodePixelWidth = DecodePixelWidth;
         try
         {
             bitmapImage.StreamSource = new StreamReader(imagePath).BaseStream;
@@ -26,15 +30,11 @@ public static class Utils
         return bitmapImage;
     }
 
-    public static BitmapImage LoadImageToStream(this BitmapImage image)
-    {
-        return LoadImageToStream(image.GetSourceFile());
-    }
-
     public static BitmapImage LoadImageToMemoryStream(string imagePath)
     {
         BitmapImage bitmapImage = new();
         bitmapImage.BeginInit();
+        bitmapImage.DecodePixelWidth = DecodePixelWidth;
         try
         {
             var ms = new MemoryStream();
@@ -47,10 +47,5 @@ public static class Utils
             bitmapImage.EndInit();
         }
         return bitmapImage;
-    }
-
-    public static BitmapImage LoadImageToMemoryStream(this BitmapImage image)
-    {
-        return LoadImageToMemoryStream(image.GetSourceFile());
     }
 }

@@ -13,7 +13,7 @@ namespace VPet.ModMaker.Converters;
 /// <para>示例:
 /// <code><![CDATA[
 /// <MultiBinding Converter="{StaticResource MarginConverter}">
-///   <Binding Path="String" />
+///   <Binding Path="StringFormat" />
 ///   <Binding Path="Value1" />
 ///   <Binding Path="Value2" />
 /// </MultiBinding>

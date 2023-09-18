@@ -9,12 +9,114 @@
   xmlns:pu="https://opensource.panuon.com/wpf-ui"
   xmlns:vm="clr-namespace:VPet.ModMaker.ViewModels.ModEdit.AnimeEdit"
   Title="AnimeEditWindow"
-  Width="800"
-  Height="450"
+  Width="1000"
+  Height="600"
   mc:Ignorable="d">
   <d:Window.DataContext>
     <vm:AnimeEditWindowVM />
   </d:Window.DataContext>
+  <Window.Resources>
+    <Style
+      x:Key="ListBoxItem_Style"
+      BasedOn="{StaticResource {x:Type ListBoxItem}}"
+      TargetType="ListBoxItem">
+      <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+      <Setter Property="VerticalContentAlignment" Value="Stretch" />
+    </Style>
+    <DataTemplate x:Key="Expander_AnimeItem" DataType="ListBoxItem">
+      <Expander
+        HorizontalAlignment="Stretch"
+        VerticalAlignment="Stretch"
+        d:DataContext=""
+        Tag="{Binding DataContext, RelativeSource={RelativeSource AncestorType=Window, Mode=FindAncestor}}">
+        <Expander.ContextMenu>
+          <ContextMenu d:DataContext="">
+            <MenuItem
+              Command="{Binding PlacementTarget.Tag.AddImageCommand, RelativeSource={RelativeSource AncestorType=ContextMenu, Mode=FindAncestor}}"
+              CommandParameter="{Binding PlacementTarget.DataContext, RelativeSource={RelativeSource AncestorType=ContextMenu, Mode=FindAncestor}}"
+              Header="添加图片" />
+            <MenuItem
+              Command="{Binding PlacementTarget.Tag.ClearImageCommand, RelativeSource={RelativeSource AncestorType=ContextMenu, Mode=FindAncestor}}"
+              CommandParameter="{Binding PlacementTarget.DataContext, RelativeSource={RelativeSource AncestorType=ContextMenu, Mode=FindAncestor}}"
+              Header="清空图片" />
+            <MenuItem
+              Command="{Binding PlacementTarget.Tag.RemoveAnimeCommand, RelativeSource={RelativeSource AncestorType=ContextMenu, Mode=FindAncestor}}"
+              CommandParameter="{Binding PlacementTarget.DataContext, RelativeSource={RelativeSource AncestorType=ContextMenu, Mode=FindAncestor}}"
+              Header="删除此项" />
+          </ContextMenu>
+        </Expander.ContextMenu>
+        <Expander.Header>
+          <Grid>
+            <Grid.ColumnDefinitions>
+              <ColumnDefinition Width="Auto" />
+              <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+            <TextBox pu:TextBoxHelper.Watermark="动画Id" Text="{Binding Id.Value}" />
+            <TextBlock Grid.Column="1" Margin="10,0,0,0">
+              <TextBlock.Text>
+                <MultiBinding Converter="{StaticResource StringFormatConverter}" ConverterParameter="{}({0})">
+                  <Binding Path="Images.Count" />
+                </MultiBinding>
+              </TextBlock.Text>
+            </TextBlock>
+          </Grid>
+        </Expander.Header>
+        <ListBox
+          d:ItemsSource="{d:SampleData ItemCount=5}"
+          AllowDrop="True"
+          Drop="ListBox_Drop"
+          ItemsSource="{Binding Images, IsAsync=True}"
+          PreviewMouseMove="ListBox_PreviewMouseMove"
+          PreviewMouseWheel="ListBox_PreviewMouseWheel"
+          SelectedItem="{Binding DataContext.CurrentImageModel.Value, RelativeSource={RelativeSource AncestorType=Window, Mode=FindAncestor}}">
+          <ListBox.ItemsPanel>
+            <ItemsPanelTemplate>
+              <WrapPanel />
+            </ItemsPanelTemplate>
+          </ListBox.ItemsPanel>
+          <ListBox.ItemTemplate>
+            <DataTemplate>
+              <Grid DataContext="{Binding DataContext, RelativeSource={RelativeSource AncestorType=Expander, Mode=FindAncestor}}" Tag="{Binding DataContext, RelativeSource={RelativeSource AncestorType=Window, Mode=FindAncestor}}">
+                <Grid.ContextMenu>
+                  <ContextMenu>
+                    <MenuItem
+                      Command="{Binding PlacementTarget.Tag.RemoveImageCommand, RelativeSource={RelativeSource AncestorType=ContextMenu, Mode=FindAncestor}}"
+                      CommandParameter="{Binding PlacementTarget.DataContext, RelativeSource={RelativeSource AncestorType=ContextMenu, Mode=FindAncestor}}"
+                      Header="删除图片" />
+                  </ContextMenu>
+                </Grid.ContextMenu>
+                <Grid.RowDefinitions>
+                  <RowDefinition Height="Auto" />
+                  <RowDefinition />
+                </Grid.RowDefinitions>
+                <Image
+                  Width="150"
+                  Height="150"
+                  d:DataContext=""
+                  DataContext="{Binding DataContext, RelativeSource={RelativeSource AncestorType=ListBoxItem, Mode=FindAncestor}}"
+                  Source="{Binding Image.Value, IsAsync=True}">
+                  <Image.ToolTip>
+                    <Image
+                      Width="250"
+                      Height="250"
+                      Source="{Binding Image.Value, IsAsync=True}" />
+                  </Image.ToolTip>
+                </Image>
+                <Grid Grid.Row="1">
+                  <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition />
+                  </Grid.ColumnDefinitions>
+                  <Label Content="持续时间(ms)" />
+                  <pu:NumberInput Grid.Column="1" Value="{Binding DataContext.Duration.Value, RelativeSource={RelativeSource AncestorType=ListBoxItem, Mode=FindAncestor}}" />
+                </Grid>
+              </Grid>
+            </DataTemplate>
+          </ListBox.ItemTemplate>
+        </ListBox>
+      </Expander>
+    </DataTemplate>
+  </Window.Resources>
   <Grid>
     <Grid.ColumnDefinitions>
       <ColumnDefinition Width="Auto" />
@@ -26,10 +128,11 @@
         <RowDefinition Height="Auto" />
         <RowDefinition />
       </Grid.RowDefinitions>
-      <Image
-        Width="250"
-        Height="250"
-        Source="{Binding Anime.Value.CurrentImageModel.Value.Image.Value}" />
+      <Image Width="250" Height="250">
+        <Image.ToolTip>
+          <Image Width="500" Height="500" />
+        </Image.ToolTip>
+      </Image>
       <Grid Grid.Row="1">
         <Grid.ColumnDefinitions>
           <ColumnDefinition />
@@ -52,10 +155,14 @@
           <RowDefinition Height="Auto" />
           <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
-        <Label Content="{ll:Str 动画Id}" />
-        <TextBox Grid.Column="1" />
+        <!--<Label Content="{ll:Str 动画Id}" />
+        <TextBox Grid.Column="1" />-->
         <Label Grid.Row="1" Content="{ll:Str 动画类型}" />
-        <ComboBox Grid.Row="1" Grid.Column="1" />
+        <TextBlock
+          Grid.Row="1"
+          Grid.Column="1"
+          IsEnabled="True"
+          Text="{Binding Anime.Value.GraphType.Value}" />
       </Grid>
     </Grid>
     <Grid Grid.Column="1">
@@ -63,62 +170,84 @@
         <RowDefinition />
         <RowDefinition Height="Auto" />
       </Grid.RowDefinitions>
-      <ListBox
-        x:Name="ListBox_Images"
-        d:ItemsSource="{d:SampleData ItemCount=5}"
-        d:SelectedIndex="0"
-        ItemsSource="{Binding Anime.Value.ImageModels}"
-        SelectedItem="{Binding Anime.Value.CurrentImageModel.Value}">
-        <ListBox.ItemsPanel>
-          <ItemsPanelTemplate>
-            <WrapPanel />
-          </ItemsPanelTemplate>
-        </ListBox.ItemsPanel>
-        <ListBox.ItemTemplate>
-          <DataTemplate>
-            <Grid Width="150" Height="200">
-              <Grid.RowDefinitions>
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
-                <RowDefinition />
-              </Grid.RowDefinitions>
-              <Image
-                Width="150"
-                Height="150"
-                Source="{Binding Image.Value}">
-                <Image.ToolTip>
-                  <Image
-                    Width="250"
-                    Height="250"
-                    Source="{Binding Image.Value}" />
-                </Image.ToolTip>
-              </Image>
-              <Grid Grid.Row="1">
-                <Grid.ColumnDefinitions>
-                  <ColumnDefinition Width="Auto" />
-                  <ColumnDefinition />
-                </Grid.ColumnDefinitions>
-                <Label Content="持续时间" />
-                <pu:NumberInput Grid.Column="1" Value="{Binding Duration.Value}" />
-              </Grid>
-              <TextBox Grid.Row="2" Text="ImageName" />
-            </Grid>
-          </DataTemplate>
-        </ListBox.ItemTemplate>
-      </ListBox>
+      <TabControl SelectionChanged="TabControl_SelectionChanged">
+        <TabItem Tag="{Binding Anime.Value.ModeTypes[0]}">
+          <TabItem.Header>
+            <MultiBinding Converter="{StaticResource StringFormatConverter}" ConverterParameter="{}{0} ({1})">
+              <Binding Path="Tag" RelativeSource="{RelativeSource Mode=Self}" />
+              <Binding Path="Anime.Value.HappyAnimes.Count" />
+            </MultiBinding>
+          </TabItem.Header>
+          <ListBox
+            d:ItemsSource="{d:SampleData ItemCount=5}"
+            d:SelectedIndex="0"
+            ItemContainerStyle="{StaticResource ListBoxItem_Style}"
+            ItemTemplate="{StaticResource Expander_AnimeItem}"
+            ItemsSource="{Binding Anime.Value.HappyAnimes, IsAsync=True}" />
+        </TabItem>
+        <TabItem d:Header="Nomal (0)" Tag="Nomal">
+          <TabItem.Header>
+            <MultiBinding Converter="{StaticResource StringFormatConverter}" ConverterParameter="{}{0} ({1})">
+              <Binding Path="Tag" RelativeSource="{RelativeSource Mode=Self}" />
+              <Binding Path="Anime.Value.NomalAnimes.Count" />
+            </MultiBinding>
+          </TabItem.Header>
+          <ListBox
+            d:ItemsSource="{d:SampleData ItemCount=5}"
+            d:SelectedIndex="0"
+            ItemContainerStyle="{StaticResource ListBoxItem_Style}"
+            ItemTemplate="{StaticResource Expander_AnimeItem}"
+            ItemsSource="{Binding Anime.Value.NomalAnimes, IsAsync=True}" />
+        </TabItem>
+        <TabItem d:Header="PoorCondition (0)" Tag="PoorCondition">
+          <TabItem.Header>
+            <MultiBinding Converter="{StaticResource StringFormatConverter}" ConverterParameter="{}{0} ({1})">
+              <Binding Path="Tag" RelativeSource="{RelativeSource Mode=Self}" />
+              <Binding Path="Anime.Value.PoorConditionAnimes.Count" />
+            </MultiBinding>
+          </TabItem.Header>
+          <ListBox
+            d:ItemsSource="{d:SampleData ItemCount=5}"
+            d:SelectedIndex="0"
+            ItemContainerStyle="{StaticResource ListBoxItem_Style}"
+            ItemTemplate="{StaticResource Expander_AnimeItem}"
+            ItemsSource="{Binding Anime.Value.PoorConditionAnimes, IsAsync=True}" />
+        </TabItem>
+        <TabItem d:Header="Ill (0)" Tag="Ill">
+          <TabItem.Header>
+            <MultiBinding Converter="{StaticResource StringFormatConverter}" ConverterParameter="{}{0} ({1})">
+              <Binding Path="Tag" RelativeSource="{RelativeSource Mode=Self}" />
+              <Binding Path="Anime.Value.IllAnimes.Count" />
+            </MultiBinding>
+          </TabItem.Header>
+          <ListBox
+            d:ItemsSource="{d:SampleData ItemCount=5}"
+            d:SelectedIndex="0"
+            ItemContainerStyle="{StaticResource ListBoxItem_Style}"
+            ItemTemplate="{StaticResource Expander_AnimeItem}"
+            ItemsSource="{Binding Anime.Value.IllAnimes, IsAsync=True}" />
+        </TabItem>
+      </TabControl>
       <Grid Grid.Row="1">
         <Grid.ColumnDefinitions>
           <ColumnDefinition />
           <ColumnDefinition />
+          <ColumnDefinition />
         </Grid.ColumnDefinitions>
         <Button
+          x:Name="Button_AddAnime"
+          Margin="10"
+          Click="Button_AddAnime_Click"
+          Content="{ll:Str 添加动画}" />
+        <Button
           x:Name="Button_Cancel"
+          Grid.Column="1"
           Margin="10"
           Click="Button_Cancel_Click"
           Content="{ll:Str 取消}" />
         <Button
           x:Name="Button_Yes"
-          Grid.Column="1"
+          Grid.Column="2"
           Margin="10"
           Click="Button_Yes_Click"
           Content="{ll:Str 确定}" />

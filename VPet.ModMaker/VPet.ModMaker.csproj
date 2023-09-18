@@ -136,6 +136,9 @@
     <Compile Include="Views\ModEdit\AnimeEdit\AnimeEditWindow.xaml.cs">
       <DependentUpon>AnimeEditWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\ModEdit\AnimeEdit\AnimePage.xaml.cs">
+      <DependentUpon>AnimePage.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\ModEdit\ClickTextEdit\ClickTextPage.xaml.cs">
       <DependentUpon>ClickTextPage.xaml</DependentUpon>
     </Compile>
@@ -235,6 +238,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\ModEdit\AnimeEdit\AnimeEditWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\ModEdit\AnimeEdit\AnimePage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

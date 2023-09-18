@@ -212,6 +212,15 @@
             </TabItem.Header>
             <Frame Content="{Binding ModEditWindow.MovePage}" />
           </TabItem>
+          <TabItem Tag="{ll:Str 动画}">
+            <TabItem.Header>
+              <MultiBinding Converter="{StaticResource StringFormatConverter}" ConverterParameter="{}{0} ({1})">
+                <Binding Path="Tag" RelativeSource="{RelativeSource Mode=Self}" />
+                <Binding Path="ModEditWindow.MovePage.ViewModel.CurrentPet.Value.Animes.Count" />
+              </MultiBinding>
+            </TabItem.Header>
+            <Frame Content="{Binding ModEditWindow.AnimePage}" />
+          </TabItem>
           <!--<TabItem Header="物品 (0)" Tag="{ll:Str 物品}">
             <Grid>
               <Grid.RowDefinitions>

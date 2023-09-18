@@ -13,6 +13,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Media.Imaging;
 using VPet.ModMaker.Models.ModModel;
+using VPet_Simulator.Core;
 using VPet_Simulator.Windows.Interface;
 
 namespace VPet.ModMaker.Models;
@@ -74,17 +75,19 @@ public class ModInfoModel : I18nModel<I18nModInfoModel>
             var petModel = new PetModel(pet);
             Pets.Add(petModel);
             // TODO: 动画加载
-            //foreach (var p in pet.path)
-            //{
-            //    foreach (var dir in Directory.EnumerateDirectories(p))
-            //    {
-            //        var animeModel = AnimeModel.Load(dir);
-            //        if (animeModel != null)
-            //        {
-            //            petModel.Animes.TryAdd(animeModel.GraphType.Value, animeModel);
-            //        }
-            //    }
-            //}
+            foreach (var p in pet.path)
+            {
+                foreach (var dir in Directory.EnumerateDirectories(p))
+                {
+                    Enum.TryParse<GraphInfo.GraphType>(
+                        Path.GetFileName(dir),
+                        true,
+                        out var animeType
+                    );
+                    if (animeType is GraphInfo.GraphType.Default)
+                        petModel.Animes.Add(new(animeType, dir));
+                }
+            }
         }
 
         foreach (var lang in loader.I18nDatas)

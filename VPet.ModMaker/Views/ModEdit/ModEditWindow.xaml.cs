@@ -17,6 +17,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using VPet.ModMaker.ViewModels.ModEdit;
+using VPet.ModMaker.Views.ModEdit.AnimeEdit;
 using VPet.ModMaker.Views.ModEdit.ClickTextEdit;
 using VPet.ModMaker.Views.ModEdit.FoodEdit;
 using VPet.ModMaker.Views.ModEdit.LowTextEdit;
@@ -40,8 +41,8 @@ public partial class ModEditWindow : Window
     public SelectTextPage SelectTextPage { get; } = new();
     public PetPage PetPage { get; } = new();
     public WorkPage WorkPage { get; } = new();
-
     public MovePage MovePage { get; } = new();
+    public AnimePage AnimePage { get; } = new();
 
     public ModEditWindow()
     {
@@ -63,6 +64,7 @@ public partial class ModEditWindow : Window
             PetPage.DataContext = null;
             WorkPage.DataContext = null;
             MovePage.DataContext = null;
+            AnimePage.DataContext = null;
         }
         catch { }
     }
