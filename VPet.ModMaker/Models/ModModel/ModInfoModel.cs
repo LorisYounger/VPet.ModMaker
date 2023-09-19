@@ -223,14 +223,6 @@ public class ModInfoModel : I18nModel<I18nModInfoModel>
         Directory.CreateDirectory(petPath);
         foreach (var pet in Pets)
         {
-            var petFile = Path.Combine(petPath, $"{pet.Id.Value}.lps");
-            if (File.Exists(petFile) is false)
-                File.Create(petFile).Close();
-            var lps = new LPS();
-            GetPetInfo(lps, pet);
-            GetWorksInfo(lps, pet);
-            GetMoveInfo(lps, pet);
-            File.WriteAllText(petFile, lps.ToString());
             foreach (var cultureName in I18nHelper.Current.CultureNames)
             {
                 _saveI18nDatas[cultureName].TryAdd(
@@ -245,6 +237,77 @@ public class ModInfoModel : I18nModel<I18nModInfoModel>
                     pet.DescriptionId.Value,
                     pet.I18nDatas[cultureName].Description.Value
                 );
+            }
+            var petFile = Path.Combine(petPath, $"{pet.Id.Value}.lps");
+            if (File.Exists(petFile) is false)
+                File.Create(petFile).Close();
+            var lps = new LPS();
+            GetPetInfo(lps, pet);
+            GetWorksInfo(lps, pet);
+            GetMoveInfo(lps, pet);
+            File.WriteAllText(petFile, lps.ToString());
+
+            var petAnimePath = Path.Combine(petPath, pet.Id.Value);
+            Directory.CreateDirectory(petAnimePath);
+            SaveAnime_Default(petAnimePath, pet);
+        }
+    }
+
+    void SaveAnime_Default(string path, PetModel pet)
+    {
+        if (
+            pet.Animes.FirstOrDefault(m => m.GraphType.Value == GraphInfo.GraphType.Default)
+            is not AnimeTypeModel animeType
+        )
+            return;
+        var animePath = Path.Combine(path, nameof(GraphInfo.GraphType.Default));
+        Directory.CreateDirectory(animePath);
+        if (animeType.HappyAnimes.Count > 0)
+        {
+            var modePath = Path.Combine(animePath, nameof(GameSave.ModeType.Happy));
+            SaveImage(animeType.HappyAnimes, animeType, modePath);
+        }
+        if (animeType.NomalAnimes.Count > 0)
+        {
+            var modePath = Path.Combine(animePath, nameof(GameSave.ModeType.Nomal));
+            SaveImage(animeType.NomalAnimes, animeType, modePath);
+        }
+        if (animeType.PoorConditionAnimes.Count > 0)
+        {
+            var modePath = Path.Combine(animePath, nameof(GameSave.ModeType.PoorCondition));
+            SaveImage(animeType.PoorConditionAnimes, animeType, modePath);
+        }
+        if (animeType.IllAnimes.Count > 0)
+        {
+            var modePath = Path.Combine(animePath, nameof(GameSave.ModeType.Ill));
+            SaveImage(animeType.IllAnimes, animeType, modePath);
+        }
+
+        static void SaveImage(
+            ObservableCollection<AnimeModel> animes,
+            AnimeTypeModel animeType,
+            string modePath
+        )
+        {
+            Directory.CreateDirectory(modePath);
+            var count = 0;
+            foreach (var anime in animes)
+            {
+                var imagePath = Path.Combine(modePath, count.ToString());
+                Directory.CreateDirectory(imagePath);
+                var imageIndex = 0;
+                foreach (var image in anime.Images)
+                {
+                    File.Copy(
+                        image.Image.Value.GetSourceFile(),
+                        Path.Combine(
+                            imagePath,
+                            $"{anime.Id.Value}_{imageIndex:000}_{image.Duration.Value}.png"
+                        )
+                    );
+                    imageIndex++;
+                }
+                count++;
             }
         }
     }

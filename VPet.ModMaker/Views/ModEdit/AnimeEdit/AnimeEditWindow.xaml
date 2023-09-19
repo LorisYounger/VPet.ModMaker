@@ -68,7 +68,8 @@
           ItemsSource="{Binding Images, IsAsync=True}"
           PreviewMouseMove="ListBox_PreviewMouseMove"
           PreviewMouseWheel="ListBox_PreviewMouseWheel"
-          SelectedItem="{Binding DataContext.CurrentImageModel.Value, RelativeSource={RelativeSource AncestorType=Window, Mode=FindAncestor}}">
+          SelectedItem="{Binding DataContext.CurrentImageModel.Value, RelativeSource={RelativeSource AncestorType=Window, Mode=FindAncestor}}"
+          SelectionChanged="ListBox_SelectionChanged">
           <ListBox.ItemsPanel>
             <ItemsPanelTemplate>
               <WrapPanel />
@@ -128,9 +129,15 @@
         <RowDefinition Height="Auto" />
         <RowDefinition />
       </Grid.RowDefinitions>
-      <Image Width="250" Height="250">
+      <Image
+        Width="250"
+        Height="250"
+        Source="{Binding CurrentImageModel.Value.Image.Value}">
         <Image.ToolTip>
-          <Image Width="500" Height="500" />
+          <Image
+            Width="500"
+            Height="500"
+            Source="{Binding CurrentImageModel.Value.Image.Value}" />
         </Image.ToolTip>
       </Image>
       <Grid Grid.Row="1">
@@ -139,12 +146,15 @@
           <ColumnDefinition />
           <ColumnDefinition />
         </Grid.ColumnDefinitions>
-        <Button Command="{Binding PauseCommand}" Content="{ll:Str 停止}" />
+        <Button Command="{Binding StopCommand}" Content="{ll:Str 停止}" />
         <Button
           Grid.Column="1"
           Command="{Binding PlayCommand}"
           Content="{ll:Str 播放}" />
-        <ToggleButton Grid.Column="2" Content="{ll:Str 循环}" />
+        <ToggleButton
+          Grid.Column="2"
+          Content="{ll:Str 循环}"
+          IsChecked="{Binding Loop.Value}" />
       </Grid>
       <Grid Grid.Row="2">
         <Grid.ColumnDefinitions>

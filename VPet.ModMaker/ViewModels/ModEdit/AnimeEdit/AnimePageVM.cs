@@ -62,9 +62,16 @@ public class AnimePageVM
 
     private void Add()
     {
+        var selectGraphTypeWindow = new SelectGraphTypeWindow();
+        selectGraphTypeWindow.CurrentPet.Value = CurrentPet.Value;
+        selectGraphTypeWindow.ShowDialog();
+        var graphType = selectGraphTypeWindow.GraphType.Value;
+        if (selectGraphTypeWindow.IsCancel)
+            return;
         var window = new AnimeEditWindow();
         var vm = window.ViewModel;
         vm.CurrentPet = CurrentPet.Value;
+        vm.Anime.Value.GraphType.Value = graphType;
         window.ShowDialog();
         if (window.IsCancel)
             return;

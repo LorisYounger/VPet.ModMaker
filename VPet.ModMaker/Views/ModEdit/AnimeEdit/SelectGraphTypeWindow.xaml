@@ -1,0 +1,56 @@
+﻿<Window
+  x:Class="VPet.ModMaker.Views.ModEdit.AnimeEdit.SelectGraphTypeWindow"
+  xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+  xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+  xmlns:ll="clr-namespace:LinePutScript.Localization.WPF;assembly=LinePutScript.Localization.WPF"
+  xmlns:local="clr-namespace:VPet.ModMaker.Views.ModEdit.AnimeEdit"
+  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+  xmlns:pu="https://opensource.panuon.com/wpf-ui"
+  Title="SelectGraphTypeWindow"
+  Width="500"
+  Height="300"
+  mc:Ignorable="d">
+  <d:Window.DataContext>
+    <local:SelectGraphTypeWindow />
+  </d:Window.DataContext>
+  <Grid>
+    <Grid.RowDefinitions>
+      <RowDefinition Height="Auto" />
+      <RowDefinition />
+      <RowDefinition Height="Auto" />
+    </Grid.RowDefinitions>
+    <TextBlock Text="当前只支持 Default 动画" />
+    <Grid
+      Grid.Row="1"
+      HorizontalAlignment="Center"
+      VerticalAlignment="Center">
+      <Grid.ColumnDefinitions>
+        <ColumnDefinition Width="Auto" />
+        <ColumnDefinition />
+      </Grid.ColumnDefinitions>
+      <Label Content="{ll:Str 动画类型}" />
+      <ComboBox
+        Grid.Column="1"
+        ItemsSource="{Binding GraphTypes}"
+        SelectedItem="{Binding GraphType.Value}" />
+    </Grid>
+    <Grid Grid.Row="2">
+      <Grid.ColumnDefinitions>
+        <ColumnDefinition />
+        <ColumnDefinition />
+      </Grid.ColumnDefinitions>
+      <Button
+        x:Name="Button_Cancel"
+        Margin="10"
+        Click="Button_Cancel_Click"
+        Content="{ll:Str 取消}" />
+      <Button
+        x:Name="Button_Yes"
+        Grid.Column="1"
+        Margin="10"
+        Click="Button_Yes_Click"
+        Content="{ll:Str 确定}" />
+    </Grid>
+  </Grid>
+</Window>

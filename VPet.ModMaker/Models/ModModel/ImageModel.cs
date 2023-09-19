@@ -27,4 +27,9 @@ public class ImageModel
         );
         return model;
     }
+
+    public void Close()
+    {
+        Image.Value?.CloseStream();
+    }
 }

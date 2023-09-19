@@ -108,10 +108,7 @@ public class AnimeModel
                 .Split(_splits, StringSplitOptions.RemoveEmptyEntries);
             Id.Value = info[0];
             var duration = info.Last();
-            var imageModel = new ImageModel(
-                Utils.LoadImageToMemoryStream(file),
-                int.Parse(duration)
-            );
+            var imageModel = new ImageModel(Utils.LoadImageToStream(file), int.Parse(duration));
             Images.Add(imageModel);
         }
     }
@@ -124,5 +121,11 @@ public class AnimeModel
         foreach (var image in Images)
             model.Images.Add(image);
         return model;
+    }
+
+    public void Close()
+    {
+        foreach (var image in Images)
+            image.Close();
     }
 }

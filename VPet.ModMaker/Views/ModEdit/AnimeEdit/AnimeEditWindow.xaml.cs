@@ -195,4 +195,12 @@ public partial class AnimeEditWindow : Window
         else if (ViewModel.CurrentMode is GameSave.ModeType.Ill)
             ViewModel.Anime.Value.IllAnimes.Add(new());
     }
+
+    private void ListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+    {
+        if (sender is not ListBox listBox)
+            return;
+        if (listBox.DataContext is AnimeModel model)
+            ViewModel.CurrentAnimeModel.Value = model;
+    }
 }
