@@ -48,40 +48,137 @@ public class AnimeTypeModel
         GraphType.Value = graphType;
         if (graphType is GraphInfo.GraphType.Default)
             LoadDefault(path);
+        else if (graphType is GraphInfo.GraphType.Touch_Head or GraphInfo.GraphType.Touch_Body)
+            LoadMultiTypeAnime(path);
+        else
+            throw new Exception();
+    }
+
+    public static AnimeTypeModel? Create(GraphInfo.GraphType graphType, string path)
+    {
+        try
+        {
+            var model = new AnimeTypeModel(graphType, path);
+            return model;
+        }
+        catch
+        {
+            return null;
+        }
     }
 
     private void LoadDefault(string path)
     {
-        foreach (var modeDir in Directory.EnumerateDirectories(path))
+        foreach (var dir in Directory.EnumerateDirectories(path))
         {
-            var mode = Enum.Parse(typeof(GameSave.ModeType), Path.GetFileName(modeDir), true);
+            var mode = Enum.Parse(typeof(GameSave.ModeType), Path.GetFileName(dir), true);
             if (mode is GameSave.ModeType.Happy)
             {
-                foreach (var imagesDir in Directory.EnumerateDirectories(modeDir))
-                {
-                    HappyAnimes.Add(new(imagesDir));
-                }
+                AddAnime(HappyAnimes, dir);
             }
             else if (mode is GameSave.ModeType.Nomal)
             {
-                foreach (var imagesDir in Directory.EnumerateDirectories(modeDir))
-                {
-                    NomalAnimes.Add(new(imagesDir));
-                }
+                AddAnime(NomalAnimes, dir);
             }
             else if (mode is GameSave.ModeType.PoorCondition)
             {
-                foreach (var imagesDir in Directory.EnumerateDirectories(modeDir))
-                {
-                    PoorConditionAnimes.Add(new(imagesDir));
-                }
+                AddAnime(PoorConditionAnimes, dir);
             }
             else if (mode is GameSave.ModeType.Ill)
             {
-                foreach (var imagesDir in Directory.EnumerateDirectories(modeDir))
+                AddAnime(IllAnimes, dir);
+            }
+        }
+    }
+
+    private void LoadMultiTypeAnime(string path)
+    {
+        foreach (var dir in Directory.EnumerateDirectories(path))
+        {
+            var dirName = Path.GetFileName(dir);
+            var dirInfo = dirName.Split(Utils.Separator, StringSplitOptions.RemoveEmptyEntries);
+            if (dirInfo.Length == 2)
+            {
+                // 判断 A_Happy 类型文件夹
+                var typeName = dirInfo[0];
+                var modeName = dirInfo[1];
+                var type = GetAnimatType(typeName[0]);
+                var mode = Enum.Parse(typeof(GameSave.ModeType), Path.GetFileName(modeName), true);
+                if (mode is GameSave.ModeType.Happy)
                 {
-                    IllAnimes.Add(new(imagesDir));
+                    AddAnime(HappyAnimes, dir, type);
                 }
+                else if (mode is GameSave.ModeType.Nomal)
+                {
+                    AddAnime(NomalAnimes, dir, type);
+                }
+                else if (mode is GameSave.ModeType.PoorCondition)
+                {
+                    AddAnime(PoorConditionAnimes, dir, type);
+                }
+                else if (mode is GameSave.ModeType.Ill)
+                {
+                    AddAnime(IllAnimes, dir, type);
+                }
+            }
+            else
+            {
+                // 判断 Happy/A 型文件夹
+                var mode = Enum.Parse(typeof(GameSave.ModeType), Path.GetFileName(dirName), true);
+                foreach (var typePath in Directory.EnumerateDirectories(dir))
+                {
+                    var type = GetAnimatType(Path.GetFileName(typePath)[0]);
+                    if (mode is GameSave.ModeType.Happy)
+                    {
+                        AddAnime(HappyAnimes, dir, type);
+                    }
+                    else if (mode is GameSave.ModeType.Nomal)
+                    {
+                        AddAnime(NomalAnimes, dir, type);
+                    }
+                    else if (mode is GameSave.ModeType.PoorCondition)
+                    {
+                        AddAnime(PoorConditionAnimes, dir, type);
+                    }
+                    else if (mode is GameSave.ModeType.Ill)
+                    {
+                        AddAnime(IllAnimes, dir, type);
+                    }
+                }
+            }
+        }
+    }
+
+    private static GraphInfo.AnimatType GetAnimatType(char c)
+    {
+        return c switch
+        {
+            'A' => GraphInfo.AnimatType.A_Start,
+            'B' => GraphInfo.AnimatType.B_Loop,
+            'C' => GraphInfo.AnimatType.C_End,
+            _ => GraphInfo.AnimatType.Single,
+        };
+    }
+
+    public static void AddAnime(
+        ObservableCollection<AnimeModel> collection,
+        string path,
+        GraphInfo.AnimatType animatType = AnimatType.Single
+    )
+    {
+        if (Directory.EnumerateFiles(path).Any())
+        {
+            var animeModel = new AnimeModel(path);
+            animeModel.AnimeType.Value = animatType;
+            collection.Add(animeModel);
+        }
+        else
+        {
+            foreach (var imagesDir in Directory.EnumerateDirectories(path))
+            {
+                var animeModel = new AnimeModel(imagesDir);
+                animeModel.AnimeType.Value = animatType;
+                collection.Add(animeModel);
             }
         }
     }
@@ -96,7 +193,6 @@ public class AnimeModel
     //public ObservableValue<GameSave.ModeType> ModeType { get; } = new();
 
     public ObservableCollection<ImageModel> Images { get; } = new();
-    private static readonly char[] _splits = new char[] { '_' };
 
     public AnimeModel() { }
 
@@ -104,8 +200,7 @@ public class AnimeModel
     {
         foreach (var file in Directory.EnumerateFiles(imagesPath))
         {
-            var info = Path.GetFileNameWithoutExtension(file)
-                .Split(_splits, StringSplitOptions.RemoveEmptyEntries);
+            var info = Path.GetFileNameWithoutExtension(file).Split(Utils.Separator);
             Id.Value = info[0];
             var duration = info.Last();
             var imageModel = new ImageModel(Utils.LoadImageToStream(file), int.Parse(duration));

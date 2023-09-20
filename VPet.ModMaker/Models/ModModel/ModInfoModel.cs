@@ -84,8 +84,8 @@ public class ModInfoModel : I18nModel<I18nModInfoModel>
                         true,
                         out var animeType
                     );
-                    if (animeType is GraphInfo.GraphType.Default)
-                        petModel.Animes.Add(new(animeType, dir));
+                    if (AnimeTypeModel.Create(animeType, dir) is AnimeTypeModel model)
+                        petModel.Animes.Add(model);
                 }
             }
         }
@@ -250,6 +250,88 @@ public class ModInfoModel : I18nModel<I18nModInfoModel>
             var petAnimePath = Path.Combine(petPath, pet.Id.Value);
             Directory.CreateDirectory(petAnimePath);
             SaveAnime_Default(petAnimePath, pet);
+            SaveAnime_MultiType(petAnimePath, pet);
+        }
+    }
+
+    void SaveAnime_MultiType(string path, PetModel pet)
+    {
+        if (
+            pet.Animes.FirstOrDefault(m => m.GraphType.Value is GraphInfo.GraphType.Touch_Head)
+            is AnimeTypeModel animeType1
+        )
+        {
+            SaveMultiTypeAnime(
+                Path.Combine(path, nameof(GraphInfo.GraphType.Touch_Head)),
+                animeType1
+            );
+        }
+        if (
+            pet.Animes.FirstOrDefault(m => m.GraphType.Value is GraphInfo.GraphType.Touch_Body)
+            is AnimeTypeModel animeType2
+        )
+        {
+            SaveMultiTypeAnime(
+                Path.Combine(path, nameof(GraphInfo.GraphType.Touch_Body)),
+                animeType2
+            );
+        }
+
+        static void SaveMultiTypeAnime(string animePath, AnimeTypeModel model)
+        {
+            Directory.CreateDirectory(animePath);
+            if (model.HappyAnimes.Count > 0)
+            {
+                var modePath = Path.Combine(animePath, nameof(GameSave.ModeType.Happy));
+                SaveAnimes(modePath, model.HappyAnimes);
+            }
+            if (model.NomalAnimes.Count > 0)
+            {
+                var modePath = Path.Combine(animePath, nameof(GameSave.ModeType.Nomal));
+                SaveAnimes(modePath, model.NomalAnimes);
+            }
+            if (model.PoorConditionAnimes.Count > 0)
+            {
+                var modePath = Path.Combine(animePath, nameof(GameSave.ModeType.PoorCondition));
+                SaveAnimes(modePath, model.PoorConditionAnimes);
+            }
+            if (model.IllAnimes.Count > 0)
+            {
+                var modePath = Path.Combine(animePath, nameof(GameSave.ModeType.Ill));
+                SaveAnimes(modePath, model.IllAnimes);
+            }
+        }
+
+        static void SaveAnimes(string animePath, ObservableCollection<AnimeModel> animes)
+        {
+            Directory.CreateDirectory(animePath);
+            var countA = 0;
+            var countB = 0;
+            var countC = 0;
+            foreach (var anime in animes)
+            {
+                if (anime.AnimeType.Value is GraphInfo.AnimatType.A_Start)
+                {
+                    var animatTypePath = Path.Combine(animePath, "A");
+                    Directory.CreateDirectory(animatTypePath);
+                    SaveImages(Path.Combine(animatTypePath, countA.ToString()), anime);
+                    countA++;
+                }
+                else if (anime.AnimeType.Value is GraphInfo.AnimatType.B_Loop)
+                {
+                    var animatTypePath = Path.Combine(animePath, "B");
+                    Directory.CreateDirectory(animatTypePath);
+                    SaveImages(Path.Combine(animatTypePath, countB.ToString()), anime);
+                    countB++;
+                }
+                else if (anime.AnimeType.Value is GraphInfo.AnimatType.C_End)
+                {
+                    var animatTypePath = Path.Combine(animePath, "C");
+                    Directory.CreateDirectory(animatTypePath);
+                    SaveImages(Path.Combine(animatTypePath, countC.ToString()), anime);
+                    countC++;
+                }
+            }
         }
     }
 
@@ -265,50 +347,52 @@ public class ModInfoModel : I18nModel<I18nModInfoModel>
         if (animeType.HappyAnimes.Count > 0)
         {
             var modePath = Path.Combine(animePath, nameof(GameSave.ModeType.Happy));
-            SaveImage(animeType.HappyAnimes, animeType, modePath);
+            SaveAnimes(modePath, animeType.HappyAnimes);
         }
         if (animeType.NomalAnimes.Count > 0)
         {
             var modePath = Path.Combine(animePath, nameof(GameSave.ModeType.Nomal));
-            SaveImage(animeType.NomalAnimes, animeType, modePath);
+            SaveAnimes(modePath, animeType.NomalAnimes);
         }
         if (animeType.PoorConditionAnimes.Count > 0)
         {
             var modePath = Path.Combine(animePath, nameof(GameSave.ModeType.PoorCondition));
-            SaveImage(animeType.PoorConditionAnimes, animeType, modePath);
+            SaveAnimes(modePath, animeType.PoorConditionAnimes);
         }
         if (animeType.IllAnimes.Count > 0)
         {
             var modePath = Path.Combine(animePath, nameof(GameSave.ModeType.Ill));
-            SaveImage(animeType.IllAnimes, animeType, modePath);
+            SaveAnimes(modePath, animeType.IllAnimes);
         }
-
-        static void SaveImage(
-            ObservableCollection<AnimeModel> animes,
-            AnimeTypeModel animeType,
-            string modePath
-        )
+        static void SaveAnimes(string animePath, ObservableCollection<AnimeModel> animes)
         {
-            Directory.CreateDirectory(modePath);
+            Directory.CreateDirectory(animePath);
             var count = 0;
             foreach (var anime in animes)
             {
-                var imagePath = Path.Combine(modePath, count.ToString());
+                var imagePath = Path.Combine(animePath, count.ToString());
                 Directory.CreateDirectory(imagePath);
-                var imageIndex = 0;
-                foreach (var image in anime.Images)
-                {
-                    File.Copy(
-                        image.Image.Value.GetSourceFile(),
-                        Path.Combine(
-                            imagePath,
-                            $"{anime.Id.Value}_{imageIndex:000}_{image.Duration.Value}.png"
-                        )
-                    );
-                    imageIndex++;
-                }
+                SaveImages(Path.Combine(imagePath, count.ToString()), anime);
                 count++;
             }
+        }
+    }
+
+    static void SaveImages(string imagesPath, AnimeModel model)
+    {
+        Directory.CreateDirectory(imagesPath);
+        var imageIndex = 0;
+        foreach (var image in model.Images)
+        {
+            File.Copy(
+                image.Image.Value.GetSourceFile(),
+                Path.Combine(
+                    imagesPath,
+                    $"{model.Id.Value}_{imageIndex:000}_{image.Duration.Value}.png"
+                ),
+                true
+            );
+            imageIndex++;
         }
     }
 

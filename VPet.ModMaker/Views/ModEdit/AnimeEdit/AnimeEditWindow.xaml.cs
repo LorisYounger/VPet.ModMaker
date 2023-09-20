@@ -47,37 +47,9 @@ public partial class AnimeEditWindow : Window
 
     private void Button_Yes_Click(object sender, RoutedEventArgs e)
     {
-        //if (string.IsNullOrEmpty(ViewModel.Work.Value.Id.Value))
-        //{
-        //    MessageBox.Show("Id不可为空".Translate(), "", MessageBoxButton.OK, MessageBoxImage.Warning);
-        //    return;
-        //}
-        //if (string.IsNullOrEmpty(ViewModel.Work.Value.Graph.Value))
-        //{
-        //    MessageBox.Show(
-        //        "指定动画Id不可为空".Translate(),
-        //        "",
-        //        MessageBoxButton.OK,
-        //        MessageBoxImage.Warning
-        //    );
-        //    return;
-        //}
-        //if (
-        //    ViewModel.OldWork?.Id.Value != ViewModel.Work.Value.Id.Value
-        //    && ViewModel.CurrentPet.Works.Any(i => i.Id.Value == ViewModel.Work.Value.Id.Value)
-        //)
-        //{
-        //    MessageBox.Show("此Id已存在".Translate(), "", MessageBoxButton.OK, MessageBoxImage.Warning);
-        //    return;
-        //}
         IsCancel = false;
         Close();
     }
-
-    //private void ListBox_Drop(object sender, DragEventArgs e)
-    //{
-    //    var fileName = ((System.Array)e.Data.GetData(DataFormats.FileDrop)).GetValue(0).ToString();
-    //}
 
     private void TabControl_SelectionChanged(object sender, SelectionChangedEventArgs e)
     {
@@ -125,13 +97,15 @@ public partial class AnimeEditWindow : Window
 
     private void ListBox_Drop(object sender, DragEventArgs e)
     {
-        if (sender.Equals(_dropSender) is false)
+        if (sender is not ListBox listBox)
+            return;
+        if (e.Data.GetData(DataFormats.FileDrop) is Array array)
+            ViewModel.AddImages((AnimeModel)listBox.DataContext, array.Cast<string>());
+        if (_dropSender is not null && sender.Equals(_dropSender) is false)
         {
             MessageBox.Show("无法移动不同动画的图片");
             return;
         }
-        if (sender is not ListBox listBox)
-            return;
         var pos = e.GetPosition(listBox);
         var result = VisualTreeHelper.HitTest(listBox, pos);
         if (result == null)

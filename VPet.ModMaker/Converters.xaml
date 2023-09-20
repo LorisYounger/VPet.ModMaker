@@ -8,4 +8,5 @@
   <c:StringFormatConverter x:Key="StringFormatConverter" />
   <c:BrushToMediaColorConverter x:Key="BrushToMediaColorConverter" />
   <c:MaxConverter x:Key="MaxConverter" />
+  <c:FalseToHiddenConverter x:Key="FalseToHiddenConverter" />
 </ResourceDictionary>

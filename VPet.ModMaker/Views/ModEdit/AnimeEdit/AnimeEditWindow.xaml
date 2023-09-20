@@ -48,6 +48,7 @@
         <Expander.Header>
           <Grid>
             <Grid.ColumnDefinitions>
+              <ColumnDefinition Width="Auto" MinWidth="200" />
               <ColumnDefinition Width="Auto" />
               <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
@@ -59,6 +60,12 @@
                 </MultiBinding>
               </TextBlock.Text>
             </TextBlock>
+            <ComboBox
+              Grid.Column="2"
+              Margin="10,0,0,0"
+              ItemsSource="{Binding DataContext.Anime.Value.AnimatTypes, RelativeSource={RelativeSource AncestorType=Window, Mode=FindAncestor}}"
+              SelectedItem="{Binding AnimeType.Value}"
+              Visibility="{Binding DataContext.HasMultiType.Value, RelativeSource={RelativeSource AncestorType=Window, Mode=FindAncestor}, Converter={StaticResource FalseToHiddenConverter}}" />
           </Grid>
         </Expander.Header>
         <ListBox

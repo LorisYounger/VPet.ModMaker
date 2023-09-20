@@ -92,6 +92,7 @@
     </Compile>
     <Compile Include="Converters\BrushToMediaColorConverter.cs" />
     <Compile Include="Converters\CalculatorConverter.cs" />
+    <Compile Include="Converters\FalseToHiddenConverter.cs" />
     <Compile Include="Converters\MediaColorToBrushConverter.cs" />
     <Compile Include="Converters\StringFormatConverter.cs" />
     <Compile Include="Converters\RatioMarginConverter.cs" />

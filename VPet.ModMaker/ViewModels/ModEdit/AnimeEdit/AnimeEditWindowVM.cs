@@ -23,6 +23,8 @@ public class AnimeEditWindowVM
     public ObservableValue<AnimeModel> CurrentAnimeModel { get; } = new();
     public GameSave.ModeType CurrentMode { get; set; }
     public ObservableValue<bool> Loop { get; } = new();
+
+    public ObservableValue<bool> HasMultiType { get; } = new(false);
     #region Command
     public ObservableCommand PlayCommand { get; } = new();
     public ObservableCommand StopCommand { get; } = new();
@@ -41,7 +43,6 @@ public class AnimeEditWindowVM
         _playerTask = new(Play);
 
         CurrentAnimeModel.ValueChanged += CurrentAnimeModel_ValueChanged;
-        ;
 
         PlayCommand.ExecuteEvent += PlayCommand_ExecuteEvent;
         StopCommand.ExecuteEvent += StopCommand_ExecuteEvent;
@@ -49,6 +50,23 @@ public class AnimeEditWindowVM
         ClearImageCommand.ExecuteEvent += ClearImageCommand_ExecuteEvent;
         RemoveAnimeCommand.ExecuteEvent += RemoveAnimeCommand_ExecuteEvent;
         RemoveImageCommand.ExecuteEvent += RemoveImageCommand_ExecuteEvent;
+
+        Anime.ValueChanged += Anime_ValueChanged;
+    }
+
+    private void Anime_ValueChanged(AnimeTypeModel oldValue, AnimeTypeModel newValue)
+    {
+        CheckGraphType(newValue);
+    }
+
+    private void CheckGraphType(AnimeTypeModel model)
+    {
+        if (
+            model.GraphType.Value
+            is GraphInfo.GraphType.Touch_Body
+                or GraphInfo.GraphType.Touch_Head
+        )
+            HasMultiType.Value = true;
     }
 
     private void CurrentAnimeModel_ValueChanged(AnimeModel oldValue, AnimeModel newValue)
@@ -112,6 +130,31 @@ public class AnimeEditWindowVM
         if (openFileDialog.ShowDialog() is true)
         {
             value.Images.Add(new(Utils.LoadImageToStream(openFileDialog.FileName)));
+        }
+    }
+
+    public void AddImages(AnimeModel model, IEnumerable<string> paths)
+    {
+        try
+        {
+            foreach (string path in paths)
+            {
+                if (File.Exists(path))
+                {
+                    model.Images.Add(new(Utils.LoadImageToStream(path)));
+                }
+                else if (Directory.Exists(path))
+                {
+                    foreach (var file in Directory.EnumerateFiles(path, "*.png"))
+                    {
+                        model.Images.Add(new(Utils.LoadImageToStream(path)));
+                    }
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            MessageBox.Show("添加失败 \n{0}".Translate(ex));
         }
     }
 
