@@ -370,9 +370,7 @@ public class ModInfoModel : I18nModel<I18nModInfoModel>
             var count = 0;
             foreach (var anime in animes)
             {
-                var imagePath = Path.Combine(animePath, count.ToString());
-                Directory.CreateDirectory(imagePath);
-                SaveImages(Path.Combine(imagePath, count.ToString()), anime);
+                SaveImages(Path.Combine(animePath, count.ToString()), anime);
                 count++;
             }
         }
