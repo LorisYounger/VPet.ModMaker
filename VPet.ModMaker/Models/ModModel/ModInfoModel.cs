@@ -79,13 +79,26 @@ public class ModInfoModel : I18nModel<I18nModInfoModel>
             {
                 foreach (var dir in Directory.EnumerateDirectories(p))
                 {
-                    Enum.TryParse<GraphInfo.GraphType>(
-                        Path.GetFileName(dir),
-                        true,
-                        out var animeType
-                    );
+                    var dirName = Path.GetFileName(dir);
+                    Enum.TryParse<GraphInfo.GraphType>(dirName, true, out var animeType);
                     if (AnimeTypeModel.Create(animeType, dir) is AnimeTypeModel model)
                         petModel.Animes.Add(model);
+                    else if (dirName.Equals("Switch", StringComparison.InvariantCultureIgnoreCase))
+                    {
+                        foreach (var switchDir in Directory.EnumerateDirectories(dir))
+                        {
+                            Enum.TryParse<GraphInfo.GraphType>(
+                                $"{dirName}_{Path.GetFileName(switchDir)}",
+                                true,
+                                out var switchType
+                            );
+                            if (
+                                AnimeTypeModel.Create(switchType, Path.Combine(dir, switchDir))
+                                is AnimeTypeModel switchModel
+                            )
+                                petModel.Animes.Add(switchModel);
+                        }
+                    }
                 }
             }
         }

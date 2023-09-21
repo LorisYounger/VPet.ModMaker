@@ -64,6 +64,10 @@ public class AnimeTypeModel
             is GraphInfo.GraphType.Default
                 or GraphInfo.GraphType.Shutdown
                 or GraphInfo.GraphType.StartUP
+                or GraphInfo.GraphType.Switch_Up
+                or GraphInfo.GraphType.Switch_Down
+                or GraphInfo.GraphType.Switch_Thirsty
+                or GraphInfo.GraphType.Switch_Hunger
         )
             LoadDefault(path);
         else if (
@@ -88,6 +92,7 @@ public class AnimeTypeModel
     //    }
     //}
 
+
     private void LoadDefault(string path)
     {
         foreach (var dir in Directory.EnumerateDirectories(path))
@@ -109,6 +114,10 @@ public class AnimeTypeModel
             {
                 AddAnime(IllAnimes, dir);
             }
+        }
+        if (Directory.EnumerateFiles(path).Any())
+        {
+            AddAnime(NomalAnimes, path);
         }
     }
 
@@ -181,7 +190,7 @@ public class AnimeTypeModel
         };
     }
 
-    public static void AddAnime(
+    private static void AddAnime(
         ObservableCollection<AnimeModel> collection,
         string path,
         GraphInfo.AnimatType animatType = AnimatType.Single
@@ -220,31 +229,47 @@ public class AnimeTypeModel
                 or GraphInfo.GraphType.Sleep
         )
             SaveMultiType(path, this);
+        else if (
+            GraphType.Value
+            is GraphInfo.GraphType.Switch_Up
+                or GraphInfo.GraphType.Switch_Down
+                or GraphInfo.GraphType.Switch_Thirsty
+                or GraphInfo.GraphType.Switch_Hunger
+        )
+            SaveSwitch(path, this);
     }
 
-    void SaveMultiType(string path, AnimeTypeModel animeType)
+    void SaveSwitch(string path, AnimeTypeModel animeTypeModel)
     {
-        var animePath = Path.Combine(path, animeType.GraphType.ToString());
+        var animePath = Path.Combine(path, "Switch");
         Directory.CreateDirectory(animePath);
-        if (animeType.HappyAnimes.Count > 0)
+        var switchName = animeTypeModel.GraphType.ToString().Split(Utils.Separator).Last();
+        SaveWithAnimeType(Path.Combine(animePath, switchName), animeTypeModel);
+    }
+
+    void SaveMultiType(string path, AnimeTypeModel animeTypeModel)
+    {
+        var animePath = Path.Combine(path, animeTypeModel.GraphType.ToString());
+        Directory.CreateDirectory(animePath);
+        if (animeTypeModel.HappyAnimes.Count > 0)
         {
             var modePath = Path.Combine(animePath, nameof(GameSave.ModeType.Happy));
-            SaveAnimes(modePath, animeType.HappyAnimes);
+            SaveAnimes(modePath, animeTypeModel.HappyAnimes);
         }
-        if (animeType.NomalAnimes.Count > 0)
+        if (animeTypeModel.NomalAnimes.Count > 0)
         {
             var modePath = Path.Combine(animePath, nameof(GameSave.ModeType.Nomal));
-            SaveAnimes(modePath, animeType.NomalAnimes);
+            SaveAnimes(modePath, animeTypeModel.NomalAnimes);
         }
-        if (animeType.PoorConditionAnimes.Count > 0)
+        if (animeTypeModel.PoorConditionAnimes.Count > 0)
         {
             var modePath = Path.Combine(animePath, nameof(GameSave.ModeType.PoorCondition));
-            SaveAnimes(modePath, animeType.PoorConditionAnimes);
+            SaveAnimes(modePath, animeTypeModel.PoorConditionAnimes);
         }
-        if (animeType.IllAnimes.Count > 0)
+        if (animeTypeModel.IllAnimes.Count > 0)
         {
             var modePath = Path.Combine(animePath, nameof(GameSave.ModeType.Ill));
-            SaveAnimes(modePath, animeType.IllAnimes);
+            SaveAnimes(modePath, animeTypeModel.IllAnimes);
         }
 
         static void SaveAnimes(string animePath, ObservableCollection<AnimeModel> animes)
@@ -280,10 +305,15 @@ public class AnimeTypeModel
         }
     }
 
-    static void SaveDefault(string path, AnimeTypeModel animeType)
+    static void SaveDefault(string path, AnimeTypeModel animeTypeModel)
     {
-        var animePath = Path.Combine(path, animeType.GraphType.ToString());
+        var animePath = Path.Combine(path, animeTypeModel.GraphType.ToString());
         Directory.CreateDirectory(animePath);
+        SaveWithAnimeType(animePath, animeTypeModel);
+    }
+
+    static void SaveWithAnimeType(string animePath, AnimeTypeModel animeType)
+    {
         if (animeType.HappyAnimes.Count > 0)
         {
             var modePath = Path.Combine(animePath, nameof(GameSave.ModeType.Happy));
