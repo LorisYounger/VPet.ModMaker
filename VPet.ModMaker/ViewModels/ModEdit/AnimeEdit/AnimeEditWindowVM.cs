@@ -65,6 +65,7 @@ public class AnimeEditWindowVM
             model.GraphType.Value
             is GraphInfo.GraphType.Touch_Body
                 or GraphInfo.GraphType.Touch_Head
+                or GraphInfo.GraphType.Sleep
         )
             HasMultiType.Value = true;
     }
@@ -72,8 +73,10 @@ public class AnimeEditWindowVM
     private void CurrentAnimeModel_ValueChanged(AnimeModel oldValue, AnimeModel newValue)
     {
         StopCommand_ExecuteEvent();
-        oldValue.Images.CollectionChanged -= Images_CollectionChanged;
-        newValue.Images.CollectionChanged += Images_CollectionChanged;
+        if (oldValue is not null)
+            oldValue.Images.CollectionChanged -= Images_CollectionChanged;
+        if (newValue is not null)
+            newValue.Images.CollectionChanged += Images_CollectionChanged;
     }
 
     private void Images_CollectionChanged(

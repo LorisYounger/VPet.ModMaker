@@ -60,7 +60,10 @@ public partial class AnimeEditWindow : Window
         )
             return;
         if (Enum.TryParse<GameSave.ModeType>(str, true, out var mode))
+        {
             ViewModel.CurrentMode = mode;
+            ViewModel.CurrentAnimeModel.Value = null;
+        }
     }
 
     private void ListBox_PreviewMouseWheel(object sender, MouseWheelEventArgs e)

@@ -43,17 +43,6 @@ public class AnimeTypeModel
             IllAnimes.Add(anime.Copy());
     }
 
-    public AnimeTypeModel(GraphInfo.GraphType graphType, string path)
-    {
-        GraphType.Value = graphType;
-        if (graphType is GraphInfo.GraphType.Default)
-            LoadDefault(path);
-        else if (graphType is GraphInfo.GraphType.Touch_Head or GraphInfo.GraphType.Touch_Body)
-            LoadMultiTypeAnime(path);
-        else
-            throw new Exception();
-    }
-
     public static AnimeTypeModel? Create(GraphInfo.GraphType graphType, string path)
     {
         try
@@ -67,31 +56,63 @@ public class AnimeTypeModel
         }
     }
 
+    public AnimeTypeModel(GraphInfo.GraphType graphType, string path)
+    {
+        GraphType.Value = graphType;
+        if (
+            graphType
+            is GraphInfo.GraphType.Default
+                or GraphInfo.GraphType.Shutdown
+                or GraphInfo.GraphType.StartUP
+        )
+            LoadDefault(path);
+        else if (
+            graphType
+            is GraphInfo.GraphType.Touch_Head
+                or GraphInfo.GraphType.Touch_Body
+                or GraphInfo.GraphType.Sleep
+        )
+            LoadMultiType(path);
+        else
+            throw new Exception();
+    }
+
+    //private void LoadSingle(string path)
+    //{
+    //    foreach (var dir in Directory.EnumerateDirectories(path))
+    //    {
+    //        var dirName = Path.GetFileName(dir);
+    //        var dirInfo = dirName.Split(Utils.Separator);
+    //        var mode = Enum.Parse(typeof(GameSave.ModeType), dirInfo[0], true);
+    //        if (dirInfo.Length == 2) { }
+    //    }
+    //}
+
     private void LoadDefault(string path)
     {
         foreach (var dir in Directory.EnumerateDirectories(path))
         {
-            var mode = Enum.Parse(typeof(GameSave.ModeType), Path.GetFileName(dir), true);
-            if (mode is GameSave.ModeType.Happy)
+            var dirName = Path.GetFileName(dir);
+            if (dirName.Contains(nameof(GameSave.ModeType.Happy)))
             {
                 AddAnime(HappyAnimes, dir);
             }
-            else if (mode is GameSave.ModeType.Nomal)
+            else if (dirName.Contains(nameof(GameSave.ModeType.Nomal)))
             {
                 AddAnime(NomalAnimes, dir);
             }
-            else if (mode is GameSave.ModeType.PoorCondition)
+            else if (dirName.Contains(nameof(GameSave.ModeType.PoorCondition)))
             {
                 AddAnime(PoorConditionAnimes, dir);
             }
-            else if (mode is GameSave.ModeType.Ill)
+            else if (dirName.Contains(nameof(GameSave.ModeType.Ill)))
             {
                 AddAnime(IllAnimes, dir);
             }
         }
     }
 
-    private void LoadMultiTypeAnime(string path)
+    private void LoadMultiType(string path)
     {
         foreach (var dir in Directory.EnumerateDirectories(path))
         {
@@ -182,6 +203,136 @@ public class AnimeTypeModel
             }
         }
     }
+
+    public void Save(string path)
+    {
+        if (
+            GraphType.Value
+            is GraphInfo.GraphType.Default
+                or GraphInfo.GraphType.Shutdown
+                or GraphInfo.GraphType.StartUP
+        )
+            SaveDefault(path, this);
+        else if (
+            GraphType.Value
+            is GraphInfo.GraphType.Touch_Head
+                or GraphInfo.GraphType.Touch_Body
+                or GraphInfo.GraphType.Sleep
+        )
+            SaveMultiType(path, this);
+    }
+
+    void SaveMultiType(string path, AnimeTypeModel animeType)
+    {
+        var animePath = Path.Combine(path, animeType.GraphType.ToString());
+        Directory.CreateDirectory(animePath);
+        if (animeType.HappyAnimes.Count > 0)
+        {
+            var modePath = Path.Combine(animePath, nameof(GameSave.ModeType.Happy));
+            SaveAnimes(modePath, animeType.HappyAnimes);
+        }
+        if (animeType.NomalAnimes.Count > 0)
+        {
+            var modePath = Path.Combine(animePath, nameof(GameSave.ModeType.Nomal));
+            SaveAnimes(modePath, animeType.NomalAnimes);
+        }
+        if (animeType.PoorConditionAnimes.Count > 0)
+        {
+            var modePath = Path.Combine(animePath, nameof(GameSave.ModeType.PoorCondition));
+            SaveAnimes(modePath, animeType.PoorConditionAnimes);
+        }
+        if (animeType.IllAnimes.Count > 0)
+        {
+            var modePath = Path.Combine(animePath, nameof(GameSave.ModeType.Ill));
+            SaveAnimes(modePath, animeType.IllAnimes);
+        }
+
+        static void SaveAnimes(string animePath, ObservableCollection<AnimeModel> animes)
+        {
+            Directory.CreateDirectory(animePath);
+            var countA = 0;
+            var countB = 0;
+            var countC = 0;
+            foreach (var anime in animes)
+            {
+                if (anime.AnimeType.Value is GraphInfo.AnimatType.A_Start)
+                {
+                    var animatTypePath = Path.Combine(animePath, "A");
+                    Directory.CreateDirectory(animatTypePath);
+                    SaveImages(Path.Combine(animatTypePath, countA.ToString()), anime);
+                    countA++;
+                }
+                else if (anime.AnimeType.Value is GraphInfo.AnimatType.B_Loop)
+                {
+                    var animatTypePath = Path.Combine(animePath, "B");
+                    Directory.CreateDirectory(animatTypePath);
+                    SaveImages(Path.Combine(animatTypePath, countB.ToString()), anime);
+                    countB++;
+                }
+                else if (anime.AnimeType.Value is GraphInfo.AnimatType.C_End)
+                {
+                    var animatTypePath = Path.Combine(animePath, "C");
+                    Directory.CreateDirectory(animatTypePath);
+                    SaveImages(Path.Combine(animatTypePath, countC.ToString()), anime);
+                    countC++;
+                }
+            }
+        }
+    }
+
+    static void SaveDefault(string path, AnimeTypeModel animeType)
+    {
+        var animePath = Path.Combine(path, animeType.GraphType.ToString());
+        Directory.CreateDirectory(animePath);
+        if (animeType.HappyAnimes.Count > 0)
+        {
+            var modePath = Path.Combine(animePath, nameof(GameSave.ModeType.Happy));
+            SaveAnimes(modePath, animeType.HappyAnimes);
+        }
+        if (animeType.NomalAnimes.Count > 0)
+        {
+            var modePath = Path.Combine(animePath, nameof(GameSave.ModeType.Nomal));
+            SaveAnimes(modePath, animeType.NomalAnimes);
+        }
+        if (animeType.PoorConditionAnimes.Count > 0)
+        {
+            var modePath = Path.Combine(animePath, nameof(GameSave.ModeType.PoorCondition));
+            SaveAnimes(modePath, animeType.PoorConditionAnimes);
+        }
+        if (animeType.IllAnimes.Count > 0)
+        {
+            var modePath = Path.Combine(animePath, nameof(GameSave.ModeType.Ill));
+            SaveAnimes(modePath, animeType.IllAnimes);
+        }
+        static void SaveAnimes(string animePath, ObservableCollection<AnimeModel> animes)
+        {
+            Directory.CreateDirectory(animePath);
+            var count = 0;
+            foreach (var anime in animes)
+            {
+                SaveImages(Path.Combine(animePath, count.ToString()), anime);
+                count++;
+            }
+        }
+    }
+
+    static void SaveImages(string imagesPath, AnimeModel model)
+    {
+        Directory.CreateDirectory(imagesPath);
+        var imageIndex = 0;
+        foreach (var image in model.Images)
+        {
+            File.Copy(
+                image.Image.Value.GetSourceFile(),
+                Path.Combine(
+                    imagesPath,
+                    $"{model.Id.Value}_{imageIndex:000}_{image.Duration.Value}.png"
+                ),
+                true
+            );
+            imageIndex++;
+        }
+    }
 }
 
 public class AnimeModel
@@ -189,8 +340,6 @@ public class AnimeModel
     public ObservableValue<string> Id { get; } = new();
 
     public ObservableValue<GraphInfo.AnimatType> AnimeType { get; } = new();
-
-    //public ObservableValue<GameSave.ModeType> ModeType { get; } = new();
 
     public ObservableCollection<ImageModel> Images { get; } = new();
 
