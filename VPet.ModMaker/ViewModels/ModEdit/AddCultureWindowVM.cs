@@ -21,9 +21,6 @@ public class AddCultureWindowVM
     public AddCultureWindowVM()
     {
         ShowCultures.Value = AllCultures;
-        AllCultures.Add("zh-Hans");
-        AllCultures.Add("zh-Hant");
-        AllCultures.Add("en-US");
         Search.ValueChanged += Search_ValueChanged;
     }
 

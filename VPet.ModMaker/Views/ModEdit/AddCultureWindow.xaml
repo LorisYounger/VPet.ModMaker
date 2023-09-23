@@ -8,7 +8,7 @@
   xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
   xmlns:pu="https://opensource.panuon.com/wpf-ui"
   xmlns:vm="clr-namespace:VPet.ModMaker.ViewModels.ModEdit"
-  Title="Window_AddLang"
+  Title="{ll:Str 添加文化}"
   Width="500"
   Height="400"
   d:DataContext="{d:DesignInstance Type=vm:AddCultureWindowVM}"
@@ -33,7 +33,7 @@
         <TextBox
           x:Name="TextBox_Lang"
           pu:TextBoxHelper.Watermark="{ll:Str 语言区域标记}"
-          Text="{Binding Lang.Value, UpdateSourceTrigger=PropertyChanged}" />
+          Text="{Binding Culture.Value, UpdateSourceTrigger=PropertyChanged}" />
         <TextBlock Grid.Row="1">
           <Hyperlink Click="Hyperlink_Click">
             <TextBlock Text="{ll:Str 详情请参阅 Windows 支持的语言/区域名称列表中的“语言标记”列}" />
@@ -66,8 +66,8 @@
       <TextBox pu:TextBoxHelper.Watermark="{ll:Str 搜索}" Text="{Binding Search.Value, UpdateSourceTrigger=PropertyChanged}" />
       <ListBox
         Grid.Row="1"
-        ItemsSource="{Binding ShowLangs.Value}"
-        SelectedItem="{Binding Lang.Value}" />
+        ItemsSource="{Binding ShowCultures.Value}"
+        SelectedItem="{Binding Culture.Value}" />
     </Grid>
   </Grid>
 </Window>
