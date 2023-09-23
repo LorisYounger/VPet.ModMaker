@@ -30,10 +30,10 @@ public class ModEditWindowVM
     #region Command
     public ObservableCommand AddImageCommand { get; } = new();
     public ObservableCommand ChangeImageCommand { get; } = new();
-    public ObservableCommand AddLangCommand { get; } = new();
+    public ObservableCommand AddCultureCommand { get; } = new();
 
-    public ObservableCommand<string> EditLangCommand { get; } = new();
-    public ObservableCommand<string> RemoveLangCommand { get; } = new();
+    public ObservableCommand<string> EditCultureCommand { get; } = new();
+    public ObservableCommand<string> RemoveCultureCommand { get; } = new();
 
     public ObservableCommand SaveCommand { get; } = new();
     public ObservableCommand SaveToCommand { get; } = new();
@@ -48,9 +48,9 @@ public class ModEditWindowVM
 
         AddImageCommand.ExecuteEvent += AddImage;
         ChangeImageCommand.ExecuteEvent += ChangeImage;
-        AddLangCommand.ExecuteEvent += AddLang;
-        EditLangCommand.ExecuteEvent += EditLang;
-        RemoveLangCommand.ExecuteEvent += RemoveLang;
+        AddCultureCommand.ExecuteEvent += AddCulture;
+        EditCultureCommand.ExecuteEvent += EditCulture;
+        RemoveCultureCommand.ExecuteEvent += RemoveLang;
         SaveCommand.ExecuteEvent += Save;
         SaveToCommand.ExecuteEvent += SaveTo;
     }
@@ -96,28 +96,29 @@ public class ModEditWindowVM
         }
     }
 
-    private void AddLang()
+    private void AddCulture()
     {
-        var window = new Window_AddLang();
+        var window = new AddCultureWindow();
         window.ShowDialog();
         if (window.IsCancel)
             return;
-        I18nHelper.Current.CultureNames.Add(window.Lang.Value);
+        I18nHelper.Current.CultureNames.Add(window.ViewModel.Culture.Value);
         if (I18nHelper.Current.CultureNames.Count == 1)
-            I18nHelper.Current.CultureName.Value = window.Lang.Value;
+            I18nHelper.Current.CultureName.Value = window.ViewModel.Culture.Value;
     }
 
-    private void EditLang(string oldLang)
+    private void EditCulture(string oldLang)
     {
-        var window = new Window_AddLang();
-        window.Lang.Value = oldLang.Translate();
+        var window = new AddCultureWindow();
+        window.ViewModel.Culture.Value = oldLang.Translate();
         window.ShowDialog();
         if (window.IsCancel)
             return;
         I18nHelper.Current.CultureNames[I18nHelper.Current.CultureNames.IndexOf(oldLang)] = window
-            .Lang
+            .ViewModel
+            .Culture
             .Value;
-        CurrentLang.Value = window.Lang.Value;
+        CurrentLang.Value = window.ViewModel.Culture.Value;
     }
 
     private void RemoveLang(string oldLang)

@@ -18,13 +18,13 @@
   </d:Window.DataContext>
   <Window.Resources>
     <ResourceDictionary>
-      <ContextMenu x:Key="ContextMenu_Lang" x:Shared="false">
+      <ContextMenu x:Key="ContextMenu_Culture" x:Shared="false">
         <MenuItem
-          Command="{Binding DataContext.ChangeLangCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}}"
+          Command="{Binding DataContext.ChangeCultureCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}}"
           CommandParameter="{Binding Content, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ListBoxItem}}"
           Header="{ll:Str 修改语言}" />
         <MenuItem
-          Command="{Binding DataContext.RemoveLangCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}}"
+          Command="{Binding DataContext.RemoveCultureCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}}"
           CommandParameter="{Binding Content, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ListBoxItem}}"
           Header="{ll:Str 删除语言}" />
       </ContextMenu>
@@ -44,7 +44,7 @@
         <Style TargetType="Grid">
           <Setter Property="IsEnabled" Value="True" />
           <Style.Triggers>
-            <DataTrigger Binding="{Binding SelectedItem, ElementName=ListBox_Langs}" Value="{x:Null}">
+            <DataTrigger Binding="{Binding SelectedItem, ElementName=ListBox_Cultures}" Value="{x:Null}">
               <Setter Property="IsEnabled" Value="False" />
             </DataTrigger>
           </Style.Triggers>
@@ -284,12 +284,9 @@
         <RowDefinition />
         <RowDefinition Height="Auto" />
       </Grid.RowDefinitions>
-      <Button
-        x:Name="Button_AddLang"
-        Command="{Binding AddLangCommand}"
-        Content="{ll:Str 添加语言}" />
+      <Button Command="{Binding AddCultureCommand}" Content="{ll:Str 添加语言}" />
       <ListBox
-        x:Name="ListBox_Langs"
+        x:Name="ListBox_Cultures"
         Grid.Row="1"
         d:ItemsSource="{d:SampleData ItemCount=5}"
         ItemsSource="{Binding I18nData.CultureNames}"
@@ -298,7 +295,7 @@
         <ListBox.ItemContainerStyle>
           <Style BasedOn="{StaticResource {x:Type ListBoxItem}}" TargetType="ListBoxItem">
             <Setter Property="Content" Value="{Binding}" />
-            <Setter Property="ContextMenu" Value="{StaticResource ContextMenu_Lang}" />
+            <Setter Property="ContextMenu" Value="{StaticResource ContextMenu_Culture}" />
           </Style>
         </ListBox.ItemContainerStyle>
       </ListBox>

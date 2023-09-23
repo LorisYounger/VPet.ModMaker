@@ -15,6 +15,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using VPet.ModMaker.Models;
+using VPet.ModMaker.ViewModels;
 using VPet.ModMaker.ViewModels.ModEdit;
 
 namespace VPet.ModMaker.Views.ModEdit;
@@ -22,16 +23,16 @@ namespace VPet.ModMaker.Views.ModEdit;
 /// <summary>
 /// Window_AddLang.xaml 的交互逻辑
 /// </summary>
-public partial class Window_AddLang : Window
+public partial class AddCultureWindow : Window
 {
-    public bool IsCancel { get; internal set; } = true;
+    public bool IsCancel { get; private set; } = true;
 
-    public ObservableValue<string> Lang { get; } = new();
+    public AddCultureWindowVM ViewModel => (AddCultureWindowVM)DataContext;
 
-    public Window_AddLang()
+    public AddCultureWindow()
     {
         InitializeComponent();
-        this.DataContext = this;
+        DataContext = new AddCultureWindowVM();
         TextBox_Lang.Focus();
     }
 
@@ -42,14 +43,14 @@ public partial class Window_AddLang : Window
 
     private void Button_Yes_Click(object sender, RoutedEventArgs e)
     {
-        if (string.IsNullOrEmpty(Lang.Value))
+        if (string.IsNullOrEmpty(ViewModel.Culture.Value))
         {
-            MessageBox.Show("Lang不可为空", "", MessageBoxButton.OK, MessageBoxImage.Warning);
+            MessageBox.Show("文化不可为空", "", MessageBoxButton.OK, MessageBoxImage.Warning);
             return;
         }
-        if (I18nHelper.Current.CultureNames.Contains(Lang.Value))
+        if (I18nHelper.Current.CultureNames.Contains(ViewModel.Culture.Value))
         {
-            MessageBox.Show("此语言已存在", "", MessageBoxButton.OK, MessageBoxImage.Warning);
+            MessageBox.Show("此文化已存在", "", MessageBoxButton.OK, MessageBoxImage.Warning);
             return;
         }
         IsCancel = false;
