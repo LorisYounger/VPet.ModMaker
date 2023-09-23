@@ -17,9 +17,19 @@ public class PetModel : I18nModel<I18nPetInfoModel>
     public ObservableValue<string> Id { get; } = new();
     public ObservableValue<string> PetNameId { get; } = new();
     public ObservableValue<string> DescriptionId { get; } = new();
-    public ObservableValue<ObservableRect<double>> TouchHeadRect { get; } = new(new());
-    public ObservableValue<ObservableMultiStateRect> TouchRaisedRect { get; } = new(new());
-    public ObservableValue<ObservableMultiStatePoint> RaisePoint { get; } = new(new());
+    public ObservableValue<ObservableRect<double>> TouchHeadRect { get; } =
+        new(new(159, 16, 189, 178));
+    public ObservableValue<ObservableMultiStateRect> TouchRaisedRect { get; } =
+        new(
+            new(
+                new(0, 50, 500, 200),
+                new(0, 50, 500, 200),
+                new(0, 50, 500, 200),
+                new(0, 200, 500, 300)
+            )
+        );
+    public ObservableValue<ObservableMultiStatePoint> RaisePoint { get; } =
+        new(new(new(290, 128), new(290, 128), new(290, 128), new(225, 115)));
 
     public ObservableCollection<WorkModel> Works { get; } = new();
 
@@ -141,6 +151,21 @@ public class ObservableMultiStateRect
     public ObservableValue<ObservableRect<double>> PoorCondition { get; } = new(new());
     public ObservableValue<ObservableRect<double>> Ill { get; } = new(new());
 
+    public ObservableMultiStateRect() { }
+
+    public ObservableMultiStateRect(
+        ObservableRect<double> happy,
+        ObservableRect<double> nomal,
+        ObservableRect<double> poorCondition,
+        ObservableRect<double> ill
+    )
+    {
+        Happy.Value = happy;
+        Nomal.Value = nomal;
+        PoorCondition.Value = poorCondition;
+        Ill.Value = ill;
+    }
+
     public ObservableMultiStateRect Copy()
     {
         var result = new ObservableMultiStateRect();
@@ -159,6 +184,21 @@ public class ObservableMultiStatePoint
     public ObservableValue<ObservablePoint<double>> PoorCondition { get; } = new(new());
     public ObservableValue<ObservablePoint<double>> Ill { get; } = new(new());
 
+    public ObservableMultiStatePoint() { }
+
+    public ObservableMultiStatePoint(
+        ObservablePoint<double> happy,
+        ObservablePoint<double> nomal,
+        ObservablePoint<double> poorCondition,
+        ObservablePoint<double> ill
+    )
+    {
+        Happy.Value = happy;
+        Nomal.Value = nomal;
+        PoorCondition.Value = poorCondition;
+        Ill.Value = ill;
+    }
+
     public ObservableMultiStatePoint Copy()
     {
         var result = new ObservableMultiStatePoint();
@@ -176,6 +216,16 @@ public class ObservableRect<T>
     public ObservableValue<T> Y { get; } = new();
     public ObservableValue<T> Width { get; } = new();
     public ObservableValue<T> Height { get; } = new();
+
+    public ObservableRect() { }
+
+    public ObservableRect(T x, T y, T width, T hetght)
+    {
+        X.Value = x;
+        Y.Value = y;
+        Width.Value = width;
+        Height.Value = hetght;
+    }
 
     public void SetValue(T x, T y, T width, T hetght)
     {
@@ -200,6 +250,14 @@ public class ObservablePoint<T>
 {
     public ObservableValue<T> X { get; } = new();
     public ObservableValue<T> Y { get; } = new();
+
+    public ObservablePoint() { }
+
+    public ObservablePoint(T x, T y)
+    {
+        X.Value = x;
+        Y.Value = y;
+    }
 
     public void SetValue(T x, T y)
     {
