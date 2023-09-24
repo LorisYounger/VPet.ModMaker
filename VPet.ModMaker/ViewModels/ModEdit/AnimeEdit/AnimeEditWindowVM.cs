@@ -175,6 +175,11 @@ public class AnimeEditWindowVM
             MessageBox.Show("正在播放".Translate());
             return;
         }
+        if (CurrentAnimeModel.Value is null)
+        {
+            MessageBox.Show("未选中动画".Translate());
+            return;
+        }
         _playing = true;
         _playerTask.Start();
     }

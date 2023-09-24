@@ -1,4 +1,5 @@
-﻿using System;
+﻿using LinePutScript.Localization.WPF;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -62,6 +63,7 @@ public partial class AnimeEditWindow : Window
         if (Enum.TryParse<GameSave.ModeType>(str, true, out var mode))
         {
             ViewModel.CurrentMode = mode;
+            ViewModel.CurrentImageModel.Value = null;
             ViewModel.CurrentAnimeModel.Value = null;
         }
     }
@@ -106,7 +108,7 @@ public partial class AnimeEditWindow : Window
             ViewModel.AddImages((AnimeModel)listBox.DataContext, array.Cast<string>());
         if (_dropSender is not null && sender.Equals(_dropSender) is false)
         {
-            MessageBox.Show("无法移动不同动画的图片");
+            MessageBox.Show("无法移动不同动画的图片".Translate());
             return;
         }
         var pos = e.GetPosition(listBox);
@@ -179,5 +181,11 @@ public partial class AnimeEditWindow : Window
             return;
         if (listBox.DataContext is AnimeModel model)
             ViewModel.CurrentAnimeModel.Value = model;
+        e.Handled = true;
+    }
+
+    private void ListBox_Animes_SelectionChanged(object sender, SelectionChangedEventArgs e)
+    {
+        e.Handled = true;
     }
 }

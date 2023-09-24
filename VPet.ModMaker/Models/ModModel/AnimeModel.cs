@@ -68,6 +68,7 @@ public class AnimeTypeModel
                 or GraphInfo.GraphType.Switch_Down
                 or GraphInfo.GraphType.Switch_Thirsty
                 or GraphInfo.GraphType.Switch_Hunger
+                or GraphInfo.GraphType.Raised_Dynamic
         )
             LoadDefault(path);
         else if (
@@ -75,6 +76,7 @@ public class AnimeTypeModel
             is GraphInfo.GraphType.Touch_Head
                 or GraphInfo.GraphType.Touch_Body
                 or GraphInfo.GraphType.Sleep
+                or GraphInfo.GraphType.Raised_Static
         )
             LoadMultiType(path);
         else
@@ -98,19 +100,39 @@ public class AnimeTypeModel
         foreach (var dir in Directory.EnumerateDirectories(path))
         {
             var dirName = Path.GetFileName(dir);
-            if (dirName.Contains(nameof(GameSave.ModeType.Happy)))
+            if (
+                dirName.Contains(
+                    nameof(GameSave.ModeType.Happy),
+                    StringComparison.InvariantCultureIgnoreCase
+                )
+            )
             {
                 AddAnime(HappyAnimes, dir);
             }
-            else if (dirName.Contains(nameof(GameSave.ModeType.Nomal)))
+            else if (
+                dirName.Contains(
+                    nameof(GameSave.ModeType.Nomal),
+                    StringComparison.InvariantCultureIgnoreCase
+                )
+            )
             {
                 AddAnime(NomalAnimes, dir);
             }
-            else if (dirName.Contains(nameof(GameSave.ModeType.PoorCondition)))
+            else if (
+                dirName.Contains(
+                    nameof(GameSave.ModeType.PoorCondition),
+                    StringComparison.InvariantCultureIgnoreCase
+                )
+            )
             {
                 AddAnime(PoorConditionAnimes, dir);
             }
-            else if (dirName.Contains(nameof(GameSave.ModeType.Ill)))
+            else if (
+                dirName.Contains(
+                    nameof(GameSave.ModeType.Ill),
+                    StringComparison.InvariantCultureIgnoreCase
+                )
+            )
             {
                 AddAnime(IllAnimes, dir);
             }
@@ -228,7 +250,7 @@ public class AnimeTypeModel
                 or GraphInfo.GraphType.Touch_Body
                 or GraphInfo.GraphType.Sleep
         )
-            SaveMultiType(path, this);
+            SaveWithModeType(path, this);
         else if (
             GraphType.Value
             is GraphInfo.GraphType.Switch_Up
@@ -237,6 +259,22 @@ public class AnimeTypeModel
                 or GraphInfo.GraphType.Switch_Hunger
         )
             SaveSwitch(path, this);
+        else if (
+            GraphType.Value
+            is GraphInfo.GraphType.Raised_Dynamic
+                or GraphInfo.GraphType.Raised_Static
+        )
+            SaveRaise(path, this);
+    }
+
+    void SaveRaise(string path, AnimeTypeModel animeTypeModel)
+    {
+        var animePath = Path.Combine(path, "Raise");
+        Directory.CreateDirectory(animePath);
+        if (animeTypeModel.GraphType.Value is GraphInfo.GraphType.Raised_Dynamic)
+            SaveDefault(animePath, animeTypeModel);
+        else if (animeTypeModel.GraphType.Value is GraphInfo.GraphType.Raised_Static)
+            SaveWithModeType(animePath, animeTypeModel);
     }
 
     void SaveSwitch(string path, AnimeTypeModel animeTypeModel)
@@ -247,7 +285,22 @@ public class AnimeTypeModel
         SaveWithAnimeType(Path.Combine(animePath, switchName), animeTypeModel);
     }
 
-    void SaveMultiType(string path, AnimeTypeModel animeTypeModel)
+    /// <summary>
+    /// 保存为 ModeType 划分的样式
+    /// <para><![CDATA[
+    /// Happy/A/0
+    /// Happy/A/1
+    /// Happy/B/0
+    /// Happy/B/1
+    /// Nomal/A/0
+    /// Nomal/A/1
+    /// ...
+    /// ]]>
+    /// </para>
+    /// </summary>
+    /// <param name="path"></param>
+    /// <param name="animeTypeModel"></param>
+    void SaveWithModeType(string path, AnimeTypeModel animeTypeModel)
     {
         var animePath = Path.Combine(path, animeTypeModel.GraphType.ToString());
         Directory.CreateDirectory(animePath);
@@ -305,6 +358,11 @@ public class AnimeTypeModel
         }
     }
 
+    /// <summary>
+    /// 保存成默认样式
+    /// </summary>
+    /// <param name="path"></param>
+    /// <param name="animeTypeModel"></param>
     static void SaveDefault(string path, AnimeTypeModel animeTypeModel)
     {
         var animePath = Path.Combine(path, animeTypeModel.GraphType.ToString());
@@ -312,6 +370,19 @@ public class AnimeTypeModel
         SaveWithAnimeType(animePath, animeTypeModel);
     }
 
+    /// <summary>
+    /// 保存为 AnimeType 划分的样式
+    /// <para><![CDATA[
+    /// Happy/0
+    /// Happy/1
+    /// Nomal/0
+    /// Nomal/1
+    /// ...
+    /// ]]>
+    /// </para>
+    /// </summary>
+    /// <param name="animePath"></param>
+    /// <param name="animeType"></param>
     static void SaveWithAnimeType(string animePath, AnimeTypeModel animeType)
     {
         if (animeType.HappyAnimes.Count > 0)
@@ -346,6 +417,11 @@ public class AnimeTypeModel
         }
     }
 
+    /// <summary>
+    /// 保存图片
+    /// </summary>
+    /// <param name="imagesPath"></param>
+    /// <param name="model"></param>
     static void SaveImages(string imagesPath, AnimeModel model)
     {
         Directory.CreateDirectory(imagesPath);

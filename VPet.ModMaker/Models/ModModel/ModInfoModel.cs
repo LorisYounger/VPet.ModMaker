@@ -77,29 +77,7 @@ public class ModInfoModel : I18nModel<I18nModInfoModel>
             // TODO: 动画加载
             foreach (var p in pet.path)
             {
-                foreach (var dir in Directory.EnumerateDirectories(p))
-                {
-                    var dirName = Path.GetFileName(dir);
-                    Enum.TryParse<GraphInfo.GraphType>(dirName, true, out var animeType);
-                    if (AnimeTypeModel.Create(animeType, dir) is AnimeTypeModel model)
-                        petModel.Animes.Add(model);
-                    else if (dirName.Equals("Switch", StringComparison.InvariantCultureIgnoreCase))
-                    {
-                        foreach (var switchDir in Directory.EnumerateDirectories(dir))
-                        {
-                            Enum.TryParse<GraphInfo.GraphType>(
-                                $"{dirName}_{Path.GetFileName(switchDir)}",
-                                true,
-                                out var switchType
-                            );
-                            if (
-                                AnimeTypeModel.Create(switchType, Path.Combine(dir, switchDir))
-                                is AnimeTypeModel switchModel
-                            )
-                                petModel.Animes.Add(switchModel);
-                        }
-                    }
-                }
+                LoadAnime(petModel, p);
             }
         }
 
@@ -108,6 +86,49 @@ public class ModInfoModel : I18nModel<I18nModInfoModel>
         OtherI18nDatas = loader.OtherI18nDatas;
 
         LoadI18nData();
+
+        static void LoadAnime(PetModel petModel, string path)
+        {
+            foreach (var animeDir in Directory.EnumerateDirectories(path))
+            {
+                var dirName = Path.GetFileName(animeDir);
+                Enum.TryParse<GraphInfo.GraphType>(dirName, true, out var animeType);
+                if (AnimeTypeModel.Create(animeType, animeDir) is AnimeTypeModel model)
+                    petModel.Animes.Add(model);
+                else if (dirName.Equals("Switch", StringComparison.InvariantCultureIgnoreCase))
+                {
+                    foreach (var dir in Directory.EnumerateDirectories(animeDir))
+                    {
+                        Enum.TryParse<GraphInfo.GraphType>(
+                            $"{dirName}_{Path.GetFileName(dir)}",
+                            true,
+                            out var switchType
+                        );
+                        if (
+                            AnimeTypeModel.Create(switchType, Path.Combine(animeDir, dir))
+                            is AnimeTypeModel switchModel
+                        )
+                            petModel.Animes.Add(switchModel);
+                    }
+                }
+                else if (dirName.Equals("Raise", StringComparison.InvariantCultureIgnoreCase))
+                {
+                    foreach (var dir in Directory.EnumerateDirectories(animeDir))
+                    {
+                        Enum.TryParse<GraphInfo.GraphType>(
+                            Path.GetFileName(dir),
+                            true,
+                            out var switchType
+                        );
+                        if (
+                            AnimeTypeModel.Create(switchType, Path.Combine(animeDir, dir))
+                            is AnimeTypeModel switchModel
+                        )
+                            petModel.Animes.Add(switchModel);
+                    }
+                }
+            }
+        }
     }
 
     private void LoadI18nData()

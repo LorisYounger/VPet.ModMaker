@@ -196,11 +196,13 @@
             </MultiBinding>
           </TabItem.Header>
           <ListBox
+            x:Name="ListBox_Animes"
             d:ItemsSource="{d:SampleData ItemCount=5}"
             d:SelectedIndex="0"
             ItemContainerStyle="{StaticResource ListBoxItem_Style}"
             ItemTemplate="{StaticResource Expander_AnimeItem}"
-            ItemsSource="{Binding Anime.Value.HappyAnimes, IsAsync=True}" />
+            ItemsSource="{Binding Anime.Value.HappyAnimes, IsAsync=True}"
+            SelectionChanged="ListBox_Animes_SelectionChanged" />
         </TabItem>
         <TabItem d:Header="Nomal (0)" Tag="Nomal">
           <TabItem.Header>
