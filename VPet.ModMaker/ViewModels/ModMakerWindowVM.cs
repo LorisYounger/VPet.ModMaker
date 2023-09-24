@@ -24,7 +24,7 @@ public class ModMakerWindowVM
 
     public ModEditWindow ModEditWindow { get; private set; }
 
-    public ObservableValue<string> HistoriesFilterText { get; } = new();
+    public ObservableValue<string> HistoriesSearchText { get; } = new();
 
     public ObservableCollection<ModInfoModel> Mods { get; } = new();
     public ObservableValue<ObservableCollection<ModMakerHistory>> ShowHistories { get; } = new();
@@ -45,7 +45,7 @@ public class ModMakerWindowVM
         CreateNewModCommand.ExecuteEvent += CreateNewMod;
         LoadModFromFileCommand.ExecuteEvent += LoadModFromFile;
         ClearHistoriesCommand.ExecuteEvent += ClearHistories;
-        HistoriesFilterText.ValueChanged += ModFilterText_ValueChanged;
+        HistoriesSearchText.ValueChanged += ModSearchText_ValueChanged;
     }
 
     private void LoadHistories()
@@ -103,7 +103,7 @@ public class ModMakerWindowVM
         }
     }
 
-    private void ModFilterText_ValueChanged(string oldValue, string newValue)
+    private void ModSearchText_ValueChanged(string oldValue, string newValue)
     {
         if (string.IsNullOrEmpty(newValue))
             ShowHistories.Value = Histories;

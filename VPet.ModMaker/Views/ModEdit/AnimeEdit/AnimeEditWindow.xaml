@@ -52,7 +52,7 @@
               <ColumnDefinition Width="Auto" />
               <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
-            <TextBox pu:TextBoxHelper.Watermark="动画Id" Text="{Binding Id.Value}" />
+            <TextBox pu:TextBoxHelper.Watermark="动画Id" Text="{Binding Id.Value, UpdateSourceTrigger=PropertyChanged}" />
             <TextBlock Grid.Column="1" Margin="10,0,0,0">
               <TextBlock.Text>
                 <MultiBinding Converter="{StaticResource StringFormatConverter}" ConverterParameter="{}({0})">
@@ -175,19 +175,15 @@
         <!--<Label Content="{ll:Str 动画Id}" />
         <TextBox Grid.Column="1" />-->
         <Label Content="{ll:Str 动画类型}" />
-        <TextBlock
-          Grid.Column="1"
-          IsEnabled="True"
-          Text="{Binding Anime.Value.GraphType.Value}" />
+        <TextBlock Grid.Column="1" Text="{Binding Anime.Value.GraphType.Value}" />
         <Label
           Grid.Row="1"
           Content="{ll:Str 动画名称}"
           Visibility="{Binding HasAnimeName.Value, Converter={StaticResource FalseToHiddenConverter}}" />
-        <TextBlock
+        <TextBox
           Grid.Row="1"
           Grid.Column="1"
-          IsEnabled="True"
-          Text="{Binding Anime.Value.GraphType.Value}"
+          Text="{Binding Anime.Value.Name.Value, UpdateSourceTrigger=PropertyChanged}"
           Visibility="{Binding HasAnimeName.Value, Converter={StaticResource FalseToHiddenConverter}}" />
       </Grid>
     </Grid>

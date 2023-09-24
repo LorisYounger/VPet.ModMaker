@@ -17,7 +17,7 @@ public class PetPageVM
     #region Value
     public ObservableValue<ObservableCollection<PetModel>> ShowPets { get; } = new();
     public ObservableCollection<PetModel> Pets => ModInfoModel.Current.Pets;
-    public ObservableValue<string> Filter { get; } = new();
+    public ObservableValue<string> Search { get; } = new();
     #endregion
     #region Command
     public ObservableCommand AddCommand { get; } = new();
@@ -27,14 +27,14 @@ public class PetPageVM
     public PetPageVM()
     {
         ShowPets.Value = Pets;
-        Filter.ValueChanged += Filter_ValueChanged;
+        Search.ValueChanged += Search_ValueChanged;
 
         AddCommand.ExecuteEvent += Add;
         EditCommand.ExecuteEvent += Edit;
         RemoveCommand.ExecuteEvent += Remove;
     }
 
-    private void Filter_ValueChanged(string oldValue, string newValue)
+    private void Search_ValueChanged(string oldValue, string newValue)
     {
         if (string.IsNullOrWhiteSpace(newValue))
         {

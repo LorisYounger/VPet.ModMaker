@@ -17,7 +17,7 @@ public class ClickTextPageVM
     #region Value
     public ObservableValue<ObservableCollection<ClickTextModel>> ShowClickTexts { get; } = new();
     public ObservableCollection<ClickTextModel> ClickTexts => ModInfoModel.Current.ClickTexts;
-    public ObservableValue<string> Filter { get; } = new();
+    public ObservableValue<string> Search { get; } = new();
     #endregion
     #region Command
     public ObservableCommand AddCommand { get; } = new();
@@ -28,13 +28,13 @@ public class ClickTextPageVM
     public ClickTextPageVM()
     {
         ShowClickTexts.Value = ClickTexts;
-        Filter.ValueChanged += Filter_ValueChanged;
+        Search.ValueChanged += Search_ValueChanged;
         AddCommand.ExecuteEvent += Add;
         EditCommand.ExecuteEvent += Edit;
         RemoveCommand.ExecuteEvent += Remove;
     }
 
-    private void Filter_ValueChanged(string oldValue, string newValue)
+    private void Search_ValueChanged(string oldValue, string newValue)
     {
         if (string.IsNullOrWhiteSpace(newValue))
         {

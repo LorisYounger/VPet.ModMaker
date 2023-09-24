@@ -17,7 +17,7 @@ public class SelectTextPageVM
     #region Value
     public ObservableValue<ObservableCollection<SelectTextModel>> ShowSelectTexts { get; } = new();
     public ObservableCollection<SelectTextModel> SelectTexts => ModInfoModel.Current.SelectTexts;
-    public ObservableValue<string> Filter { get; } = new();
+    public ObservableValue<string> Search { get; } = new();
     #endregion
     #region Command
     public ObservableCommand AddCommand { get; } = new();
@@ -28,13 +28,13 @@ public class SelectTextPageVM
     public SelectTextPageVM()
     {
         ShowSelectTexts.Value = SelectTexts;
-        Filter.ValueChanged += Filter_ValueChanged;
+        Search.ValueChanged += Search_ValueChanged;
         AddCommand.ExecuteEvent += Add;
         EditCommand.ExecuteEvent += Edit;
         RemoveCommand.ExecuteEvent += Remove;
     }
 
-    private void Filter_ValueChanged(string oldValue, string newValue)
+    private void Search_ValueChanged(string oldValue, string newValue)
     {
         if (string.IsNullOrWhiteSpace(newValue))
         {

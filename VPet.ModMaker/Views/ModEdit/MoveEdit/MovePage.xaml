@@ -26,7 +26,7 @@
         <ColumnDefinition />
         <ColumnDefinition Width="Auto" />
       </Grid.ColumnDefinitions>
-      <!--<TextBox pu:TextBoxHelper.Watermark="{ll:Str 搜索Id}" Text="{Binding Filter.Value, UpdateSourceTrigger=PropertyChanged}">
+      <!--<TextBox pu:TextBoxHelper.Watermark="{ll:Str 搜索Id}" Text="{Binding Search.Value, UpdateSourceTrigger=PropertyChanged}">
         <TextBox.Style>
           <Style BasedOn="{StaticResource {x:Type TextBox}}" TargetType="TextBox">
             <Setter Property="IsEnabled" Value="True" />

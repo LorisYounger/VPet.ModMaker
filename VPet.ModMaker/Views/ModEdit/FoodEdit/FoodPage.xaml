@@ -20,7 +20,7 @@
       <RowDefinition Height="Auto" />
       <RowDefinition />
     </Grid.RowDefinitions>
-    <TextBox pu:TextBoxHelper.Watermark="{ll:Str 搜索Id}" Text="{Binding Filter.Value, UpdateSourceTrigger=PropertyChanged}" />
+    <TextBox pu:TextBoxHelper.Watermark="{ll:Str 搜索Id}" Text="{Binding Search.Value, UpdateSourceTrigger=PropertyChanged}" />
     <DataGrid
       Grid.Row="1"
       d:ItemsSource="{d:SampleData ItemCount=5}"

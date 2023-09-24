@@ -21,6 +21,8 @@ public class AnimeTypeModel
     public static ObservableCollection<GameSave.ModeType> ModeTypes { get; } =
         new(Enum.GetValues(typeof(GameSave.ModeType)).Cast<GameSave.ModeType>());
 
+    public ObservableValue<string> Id { get; } = new();
+
     public ObservableValue<string> Name { get; } = new();
     public ObservableValue<GraphInfo.GraphType> GraphType { get; } = new();
 
@@ -29,10 +31,18 @@ public class AnimeTypeModel
     public ObservableCollection<AnimeModel> PoorConditionAnimes { get; } = new();
     public ObservableCollection<AnimeModel> IllAnimes { get; } = new();
 
-    public AnimeTypeModel() { }
+    public AnimeTypeModel()
+    {
+        Name.ValueChanged += (_, _) =>
+        {
+            Id.Value = $"{GraphType.Value}_{Name.Value}";
+        };
+    }
 
     public AnimeTypeModel(AnimeTypeModel model)
+        : this()
     {
+        Id.Value = model.Id.Value;
         Name.Value = model.Name.Value;
         GraphType.Value = model.GraphType.Value;
         foreach (var anime in model.HappyAnimes)
@@ -60,6 +70,11 @@ public class AnimeTypeModel
 
     public AnimeTypeModel(GraphInfo.GraphType graphType, string path)
     {
+        Name.Value = Path.GetFileName(path);
+        if (graphType is GraphInfo.GraphType.Common)
+            Id.Value = $"{nameof(GraphInfo.GraphType.Common)}_{Name.Value}";
+        else
+            Id.Value = graphType.ToString();
         GraphType.Value = graphType;
         if (
             graphType
@@ -81,6 +96,7 @@ public class AnimeTypeModel
                 or GraphInfo.GraphType.Raised_Static
                 or GraphInfo.GraphType.StateONE
                 or GraphInfo.GraphType.StateTWO
+                or GraphInfo.GraphType.Common
         )
             LoadMultiType(path);
         else
@@ -177,13 +193,14 @@ public class AnimeTypeModel
                     AddAnime(IllAnimes, dir, type);
                 }
             }
-            else
+            else if (Enum.TryParse<GameSave.ModeType>(dirName, true, out var mode))
             {
                 // 判断 Happy/A 型文件夹
-                var mode = Enum.Parse(typeof(GameSave.ModeType), dirName, true);
                 foreach (var typePath in Directory.EnumerateDirectories(dir))
                 {
-                    var type = GetAnimatType(Path.GetFileName(typePath)[0]);
+                    var type = GetAnimatType(
+                        Path.GetFileName(typePath).Split(Utils.Separator).First()[0]
+                    );
                     if (mode is GameSave.ModeType.Happy)
                     {
                         AddAnime(HappyAnimes, typePath, type);
@@ -199,6 +216,36 @@ public class AnimeTypeModel
                     else if (mode is GameSave.ModeType.Ill)
                     {
                         AddAnime(IllAnimes, typePath, type);
+                    }
+                }
+            }
+            else
+            {
+                var type = GetAnimatType(dirName[0]);
+                // 判断 A/Happy 文件夹
+                foreach (var modePath in Directory.EnumerateDirectories(dir))
+                {
+                    mode = (GameSave.ModeType)
+                        Enum.Parse(
+                            typeof(GameSave.ModeType),
+                            Path.GetFileName(modePath).Split(Utils.Separator).First(),
+                            true
+                        );
+                    if (mode is GameSave.ModeType.Happy)
+                    {
+                        AddAnime(HappyAnimes, modePath, type);
+                    }
+                    else if (mode is GameSave.ModeType.Nomal)
+                    {
+                        AddAnime(NomalAnimes, modePath, type);
+                    }
+                    else if (mode is GameSave.ModeType.PoorCondition)
+                    {
+                        AddAnime(PoorConditionAnimes, modePath, type);
+                    }
+                    else if (mode is GameSave.ModeType.Ill)
+                    {
+                        AddAnime(IllAnimes, modePath, type);
                     }
                 }
             }
@@ -254,7 +301,7 @@ public class AnimeTypeModel
                 or GraphInfo.GraphType.Touch_Body
                 or GraphInfo.GraphType.Sleep
         )
-            SaveWithModeType(path, this);
+            SaveMultiType(path, this);
         else if (
             GraphType.Value
             is GraphInfo.GraphType.Switch_Up
@@ -271,13 +318,22 @@ public class AnimeTypeModel
             SaveRaise(path, this);
         else if (GraphType.Value is GraphInfo.GraphType.StateONE or GraphInfo.GraphType.StateTWO)
             SaveState(path, this);
+        else if (GraphType.Value is GraphInfo.GraphType.Common)
+            SaveCommon(path, this);
+    }
+
+    void SaveCommon(string path, AnimeTypeModel animeTypeModel)
+    {
+        var animePath = Path.Combine(path, animeTypeModel.Name.Value);
+        Directory.CreateDirectory(animePath);
+        SaveWithModeType(animePath, animeTypeModel);
     }
 
     void SaveState(string path, AnimeTypeModel animeTypeModel)
     {
         var animePath = Path.Combine(path, "State");
         Directory.CreateDirectory(animePath);
-        SaveWithModeType(animePath, animeTypeModel);
+        SaveMultiType(animePath, animeTypeModel);
     }
 
     void SaveRaise(string path, AnimeTypeModel animeTypeModel)
@@ -287,7 +343,7 @@ public class AnimeTypeModel
         if (animeTypeModel.GraphType.Value is GraphInfo.GraphType.Raised_Dynamic)
             SaveDefault(animePath, animeTypeModel);
         else if (animeTypeModel.GraphType.Value is GraphInfo.GraphType.Raised_Static)
-            SaveWithModeType(animePath, animeTypeModel);
+            SaveMultiType(animePath, animeTypeModel);
     }
 
     void SaveSwitch(string path, AnimeTypeModel animeTypeModel)
@@ -296,6 +352,30 @@ public class AnimeTypeModel
         Directory.CreateDirectory(animePath);
         var switchName = animeTypeModel.GraphType.ToString().Split(Utils.Separator).Last();
         SaveWithAnimeType(Path.Combine(animePath, switchName), animeTypeModel);
+    }
+
+    /// <summary>
+    /// 保存成默认样式
+    /// </summary>
+    /// <param name="path"></param>
+    /// <param name="animeTypeModel"></param>
+    static void SaveDefault(string path, AnimeTypeModel animeTypeModel)
+    {
+        var animePath = Path.Combine(path, animeTypeModel.GraphType.ToString());
+        Directory.CreateDirectory(animePath);
+        SaveWithAnimeType(animePath, animeTypeModel);
+    }
+
+    /// <summary>
+    /// 保存成多类型样式
+    /// </summary>
+    /// <param name="path"></param>
+    /// <param name="animeTypeModel"></param>
+    static void SaveMultiType(string path, AnimeTypeModel animeTypeModel)
+    {
+        var animePath = Path.Combine(path, animeTypeModel.GraphType.ToString());
+        Directory.CreateDirectory(animePath);
+        SaveWithModeType(animePath, animeTypeModel);
     }
 
     /// <summary>
@@ -313,28 +393,26 @@ public class AnimeTypeModel
     /// </summary>
     /// <param name="path"></param>
     /// <param name="animeTypeModel"></param>
-    void SaveWithModeType(string path, AnimeTypeModel animeTypeModel)
+    static void SaveWithModeType(string path, AnimeTypeModel animeTypeModel)
     {
-        var animePath = Path.Combine(path, animeTypeModel.GraphType.ToString());
-        Directory.CreateDirectory(animePath);
         if (animeTypeModel.HappyAnimes.Count > 0)
         {
-            var modePath = Path.Combine(animePath, nameof(GameSave.ModeType.Happy));
+            var modePath = Path.Combine(path, nameof(GameSave.ModeType.Happy));
             SaveAnimes(modePath, animeTypeModel.HappyAnimes);
         }
         if (animeTypeModel.NomalAnimes.Count > 0)
         {
-            var modePath = Path.Combine(animePath, nameof(GameSave.ModeType.Nomal));
+            var modePath = Path.Combine(path, nameof(GameSave.ModeType.Nomal));
             SaveAnimes(modePath, animeTypeModel.NomalAnimes);
         }
         if (animeTypeModel.PoorConditionAnimes.Count > 0)
         {
-            var modePath = Path.Combine(animePath, nameof(GameSave.ModeType.PoorCondition));
+            var modePath = Path.Combine(path, nameof(GameSave.ModeType.PoorCondition));
             SaveAnimes(modePath, animeTypeModel.PoorConditionAnimes);
         }
         if (animeTypeModel.IllAnimes.Count > 0)
         {
-            var modePath = Path.Combine(animePath, nameof(GameSave.ModeType.Ill));
+            var modePath = Path.Combine(path, nameof(GameSave.ModeType.Ill));
             SaveAnimes(modePath, animeTypeModel.IllAnimes);
         }
 
@@ -369,18 +447,6 @@ public class AnimeTypeModel
                 }
             }
         }
-    }
-
-    /// <summary>
-    /// 保存成默认样式
-    /// </summary>
-    /// <param name="path"></param>
-    /// <param name="animeTypeModel"></param>
-    static void SaveDefault(string path, AnimeTypeModel animeTypeModel)
-    {
-        var animePath = Path.Combine(path, animeTypeModel.GraphType.ToString());
-        Directory.CreateDirectory(animePath);
-        SaveWithAnimeType(animePath, animeTypeModel);
     }
 
     /// <summary>

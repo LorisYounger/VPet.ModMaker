@@ -25,18 +25,18 @@
         <ColumnDefinition />
         <ColumnDefinition Width="Auto" />
       </Grid.ColumnDefinitions>
-      <!--<TextBox pu:TextBoxHelper.Watermark="{ll:Str 搜索Id}" Text="{Binding Filter.Value, UpdateSourceTrigger=PropertyChanged}">
-      <TextBox.Style>
-        <Style BasedOn="{StaticResource {x:Type TextBox}}" TargetType="TextBox">
-          <Setter Property="IsEnabled" Value="True" />
-          <Style.Triggers>
-            <DataTrigger Binding="{Binding SelectedItem, ElementName=ComboBox_Pet}" Value="{x:Null}">
-              <Setter Property="IsEnabled" Value="False" />
-            </DataTrigger>
-          </Style.Triggers>
-        </Style>
-      </TextBox.Style>
-    </TextBox>-->
+      <TextBox pu:TextBoxHelper.Watermark="{ll:Str 搜索Id}" Text="{Binding Search.Value, UpdateSourceTrigger=PropertyChanged}">
+        <TextBox.Style>
+          <Style BasedOn="{StaticResource {x:Type TextBox}}" TargetType="TextBox">
+            <Setter Property="IsEnabled" Value="True" />
+            <Style.Triggers>
+              <DataTrigger Binding="{Binding SelectedItem, ElementName=ComboBox_Pet}" Value="{x:Null}">
+                <Setter Property="IsEnabled" Value="False" />
+              </DataTrigger>
+            </Style.Triggers>
+          </Style>
+        </TextBox.Style>
+      </TextBox>
       <ComboBox
         x:Name="ComboBox_Pet"
         Grid.Column="1"
@@ -83,10 +83,10 @@
         </DataGrid.RowStyle>
         <DataGrid.Columns>
           <DataGridTextColumn
-            Binding="{Binding GraphType.Value}"
+            Binding="{Binding Id.Value}"
             CanUserSort="True"
             IsReadOnly="True"
-            SortMemberPath="GraphType.Value">
+            SortMemberPath="Id.Value">
             <DataGridTextColumn.Header>
               <TextBlock Text="{ll:Str 动画类型}" />
             </DataGridTextColumn.Header>

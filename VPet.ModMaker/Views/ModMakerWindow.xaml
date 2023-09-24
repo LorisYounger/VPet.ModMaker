@@ -34,7 +34,7 @@
           <ColumnDefinition />
           <ColumnDefinition Width="Auto" />
         </Grid.ColumnDefinitions>
-        <TextBox pu:TextBoxHelper.Watermark="{ll:Str 最近的内容}" Text="{Binding HistoriesFilterText.Value}" />
+        <TextBox pu:TextBoxHelper.Watermark="{ll:Str 最近的内容}" Text="{Binding HistoriesSearchText.Value}" />
         <Button
           Grid.Column="1"
           Command="{Binding ClearHistoriesCommand}"

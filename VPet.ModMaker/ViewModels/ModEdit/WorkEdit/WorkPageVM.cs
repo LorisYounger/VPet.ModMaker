@@ -20,7 +20,7 @@ public class WorkPageVM
 
     public ObservableCollection<PetModel> Pets => ModInfoModel.Current.Pets;
     public ObservableValue<PetModel> CurrentPet { get; } = new(new());
-    public ObservableValue<string> Filter { get; } = new();
+    public ObservableValue<string> Search { get; } = new();
     #endregion
     #region Command
     public ObservableCommand AddCommand { get; } = new();
@@ -31,7 +31,7 @@ public class WorkPageVM
     {
         ShowWorks.Value = Works;
         CurrentPet.ValueChanged += CurrentPet_ValueChanged;
-        Filter.ValueChanged += Filter_ValueChanged;
+        Search.ValueChanged += Search_ValueChanged;
 
         AddCommand.ExecuteEvent += Add;
         EditCommand.ExecuteEvent += Edit;
@@ -43,7 +43,7 @@ public class WorkPageVM
         ShowWorks.Value = newValue.Works;
     }
 
-    private void Filter_ValueChanged(string oldValue, string newValue)
+    private void Search_ValueChanged(string oldValue, string newValue)
     {
         if (string.IsNullOrWhiteSpace(newValue))
         {

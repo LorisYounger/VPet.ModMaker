@@ -20,7 +20,7 @@ public class LowTextPageVM
     #region Value
     public ObservableValue<ObservableCollection<LowTextModel>> ShowLowTexts { get; } = new();
     public ObservableCollection<LowTextModel> LowTexts => ModInfoModel.Current.LowTexts;
-    public ObservableValue<string> Filter { get; } = new();
+    public ObservableValue<string> Search { get; } = new();
     #endregion
     #region Command
     public ObservableCommand AddCommand { get; } = new();
@@ -31,13 +31,13 @@ public class LowTextPageVM
     public LowTextPageVM()
     {
         ShowLowTexts.Value = LowTexts;
-        Filter.ValueChanged += Filter_ValueChanged;
+        Search.ValueChanged += Search_ValueChanged;
         AddCommand.ExecuteEvent += Add;
         EditCommand.ExecuteEvent += Edit;
         RemoveCommand.ExecuteEvent += Remove;
     }
 
-    private void Filter_ValueChanged(string oldValue, string newValue)
+    private void Search_ValueChanged(string oldValue, string newValue)
     {
         if (string.IsNullOrWhiteSpace(newValue))
         {
