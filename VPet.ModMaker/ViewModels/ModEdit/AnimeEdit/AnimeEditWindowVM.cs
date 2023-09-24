@@ -25,6 +25,7 @@ public class AnimeEditWindowVM
     public ObservableValue<bool> Loop { get; } = new();
 
     public ObservableValue<bool> HasMultiType { get; } = new(false);
+    public ObservableValue<bool> HasAnimeName { get; } = new(false);
     #region Command
     public ObservableCommand PlayCommand { get; } = new();
     public ObservableCommand StopCommand { get; } = new();
@@ -68,6 +69,9 @@ public class AnimeEditWindowVM
                 or GraphInfo.GraphType.Sleep
         )
             HasMultiType.Value = true;
+
+        if (model.GraphType.Value is GraphInfo.GraphType.Idel)
+            HasAnimeName.Value = true;
     }
 
     private void CurrentAnimeModel_ValueChanged(AnimeModel oldValue, AnimeModel newValue)

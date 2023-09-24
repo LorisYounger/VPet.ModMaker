@@ -174,12 +174,21 @@
         </Grid.RowDefinitions>
         <!--<Label Content="{ll:Str 动画Id}" />
         <TextBox Grid.Column="1" />-->
-        <Label Grid.Row="1" Content="{ll:Str 动画类型}" />
+        <Label Content="{ll:Str 动画类型}" />
+        <TextBlock
+          Grid.Column="1"
+          IsEnabled="True"
+          Text="{Binding Anime.Value.GraphType.Value}" />
+        <Label
+          Grid.Row="1"
+          Content="{ll:Str 动画名称}"
+          Visibility="{Binding HasAnimeName.Value, Converter={StaticResource FalseToHiddenConverter}}" />
         <TextBlock
           Grid.Row="1"
           Grid.Column="1"
           IsEnabled="True"
-          Text="{Binding Anime.Value.GraphType.Value}" />
+          Text="{Binding Anime.Value.GraphType.Value}"
+          Visibility="{Binding HasAnimeName.Value, Converter={StaticResource FalseToHiddenConverter}}" />
       </Grid>
     </Grid>
     <Grid Grid.Column="1">

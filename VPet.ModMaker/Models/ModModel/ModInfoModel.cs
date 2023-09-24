@@ -127,6 +127,22 @@ public class ModInfoModel : I18nModel<I18nModInfoModel>
                             petModel.Animes.Add(switchModel);
                     }
                 }
+                else if (dirName.Equals("State", StringComparison.InvariantCultureIgnoreCase))
+                {
+                    foreach (var dir in Directory.EnumerateDirectories(animeDir))
+                    {
+                        Enum.TryParse<GraphInfo.GraphType>(
+                            Path.GetFileName(dir),
+                            true,
+                            out var switchType
+                        );
+                        if (
+                            AnimeTypeModel.Create(switchType, Path.Combine(animeDir, dir))
+                            is AnimeTypeModel switchModel
+                        )
+                            petModel.Animes.Add(switchModel);
+                    }
+                }
             }
         }
     }
