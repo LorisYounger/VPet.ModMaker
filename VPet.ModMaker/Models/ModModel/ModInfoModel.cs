@@ -65,7 +65,7 @@ public class ModInfoModel : I18nModel<I18nModInfoModel>
         AuthorID = loader.AuthorID;
         var imagePath = Path.Combine(loader.ModPath.FullName, "icon.png");
         if (File.Exists(imagePath))
-            Image.Value = Utils.LoadImageToStream(imagePath);
+            Image.Value = Utils.LoadImageToMemoryStream(imagePath);
         foreach (var food in loader.Foods)
             Foods.Add(new(food));
         foreach (var clickText in loader.ClickTexts)
@@ -260,13 +260,7 @@ public class ModInfoModel : I18nModel<I18nModInfoModel>
                 }
             );
         }
-        if (Image.Value is not null)
-        {
-            var imagePath = Image.Value.GetSourceFile();
-            var targetImagePath = Path.Combine(path, Path.GetFileName(imagePath));
-            if (imagePath != targetImagePath)
-                File.Copy(imagePath, targetImagePath, true);
-        }
+        Image.Value?.SaveToPng(Path.Combine(path, "icon.png"));
         File.WriteAllText(modInfoFile, lps.ToString());
         SavePets(path);
         SaveFoods(path);
@@ -548,13 +542,7 @@ public class ModInfoModel : I18nModel<I18nModInfoModel>
             Directory.CreateDirectory(foodPath);
             foreach (var food in Foods)
             {
-                var foodImagePath = food.Image.Value.GetSourceFile();
-                var targetImagePath = Path.Combine(
-                    foodPath,
-                    $"{food.Id.Value}{Path.GetExtension(foodImagePath)}"
-                );
-                if (foodImagePath != targetImagePath)
-                    File.Copy(foodImagePath, targetImagePath, true);
+                food.Image.Value.SaveToPng(Path.Combine(foodPath, food.Id.Value));
             }
         }
     }

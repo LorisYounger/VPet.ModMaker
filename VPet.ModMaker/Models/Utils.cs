@@ -15,21 +15,21 @@ public static class Utils
     public const int DecodePixelHeight = 250;
     public static char[] Separator { get; } = new char[] { '_' };
 
-    public static BitmapImage LoadImageToStream(string imagePath)
-    {
-        BitmapImage bitmapImage = new();
-        bitmapImage.BeginInit();
-        bitmapImage.DecodePixelWidth = DecodePixelWidth;
-        try
-        {
-            bitmapImage.StreamSource = new StreamReader(imagePath).BaseStream;
-        }
-        finally
-        {
-            bitmapImage.EndInit();
-        }
-        return bitmapImage;
-    }
+    //public static BitmapImage LoadImageToStream(string imagePath)
+    //{
+    //    BitmapImage bitmapImage = new();
+    //    bitmapImage.BeginInit();
+    //    bitmapImage.DecodePixelWidth = DecodePixelWidth;
+    //    try
+    //    {
+    //        bitmapImage.StreamSource = new StreamReader(imagePath).BaseStream;
+    //    }
+    //    finally
+    //    {
+    //        bitmapImage.EndInit();
+    //    }
+    //    return bitmapImage;
+    //}
 
     public static BitmapImage LoadImageToMemoryStream(string imagePath)
     {

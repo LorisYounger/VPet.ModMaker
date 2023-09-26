@@ -48,7 +48,7 @@ public class FoodEditWindowVM
             };
         if (openFileDialog.ShowDialog() is true)
         {
-            Food.Value.Image.Value = Utils.LoadImageToStream(openFileDialog.FileName);
+            Food.Value.Image.Value = Utils.LoadImageToMemoryStream(openFileDialog.FileName);
         }
     }
 
@@ -63,7 +63,7 @@ public class FoodEditWindowVM
         if (openFileDialog.ShowDialog() is true)
         {
             Food.Value.Image.Value?.StreamSource?.Close();
-            Food.Value.Image.Value = Utils.LoadImageToStream(openFileDialog.FileName);
+            Food.Value.Image.Value = Utils.LoadImageToMemoryStream(openFileDialog.FileName);
         }
     }
 }

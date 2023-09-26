@@ -284,7 +284,7 @@
         <RowDefinition />
         <RowDefinition Height="Auto" />
       </Grid.RowDefinitions>
-      <Button Command="{Binding AddCultureCommand}" Content="{ll:Str 添加语言}" />
+      <Button Command="{Binding AddCultureCommand}" Content="{ll:Str 添加文化}" />
       <ListBox
         x:Name="ListBox_Cultures"
         Grid.Row="1"

@@ -21,10 +21,7 @@ public class ImageModel
 
     public ImageModel Copy()
     {
-        var model = new ImageModel(
-            Utils.LoadImageToStream(Image.Value.GetSourceFile()),
-            Duration.Value
-        );
+        var model = new ImageModel(Image.Value, Duration.Value);
         return model;
     }
 

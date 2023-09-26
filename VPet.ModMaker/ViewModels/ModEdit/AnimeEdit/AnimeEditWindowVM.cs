@@ -137,7 +137,7 @@ public class AnimeEditWindowVM
             };
         if (openFileDialog.ShowDialog() is true)
         {
-            value.Images.Add(new(Utils.LoadImageToStream(openFileDialog.FileName)));
+            value.Images.Add(new(Utils.LoadImageToMemoryStream(openFileDialog.FileName)));
         }
     }
 
@@ -149,13 +149,13 @@ public class AnimeEditWindowVM
             {
                 if (File.Exists(path))
                 {
-                    model.Images.Add(new(Utils.LoadImageToStream(path)));
+                    model.Images.Add(new(Utils.LoadImageToMemoryStream(path)));
                 }
                 else if (Directory.Exists(path))
                 {
                     foreach (var file in Directory.EnumerateFiles(path, "*.png"))
                     {
-                        model.Images.Add(new(Utils.LoadImageToStream(path)));
+                        model.Images.Add(new(Utils.LoadImageToMemoryStream(path)));
                     }
                 }
             }

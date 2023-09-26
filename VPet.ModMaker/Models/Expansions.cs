@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
+using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -16,10 +18,10 @@ public static class Extensions
         return source.IndexOf(value, comparisonType) >= 0;
     }
 
-    public static string GetSourceFile(this BitmapImage image)
-    {
-        return ((FileStream)image.StreamSource).Name;
-    }
+    //public static string GetSourceFile(this BitmapImage image)
+    //{
+    //    return ((FileStream)image.StreamSource).Name;
+    //}
 
     public static void CloseStream(this ImageSource source)
     {
@@ -27,6 +29,37 @@ public static class Extensions
         {
             image.StreamSource?.Close();
         }
+    }
+
+    public static BitmapImage Copy(this BitmapImage image)
+    {
+        BitmapImage newImage = new();
+        newImage.BeginInit();
+        newImage.DecodePixelWidth = image.DecodePixelWidth;
+        newImage.DecodePixelHeight = image.DecodePixelHeight;
+        try
+        {
+            using var bitmap = new Bitmap(image.StreamSource);
+            var ms = new MemoryStream();
+            bitmap.Save(ms, ImageFormat.Png);
+            image.StreamSource.CopyTo(ms);
+            newImage.StreamSource = ms;
+        }
+        finally
+        {
+            newImage.EndInit();
+        }
+        return newImage;
+    }
+
+    public static void SaveToPng(this BitmapSource image, string path)
+    {
+        if (path.EndsWith(".png") is false)
+            path += ".png";
+        var encoder = new PngBitmapEncoder();
+        encoder.Frames.Add(BitmapFrame.Create(image));
+        using var fs = new FileStream(path, FileMode.Create);
+        encoder.Save(fs);
     }
 
     public static bool TryAdd<TKey, TValue>(

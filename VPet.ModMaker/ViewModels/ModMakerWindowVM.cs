@@ -146,6 +146,11 @@ public class ModMakerWindowVM
 
     private void ClearHistories()
     {
+        if (
+            MessageBox.Show("确定要清空吗?".Translate(), "", MessageBoxButton.YesNo)
+            is not MessageBoxResult.Yes
+        )
+            return;
         ShowHistories.Value.Clear();
         Histories.Clear();
         File.WriteAllText(ModMakerInfo.HistoryFile, string.Empty);

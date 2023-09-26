@@ -16,9 +16,9 @@ public class I18nModel<T>
     public I18nModel()
     {
         I18nHelper.Current.CultureName.ValueChanged += LangChanged;
-        I18nHelper.Current.AddLang += AddLang;
-        I18nHelper.Current.RemoveLang += RemoveLang;
-        I18nHelper.Current.ReplaceLang += ReplaceLang;
+        I18nHelper.Current.AddCulture += AddLang;
+        I18nHelper.Current.RemoveCulture += RemoveLang;
+        I18nHelper.Current.ReplaceCulture += ReplaceLang;
         if (I18nHelper.Current.CultureNames.Count == 0)
             return;
         foreach (var item in I18nHelper.Current.CultureNames)

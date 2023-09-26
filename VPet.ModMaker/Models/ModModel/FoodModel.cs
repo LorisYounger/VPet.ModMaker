@@ -54,7 +54,7 @@ public class FoodModel : I18nModel<I18nFoodModel>
         Likability.Value = model.Likability.Value;
         Price.Value = model.Price.Value;
         Exp.Value = model.Exp.Value;
-        Image.Value = Utils.LoadImageToStream(model.Image.Value.GetSourceFile());
+        Image.Value = model.Image.Value;
         foreach (var item in model.I18nDatas)
             I18nDatas[item.Key] = item.Value.Copy();
         CurrentI18nData.Value = I18nDatas[I18nHelper.Current.CultureName.Value];
@@ -76,7 +76,7 @@ public class FoodModel : I18nModel<I18nFoodModel>
         Price.Value = food.Price;
         Exp.Value = food.Exp;
         if (File.Exists(food.Image))
-            Image.Value = Utils.LoadImageToStream(food.Image);
+            Image.Value = Utils.LoadImageToMemoryStream(food.Image);
     }
 
     public Food ToFood()

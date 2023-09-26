@@ -14,6 +14,7 @@ using VPet.ModMaker.Views.ModEdit;
 using System.Windows;
 using System.IO;
 using LinePutScript.Localization.WPF;
+using Panuon.WPF.UI;
 
 namespace VPet.ModMaker.ViewModels.ModEdit;
 
@@ -77,7 +78,7 @@ public class ModEditWindowVM
             };
         if (openFileDialog.ShowDialog() is true)
         {
-            ModInfo.Value.Image.Value = Utils.LoadImageToStream(openFileDialog.FileName);
+            ModInfo.Value.Image.Value = Utils.LoadImageToMemoryStream(openFileDialog.FileName);
         }
     }
 
@@ -92,11 +93,11 @@ public class ModEditWindowVM
         if (openFileDialog.ShowDialog() is true)
         {
             ModInfo.Value.Image.Value?.StreamSource?.Close();
-            ModInfo.Value.Image.Value = Utils.LoadImageToStream(openFileDialog.FileName);
+            ModInfo.Value.Image.Value = Utils.LoadImageToMemoryStream(openFileDialog.FileName);
         }
     }
 
-    private void AddCulture()
+    public void AddCulture()
     {
         var window = new AddCultureWindow();
         window.ShowDialog();
@@ -163,19 +164,22 @@ public class ModEditWindowVM
             };
         if (saveFileDialog.ShowDialog() is true)
         {
+            var pending = PendingBox.Show("保存中".Translate());
             try
             {
                 var path = Path.GetDirectoryName(saveFileDialog.FileName);
                 ModInfo.Value.SaveTo(path);
                 if (string.IsNullOrWhiteSpace(ModInfo.Value.SourcePath.Value))
                     ModInfo.Value.SourcePath.Value = path;
+                pending.Close();
+                MessageBox.Show(ModEditWindow, "保存成功".Translate());
             }
             catch (Exception ex)
             {
+                pending.Close();
                 MessageBox.Show($"保存失败 错误信息:\n{0}".Translate(ex));
                 return;
             }
-            MessageBox.Show("保存成功".Translate());
         }
     }
 

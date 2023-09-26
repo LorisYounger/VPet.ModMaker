@@ -507,13 +507,11 @@ public class AnimeTypeModel
         var imageIndex = 0;
         foreach (var image in model.Images)
         {
-            File.Copy(
-                image.Image.Value.GetSourceFile(),
+            image.Image.Value.SaveToPng(
                 Path.Combine(
                     imagesPath,
                     $"{model.Id.Value}_{imageIndex:000}_{image.Duration.Value}.png"
-                ),
-                true
+                )
             );
             imageIndex++;
         }
@@ -537,7 +535,10 @@ public class AnimeModel
             var info = Path.GetFileNameWithoutExtension(file).Split(Utils.Separator);
             Id.Value = info[0];
             var duration = info.Last();
-            var imageModel = new ImageModel(Utils.LoadImageToStream(file), int.Parse(duration));
+            var imageModel = new ImageModel(
+                Utils.LoadImageToMemoryStream(file),
+                int.Parse(duration)
+            );
             Images.Add(imageModel);
         }
     }
@@ -548,7 +549,7 @@ public class AnimeModel
         model.Id.Value = Id.Value;
         model.AnimeType.Value = AnimeType.Value;
         foreach (var image in Images)
-            model.Images.Add(image);
+            model.Images.Add(image.Copy());
         return model;
     }
 

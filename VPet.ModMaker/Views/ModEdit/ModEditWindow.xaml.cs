@@ -1,4 +1,5 @@
-﻿using Microsoft.Win32;
+﻿using LinePutScript.Localization.WPF;
+using Microsoft.Win32;
 using Panuon.WPF;
 using System;
 using System.Collections.Generic;
@@ -16,6 +17,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using VPet.ModMaker.Models;
 using VPet.ModMaker.ViewModels.ModEdit;
 using VPet.ModMaker.Views.ModEdit.AnimeEdit;
 using VPet.ModMaker.Views.ModEdit.ClickTextEdit;
@@ -48,10 +50,23 @@ public partial class ModEditWindow : Window
     {
         InitializeComponent();
         DataContext = new ModEditWindowVM(this);
-        Closed += Window_ModEdit_Closed;
+        Closed += ModEditWindow_Closed;
+        Loaded += ModEditWindow_Loaded;
     }
 
-    private void Window_ModEdit_Closed(object sender, EventArgs e)
+    private void ModEditWindow_Loaded(object sender, RoutedEventArgs e)
+    {
+        if (I18nHelper.Current.CultureNames.Count == 0)
+        {
+            if (
+                MessageBox.Show("未添加任何文化,确定要添加文化吗?".Translate(), "", MessageBoxButton.YesNo)
+                is MessageBoxResult.Yes
+            )
+                ViewModel.AddCulture();
+        }
+    }
+
+    private void ModEditWindow_Closed(object sender, EventArgs e)
     {
         ViewModel.Close();
         try

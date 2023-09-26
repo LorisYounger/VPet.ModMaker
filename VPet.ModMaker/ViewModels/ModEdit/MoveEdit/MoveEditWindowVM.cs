@@ -52,7 +52,7 @@ public class MoveEditWindowVM
             };
         if (openFileDialog.ShowDialog() is true)
         {
-            Image.Value = Utils.LoadImageToStream(openFileDialog.FileName);
+            Image.Value = Utils.LoadImageToMemoryStream(openFileDialog.FileName);
         }
     }
 
@@ -67,7 +67,7 @@ public class MoveEditWindowVM
         if (openFileDialog.ShowDialog() is true)
         {
             Image.Value?.StreamSource?.Close();
-            Image.Value = Utils.LoadImageToStream(openFileDialog.FileName);
+            Image.Value = Utils.LoadImageToMemoryStream(openFileDialog.FileName);
         }
     }
 }

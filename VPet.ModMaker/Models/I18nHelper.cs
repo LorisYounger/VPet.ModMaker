@@ -11,17 +11,15 @@ namespace VPet.ModMaker.Models;
 public class I18nHelper
 {
     public static I18nHelper Current { get; set; } = new();
-
-    public ObservableValue<string> MainCulture { get; } = new();
     public ObservableValue<string> CultureName { get; } = new();
     public ObservableCollection<string> CultureNames { get; } = new();
 
     public I18nHelper()
     {
-        CultureNames.CollectionChanged += Langs_CollectionChanged;
+        CultureNames.CollectionChanged += Cultures_CollectionChanged;
     }
 
-    private void Langs_CollectionChanged(
+    private void Cultures_CollectionChanged(
         object sender,
         System.Collections.Specialized.NotifyCollectionChangedEventArgs e
     )
@@ -29,25 +27,25 @@ public class I18nHelper
         // 替换
         if (e.NewStartingIndex == e.OldStartingIndex)
         {
-            ReplaceLang?.Invoke((string)e.OldItems[0], (string)e.NewItems[0]);
+            ReplaceCulture?.Invoke((string)e.OldItems[0], (string)e.NewItems[0]);
             return;
         }
         // 删除
         if (e.OldItems is not null)
         {
-            RemoveLang?.Invoke((string)e.OldItems[0]);
+            RemoveCulture?.Invoke((string)e.OldItems[0]);
         }
         // 新增
         if (e.NewItems is not null)
         {
-            AddLang?.Invoke((string)e.NewItems[0]);
+            AddCulture?.Invoke((string)e.NewItems[0]);
         }
     }
 
-    public event LangEventHandler AddLang;
-    public event LangEventHandler RemoveLang;
-    public event ReplaceLangEventHandler ReplaceLang;
+    public event CultureEventHandler AddCulture;
+    public event CultureEventHandler RemoveCulture;
+    public event ReplaceCultureEventHandler ReplaceCulture;
 
-    public delegate void LangEventHandler(string lang);
-    public delegate void ReplaceLangEventHandler(string oldLang, string newLang);
+    public delegate void CultureEventHandler(string culture);
+    public delegate void ReplaceCultureEventHandler(string oldCulture, string newCulture);
 }
