@@ -55,7 +55,16 @@
                   <Grid
                     Margin="5"
                     Background="{DynamicResource PrimaryDark}"
+                    Tag="{Binding DataContext, RelativeSource={RelativeSource AncestorType=Window, Mode=FindAncestor}}"
                     ToolTip="{Binding InfoFile}">
+                    <Grid.ContextMenu>
+                      <ContextMenu>
+                        <MenuItem
+                          Command="{Binding PlacementTarget.Tag.RemoveHistoryCommand, RelativeSource={RelativeSource AncestorType=ContextMenu, Mode=FindAncestor}}"
+                          CommandParameter="{Binding PlacementTarget.DataContext, RelativeSource={RelativeSource AncestorType=ContextMenu, Mode=FindAncestor}}"
+                          Header="{ll:Str 删除此历史}" />
+                      </ContextMenu>
+                    </Grid.ContextMenu>
                     <Grid.ColumnDefinitions>
                       <ColumnDefinition Width="Auto" />
                       <ColumnDefinition />

@@ -31,8 +31,6 @@ public class ModMakerHistory
         }
     }
 
-    public string LastTimeString => LastTime.ToString("yyyy/MM/dd HH:mm:ss");
-
     public string InfoFile => Path.Combine(SourcePath, "info.lps");
 
     [Line(ignoreCase: true)]

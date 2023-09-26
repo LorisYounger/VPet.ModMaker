@@ -34,6 +34,7 @@ public class ModMakerWindowVM
     public ObservableCommand CreateNewModCommand { get; } = new();
     public ObservableCommand LoadModFromFileCommand { get; } = new();
     public ObservableCommand ClearHistoriesCommand { get; } = new();
+    public ObservableCommand<ModMakerHistory> RemoveHistoryCommand { get; } = new();
     #endregion
     public ModMakerWindowVM() { }
 
@@ -45,7 +46,14 @@ public class ModMakerWindowVM
         CreateNewModCommand.ExecuteEvent += CreateNewMod;
         LoadModFromFileCommand.ExecuteEvent += LoadModFromFile;
         ClearHistoriesCommand.ExecuteEvent += ClearHistories;
+        RemoveHistoryCommand.ExecuteEvent += RemoveHistory;
         HistoriesSearchText.ValueChanged += ModSearchText_ValueChanged;
+    }
+
+    private void RemoveHistory(ModMakerHistory value)
+    {
+        Histories.Remove(value);
+        SaveHistories();
     }
 
     private void LoadHistories()
@@ -73,7 +81,7 @@ public class ModMakerWindowVM
                 {
                     new Sub("Id", history.Id),
                     new Sub("SourcePath", history.SourcePath),
-                    new Sub("LastTime", history.LastTimeString)
+                    new Sub("LastTime", history.LastTime.ToString("yyyy/MM/dd HH:mm"))
                 }
             );
         File.WriteAllText(ModMakerInfo.HistoryFile, lps.ToString());

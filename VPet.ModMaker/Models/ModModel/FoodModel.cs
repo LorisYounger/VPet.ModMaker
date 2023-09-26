@@ -94,7 +94,7 @@ public class FoodModel : I18nModel<I18nFoodModel>
             Health = Health.Value,
             Likability = Likability.Value,
             Price = Price.Value,
-            ImageSource = Image.Value,
+            Exp = Exp.Value,
         };
     }
 
