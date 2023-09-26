@@ -20,7 +20,9 @@ namespace VPet.ModMaker.Models;
 
 public class ModInfoModel : I18nModel<I18nModInfoModel>
 {
-    public const string ModInfoFile = "info.lps";
+    public long AuthorID { get; }
+    public ulong ItemID { get; }
+
     public static ModInfoModel Current { get; set; } = new();
 
     public ObservableValue<string> Id { get; } = new();
@@ -59,6 +61,8 @@ public class ModInfoModel : I18nModel<I18nModInfoModel>
         Author.Value = loader.Author;
         GameVersion.Value = loader.GameVer.ToString();
         ModVersion.Value = loader.Ver.ToString();
+        ItemID = loader.ItemID;
+        AuthorID = loader.AuthorID;
         var imagePath = Path.Combine(loader.ModPath.FullName, "icon.png");
         if (File.Exists(imagePath))
             Image.Value = Utils.LoadImageToStream(imagePath);
@@ -224,7 +228,7 @@ public class ModInfoModel : I18nModel<I18nModInfoModel>
 
     public void SaveTo(string path)
     {
-        var modInfoFile = Path.Combine(path, ModInfoFile);
+        var modInfoFile = Path.Combine(path, ModMakerInfo.InfoFile);
         if (File.Exists(modInfoFile) is false)
             File.Create(modInfoFile).Close();
 
@@ -242,8 +246,8 @@ public class ModInfoModel : I18nModel<I18nModInfoModel>
                 new Sub("ver", ModVersion.Value)
             },
             new Line("intro", DescriptionId.Value),
-            new Line("authorid", "0"),
-            new Line("itemid", "0"),
+            new Line("authorid", AuthorID.ToString()),
+            new Line("itemid", ItemID.ToString()),
             new Line("cachedate", DateTime.Now.Date.ToString())
         };
         foreach (var cultureName in I18nHelper.Current.CultureNames)
