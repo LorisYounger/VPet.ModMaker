@@ -20,7 +20,6 @@
       <RowDefinition />
       <RowDefinition Height="Auto" />
     </Grid.RowDefinitions>
-    <TextBlock Text="当前只支持 Default 动画" />
     <Grid
       Grid.Row="1"
       HorizontalAlignment="Center"
@@ -29,11 +28,24 @@
         <ColumnDefinition Width="Auto" />
         <ColumnDefinition />
       </Grid.ColumnDefinitions>
+      <Grid.RowDefinitions>
+        <RowDefinition Height="Auto" />
+        <RowDefinition Height="Auto" />
+      </Grid.RowDefinitions>
       <Label Content="{ll:Str 动画类型}" />
       <ComboBox
         Grid.Column="1"
-        ItemsSource="{Binding GraphTypes}"
+        ItemsSource="{Binding GraphTypes.Value}"
         SelectedItem="{Binding GraphType.Value}" />
+      <Label
+        Grid.Row="1"
+        Content="{ll:Str 动画名称}"
+        Visibility="{Binding HasNameAnime.Value, Converter={StaticResource FalseToHiddenConverter}}" />
+      <TextBox
+        Grid.Row="1"
+        Grid.Column="1"
+        Text="{Binding AnimeName.Value, UpdateSourceTrigger=PropertyChanged}"
+        Visibility="{Binding HasNameAnime.Value, Converter={StaticResource FalseToHiddenConverter}}" />
     </Grid>
     <Grid Grid.Row="2">
       <Grid.ColumnDefinitions>

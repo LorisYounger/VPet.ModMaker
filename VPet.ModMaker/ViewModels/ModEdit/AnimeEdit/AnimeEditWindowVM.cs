@@ -68,10 +68,16 @@ public class AnimeEditWindowVM
                 or GraphInfo.GraphType.Touch_Head
                 or GraphInfo.GraphType.Sleep
                 or GraphInfo.GraphType.Common
+                or GraphInfo.GraphType.Work
         )
             HasMultiType.Value = true;
 
-        if (model.GraphType.Value is GraphInfo.GraphType.Idel or GraphInfo.GraphType.Common)
+        if (
+            model.GraphType.Value
+            is GraphInfo.GraphType.Idel
+                or GraphInfo.GraphType.Common
+                or GraphInfo.GraphType.Work
+        )
             HasAnimeName.Value = true;
     }
 

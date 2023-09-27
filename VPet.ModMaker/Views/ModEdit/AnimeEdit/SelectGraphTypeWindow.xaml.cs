@@ -29,6 +29,7 @@ public partial class SelectGraphTypeWindow : Window
         InitializeComponent();
         DataContext = this;
         CurrentPet.ValueChanged += CurrentPet_ValueChanged;
+        GraphType.ValueChanged += GraphType_ValueChanged;
         Closed += (s, e) =>
         {
             try
@@ -39,22 +40,37 @@ public partial class SelectGraphTypeWindow : Window
         };
     }
 
+    private void GraphType_ValueChanged(GraphInfo.GraphType oldValue, GraphInfo.GraphType newValue)
+    {
+        if (newValue.IsHasNameAnime())
+            HasNameAnime.Value = true;
+        else
+            HasNameAnime.Value = false;
+    }
+
     private void CurrentPet_ValueChanged(PetModel oldValue, PetModel newValue)
     {
-        if (CurrentPet.Value.Animes.Count == 0)
-        {
-            GraphTypes.Value.Add(GraphInfo.GraphType.Default);
-            return;
-        }
         GraphTypes.Value = new(
             AnimeTypeModel.GraphTypes.Except(CurrentPet.Value.Animes.Select(m => m.GraphType.Value))
         );
+        // 可添加多个项的类型
+        if (GraphTypes.Value.Contains(GraphInfo.GraphType.Common) is false)
+            GraphTypes.Value.Add(GraphInfo.GraphType.Common);
+        if (GraphTypes.Value.Contains(GraphInfo.GraphType.Work) is false)
+            GraphTypes.Value.Add(GraphInfo.GraphType.Work);
+        if (GraphTypes.Value.Contains(GraphInfo.GraphType.Move) is false)
+            GraphTypes.Value.Add(GraphInfo.GraphType.Move);
+        if (GraphTypes.Value.Contains(GraphInfo.GraphType.Idel) is false)
+            GraphTypes.Value.Add(GraphInfo.GraphType.Idel);
     }
 
     public ObservableValue<PetModel> CurrentPet { get; } = new();
     public ObservableValue<GraphInfo.GraphType> GraphType { get; } = new();
     public ObservableValue<ObservableCollection<GraphInfo.GraphType>> GraphTypes { get; } =
         new(new());
+    public ObservableValue<string> AnimeName { get; } = new();
+
+    public ObservableValue<bool> HasNameAnime { get; } = new();
 
     public bool IsCancel { get; private set; } = true;
 

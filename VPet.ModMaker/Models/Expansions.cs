@@ -8,6 +8,8 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using VPet.ModMaker.Models.ModModel;
+using VPet_Simulator.Core;
 
 namespace VPet.ModMaker.Models;
 
@@ -72,6 +74,11 @@ public static class Extensions
             return false;
         dictionary.Add(key, value);
         return true;
+    }
+
+    public static bool IsHasNameAnime(this GraphInfo.GraphType graphType)
+    {
+        return AnimeTypeModel.HasNameAnimes.Contains(graphType);
     }
 
     /// <summary>

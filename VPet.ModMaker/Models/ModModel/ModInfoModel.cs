@@ -98,7 +98,18 @@ public class ModInfoModel : I18nModel<I18nModInfoModel>
                 var dirName = Path.GetFileName(animeDir);
                 if (Enum.TryParse<GraphInfo.GraphType>(dirName, true, out var animeType))
                 {
-                    if (AnimeTypeModel.Create(animeType, animeDir) is AnimeTypeModel model)
+                    if (animeType is GraphInfo.GraphType.Work)
+                    {
+                        foreach (var dir in Directory.EnumerateDirectories(animeDir))
+                        {
+                            if (
+                                AnimeTypeModel.Create(GraphInfo.GraphType.Work, dir)
+                                is AnimeTypeModel model1
+                            )
+                                petModel.Animes.Add(model1);
+                        }
+                    }
+                    else if (AnimeTypeModel.Create(animeType, animeDir) is AnimeTypeModel model)
                         petModel.Animes.Add(model);
                 }
                 else if (dirName.Equals("Switch", StringComparison.InvariantCultureIgnoreCase))
@@ -161,6 +172,7 @@ public class ModInfoModel : I18nModel<I18nModInfoModel>
         }
     }
 
+    #region Load
     private void LoadI18nData()
     {
         foreach (var lang in I18nDatas)
@@ -220,7 +232,8 @@ public class ModInfoModel : I18nModel<I18nModInfoModel>
             }
         }
     }
-
+    #endregion
+    #region Save
     public void Save()
     {
         SaveTo(SourcePath.Value);
@@ -340,7 +353,7 @@ public class ModInfoModel : I18nModel<I18nModInfoModel>
             new Line("pet", pet.Id.Value)
             {
                 new Sub("intor", pet.DescriptionId.Value),
-                new Sub("ModPath", pet.Id.Value),
+                new Sub("path", pet.Id.Value),
                 new Sub("petname", pet.PetNameId.Value)
             }
         );
@@ -546,7 +559,7 @@ public class ModInfoModel : I18nModel<I18nModInfoModel>
             }
         }
     }
-
+    #endregion
     public void Close()
     {
         Image.Value.CloseStream();

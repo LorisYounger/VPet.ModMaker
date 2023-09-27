@@ -72,6 +72,7 @@ public class AnimePageVM
         var vm = window.ViewModel;
         vm.CurrentPet = CurrentPet.Value;
         vm.Anime.Value.GraphType.Value = graphType;
+        vm.Anime.Value.Name.Value = selectGraphTypeWindow.AnimeName.Value;
         window.ShowDialog();
         if (window.IsCancel)
             return;

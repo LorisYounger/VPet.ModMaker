@@ -3,6 +3,7 @@ using LinePutScript;
 using LinePutScript.Converter;
 using LinePutScript.Localization.WPF;
 using Microsoft.Win32;
+using Panuon.WPF.UI;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -189,8 +190,10 @@ public class ModMakerWindowVM
                 MessageBox.Show("模组载入失败".Translate());
                 return;
             }
+            var pendingHandler = PendingBox.Show("载入中".Translate());
             var modInfo = new ModInfoModel(mod);
             EditMod(modInfo);
+            pendingHandler.Close();
         }
         catch (Exception ex)
         {

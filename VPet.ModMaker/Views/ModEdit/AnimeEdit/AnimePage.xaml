@@ -91,6 +91,42 @@
               <TextBlock Text="{ll:Str 动画类型}" />
             </DataGridTextColumn.Header>
           </DataGridTextColumn>
+          <DataGridTextColumn
+            Binding="{Binding HappyAnimes.Count}"
+            CanUserSort="True"
+            IsReadOnly="True"
+            SortMemberPath="Id.Value">
+            <DataGridTextColumn.Header>
+              <TextBlock Text="{ll:Str 开心状态动画数量}" />
+            </DataGridTextColumn.Header>
+          </DataGridTextColumn>
+          <DataGridTextColumn
+            Binding="{Binding NomalAnimes.Count}"
+            CanUserSort="True"
+            IsReadOnly="True"
+            SortMemberPath="Id.Value">
+            <DataGridTextColumn.Header>
+              <TextBlock Text="{ll:Str 普通状态动画数量}" />
+            </DataGridTextColumn.Header>
+          </DataGridTextColumn>
+          <DataGridTextColumn
+            Binding="{Binding PoorConditionAnimes.Count}"
+            CanUserSort="True"
+            IsReadOnly="True"
+            SortMemberPath="Id.Value">
+            <DataGridTextColumn.Header>
+              <TextBlock Text="{ll:Str 不开心状态动画数量}" />
+            </DataGridTextColumn.Header>
+          </DataGridTextColumn>
+          <DataGridTextColumn
+            Binding="{Binding IllAnimes.Count}"
+            CanUserSort="True"
+            IsReadOnly="True"
+            SortMemberPath="Id.Value">
+            <DataGridTextColumn.Header>
+              <TextBlock Text="{ll:Str 生病状态动画数量}" />
+            </DataGridTextColumn.Header>
+          </DataGridTextColumn>
           <!--<DataGridTextColumn
             Binding="{Binding LocateType.EnumValue.Value}"
             CanUserSort="True"

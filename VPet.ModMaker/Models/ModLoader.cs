@@ -94,20 +94,11 @@ public class ModLoader
                                 var name = lps.First().Info;
                                 var pet = new PetLoader(lps, di);
                                 Pets.Add(pet);
-                                // TODO : 此方法会导致 LoadImageToStream 无法使用
+                                // ! : 此方法会导致 LoadImageToStream 无法使用
                                 //var graphCore = new GraphCore(0);
                                 //foreach (var p in pet.path)
                                 //    PetLoader.LoadGraph(graphCore, di, p);
                                 //MultiGraphs.Add(pet.Name, graphCore);
-
-                                //var p = mw.Pets.FirstOrDefault(x => x.Id == name);
-                                //if (p == null)
-                                //    mw.Pets.Add(new PetLoader(lps, di));
-                                //else
-                                //{
-                                //    p.path.Add(di.FullName + "\\" + lps.First()["path"].Info);
-                                //    p.Config.Set(lps);
-                                //}
                             }
                         }
                         break;

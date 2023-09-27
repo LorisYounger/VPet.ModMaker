@@ -216,7 +216,7 @@
             <TabItem.Header>
               <MultiBinding Converter="{StaticResource StringFormatConverter}" ConverterParameter="{}{0} ({1})">
                 <Binding Path="Tag" RelativeSource="{RelativeSource Mode=Self}" />
-                <Binding Path="ModEditWindow.MovePage.ViewModel.CurrentPet.Value.Animes.Count" />
+                <Binding Path="ModEditWindow.AnimePage.ViewModel.CurrentPet.Value.Animes.Count" />
               </MultiBinding>
             </TabItem.Header>
             <Frame Content="{Binding ModEditWindow.AnimePage}" />
