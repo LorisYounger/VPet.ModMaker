@@ -35,6 +35,7 @@
         <Label Content="Id" />
         <TextBox
           Grid.Column="1"
+          pu:TextBoxHelper.Watermark="Id"
           Style="{StaticResource TextBox_Wrap}"
           Text="{Binding LowText.Value.Id.Value, UpdateSourceTrigger=PropertyChanged}" />
       </Grid>

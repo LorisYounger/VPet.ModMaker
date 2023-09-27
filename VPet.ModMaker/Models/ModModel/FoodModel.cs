@@ -18,7 +18,7 @@ public class FoodModel : I18nModel<I18nFoodModel>
 
     public ObservableValue<string> Id { get; } = new();
     public ObservableValue<string> DescriptionId { get; } = new();
-    public ObservableValue<string> Graph { get; } = new();
+    public ObservableValue<string> Graph { get; } = new("eat");
     public ObservableValue<Food.FoodType> Type { get; } = new();
     public ObservableValue<double> Strength { get; } = new();
     public ObservableValue<double> StrengthFood { get; } = new();

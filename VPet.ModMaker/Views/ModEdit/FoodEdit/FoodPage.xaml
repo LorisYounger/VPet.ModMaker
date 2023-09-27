@@ -96,6 +96,15 @@
           </DataGridTextColumn.Header>
         </DataGridTextColumn>
         <DataGridTextColumn
+          Binding="{Binding Graph.Value}"
+          CanUserSort="True"
+          IsReadOnly="True"
+          SortMemberPath="Type.Value">
+          <DataGridTextColumn.Header>
+            <TextBlock Text="{ll:Str 指定动画}" />
+          </DataGridTextColumn.Header>
+        </DataGridTextColumn>
+        <DataGridTextColumn
           Binding="{Binding StrengthFood.Value}"
           CanUserSort="True"
           IsReadOnly="True"

@@ -70,7 +70,7 @@
             <RowDefinition Height="Auto" />
             <RowDefinition />
           </Grid.RowDefinitions>
-          <Label Content="{ll:Str 食物Id}" />
+          <Label Content="Id" />
           <TextBox
             Grid.Column="1"
             pu:TextBoxHelper.Watermark="Id"
@@ -86,7 +86,7 @@
           <TextBox
             Grid.Row="2"
             Grid.Column="1"
-            pu:TextBoxHelper.Watermark="{ll:Str 动画名称(非必要)}"
+            pu:TextBoxHelper.Watermark="{ll:Str 绑定的动画名称(非必要)}"
             Text="{Binding Food.Value.Graph.Value, UpdateSourceTrigger=PropertyChanged}" />
           <Label Grid.Row="3" Content="{ll:Str 食物名称}" />
           <TextBox

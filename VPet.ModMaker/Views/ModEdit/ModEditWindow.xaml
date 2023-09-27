@@ -101,10 +101,10 @@
               <RowDefinition Height="Auto" />
               <RowDefinition />
             </Grid.RowDefinitions>
-            <Label Content="{ll:Str 模组Id}" />
+            <Label Content="Id" />
             <TextBox
               Grid.Column="1"
-              pu:TextBoxHelper.Watermark="{ll:Str 模组Id}"
+              pu:TextBoxHelper.Watermark="Id"
               Text="{Binding ModInfo.Value.Id.Value}" />
             <Label Grid.Row="1" Content="{ll:Str 作者}" />
             <TextBox
