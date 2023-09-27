@@ -27,7 +27,24 @@ public class AnimeTypeModel
             GraphInfo.GraphType.Common,
             GraphInfo.GraphType.Work,
             GraphInfo.GraphType.Idel,
-            GraphInfo.GraphType.Move
+            GraphInfo.GraphType.Move,
+            GraphInfo.GraphType.Say
+        };
+
+    public static HashSet<GraphInfo.GraphType> HasMultiTypeAnimes { get; } =
+        new()
+        {
+            GraphInfo.GraphType.Touch_Head,
+            GraphInfo.GraphType.Touch_Body,
+            GraphInfo.GraphType.Sleep,
+            GraphInfo.GraphType.Raised_Static,
+            GraphInfo.GraphType.StateONE,
+            GraphInfo.GraphType.StateTWO,
+            GraphInfo.GraphType.Common,
+            GraphInfo.GraphType.Work,
+            GraphInfo.GraphType.Idel,
+            GraphInfo.GraphType.Move,
+            GraphInfo.GraphType.Say
         };
 
     public ObservableValue<string> Id { get; } = new();
@@ -80,7 +97,8 @@ public class AnimeTypeModel
     public AnimeTypeModel(GraphInfo.GraphType graphType, string path)
     {
         Name.Value = Path.GetFileName(path);
-        if (graphType is GraphInfo.GraphType.Common or GraphInfo.GraphType.Work)
+        // 为带有名字的类型设置Id
+        if (graphType.IsHasNameAnime())
             Id.Value = $"{graphType}_{Name.Value}";
         else
             Id.Value = graphType.ToString();
@@ -105,9 +123,9 @@ public class AnimeTypeModel
                 or GraphInfo.GraphType.Raised_Static
                 or GraphInfo.GraphType.StateONE
                 or GraphInfo.GraphType.StateTWO
-                or GraphInfo.GraphType.Common
-                or GraphInfo.GraphType.Work
         )
+            LoadMultiType(path);
+        else if (graphType.IsHasNameAnime())
             LoadMultiType(path);
         else
             throw new Exception();
@@ -203,15 +221,22 @@ public class AnimeTypeModel
             {
                 var type = GetAnimatType(dirName[0]);
                 // 判断 A/Happy 文件夹
-                foreach (var modePath in Directory.EnumerateDirectories(dir))
+                if (Directory.EnumerateDirectories(dir).Any())
                 {
-                    mode = (GameSave.ModeType)
-                        Enum.Parse(
-                            typeof(GameSave.ModeType),
-                            Path.GetFileName(modePath).Split(Utils.Separator).First(),
-                            true
-                        );
-                    AddAnimeForModeType(modePath, mode, type);
+                    foreach (var modePath in Directory.EnumerateDirectories(dir))
+                    {
+                        mode = (GameSave.ModeType)
+                            Enum.Parse(
+                                typeof(GameSave.ModeType),
+                                Path.GetFileName(modePath).Split(Utils.Separator).First(),
+                                true
+                            );
+                        AddAnimeForModeType(modePath, mode, type);
+                    }
+                }
+                else
+                {
+                    AddAnimeForModeType(dir, GameSave.ModeType.Nomal, type);
                 }
             }
         }
@@ -310,7 +335,7 @@ public class AnimeTypeModel
             SaveState(path, this);
         else if (GraphType.Value is GraphInfo.GraphType.Common)
             SaveCommon(path, this);
-        else if (GraphType.Value is GraphInfo.GraphType.Work)
+        else if (GraphType.Value.IsHasNameAnime())
             SaveHasNameAnime(path, this);
     }
 

@@ -62,22 +62,10 @@ public class AnimeEditWindowVM
 
     private void CheckGraphType(AnimeTypeModel model)
     {
-        if (
-            model.GraphType.Value
-            is GraphInfo.GraphType.Touch_Body
-                or GraphInfo.GraphType.Touch_Head
-                or GraphInfo.GraphType.Sleep
-                or GraphInfo.GraphType.Common
-                or GraphInfo.GraphType.Work
-        )
+        if (AnimeTypeModel.HasMultiTypeAnimes.Contains(model.GraphType.Value))
             HasMultiType.Value = true;
 
-        if (
-            model.GraphType.Value
-            is GraphInfo.GraphType.Idel
-                or GraphInfo.GraphType.Common
-                or GraphInfo.GraphType.Work
-        )
+        if (AnimeTypeModel.HasNameAnimes.Contains(model.GraphType.Value))
             HasAnimeName.Value = true;
     }
 

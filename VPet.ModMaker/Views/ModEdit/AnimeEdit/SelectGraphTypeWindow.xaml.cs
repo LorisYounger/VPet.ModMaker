@@ -54,14 +54,9 @@ public partial class SelectGraphTypeWindow : Window
             AnimeTypeModel.GraphTypes.Except(CurrentPet.Value.Animes.Select(m => m.GraphType.Value))
         );
         // 可添加多个项的类型
-        if (GraphTypes.Value.Contains(GraphInfo.GraphType.Common) is false)
-            GraphTypes.Value.Add(GraphInfo.GraphType.Common);
-        if (GraphTypes.Value.Contains(GraphInfo.GraphType.Work) is false)
-            GraphTypes.Value.Add(GraphInfo.GraphType.Work);
-        if (GraphTypes.Value.Contains(GraphInfo.GraphType.Move) is false)
-            GraphTypes.Value.Add(GraphInfo.GraphType.Move);
-        if (GraphTypes.Value.Contains(GraphInfo.GraphType.Idel) is false)
-            GraphTypes.Value.Add(GraphInfo.GraphType.Idel);
+        foreach (var graphType in AnimeTypeModel.HasNameAnimes)
+            if (GraphTypes.Value.Contains(graphType) is false)
+                GraphTypes.Value.Add(graphType);
     }
 
     public ObservableValue<PetModel> CurrentPet { get; } = new();
