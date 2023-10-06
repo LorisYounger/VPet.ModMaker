@@ -15,13 +15,35 @@ namespace VPet.ModMaker.ViewModels.ModEdit.ClickTextEdit;
 public class ClickTextPageVM
 {
     #region Value
+    /// <summary>
+    /// 显示的点击文本
+    /// </summary>
     public ObservableValue<ObservableCollection<ClickTextModel>> ShowClickTexts { get; } = new();
+
+    /// <summary>
+    /// 点击文本
+    /// </summary>
     public ObservableCollection<ClickTextModel> ClickTexts => ModInfoModel.Current.ClickTexts;
+
+    /// <summary>
+    /// 搜索
+    /// </summary>
     public ObservableValue<string> Search { get; } = new();
     #endregion
     #region Command
+    /// <summary>
+    /// 添加命令
+    /// </summary>
     public ObservableCommand AddCommand { get; } = new();
+
+    /// <summary>
+    /// 编辑命令
+    /// </summary>
     public ObservableCommand<ClickTextModel> EditCommand { get; } = new();
+
+    /// <summary>
+    /// 删除命令
+    /// </summary>
     public ObservableCommand<ClickTextModel> RemoveCommand { get; } = new();
     #endregion
 
@@ -50,6 +72,9 @@ public class ClickTextPageVM
         }
     }
 
+    /// <summary>
+    /// 添加点击文本
+    /// </summary>
     private void Add()
     {
         var window = new ClickTextEditWindow();
@@ -60,6 +85,10 @@ public class ClickTextPageVM
         ClickTexts.Add(vm.ClickText.Value);
     }
 
+    /// <summary>
+    /// 编辑点击文本
+    /// </summary>
+    /// <param name="model">模型</param>
     public void Edit(ClickTextModel model)
     {
         var window = new ClickTextEditWindow();
@@ -80,6 +109,10 @@ public class ClickTextPageVM
         }
     }
 
+    /// <summary>
+    /// 删除点击文本
+    /// </summary>
+    /// <param name="model">模型</param>
     private void Remove(ClickTextModel model)
     {
         if (MessageBox.Show("确定删除吗".Translate(), "", MessageBoxButton.YesNo) is MessageBoxResult.No)

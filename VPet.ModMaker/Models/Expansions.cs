@@ -13,8 +13,18 @@ using VPet_Simulator.Core;
 
 namespace VPet.ModMaker.Models;
 
+/// <summary>
+/// 拓展
+/// </summary>
 public static class Extensions
 {
+    /// <summary>
+    ///
+    /// </summary>
+    /// <param name="source"></param>
+    /// <param name="value"></param>
+    /// <param name="comparisonType"></param>
+    /// <returns></returns>
     public static bool Contains(this string source, string value, StringComparison comparisonType)
     {
         return source.IndexOf(value, comparisonType) >= 0;
@@ -25,6 +35,10 @@ public static class Extensions
     //    return ((FileStream)image.StreamSource).Name;
     //}
 
+    /// <summary>
+    /// 关闭流
+    /// </summary>
+    /// <param name="source">图像资源</param>
     public static void CloseStream(this ImageSource source)
     {
         if (source is BitmapImage image)
@@ -33,6 +47,11 @@ public static class Extensions
         }
     }
 
+    /// <summary>
+    /// 图像复制
+    /// </summary>
+    /// <param name="image">图像</param>
+    /// <returns>复制的图像</returns>
     public static BitmapImage Copy(this BitmapImage image)
     {
         BitmapImage newImage = new();
@@ -54,6 +73,11 @@ public static class Extensions
         return newImage;
     }
 
+    /// <summary>
+    /// 保存至Png图片
+    /// </summary>
+    /// <param name="image">图片资源</param>
+    /// <param name="path">路径</param>
     public static void SaveToPng(this BitmapSource image, string path)
     {
         if (path.EndsWith(".png") is false)
@@ -64,6 +88,15 @@ public static class Extensions
         encoder.Save(fs);
     }
 
+    /// <summary>
+    /// 尝试添加
+    /// </summary>
+    /// <typeparam name="TKey">键类型</typeparam>
+    /// <typeparam name="TValue"></typeparam>
+    /// <param name="dictionary"></param>
+    /// <param name="key">键</param>
+    /// <param name="value">值</param>
+    /// <returns>成功为 <see langword="true"/> 失败为 <see langword="false"/></returns>
     public static bool TryAdd<TKey, TValue>(
         this IDictionary<TKey, TValue> dictionary,
         TKey key,
@@ -76,6 +109,11 @@ public static class Extensions
         return true;
     }
 
+    /// <summary>
+    /// 是含有名称的动画
+    /// </summary>
+    /// <param name="graphType"></param>
+    /// <returns></returns>
     public static bool IsHasNameAnime(this GraphInfo.GraphType graphType)
     {
         return AnimeTypeModel.HasNameAnimes.Contains(graphType);

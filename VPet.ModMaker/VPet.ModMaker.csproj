@@ -110,7 +110,7 @@
     <Compile Include="Models\ModModel\ImageModel.cs" />
     <Compile Include="Models\ModModel\LowTextModel.cs" />
     <Compile Include="Models\ModLoader.cs" />
-    <Compile Include="Models\ModMakerHistory.cs" />
+    <Compile Include="Models\ModMakeHistory.cs" />
     <Compile Include="Models\ModMakerInfo.cs" />
     <Compile Include="Models\ModModel\MoveModel.cs" />
     <Compile Include="Models\ObservableRange.cs" />

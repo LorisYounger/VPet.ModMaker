@@ -28,7 +28,7 @@ public class SelectTextModel : I18nModel<I18nSelectTextModel>
 
     public ObservableValue<string> Id { get; } = new();
     public ObservableValue<string> ChooseId { get; } = new();
-    public ObservableEnumFlagsVM<ClickText.ModeType> Mode { get; } = new();
+    public ObservableEnumFlags<ClickText.ModeType> Mode { get; } = new();
 
     //public ObservableValue<string> Working { get; } = new();
     //public ObservableValue<VPet_Simulator.Core.Main.WorkingState> WorkingState { get; } = new();

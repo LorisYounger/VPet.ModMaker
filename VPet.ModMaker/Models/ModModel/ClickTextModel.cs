@@ -24,9 +24,9 @@ public class ClickTextModel : I18nModel<I18nClickTextModel>
 
     public ObservableValue<string> Id { get; } = new();
     public ObservableValue<string> Working { get; } = new();
-    public ObservableEnumFlagsVM<ClickText.ModeType> Mode { get; } = new();
+    public ObservableEnumFlags<ClickText.ModeType> Mode { get; } = new();
     public ObservableValue<VPet_Simulator.Core.Main.WorkingState> WorkingState { get; } = new();
-    public ObservableEnumFlagsVM<ClickText.DayTime> DayTime { get; } = new();
+    public ObservableEnumFlags<ClickText.DayTime> DayTime { get; } = new();
 
     public ObservableRange<double> Like { get; } = new(0, int.MaxValue);
     public ObservableRange<double> Health { get; } = new(0, int.MaxValue);

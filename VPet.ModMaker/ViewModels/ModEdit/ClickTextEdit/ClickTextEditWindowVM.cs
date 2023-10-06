@@ -15,8 +15,14 @@ public class ClickTextEditWindowVM
     public I18nHelper I18nData => I18nHelper.Current;
 
     #region Value
-
+    /// <summary>
+    /// 旧点击文本
+    /// </summary>
     public ClickTextModel OldClickText { get; set; }
+
+    /// <summary>
+    /// 点击文本
+    /// </summary>
     public ObservableValue<ClickTextModel> ClickText { get; } = new(new());
     #endregion
     public ClickTextEditWindowVM() { }

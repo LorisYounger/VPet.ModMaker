@@ -8,10 +8,24 @@ using System.Threading.Tasks;
 
 namespace VPet.ModMaker.Models;
 
+/// <summary>
+/// I18n助手
+/// </summary>
 public class I18nHelper
 {
+    /// <summary>
+    /// 当前数据
+    /// </summary>
     public static I18nHelper Current { get; set; } = new();
+
+    /// <summary>
+    /// 当前文化名称
+    /// </summary>
     public ObservableValue<string> CultureName { get; } = new();
+
+    /// <summary>
+    /// 文化列表
+    /// </summary>
     public ObservableCollection<string> CultureNames { get; } = new();
 
     public I18nHelper()
@@ -42,8 +56,19 @@ public class I18nHelper
         }
     }
 
+    /// <summary>
+    /// 添加文化事件
+    /// </summary>
     public event CultureEventHandler AddCulture;
+
+    /// <summary>
+    /// 删除文化事件
+    /// </summary>
     public event CultureEventHandler RemoveCulture;
+
+    /// <summary>
+    /// 修改文化事件
+    /// </summary>
     public event ReplaceCultureEventHandler ReplaceCulture;
 
     public delegate void CultureEventHandler(string culture);

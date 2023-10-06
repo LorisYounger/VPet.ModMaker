@@ -33,12 +33,12 @@ public class ModMakerWindowVM
     /// <summary>
     /// 显示的历史
     /// </summary>
-    public ObservableValue<ObservableCollection<ModMakerHistory>> ShowHistories { get; } = new();
+    public ObservableValue<ObservableCollection<ModMakeHistory>> ShowHistories { get; } = new();
 
     /// <summary>
     /// 历史
     /// </summary>
-    public ObservableCollection<ModMakerHistory> Histories { get; } = new();
+    public ObservableCollection<ModMakeHistory> Histories { get; } = new();
     #endregion
     #region Command
     /// <summary>
@@ -59,7 +59,7 @@ public class ModMakerWindowVM
     /// <summary>
     /// 删除历史命令
     /// </summary>
-    public ObservableCommand<ModMakerHistory> RemoveHistoryCommand { get; } = new();
+    public ObservableCommand<ModMakeHistory> RemoveHistoryCommand { get; } = new();
     #endregion
 
     public ModMakerWindowVM(ModMakerWindow window)
@@ -83,7 +83,7 @@ public class ModMakerWindowVM
     }
 
     #region History
-    private void RemoveHistory(ModMakerHistory value)
+    private void RemoveHistory(ModMakeHistory value)
     {
         Histories.Remove(value);
         SaveHistories();
@@ -99,7 +99,7 @@ public class ModMakerWindowVM
         var lps = new LPS(File.ReadAllText(ModMakerInfo.HistoryFile));
         foreach (var line in lps)
         {
-            var history = LPSConvert.DeserializeObject<ModMakerHistory>(line);
+            var history = LPSConvert.DeserializeObject<ModMakeHistory>(line);
             if (Histories.All(h => h.InfoFile != history.InfoFile))
                 Histories.Add(history);
         }
@@ -136,7 +136,7 @@ public class ModMakerWindowVM
     {
         if (
             Histories.FirstOrDefault(h => h.SourcePath == modInfo.SourcePath.Value)
-            is ModMakerHistory history
+            is ModMakeHistory history
         )
         {
             history.Id = modInfo.Id.Value;
@@ -240,22 +240,21 @@ public class ModMakerWindowVM
     /// <param name="path">位置</param>
     public void LoadMod(string path)
     {
+        ModLoader? loader = null;
         try
         {
-            var mod = new ModLoader(new DirectoryInfo(path));
-            if (mod.SuccessLoad is false)
-            {
-                MessageBox.Show("模组载入失败".Translate());
-                return;
-            }
-            var pendingHandler = PendingBox.Show("载入中".Translate());
-            var modInfo = new ModInfoModel(mod);
-            EditMod(modInfo);
-            pendingHandler.Close();
+            loader = new ModLoader(new DirectoryInfo(path));
         }
         catch (Exception ex)
         {
             MessageBox.Show("模组载入失败:\n{0}".Translate(ex));
+        }
+        if (loader is not null)
+        {
+            var pendingHandler = PendingBox.Show("载入中".Translate());
+            var modInfo = new ModInfoModel(loader);
+            EditMod(modInfo);
+            pendingHandler.Close();
         }
     }
     #endregion

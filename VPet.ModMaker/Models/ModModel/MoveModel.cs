@@ -36,12 +36,12 @@ public class MoveModel
     public ObservableValue<int> TriggerTop { get; } = new(100);
     public ObservableValue<int> TriggerBottom { get; } = new(100);
 
-    public ObservableEnumFlagsVM<GraphHelper.Move.DirectionType> LocateType { get; } =
+    public ObservableEnumFlags<GraphHelper.Move.DirectionType> LocateType { get; } =
         new(GraphHelper.Move.DirectionType.None);
-    public ObservableEnumFlagsVM<GraphHelper.Move.DirectionType> TriggerType { get; } =
+    public ObservableEnumFlags<GraphHelper.Move.DirectionType> TriggerType { get; } =
         new(GraphHelper.Move.DirectionType.None);
 
-    public ObservableEnumFlagsVM<GraphHelper.Move.ModeType> ModeType { get; } =
+    public ObservableEnumFlags<GraphHelper.Move.ModeType> ModeType { get; } =
         new(GraphHelper.Move.ModeType.Nomal);
 
     public MoveModel() { }

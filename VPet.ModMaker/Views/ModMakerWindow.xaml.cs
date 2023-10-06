@@ -43,7 +43,7 @@ public partial class ModMakerWindow : Window
     {
         if (sender is not ListBoxItem item)
             return;
-        if (item.DataContext is not ModMakerHistory history)
+        if (item.DataContext is not ModMakeHistory history)
             return;
         if (Directory.Exists(history.SourcePath) is false)
         {

@@ -16,16 +16,45 @@ namespace VPet.ModMaker.ViewModels.ModEdit.AnimeEdit;
 public class AnimePageVM
 {
     #region Value
+    /// <summary>
+    /// 显示的动画
+    /// </summary>
     public ObservableValue<ObservableCollection<AnimeTypeModel>> ShowAnimes { get; } = new();
+
+    /// <summary>
+    /// 动画
+    /// </summary>
     public ObservableCollection<AnimeTypeModel> Animes => CurrentPet.Value.Animes;
 
+    /// <summary>
+    /// 宠物列表
+    /// </summary>
     public ObservableCollection<PetModel> Pets => ModInfoModel.Current.Pets;
+
+    /// <summary>
+    /// 当前宠物
+    /// </summary>
     public ObservableValue<PetModel> CurrentPet { get; } = new(new());
+
+    /// <summary>
+    /// 搜索
+    /// </summary>
     public ObservableValue<string> Search { get; } = new();
     #endregion
     #region Command
+    /// <summary>
+    /// 添加命令
+    /// </summary>
     public ObservableCommand AddCommand { get; } = new();
+
+    /// <summary>
+    /// 编辑命令
+    /// </summary>
     public ObservableCommand<AnimeTypeModel> EditCommand { get; } = new();
+
+    /// <summary>
+    /// 删除命令
+    /// </summary>
     public ObservableCommand<AnimeTypeModel> RemoveCommand { get; } = new();
     #endregion
     public AnimePageVM()
@@ -58,8 +87,9 @@ public class AnimePageVM
         }
     }
 
-    public void Close() { }
-
+    /// <summary>
+    /// 添加动画
+    /// </summary>
     private void Add()
     {
         var selectGraphTypeWindow = new SelectGraphTypeWindow();
@@ -79,6 +109,10 @@ public class AnimePageVM
         Animes.Add(vm.Anime.Value);
     }
 
+    /// <summary>
+    /// 编辑动画
+    /// </summary>
+    /// <param name="model">动画类型模型</param>
     public void Edit(AnimeTypeModel model)
     {
         var window = new AnimeEditWindow();
@@ -100,18 +134,22 @@ public class AnimePageVM
         }
     }
 
-    private void Remove(AnimeTypeModel food)
+    /// <summary>
+    /// 删除动画
+    /// </summary>
+    /// <param name="model">动画类型模型</param>
+    private void Remove(AnimeTypeModel model)
     {
         if (MessageBox.Show("确定删除吗".Translate(), "", MessageBoxButton.YesNo) is MessageBoxResult.No)
             return;
         if (ShowAnimes.Value.Count == Animes.Count)
         {
-            Animes.Remove(food);
+            Animes.Remove(model);
         }
         else
         {
-            ShowAnimes.Value.Remove(food);
-            Animes.Remove(food);
+            ShowAnimes.Value.Remove(model);
+            Animes.Remove(model);
         }
     }
 }

@@ -9,9 +9,19 @@ using System.Windows.Media.Imaging;
 
 namespace VPet.ModMaker.Models;
 
+/// <summary>
+/// 工具
+/// </summary>
 public static class Utils
 {
+    /// <summary>
+    /// 解码像素宽度
+    /// </summary>
     public const int DecodePixelWidth = 250;
+
+    /// <summary>
+    /// 节码像素高度
+    /// </summary>
     public const int DecodePixelHeight = 250;
     public static char[] Separator { get; } = new char[] { '_' };
 
@@ -31,6 +41,11 @@ public static class Utils
     //    return bitmapImage;
     //}
 
+    /// <summary>
+    /// 载入图片至内存流
+    /// </summary>
+    /// <param name="imagePath"></param>
+    /// <returns></returns>
     public static BitmapImage LoadImageToMemoryStream(string imagePath)
     {
         BitmapImage bitmapImage = new();
