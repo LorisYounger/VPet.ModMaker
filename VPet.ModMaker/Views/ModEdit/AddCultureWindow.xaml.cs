@@ -1,4 +1,6 @@
 ﻿using HKW.HKWViewModels.SimpleObservable;
+using LinePutScript.Localization.WPF;
+using Panuon.WPF.UI;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -23,7 +25,7 @@ namespace VPet.ModMaker.Views.ModEdit;
 /// <summary>
 /// Window_AddLang.xaml 的交互逻辑
 /// </summary>
-public partial class AddCultureWindow : Window
+public partial class AddCultureWindow : WindowX
 {
     public bool IsCancel { get; private set; } = true;
 
@@ -34,6 +36,7 @@ public partial class AddCultureWindow : Window
         InitializeComponent();
         DataContext = new AddCultureWindowVM();
         TextBox_Lang.Focus();
+        TextBox_Lang.Dispatcher.InvokeAsync(TextBox_Lang.SelectAll);
     }
 
     private void Button_Cancel_Click(object sender, RoutedEventArgs e)
@@ -43,14 +46,14 @@ public partial class AddCultureWindow : Window
 
     private void Button_Yes_Click(object sender, RoutedEventArgs e)
     {
-        if (string.IsNullOrEmpty(ViewModel.Culture.Value))
+        if (string.IsNullOrWhiteSpace(ViewModel.Culture.Value))
         {
-            MessageBox.Show("文化不可为空", "", MessageBoxButton.OK, MessageBoxImage.Warning);
+            MessageBox.Show("文化不可为空".Translate(), "", MessageBoxButton.OK, MessageBoxImage.Warning);
             return;
         }
         if (I18nHelper.Current.CultureNames.Contains(ViewModel.Culture.Value))
         {
-            MessageBox.Show("此文化已存在", "", MessageBoxButton.OK, MessageBoxImage.Warning);
+            MessageBox.Show("此文化已存在".Translate(), "", MessageBoxButton.OK, MessageBoxImage.Warning);
             return;
         }
         IsCancel = false;

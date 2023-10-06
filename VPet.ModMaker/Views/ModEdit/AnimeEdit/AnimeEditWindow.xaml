@@ -11,10 +11,8 @@
   Title="AnimeEditWindow"
   Width="1000"
   Height="600"
+  d:DataContext="{d:DesignInstance Type=vm:AnimeEditWindowVM}"
   mc:Ignorable="d">
-  <d:Window.DataContext>
-    <vm:AnimeEditWindowVM />
-  </d:Window.DataContext>
   <Window.Resources>
     <Style
       x:Key="ListBoxItem_Style"

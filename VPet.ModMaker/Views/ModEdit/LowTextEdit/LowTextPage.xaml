@@ -8,13 +8,11 @@
   xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
   xmlns:pu="https://opensource.panuon.com/wpf-ui"
   xmlns:vm="clr-namespace:VPet.ModMaker.ViewModels.ModEdit.LowTextEdit"
-  Title="Page_LowText"
+  Title="LowTextPage"
+  d:DataContext="{d:DesignInstance Type=vm:LowTextPageVM}"
   d:DesignHeight="450"
   d:DesignWidth="800"
   mc:Ignorable="d">
-  <d:Page.DataContext>
-    <vm:LowTextPageVM />
-  </d:Page.DataContext>
   <Grid>
     <Grid.RowDefinitions>
       <RowDefinition Height="Auto" />

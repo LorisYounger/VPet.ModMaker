@@ -11,11 +11,9 @@
   Title="PetEditWindow"
   Width="800"
   Height="450"
+  d:DataContext="{d:DesignInstance Type=vm:PetEditWindowVM}"
   WindowStartupLocation="CenterScreen"
   mc:Ignorable="d">
-  <d:Window.DataContext>
-    <vm:PetEditWindowVM />
-  </d:Window.DataContext>
   <Window.Resources>
     <Style
       x:Key="Label_ThouchRect"

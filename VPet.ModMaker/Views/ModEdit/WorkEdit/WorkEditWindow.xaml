@@ -11,11 +11,9 @@
   Title="WorkEditWindow"
   Width="800"
   Height="450"
+  d:DataContext="{d:DesignInstance Type=vm:WorkEditWindowVM}"
   WindowStartupLocation="CenterScreen"
   mc:Ignorable="d">
-  <d:Window.DataContext>
-    <vm:WorkEditWindowVM />
-  </d:Window.DataContext>
   <Grid>
     <Grid.ColumnDefinitions>
       <ColumnDefinition Width="Auto" />

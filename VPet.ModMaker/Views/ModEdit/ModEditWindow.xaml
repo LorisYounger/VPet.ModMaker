@@ -8,28 +8,12 @@
   xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
   xmlns:pu="https://opensource.panuon.com/wpf-ui"
   xmlns:vm="clr-namespace:VPet.ModMaker.ViewModels.ModEdit"
-  Title="ModEditWindow"
+  Title="{ll:Str 模组编辑器}"
   Width="1000"
   Height="500"
+  d:DataContext="{d:DesignInstance Type=vm:ModEditWindowVM}"
   WindowStartupLocation="CenterScreen"
   mc:Ignorable="d">
-  <d:Window.DataContext>
-    <vm:ModEditWindowVM />
-  </d:Window.DataContext>
-  <Window.Resources>
-    <ResourceDictionary>
-      <ContextMenu x:Key="ContextMenu_Culture" x:Shared="false">
-        <MenuItem
-          Command="{Binding DataContext.ChangeCultureCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}}"
-          CommandParameter="{Binding Content, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ListBoxItem}}"
-          Header="{ll:Str 修改语言}" />
-        <MenuItem
-          Command="{Binding DataContext.RemoveCultureCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}}"
-          CommandParameter="{Binding Content, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ListBoxItem}}"
-          Header="{ll:Str 删除语言}" />
-      </ContextMenu>
-    </ResourceDictionary>
-  </Window.Resources>
   <Grid>
     <Grid.ColumnDefinitions>
       <ColumnDefinition />
@@ -74,7 +58,7 @@
           x:Name="Button_AddModImage"
           HorizontalAlignment="Center"
           VerticalAlignment="Center"
-          Command="{Binding AddImageCommand}"
+          Command="{Binding ChangeImageCommand}"
           Content="{ll:Str 添加图片}">
           <Button.Style>
             <Style BasedOn="{StaticResource {x:Type Button}}" TargetType="Button">
@@ -294,8 +278,22 @@
         SelectedItem="{Binding I18nData.CultureName.Value}">
         <ListBox.ItemContainerStyle>
           <Style BasedOn="{StaticResource {x:Type ListBoxItem}}" TargetType="ListBoxItem">
+            <Setter Property="Tag" Value="{Binding DataContext, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}}" />
             <Setter Property="Content" Value="{Binding}" />
-            <Setter Property="ContextMenu" Value="{StaticResource ContextMenu_Culture}" />
+            <Setter Property="ContextMenu">
+              <Setter.Value>
+                <ContextMenu>
+                  <MenuItem
+                    Command="{Binding PlacementTarget.Tag.EditCultureCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ContextMenu}}"
+                    CommandParameter="{Binding}"
+                    Header="{ll:Str 修改语言}" />
+                  <MenuItem
+                    Command="{Binding PlacementTarget.Tag.RemoveCultureCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ContextMenu}}"
+                    CommandParameter="{Binding}"
+                    Header="{ll:Str 删除语言}" />
+                </ContextMenu>
+              </Setter.Value>
+            </Setter>
           </Style>
         </ListBox.ItemContainerStyle>
       </ListBox>

@@ -25,19 +25,42 @@ public class ModMakerWindowVM
 
     public ModEditWindow ModEditWindow { get; private set; }
 
+    /// <summary>
+    /// 历史搜索文本
+    /// </summary>
     public ObservableValue<string> HistoriesSearchText { get; } = new();
 
-    public ObservableCollection<ModInfoModel> Mods { get; } = new();
+    /// <summary>
+    /// 显示的历史
+    /// </summary>
     public ObservableValue<ObservableCollection<ModMakerHistory>> ShowHistories { get; } = new();
+
+    /// <summary>
+    /// 历史
+    /// </summary>
     public ObservableCollection<ModMakerHistory> Histories { get; } = new();
     #endregion
     #region Command
+    /// <summary>
+    /// 创建新模组命令
+    /// </summary>
     public ObservableCommand CreateNewModCommand { get; } = new();
+
+    /// <summary>
+    /// 从文件载入模组命令
+    /// </summary>
     public ObservableCommand LoadModFromFileCommand { get; } = new();
+
+    /// <summary>
+    /// 清除历史命令
+    /// </summary>
     public ObservableCommand ClearHistoriesCommand { get; } = new();
+
+    /// <summary>
+    /// 删除历史命令
+    /// </summary>
     public ObservableCommand<ModMakerHistory> RemoveHistoryCommand { get; } = new();
     #endregion
-    public ModMakerWindowVM() { }
 
     public ModMakerWindowVM(ModMakerWindow window)
     {
@@ -48,15 +71,27 @@ public class ModMakerWindowVM
         LoadModFromFileCommand.ExecuteEvent += LoadModFromFile;
         ClearHistoriesCommand.ExecuteEvent += ClearHistories;
         RemoveHistoryCommand.ExecuteEvent += RemoveHistory;
-        HistoriesSearchText.ValueChanged += ModSearchText_ValueChanged;
+        HistoriesSearchText.ValueChanged += HistoriesSearchText_ValueChanged;
     }
 
+    private void HistoriesSearchText_ValueChanged(string oldValue, string newValue)
+    {
+        if (string.IsNullOrEmpty(newValue))
+            ShowHistories.Value = Histories;
+        else
+            ShowHistories.Value = new(Histories.Where(i => i.Id.Contains(newValue)));
+    }
+
+    #region History
     private void RemoveHistory(ModMakerHistory value)
     {
         Histories.Remove(value);
         SaveHistories();
     }
 
+    /// <summary>
+    /// 载入历史
+    /// </summary>
     private void LoadHistories()
     {
         if (File.Exists(ModMakerInfo.HistoryFile) is false)
@@ -70,6 +105,9 @@ public class ModMakerWindowVM
         }
     }
 
+    /// <summary>
+    /// 保存历史
+    /// </summary>
     private void SaveHistories()
     {
         Directory.CreateDirectory(nameof(ModMaker));
@@ -77,6 +115,7 @@ public class ModMakerWindowVM
             File.Create(ModMakerInfo.HistoryFile).Close();
         var lps = new LPS();
         foreach (var history in Histories)
+        {
             lps.Add(
                 new Line(nameof(history))
                 {
@@ -85,9 +124,14 @@ public class ModMakerWindowVM
                     new Sub("LastTime", history.LastTime.ToString("yyyy/MM/dd HH:mm"))
                 }
             );
+        }
         File.WriteAllText(ModMakerInfo.HistoryFile, lps.ToString());
     }
 
+    /// <summary>
+    /// 添加历史
+    /// </summary>
+    /// <param name="modInfo">模组信息</param>
     private void AddHistories(ModInfoModel modInfo)
     {
         if (
@@ -112,47 +156,6 @@ public class ModMakerWindowVM
         }
     }
 
-    private void ModSearchText_ValueChanged(string oldValue, string newValue)
-    {
-        if (string.IsNullOrEmpty(newValue))
-            ShowHistories.Value = Histories;
-        else
-            ShowHistories.Value = new(Histories.Where(i => i.Id.Contains(newValue)));
-    }
-
-    public void CreateNewMod()
-    {
-        ModInfoModel.Current = new();
-        ShowEditWindow();
-    }
-
-    public void EditMod(ModInfoModel modInfo)
-    {
-        ModInfoModel.Current = modInfo;
-        ShowEditWindow();
-    }
-
-    private void ShowEditWindow()
-    {
-        if (string.IsNullOrEmpty(ModInfoModel.Current.SourcePath.Value) is false)
-            AddHistories(ModInfoModel.Current);
-        SaveHistories();
-        ModEditWindow = new();
-        ModEditWindow.Show();
-        ModMakerWindow.Hide();
-        ModEditWindow.Closed += (s, e) =>
-        {
-            var modInfo = ModInfoModel.Current;
-            if (string.IsNullOrEmpty(modInfo.SourcePath.Value) is false)
-                AddHistories(modInfo);
-            SaveHistories();
-            ModInfoModel.Current.Close();
-            ModInfoModel.Current = null;
-            I18nHelper.Current = new();
-            ModMakerWindow.Show();
-        };
-    }
-
     private void ClearHistories()
     {
         if (
@@ -164,7 +167,58 @@ public class ModMakerWindowVM
         Histories.Clear();
         File.WriteAllText(ModMakerInfo.HistoryFile, string.Empty);
     }
+    #endregion
 
+    #region Mod
+    /// <summary>
+    /// 创建新模组
+    /// </summary>
+    public void CreateNewMod()
+    {
+        ModInfoModel.Current = new();
+        ShowEditWindow();
+    }
+
+    /// <summary>
+    /// 编辑模组
+    /// </summary>
+    /// <param name="modInfo">模组信息</param>
+    public void EditMod(ModInfoModel modInfo)
+    {
+        ModInfoModel.Current = modInfo;
+        ShowEditWindow();
+    }
+
+    /// <summary>
+    /// 显示模组编辑窗口
+    /// </summary>
+    private void ShowEditWindow()
+    {
+        ModMakerWindow.Hide();
+        // 将当前模组添加到历史
+        if (string.IsNullOrEmpty(ModInfoModel.Current.SourcePath.Value) is false)
+            AddHistories(ModInfoModel.Current);
+        SaveHistories();
+        ModEditWindow = new();
+        ModEditWindow.Show();
+        ModEditWindow.Closed += (s, e) =>
+        {
+            var modInfo = ModInfoModel.Current;
+            if (string.IsNullOrEmpty(modInfo.SourcePath.Value) is false)
+            {
+                AddHistories(modInfo);
+                SaveHistories();
+            }
+            ModInfoModel.Current.Close();
+            ModInfoModel.Current = null;
+            I18nHelper.Current = new();
+            ModMakerWindow.Show();
+        };
+    }
+
+    /// <summary>
+    /// 从文件载入模组
+    /// </summary>
     public void LoadModFromFile()
     {
         OpenFileDialog openFileDialog =
@@ -180,6 +234,10 @@ public class ModMakerWindowVM
         }
     }
 
+    /// <summary>
+    /// 载入模组
+    /// </summary>
+    /// <param name="path">位置</param>
     public void LoadMod(string path)
     {
         try
@@ -200,4 +258,5 @@ public class ModMakerWindowVM
             MessageBox.Show("模组载入失败:\n{0}".Translate(ex));
         }
     }
+    #endregion
 }

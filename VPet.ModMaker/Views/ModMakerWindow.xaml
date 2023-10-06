@@ -11,12 +11,10 @@
   Title="{ll:Str Mod制作器}"
   Width="600"
   Height="450"
+  d:DataContext="{d:DesignInstance Type=vm:ModMakerWindowVM}"
   FontSize="16"
   WindowStartupLocation="CenterScreen"
   mc:Ignorable="d">
-  <d:Window.DataContext>
-    <vm:ModMakerWindowVM />
-  </d:Window.DataContext>
   <Grid>
     <Grid.ColumnDefinitions>
       <ColumnDefinition />

@@ -11,11 +11,25 @@ namespace VPet.ModMaker.ViewModels.ModEdit;
 
 public class AddCultureWindowVM
 {
+    /// <summary>
+    /// 显示的文化
+    /// </summary>
     public ObservableValue<ObservableCollection<string>> ShowCultures { get; } = new();
+
+    /// <summary>
+    /// 全部文化
+    /// </summary>
     public static ObservableCollection<string> AllCultures { get; set; } =
         new(LinePutScript.Localization.WPF.LocalizeCore.AvailableCultures);
+
+    /// <summary>
+    /// 当前文化
+    /// </summary>
     public ObservableValue<string> Culture { get; } = new();
 
+    /// <summary>
+    /// 搜索文化
+    /// </summary>
     public ObservableValue<string> Search { get; } = new();
 
     public AddCultureWindowVM()

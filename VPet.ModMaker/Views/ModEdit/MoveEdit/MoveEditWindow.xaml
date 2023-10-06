@@ -11,11 +11,9 @@
   Title="MoveEditWindow"
   Width="800"
   Height="450"
+  d:DataContext="{d:DesignInstance Type=vm:MoveEditWindowVM}"
   WindowStartupLocation="CenterScreen"
   mc:Ignorable="d">
-  <d:Window.DataContext>
-    <vm:MoveEditWindowVM />
-  </d:Window.DataContext>
   <Grid>
     <Grid.ColumnDefinitions>
       <ColumnDefinition Width="Auto" />

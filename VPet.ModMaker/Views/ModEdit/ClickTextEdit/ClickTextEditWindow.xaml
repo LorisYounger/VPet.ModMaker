@@ -11,11 +11,9 @@
   Title="ClickTextWindow"
   Width="800"
   Height="450"
+  d:DataContext="{d:DesignInstance Type=vm:ClickTextEditWindowVM}"
   WindowStartupLocation="CenterScreen"
   mc:Ignorable="d">
-  <d:Window.DataContext>
-    <vm:ClickTextEditWindowVM />
-  </d:Window.DataContext>
   <Grid>
     <Grid.ColumnDefinitions>
       <ColumnDefinition MinWidth="300" />

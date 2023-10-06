@@ -9,12 +9,10 @@
   xmlns:pu="https://opensource.panuon.com/wpf-ui"
   xmlns:vm="clr-namespace:VPet.ModMaker.ViewModels.ModEdit.AnimeEdit"
   Title="AnimePage"
+  d:DataContext="{d:DesignInstance Type=vm:AnimePageVM}"
   d:DesignHeight="450"
   d:DesignWidth="800"
   mc:Ignorable="d">
-  <d:Page.DataContext>
-    <vm:AnimePageVM />
-  </d:Page.DataContext>
   <Grid>
     <Grid.RowDefinitions>
       <RowDefinition Height="Auto" />

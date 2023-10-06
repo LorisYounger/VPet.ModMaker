@@ -23,65 +23,74 @@ public class ModEditWindowVM
     public ModEditWindow ModEditWindow { get; }
 
     #region Value
+    /// <summary>
+    /// 当前模组信息
+    /// </summary>
     public ObservableValue<ModInfoModel> ModInfo { get; } = new(ModInfoModel.Current);
-    public ObservableValue<string> CurrentLang { get; } = new();
+
+    /// <summary>
+    /// I18n数据
+    /// </summary>
     public I18nHelper I18nData => I18nHelper.Current;
     #endregion
 
     #region Command
-    public ObservableCommand AddImageCommand { get; } = new();
+
+    /// <summary>
+    /// 改变图片命令
+    /// </summary>
     public ObservableCommand ChangeImageCommand { get; } = new();
+
+    /// <summary>
+    /// 添加文化命令
+    /// </summary>
     public ObservableCommand AddCultureCommand { get; } = new();
 
+    /// <summary>
+    /// 编辑文化命令
+    /// </summary>
     public ObservableCommand<string> EditCultureCommand { get; } = new();
+
+    /// <summary>
+    /// 删除文化命令
+    /// </summary>
     public ObservableCommand<string> RemoveCultureCommand { get; } = new();
 
+    /// <summary>
+    /// 保存命令
+    /// </summary>
     public ObservableCommand SaveCommand { get; } = new();
+
+    /// <summary>
+    /// 保存至命令
+    /// </summary>
     public ObservableCommand SaveToCommand { get; } = new();
     #endregion
-
-    public ModEditWindowVM() { }
 
     public ModEditWindowVM(ModEditWindow window)
     {
         ModEditWindow = window;
-        CurrentLang.ValueChanged += CurrentLang_ValueChanged;
 
-        AddImageCommand.ExecuteEvent += AddImage;
         ChangeImageCommand.ExecuteEvent += ChangeImage;
         AddCultureCommand.ExecuteEvent += AddCulture;
         EditCultureCommand.ExecuteEvent += EditCulture;
-        RemoveCultureCommand.ExecuteEvent += RemoveLang;
+        RemoveCultureCommand.ExecuteEvent += RemoveCulture;
+
         SaveCommand.ExecuteEvent += Save;
         SaveToCommand.ExecuteEvent += SaveTo;
     }
 
-    private void CurrentLang_ValueChanged(string oldValue, string newValue)
-    {
-        if (newValue is null)
-            return;
-        ModInfo.Value.CurrentI18nData.Value = ModInfo.Value.I18nDatas[newValue];
-    }
-
+    /// <summary>
+    /// 关闭
+    /// </summary>
     public void Close()
     {
         ModInfo.Value.Image.Value?.StreamSource?.Close();
     }
 
-    private void AddImage()
-    {
-        OpenFileDialog openFileDialog =
-            new()
-            {
-                Title = "选择图片".Translate(),
-                Filter = $"图片|*.jpg;*.jpeg;*.png;*.bmp".Translate()
-            };
-        if (openFileDialog.ShowDialog() is true)
-        {
-            ModInfo.Value.Image.Value = Utils.LoadImageToMemoryStream(openFileDialog.FileName);
-        }
-    }
-
+    /// <summary>
+    /// 改变图片
+    /// </summary>
     private void ChangeImage()
     {
         OpenFileDialog openFileDialog =
@@ -97,6 +106,10 @@ public class ModEditWindowVM
         }
     }
 
+    #region Culture
+    /// <summary>
+    /// 添加文化
+    /// </summary>
     public void AddCulture()
     {
         var window = new AddCultureWindow();
@@ -108,32 +121,48 @@ public class ModEditWindowVM
             I18nHelper.Current.CultureName.Value = window.ViewModel.Culture.Value;
     }
 
-    private void EditCulture(string oldLang)
+    /// <summary>
+    /// 编辑文化
+    /// </summary>
+    /// <param name="oldCulture">旧文化</param>
+    private void EditCulture(string oldCulture)
     {
         var window = new AddCultureWindow();
-        window.ViewModel.Culture.Value = oldLang.Translate();
+        window.ViewModel.Culture.Value = oldCulture.Translate();
         window.ShowDialog();
         if (window.IsCancel)
             return;
-        I18nHelper.Current.CultureNames[I18nHelper.Current.CultureNames.IndexOf(oldLang)] = window
-            .ViewModel
-            .Culture
-            .Value;
-        CurrentLang.Value = window.ViewModel.Culture.Value;
+        I18nHelper.Current.CultureNames[I18nHelper.Current.CultureNames.IndexOf(oldCulture)] =
+            window.ViewModel.Culture.Value;
     }
 
-    private void RemoveLang(string oldLang)
+    /// <summary>
+    /// 删除文化
+    /// </summary>
+    /// <param name="oldCulture">旧文化</param>
+    private void RemoveCulture(string oldCulture)
     {
         if (
-            MessageBox.Show("确定删除吗".Translate(), "".Translate(), MessageBoxButton.YesNo)
-            is MessageBoxResult.No
+            MessageBox.Show(
+                "确定删除文化 {0} 吗".Translate(oldCulture),
+                "".Translate(),
+                MessageBoxButton.YesNo
+            ) is MessageBoxResult.No
         )
             return;
-        I18nHelper.Current.CultureNames.Remove(oldLang);
+        I18nHelper.Current.CultureNames.Remove(oldCulture);
     }
+    #endregion
 
+    #region Save
+    /// <summary>
+    /// 保存
+    /// </summary>
     private void Save()
     {
+        if (MessageBox.Show("确定保存吗".Translate()) is not MessageBoxResult.Yes)
+            return;
+
         if (string.IsNullOrEmpty(ModInfo.Value.SourcePath.Value))
         {
             MessageBox.Show("源路径为空, 请使用 保存至".Translate());
@@ -151,6 +180,9 @@ public class ModEditWindowVM
         MessageBox.Show("保存成功".Translate());
     }
 
+    /// <summary>
+    /// 保存至
+    /// </summary>
     private void SaveTo()
     {
         if (ValidationData(ModInfo.Value) is false)
@@ -183,6 +215,11 @@ public class ModEditWindowVM
         }
     }
 
+    /// <summary>
+    /// 验证数据
+    /// </summary>
+    /// <param name="model">模型</param>
+    /// <returns>成功为 <see langword="true"/> 失败为 <see langword="false"/></returns>
     private bool ValidationData(ModInfoModel model)
     {
         if (I18nHelper.Current.CultureNames.Count == 0)
@@ -207,4 +244,5 @@ public class ModEditWindowVM
         }
         return true;
     }
+    #endregion
 }

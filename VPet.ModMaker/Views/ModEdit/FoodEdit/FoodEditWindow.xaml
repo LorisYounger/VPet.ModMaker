@@ -8,14 +8,12 @@
   xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
   xmlns:pu="https://opensource.panuon.com/wpf-ui"
   xmlns:vm="clr-namespace:VPet.ModMaker.ViewModels.ModEdit.FoodEdit"
-  Title="Window_FoodEdit"
+  Title="FoodEditWindow"
   Width="800"
   Height="450"
+  d:DataContext="{d:DesignInstance Type=vm:FoodEditWindowVM}"
   WindowStartupLocation="CenterScreen"
   mc:Ignorable="d">
-  <d:Window.DataContext>
-    <vm:FoodEditWindowVM />
-  </d:Window.DataContext>
   <Grid>
     <Grid.ColumnDefinitions>
       <ColumnDefinition Width="250" />
