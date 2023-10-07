@@ -12,13 +12,35 @@ using VPet_Simulator.Core;
 
 namespace VPet.ModMaker.Models;
 
+/// <summary>
+/// 宠物模型
+/// </summary>
 public class PetModel : I18nModel<I18nPetInfoModel>
 {
+    /// <summary>
+    /// Id
+    /// </summary>
     public ObservableValue<string> Id { get; } = new();
+
+    /// <summary>
+    /// 宠物名称Id
+    /// </summary>
     public ObservableValue<string> PetNameId { get; } = new();
+
+    /// <summary>
+    /// 描述Id
+    /// </summary>
     public ObservableValue<string> DescriptionId { get; } = new();
+
+    /// <summary>
+    /// 头部点击区域
+    /// </summary>
     public ObservableValue<ObservableRect<double>> TouchHeadRect { get; } =
         new(new(159, 16, 189, 178));
+
+    /// <summary>
+    /// 提起区域
+    /// </summary>
     public ObservableValue<ObservableMultiStateRect> TouchRaisedRect { get; } =
         new(
             new(
@@ -28,13 +50,26 @@ public class PetModel : I18nModel<I18nPetInfoModel>
                 new(0, 200, 500, 300)
             )
         );
+
+    /// <summary>
+    /// 提起定位
+    /// </summary>
     public ObservableValue<ObservableMultiStatePoint> RaisePoint { get; } =
         new(new(new(290, 128), new(290, 128), new(290, 128), new(225, 115)));
 
+    /// <summary>
+    /// 工作
+    /// </summary>
     public ObservableCollection<WorkModel> Works { get; } = new();
 
+    /// <summary>
+    /// 移动
+    /// </summary>
     public ObservableCollection<MoveModel> Moves { get; } = new();
 
+    /// <summary>
+    /// 动画
+    /// </summary>
     public ObservableCollection<AnimeTypeModel> Animes { get; } = new();
 
     public PetModel()

@@ -18,28 +18,94 @@ using VPet_Simulator.Windows.Interface;
 
 namespace VPet.ModMaker.Models;
 
+/// <summary>
+/// 模组信息模型
+/// </summary>
 public class ModInfoModel : I18nModel<I18nModInfoModel>
 {
+    /// <summary>
+    /// 作者Id
+    /// </summary>
     public long AuthorID { get; }
+
+    /// <summary>
+    /// 项目Id
+    /// </summary>
     public ulong ItemID { get; }
 
+    /// <summary>
+    /// 当前
+    /// </summary>
     public static ModInfoModel Current { get; set; } = new();
 
+    /// <summary>
+    /// Id
+    /// </summary>
     public ObservableValue<string> Id { get; } = new();
+
+    /// <summary>
+    /// 描述Id
+    /// </summary>
     public ObservableValue<string> DescriptionId { get; } = new();
+
+    /// <summary>
+    /// 作者
+    /// </summary>
     public ObservableValue<string> Author { get; } = new();
+
+    /// <summary>
+    /// 支持的游戏版本
+    /// </summary>
     public ObservableValue<string> GameVersion { get; } = new();
+
+    /// <summary>
+    /// 模组版本
+    /// </summary>
     public ObservableValue<string> ModVersion { get; } = new();
+
+    /// <summary>
+    /// 封面
+    /// </summary>
     public ObservableValue<BitmapImage> Image { get; } = new();
+
+    /// <summary>
+    /// 源路径
+    /// </summary>
     public ObservableValue<string> SourcePath { get; } = new();
 
+    /// <summary>
+    /// 食物
+    /// </summary>
     public ObservableCollection<FoodModel> Foods { get; } = new();
+
+    /// <summary>
+    /// 点击文本
+    /// </summary>
     public ObservableCollection<ClickTextModel> ClickTexts { get; } = new();
+
+    /// <summary>
+    /// 低状态文本
+    /// </summary>
     public ObservableCollection<LowTextModel> LowTexts { get; } = new();
+
+    /// <summary>
+    /// 选择文本
+    /// </summary>
     public ObservableCollection<SelectTextModel> SelectTexts { get; } = new();
+
+    /// <summary>
+    /// 宠物
+    /// </summary>
     public ObservableCollection<PetModel> Pets { get; } = new();
 
+    /// <summary>
+    /// 其它I18n数据
+    /// </summary>
     public Dictionary<string, Dictionary<string, string>> OtherI18nDatas { get; } = new();
+
+    /// <summary>
+    /// 需要保存的I18n数据
+    /// </summary>
 
     private readonly Dictionary<string, Dictionary<string, string>> _saveI18nDatas = new();
 
@@ -93,6 +159,11 @@ public class ModInfoModel : I18nModel<I18nModInfoModel>
     }
 
     #region Load
+    /// <summary>
+    /// 加载宠物动画
+    /// </summary>
+    /// <param name="petModel">模型</param>
+    /// <param name="path">路径</param>
     static void LoadAnime(PetModel petModel, string path)
     {
         foreach (var animeDir in Directory.EnumerateDirectories(path))
@@ -170,6 +241,9 @@ public class ModInfoModel : I18nModel<I18nModInfoModel>
         }
     }
 
+    /// <summary>
+    /// 加载本地化数据
+    /// </summary>
     private void LoadI18nData()
     {
         foreach (var lang in I18nDatas)
@@ -231,12 +305,35 @@ public class ModInfoModel : I18nModel<I18nModInfoModel>
     }
     #endregion
     #region Save
+    /// <summary>
+    /// 保存
+    /// </summary>
     public void Save()
     {
         SaveTo(SourcePath.Value);
     }
 
+    /// <summary>
+    /// 保存至路径
+    /// </summary>
+    /// <param name="path">路径</param>
     public void SaveTo(string path)
+    {
+        // 保存模型信息
+        SaveModInfo(path);
+        // 保存模组数据
+        SavePets(path);
+        SaveFoods(path);
+        SaveText(path);
+        SaveI18nData(path);
+        SaveImage(path);
+    }
+
+    /// <summary>
+    /// 保存模型信息
+    /// </summary>
+    /// <param name="path">路径</param>
+    private void SaveModInfo(string path)
     {
         var modInfoFile = Path.Combine(path, ModMakerInfo.InfoFile);
         if (File.Exists(modInfoFile) is false)
@@ -246,7 +343,6 @@ public class ModInfoModel : I18nModel<I18nModInfoModel>
         foreach (var cultureName in I18nHelper.Current.CultureNames)
             _saveI18nDatas.Add(cultureName, new());
 
-        //var lps = new LpsDocument(File.ReadAllText(modInfoFile));
         var lps = new LPS()
         {
             new Line("vupmod", Id.Value)
@@ -272,13 +368,13 @@ public class ModInfoModel : I18nModel<I18nModInfoModel>
         }
         Image.Value?.SaveToPng(Path.Combine(path, "icon.png"));
         File.WriteAllText(modInfoFile, lps.ToString());
-        SavePets(path);
-        SaveFoods(path);
-        SaveText(path);
-        SaveLang(path);
-        SaveImage(path);
     }
 
+    #region SavePet
+    /// <summary>
+    /// 保存宠物
+    /// </summary>
+    /// <param name="path">路径</param>
     private void SavePets(string path)
     {
         var petPath = Path.Combine(path, "pet");
@@ -310,9 +406,9 @@ public class ModInfoModel : I18nModel<I18nModInfoModel>
             if (File.Exists(petFile) is false)
                 File.Create(petFile).Close();
             var lps = new LPS();
-            GetPetInfo(lps, pet);
-            GetWorksInfo(lps, pet);
-            GetMoveInfo(lps, pet);
+            SavePetInfo(lps, pet);
+            SaveWorksInfo(lps, pet);
+            SaveMoveInfo(lps, pet);
             File.WriteAllText(petFile, lps.ToString());
 
             var petAnimePath = Path.Combine(petPath, pet.Id.Value);
@@ -321,7 +417,12 @@ public class ModInfoModel : I18nModel<I18nModInfoModel>
         }
     }
 
-    void GetMoveInfo(LPS lps, PetModel pet)
+    /// <summary>
+    /// 保存移动信息
+    /// </summary>
+    /// <param name="lps"></param>
+    /// <param name="pet"></param>
+    void SaveMoveInfo(LPS lps, PetModel pet)
     {
         foreach (var move in pet.Moves)
         {
@@ -329,7 +430,12 @@ public class ModInfoModel : I18nModel<I18nModInfoModel>
         }
     }
 
-    void GetWorksInfo(LPS lps, PetModel pet)
+    /// <summary>
+    /// 保存工作信息
+    /// </summary>
+    /// <param name="lps"></param>
+    /// <param name="pet"></param>
+    void SaveWorksInfo(LPS lps, PetModel pet)
     {
         foreach (var work in pet.Works)
         {
@@ -344,7 +450,12 @@ public class ModInfoModel : I18nModel<I18nModInfoModel>
         }
     }
 
-    private void GetPetInfo(LPS lps, PetModel pet)
+    /// <summary>
+    /// 保存宠物信息
+    /// </summary>
+    /// <param name="lps"></param>
+    /// <param name="pet"></param>
+    private void SavePetInfo(LPS lps, PetModel pet)
     {
         lps.Add(
             new Line("pet", pet.Id.Value)
@@ -410,7 +521,11 @@ public class ModInfoModel : I18nModel<I18nModInfoModel>
             }
         );
     }
-
+    #endregion
+    /// <summary>
+    /// 保存食物
+    /// </summary>
+    /// <param name="path">路径</param>
     private void SaveFoods(string path)
     {
         var foodPath = Path.Combine(path, "food");
@@ -443,6 +558,11 @@ public class ModInfoModel : I18nModel<I18nModInfoModel>
         File.WriteAllText(foodFile, lps.ToString());
     }
 
+    #region SaveText
+    /// <summary>
+    /// 保存文本
+    /// </summary>
+    /// <param name="path">路径</param>
     private void SaveText(string path)
     {
         var textPath = Path.Combine(path, "text");
@@ -458,6 +578,10 @@ public class ModInfoModel : I18nModel<I18nModInfoModel>
         SaveSelectText(textPath);
     }
 
+    /// <summary>
+    /// 保存选择文本
+    /// </summary>
+    /// <param name="path">路径</param>
     private void SaveSelectText(string textPath)
     {
         if (SelectTexts.Count == 0)
@@ -483,6 +607,10 @@ public class ModInfoModel : I18nModel<I18nModInfoModel>
         File.WriteAllText(textFile, lps.ToString());
     }
 
+    /// <summary>
+    /// 保存低状态文本
+    /// </summary>
+    /// <param name="path">路径</param>
     private void SaveLowText(string textPath)
     {
         if (LowTexts.Count == 0)
@@ -504,6 +632,10 @@ public class ModInfoModel : I18nModel<I18nModInfoModel>
         File.WriteAllText(textFile, lps.ToString());
     }
 
+    /// <summary>
+    /// 保存点击文本
+    /// </summary>
+    /// <param name="path">路径</param>
     private void SaveClickText(string textPath)
     {
         if (ClickTexts.Count == 0)
@@ -524,8 +656,12 @@ public class ModInfoModel : I18nModel<I18nModInfoModel>
         }
         File.WriteAllText(textFile, lps.ToString());
     }
-
-    private void SaveLang(string path)
+    #endregion
+    /// <summary>
+    /// 保存I18n数据
+    /// </summary>
+    /// <param name="path">路径</param>
+    private void SaveI18nData(string path)
     {
         var langPath = Path.Combine(path, "lang");
         Directory.CreateDirectory(langPath);
@@ -542,6 +678,10 @@ public class ModInfoModel : I18nModel<I18nModInfoModel>
         }
     }
 
+    /// <summary>
+    /// 保存突破
+    /// </summary>
+    /// <param name="path">路径</param>
     private void SaveImage(string path)
     {
         var imagePath = Path.Combine(path, "image");
@@ -562,8 +702,6 @@ public class ModInfoModel : I18nModel<I18nModInfoModel>
         Image.Value.CloseStream();
         foreach (var food in Foods)
             food.Close();
-        //foreach (var pet in Pets)
-        //    pet.Close();
     }
 }
 

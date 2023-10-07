@@ -10,37 +10,79 @@ using VPet_Simulator.Windows.Interface;
 
 namespace VPet.ModMaker.Models;
 
+/// <summary>
+/// 选择文本模型
+/// </summary>
 public class SelectTextModel : I18nModel<I18nSelectTextModel>
 {
+    /// <summary>
+    /// 模式类型
+    /// </summary>
     public static ObservableCollection<ClickText.ModeType> ModeTypes => ClickTextModel.ModeTypes;
 
-    //public ObservableValue<int> Exp { get; } = new();
-    //public ObservableValue<double> Money { get; } = new();
-    //public ObservableValue<double> Strength { get; } = new();
-    //public ObservableValue<double> StrengthFood { get; } = new();
-    //public ObservableValue<double> StrengthDrink { get; } = new();
-    //public ObservableValue<double> Feeling { get; } = new();
-    //public ObservableValue<double> Health { get; } = new();
-    //public ObservableValue<double> Likability { get; } = new();
-
+    /// <summary>
+    /// 标签
+    /// </summary>
     public ObservableValue<string> Tags { get; } = new();
+
+    /// <summary>
+    /// 跳转标签
+    /// </summary>
     public ObservableValue<string> ToTags { get; } = new();
 
+    /// <summary>
+    /// Id
+    /// </summary>
     public ObservableValue<string> Id { get; } = new();
+
+    /// <summary>
+    /// 选择Id
+    /// </summary>
     public ObservableValue<string> ChooseId { get; } = new();
+
+    /// <summary>
+    /// 模式
+    /// </summary>
     public ObservableEnumFlags<ClickText.ModeType> Mode { get; } = new();
 
-    //public ObservableValue<string> Working { get; } = new();
-    //public ObservableValue<VPet_Simulator.Core.Main.WorkingState> WorkingState { get; } = new();
-    //public ObservableValue<ClickText.DayTime> DayTime { get; } = new();
-
+    /// <summary>
+    /// 好感度
+    /// </summary>
     public ObservableRange<double> Like { get; } = new(0, int.MaxValue);
+
+    /// <summary>
+    /// 健康度
+    /// </summary>
     public ObservableRange<double> Health { get; } = new(0, int.MaxValue);
+
+    /// <summary>
+    /// 等级
+    /// </summary>
     public ObservableRange<double> Level { get; } = new(0, int.MaxValue);
+
+    /// <summary>
+    /// 金钱
+    /// </summary>
     public ObservableRange<double> Money { get; } = new(int.MinValue, int.MaxValue);
+
+    /// <summary>
+    /// 饱食度
+    /// </summary>
     public ObservableRange<double> Food { get; } = new(0, int.MaxValue);
+
+    /// <summary>
+    /// 口渴度
+    /// </summary>
     public ObservableRange<double> Drink { get; } = new(0, int.MaxValue);
+
+    /// <summary>
+    /// 心情值
+    /// </summary>
     public ObservableRange<double> Feel { get; } = new(0, int.MaxValue);
+
+    /// <summary>
+    /// 体力值
+    /// </summary>
     public ObservableRange<double> Strength { get; } = new(0, int.MaxValue);
 
     public SelectTextModel()
@@ -59,9 +101,6 @@ public class SelectTextModel : I18nModel<I18nSelectTextModel>
         Mode.EnumValue.Value = model.Mode.EnumValue.Value;
         Tags.Value = model.Tags.Value;
         ToTags.Value = model.ToTags.Value;
-        //Working.EnumValue = model.Working.EnumValue;
-        //WorkingState.EnumValue = model.WorkingState.EnumValue;
-        //DayTime.EnumValue = model.DayTime.EnumValue;
         Like = model.Like.Copy();
         Health = model.Health.Copy();
         Level = model.Level.Copy();
@@ -84,9 +123,6 @@ public class SelectTextModel : I18nModel<I18nSelectTextModel>
         Mode.EnumValue.Value = text.Mode;
         Tags.Value = text.Tags is null ? string.Empty : string.Join(", ", text.Tags);
         ToTags.Value = text.ToTags is null ? string.Empty : string.Join(", ", text.ToTags);
-        //Working.EnumValue = text.Working;
-        //WorkingState.EnumValue = text.State;
-        //DayTime.EnumValue = text.DaiTime;
         Like.SetValue(text.LikeMin, text.LikeMax);
         Health.SetValue(text.HealthMin, text.HealthMax);
         Level.SetValue(text.LevelMin, text.LevelMax);
@@ -108,9 +144,6 @@ public class SelectTextModel : I18nModel<I18nSelectTextModel>
             Mode = Mode.EnumValue.Value,
             Tags = new(Tags.Value.Split(rs_splitChar, StringSplitOptions.RemoveEmptyEntries)),
             ToTags = new(ToTags.Value.Split(rs_splitChar, StringSplitOptions.RemoveEmptyEntries)),
-            //Working = Working.EnumValue,
-            //State = WorkingState.EnumValue,
-            //DaiTime = DayTime.EnumValue,
             LikeMax = Like.Max.Value,
             LikeMin = Like.Min.Value,
             HealthMin = Health.Min.Value,

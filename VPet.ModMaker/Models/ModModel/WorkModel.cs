@@ -9,43 +9,124 @@ using System.Windows.Media;
 
 namespace VPet.ModMaker.Models;
 
+/// <summary>
+/// 工作模型
+/// </summary>
 public class WorkModel : I18nModel<I18nWorkModel>
 {
+    /// <summary>
+    /// 工作类型
+    /// </summary>
     public static ObservableCollection<VPet_Simulator.Core.GraphHelper.Work.WorkType> WorkTypes { get; } =
         new(
             Enum.GetValues(typeof(VPet_Simulator.Core.GraphHelper.Work.WorkType))
                 .Cast<VPet_Simulator.Core.GraphHelper.Work.WorkType>()
         );
 
+    /// <summary>
+    /// Id
+    /// </summary>
+    public ObservableValue<string> Id { get; } = new();
+
+    /// <summary>
+    /// 指定动画
+    /// </summary>
+    public ObservableValue<string> Graph { get; } = new();
+
+    /// <summary>
+    /// 收获倍率
+    /// </summary>
+    public ObservableValue<double> MoneyLevel { get; } = new();
+
+    /// <summary>
+    /// 收获基础
+    /// </summary>
+    public ObservableValue<double> MoneyBase { get; } = new();
+
+    /// <summary>
+    /// 饱食度消耗
+    /// </summary>
+    public ObservableValue<double> StrengthFood { get; } = new();
+
+    /// <summary>
+    /// 口渴度消耗
+    /// </summary>
+    public ObservableValue<double> StrengthDrink { get; } = new();
+
+    /// <summary>
+    /// 心情消耗
+    /// </summary>
+    public ObservableValue<double> Feeling { get; } = new();
+
+    /// <summary>
+    /// 等级倍率
+    /// </summary>
+    public ObservableValue<int> LevelLimit { get; } = new();
+
+    /// <summary>
+    /// 时间
+    /// </summary>
+    public ObservableValue<int> Time { get; } = new();
+
+    /// <summary>
+    /// 完成奖励倍率
+    /// </summary>
+    public ObservableValue<double> FinishBonus { get; } = new();
+
+    /// <summary>
+    /// 是否超模
+    /// </summary>
+    public ObservableValue<bool> IsOverLoad { get; } = new();
+
+    /// <summary>
+    /// 类型
+    /// </summary>
     public ObservableValue<VPet_Simulator.Core.GraphHelper.Work.WorkType> WorkType { get; } =
         new(VPet_Simulator.Core.GraphHelper.Work.WorkType.Work);
 
-    public ObservableValue<string> Id { get; } = new();
-
-    public ObservableValue<string> Graph { get; } = new();
-    public ObservableValue<double> MoneyLevel { get; } = new();
-    public ObservableValue<double> MoneyBase { get; } = new();
-    public ObservableValue<double> StrengthFood { get; } = new();
-    public ObservableValue<double> StrengthDrink { get; } = new();
-    public ObservableValue<double> Feeling { get; } = new();
-    public ObservableValue<int> LevelLimit { get; } = new();
-    public ObservableValue<int> Time { get; } = new();
-    public ObservableValue<double> FinishBonus { get; } = new();
-    public ObservableValue<bool> IsOverLoad { get; } = new();
-
+    /// <summary>
+    /// 边框颜色
+    /// </summary>
     public ObservableValue<SolidColorBrush> BorderBrush { get; } =
         new(new((Color)ColorConverter.ConvertFromString("#FF0290D5")));
+
+    /// <summary>
+    /// 背景色
+    /// </summary>
     public ObservableValue<SolidColorBrush> Background { get; } =
-        new(new((Color)ColorConverter.ConvertFromString("#FF81d4fa")));
+        new(new((Color)ColorConverter.ConvertFromString("#FF81D4FA")));
+
+    /// <summary>
+    /// 前景色
+    /// </summary>
     public ObservableValue<SolidColorBrush> Foreground { get; } =
         new(new((Color)ColorConverter.ConvertFromString("#FF0286C6")));
+
+    /// <summary>
+    /// 按钮背景色
+    /// </summary>
     public ObservableValue<SolidColorBrush> ButtonBackground { get; } =
         new(new((Color)ColorConverter.ConvertFromString("#AA0286C6")));
-    public ObservableValue<SolidColorBrush> ButtonForeground { get; } =
-        new(new((Color)ColorConverter.ConvertFromString("#FFffffff")));
 
+    /// <summary>
+    /// 按钮前景色
+    /// </summary>
+    public ObservableValue<SolidColorBrush> ButtonForeground { get; } =
+        new(new((Color)ColorConverter.ConvertFromString("#FFFFFFFF")));
+
+    /// <summary>
+    /// X位置
+    /// </summary>
     public ObservableValue<double> Left { get; } = new(100);
+
+    /// <summary>
+    /// Y位置
+    /// </summary>
     public ObservableValue<double> Top { get; } = new(160);
+
+    /// <summary>
+    /// 宽度
+    /// </summary>
     public ObservableValue<double> Width { get; } = new(300);
 
     public WorkModel()

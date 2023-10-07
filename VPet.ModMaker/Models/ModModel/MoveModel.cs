@@ -9,38 +9,112 @@ using VPet_Simulator.Core;
 
 namespace VPet.ModMaker.Models;
 
+/// <summary>
+/// 移动模型
+/// </summary>
 public class MoveModel
 {
+    /// <summary>
+    /// 移动类型
+    /// </summary>
     public static ObservableCollection<GraphHelper.Move.DirectionType> DirectionTypes { get; } =
         new(
             Enum.GetValues(typeof(GraphHelper.Move.DirectionType))
                 .Cast<GraphHelper.Move.DirectionType>()
         );
 
+    /// <summary>
+    /// 模式类型
+    /// </summary>
     public static ObservableCollection<GraphHelper.Move.ModeType> ModeTypes { get; } =
         new(Enum.GetValues(typeof(GraphHelper.Move.ModeType)).Cast<GraphHelper.Move.ModeType>());
 
     //public ObservableValue<string> Id { get; } = new();
+    /// <summary>
+    /// 指定动画
+    /// </summary>
     public ObservableValue<string> Graph { get; } = new();
+
+    /// <summary>
+    /// 移动距离
+    /// </summary>
     public ObservableValue<int> Distance { get; } = new(5);
+
+    /// <summary>
+    /// 间隔
+    /// </summary>
     public ObservableValue<int> Interval { get; } = new(125);
+
+    /// <summary>
+    /// 定位长度
+    /// </summary>
     public ObservableValue<int> LocateLength { get; } = new();
+
+    /// <summary>
+    /// X速度
+    /// </summary>
     public ObservableValue<int> SpeedX { get; } = new();
+
+    /// <summary>
+    /// Y速度
+    /// </summary>
     public ObservableValue<int> SpeedY { get; } = new();
+
+    /// <summary>
+    /// 左侧检测距离
+    /// </summary>
     public ObservableValue<int> CheckLeft { get; } = new(100);
+
+    /// <summary>
+    /// 右侧检测距离
+    /// </summary>
     public ObservableValue<int> CheckRight { get; } = new(100);
+
+    /// <summary>
+    /// 上方检测距离
+    /// </summary>
     public ObservableValue<int> CheckTop { get; } = new(100);
+
+    /// <summary>
+    /// 下方检测距离
+    /// </summary>
     public ObservableValue<int> CheckBottom { get; } = new(100);
+
+    /// <summary>
+    /// 左侧触发距离
+    /// </summary>
     public ObservableValue<int> TriggerLeft { get; } = new(100);
+
+    /// <summary>
+    /// 右侧触发距离
+    /// </summary>
     public ObservableValue<int> TriggerRight { get; } = new(100);
+
+    /// <summary>
+    /// 上方触发距离
+    /// </summary>
     public ObservableValue<int> TriggerTop { get; } = new(100);
+
+    /// <summary>
+    /// 下方触发距离
+    /// </summary>
     public ObservableValue<int> TriggerBottom { get; } = new(100);
 
+    /// <summary>
+    /// 定位类型
+    /// </summary>
     public ObservableEnumFlags<GraphHelper.Move.DirectionType> LocateType { get; } =
         new(GraphHelper.Move.DirectionType.None);
+
+    /// <summary>
+    /// 触发类型
+    /// </summary>
     public ObservableEnumFlags<GraphHelper.Move.DirectionType> TriggerType { get; } =
         new(GraphHelper.Move.DirectionType.None);
 
+    /// <summary>
+    /// 模式
+    /// </summary>
     public ObservableEnumFlags<GraphHelper.Move.ModeType> ModeType { get; } =
         new(GraphHelper.Move.ModeType.Nomal);
 
