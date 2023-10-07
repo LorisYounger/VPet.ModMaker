@@ -20,7 +20,7 @@ public static class Utils
     public const int DecodePixelWidth = 250;
 
     /// <summary>
-    /// 节码像素高度
+    /// 解码像素高度
     /// </summary>
     public const int DecodePixelHeight = 250;
     public static char[] Separator { get; } = new char[] { '_' };

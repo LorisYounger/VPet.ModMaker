@@ -10,18 +10,47 @@ using VPet_Simulator.Windows.Interface;
 
 namespace VPet.ModMaker.Models;
 
+/// <summary>
+/// 低状态文本
+/// </summary>
 public class LowTextModel : I18nModel<I18nLowTextModel>
 {
+    /// <summary>
+    /// 状态类型
+    /// </summary>
     public static ObservableCollection<LowText.ModeType> ModeTypes { get; } =
         new(Enum.GetValues(typeof(LowText.ModeType)).Cast<LowText.ModeType>());
+
+    /// <summary>
+    /// 好感度类型
+    /// </summary>
     public static ObservableCollection<LowText.LikeType> LikeTypes { get; } =
         new(Enum.GetValues(typeof(LowText.LikeType)).Cast<LowText.LikeType>());
+
+    /// <summary>
+    /// 体力类型
+    /// </summary>
     public static ObservableCollection<LowText.StrengthType> StrengthTypes { get; } =
         new(Enum.GetValues(typeof(LowText.StrengthType)).Cast<LowText.StrengthType>());
 
+    /// <summary>
+    /// Id
+    /// </summary>
     public ObservableValue<string> Id { get; } = new();
+
+    /// <summary>
+    /// 状态
+    /// </summary>
     public ObservableValue<LowText.ModeType> Mode { get; } = new();
+
+    /// <summary>
+    /// 体力
+    /// </summary>
     public ObservableValue<LowText.StrengthType> Strength { get; } = new();
+
+    /// <summary>
+    /// 好感度
+    /// </summary>
     public ObservableValue<LowText.LikeType> Like { get; } = new();
 
     public LowTextModel() { }

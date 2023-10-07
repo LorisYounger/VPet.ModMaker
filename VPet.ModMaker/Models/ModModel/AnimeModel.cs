@@ -6,12 +6,24 @@ using VPet_Simulator.Core;
 
 namespace VPet.ModMaker.Models.ModModel;
 
+/// <summary>
+/// 动画模型
+/// </summary>
 public class AnimeModel
 {
+    /// <summary>
+    /// Id
+    /// </summary>
     public ObservableValue<string> Id { get; } = new();
 
+    /// <summary>
+    /// 动画类型
+    /// </summary>
     public ObservableValue<GraphInfo.AnimatType> AnimeType { get; } = new();
 
+    /// <summary>
+    /// 图像列表
+    /// </summary>
     public ObservableCollection<ImageModel> Images { get; } = new();
 
     public AnimeModel() { }
@@ -31,6 +43,10 @@ public class AnimeModel
         }
     }
 
+    /// <summary>
+    /// 复制
+    /// </summary>
+    /// <returns></returns>
     public AnimeModel Copy()
     {
         var model = new AnimeModel();
@@ -41,6 +57,9 @@ public class AnimeModel
         return model;
     }
 
+    /// <summary>
+    /// 关闭所有图像流
+    /// </summary>
     public void Close()
     {
         foreach (var image in Images)

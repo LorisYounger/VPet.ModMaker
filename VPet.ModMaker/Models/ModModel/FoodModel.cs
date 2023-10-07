@@ -11,23 +11,80 @@ using VPet_Simulator.Windows.Interface;
 
 namespace VPet.ModMaker.Models;
 
+/// <summary>
+/// 食物模型
+/// </summary>
 public class FoodModel : I18nModel<I18nFoodModel>
 {
+    /// <summary>
+    /// 食物类型
+    /// </summary>
     public static ObservableCollection<Food.FoodType> FoodTypes { get; } =
         new(Enum.GetValues(typeof(Food.FoodType)).Cast<Food.FoodType>());
 
+    /// <summary>
+    /// Id
+    /// </summary>
     public ObservableValue<string> Id { get; } = new();
+
+    /// <summary>
+    /// 详情Id
+    /// </summary>
     public ObservableValue<string> DescriptionId { get; } = new();
+
+    /// <summary>
+    /// 指定动画
+    /// </summary>
     public ObservableValue<string> Graph { get; } = new("eat");
+
+    /// <summary>
+    /// 类型
+    /// </summary>
     public ObservableValue<Food.FoodType> Type { get; } = new();
+
+    /// <summary>
+    /// 体力
+    /// </summary>
     public ObservableValue<double> Strength { get; } = new();
+
+    /// <summary>
+    /// 饱食度
+    /// </summary>
     public ObservableValue<double> StrengthFood { get; } = new();
+
+    /// <summary>
+    /// 口渴度
+    /// </summary>
     public ObservableValue<double> StrengthDrink { get; } = new();
+
+    /// <summary>
+    /// 心情
+    /// </summary>
     public ObservableValue<double> Feeling { get; } = new();
+
+    /// <summary>
+    /// 健康度
+    /// </summary>
     public ObservableValue<double> Health { get; } = new();
+
+    /// <summary>
+    /// 好感度
+    /// </summary>
     public ObservableValue<double> Likability { get; } = new();
+
+    /// <summary>
+    /// 价格
+    /// </summary>
     public ObservableValue<double> Price { get; } = new();
+
+    /// <summary>
+    /// 经验
+    /// </summary>
     public ObservableValue<int> Exp { get; } = new();
+
+    /// <summary>
+    /// 图片
+    /// </summary>
     public ObservableValue<BitmapImage> Image { get; } = new();
 
     public FoodModel()

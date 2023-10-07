@@ -14,13 +14,27 @@ namespace VPet.ModMaker.Models.ModModel;
 
 public class AnimeTypeModel
 {
+    /// <summary>
+    /// 动作类型
+    /// </summary>
     public static ObservableCollection<GraphInfo.GraphType> GraphTypes { get; } =
         new(Enum.GetValues(typeof(GraphInfo.GraphType)).Cast<GraphInfo.GraphType>());
+
+    /// <summary>
+    /// 动画类型
+    /// </summary>
     public static ObservableCollection<GraphInfo.AnimatType> AnimatTypes { get; } =
         new(Enum.GetValues(typeof(GraphInfo.AnimatType)).Cast<GraphInfo.AnimatType>());
+
+    /// <summary>
+    /// 模式类型
+    /// </summary>
     public static ObservableCollection<GameSave.ModeType> ModeTypes { get; } =
         new(Enum.GetValues(typeof(GameSave.ModeType)).Cast<GameSave.ModeType>());
 
+    /// <summary>
+    /// 含有名称的动作列表
+    /// </summary>
     public static HashSet<GraphInfo.GraphType> HasNameAnimes { get; } =
         new()
         {
@@ -31,6 +45,9 @@ public class AnimeTypeModel
             GraphInfo.GraphType.Say
         };
 
+    /// <summary>
+    /// 含有不同动画类型的动作列表
+    /// </summary>
     public static HashSet<GraphInfo.GraphType> HasMultiTypeAnimes { get; } =
         new()
         {
@@ -47,14 +64,39 @@ public class AnimeTypeModel
             GraphInfo.GraphType.Say
         };
 
+    /// <summary>
+    /// Id
+    /// </summary>
     public ObservableValue<string> Id { get; } = new();
 
+    /// <summary>
+    /// 名称
+    /// </summary>
     public ObservableValue<string> Name { get; } = new();
+
+    /// <summary>
+    /// 动作类型
+    /// </summary>
     public ObservableValue<GraphInfo.GraphType> GraphType { get; } = new();
 
+    /// <summary>
+    /// 开心动画
+    /// </summary>
     public ObservableCollection<AnimeModel> HappyAnimes { get; } = new();
+
+    /// <summary>
+    /// 普通动画 (默认)
+    /// </summary>
     public ObservableCollection<AnimeModel> NomalAnimes { get; } = new();
+
+    /// <summary>
+    /// 低状态动画
+    /// </summary>
     public ObservableCollection<AnimeModel> PoorConditionAnimes { get; } = new();
+
+    /// <summary>
+    /// 生病动画
+    /// </summary>
     public ObservableCollection<AnimeModel> IllAnimes { get; } = new();
 
     public AnimeTypeModel()
@@ -81,6 +123,12 @@ public class AnimeTypeModel
             IllAnimes.Add(anime.Copy());
     }
 
+    /// <summary>
+    /// 创建动画类型模型
+    /// </summary>
+    /// <param name="graphType">动作类型</param>
+    /// <param name="path">路径</param>
+    /// <returns></returns>
     public static AnimeTypeModel? Create(GraphInfo.GraphType graphType, string path)
     {
         try
@@ -132,6 +180,10 @@ public class AnimeTypeModel
     }
 
     #region Load
+    /// <summary>
+    /// 默认载入方式 (只有一个动画类型 <see cref="GraphInfo.AnimatType.Single"/>)
+    /// </summary>
+    /// <param name="path">路径</param>
     private void LoadDefault(string path)
     {
         foreach (var dir in Directory.EnumerateDirectories(path))
@@ -180,6 +232,10 @@ public class AnimeTypeModel
         }
     }
 
+    /// <summary>
+    /// 有多个动画类型的载入方式
+    /// </summary>
+    /// <param name="path">路径</param>
     private void LoadMultiType(string path)
     {
         foreach (var dir in Directory.EnumerateDirectories(path))
@@ -242,6 +298,12 @@ public class AnimeTypeModel
         }
     }
 
+    /// <summary>
+    /// 添加动画到不同模式
+    /// </summary>
+    /// <param name="path">路径</param>
+    /// <param name="modeType">模式类型</param>
+    /// <param name="animeType">动画类型</param>
     private void AddAnimeForModeType(
         string path,
         GameSave.ModeType modeType,
@@ -277,6 +339,12 @@ public class AnimeTypeModel
         };
     }
 
+    /// <summary>
+    /// 添加动画至动画列表
+    /// </summary>
+    /// <param name="collection">动画列表</param>
+    /// <param name="path">路径</param>
+    /// <param name="animatType">动画类型</param>
     private static void AddAnime(
         ObservableCollection<AnimeModel> collection,
         string path,
@@ -285,12 +353,14 @@ public class AnimeTypeModel
     {
         if (Directory.EnumerateFiles(path).Any())
         {
+            // 如果没有文件夹 则载入全部文件
             var animeModel = new AnimeModel(path);
             animeModel.AnimeType.Value = animatType;
             collection.Add(animeModel);
         }
         else
         {
+            // 否则遍历文件夹
             foreach (var imagesDir in Directory.EnumerateDirectories(path))
             {
                 var animeModel = new AnimeModel(imagesDir);
@@ -301,6 +371,10 @@ public class AnimeTypeModel
     }
     #endregion
     #region Save
+    /// <summary>
+    /// 保存至指定路径
+    /// </summary>
+    /// <param name="path">路径</param>
     public void Save(string path)
     {
         if (
@@ -330,7 +404,7 @@ public class AnimeTypeModel
             is GraphInfo.GraphType.Raised_Dynamic
                 or GraphInfo.GraphType.Raised_Static
         )
-            SaveRaise(path, this);
+            SaveRaised(path, this);
         else if (GraphType.Value is GraphInfo.GraphType.StateONE or GraphInfo.GraphType.StateTWO)
             SaveState(path, this);
         else if (GraphType.Value is GraphInfo.GraphType.Common)
@@ -339,6 +413,11 @@ public class AnimeTypeModel
             SaveHasNameAnime(path, this);
     }
 
+    /// <summary>
+    /// 保存为带有名称的动画样式
+    /// </summary>
+    /// <param name="path">路径</param>
+    /// <param name="animeTypeModel">动画模型</param>
     void SaveHasNameAnime(string path, AnimeTypeModel animeTypeModel)
     {
         var animeTypePath = Path.Combine(path, animeTypeModel.GraphType.Value.ToString());
@@ -348,6 +427,11 @@ public class AnimeTypeModel
         SaveWithModeType(animePath, animeTypeModel);
     }
 
+    /// <summary>
+    /// 保存为通用样式
+    /// </summary>
+    /// <param name="path">路径</param>
+    /// <param name="animeTypeModel">模型</param>
     void SaveCommon(string path, AnimeTypeModel animeTypeModel)
     {
         var animePath = Path.Combine(path, animeTypeModel.Name.Value);
@@ -355,6 +439,11 @@ public class AnimeTypeModel
         SaveWithModeType(animePath, animeTypeModel);
     }
 
+    /// <summary>
+    /// 保存为 <see cref="GraphInfo.GraphType.StateONE"/> 或 <see cref="GraphInfo.GraphType.StateTWO"/> 样式
+    /// </summary>
+    /// <param name="path">路径</param>
+    /// <param name="animeTypeModel">模型</param>
     void SaveState(string path, AnimeTypeModel animeTypeModel)
     {
         var animePath = Path.Combine(path, "State");
@@ -362,7 +451,12 @@ public class AnimeTypeModel
         SaveMultiType(animePath, animeTypeModel);
     }
 
-    void SaveRaise(string path, AnimeTypeModel animeTypeModel)
+    /// <summary>
+    /// 保存为 <see cref="GraphInfo.GraphType.Raised_Dynamic"/> 或 <see cref="GraphInfo.GraphType.Raised_Static"/> 样式
+    /// </summary>
+    /// <param name="path">路径</param>
+    /// <param name="animeTypeModel">模型</param>
+    void SaveRaised(string path, AnimeTypeModel animeTypeModel)
     {
         var animePath = Path.Combine(path, "Raise");
         Directory.CreateDirectory(animePath);
@@ -372,6 +466,11 @@ public class AnimeTypeModel
             SaveMultiType(animePath, animeTypeModel);
     }
 
+    /// <summary>
+    /// 保存为 <see cref="GraphInfo.GraphType.Switch_Up"/> 或 <see cref="GraphInfo.GraphType.Switch_Down"/> 或 <see cref="GraphInfo.GraphType.Switch_Thirsty"/> 或 <see cref="GraphInfo.GraphType.Switch_Hunger"/>
+    /// </summary>
+    /// <param name="path">路径</param>
+    /// <param name="animeTypeModel">模型</param>
     void SaveSwitch(string path, AnimeTypeModel animeTypeModel)
     {
         var animePath = Path.Combine(path, "Switch");
@@ -405,17 +504,7 @@ public class AnimeTypeModel
     }
 
     /// <summary>
-    /// 保存为 ModeType 划分的样式
-    /// <para><![CDATA[
-    /// Happy/A/0
-    /// Happy/A/1
-    /// Happy/B/0
-    /// Happy/B/1
-    /// Nomal/A/0
-    /// Nomal/A/1
-    /// ...
-    /// ]]>
-    /// </para>
+    /// 保存为 Happy/A/0 的路径样式
     /// </summary>
     /// <param name="path"></param>
     /// <param name="animeTypeModel"></param>
@@ -476,15 +565,7 @@ public class AnimeTypeModel
     }
 
     /// <summary>
-    /// 保存为 AnimeType 划分的样式
-    /// <para><![CDATA[
-    /// Happy/0
-    /// Happy/1
-    /// Nomal/0
-    /// Nomal/1
-    /// ...
-    /// ]]>
-    /// </para>
+    /// 保存为 Happy/0 的路径样式
     /// </summary>
     /// <param name="animePath"></param>
     /// <param name="animeType"></param>
