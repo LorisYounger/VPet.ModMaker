@@ -47,19 +47,31 @@ public class ClickTextModel : I18nModel<I18nClickTextModel>
     public ObservableValue<string> Working { get; } = new();
 
     /// <summary>
-    /// 模式
+    /// 宠物状态
     /// </summary>
-    public ObservableEnumFlags<ClickText.ModeType> Mode { get; } = new();
+    public ObservableEnumFlags<ClickText.ModeType> Mode { get; } =
+        new(
+            ClickText.ModeType.Happy
+                | ClickText.ModeType.Nomal
+                | ClickText.ModeType.PoorCondition
+                | ClickText.ModeType.Ill
+        );
 
     /// <summary>
-    /// 工作状态
+    /// 行动状态
     /// </summary>
     public ObservableValue<VPet_Simulator.Core.Main.WorkingState> WorkingState { get; } = new();
 
     /// <summary>
     /// 日期区间
     /// </summary>
-    public ObservableEnumFlags<ClickText.DayTime> DayTime { get; } = new();
+    public ObservableEnumFlags<ClickText.DayTime> DayTime { get; } =
+        new(
+            ClickText.DayTime.Morning
+                | ClickText.DayTime.Afternoon
+                | ClickText.DayTime.Night
+                | ClickText.DayTime.Midnight
+        );
 
     /// <summary>
     /// 好感度

@@ -41,9 +41,15 @@ public class SelectTextModel : I18nModel<I18nSelectTextModel>
     public ObservableValue<string> ChooseId { get; } = new();
 
     /// <summary>
-    /// 模式
+    /// 宠物状态
     /// </summary>
-    public ObservableEnumFlags<ClickText.ModeType> Mode { get; } = new();
+    public ObservableEnumFlags<ClickText.ModeType> Mode { get; } =
+        new(
+            ClickText.ModeType.Happy
+                | ClickText.ModeType.Nomal
+                | ClickText.ModeType.PoorCondition
+                | ClickText.ModeType.Ill
+        );
 
     /// <summary>
     /// 好感度
