@@ -81,7 +81,7 @@
                       <TextBlock
                         HorizontalAlignment="Right"
                         VerticalAlignment="Top"
-                        Text="{Binding LastTimeString}" />
+                        Text="{Binding LastTime, StringFormat={}yyyy/MM/dd HH:mm}" />
                       <TextBlock
                         Grid.Row="1"
                         VerticalAlignment="Bottom"

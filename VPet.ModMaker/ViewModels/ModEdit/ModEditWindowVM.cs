@@ -160,7 +160,10 @@ public class ModEditWindowVM
     /// </summary>
     private void Save()
     {
-        if (MessageBox.Show("确定保存吗".Translate()) is not MessageBoxResult.Yes)
+        if (
+            MessageBox.Show("确定保存吗".Translate(), "", MessageBoxButton.YesNo)
+            is not MessageBoxResult.Yes
+        )
             return;
 
         if (string.IsNullOrEmpty(ModInfo.Value.SourcePath.Value))

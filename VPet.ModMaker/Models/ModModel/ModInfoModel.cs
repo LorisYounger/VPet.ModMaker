@@ -684,6 +684,8 @@ public class ModInfoModel : I18nModel<I18nModInfoModel>
     /// <param name="path">路径</param>
     private void SaveImage(string path)
     {
+        if (Foods.Count == 0)
+            return;
         var imagePath = Path.Combine(path, "image");
         Directory.CreateDirectory(imagePath);
         if (Foods.Count > 0)
