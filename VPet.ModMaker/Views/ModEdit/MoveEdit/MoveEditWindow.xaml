@@ -64,7 +64,7 @@
           <RowDefinition Height="Auto" />
           <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
-        <Label Grid.Row="3" Content="{ll:Str 指定动画}" />
+        <Label Grid.Row="3" Content="{ll:Str 动画}" />
         <TextBox
           Grid.Row="3"
           Grid.Column="1"

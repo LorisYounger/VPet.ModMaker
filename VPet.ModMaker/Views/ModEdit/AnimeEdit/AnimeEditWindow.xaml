@@ -8,7 +8,7 @@
   xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
   xmlns:pu="https://opensource.panuon.com/wpf-ui"
   xmlns:vm="clr-namespace:VPet.ModMaker.ViewModels.ModEdit.AnimeEdit"
-  Title="AnimeEditWindow"
+  Title="{ll:Str 编辑动画}"
   Width="1000"
   Height="600"
   d:DataContext="{d:DesignInstance Type=vm:AnimeEditWindowVM}"
@@ -191,7 +191,7 @@
         <RowDefinition Height="Auto" />
       </Grid.RowDefinitions>
       <TabControl SelectionChanged="TabControl_SelectionChanged">
-        <TabItem Tag="{Binding Anime.Value.ModeTypes[0]}">
+        <TabItem d:Header="Happy (0)" Tag="Happy">
           <TabItem.Header>
             <MultiBinding Converter="{StaticResource StringFormatConverter}" ConverterParameter="{}{0} ({1})">
               <Binding Path="Tag" RelativeSource="{RelativeSource Mode=Self}" />

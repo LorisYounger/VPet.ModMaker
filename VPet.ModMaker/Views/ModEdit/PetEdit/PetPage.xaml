@@ -59,21 +59,12 @@
           </DataGridTextColumn.Header>
         </DataGridTextColumn>
         <DataGridTextColumn
-          Binding="{Binding CurrentI18nData.Value.PetName.Value}"
-          CanUserSort="True"
-          IsReadOnly="True"
-          SortMemberPath="CurrentI18nData.Value.PetName.Value">
-          <DataGridTextColumn.Header>
-            <TextBlock Text="{ll:Str 宠物名称}" />
-          </DataGridTextColumn.Header>
-        </DataGridTextColumn>
-        <DataGridTextColumn
           Binding="{Binding CurrentI18nData.Value.Description.Value}"
           CanUserSort="True"
           IsReadOnly="True"
           SortMemberPath="CurrentI18nData.Value.Description.Value">
           <DataGridTextColumn.Header>
-            <TextBlock Text="{ll:Str 宠物描述}" />
+            <TextBlock Text="{ll:Str 描述}" />
           </DataGridTextColumn.Header>
         </DataGridTextColumn>
       </DataGrid.Columns>

@@ -116,7 +116,12 @@ public class MoveModel
     /// 模式
     /// </summary>
     public ObservableEnumFlags<GraphHelper.Move.ModeType> ModeType { get; } =
-        new(GraphHelper.Move.ModeType.Nomal);
+        new(
+            GraphHelper.Move.ModeType.Happy
+                | GraphHelper.Move.ModeType.Nomal
+                | GraphHelper.Move.ModeType.PoorCondition
+                | GraphHelper.Move.ModeType.Ill
+        );
 
     public MoveModel() { }
 

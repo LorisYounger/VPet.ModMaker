@@ -23,11 +23,6 @@ public class PetModel : I18nModel<I18nPetInfoModel>
     public ObservableValue<string> Id { get; } = new();
 
     /// <summary>
-    /// 宠物名称Id
-    /// </summary>
-    public ObservableValue<string> PetNameId { get; } = new();
-
-    /// <summary>
     /// 描述Id
     /// </summary>
     public ObservableValue<string> DescriptionId { get; } = new();
@@ -74,11 +69,9 @@ public class PetModel : I18nModel<I18nPetInfoModel>
 
     public PetModel()
     {
-        PetNameId.Value = $"{Id.Value}_{nameof(PetNameId)}";
         DescriptionId.Value = $"{Id.Value}_{nameof(DescriptionId)}";
         Id.ValueChanged += (o, n) =>
         {
-            PetNameId.Value = $"{n}_{nameof(PetNameId)}";
             DescriptionId.Value = $"{n}_{nameof(DescriptionId)}";
         };
     }
@@ -101,8 +94,7 @@ public class PetModel : I18nModel<I18nPetInfoModel>
     public PetModel(PetLoader loader)
         : this()
     {
-        Id.Value = loader.Name;
-        PetNameId.Value = loader.PetName;
+        Id.Value = loader.PetName;
         DescriptionId.Value = loader.Intor;
 
         TouchHeadRect.Value.SetValue(
@@ -166,14 +158,12 @@ public class PetModel : I18nModel<I18nPetInfoModel>
 public class I18nPetInfoModel
 {
     public ObservableValue<string> Name { get; } = new();
-    public ObservableValue<string> PetName { get; } = new();
     public ObservableValue<string> Description { get; } = new();
 
     public I18nPetInfoModel Copy()
     {
         var result = new I18nPetInfoModel();
         result.Name.Value = Name.Value;
-        result.PetName.Value = PetName.Value;
         result.Description.Value = Description.Value;
         return result;
     }

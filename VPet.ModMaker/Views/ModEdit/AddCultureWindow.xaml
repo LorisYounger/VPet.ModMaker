@@ -32,7 +32,7 @@
         </Grid.RowDefinitions>
         <TextBox
           x:Name="TextBox_Lang"
-          pu:TextBoxHelper.Watermark="{ll:Str 语言区域标记}"
+          pu:TextBoxHelper.Watermark="{ll:Str 文化名称}"
           Text="{Binding Culture.Value, UpdateSourceTrigger=PropertyChanged}" />
         <TextBlock Grid.Row="1">
           <Hyperlink Click="Hyperlink_Click">

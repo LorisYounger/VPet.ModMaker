@@ -289,8 +289,6 @@ public class ModInfoModel : I18nModel<I18nModInfoModel>
                     var petI18n = pet.I18nDatas[i18nData.Key];
                     if (i18nData.Value.TryGetValue(pet.Id.Value, out var name))
                         petI18n.Name.Value = name;
-                    if (i18nData.Value.TryGetValue(pet.PetNameId.Value, out var petName))
-                        petI18n.PetName.Value = petName;
                     if (i18nData.Value.TryGetValue(pet.DescriptionId.Value, out var description))
                         petI18n.Description.Value = description;
                     foreach (var work in pet.Works)
@@ -394,10 +392,6 @@ public class ModInfoModel : I18nModel<I18nModInfoModel>
                     pet.I18nDatas[cultureName].Name.Value
                 );
                 _saveI18nDatas[cultureName].TryAdd(
-                    pet.PetNameId.Value,
-                    pet.I18nDatas[cultureName].PetName.Value
-                );
-                _saveI18nDatas[cultureName].TryAdd(
                     pet.DescriptionId.Value,
                     pet.I18nDatas[cultureName].Description.Value
                 );
@@ -462,7 +456,7 @@ public class ModInfoModel : I18nModel<I18nModInfoModel>
             {
                 new Sub("intor", pet.DescriptionId.Value),
                 new Sub("path", pet.Id.Value),
-                new Sub("petname", pet.PetNameId.Value)
+                new Sub("petname", pet.Id.Value)
             }
         );
         lps.Add(

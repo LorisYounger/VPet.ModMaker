@@ -96,10 +96,10 @@
           </DataGridTextColumn.Header>
         </DataGridTextColumn>
         <DataGridTextColumn
-          Binding="{Binding Mode.Value}"
+          Binding="{Binding Mode.EnumValue}"
           CanUserSort="True"
           IsReadOnly="True"
-          SortMemberPath="Mode.Value">
+          SortMemberPath="Mode.EnumValue">
           <DataGridTextColumn.Header>
             <TextBlock Text="{ll:Str 状态}" />
           </DataGridTextColumn.Header>
