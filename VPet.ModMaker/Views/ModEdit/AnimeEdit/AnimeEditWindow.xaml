@@ -181,6 +181,7 @@
         <TextBox
           Grid.Row="1"
           Grid.Column="1"
+          pu:TextBoxHelper.Watermark="{ll:Str 动画名称}"
           Text="{Binding Anime.Value.Name.Value, UpdateSourceTrigger=PropertyChanged}"
           Visibility="{Binding HasAnimeName.Value, Converter={StaticResource FalseToHiddenConverter}}" />
       </Grid>
