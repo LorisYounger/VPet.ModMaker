@@ -104,6 +104,9 @@
     <Compile Include="Models\ModModel\AnimeTypeModel.cs" />
     <Compile Include="Models\ModModel\ClickTextModel.cs" />
     <Compile Include="Models\Expansions.cs" />
+    <Compile Include="Models\ModModel\FoodAnimeModel.cs" />
+    <Compile Include="Models\ModModel\FoodAnimeTypeModel.cs" />
+    <Compile Include="Models\ModModel\FoodLocationInfoModel.cs" />
     <Compile Include="Models\ModModel\FoodModel.cs" />
     <Compile Include="Models\I18nHelper.cs" />
     <Compile Include="Models\I18nModel.cs" />
@@ -120,6 +123,7 @@
     <Compile Include="SimpleObservable\ObservableCommandT.cs" />
     <Compile Include="Styles.cs" />
     <Compile Include="ViewModels\ModEdit\AddCultureWindowVM.cs" />
+    <Compile Include="ViewModels\ModEdit\AnimeEdit\FoodAnimeEditWindowVM.cs" />
     <Compile Include="ViewModels\ModEdit\AnimeEdit\AnimeEditWindowVM.cs" />
     <Compile Include="ViewModels\ModEdit\AnimeEdit\AnimePageVM.cs" />
     <Compile Include="ViewModels\ModEdit\ClickTextEdit\ClickTextEditWindowVM.cs" />
@@ -137,6 +141,9 @@
     <Compile Include="ViewModels\ModEdit\SelectTextEdit\SelectTextPageVM.cs" />
     <Compile Include="ViewModels\ModEdit\WorkEdit\WorkEditWindowVM.cs" />
     <Compile Include="ViewModels\ModEdit\WorkEdit\WorkPageVM.cs" />
+    <Compile Include="Views\ModEdit\AnimeEdit\FoodAnimeEditWindow.xaml.cs">
+      <DependentUpon>FoodAnimeEditWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\ModEdit\AnimeEdit\AnimeEditWindow.xaml.cs">
       <DependentUpon>AnimeEditWindow.xaml</DependentUpon>
     </Compile>
@@ -243,6 +250,10 @@
     <Page Include="Templates.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\ModEdit\AnimeEdit\FoodAnimeEditWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="Views\ModEdit\AnimeEdit\AnimeEditWindow.xaml">
       <SubType>Designer</SubType>

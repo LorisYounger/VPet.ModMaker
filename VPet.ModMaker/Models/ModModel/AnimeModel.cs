@@ -29,6 +29,7 @@ public class AnimeModel
     public AnimeModel() { }
 
     public AnimeModel(string imagesPath)
+        : this()
     {
         foreach (var file in Directory.EnumerateFiles(imagesPath))
         {
