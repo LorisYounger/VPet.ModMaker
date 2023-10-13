@@ -249,52 +249,51 @@ public class ModInfoModel : I18nModel<I18nModInfoModel>
             if (I18nHelper.Current.CultureNames.Contains(lang) is false)
                 I18nHelper.Current.CultureNames.Add(lang);
         }
-        if (I18nHelper.Current.CultureNames.Count > 0)
+        if (I18nHelper.Current.CultureNames.Count == 0)
+            return;
+        I18nHelper.Current.CultureName.Value = I18nHelper.Current.CultureNames.First();
+        foreach (var i18nData in OtherI18nDatas)
         {
-            I18nHelper.Current.CultureName.Value = I18nHelper.Current.CultureNames.First();
-            foreach (var i18nData in OtherI18nDatas)
+            foreach (var food in Foods)
             {
-                foreach (var food in Foods)
+                var foodI18n = food.I18nDatas[i18nData.Key];
+                if (i18nData.Value.TryGetValue(food.Id.Value, out var name))
+                    foodI18n.Name.Value = name;
+                if (i18nData.Value.TryGetValue(food.DescriptionId.Value, out var description))
+                    foodI18n.Description.Value = description;
+            }
+            foreach (var lowText in LowTexts)
+            {
+                var lowTextI18n = lowText.I18nDatas[i18nData.Key];
+                if (i18nData.Value.TryGetValue(lowText.Id.Value, out var text))
+                    lowTextI18n.Text.Value = text;
+            }
+            foreach (var clickText in ClickTexts)
+            {
+                var clickTextI18n = clickText.I18nDatas[i18nData.Key];
+                if (i18nData.Value.TryGetValue(clickText.Id.Value, out var text))
+                    clickTextI18n.Text.Value = text;
+            }
+            foreach (var selectText in SelectTexts)
+            {
+                var selectTextI18n = selectText.I18nDatas[i18nData.Key];
+                if (i18nData.Value.TryGetValue(selectText.Id.Value, out var text))
+                    selectTextI18n.Text.Value = text;
+                if (i18nData.Value.TryGetValue(selectText.ChooseId.Value, out var choose))
+                    selectTextI18n.Choose.Value = choose;
+            }
+            foreach (var pet in Pets)
+            {
+                var petI18n = pet.I18nDatas[i18nData.Key];
+                if (i18nData.Value.TryGetValue(pet.Id.Value, out var name))
+                    petI18n.Name.Value = name;
+                if (i18nData.Value.TryGetValue(pet.DescriptionId.Value, out var description))
+                    petI18n.Description.Value = description;
+                foreach (var work in pet.Works)
                 {
-                    var foodI18n = food.I18nDatas[i18nData.Key];
-                    if (i18nData.Value.TryGetValue(food.Id.Value, out var name))
-                        foodI18n.Name.Value = name;
-                    if (i18nData.Value.TryGetValue(food.DescriptionId.Value, out var description))
-                        foodI18n.Description.Value = description;
-                }
-                foreach (var lowText in LowTexts)
-                {
-                    var lowTextI18n = lowText.I18nDatas[i18nData.Key];
-                    if (i18nData.Value.TryGetValue(lowText.Id.Value, out var text))
-                        lowTextI18n.Text.Value = text;
-                }
-                foreach (var clickText in ClickTexts)
-                {
-                    var clickTextI18n = clickText.I18nDatas[i18nData.Key];
-                    if (i18nData.Value.TryGetValue(clickText.Id.Value, out var text))
-                        clickTextI18n.Text.Value = text;
-                }
-                foreach (var selectText in SelectTexts)
-                {
-                    var selectTextI18n = selectText.I18nDatas[i18nData.Key];
-                    if (i18nData.Value.TryGetValue(selectText.Id.Value, out var text))
-                        selectTextI18n.Text.Value = text;
-                    if (i18nData.Value.TryGetValue(selectText.ChooseId.Value, out var choose))
-                        selectTextI18n.Choose.Value = choose;
-                }
-                foreach (var pet in Pets)
-                {
-                    var petI18n = pet.I18nDatas[i18nData.Key];
-                    if (i18nData.Value.TryGetValue(pet.Id.Value, out var name))
-                        petI18n.Name.Value = name;
-                    if (i18nData.Value.TryGetValue(pet.DescriptionId.Value, out var description))
-                        petI18n.Description.Value = description;
-                    foreach (var work in pet.Works)
-                    {
-                        var workI18n = work.I18nDatas[i18nData.Key];
-                        if (i18nData.Value.TryGetValue(work.Id.Value, out var workName))
-                            workI18n.Name.Value = workName;
-                    }
+                    var workI18n = work.I18nDatas[i18nData.Key];
+                    if (i18nData.Value.TryGetValue(work.Id.Value, out var workName))
+                        workI18n.Name.Value = workName;
                 }
             }
         }

@@ -200,21 +200,21 @@ public class ModEditWindowVM
         if (saveFileDialog.ShowDialog() is true)
         {
             var pending = PendingBox.Show("保存中".Translate());
-            try
-            {
-                var path = Path.GetDirectoryName(saveFileDialog.FileName);
-                ModInfo.Value.SaveTo(path);
-                if (string.IsNullOrWhiteSpace(ModInfo.Value.SourcePath.Value))
-                    ModInfo.Value.SourcePath.Value = path;
-                pending.Close();
-                MessageBox.Show(ModEditWindow, "保存成功".Translate());
-            }
-            catch (Exception ex)
-            {
-                pending.Close();
-                MessageBox.Show($"保存失败 错误信息:\n{0}".Translate(ex));
-                return;
-            }
+            //try
+            //{
+            var path = Path.GetDirectoryName(saveFileDialog.FileName);
+            ModInfo.Value.SaveTo(path);
+            if (string.IsNullOrWhiteSpace(ModInfo.Value.SourcePath.Value))
+                ModInfo.Value.SourcePath.Value = path;
+            pending.Close();
+            MessageBox.Show(ModEditWindow, "保存成功".Translate());
+            //}
+            //catch (Exception ex)
+            //{
+            //    pending.Close();
+            //    MessageBox.Show("保存失败 错误信息:\n{0}".Translate(ex));
+            //    return;
+            //}
         }
     }
 
