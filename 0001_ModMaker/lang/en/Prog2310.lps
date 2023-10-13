@@ -1,0 +1,38 @@
+Mod制作器#Mod Maker:|
+信息文件\n{0}\n不存在#Information file \n{0}\n does not exist:|
+信息文件\n{0}\n未包含食物动画信息#Information file\n{0}\n does not contain food animation information.:|
+确定要清空吗?#Are you sure you want to clear it?:|
+模组信息文件#Module Info File:|
+LPS文件|*.lps;#LPS file|*.lps.:|
+模组载入失败:\n{0}#Module loading failed:\n{0}:|
+载入中#Loading:|
+选择图片#Select Image:|
+图片|*.jpg;*.jpeg;*.png;*.bmp#Image|*.jpg;*.jpeg;*.png;*.bmp:|
+确定删除文化 {0} 吗#Are you sure you want to delete culture {0}?:|
+确定保存吗#Are you sure you want to save it?:|
+源路径为空, 请使用 保存至#Source path is empty, please use Save to:|
+保存失败 错误信息:\n{0}#Save Failed Error Message:\n{0}:|
+保存成功#Saved successfully.:|
+保存 模组信息文件,并在文件夹内保存模组数据#Save the module information file and save the module data in the folder:|
+info.lps#info.lps:|
+保存中#Saving:|
+未添加任何语言#No language is added.:|
+Id不可为空#Id must not be empty:|
+作者不可为空#Author can't be empty:|
+确定删除吗#Are you sure you want to delete?:|
+确定清空吗#Are you sure you want to clear it?:|
+图片|*.png#Image|*.png:|
+添加失败 \n{0}#Add failed \n{0}:|
+正在播放#Playing:|
+未选中动画#Unchecked animation:|
+路径不存在, 是否删除?#Path does not exist, is it deleted?:|
+文化不可为空#Culture cannot be empty:|
+此文化已存在#This culture already exists:|
+未添加任何文化,确定要添加文化吗?#No culture has been added, are you sure you want to add a culture?:|
+无法移动不同动画的图片#Can't move pictures with different animations:|
+此Id已存在#This Id already exists:|
+文本不可为空#Text cannot be empty:|
+图像不可为空#Image cannot be empty:|
+指定动画Id不可为空#The specified animation Id cannot be empty:|
+名称不可为空#Name cannot be empty:|
+选项名不可为空#Option name cannot be empty:|
