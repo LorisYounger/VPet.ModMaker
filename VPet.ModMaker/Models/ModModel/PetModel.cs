@@ -1,7 +1,10 @@
 ﻿using HKW.HKWViewModels.SimpleObservable;
+using LinePutScript;
+using LinePutScript.Converter;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -66,6 +69,8 @@ public class PetModel : I18nModel<I18nPetInfoModel>
     /// 动画
     /// </summary>
     public ObservableCollection<AnimeTypeModel> Animes { get; } = new();
+
+    public bool IsSimplePetModel { get; } = false;
 
     public PetModel()
     {
@@ -152,7 +157,165 @@ public class PetModel : I18nModel<I18nPetInfoModel>
             Moves.Add(new(move));
     }
 
+    public PetModel(PetLoader loader, bool isSimplePet)
+        : this()
+    {
+        Id.Value = loader.PetName;
+        IsSimplePetModel = isSimplePet;
+    }
+
     public void Close() { }
+
+    #region Save
+    /// <summary>
+    /// 保存宠物
+    /// </summary>
+    /// <param name="path">路径</param>
+    public void Save(string path)
+    {
+        if (IsSimplePetModel)
+        {
+            SaveSimplePetInfo(path);
+            return;
+        }
+        foreach (var cultureName in I18nHelper.Current.CultureNames)
+        {
+            ModInfoModel.SaveI18nDatas[cultureName].TryAdd(
+                Id.Value,
+                I18nDatas[cultureName].Name.Value
+            );
+            ModInfoModel.SaveI18nDatas[cultureName].TryAdd(
+                DescriptionId.Value,
+                I18nDatas[cultureName].Description.Value
+            );
+        }
+        var petFile = Path.Combine(path, $"{Id.Value}.lps");
+        if (File.Exists(petFile) is false)
+            File.Create(petFile).Close();
+        var lps = new LPS();
+        SavePetInfo(lps);
+        SaveWorksInfo(lps);
+        SaveMoveInfo(lps);
+        File.WriteAllText(petFile, lps.ToString());
+
+        var petAnimePath = Path.Combine(path, Id.Value);
+        foreach (var animeType in Animes)
+            animeType.Save(petAnimePath);
+    }
+
+    private void SaveSimplePetInfo(string path)
+    {
+        if (Works.Count == 0 && Moves.Count == 0 && Animes.Count == 0)
+            return;
+        var petFile = Path.Combine(path, $"{Id.Value}.lps");
+        var lps = new LPS { new Line("pet", Id.Value) { new Sub("path", Id.Value), } };
+        SaveWorksInfo(lps);
+        SaveMoveInfo(lps);
+        File.WriteAllText(petFile, lps.ToString());
+        var petAnimePath = Path.Combine(path, Id.Value);
+        foreach (var animeType in Animes)
+            animeType.Save(petAnimePath);
+    }
+
+    /// <summary>
+    /// 保存移动信息
+    /// </summary>
+    /// <param name="lps"></param>
+    /// <param name="pet"></param>
+    void SaveMoveInfo(LPS lps)
+    {
+        foreach (var move in Moves)
+        {
+            lps.Add(LPSConvert.SerializeObjectToLine<Line>(move.ToMove(), "move"));
+        }
+    }
+
+    /// <summary>
+    /// 保存工作信息
+    /// </summary>
+    /// <param name="lps"></param>
+    /// <param name="pet"></param>
+    void SaveWorksInfo(LPS lps)
+    {
+        foreach (var work in Works)
+        {
+            lps.Add(LPSConvert.SerializeObjectToLine<Line>(work.ToWork(), "work"));
+            foreach (var cultureName in I18nHelper.Current.CultureNames)
+            {
+                ModInfoModel.SaveI18nDatas[cultureName].TryAdd(
+                    work.Id.Value,
+                    work.I18nDatas[cultureName].Name.Value
+                );
+            }
+        }
+    }
+
+    /// <summary>
+    /// 保存宠物信息
+    /// </summary>
+    /// <param name="lps"></param>
+    /// <param name="pet"></param>
+    private void SavePetInfo(LPS lps)
+    {
+        lps.Add(
+            new Line("pet", Id.Value)
+            {
+                new Sub("intor", DescriptionId.Value),
+                new Sub("path", Id.Value),
+                new Sub("petname", Id.Value)
+            }
+        );
+        lps.Add(
+            new Line("touchhead")
+            {
+                new Sub("px", TouchHeadRect.Value.X.Value),
+                new Sub("py", TouchHeadRect.Value.Y.Value),
+                new Sub("sw", TouchHeadRect.Value.Width.Value),
+                new Sub("sh", TouchHeadRect.Value.Height.Value),
+            }
+        );
+        lps.Add(
+            new Line("touchraised")
+            {
+                new Sub("happy_px", TouchRaisedRect.Value.Happy.Value.X.Value),
+                new Sub("happy_py", TouchRaisedRect.Value.Happy.Value.Y.Value),
+                new Sub("happy_sw", TouchRaisedRect.Value.Happy.Value.Width.Value),
+                new Sub("happy_sh", TouchRaisedRect.Value.Happy.Value.Height.Value),
+                //
+                new Sub("nomal_px", TouchRaisedRect.Value.Nomal.Value.X.Value),
+                new Sub("nomal_py", TouchRaisedRect.Value.Nomal.Value.Y.Value),
+                new Sub("nomal_sw", TouchRaisedRect.Value.Nomal.Value.Width.Value),
+                new Sub("nomal_sh", TouchRaisedRect.Value.Nomal.Value.Height.Value),
+                //
+                new Sub("poorcondition_px", TouchRaisedRect.Value.PoorCondition.Value.X.Value),
+                new Sub("poorcondition_py", TouchRaisedRect.Value.PoorCondition.Value.Y.Value),
+                new Sub("poorcondition_sw", TouchRaisedRect.Value.PoorCondition.Value.Width.Value),
+                new Sub("poorcondition_sh", TouchRaisedRect.Value.PoorCondition.Value.Height.Value),
+                //
+                new Sub("ill_px", TouchRaisedRect.Value.Ill.Value.X.Value),
+                new Sub("ill_py", TouchRaisedRect.Value.Ill.Value.Y.Value),
+                new Sub("ill_sw", TouchRaisedRect.Value.Ill.Value.Width.Value),
+                new Sub("ill_sh", TouchRaisedRect.Value.Ill.Value.Height.Value),
+            }
+        );
+        lps.Add(
+            new Line("raisepoint")
+            {
+                new Sub("happy_x", RaisePoint.Value.Happy.Value.X.Value),
+                new Sub("happy_y", RaisePoint.Value.Happy.Value.Y.Value),
+                //
+                new Sub("nomal_x", RaisePoint.Value.Nomal.Value.X.Value),
+                new Sub("nomal_y", RaisePoint.Value.Nomal.Value.Y.Value),
+                //
+                new Sub("poorcondition_x", RaisePoint.Value.PoorCondition.Value.X.Value),
+                new Sub("poorcondition_y", RaisePoint.Value.PoorCondition.Value.Y.Value),
+                //
+                new Sub("ill_x", RaisePoint.Value.Ill.Value.X.Value),
+                new Sub("ill_y", RaisePoint.Value.Ill.Value.Y.Value),
+            }
+        );
+    }
+    #endregion
 }
 
 public class I18nPetInfoModel

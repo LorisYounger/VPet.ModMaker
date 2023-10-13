@@ -89,34 +89,34 @@
             <TextBox
               Grid.Column="1"
               pu:TextBoxHelper.Watermark="Id"
-              Text="{Binding ModInfo.Value.Id.Value}" />
+              Text="{Binding ModInfo.Value.Id.Value, UpdateSourceTrigger=PropertyChanged}" />
             <Label Grid.Row="1" Content="{ll:Str 作者}" />
             <TextBox
               x:Name="TextBox_Author"
               Grid.Row="1"
               Grid.Column="1"
               pu:TextBoxHelper.Watermark="{ll:Str 作者}"
-              Text="{Binding ModInfo.Value.Author.Value}" />
+              Text="{Binding ModInfo.Value.Author.Value, UpdateSourceTrigger=PropertyChanged}" />
             <Label Grid.Row="2" Content="{ll:Str 游戏版本}" />
             <TextBox
               x:Name="TextBox_GameVersion"
               Grid.Row="2"
               Grid.Column="1"
               pu:TextBoxHelper.Watermark="{ll:Str 游戏版本}"
-              Text="{Binding ModInfo.Value.GameVersion.Value}" />
+              Text="{Binding ModInfo.Value.GameVersion.Value, UpdateSourceTrigger=PropertyChanged}" />
             <Label Grid.Row="3" Content="{ll:Str 模组版本}" />
             <TextBox
               x:Name="TextBox_ModVersion"
               Grid.Row="3"
               Grid.Column="1"
               pu:TextBoxHelper.Watermark="{ll:Str 模组版本}"
-              Text="{Binding ModInfo.Value.ModVersion.Value}" />
+              Text="{Binding ModInfo.Value.ModVersion.Value, UpdateSourceTrigger=PropertyChanged}" />
             <Label Grid.Row="4" Content="{ll:Str 模组名称}" />
             <TextBox
               Grid.Row="4"
               Grid.Column="1"
               pu:TextBoxHelper.Watermark="{ll:Str 模组名称}"
-              Text="{Binding ModInfo.Value.CurrentI18nData.Value.Name.Value}" />
+              Text="{Binding ModInfo.Value.CurrentI18nData.Value.Name.Value, UpdateSourceTrigger=PropertyChanged}" />
             <Label Grid.Row="5" Content="{ll:Str 模组介绍}" />
             <TextBox
               x:Name="TextBox_Description"
@@ -126,7 +126,7 @@
               VerticalContentAlignment="Top"
               d:Text="AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
               pu:TextBoxHelper.Watermark="{ll:Str 模组介绍}"
-              Text="{Binding ModInfo.Value.CurrentI18nData.Value.Description.Value}"
+              Text="{Binding ModInfo.Value.CurrentI18nData.Value.Description.Value, UpdateSourceTrigger=PropertyChanged}"
               TextWrapping="Wrap" />
           </Grid>
         </ScrollViewer>

@@ -202,7 +202,7 @@
               Grid.Row="4"
               Grid.Column="1"
               Value="{Binding Work.Value.Feeling.Value}" />
-            <Label Grid.Row="5" Content="{ll:Str 奖励倍率}" />
+            <Label Grid.Row="5" Content="{ll:Str 完成奖励倍率}" />
             <pu:NumberInput
               Grid.Row="5"
               Grid.Column="1"
@@ -211,12 +211,12 @@
             <pu:NumberInput
               Grid.Row="6"
               Grid.Column="1"
-              Value="{Binding Work.Value.FinishBonus.Value}" />
+              Value="{Binding Work.Value.LevelLimit.Value}" />
             <Label Grid.Row="7" Content="{ll:Str 花费时间(分钟)}" />
             <pu:NumberInput
               Grid.Row="7"
               Grid.Column="1"
-              Value="{Binding Work.Value.FinishBonus.Value}" />
+              Value="{Binding Work.Value.Time.Value}" />
           </Grid>
           <Expander Grid.Row="1" Header="{ll:Str 界面样式}">
             <Grid>

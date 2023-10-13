@@ -20,17 +20,44 @@ public class FoodEditWindowVM
     #region Value
     public FoodModel OldFood { get; set; }
     public ObservableValue<FoodModel> Food { get; } = new(new());
+    public ObservableValue<bool> AutoSetReferencePrice { get; } = new(false);
     #endregion
 
     #region Command
     public ObservableCommand AddImageCommand { get; } = new();
     public ObservableCommand ChangeImageCommand { get; } = new();
+
+    public ObservableCommand<double> SetReferencePriceCommand { get; } = new();
     #endregion
 
     public FoodEditWindowVM()
     {
         AddImageCommand.ExecuteEvent += AddImage;
         ChangeImageCommand.ExecuteEvent += ChangeImage;
+        AutoSetReferencePrice.ValueChanged += AutoSetReferencePrice_ValueChanged;
+        SetReferencePriceCommand.ExecuteEvent += SetReferencePriceToPrice;
+        Food.Value.ReferencePrice.ValueChanged += ReferencePrice_ValueChanged;
+    }
+
+    private void AutoSetReferencePrice_ValueChanged(bool oldValue, bool newValue)
+    {
+        if (newValue)
+        {
+            SetReferencePriceToPrice(Food.Value.ReferencePrice.Value);
+        }
+    }
+
+    private void ReferencePrice_ValueChanged(double oldValue, double newValue)
+    {
+        if (AutoSetReferencePrice.Value)
+        {
+            SetReferencePriceToPrice(newValue);
+        }
+    }
+
+    private void SetReferencePriceToPrice(double value)
+    {
+        Food.Value.Price.Value = value;
     }
 
     public void Close()

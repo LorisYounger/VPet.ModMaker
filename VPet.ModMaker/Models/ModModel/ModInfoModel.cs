@@ -56,12 +56,12 @@ public class ModInfoModel : I18nModel<I18nModInfoModel>
     /// <summary>
     /// 支持的游戏版本
     /// </summary>
-    public ObservableValue<string> GameVersion { get; } = new();
+    public ObservableValue<int> GameVersion { get; } = new(ModMakerInfo.GameVersion);
 
     /// <summary>
     /// 模组版本
     /// </summary>
-    public ObservableValue<string> ModVersion { get; } = new();
+    public ObservableValue<int> ModVersion { get; } = new(100);
 
     /// <summary>
     /// 封面
@@ -96,7 +96,7 @@ public class ModInfoModel : I18nModel<I18nModInfoModel>
     /// <summary>
     /// 宠物
     /// </summary>
-    public ObservableCollection<PetModel> Pets { get; } = new();
+    public ObservableCollection<PetModel> Pets { get; } = new(ModMakerInfo.Pets);
 
     /// <summary>
     /// 其它I18n数据
@@ -106,8 +106,7 @@ public class ModInfoModel : I18nModel<I18nModInfoModel>
     /// <summary>
     /// 需要保存的I18n数据
     /// </summary>
-
-    private readonly Dictionary<string, Dictionary<string, string>> _saveI18nDatas = new();
+    public static Dictionary<string, Dictionary<string, string>> SaveI18nDatas { get; } = new();
 
     public ModInfoModel()
     {
@@ -125,8 +124,8 @@ public class ModInfoModel : I18nModel<I18nModInfoModel>
         Id.Value = loader.Name;
         DescriptionId.Value = loader.Intro;
         Author.Value = loader.Author;
-        GameVersion.Value = loader.GameVer.ToString();
-        ModVersion.Value = loader.Ver.ToString();
+        GameVersion.Value = loader.GameVer;
+        ModVersion.Value = loader.Ver;
         ItemID = loader.ItemID;
         AuthorID = loader.AuthorID;
         var imagePath = Path.Combine(loader.ModPath.FullName, "icon.png");
@@ -144,7 +143,6 @@ public class ModInfoModel : I18nModel<I18nModInfoModel>
         {
             var petModel = new PetModel(pet);
             Pets.Add(petModel);
-            // TODO: 动画加载
             foreach (var p in pet.path)
             {
                 LoadAnime(petModel, p);
@@ -246,57 +244,56 @@ public class ModInfoModel : I18nModel<I18nModInfoModel>
     /// </summary>
     private void LoadI18nData()
     {
-        foreach (var lang in I18nDatas)
+        foreach (var lang in I18nDatas.Keys.Union(OtherI18nDatas.Keys))
         {
-            if (I18nHelper.Current.CultureNames.Contains(lang.Key) is false)
-                I18nHelper.Current.CultureNames.Add(lang.Key);
+            if (I18nHelper.Current.CultureNames.Contains(lang) is false)
+                I18nHelper.Current.CultureNames.Add(lang);
         }
-        if (I18nHelper.Current.CultureNames.Count > 0)
+        if (I18nHelper.Current.CultureNames.Count == 0)
+            return;
+        I18nHelper.Current.CultureName.Value = I18nHelper.Current.CultureNames.First();
+        foreach (var i18nData in OtherI18nDatas)
         {
-            I18nHelper.Current.CultureName.Value = I18nHelper.Current.CultureNames.First();
-            foreach (var i18nData in OtherI18nDatas)
+            foreach (var food in Foods)
             {
-                foreach (var food in Foods)
+                var foodI18n = food.I18nDatas[i18nData.Key];
+                if (i18nData.Value.TryGetValue(food.Id.Value, out var name))
+                    foodI18n.Name.Value = name;
+                if (i18nData.Value.TryGetValue(food.DescriptionId.Value, out var description))
+                    foodI18n.Description.Value = description;
+            }
+            foreach (var lowText in LowTexts)
+            {
+                var lowTextI18n = lowText.I18nDatas[i18nData.Key];
+                if (i18nData.Value.TryGetValue(lowText.Id.Value, out var text))
+                    lowTextI18n.Text.Value = text;
+            }
+            foreach (var clickText in ClickTexts)
+            {
+                var clickTextI18n = clickText.I18nDatas[i18nData.Key];
+                if (i18nData.Value.TryGetValue(clickText.Id.Value, out var text))
+                    clickTextI18n.Text.Value = text;
+            }
+            foreach (var selectText in SelectTexts)
+            {
+                var selectTextI18n = selectText.I18nDatas[i18nData.Key];
+                if (i18nData.Value.TryGetValue(selectText.Id.Value, out var text))
+                    selectTextI18n.Text.Value = text;
+                if (i18nData.Value.TryGetValue(selectText.ChooseId.Value, out var choose))
+                    selectTextI18n.Choose.Value = choose;
+            }
+            foreach (var pet in Pets)
+            {
+                var petI18n = pet.I18nDatas[i18nData.Key];
+                if (i18nData.Value.TryGetValue(pet.Id.Value, out var name))
+                    petI18n.Name.Value = name;
+                if (i18nData.Value.TryGetValue(pet.DescriptionId.Value, out var description))
+                    petI18n.Description.Value = description;
+                foreach (var work in pet.Works)
                 {
-                    var foodI18n = food.I18nDatas[i18nData.Key];
-                    if (i18nData.Value.TryGetValue(food.Id.Value, out var name))
-                        foodI18n.Name.Value = name;
-                    if (i18nData.Value.TryGetValue(food.DescriptionId.Value, out var description))
-                        foodI18n.Description.Value = description;
-                }
-                foreach (var lowText in LowTexts)
-                {
-                    var lowTextI18n = lowText.I18nDatas[i18nData.Key];
-                    if (i18nData.Value.TryGetValue(lowText.Id.Value, out var text))
-                        lowTextI18n.Text.Value = text;
-                }
-                foreach (var clickText in ClickTexts)
-                {
-                    var clickTextI18n = clickText.I18nDatas[i18nData.Key];
-                    if (i18nData.Value.TryGetValue(clickText.Id.Value, out var text))
-                        clickTextI18n.Text.Value = text;
-                }
-                foreach (var selectText in SelectTexts)
-                {
-                    var selectTextI18n = selectText.I18nDatas[i18nData.Key];
-                    if (i18nData.Value.TryGetValue(selectText.Id.Value, out var text))
-                        selectTextI18n.Text.Value = text;
-                    if (i18nData.Value.TryGetValue(selectText.ChooseId.Value, out var choose))
-                        selectTextI18n.Choose.Value = choose;
-                }
-                foreach (var pet in Pets)
-                {
-                    var petI18n = pet.I18nDatas[i18nData.Key];
-                    if (i18nData.Value.TryGetValue(pet.Id.Value, out var name))
-                        petI18n.Name.Value = name;
-                    if (i18nData.Value.TryGetValue(pet.DescriptionId.Value, out var description))
-                        petI18n.Description.Value = description;
-                    foreach (var work in pet.Works)
-                    {
-                        var workI18n = work.I18nDatas[i18nData.Key];
-                        if (i18nData.Value.TryGetValue(work.Id.Value, out var workName))
-                            workI18n.Name.Value = workName;
-                    }
+                    var workI18n = work.I18nDatas[i18nData.Key];
+                    if (i18nData.Value.TryGetValue(work.Id.Value, out var workName))
+                        workI18n.Name.Value = workName;
                 }
             }
         }
@@ -317,6 +314,7 @@ public class ModInfoModel : I18nModel<I18nModInfoModel>
     /// <param name="path">路径</param>
     public void SaveTo(string path)
     {
+        SaveI18nDatas.Clear();
         // 保存模型信息
         SaveModInfo(path);
         // 保存模组数据
@@ -325,6 +323,7 @@ public class ModInfoModel : I18nModel<I18nModInfoModel>
         SaveText(path);
         SaveI18nData(path);
         SaveImage(path);
+        SaveI18nDatas.Clear();
     }
 
     /// <summary>
@@ -337,9 +336,9 @@ public class ModInfoModel : I18nModel<I18nModInfoModel>
         if (File.Exists(modInfoFile) is false)
             File.Create(modInfoFile).Close();
 
-        _saveI18nDatas.Clear();
+        SaveI18nDatas.Clear();
         foreach (var cultureName in I18nHelper.Current.CultureNames)
-            _saveI18nDatas.Add(cultureName, new());
+            SaveI18nDatas.Add(cultureName, new());
 
         var lps = new LPS()
         {
@@ -368,11 +367,6 @@ public class ModInfoModel : I18nModel<I18nModInfoModel>
         File.WriteAllText(modInfoFile, lps.ToString());
     }
 
-    #region SavePet
-    /// <summary>
-    /// 保存宠物
-    /// </summary>
-    /// <param name="path">路径</param>
     private void SavePets(string path)
     {
         var petPath = Path.Combine(path, "pet");
@@ -385,137 +379,13 @@ public class ModInfoModel : I18nModel<I18nModInfoModel>
         Directory.CreateDirectory(petPath);
         foreach (var pet in Pets)
         {
-            foreach (var cultureName in I18nHelper.Current.CultureNames)
-            {
-                _saveI18nDatas[cultureName].TryAdd(
-                    pet.Id.Value,
-                    pet.I18nDatas[cultureName].Name.Value
-                );
-                _saveI18nDatas[cultureName].TryAdd(
-                    pet.DescriptionId.Value,
-                    pet.I18nDatas[cultureName].Description.Value
-                );
-            }
-            var petFile = Path.Combine(petPath, $"{pet.Id.Value}.lps");
-            if (File.Exists(petFile) is false)
-                File.Create(petFile).Close();
-            var lps = new LPS();
-            SavePetInfo(lps, pet);
-            SaveWorksInfo(lps, pet);
-            SaveMoveInfo(lps, pet);
-            File.WriteAllText(petFile, lps.ToString());
-
-            var petAnimePath = Path.Combine(petPath, pet.Id.Value);
-            foreach (var animeType in pet.Animes)
-                animeType.Save(petAnimePath);
+            pet.Save(petPath);
         }
+        // 如果没有一个完成保存, 则删除文件夹
+        if (Directory.EnumerateFiles(petPath).Any() is false)
+            Directory.Delete(petPath);
     }
 
-    /// <summary>
-    /// 保存移动信息
-    /// </summary>
-    /// <param name="lps"></param>
-    /// <param name="pet"></param>
-    void SaveMoveInfo(LPS lps, PetModel pet)
-    {
-        foreach (var move in pet.Moves)
-        {
-            lps.Add(LPSConvert.SerializeObjectToLine<Line>(move.ToMove(), "move"));
-        }
-    }
-
-    /// <summary>
-    /// 保存工作信息
-    /// </summary>
-    /// <param name="lps"></param>
-    /// <param name="pet"></param>
-    void SaveWorksInfo(LPS lps, PetModel pet)
-    {
-        foreach (var work in pet.Works)
-        {
-            lps.Add(LPSConvert.SerializeObjectToLine<Line>(work.ToWork(), "work"));
-            foreach (var cultureName in I18nHelper.Current.CultureNames)
-            {
-                _saveI18nDatas[cultureName].TryAdd(
-                    work.Id.Value,
-                    work.I18nDatas[cultureName].Name.Value
-                );
-            }
-        }
-    }
-
-    /// <summary>
-    /// 保存宠物信息
-    /// </summary>
-    /// <param name="lps"></param>
-    /// <param name="pet"></param>
-    private void SavePetInfo(LPS lps, PetModel pet)
-    {
-        lps.Add(
-            new Line("pet", pet.Id.Value)
-            {
-                new Sub("intor", pet.DescriptionId.Value),
-                new Sub("path", pet.Id.Value),
-                new Sub("petname", pet.Id.Value)
-            }
-        );
-        lps.Add(
-            new Line("touchhead")
-            {
-                new Sub("px", pet.TouchHeadRect.Value.X.Value),
-                new Sub("py", pet.TouchHeadRect.Value.Y.Value),
-                new Sub("sw", pet.TouchHeadRect.Value.Width.Value),
-                new Sub("sh", pet.TouchHeadRect.Value.Height.Value),
-            }
-        );
-        lps.Add(
-            new Line("touchraised")
-            {
-                new Sub("happy_px", pet.TouchRaisedRect.Value.Happy.Value.X.Value),
-                new Sub("happy_py", pet.TouchRaisedRect.Value.Happy.Value.Y.Value),
-                new Sub("happy_sw", pet.TouchRaisedRect.Value.Happy.Value.Width.Value),
-                new Sub("happy_sh", pet.TouchRaisedRect.Value.Happy.Value.Height.Value),
-                //
-                new Sub("nomal_px", pet.TouchRaisedRect.Value.Nomal.Value.X.Value),
-                new Sub("nomal_py", pet.TouchRaisedRect.Value.Nomal.Value.Y.Value),
-                new Sub("nomal_sw", pet.TouchRaisedRect.Value.Nomal.Value.Width.Value),
-                new Sub("nomal_sh", pet.TouchRaisedRect.Value.Nomal.Value.Height.Value),
-                //
-                new Sub("poorcondition_px", pet.TouchRaisedRect.Value.PoorCondition.Value.X.Value),
-                new Sub("poorcondition_py", pet.TouchRaisedRect.Value.PoorCondition.Value.Y.Value),
-                new Sub(
-                    "poorcondition_sw",
-                    pet.TouchRaisedRect.Value.PoorCondition.Value.Width.Value
-                ),
-                new Sub(
-                    "poorcondition_sh",
-                    pet.TouchRaisedRect.Value.PoorCondition.Value.Height.Value
-                ),
-                //
-                new Sub("ill_px", pet.TouchRaisedRect.Value.Ill.Value.X.Value),
-                new Sub("ill_py", pet.TouchRaisedRect.Value.Ill.Value.Y.Value),
-                new Sub("ill_sw", pet.TouchRaisedRect.Value.Ill.Value.Width.Value),
-                new Sub("ill_sh", pet.TouchRaisedRect.Value.Ill.Value.Height.Value),
-            }
-        );
-        lps.Add(
-            new Line("raisepoint")
-            {
-                new Sub("happy_x", pet.RaisePoint.Value.Happy.Value.X.Value),
-                new Sub("happy_y", pet.RaisePoint.Value.Happy.Value.Y.Value),
-                //
-                new Sub("nomal_x", pet.RaisePoint.Value.Nomal.Value.X.Value),
-                new Sub("nomal_y", pet.RaisePoint.Value.Nomal.Value.Y.Value),
-                //
-                new Sub("poorcondition_x", pet.RaisePoint.Value.PoorCondition.Value.X.Value),
-                new Sub("poorcondition_y", pet.RaisePoint.Value.PoorCondition.Value.Y.Value),
-                //
-                new Sub("ill_x", pet.RaisePoint.Value.Ill.Value.X.Value),
-                new Sub("ill_y", pet.RaisePoint.Value.Ill.Value.Y.Value),
-            }
-        );
-    }
-    #endregion
     /// <summary>
     /// 保存食物
     /// </summary>
@@ -539,11 +409,11 @@ public class ModInfoModel : I18nModel<I18nModInfoModel>
             lps.Add(LPSConvert.SerializeObjectToLine<Line>(food.ToFood(), "food"));
             foreach (var cultureName in I18nHelper.Current.CultureNames)
             {
-                _saveI18nDatas[cultureName].TryAdd(
+                SaveI18nDatas[cultureName].TryAdd(
                     food.Id.Value,
                     food.I18nDatas[cultureName].Name.Value
                 );
-                _saveI18nDatas[cultureName].TryAdd(
+                SaveI18nDatas[cultureName].TryAdd(
                     food.DescriptionId.Value,
                     food.I18nDatas[cultureName].Description.Value
                 );
@@ -588,11 +458,11 @@ public class ModInfoModel : I18nModel<I18nModInfoModel>
             lps.Add(LPSConvert.SerializeObjectToLine<Line>(text.ToSelectText(), "SelectText"));
             foreach (var cultureName in I18nHelper.Current.CultureNames)
             {
-                _saveI18nDatas[cultureName].TryAdd(
+                SaveI18nDatas[cultureName].TryAdd(
                     text.Id.Value,
                     text.I18nDatas[cultureName].Text.Value
                 );
-                _saveI18nDatas[cultureName].TryAdd(
+                SaveI18nDatas[cultureName].TryAdd(
                     text.ChooseId.Value,
                     text.I18nDatas[cultureName].Choose.Value
                 );
@@ -617,7 +487,7 @@ public class ModInfoModel : I18nModel<I18nModInfoModel>
             lps.Add(LPSConvert.SerializeObjectToLine<Line>(text.ToLowText(), "lowfoodtext"));
             foreach (var cultureName in I18nHelper.Current.CultureNames)
             {
-                _saveI18nDatas[cultureName].TryAdd(
+                SaveI18nDatas[cultureName].TryAdd(
                     text.Id.Value,
                     text.I18nDatas[cultureName].Text.Value
                 );
@@ -642,7 +512,7 @@ public class ModInfoModel : I18nModel<I18nModInfoModel>
             lps.Add(LPSConvert.SerializeObjectToLine<Line>(text.ToClickText(), "clicktext"));
             foreach (var cultureName in I18nHelper.Current.CultureNames)
             {
-                _saveI18nDatas[cultureName].TryAdd(
+                SaveI18nDatas[cultureName].TryAdd(
                     text.Id.Value,
                     text.I18nDatas[cultureName].Text.Value
                 );
@@ -666,7 +536,7 @@ public class ModInfoModel : I18nModel<I18nModInfoModel>
             var cultureFile = Path.Combine(culturePath, $"{cultureName}.lps");
             File.Create(cultureFile).Close();
             var lps = new LPS();
-            foreach (var data in _saveI18nDatas[cultureName])
+            foreach (var data in SaveI18nDatas[cultureName])
                 lps.Add(new Line(data.Key, data.Value));
             File.WriteAllText(cultureFile, lps.ToString());
         }

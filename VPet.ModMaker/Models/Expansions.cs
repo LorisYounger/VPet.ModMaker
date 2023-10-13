@@ -80,6 +80,8 @@ public static class Extensions
     /// <param name="path">路径</param>
     public static void SaveToPng(this BitmapSource image, string path)
     {
+        if (image is null)
+            return;
         if (path.EndsWith(".png") is false)
             path += ".png";
         var encoder = new PngBitmapEncoder();

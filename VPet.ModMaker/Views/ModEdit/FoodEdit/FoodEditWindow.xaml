@@ -125,6 +125,7 @@
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
           </Grid.RowDefinitions>
           <Label Content="{ll:Str 饱腹值}" />
           <pu:NumberInput
@@ -163,10 +164,29 @@
             Value="{Binding Food.Value.Exp.Value, Mode=TwoWay}" />
           <Label Grid.Row="8" Content="{ll:Str 价格}" />
           <pu:NumberInput
-            x:Name="NumberInput_Price"
             Grid.Row="8"
             Grid.Column="1"
             Value="{Binding Food.Value.Price.Value, Mode=TwoWay}" />
+          <Label Grid.Row="9" Content="{ll:Str 参考价格}" />
+          <Grid Grid.Row="9" Grid.Column="1">
+            <Grid.ColumnDefinitions>
+              <ColumnDefinition />
+              <ColumnDefinition Width="Auto" />
+              <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+            <TextBlock Text="{Binding Food.Value.ReferencePrice.Value}" />
+            <Button
+              Grid.Column="1"
+              Command="{Binding SetReferencePriceCommand}"
+              CommandParameter="{Binding Food.Value.ReferencePrice.Value}"
+              Content="{ll:Str 设置}" />
+            <pu:Switch
+              Grid.Column="2"
+              BoxHeight="16"
+              BoxWidth="30"
+              Content="{ll:Str 自动设置}"
+              IsChecked="{Binding AutoSetReferencePrice.Value}" />
+          </Grid>
         </Grid>
       </ScrollViewer>
       <Grid Grid.Row="2">

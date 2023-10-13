@@ -36,7 +36,7 @@
         <Button
           Grid.Column="1"
           Command="{Binding ClearHistoriesCommand}"
-          Content="清空历史" />
+          Content="{ll:Str 清空历史}" />
       </Grid>
       <ListBox
         Grid.Row="2"
