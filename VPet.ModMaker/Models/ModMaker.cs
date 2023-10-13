@@ -47,6 +47,15 @@ public class ModMaker : MainPlugin
         {
             // 载入ModMaker资源
             Maker = new ModMakerWindow();
+            // 设置游戏版本
+            ModMakerInfo.GameVersion = MW.version;
+            // 载入本体宠物
+            foreach (var pet in MW.Pets)
+            {
+                var petModel = new PetModel();
+                petModel.Id.Value = pet.Name;
+                ModMakerInfo.Pets.Add(petModel);
+            }
             //Maker.ModMaker = this;
             Maker.Show();
             Maker.Closed += Maker_Closed;

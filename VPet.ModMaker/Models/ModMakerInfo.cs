@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using VPet.ModMaker.Models.ModModel;
 
 namespace VPet.ModMaker.Models;
 
@@ -25,4 +26,11 @@ public static class ModMakerInfo
     /// 信息文件
     /// </summary>
     public const string InfoFile = "info.lps";
+
+    /// <summary>
+    /// 游戏版本
+    /// </summary>
+    public static int GameVersion { get; set; } = 100;
+
+    public static List<PetModel> Pets { get; } = new();
 }

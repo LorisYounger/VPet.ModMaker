@@ -91,18 +91,18 @@ public class WorkPageVM
         }
     }
 
-    private void Remove(WorkModel food)
+    private void Remove(WorkModel model)
     {
         if (MessageBox.Show("确定删除吗".Translate(), "", MessageBoxButton.YesNo) is MessageBoxResult.No)
             return;
         if (ShowWorks.Value.Count == Works.Count)
         {
-            Works.Remove(food);
+            Works.Remove(model);
         }
         else
         {
-            ShowWorks.Value.Remove(food);
-            Works.Remove(food);
+            ShowWorks.Value.Remove(model);
+            Works.Remove(model);
         }
     }
 }

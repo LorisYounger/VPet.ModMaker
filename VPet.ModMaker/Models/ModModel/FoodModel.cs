@@ -87,12 +87,29 @@ public class FoodModel : I18nModel<I18nFoodModel>
     /// </summary>
     public ObservableValue<BitmapImage> Image { get; } = new();
 
+    public ObservableValue<double> ReferencePrice { get; } = new();
+
+    private readonly Food _food = new();
+
     public FoodModel()
     {
         DescriptionId.Value = $"{Id.Value}_{nameof(DescriptionId)}";
         Id.ValueChanged += (o, n) =>
         {
             DescriptionId.Value = $"{n}_{nameof(DescriptionId)}";
+        };
+        ReferencePrice.AddNotifyReceiver(
+            Strength,
+            StrengthFood,
+            StrengthDrink,
+            Feeling,
+            Health,
+            Likability,
+            Exp
+        );
+        ReferencePrice.NotifyReceived += (ref double v) =>
+        {
+            v = Math.Floor(SetValueToFood(_food).RealPrice);
         };
     }
 
@@ -153,6 +170,18 @@ public class FoodModel : I18nModel<I18nFoodModel>
             Price = Price.Value,
             Exp = Exp.Value,
         };
+    }
+
+    public Food SetValueToFood(Food food)
+    {
+        food.Strength = Strength.Value;
+        food.StrengthFood = StrengthFood.Value;
+        food.StrengthDrink = StrengthDrink.Value;
+        food.Feeling = Feeling.Value;
+        food.Health = Health.Value;
+        food.Likability = Likability.Value;
+        food.Exp = Exp.Value;
+        return food;
     }
 
     public void Close()

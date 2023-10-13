@@ -62,6 +62,11 @@ public class PetPageVM
 
     public void Edit(PetModel model)
     {
+        if (model.IsSimplePetModel.Value)
+        {
+            MessageBox.Show("这是本体自带的宠物, 无法编辑".Translate());
+            return;
+        }
         var window = new PetEditWindow();
         var vm = window.ViewModel;
         vm.OldPet = model;
@@ -81,18 +86,23 @@ public class PetPageVM
         model.Close();
     }
 
-    private void Remove(PetModel food)
+    private void Remove(PetModel model)
     {
+        if (model.IsSimplePetModel.Value)
+        {
+            MessageBox.Show("这是本体自带的宠物, 无法删除".Translate());
+            return;
+        }
         if (MessageBox.Show("确定删除吗".Translate(), "", MessageBoxButton.YesNo) is MessageBoxResult.No)
             return;
         if (ShowPets.Value.Count == Pets.Count)
         {
-            Pets.Remove(food);
+            Pets.Remove(model);
         }
         else
         {
-            ShowPets.Value.Remove(food);
-            Pets.Remove(food);
+            ShowPets.Value.Remove(model);
+            Pets.Remove(model);
         }
     }
 }

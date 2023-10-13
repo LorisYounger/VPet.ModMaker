@@ -91,18 +91,18 @@ public class MovePageVM
         }
     }
 
-    private void Remove(MoveModel food)
+    private void Remove(MoveModel model)
     {
         if (MessageBox.Show("确定删除吗".Translate(), "", MessageBoxButton.YesNo) is MessageBoxResult.No)
             return;
         if (ShowMoves.Value.Count == Moves.Count)
         {
-            Moves.Remove(food);
+            Moves.Remove(model);
         }
         else
         {
-            ShowMoves.Value.Remove(food);
-            Moves.Remove(food);
+            ShowMoves.Value.Remove(model);
+            Moves.Remove(model);
         }
     }
 }
