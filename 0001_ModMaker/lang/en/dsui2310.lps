@@ -1,0 +1,145 @@
+打开最近的内容#Open recent content:|
+最近的内容#Recent content:|
+开始使用#Getting Started:|
+创建新的模组#Creating a new module:|
+从文件中载入#Load from file:|
+删除此历史#Delete this history:|
+搜索Id#Search Id:|
+食物图片#Food Image:|
+食物名称#Food Name:|
+食物类型#Food Type:|
+指定动画#Specified animation:|
+饱腹值#Satiety Value:|
+口渴值#Thirst Value:|
+健康值#Health Value:|
+体力值#Stamina:|
+心情值#Mood:|
+好感值#Favorability Value:|
+价格#Price:|
+描述#Description:|
+文本#Text:|
+状态#Status:|
+饥渴需求#Thirsty:|
+好感需求#Favorable demand:|
+指定工作#Designated Job:|
+工作状态#Work Status:|
+时间#Time:|
+好感度范围#Sense of well-being range:|
+健康度范围#Health Level Range:|
+等级范围#Level Range:|
+金钱范围#Money Range:|
+食物范围#Food Range:|
+口渴范围#Thirst Range:|
+心情范围#Mood Range:|
+体力范围#Stamina Range:|
+选择名#Select Name:|
+标签#Label:|
+跳转标签#Jump tab:|
+名称#Name:|
+选择宠物#Select Pet:|
+工作名称#Job Name:|
+工作类型#Job Type:|
+动画名称#Animation Name:|
+是否超模#Supermodel or not:|
+基本倍率#Basic Ratio:|
+等级倍率#Level Multiplier:|
+饱食度消耗倍率#Satiety consumption multiplier:|
+口渴度消耗倍率#Thirst Consumption:|
+心情消耗倍率#Mood:|
+等级限制#Level Limit:|
+花费时间#Time Spent:|
+奖励倍率#Reward multiplier:|
+绑定动画#Binding Animation:|
+定位类型#Positioning Type:|
+触发类型#Trigger Type:|
+状态类型#Status Type:|
+移动距离#Move Distance:|
+移动间隔#Move Interval:|
+定位长度#Positioning Length:|
+动画类型#Animation Type:|
+开心状态动画数量#Number of happy state animations:|
+普通状态动画数量#Number of normal state animations:|
+不开心状态动画数量#Number of unhappy animations:|
+生病状态动画数量#Number of sick animations:|
+模组编辑器#Module Editor:|
+修改图片#Modify Image:|
+添加图片#Add Image:|
+作者#Author:|
+模组版本#Module Version:|
+模组名称#Module Name:|
+模组介绍#Module Description:|
+食物#Food:|
+点击文本#Click Text:|
+低状态文本#Low status text:|
+选择文本#Selection Text:|
+宠物#Pets:|
+移动#Moving:|
+动画#Animation:|
+添加文化#Add Culture:|
+修改语言#Modify Language:|
+删除语言#Delete Language:|
+保存#Save:|
+保存至#Save to:|
+文化名称#Culture name:|
+详情请参阅 Windows 支持的语言/区域名称列表中的“语言标记”列#For more information, see the Language Tag column in the list of languages/regions supported by Windows.:|
+取消#Cancel:|
+确定#OK:|
+搜索#Search for:|
+编辑食物#Edit food:|
+绑定的动画名称(非必要)#Bound animation name (not required):|
+食物描述#Food Description:|
+食物效果#Food effect:|
+编辑宠物#Edit Pet:|
+修改测试图片#Modify test image:|
+头部触碰范围#Head touch range:|
+开心状态提起范围#Happy Lift Range:|
+普通状态提起范围#Normal lifting range:|
+低状态提起范围#Low lifting range:|
+生病状态提起范围#Lifting range in sick state:|
+开心状态提起点位#Lift Points in Happy State:|
+普通状态提起点位#Normal status raise points:|
+低状态提起点位#Low status raise point:|
+生病状态提起点位#Sick lifting point:|
+添加测试图片#Add Test Picture:|
+提起范围#Lift range:|
+开心状态#Happy state:|
+普通状态#Normal:|
+低状态#Low state:|
+生病状态#Sick:|
+提起点位#Mention Points:|
+编辑点击文本#Edit Click Text:|
+非必要#Non-essential:|
+宠物状态#Pet Status:|
+行动状态#Action Status:|
+日期区间#Date range:|
+最小值#Minimum value:|
+最大值#Maximum value:|
+编辑低状态文本#Edit low status text:|
+饥渴状态#Hunger Status:|
+好感度需求#Favorability Requirement:|
+编辑选择文本#Edit Selection Text:|
+选项名#Option name:|
+显示在选项列表中的名称#Names displayed in the options list:|
+多标签使用逗号分隔#Multiple tabs are separated by commas:|
+编辑工作#Edit job:|
+类型#Type:|
+基础倍率#Base multiplier:|
+花费时间(分钟)#Time spent (minutes):|
+界面样式#Interface style:|
+边框颜色#Border Color:|
+背景颜色#Background Color:|
+字体颜色#Font Color:|
+按钮背景颜色#Button background color:|
+按钮字体颜色#Button Font Color:|
+宽#Width:|
+移动间隔(ms)#Move Interval(ms):|
+触发距离#Trigger Distance:|
+左#Left:|
+上#Up:|
+右#Right:|
+下#Down:|
+检测距离#Detection Distance:|
+编辑动画#Edit animation:|
+播放#Play:|
+循环#Loop:|
+添加动画#Add animation:|
