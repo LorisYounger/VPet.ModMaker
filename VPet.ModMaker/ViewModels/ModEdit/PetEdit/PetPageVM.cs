@@ -62,7 +62,7 @@ public class PetPageVM
 
     public void Edit(PetModel model)
     {
-        if (model.IsSimplePetModel.Value)
+        if (model.IsSimplePetModel)
         {
             MessageBox.Show("这是本体自带的宠物, 无法编辑".Translate());
             return;
@@ -88,7 +88,7 @@ public class PetPageVM
 
     private void Remove(PetModel model)
     {
-        if (model.IsSimplePetModel.Value)
+        if (model.IsSimplePetModel)
         {
             MessageBox.Show("这是本体自带的宠物, 无法删除".Translate());
             return;

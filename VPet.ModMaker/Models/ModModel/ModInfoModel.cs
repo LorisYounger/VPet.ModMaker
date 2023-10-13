@@ -244,10 +244,10 @@ public class ModInfoModel : I18nModel<I18nModInfoModel>
     /// </summary>
     private void LoadI18nData()
     {
-        foreach (var lang in I18nDatas)
+        foreach (var lang in I18nDatas.Keys.Union(OtherI18nDatas.Keys))
         {
-            if (I18nHelper.Current.CultureNames.Contains(lang.Key) is false)
-                I18nHelper.Current.CultureNames.Add(lang.Key);
+            if (I18nHelper.Current.CultureNames.Contains(lang) is false)
+                I18nHelper.Current.CultureNames.Add(lang);
         }
         if (I18nHelper.Current.CultureNames.Count > 0)
         {
