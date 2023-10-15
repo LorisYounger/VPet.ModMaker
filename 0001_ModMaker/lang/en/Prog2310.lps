@@ -3,7 +3,7 @@ Mod制作器#Mod Maker:|
 信息文件\n{0}\n未包含食物动画信息#Information file\n{0}\n does not contain food animation information.:|
 确定要清空吗?#Are you sure you want to clear it?:|
 模组信息文件#Module Info File:|
-LPS文件|*.lps;#LPS file|*.lps.:|
+LPS文件|*.lps;#LPS file|*.lps:|
 模组载入失败:\n{0}#Module loading failed:\n{0}:|
 载入中#Loading:|
 选择图片#Select Image:|
