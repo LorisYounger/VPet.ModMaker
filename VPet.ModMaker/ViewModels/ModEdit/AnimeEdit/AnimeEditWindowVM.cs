@@ -286,7 +286,6 @@ public class AnimeEditWindowVM
                     return;
             }
         } while (Loop.Value);
-        Reset();
     }
 
     /// <summary>

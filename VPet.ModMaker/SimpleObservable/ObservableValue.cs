@@ -34,6 +34,11 @@ public class ObservableValue<T> : INotifyPropertyChanging, INotifyPropertyChange
         }
     }
 
+    /// <summary>
+    /// 含有值
+    /// </summary>
+    public bool HasValue => Value != null;
+
     #region Ctor
     /// <inheritdoc/>
     public ObservableValue() { }

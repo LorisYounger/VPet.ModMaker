@@ -4,6 +4,7 @@ using LinePutScript.Localization.WPF;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Collections.Specialized;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -23,6 +24,11 @@ public class FoodAnimeTypeModel
     /// 名称
     /// </summary>
     public ObservableValue<string> Name { get; } = new();
+
+    /// <summary>
+    /// 动作类型
+    /// </summary>
+    public GraphInfo.GraphType GraphType => GraphInfo.GraphType.Common;
 
     /// <summary>
     /// 开心动画
@@ -46,10 +52,59 @@ public class FoodAnimeTypeModel
 
     public FoodAnimeTypeModel()
     {
+        HappyAnimes.CollectionChanged += Animes_CollectionChanged;
         //Name.ValueChanged += (_, _) =>
         //{
         //    Id.Value = $"{GraphType.Value}_{Name.Value}";
         //};
+    }
+
+    private void Animes_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
+    {
+        if (e.NewItems is not null)
+        {
+            foreach (var model in e.NewItems.Cast<FoodAnimeModel>())
+            {
+                SetImagesPathValueChanged(model);
+            }
+        }
+        if (e.OldItems is not null)
+        {
+            foreach (var model in e.OldItems.Cast<FoodAnimeModel>())
+            {
+                SetImagesPathValueChanged(model);
+            }
+        }
+    }
+
+    private void SetImagesPathValueChanged(FoodAnimeModel model)
+    {
+        model.FrontImagesPath.ValueChanged += (o, n) =>
+        {
+            if (n is null)
+                return;
+            if (n.Mode.Value is GameSave.ModeType.Happy)
+                model.FrontImages = HappyAnimes[n.Index.Value].FrontImages;
+            else if (n.Mode.Value is GameSave.ModeType.Nomal)
+                model.FrontImages = NomalAnimes[n.Index.Value].FrontImages;
+            else if (n.Mode.Value is GameSave.ModeType.PoorCondition)
+                model.FrontImages = PoorConditionAnimes[n.Index.Value].FrontImages;
+            else if (n.Mode.Value is GameSave.ModeType.Ill)
+                model.FrontImages = IllAnimes[n.Index.Value].FrontImages;
+        };
+        model.BackImagesPath.ValueChanged += (o, n) =>
+        {
+            if (n is null)
+                return;
+            if (n.Mode.Value is GameSave.ModeType.Happy)
+                model.BackImages = HappyAnimes[n.Index.Value].BackImages;
+            else if (n.Mode.Value is GameSave.ModeType.Nomal)
+                model.BackImages = NomalAnimes[n.Index.Value].BackImages;
+            else if (n.Mode.Value is GameSave.ModeType.PoorCondition)
+                model.BackImages = PoorConditionAnimes[n.Index.Value].BackImages;
+            else if (n.Mode.Value is GameSave.ModeType.Ill)
+                model.BackImages = IllAnimes[n.Index.Value].BackImages;
+        };
     }
 
     public FoodAnimeTypeModel(string path)
@@ -57,17 +112,13 @@ public class FoodAnimeTypeModel
     {
         Name.Value = Path.GetFileName(path);
         var infoFile = Path.Combine(path, ModMakerInfo.InfoFile);
-        if (File.Exists(infoFile) is false)
+        if (
+            Directory.EnumerateFiles(path, ModMakerInfo.InfoFile, SearchOption.AllDirectories).Any()
+            is false
+        )
             throw new Exception("信息文件\n{0}\n不存在".Translate(infoFile));
-        var lps = new LPS(infoFile);
-        var foodAnime = lps.FindAllLineInfo(nameof(FoodAnimation));
-        if (foodAnime.Any() is false)
-            throw new Exception("信息文件\n{0}\n未包含食物动画信息".Translate(infoFile));
-        var anime = lps.FindAllLineInfo(nameof(PNGAnimation));
-        foreach (var foodAnimation in foodAnime)
-        {
-            ParseFoodAnimeInfo(foodAnimation);
-        }
+        if (File.Exists(infoFile))
+            ParseInfoFile(path, infoFile);
     }
 
     public FoodAnimeTypeModel(FoodAnimeTypeModel model)
@@ -104,21 +155,115 @@ public class FoodAnimeTypeModel
         }
     }
 
-    public void ParseFoodAnimeInfo(ILine line)
+    public void ParseInfoFile(string path, string infoPath)
     {
-        var mode = (GameSave.ModeType)Enum.Parse(typeof(GameSave.ModeType), line.Find("mode").Info);
-        if (mode is GameSave.ModeType.Happy)
-            AddModeAnime(HappyAnimes, line);
-        else if (mode is GameSave.ModeType.Nomal)
-            AddModeAnime(NomalAnimes, line);
-        else if (mode is GameSave.ModeType.PoorCondition)
-            AddModeAnime(PoorConditionAnimes, line);
-        else if (mode is GameSave.ModeType.Ill)
-            AddModeAnime(IllAnimes, line);
+        var lps = new LPS(infoPath);
+        var foodAnimeInfos = lps.FindAllLineInfo(nameof(FoodAnimation));
+        if (foodAnimeInfos.Any() is false)
+            throw new Exception("信息文件\n{0}\n未包含食物动画信息".Translate(infoPath));
+        var pngAnimeInfos = lps.FindAllLineInfo(nameof(PNGAnimation))
+            .Select(
+                i =>
+                    new PNGAnimeInfo(
+                        i.Info,
+                        i.Find("infoPath").Info,
+                        (GameSave.ModeType)
+                            Enum.Parse(typeof(GameSave.ModeType), i.Find("mode").Info, true)
+                    )
+            )
+            .ToList();
+        foreach (var foodAnimation in foodAnimeInfos)
+        {
+            ParseFoodAnimeInfo(path, foodAnimation, pngAnimeInfos);
+        }
     }
 
-    public void AddModeAnime(ObservableCollection<FoodAnimeModel> foodAnimes, ILine line)
+    public void ParseFoodAnimeInfo(string path, ILine line, List<PNGAnimeInfo> pngAnimeInfos)
     {
-        foodAnimes.Add(new(line));
+        var mode = (GameSave.ModeType)
+            Enum.Parse(typeof(GameSave.ModeType), line.Find("mode").Info, true);
+        if (mode is GameSave.ModeType.Happy)
+            AddModeAnime(path, GameSave.ModeType.Happy, HappyAnimes, line, pngAnimeInfos);
+        else if (mode is GameSave.ModeType.Nomal)
+            AddModeAnime(path, GameSave.ModeType.Nomal, NomalAnimes, line, pngAnimeInfos);
+        else if (mode is GameSave.ModeType.PoorCondition)
+            AddModeAnime(
+                path,
+                GameSave.ModeType.PoorCondition,
+                PoorConditionAnimes,
+                line,
+                pngAnimeInfos
+            );
+        else if (mode is GameSave.ModeType.Ill)
+            AddModeAnime(path, GameSave.ModeType.Ill, IllAnimes, line, pngAnimeInfos);
+    }
+
+    public void AddModeAnime(
+        string path,
+        GameSave.ModeType mode,
+        ObservableCollection<FoodAnimeModel> foodAnimes,
+        ILine line,
+        List<PNGAnimeInfo> pngAnimeInfos
+    )
+    {
+        var anime = new FoodAnimeModel(line);
+        var frontLay = line.Find("front_lay").Info;
+        var backLay = line.Find("back_lay").Info;
+        var frontLayAnimes = pngAnimeInfos.Where(i => i.Name == frontLay).ToList();
+        var backLayAnimes = pngAnimeInfos.Where(i => i.Name == backLay).ToList();
+        // 尝试获取相同模式的动画
+        if (frontLayAnimes.FirstOrDefault(i => i.Mode == mode) is PNGAnimeInfo frontAnimeInfo)
+        {
+            anime.FrontImages = GetImages(path, frontAnimeInfo);
+        }
+        else
+        {
+            // 若没有则获取通用动画
+            anime.FrontImages = GetImages(
+                path,
+                frontLayAnimes.First(i => i.Mode == GameSave.ModeType.Nomal)
+            );
+        }
+        if (backLayAnimes.FirstOrDefault(i => i.Mode == mode) is PNGAnimeInfo backAnimeInfo)
+        {
+            anime.BackImages = GetImages(path, backAnimeInfo);
+        }
+        else
+        {
+            anime.BackImages = GetImages(
+                path,
+                backLayAnimes.First(i => i.Mode == GameSave.ModeType.Nomal)
+            );
+        }
+        foodAnimes.Add(anime);
+
+        static ObservableCollection<ImageModel> GetImages(string path, PNGAnimeInfo pngAnimeInfo)
+        {
+            return new(
+                Directory
+                    .EnumerateFiles(Path.Combine(path, pngAnimeInfo.Path))
+                    .Select(
+                        i =>
+                            new ImageModel(
+                                Utils.LoadImageToMemoryStream(i),
+                                int.Parse(Path.GetFileNameWithoutExtension(i).Split('_')[1])
+                            )
+                    )
+            );
+        }
+    }
+}
+
+public class PNGAnimeInfo
+{
+    public string Name { get; }
+    public string Path { get; }
+    public GameSave.ModeType Mode { get; }
+
+    public PNGAnimeInfo(string name, string path, GameSave.ModeType mode)
+    {
+        Name = name;
+        Path = path;
+        Mode = mode;
     }
 }

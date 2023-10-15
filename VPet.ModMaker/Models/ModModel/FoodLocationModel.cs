@@ -10,7 +10,7 @@ namespace VPet.ModMaker.Models.ModModel;
 /// <summary>
 /// 食物图像模型
 /// </summary>
-public class FoodLocationInfoModel
+public class FoodLocationModel
 {
     /// <summary>
     /// 持续时间
@@ -32,7 +32,7 @@ public class FoodLocationInfoModel
     /// </summary>
     public ObservableValue<double> Opacity { get; } = new(100);
 
-    public FoodLocationInfoModel()
+    public FoodLocationModel()
     {
         Rect.Width.ValueChanged += (o, n) =>
         {
@@ -40,9 +40,9 @@ public class FoodLocationInfoModel
         };
     }
 
-    public FoodLocationInfoModel Copy()
+    public FoodLocationModel Copy()
     {
-        var model = new FoodLocationInfoModel();
+        var model = new FoodLocationModel();
         model.Duration.Value = Duration.Value;
         model.Rect.SetValue(Rect.X.Value, Rect.Y.Value, Rect.Width.Value, Rect.Height.Value);
         model.Rotate.Value = Rotate.Value;

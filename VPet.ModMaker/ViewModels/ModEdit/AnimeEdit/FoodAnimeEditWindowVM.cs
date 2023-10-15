@@ -7,8 +7,10 @@ using System.Collections.Specialized;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Media.Imaging;
 using VPet.ModMaker.Models;
 using VPet.ModMaker.Models.ModModel;
 using VPet_Simulator.Core;
@@ -23,24 +25,44 @@ public class FoodAnimeEditWindowVM
     public PetModel CurrentPet { get; set; }
 
     /// <summary>
+    /// 食物图片
+    /// </summary>
+    public ObservableValue<BitmapImage> FoodImage { get; } = new();
+
+    /// <summary>
+    /// 比例
+    /// </summary>
+    public ObservableValue<double> LengthRatio { get; } = new(250.0 / 500.0);
+
+    /// <summary>
     /// 旧动画
     /// </summary>
-    public AnimeTypeModel OldAnime { get; set; }
+    public FoodAnimeTypeModel OldAnime { get; set; }
 
     /// <summary>
     /// 动画
     /// </summary>
-    public ObservableValue<AnimeTypeModel> Anime { get; } = new(new());
+    public ObservableValue<FoodAnimeTypeModel> Anime { get; } = new(new());
 
     /// <summary>
-    /// 当前图像模型
+    /// 当前顶层图像模型
     /// </summary>
-    public ObservableValue<ImageModel> CurrentImageModel { get; } = new();
+    public ObservableValue<ImageModel> CurrentFrontImageModel { get; } = new();
+
+    /// <summary>
+    /// 当前底层图像模型
+    /// </summary>
+    public ObservableValue<ImageModel> CurrentBackImageModel { get; } = new();
+
+    /// <summary>
+    /// 当前食物定位模型
+    /// </summary>
+    public ObservableValue<FoodLocationModel> CurrentFoodLocationModel { get; } = new();
 
     /// <summary>
     /// 当前动画模型
     /// </summary>
-    public ObservableValue<AnimeModel> CurrentAnimeModel { get; } = new();
+    public ObservableValue<FoodAnimeModel> CurrentAnimeModel { get; } = new();
 
     /// <summary>
     /// 当前模式
@@ -100,13 +122,25 @@ public class FoodAnimeEditWindowVM
     private bool _playing = false;
 
     /// <summary>
-    /// 动画任务
+    /// 顶层动画任务
     /// </summary>
-    private Task _playerTask;
+    private Task _frontPlayerTask;
+
+    /// <summary>
+    /// 底层动画任务
+    /// </summary>
+    private Task _backPlayerTask;
+
+    /// <summary>
+    /// 食物动画任务
+    /// </summary>
+    private Task _foodPlayerTask;
 
     public FoodAnimeEditWindowVM()
     {
-        _playerTask = new(Play);
+        _frontPlayerTask = new(FrontPlay);
+        _backPlayerTask = new(BackPlay);
+        _foodPlayerTask = new(FoodPlay);
 
         CurrentAnimeModel.ValueChanged += CurrentAnimeModel_ValueChanged;
 
@@ -121,18 +155,18 @@ public class FoodAnimeEditWindowVM
     }
 
     #region LoadAnime
-    private void Anime_ValueChanged(AnimeTypeModel oldValue, AnimeTypeModel newValue)
+    private void Anime_ValueChanged(FoodAnimeTypeModel oldValue, FoodAnimeTypeModel newValue)
     {
         CheckGraphType(newValue);
     }
 
-    private void CheckGraphType(AnimeTypeModel model)
+    private void CheckGraphType(FoodAnimeTypeModel model)
     {
-        if (AnimeTypeModel.HasMultiTypeAnimes.Contains(model.GraphType.Value))
-            HasMultiType.Value = true;
+        //if (FoodAnimeTypeModel.HasMultiTypeAnimes.Contains(model.GraphType.Value))
+        //    HasMultiType.Value = true;
 
-        if (AnimeTypeModel.HasNameAnimes.Contains(model.GraphType.Value))
-            HasAnimeName.Value = true;
+        //if (FoodAnimeTypeModel.HasNameAnimes.Contains(model.GraphType.Value))
+        //    HasAnimeName.Value = true;
     }
     #endregion
     /// <summary>
@@ -146,14 +180,14 @@ public class FoodAnimeEditWindowVM
             MessageBox.Show("确定删除吗".Translate(), "", MessageBoxButton.YesNo) is MessageBoxResult.Yes
         )
         {
-            if (CurrentMode is GameSave.ModeType.Happy)
-                Anime.Value.HappyAnimes.Remove(value);
-            else if (CurrentMode is GameSave.ModeType.Nomal)
-                Anime.Value.NomalAnimes.Remove(value);
-            else if (CurrentMode is GameSave.ModeType.PoorCondition)
-                Anime.Value.PoorConditionAnimes.Remove(value);
-            else if (CurrentMode is GameSave.ModeType.Ill)
-                Anime.Value.IllAnimes.Remove(value);
+            //if (CurrentMode is GameSave.ModeType.Happy)
+            //    Anime.Value.HappyAnimes.Remove(value);
+            //else if (CurrentMode is GameSave.ModeType.Nomal)
+            //    Anime.Value.NomalAnimes.Remove(value);
+            //else if (CurrentMode is GameSave.ModeType.PoorCondition)
+            //    Anime.Value.PoorConditionAnimes.Remove(value);
+            //else if (CurrentMode is GameSave.ModeType.Ill)
+            //    Anime.Value.IllAnimes.Remove(value);
             value.Close();
         }
     }
@@ -223,18 +257,26 @@ public class FoodAnimeEditWindowVM
     /// <param name="value">动画模型</param>
     private void RemoveImageCommand_ExecuteEvent(AnimeModel value)
     {
-        CurrentImageModel.Value.Close();
-        value.Images.Remove(CurrentImageModel.Value);
+        CurrentFrontImageModel.Value.Close();
+        value.Images.Remove(CurrentFrontImageModel.Value);
     }
 
-    #region Player
-    private void CurrentAnimeModel_ValueChanged(AnimeModel oldValue, AnimeModel newValue)
+    #region FrontPlayer
+    private void CurrentAnimeModel_ValueChanged(FoodAnimeModel oldValue, FoodAnimeModel newValue)
     {
         StopCommand_ExecuteEvent();
         if (oldValue is not null)
-            oldValue.Images.CollectionChanged -= Images_CollectionChanged;
+        {
+            oldValue.FrontImages.CollectionChanged -= Images_CollectionChanged;
+            oldValue.BackImages.CollectionChanged -= Images_CollectionChanged;
+            oldValue.FoodLocations.CollectionChanged -= Images_CollectionChanged;
+        }
         if (newValue is not null)
-            newValue.Images.CollectionChanged += Images_CollectionChanged;
+        {
+            newValue.FrontImages.CollectionChanged += Images_CollectionChanged;
+            newValue.BackImages.CollectionChanged += Images_CollectionChanged;
+            newValue.FoodLocations.CollectionChanged += Images_CollectionChanged;
+        }
     }
 
     private void Images_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
@@ -268,25 +310,60 @@ public class FoodAnimeEditWindowVM
             return;
         }
         _playing = true;
-        _playerTask.Start();
+        _frontPlayerTask.Start();
+        _backPlayerTask.Start();
+        _foodPlayerTask.Start();
     }
 
     /// <summary>
-    /// 播放
+    /// 顶层播放
     /// </summary>
-    private void Play()
+    private void FrontPlay()
     {
         do
         {
-            foreach (var model in CurrentAnimeModel.Value.Images)
+            foreach (var model in CurrentAnimeModel.Value.FrontImages)
             {
-                CurrentImageModel.Value = model;
+                CurrentFrontImageModel.Value = model;
                 Task.Delay(model.Duration.Value).Wait();
                 if (_playing is false)
                     return;
             }
         } while (Loop.Value);
-        Reset();
+    }
+
+    /// <summary>
+    /// 底层
+    /// </summary>
+    private void BackPlay()
+    {
+        do
+        {
+            foreach (var model in CurrentAnimeModel.Value.BackImages)
+            {
+                CurrentBackImageModel.Value = model;
+                Task.Delay(model.Duration.Value).Wait();
+                if (_playing is false)
+                    return;
+            }
+        } while (Loop.Value);
+    }
+
+    /// <summary>
+    /// 食物
+    /// </summary>
+    private void FoodPlay()
+    {
+        do
+        {
+            foreach (var model in CurrentAnimeModel.Value.FoodLocations)
+            {
+                CurrentFoodLocationModel.Value = model;
+                Task.Delay(model.Duration.Value).Wait();
+                if (_playing is false)
+                    return;
+            }
+        } while (Loop.Value);
     }
 
     /// <summary>
@@ -295,7 +372,9 @@ public class FoodAnimeEditWindowVM
     private void Reset()
     {
         _playing = false;
-        _playerTask = new(Play);
+        _frontPlayerTask = new(FrontPlay);
+        _backPlayerTask = new(BackPlay);
+        _foodPlayerTask = new(FoodPlay);
     }
     #endregion
 }

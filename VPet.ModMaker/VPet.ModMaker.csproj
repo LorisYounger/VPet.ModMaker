@@ -106,7 +106,7 @@
     <Compile Include="Models\Expansions.cs" />
     <Compile Include="Models\ModModel\FoodAnimeModel.cs" />
     <Compile Include="Models\ModModel\FoodAnimeTypeModel.cs" />
-    <Compile Include="Models\ModModel\FoodLocationInfoModel.cs" />
+    <Compile Include="Models\ModModel\FoodLocationModel.cs" />
     <Compile Include="Models\ModModel\FoodModel.cs" />
     <Compile Include="Models\I18nHelper.cs" />
     <Compile Include="Models\I18nModel.cs" />

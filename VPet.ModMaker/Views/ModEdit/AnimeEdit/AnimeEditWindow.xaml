@@ -46,18 +46,21 @@
         <Expander.Header>
           <Grid>
             <Grid.ColumnDefinitions>
+              <ColumnDefinition Width="Auto" />
               <ColumnDefinition Width="Auto" MinWidth="200" />
               <ColumnDefinition Width="Auto" />
-              <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
-            <TextBox pu:TextBoxHelper.Watermark="{ll:Str 动画Id}" Text="{Binding Id.Value, UpdateSourceTrigger=PropertyChanged}" />
-            <TextBlock Grid.Column="1" Margin="10,0,0,0">
+            <TextBlock Margin="10,0,10,0">
               <TextBlock.Text>
                 <MultiBinding Converter="{StaticResource StringFormatConverter}" ConverterParameter="{}({0})">
                   <Binding Path="Images.Count" />
                 </MultiBinding>
               </TextBlock.Text>
             </TextBlock>
+            <TextBox
+              Grid.Column="1"
+              pu:TextBoxHelper.Watermark="{ll:Str 动画Id}"
+              Text="{Binding Id.Value, UpdateSourceTrigger=PropertyChanged}" />
             <ComboBox
               Grid.Column="2"
               Margin="10,0,0,0"

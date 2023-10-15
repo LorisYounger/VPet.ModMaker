@@ -23,19 +23,19 @@ public class FoodAnimeModel
     /// <summary>
     /// 后图像列表
     /// </summary>
-    public ObservableCollection<ImageModel> BackImages { get; } = new();
-    public ObservableValue<FoodImagesPath> BackImagesPath { get; } = new();
+    public ObservableCollection<ImageModel> BackImages { get; set; } = new();
+    public ObservableValue<FoodImagesPath?> BackImagesPath { get; } = new();
 
     /// <summary>
     /// 前图像列表
     /// </summary>
-    public ObservableCollection<ImageModel> FrontImages { get; } = new();
-    public ObservableValue<FoodImagesPath> FrontImagesPath { get; } = new();
+    public ObservableCollection<ImageModel> FrontImages { get; set; } = new();
+    public ObservableValue<FoodImagesPath?> FrontImagesPath { get; } = new();
 
     /// <summary>
     /// 食物定位列表
     /// </summary>
-    public ObservableCollection<FoodLocationInfoModel> FoodLocations { get; } = new();
+    public ObservableCollection<FoodLocationModel> FoodLocations { get; } = new();
 
     public FoodAnimeModel() { }
 
@@ -46,7 +46,7 @@ public class FoodAnimeModel
         {
             //var index = int.Parse(item.Name.Substring(1));
             var infos = item.Info.Split(',');
-            var foodLocationInfo = new FoodLocationInfoModel();
+            var foodLocationInfo = new FoodLocationModel();
             foodLocationInfo.Duration.Value = int.Parse(infos[0]);
             if (infos.Length > 1)
             {

@@ -32,15 +32,15 @@
             <MenuItem
               Command="{Binding PlacementTarget.Tag.AddImageCommand, RelativeSource={RelativeSource AncestorType=ContextMenu, Mode=FindAncestor}}"
               CommandParameter="{Binding PlacementTarget.DataContext, RelativeSource={RelativeSource AncestorType=ContextMenu, Mode=FindAncestor}}"
-              Header="添加图片" />
+              Header="{ll:Str 添加图片}" />
             <MenuItem
               Command="{Binding PlacementTarget.Tag.ClearImageCommand, RelativeSource={RelativeSource AncestorType=ContextMenu, Mode=FindAncestor}}"
               CommandParameter="{Binding PlacementTarget.DataContext, RelativeSource={RelativeSource AncestorType=ContextMenu, Mode=FindAncestor}}"
-              Header="清空图片" />
+              Header="{ll:Str 清空图片}" />
             <MenuItem
               Command="{Binding PlacementTarget.Tag.RemoveAnimeCommand, RelativeSource={RelativeSource AncestorType=ContextMenu, Mode=FindAncestor}}"
               CommandParameter="{Binding PlacementTarget.DataContext, RelativeSource={RelativeSource AncestorType=ContextMenu, Mode=FindAncestor}}"
-              Header="删除此项" />
+              Header="{ll:Str 删除此项}" />
           </ContextMenu>
         </Expander.ContextMenu>
         <Expander.Header>
@@ -50,14 +50,17 @@
               <ColumnDefinition Width="Auto" />
               <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
-            <TextBox pu:TextBoxHelper.Watermark="动画Id" Text="{Binding Id.Value, UpdateSourceTrigger=PropertyChanged}" />
-            <TextBlock Grid.Column="1" Margin="10,0,0,0">
+            <TextBlock Margin="10,0,10,0">
               <TextBlock.Text>
                 <MultiBinding Converter="{StaticResource StringFormatConverter}" ConverterParameter="{}({0})">
                   <Binding Path="Images.Count" />
                 </MultiBinding>
               </TextBlock.Text>
             </TextBlock>
+            <TextBox
+              Grid.Column="1"
+              pu:TextBoxHelper.Watermark="{ll:Str 动画Id}"
+              Text="{Binding Id.Value, UpdateSourceTrigger=PropertyChanged}" />
             <ComboBox
               Grid.Column="2"
               Margin="10,0,0,0"
@@ -66,60 +69,139 @@
               Visibility="{Binding DataContext.HasMultiType.Value, RelativeSource={RelativeSource AncestorType=Window, Mode=FindAncestor}, Converter={StaticResource FalseToHiddenConverter}}" />
           </Grid>
         </Expander.Header>
-        <ListBox
-          d:ItemsSource="{d:SampleData ItemCount=5}"
-          AllowDrop="True"
-          Drop="ListBox_Drop"
-          ItemsSource="{Binding Images, IsAsync=True}"
-          PreviewMouseMove="ListBox_PreviewMouseMove"
-          PreviewMouseWheel="ListBox_PreviewMouseWheel"
-          SelectedItem="{Binding DataContext.CurrentImageModel.Value, RelativeSource={RelativeSource AncestorType=Window, Mode=FindAncestor}}"
-          SelectionChanged="ListBox_SelectionChanged">
-          <ListBox.ItemsPanel>
-            <ItemsPanelTemplate>
-              <WrapPanel />
-            </ItemsPanelTemplate>
-          </ListBox.ItemsPanel>
-          <ListBox.ItemTemplate>
-            <DataTemplate>
-              <Grid DataContext="{Binding DataContext, RelativeSource={RelativeSource AncestorType=Expander, Mode=FindAncestor}}" Tag="{Binding DataContext, RelativeSource={RelativeSource AncestorType=Window, Mode=FindAncestor}}">
-                <Grid.ContextMenu>
-                  <ContextMenu>
-                    <MenuItem
-                      Command="{Binding PlacementTarget.Tag.RemoveImageCommand, RelativeSource={RelativeSource AncestorType=ContextMenu, Mode=FindAncestor}}"
-                      CommandParameter="{Binding PlacementTarget.DataContext, RelativeSource={RelativeSource AncestorType=ContextMenu, Mode=FindAncestor}}"
-                      Header="删除图片" />
-                  </ContextMenu>
-                </Grid.ContextMenu>
-                <Grid.RowDefinitions>
-                  <RowDefinition Height="Auto" />
-                  <RowDefinition />
-                </Grid.RowDefinitions>
-                <Image
-                  Width="150"
-                  Height="150"
-                  d:DataContext=""
-                  DataContext="{Binding DataContext, RelativeSource={RelativeSource AncestorType=ListBoxItem, Mode=FindAncestor}}"
-                  Source="{Binding Image.Value, IsAsync=True}">
-                  <Image.ToolTip>
-                    <Image
-                      Width="250"
-                      Height="250"
-                      Source="{Binding Image.Value, IsAsync=True}" />
-                  </Image.ToolTip>
-                </Image>
-                <Grid Grid.Row="1">
-                  <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="Auto" />
-                    <ColumnDefinition />
-                  </Grid.ColumnDefinitions>
-                  <Label Content="持续时间(ms)" />
-                  <pu:NumberInput Grid.Column="1" Value="{Binding DataContext.Duration.Value, RelativeSource={RelativeSource AncestorType=ListBoxItem, Mode=FindAncestor}}" />
-                </Grid>
-              </Grid>
-            </DataTemplate>
-          </ListBox.ItemTemplate>
-        </ListBox>
+        <Grid>
+          <Grid.ColumnDefinitions>
+            <ColumnDefinition />
+            <ColumnDefinition Width="Auto" MinWidth="200" />
+          </Grid.ColumnDefinitions>
+          <Grid>
+            <Grid.RowDefinitions>
+              <RowDefinition Height="Auto" />
+              <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+            <GroupBox>
+              <GroupBox.Header>
+                <Label Content="{ll:Str 顶层图片}" />
+              </GroupBox.Header>
+              <ListBox
+                d:ItemsSource="{d:SampleData ItemCount=5}"
+                AllowDrop="True"
+                Drop="ListBox_Drop"
+                ItemsSource="{Binding Images, IsAsync=True}"
+                PreviewMouseMove="ListBox_PreviewMouseMove"
+                PreviewMouseWheel="ListBox_PreviewMouseWheel"
+                SelectedItem="{Binding DataContext.CurrentImageModel.Value, RelativeSource={RelativeSource AncestorType=Window, Mode=FindAncestor}}"
+                SelectionChanged="ListBox_SelectionChanged">
+                <ListBox.ItemsPanel>
+                  <ItemsPanelTemplate>
+                    <WrapPanel />
+                  </ItemsPanelTemplate>
+                </ListBox.ItemsPanel>
+                <ListBox.ItemTemplate>
+                  <DataTemplate>
+                    <Grid DataContext="{Binding DataContext, RelativeSource={RelativeSource AncestorType=Expander, Mode=FindAncestor}}" Tag="{Binding DataContext, RelativeSource={RelativeSource AncestorType=Window, Mode=FindAncestor}}">
+                      <Grid.ContextMenu>
+                        <ContextMenu>
+                          <MenuItem
+                            Command="{Binding PlacementTarget.Tag.RemoveImageCommand, RelativeSource={RelativeSource AncestorType=ContextMenu, Mode=FindAncestor}}"
+                            CommandParameter="{Binding PlacementTarget.DataContext, RelativeSource={RelativeSource AncestorType=ContextMenu, Mode=FindAncestor}}"
+                            Header="{ll:Str 删除图片}" />
+                        </ContextMenu>
+                      </Grid.ContextMenu>
+                      <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition />
+                      </Grid.RowDefinitions>
+                      <Image
+                        Width="150"
+                        Height="150"
+                        d:DataContext=""
+                        DataContext="{Binding DataContext, RelativeSource={RelativeSource AncestorType=ListBoxItem, Mode=FindAncestor}}"
+                        Source="{Binding Image.Value, IsAsync=True}">
+                        <Image.ToolTip>
+                          <Image
+                            Width="250"
+                            Height="250"
+                            Source="{Binding Image.Value, IsAsync=True}" />
+                        </Image.ToolTip>
+                      </Image>
+                      <Grid Grid.Row="1">
+                        <Grid.ColumnDefinitions>
+                          <ColumnDefinition Width="Auto" />
+                          <ColumnDefinition />
+                        </Grid.ColumnDefinitions>
+                        <Label Content="{ll:Str 持续时间(ms)}" />
+                        <pu:NumberInput Grid.Column="1" Value="{Binding DataContext.Duration.Value, RelativeSource={RelativeSource AncestorType=ListBoxItem, Mode=FindAncestor}}" />
+                      </Grid>
+                    </Grid>
+                  </DataTemplate>
+                </ListBox.ItemTemplate>
+              </ListBox>
+            </GroupBox>
+            <GroupBox Grid.Row="1">
+              <GroupBox.Header>
+                <Label Content="{ll:Str 底层图片}" />
+              </GroupBox.Header>
+              <ListBox
+                d:ItemsSource="{d:SampleData ItemCount=5}"
+                AllowDrop="True"
+                Drop="ListBox_Drop"
+                ItemsSource="{Binding Images, IsAsync=True}"
+                PreviewMouseMove="ListBox_PreviewMouseMove"
+                PreviewMouseWheel="ListBox_PreviewMouseWheel"
+                SelectedItem="{Binding DataContext.CurrentImageModel.Value, RelativeSource={RelativeSource AncestorType=Window, Mode=FindAncestor}}"
+                SelectionChanged="ListBox_SelectionChanged">
+                <ListBox.ItemsPanel>
+                  <ItemsPanelTemplate>
+                    <WrapPanel />
+                  </ItemsPanelTemplate>
+                </ListBox.ItemsPanel>
+                <ListBox.ItemTemplate>
+                  <DataTemplate>
+                    <Grid DataContext="{Binding DataContext, RelativeSource={RelativeSource AncestorType=Expander, Mode=FindAncestor}}" Tag="{Binding DataContext, RelativeSource={RelativeSource AncestorType=Window, Mode=FindAncestor}}">
+                      <Grid.ContextMenu>
+                        <ContextMenu>
+                          <MenuItem
+                            Command="{Binding PlacementTarget.Tag.RemoveImageCommand, RelativeSource={RelativeSource AncestorType=ContextMenu, Mode=FindAncestor}}"
+                            CommandParameter="{Binding PlacementTarget.DataContext, RelativeSource={RelativeSource AncestorType=ContextMenu, Mode=FindAncestor}}"
+                            Header="{ll:Str 删除图片}" />
+                        </ContextMenu>
+                      </Grid.ContextMenu>
+                      <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition />
+                      </Grid.RowDefinitions>
+                      <Image
+                        Width="150"
+                        Height="150"
+                        d:DataContext=""
+                        DataContext="{Binding DataContext, RelativeSource={RelativeSource AncestorType=ListBoxItem, Mode=FindAncestor}}"
+                        Source="{Binding Image.Value, IsAsync=True}">
+                        <Image.ToolTip>
+                          <Image
+                            Width="250"
+                            Height="250"
+                            Source="{Binding Image.Value, IsAsync=True}" />
+                        </Image.ToolTip>
+                      </Image>
+                      <Grid Grid.Row="1">
+                        <Grid.ColumnDefinitions>
+                          <ColumnDefinition Width="Auto" />
+                          <ColumnDefinition />
+                        </Grid.ColumnDefinitions>
+                        <Label Content="{ll:Str 持续时间(ms)}" />
+                        <pu:NumberInput Grid.Column="1" Value="{Binding DataContext.Duration.Value, RelativeSource={RelativeSource AncestorType=ListBoxItem, Mode=FindAncestor}}" />
+                      </Grid>
+                    </Grid>
+                  </DataTemplate>
+                </ListBox.ItemTemplate>
+              </ListBox>
+            </GroupBox>
+          </Grid>
+          <GroupBox Grid.Column="1">
+            <ListBox />
+          </GroupBox>
+        </Grid>
       </Expander>
     </DataTemplate>
   </Window.Resources>
@@ -134,38 +216,85 @@
         <RowDefinition Height="Auto" />
         <RowDefinition />
       </Grid.RowDefinitions>
-      <Image
-        x:Name="Image_Back"
-        Width="250"
-        Height="250"
-        Source="{Binding CurrentImageModel.Value.Image.Value}" />
-      <Image
-        x:Name="Image_Center"
-        Width="250"
-        Height="250"
-        Source="{Binding CurrentImageModel.Value.Image.Value}" />
-      <Image
-        x:Name="Image_Front"
-        Width="250"
-        Height="250"
-        Source="{Binding CurrentImageModel.Value.Image.Value}">
-        <Image.ToolTip>
-          <Grid>
-            <Image
-              Width="500"
-              Height="500"
-              Source="{Binding Source, ElementName=Image_Back}" />
-            <Image
-              Width="500"
-              Height="500"
-              Source="{Binding Source, ElementName=Image_Center}" />
-            <Image
-              Width="500"
-              Height="500"
-              Source="{Binding Source, ElementName=Image_Front}" />
-          </Grid>
-        </Image.ToolTip>
-      </Image>
+      <Grid>
+        <Grid.ContextMenu>
+          <ContextMenu>
+            <MenuItem Header="{ll:Str 替换测试食物图片}" />
+            <MenuItem Header="{ll:Str 重置测试食物图片}" />
+          </ContextMenu>
+        </Grid.ContextMenu>
+        <Image
+          x:Name="Image_Back"
+          Width="250"
+          Height="250"
+          Source="{Binding CurrentBackImageModel.Value.Image.Value}" />
+        <Image
+          x:Name="Image_Center"
+          Width="250"
+          Height="250"
+          Opacity="{Binding CurrentFoodLocationModel.Value.Opacity.Value}"
+          RenderTransformOrigin="0,0">
+          <Image.RenderTransform>
+            <TransformGroup>
+              <ScaleTransform />
+              <SkewTransform />
+              <RotateTransform Angle="{Binding CurrentFoodLocationModel.Value.Rotate.Value}" />
+              <TranslateTransform />
+            </TransformGroup>
+          </Image.RenderTransform>
+          <Image.Style>
+            <Style TargetType="Image">
+              <Setter Property="Width">
+                <Setter.Value>
+                  <MultiBinding Converter="{StaticResource CalculatorConverter}" ConverterParameter="*">
+                    <Binding Path="CurrentFoodLocationModel.Value.Rect.Value.Width.Value" />
+                    <Binding Path="LengthRatio.Value" />
+                  </MultiBinding>
+                </Setter.Value>
+              </Setter>
+              <Setter Property="Height">
+                <Setter.Value>
+                  <MultiBinding Converter="{StaticResource CalculatorConverter}" ConverterParameter="*">
+                    <Binding Path="CurrentFoodLocationModel.Value.Rect.Value.Width.Value" />
+                    <Binding Path="LengthRatio.Value" />
+                  </MultiBinding>
+                </Setter.Value>
+              </Setter>
+              <Setter Property="Margin">
+                <Setter.Value>
+                  <MultiBinding Converter="{StaticResource RatioMarginConverter}">
+                    <Binding Path="LengthRatio.Value" />
+                    <Binding Path="CurrentFoodLocationModel.Value.Rect.Value.X.Value" />
+                    <Binding Path="CurrentFoodLocationModel.Value.Rect.Value.Y.Value" />
+                  </MultiBinding>
+                </Setter.Value>
+              </Setter>
+            </Style>
+          </Image.Style>
+        </Image>
+        <Image
+          x:Name="Image_Front"
+          Width="250"
+          Height="250"
+          Source="{Binding CurrentFrontImageModel.Value.Image.Value}">
+          <Image.ToolTip>
+            <Grid>
+              <Image
+                Width="500"
+                Height="500"
+                Source="{Binding Source, ElementName=Image_Back}" />
+              <Image
+                Width="500"
+                Height="500"
+                Source="{Binding Source, ElementName=Image_Center}" />
+              <Image
+                Width="500"
+                Height="500"
+                Source="{Binding Source, ElementName=Image_Front}" />
+            </Grid>
+          </Image.ToolTip>
+        </Image>
+      </Grid>
       <Grid Grid.Row="1">
         <Grid.ColumnDefinitions>
           <ColumnDefinition />
@@ -194,7 +323,7 @@
         <!--<Label Content="{ll:Str 动画Id}" />
         <TextBox Grid.Column="1" />-->
         <Label Content="{ll:Str 动画类型}" />
-        <TextBlock Grid.Column="1" Text="{Binding Anime.Value.GraphType.Value}" />
+        <TextBlock Grid.Column="1" Text="{Binding Anime.Value.GraphType}" />
         <Label
           Grid.Row="1"
           Content="{ll:Str 动画名称}"

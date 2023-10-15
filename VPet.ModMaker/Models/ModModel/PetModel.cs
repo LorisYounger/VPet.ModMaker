@@ -70,6 +70,11 @@ public class PetModel : I18nModel<I18nPetInfoModel>
     /// </summary>
     public ObservableCollection<AnimeTypeModel> Animes { get; } = new();
 
+    /// <summary>
+    ///食物动画
+    /// </summary>
+    public ObservableCollection<FoodAnimeTypeModel> FoodAnimes { get; } = new();
+
     public bool IsSimplePetModel { get; } = false;
 
     public PetModel()

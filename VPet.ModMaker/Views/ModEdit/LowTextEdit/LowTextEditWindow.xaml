@@ -38,7 +38,6 @@
           Text="{Binding LowText.Value.Id.Value, UpdateSourceTrigger=PropertyChanged}" />
       </Grid>
       <TextBox
-        x:Name="TextBox_Text"
         Grid.Row="1"
         d:Text="这是一个测试文本,这是一个测试文本,这是一个测试文本,这是一个测试文本,这是一个测试文本,这是一个测试文本,这是一个测试文本,"
         pu:TextBoxHelper.Watermark="{ll:Str 文本}"
