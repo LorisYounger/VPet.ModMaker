@@ -3,6 +3,7 @@ using LinePutScript.Localization.WPF;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Collections.Specialized;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -19,12 +20,22 @@ public class AnimePageVM
     /// <summary>
     /// 显示的动画
     /// </summary>
-    public ObservableValue<ObservableCollection<AnimeTypeModel>> ShowAnimes { get; } = new();
+    public ObservableValue<ObservableCollection<object>> ShowAnimes { get; } = new();
+
+    /// <summary>
+    /// 所有动画
+    /// </summary>
+    public ObservableCollection<object> AllAnimes { get; } = new();
 
     /// <summary>
     /// 动画
     /// </summary>
     public ObservableCollection<AnimeTypeModel> Animes => CurrentPet.Value.Animes;
+
+    /// <summary>
+    /// 食物动画
+    /// </summary>
+    public ObservableCollection<FoodAnimeTypeModel> FoodAnimes => CurrentPet.Value.FoodAnimes;
 
     /// <summary>
     /// 宠物列表
@@ -59,7 +70,7 @@ public class AnimePageVM
     #endregion
     public AnimePageVM()
     {
-        ShowAnimes.Value = Animes;
+        ShowAnimes.Value = AllAnimes;
         CurrentPet.ValueChanged += CurrentPet_ValueChanged;
         Search.ValueChanged += Search_ValueChanged;
 
@@ -68,21 +79,57 @@ public class AnimePageVM
         RemoveCommand.ExecuteEvent += Remove;
     }
 
+    private void InitializeAllAnimes()
+    {
+        AllAnimes.Clear();
+        foreach (var item in Animes)
+            AllAnimes.Add(item);
+        foreach (var item in FoodAnimes)
+            AllAnimes.Add(item);
+        Animes.CollectionChanged += Animes_CollectionChanged;
+        FoodAnimes.CollectionChanged += Animes_CollectionChanged;
+    }
+
+    private void Animes_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
+    {
+        if (e.Action is NotifyCollectionChangedAction.Add)
+            AllAnimes.Add(e.NewItems[0]);
+        else if (e.Action is NotifyCollectionChangedAction.Remove)
+            AllAnimes.Remove(e.OldItems[0]);
+        else if (e.Action is NotifyCollectionChangedAction.Replace)
+            AllAnimes[AllAnimes.IndexOf(e.OldItems[0])] = e.NewItems[0];
+    }
+
     private void CurrentPet_ValueChanged(PetModel oldValue, PetModel newValue)
     {
-        ShowAnimes.Value = newValue.Animes;
+        InitializeAllAnimes();
+        ShowAnimes.Value = AllAnimes;
     }
 
     private void Search_ValueChanged(string oldValue, string newValue)
     {
         if (string.IsNullOrWhiteSpace(newValue))
         {
-            ShowAnimes.Value = Animes;
+            ShowAnimes.Value = AllAnimes;
         }
         else
         {
             ShowAnimes.Value = new(
-                Animes.Where(m => m.Id.Value.Contains(newValue, StringComparison.OrdinalIgnoreCase))
+                AllAnimes.Where(m =>
+                {
+                    if (m is AnimeTypeModel animeTypeModel)
+                        return animeTypeModel.Id.Value.Contains(
+                            newValue,
+                            StringComparison.OrdinalIgnoreCase
+                        );
+                    else if (m is FoodAnimeTypeModel foodAnimeTypeModel)
+                        return foodAnimeTypeModel.Id.Value.Contains(
+                            newValue,
+                            StringComparison.OrdinalIgnoreCase
+                        );
+                    else
+                        throw new Exception("???");
+                })
             );
         }
     }
@@ -98,6 +145,7 @@ public class AnimePageVM
         var graphType = selectGraphTypeWindow.GraphType.Value;
         if (selectGraphTypeWindow.IsCancel)
             return;
+        // TODO: FoodAnime
         var window = new AnimeEditWindow();
         var vm = window.ViewModel;
         vm.CurrentPet = CurrentPet.Value;
@@ -115,6 +163,7 @@ public class AnimePageVM
     /// <param name="model">动画类型模型</param>
     public void Edit(AnimeTypeModel model)
     {
+        // TODO: FoodAnime
         var window = new AnimeEditWindow();
         var vm = window.ViewModel;
         vm.CurrentPet = CurrentPet.Value;
@@ -142,14 +191,14 @@ public class AnimePageVM
     {
         if (MessageBox.Show("确定删除吗".Translate(), "", MessageBoxButton.YesNo) is MessageBoxResult.No)
             return;
-        if (ShowAnimes.Value.Count == Animes.Count)
+        if (ShowAnimes.Value.Count == AllAnimes.Count)
         {
-            Animes.Remove(model);
+            AllAnimes.Remove(model);
         }
         else
         {
             ShowAnimes.Value.Remove(model);
-            Animes.Remove(model);
+            AllAnimes.Remove(model);
         }
     }
 }

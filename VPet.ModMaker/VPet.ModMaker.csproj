@@ -93,8 +93,11 @@
     </Compile>
     <Compile Include="Converters\BrushToMediaColorConverter.cs" />
     <Compile Include="Converters\CalculatorConverter.cs" />
+    <Compile Include="Converters\EqualsConverter.cs" />
+    <Compile Include="Converters\FalseToCollapsedConverter.cs" />
     <Compile Include="Converters\FalseToHiddenConverter.cs" />
     <Compile Include="Converters\MediaColorToBrushConverter.cs" />
+    <Compile Include="Converters\NotEqualsConverter.cs" />
     <Compile Include="Converters\StringFormatConverter.cs" />
     <Compile Include="Converters\RatioMarginConverter.cs" />
     <Compile Include="Converters\MaxConverter.cs" />

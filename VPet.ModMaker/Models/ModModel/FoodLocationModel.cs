@@ -18,7 +18,7 @@ public class FoodLocationModel
     public ObservableValue<int> Duration { get; } = new(100);
 
     /// <summary>
-    /// 定位
+    /// 范围
     /// </summary>
     public ObservableRect<double> Rect { get; } = new();
 

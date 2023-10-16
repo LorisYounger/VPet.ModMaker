@@ -21,7 +21,7 @@
       <Setter Property="HorizontalContentAlignment" Value="Stretch" />
       <Setter Property="VerticalContentAlignment" Value="Stretch" />
     </Style>
-    <DataTemplate x:Key="Expander_AnimeItem" DataType="ListBoxItem">
+    <DataTemplate x:Key="Expander_AnimeItem" DataType="Expander">
       <Expander
         HorizontalAlignment="Stretch"
         VerticalAlignment="Stretch"

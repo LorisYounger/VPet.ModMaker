@@ -9,4 +9,6 @@
   <c:BrushToMediaColorConverter x:Key="BrushToMediaColorConverter" />
   <c:MaxConverter x:Key="MaxConverter" />
   <c:FalseToHiddenConverter x:Key="FalseToHiddenConverter" />
+  <c:EqualsConverter x:Key="EqualsConverter" />
+  <c:NotEqualsConverter x:Key="NotEqualsConverter" />
 </ResourceDictionary>

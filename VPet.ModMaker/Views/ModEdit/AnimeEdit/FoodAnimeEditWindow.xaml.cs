@@ -25,7 +25,7 @@ public partial class FoodAnimeEditWindow : Window
 {
     public FoodAnimeEditWindow()
     {
-        DataContext = new AnimeEditWindowVM();
+        DataContext = new FoodAnimeEditWindowVM();
         InitializeComponent();
         Closed += (s, e) =>
         {

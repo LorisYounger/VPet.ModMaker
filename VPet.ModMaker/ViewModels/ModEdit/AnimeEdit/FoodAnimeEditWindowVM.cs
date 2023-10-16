@@ -25,6 +25,11 @@ public class FoodAnimeEditWindowVM
     public PetModel CurrentPet { get; set; }
 
     /// <summary>
+    /// 默认食物图片
+    /// </summary>
+    public static BitmapImage DefaultFoodImage { get; } = Utils.LoadImageToMemoryStream("");
+
+    /// <summary>
     /// 食物图片
     /// </summary>
     public ObservableValue<BitmapImage> FoodImage { get; } = new();
@@ -114,6 +119,16 @@ public class FoodAnimeEditWindowVM
     /// 删除图片命令
     /// </summary>
     public ObservableCommand<AnimeModel> RemoveImageCommand { get; } = new();
+
+    /// <summary>
+    /// 改变食物图片
+    /// </summary>
+    public ObservableCommand ReplaceFoodImageCommand { get; } = new();
+
+    /// <summary>
+    /// 重置食物图片
+    /// </summary>
+    public ObservableCommand ResetFoodImageCommand { get; } = new();
     #endregion
 
     /// <summary>
@@ -150,8 +165,29 @@ public class FoodAnimeEditWindowVM
         ClearImageCommand.ExecuteEvent += ClearImageCommand_ExecuteEvent;
         RemoveAnimeCommand.ExecuteEvent += RemoveAnimeCommand_ExecuteEvent;
         RemoveImageCommand.ExecuteEvent += RemoveImageCommand_ExecuteEvent;
+        ReplaceFoodImageCommand.ExecuteEvent += ReplaceFoodImageCommand_ExecuteEvent;
+        ResetFoodImageCommand.ExecuteEvent += ResetFoodImageCommand_ExecuteEvent;
 
         Anime.ValueChanged += Anime_ValueChanged;
+    }
+
+    private void ResetFoodImageCommand_ExecuteEvent()
+    {
+        if (FoodImage.Value != DefaultFoodImage)
+            FoodImage.Value.CloseStream();
+        FoodImage.Value = DefaultFoodImage;
+    }
+
+    private void ReplaceFoodImageCommand_ExecuteEvent()
+    {
+        OpenFileDialog openFileDialog =
+            new() { Title = "选择食物图片".Translate(), Filter = $"图片|*.png".Translate() };
+        if (openFileDialog.ShowDialog() is true)
+        {
+            if (FoodImage.Value != DefaultFoodImage)
+                FoodImage.Value.CloseStream();
+            FoodImage.Value = Utils.LoadImageToMemoryStream(openFileDialog.FileName);
+        }
     }
 
     #region LoadAnime
