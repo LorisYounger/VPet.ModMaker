@@ -4,6 +4,7 @@ using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Data;
 
 namespace VPet.ModMaker.Converters;
@@ -38,6 +39,8 @@ public class CalculatorConverter : IMultiValueConverter
 {
     public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
     {
+        if (values.Any(i => i == DependencyProperty.UnsetValue))
+            return 0;
         if (values.Length == 1)
             return values[0];
         double result = System.Convert.ToDouble(values[0]);

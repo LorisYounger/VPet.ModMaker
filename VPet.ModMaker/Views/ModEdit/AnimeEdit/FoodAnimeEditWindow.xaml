@@ -12,6 +12,7 @@
   Width="1000"
   Height="600"
   d:DataContext="{d:DesignInstance Type=vm:FoodAnimeEditWindowVM}"
+  WindowStartupLocation="CenterScreen"
   mc:Ignorable="d">
   <Window.Resources>
     <Style
@@ -33,17 +34,20 @@
               d:Header="添加图片"
               Command="{Binding PlacementTarget.Tag.AddImageCommand, RelativeSource={RelativeSource AncestorType=ContextMenu, Mode=FindAncestor}}"
               CommandParameter="{Binding PlacementTarget.DataContext, RelativeSource={RelativeSource AncestorType=ContextMenu, Mode=FindAncestor}}"
-              Header="{ll:Str 添加图片}" />
+              Header="{ll:Str 添加图片}"
+              IsEnabled="{Binding PlacementTarget.Tag.PlayCommand.CurrentCanExecute.Value, RelativeSource={RelativeSource AncestorType=ContextMenu, Mode=FindAncestor}}" />
             <MenuItem
               d:Header="添加图片"
               Command="{Binding PlacementTarget.Tag.ClearImageCommand, RelativeSource={RelativeSource AncestorType=ContextMenu, Mode=FindAncestor}}"
               CommandParameter="{Binding PlacementTarget.DataContext, RelativeSource={RelativeSource AncestorType=ContextMenu, Mode=FindAncestor}}"
-              Header="{ll:Str 清空图片}" />
+              Header="{ll:Str 清空图片}"
+              IsEnabled="{Binding PlacementTarget.Tag.PlayCommand.CurrentCanExecute.Value, RelativeSource={RelativeSource AncestorType=ContextMenu, Mode=FindAncestor}}" />
             <MenuItem
               d:Header="添加图片"
               Command="{Binding PlacementTarget.Tag.RemoveAnimeCommand, RelativeSource={RelativeSource AncestorType=ContextMenu, Mode=FindAncestor}}"
               CommandParameter="{Binding PlacementTarget.DataContext, RelativeSource={RelativeSource AncestorType=ContextMenu, Mode=FindAncestor}}"
-              Header="{ll:Str 删除此项}" />
+              Header="{ll:Str 删除此项}"
+              IsEnabled="{Binding PlacementTarget.Tag.PlayCommand.CurrentCanExecute.Value, RelativeSource={RelativeSource AncestorType=ContextMenu, Mode=FindAncestor}}" />
           </ContextMenu>
         </Expander.ContextMenu>
         <Expander.Header>
@@ -53,13 +57,13 @@
               <ColumnDefinition Width="Auto" />
               <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
-            <TextBlock Margin="10,0,10,0">
+            <!--<TextBlock Margin="10,0,10,0">
               <TextBlock.Text>
                 <MultiBinding Converter="{StaticResource StringFormatConverter}" ConverterParameter="{}({0})">
                   <Binding Path="Images.Count" />
                 </MultiBinding>
               </TextBlock.Text>
-            </TextBlock>
+            </TextBlock>-->
             <TextBox Grid.Column="1" Text="{Binding Id.Value, UpdateSourceTrigger=PropertyChanged}" />
             <!--  pu:TextBoxHelper.Watermark="{ll:Str 动画Id(非必要)}"  -->
           </Grid>
@@ -98,10 +102,17 @@
                       <Grid.ContextMenu>
                         <ContextMenu>
                           <MenuItem
+                            d:Header="修改图片"
+                            Command="{Binding PlacementTarget.Tag.ChangeImageCommand, RelativeSource={RelativeSource AncestorType=ContextMenu, Mode=FindAncestor}}"
+                            CommandParameter="{Binding PlacementTarget.DataContext, RelativeSource={RelativeSource AncestorType=ContextMenu, Mode=FindAncestor}}"
+                            Header="{ll:Str 修改图片}"
+                            IsEnabled="{Binding PlacementTarget.Tag.PlayCommand.CurrentCanExecute.Value, RelativeSource={RelativeSource AncestorType=ContextMenu, Mode=FindAncestor}}" />
+                          <MenuItem
                             d:Header="删除图片"
                             Command="{Binding PlacementTarget.Tag.RemoveImageCommand, RelativeSource={RelativeSource AncestorType=ContextMenu, Mode=FindAncestor}}"
                             CommandParameter="{Binding PlacementTarget.DataContext, RelativeSource={RelativeSource AncestorType=ContextMenu, Mode=FindAncestor}}"
-                            Header="{ll:Str 删除图片}" />
+                            Header="{ll:Str 删除图片}"
+                            IsEnabled="{Binding PlacementTarget.Tag.PlayCommand.CurrentCanExecute.Value, RelativeSource={RelativeSource AncestorType=ContextMenu, Mode=FindAncestor}}" />
                         </ContextMenu>
                       </Grid.ContextMenu>
                       <Grid.RowDefinitions>
@@ -157,6 +168,12 @@
                     <Grid DataContext="{Binding DataContext, RelativeSource={RelativeSource AncestorType=Expander, Mode=FindAncestor}}" Tag="{Binding DataContext, RelativeSource={RelativeSource AncestorType=Window, Mode=FindAncestor}}">
                       <Grid.ContextMenu>
                         <ContextMenu>
+                          <MenuItem
+                            d:Header="修改图片"
+                            Command="{Binding PlacementTarget.Tag.ChangeImageCommand, RelativeSource={RelativeSource AncestorType=ContextMenu, Mode=FindAncestor}}"
+                            CommandParameter="{Binding PlacementTarget.DataContext, RelativeSource={RelativeSource AncestorType=ContextMenu, Mode=FindAncestor}}"
+                            Header="{ll:Str 修改图片}"
+                            IsEnabled="{Binding PlacementTarget.Tag.PlayCommand.CurrentCanExecute.Value, RelativeSource={RelativeSource AncestorType=ContextMenu, Mode=FindAncestor}}" />
                           <MenuItem
                             d:Header="删除图片"
                             Command="{Binding PlacementTarget.Tag.RemoveImageCommand, RelativeSource={RelativeSource AncestorType=ContextMenu, Mode=FindAncestor}}"
@@ -307,11 +324,13 @@
           Height="250"
           Source="{Binding CurrentBackImageModel.Value.Image.Value}" />
         <Image
-          x:Name="Image_Center"
-          Width="250"
-          Height="250"
+          x:Name="Image_Food"
+          Height="{Binding Width, RelativeSource={RelativeSource Mode=Self}}"
+          HorizontalAlignment="Left"
+          VerticalAlignment="Top"
           Opacity="{Binding CurrentFoodLocationModel.Value.Opacity.Value}"
-          RenderTransformOrigin="0,0">
+          RenderTransformOrigin="0,0"
+          Source="{Binding FoodImage.Value}">
           <Image.RenderTransform>
             <TransformGroup>
               <ScaleTransform />
@@ -325,15 +344,7 @@
               <Setter Property="Width">
                 <Setter.Value>
                   <MultiBinding Converter="{StaticResource CalculatorConverter}" ConverterParameter="*">
-                    <Binding Path="CurrentFoodLocationModel.Value.Rect.Value.Width.Value" />
-                    <Binding Path="LengthRatio.Value" />
-                  </MultiBinding>
-                </Setter.Value>
-              </Setter>
-              <Setter Property="Height">
-                <Setter.Value>
-                  <MultiBinding Converter="{StaticResource CalculatorConverter}" ConverterParameter="*">
-                    <Binding Path="CurrentFoodLocationModel.Value.Rect.Value.Width.Value" />
+                    <Binding Path="CurrentFoodLocationModel.Value.Rect.Width.Value" />
                     <Binding Path="LengthRatio.Value" />
                   </MultiBinding>
                 </Setter.Value>
@@ -342,8 +353,8 @@
                 <Setter.Value>
                   <MultiBinding Converter="{StaticResource RatioMarginConverter}">
                     <Binding Path="LengthRatio.Value" />
-                    <Binding Path="CurrentFoodLocationModel.Value.Rect.Value.X.Value" />
-                    <Binding Path="CurrentFoodLocationModel.Value.Rect.Value.Y.Value" />
+                    <Binding Path="CurrentFoodLocationModel.Value.Rect.X.Value" />
+                    <Binding Path="CurrentFoodLocationModel.Value.Rect.Y.Value" />
                   </MultiBinding>
                 </Setter.Value>
               </Setter>
@@ -488,7 +499,7 @@
         <Button
           x:Name="Button_AddAnime"
           Margin="10"
-          Click="Button_AddAnime_Click"
+          Command="{Binding AddAnimeCommand}"
           Content="{ll:Str 添加动画}" />
         <Button
           x:Name="Button_Cancel"

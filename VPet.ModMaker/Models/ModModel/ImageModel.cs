@@ -31,7 +31,7 @@ public class ImageModel
 
     public ImageModel Copy()
     {
-        var model = new ImageModel(Image.Value, Duration.Value);
+        var model = new ImageModel(Image.Value.Copy(), Duration.Value);
         return model;
     }
 

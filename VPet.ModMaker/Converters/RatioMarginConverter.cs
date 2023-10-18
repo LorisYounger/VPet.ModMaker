@@ -29,6 +29,8 @@ public class RatioMarginConverter : IMultiValueConverter
         System.Globalization.CultureInfo culture
     )
     {
+        if (values.Any(i => i == DependencyProperty.UnsetValue))
+            return new Thickness();
         if (values.Length == 0)
         {
             return new Thickness();

@@ -28,9 +28,11 @@ public class ObservableValue<T> : INotifyPropertyChanging, INotifyPropertyChange
         {
             if (_value?.Equals(value) is true)
                 return;
-            NotifyPropertyChanging(_value, value);
+            var oldValue = _value;
+            if (NotifyPropertyChanging(oldValue, value))
+                return;
             _value = value;
-            NotifyPropertyChanged(_value, value);
+            NotifyPropertyChanged(oldValue, value);
         }
     }
 
@@ -57,10 +59,15 @@ public class ObservableValue<T> : INotifyPropertyChanging, INotifyPropertyChange
     /// </summary>
     /// <param name="oldValue">旧值</param>
     /// <param name="newValue">新值</param>
-    private void NotifyPropertyChanging(T oldValue, T newValue)
+    private bool NotifyPropertyChanging(T oldValue, T newValue)
     {
         PropertyChanging?.Invoke(this, new(nameof(Value)));
-        ValueChanging?.Invoke(oldValue, newValue);
+        // 若全部事件取消改变 则取消改变
+        return ValueChanging
+            ?.GetInvocationList()
+            .Cast<ValueChangingEventHandler>()
+            .All(e => e.Invoke(oldValue, newValue) is true)
+            is true;
     }
 
     /// <summary>
@@ -98,8 +105,8 @@ public class ObservableValue<T> : INotifyPropertyChanging, INotifyPropertyChange
     /// {
     ///     v = "B"; // trigger this
     /// };
-    /// value1.EnumValue = "A"; // execute this
-    /// // result: value1.EnumValue == "A" , value2.EnumValue == "B"
+    /// value1.Value = "A"; // execute this
+    /// // result: value1.Value == "A" , value2.Value == "B"
     /// ]]>
     /// </code></para>
     /// </summary>
@@ -142,12 +149,12 @@ public class ObservableValue<T> : INotifyPropertyChanging, INotifyPropertyChange
     /// <summary>
     /// 值改变前事件
     /// </summary>
-    public event ValueChangeEventHandler? ValueChanging;
+    public event ValueChangingEventHandler? ValueChanging;
 
     /// <summary>
     /// 值改变后事件
     /// </summary>
-    public event ValueChangeEventHandler? ValueChanged;
+    public event ValueChangedEventHandler? ValueChanged;
 
     /// <summary>
     /// 通知接收器事件
@@ -161,7 +168,15 @@ public class ObservableValue<T> : INotifyPropertyChanging, INotifyPropertyChange
     /// </summary>
     /// <param name="oldValue">旧值</param>
     /// <param name="newValue">新值</param>
-    public delegate void ValueChangeEventHandler(T oldValue, T newValue);
+    /// <returns>取消改变</returns>
+    public delegate bool ValueChangingEventHandler(T oldValue, T newValue);
+
+    /// <summary>
+    /// 值改变后事件
+    /// </summary>
+    /// <param name="oldValue">旧值</param>
+    /// <param name="newValue">新值</param>
+    public delegate void ValueChangedEventHandler(T oldValue, T newValue);
 
     /// <summary>
     /// 通知接收器

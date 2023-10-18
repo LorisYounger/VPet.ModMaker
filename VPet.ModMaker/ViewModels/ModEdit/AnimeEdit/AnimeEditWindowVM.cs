@@ -3,12 +3,14 @@ using LinePutScript.Localization.WPF;
 using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Media.Imaging;
 using VPet.ModMaker.Models;
 using VPet.ModMaker.Models.ModModel;
 using VPet_Simulator.Core;
@@ -74,14 +76,9 @@ public class AnimeEditWindowVM
     public ObservableCommand StopCommand { get; } = new();
 
     /// <summary>
-    /// 添加图片命令
+    /// 添加动画命令
     /// </summary>
-    public ObservableCommand<AnimeModel> AddImageCommand { get; } = new();
-
-    /// <summary>
-    /// 清除图片命令
-    /// </summary>
-    public ObservableCommand<AnimeModel> ClearImageCommand { get; } = new();
+    public ObservableCommand AddAnimeCommand { get; } = new();
 
     /// <summary>
     /// 删除动画命令
@@ -89,9 +86,24 @@ public class AnimeEditWindowVM
     public ObservableCommand<AnimeModel> RemoveAnimeCommand { get; } = new();
 
     /// <summary>
+    /// 添加图片命令
+    /// </summary>
+    public ObservableCommand<AnimeModel> AddImageCommand { get; } = new();
+
+    /// <summary>
     /// 删除图片命令
     /// </summary>
     public ObservableCommand<AnimeModel> RemoveImageCommand { get; } = new();
+
+    /// <summary>
+    /// 替换图片命令
+    /// </summary>
+    public ObservableCommand<AnimeModel> ChangeImageCommand { get; } = new();
+
+    /// <summary>
+    /// 清除图片命令
+    /// </summary>
+    public ObservableCommand<AnimeModel> ClearImageCommand { get; } = new();
     #endregion
 
     /// <summary>
@@ -110,12 +122,14 @@ public class AnimeEditWindowVM
 
         CurrentAnimeModel.ValueChanged += CurrentAnimeModel_ValueChanged;
 
-        PlayCommand.ExecuteEvent += PlayCommand_ExecuteEvent;
+        PlayCommand.AsyncExecuteEvent += PlayCommand_AsyncExecuteEvent;
         StopCommand.ExecuteEvent += StopCommand_ExecuteEvent;
-        AddImageCommand.ExecuteEvent += AddImageCommand_ExecuteEvent;
-        ClearImageCommand.ExecuteEvent += ClearImageCommand_ExecuteEvent;
+        AddAnimeCommand.ExecuteEvent += AddAnimeCommand_ExecuteEvent;
         RemoveAnimeCommand.ExecuteEvent += RemoveAnimeCommand_ExecuteEvent;
+        AddImageCommand.ExecuteEvent += AddImageCommand_ExecuteEvent;
         RemoveImageCommand.ExecuteEvent += RemoveImageCommand_ExecuteEvent;
+        ChangeImageCommand.ExecuteEvent += ChangeImageCommand_ExecuteEvent;
+        ClearImageCommand.ExecuteEvent += ClearImageCommand_ExecuteEvent;
 
         Anime.ValueChanged += Anime_ValueChanged;
     }
@@ -135,6 +149,24 @@ public class AnimeEditWindowVM
             HasAnimeName.Value = true;
     }
     #endregion
+
+    #region AnimeCommand
+    /// <summary>
+    /// 添加动画
+    /// </summary>
+    /// <param name="value">动画模型</param>
+    private void AddAnimeCommand_ExecuteEvent()
+    {
+        if (CurrentMode is GameSave.ModeType.Happy)
+            Anime.Value.HappyAnimes.Add(new());
+        else if (CurrentMode is GameSave.ModeType.Nomal)
+            Anime.Value.NomalAnimes.Add(new());
+        else if (CurrentMode is GameSave.ModeType.PoorCondition)
+            Anime.Value.PoorConditionAnimes.Add(new());
+        else if (CurrentMode is GameSave.ModeType.Ill)
+            Anime.Value.IllAnimes.Add(new());
+    }
+
     /// <summary>
     /// 删除动画
     /// </summary>
@@ -157,6 +189,64 @@ public class AnimeEditWindowVM
             value.Close();
         }
     }
+    #endregion
+
+    #region ImageCommand
+
+    /// <summary>
+    /// 添加图片
+    /// </summary>
+    /// <param name="value">动画模型</param>
+    private void AddImageCommand_ExecuteEvent(AnimeModel value)
+    {
+        OpenFileDialog openFileDialog =
+            new()
+            {
+                Title = "选择图片".Translate(),
+                Filter = $"图片|*.png".Translate(),
+                Multiselect = true
+            };
+        if (openFileDialog.ShowDialog() is not true)
+            return;
+        AddImages(value.Images, openFileDialog.FileNames);
+    }
+
+    /// <summary>
+    /// 删除图片
+    /// </summary>
+    /// <param name="value">动画模型</param>
+    private void RemoveImageCommand_ExecuteEvent(AnimeModel value)
+    {
+        value.Images.Remove(CurrentImageModel.Value);
+        CurrentImageModel.Value.Close();
+    }
+
+    /// <summary>
+    /// 替换图片
+    /// </summary>
+    /// <param name="value"></param>
+    /// <exception cref="NotImplementedException"></exception>
+    private void ChangeImageCommand_ExecuteEvent(AnimeModel value)
+    {
+        OpenFileDialog openFileDialog =
+            new() { Title = "选择图片".Translate(), Filter = $"图片|*.png".Translate() };
+        if (openFileDialog.ShowDialog() is not true)
+            return;
+        BitmapImage newImage;
+        try
+        {
+            newImage = Utils.LoadImageToMemoryStream(openFileDialog.FileName);
+        }
+        catch (Exception ex)
+        {
+            MessageBox.Show("替换失败失败 \n{0}".Translate(ex));
+            return;
+        }
+        if (newImage is null)
+            return;
+        CurrentImageModel.Value.Close();
+        CurrentImageModel.Value.Image.Value = newImage;
+    }
 
     /// <summary>
     /// 清空图片
@@ -176,57 +266,36 @@ public class AnimeEditWindowVM
     /// <summary>
     /// 添加图片
     /// </summary>
-    /// <param name="value">动画模型</param>
-    private void AddImageCommand_ExecuteEvent(AnimeModel value)
-    {
-        OpenFileDialog openFileDialog =
-            new() { Title = "选择图片".Translate(), Filter = $"图片|*.png".Translate() };
-        if (openFileDialog.ShowDialog() is true)
-        {
-            value.Images.Add(new(Utils.LoadImageToMemoryStream(openFileDialog.FileName)));
-        }
-    }
-
-    /// <summary>
-    /// 添加图片
-    /// </summary>
-    /// <param name="model">动画模型</param>
+    /// <param name="images">动画</param>
     /// <param name="paths">路径</param>
-    public void AddImages(AnimeModel model, IEnumerable<string> paths)
+    public void AddImages(ObservableCollection<ImageModel> images, IEnumerable<string> paths)
     {
         try
         {
+            var newImages = new List<ImageModel>();
             foreach (string path in paths)
             {
                 if (File.Exists(path))
                 {
-                    model.Images.Add(new(Utils.LoadImageToMemoryStream(path)));
+                    newImages.Add(new(Utils.LoadImageToMemoryStream(path)));
                 }
                 else if (Directory.Exists(path))
                 {
                     foreach (var file in Directory.EnumerateFiles(path, "*.png"))
                     {
-                        model.Images.Add(new(Utils.LoadImageToMemoryStream(path)));
+                        newImages.Add(new(Utils.LoadImageToMemoryStream(path)));
                     }
                 }
             }
+            foreach (var image in newImages)
+                images.Add(image);
         }
         catch (Exception ex)
         {
             MessageBox.Show("添加失败 \n{0}".Translate(ex));
         }
     }
-
-    /// <summary>
-    /// 删除图片
-    /// </summary>
-    /// <param name="value">动画模型</param>
-    private void RemoveImageCommand_ExecuteEvent(AnimeModel value)
-    {
-        CurrentImageModel.Value.Close();
-        value.Images.Remove(CurrentImageModel.Value);
-    }
-
+    #endregion
     #region Player
     private void CurrentAnimeModel_ValueChanged(AnimeModel oldValue, AnimeModel newValue)
     {
@@ -249,19 +318,13 @@ public class AnimeEditWindowVM
     {
         if (_playing is false)
             return;
-        Reset();
     }
 
     /// <summary>
     /// 开始播放
     /// </summary>
-    private void PlayCommand_ExecuteEvent()
+    private async Task PlayCommand_AsyncExecuteEvent()
     {
-        if (_playing)
-        {
-            MessageBox.Show("正在播放".Translate());
-            return;
-        }
         if (CurrentAnimeModel.Value is null)
         {
             MessageBox.Show("未选中动画".Translate());
@@ -269,6 +332,8 @@ public class AnimeEditWindowVM
         }
         _playing = true;
         _playerTask.Start();
+        await Task.WhenAll(_playerTask);
+        Reset();
     }
 
     /// <summary>

@@ -16,6 +16,17 @@ namespace VPet.ModMaker.Models.ModModel;
 public class FoodAnimeTypeModel
 {
     /// <summary>
+    /// 动作类型
+    /// </summary>
+    public static GraphInfo.GraphType GraphType => GraphInfo.GraphType.Common;
+
+    /// <summary>
+    /// 动画名称
+    /// </summary>
+    public static HashSet<string> FoodAnimeNames =
+        new(StringComparer.InvariantCultureIgnoreCase) { "Eat", "Drink", "Gift", };
+
+    /// <summary>
     /// Id
     /// </summary>
     public ObservableValue<string> Id { get; } = new();
@@ -24,11 +35,6 @@ public class FoodAnimeTypeModel
     /// 名称
     /// </summary>
     public ObservableValue<string> Name { get; } = new();
-
-    /// <summary>
-    /// 动作类型
-    /// </summary>
-    public GraphInfo.GraphType GraphType => GraphInfo.GraphType.Common;
 
     /// <summary>
     /// 开心动画
@@ -53,10 +59,30 @@ public class FoodAnimeTypeModel
     public FoodAnimeTypeModel()
     {
         HappyAnimes.CollectionChanged += Animes_CollectionChanged;
-        //Name.ValueChanged += (_, _) =>
-        //{
-        //    Id.Value = $"{GraphType.Value}_{Name.Value}";
-        //};
+        Name.ValueChanged += (_, _) =>
+        {
+            Id.Value = $"{GraphType}_{Name.Value}";
+        };
+    }
+
+    public void Close()
+    {
+        foreach (var anime in HappyAnimes)
+            anime.Close();
+        foreach (var anime in NomalAnimes)
+            anime.Close();
+        foreach (var anime in PoorConditionAnimes)
+            anime.Close();
+        foreach (var anime in IllAnimes)
+            anime.Close();
+    }
+
+    public void Clear()
+    {
+        HappyAnimes.Clear();
+        NomalAnimes.Clear();
+        PoorConditionAnimes.Clear();
+        IllAnimes.Clear();
     }
 
     private void Animes_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
@@ -157,16 +183,16 @@ public class FoodAnimeTypeModel
 
     public void ParseInfoFile(string path, string infoPath)
     {
-        var lps = new LPS(infoPath);
-        var foodAnimeInfos = lps.FindAllLineInfo(nameof(FoodAnimation));
+        var lps = new LPS(File.ReadAllText(infoPath));
+        var foodAnimeInfos = lps.FindAllLine(nameof(FoodAnimation));
         if (foodAnimeInfos.Any() is false)
             throw new Exception("信息文件\n{0}\n未包含食物动画信息".Translate(infoPath));
-        var pngAnimeInfos = lps.FindAllLineInfo(nameof(PNGAnimation))
+        var pngAnimeInfos = lps.FindAllLine(nameof(PNGAnimation))
             .Select(
                 i =>
                     new PNGAnimeInfo(
                         i.Info,
-                        i.Find("infoPath").Info,
+                        i.Find("path").Info,
                         (GameSave.ModeType)
                             Enum.Parse(typeof(GameSave.ModeType), i.Find("mode").Info, true)
                     )
@@ -246,7 +272,7 @@ public class FoodAnimeTypeModel
                         i =>
                             new ImageModel(
                                 Utils.LoadImageToMemoryStream(i),
-                                int.Parse(Path.GetFileNameWithoutExtension(i).Split('_')[1])
+                                int.Parse(Path.GetFileNameWithoutExtension(i).Split('_')[2])
                             )
                     )
             );

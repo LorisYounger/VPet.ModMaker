@@ -105,7 +105,7 @@ public partial class AnimeEditWindow : Window
         if (sender is not ListBox listBox)
             return;
         if (e.Data.GetData(DataFormats.FileDrop) is Array array)
-            ViewModel.AddImages((AnimeModel)listBox.DataContext, array.Cast<string>());
+            ViewModel.AddImages(((AnimeModel)listBox.DataContext).Images, array.Cast<string>());
         if (_dropSender is not null && sender.Equals(_dropSender) is false)
         {
             MessageBox.Show("无法移动不同动画的图片".Translate());
@@ -161,18 +161,6 @@ public partial class AnimeEditWindow : Window
             obj = VisualTreeHelper.GetParent(obj);
         }
         return null;
-    }
-
-    private void Button_AddAnime_Click(object sender, RoutedEventArgs e)
-    {
-        if (ViewModel.CurrentMode is GameSave.ModeType.Happy)
-            ViewModel.Anime.Value.HappyAnimes.Add(new());
-        else if (ViewModel.CurrentMode is GameSave.ModeType.Nomal)
-            ViewModel.Anime.Value.NomalAnimes.Add(new());
-        else if (ViewModel.CurrentMode is GameSave.ModeType.PoorCondition)
-            ViewModel.Anime.Value.PoorConditionAnimes.Add(new());
-        else if (ViewModel.CurrentMode is GameSave.ModeType.Ill)
-            ViewModel.Anime.Value.IllAnimes.Add(new());
     }
 
     private void ListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)

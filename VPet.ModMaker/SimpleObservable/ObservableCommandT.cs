@@ -14,7 +14,7 @@ namespace HKW.HKWViewModels.SimpleObservable;
 /// </summary>
 /// <typeparam name="T">参数类型</typeparam>
 [DebuggerDisplay(
-    "CanExecute = {CanExecuteProperty.EnumValue}, EventCount =  {ExecuteEvent.GetInvocationList().Length}, AsyncEventCount = {AsyncExecuteEvent.GetInvocationList().Length}"
+    "CanExecute = {CanExecuteProperty.Value}, EventCount =  {ExecuteEvent.GetInvocationList().Length}, AsyncEventCount = {AsyncExecuteEvent.GetInvocationList().Length}"
 )]
 public class ObservableCommand<T> : ICommand
     where T : notnull
@@ -22,15 +22,24 @@ public class ObservableCommand<T> : ICommand
     /// <inheritdoc cref="ObservableCommand.CanExecuteProperty"/>
     public ObservableValue<bool> CanExecuteProperty { get; } = new(true);
 
-    /// <inheritdoc cref="ObservableCommand.r_waiting"/>
-    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-    private readonly ObservableValue<bool> r_waiting = new(false);
+    /// <summary>
+    /// 当前可执行状态
+    /// </summary>
+    public ObservableValue<bool> CurrentCanExecute { get; } = new(true);
 
-    /// <inheritdoc />
+    /// <inheritdoc/>
     public ObservableCommand()
     {
         CanExecuteProperty.PropertyChanged += InvokeCanExecuteChanged;
-        r_waiting.PropertyChanged += InvokeCanExecuteChanged;
+        CurrentCanExecute.PropertyChanged += InvokeCanExecuteChanged;
+        CurrentCanExecute.ValueChanging += CurrentCanExecute_ValueChanging;
+    }
+
+    private bool CurrentCanExecute_ValueChanging(bool oldValue, bool newValue)
+    {
+        if (newValue is true && CanExecuteProperty.Value is false)
+            return true;
+        return false;
     }
 
     private void InvokeCanExecuteChanged(object? sender, PropertyChangedEventArgs e)
@@ -42,9 +51,7 @@ public class ObservableCommand<T> : ICommand
     /// <inheritdoc cref="ObservableCommand.CanExecute(object?)"/>
     public bool CanExecute(object? parameter)
     {
-        if (r_waiting.Value is true)
-            return false;
-        return CanExecuteProperty.Value;
+        return CurrentCanExecute.Value && CanExecuteProperty.Value;
     }
 
     /// <inheritdoc cref="ObservableCommand.Execute(object?)"/>
@@ -60,12 +67,12 @@ public class ObservableCommand<T> : ICommand
     {
         if (AsyncExecuteEvent is null)
             return;
-        r_waiting.Value = true;
+        CurrentCanExecute.Value = false;
         foreach (
             var asyncEvent in AsyncExecuteEvent.GetInvocationList().Cast<AsyncExecuteHandler>()
         )
             await asyncEvent.Invoke(parameter);
-        r_waiting.Value = false;
+        CurrentCanExecute.Value = true;
     }
     #endregion
 

@@ -32,8 +32,8 @@ public partial class AnimePage : Page
 
     private void DataGrid_MouseDoubleClick(object sender, MouseButtonEventArgs e)
     {
-        if (sender is not DataGrid dataGrid || dataGrid.SelectedItem is not AnimeTypeModel model)
+        if (sender is not DataGrid dataGrid || dataGrid.SelectedItem is null)
             return;
-        ViewModel.Edit(model);
+        ViewModel.Edit(dataGrid.SelectedItem);
     }
 }

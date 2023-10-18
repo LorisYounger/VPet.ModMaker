@@ -57,9 +57,9 @@ public class FoodAnimeModel
                     double.Parse(infos[3])
                 );
             }
-            if (infos.Length > 3)
-                foodLocationInfo.Rotate.Value = double.Parse(infos[4]);
             if (infos.Length > 4)
+                foodLocationInfo.Rotate.Value = double.Parse(infos[4]);
+            if (infos.Length > 5)
                 foodLocationInfo.Opacity.Value = double.Parse(infos[5]);
             FoodLocations.Add(foodLocationInfo);
         }

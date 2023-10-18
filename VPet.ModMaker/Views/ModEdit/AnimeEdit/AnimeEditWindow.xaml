@@ -12,6 +12,7 @@
   Width="1000"
   Height="600"
   d:DataContext="{d:DesignInstance Type=vm:AnimeEditWindowVM}"
+  WindowStartupLocation="CenterScreen"
   mc:Ignorable="d">
   <Window.Resources>
     <Style
@@ -30,17 +31,23 @@
         <Expander.ContextMenu>
           <ContextMenu d:DataContext="">
             <MenuItem
+              d:Header="添加图片"
               Command="{Binding PlacementTarget.Tag.AddImageCommand, RelativeSource={RelativeSource AncestorType=ContextMenu, Mode=FindAncestor}}"
               CommandParameter="{Binding PlacementTarget.DataContext, RelativeSource={RelativeSource AncestorType=ContextMenu, Mode=FindAncestor}}"
-              Header="{ll:Str 添加图片}" />
+              Header="{ll:Str 添加图片}"
+              IsEnabled="{Binding PlacementTarget.Tag.PlayCommand.CurrentCanExecute.Value, RelativeSource={RelativeSource AncestorType=ContextMenu, Mode=FindAncestor}}" />
             <MenuItem
+              d:Header="清空图片"
               Command="{Binding PlacementTarget.Tag.ClearImageCommand, RelativeSource={RelativeSource AncestorType=ContextMenu, Mode=FindAncestor}}"
               CommandParameter="{Binding PlacementTarget.DataContext, RelativeSource={RelativeSource AncestorType=ContextMenu, Mode=FindAncestor}}"
-              Header="{ll:Str 清空图片}" />
+              Header="{ll:Str 清空图片}"
+              IsEnabled="{Binding PlacementTarget.Tag.PlayCommand.CurrentCanExecute.Value, RelativeSource={RelativeSource AncestorType=ContextMenu, Mode=FindAncestor}}" />
             <MenuItem
+              d:Header="删除此项"
               Command="{Binding PlacementTarget.Tag.RemoveAnimeCommand, RelativeSource={RelativeSource AncestorType=ContextMenu, Mode=FindAncestor}}"
               CommandParameter="{Binding PlacementTarget.DataContext, RelativeSource={RelativeSource AncestorType=ContextMenu, Mode=FindAncestor}}"
-              Header="{ll:Str 删除此项}" />
+              Header="{ll:Str 删除此项}"
+              IsEnabled="{Binding PlacementTarget.Tag.PlayCommand.CurrentCanExecute.Value, RelativeSource={RelativeSource AncestorType=ContextMenu, Mode=FindAncestor}}" />
           </ContextMenu>
         </Expander.ContextMenu>
         <Expander.Header>
@@ -59,8 +66,9 @@
             </TextBlock>
             <TextBox
               Grid.Column="1"
-              pu:TextBoxHelper.Watermark="{ll:Str 动画Id}"
+              pu:TextBoxHelper.Watermark="{ll:Str 动画Id(非必要)}"
               Text="{Binding Id.Value, UpdateSourceTrigger=PropertyChanged}" />
+            <!--  pu:TextBoxHelper.Watermark="{ll:Str 动画Id(非必要)}"  -->
             <ComboBox
               Grid.Column="2"
               Margin="10,0,0,0"
@@ -89,9 +97,17 @@
                 <Grid.ContextMenu>
                   <ContextMenu>
                     <MenuItem
+                      d:Header="修改图片"
+                      Command="{Binding PlacementTarget.Tag.ChangeImageCommand, RelativeSource={RelativeSource AncestorType=ContextMenu, Mode=FindAncestor}}"
+                      CommandParameter="{Binding PlacementTarget.DataContext, RelativeSource={RelativeSource AncestorType=ContextMenu, Mode=FindAncestor}}"
+                      Header="{ll:Str 修改图片}"
+                      IsEnabled="{Binding PlacementTarget.Tag.PlayCommand.CurrentCanExecute.Value, RelativeSource={RelativeSource AncestorType=ContextMenu, Mode=FindAncestor}}" />
+                    <MenuItem
+                      d:Header="删除图片"
                       Command="{Binding PlacementTarget.Tag.RemoveImageCommand, RelativeSource={RelativeSource AncestorType=ContextMenu, Mode=FindAncestor}}"
                       CommandParameter="{Binding PlacementTarget.DataContext, RelativeSource={RelativeSource AncestorType=ContextMenu, Mode=FindAncestor}}"
-                      Header="{ll:Str 删除图片}" />
+                      Header="{ll:Str 删除图片}"
+                      IsEnabled="{Binding PlacementTarget.Tag.PlayCommand.CurrentCanExecute.Value, RelativeSource={RelativeSource AncestorType=ContextMenu, Mode=FindAncestor}}" />
                   </ContextMenu>
                 </Grid.ContextMenu>
                 <Grid.RowDefinitions>
@@ -116,7 +132,7 @@
                     <ColumnDefinition Width="Auto" />
                     <ColumnDefinition />
                   </Grid.ColumnDefinitions>
-                  <Label Content="{ll:Str 持续时间(ms)}" />
+                  <Label d:Content="持续时间(ms)" Content="{ll:Str 持续时间(ms)}" />
                   <pu:NumberInput Grid.Column="1" Value="{Binding DataContext.Duration.Value, RelativeSource={RelativeSource AncestorType=ListBoxItem, Mode=FindAncestor}}" />
                 </Grid>
               </Grid>
@@ -263,7 +279,7 @@
         <Button
           x:Name="Button_AddAnime"
           Margin="10"
-          Click="Button_AddAnime_Click"
+          Command="{Binding AddAnimeCommand}"
           Content="{ll:Str 添加动画}" />
         <Button
           x:Name="Button_Cancel"

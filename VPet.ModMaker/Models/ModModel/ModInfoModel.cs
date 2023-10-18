@@ -236,6 +236,11 @@ public class ModInfoModel : I18nModel<I18nModInfoModel>
                 )
                     petModel.Animes.Add(model1);
             }
+            else if (FoodAnimeTypeModel.FoodAnimeNames.Contains(dirName))
+            {
+                //if (FoodAnimeTypeModel.Create(animeDir) is FoodAnimeTypeModel model1)
+                //    petModel.FoodAnimes.Add(model1);
+            }
         }
     }
 

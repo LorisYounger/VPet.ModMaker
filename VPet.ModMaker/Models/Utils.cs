@@ -50,7 +50,6 @@ public static class Utils
     {
         BitmapImage bitmapImage = new();
         bitmapImage.BeginInit();
-        bitmapImage.DecodePixelWidth = DecodePixelWidth;
         try
         {
             var ms = new MemoryStream();
@@ -62,6 +61,8 @@ public static class Utils
         {
             bitmapImage.EndInit();
         }
+        if (bitmapImage.PixelWidth > DecodePixelWidth)
+            bitmapImage.DecodePixelWidth = DecodePixelWidth;
         return bitmapImage;
     }
 }

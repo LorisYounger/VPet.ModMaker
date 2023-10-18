@@ -13,7 +13,7 @@ namespace HKW.HKWViewModels.SimpleObservable;
 /// 可观察命令
 /// </summary>
 [DebuggerDisplay(
-    "CanExecute = {CanExecuteProperty.EnumValue}, EventCount =  {ExecuteEvent.GetInvocationList().Length}, AsyncEventCount = {AsyncExecuteEvent.GetInvocationList().Length}"
+    "CanExecute = {CanExecuteProperty.Value}, EventCount =  {ExecuteEvent.GetInvocationList().Length}, AsyncEventCount = {AsyncExecuteEvent.GetInvocationList().Length}"
 )]
 public class ObservableCommand : ICommand
 {
@@ -23,16 +23,23 @@ public class ObservableCommand : ICommand
     public ObservableValue<bool> CanExecuteProperty { get; } = new(true);
 
     /// <summary>
-    /// 等待异步执行完成
+    /// 当前可执行状态
     /// </summary>
-    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-    private readonly ObservableValue<bool> r_waiting = new(false);
+    public ObservableValue<bool> CurrentCanExecute { get; } = new(true);
 
     /// <inheritdoc/>
     public ObservableCommand()
     {
         CanExecuteProperty.PropertyChanged += InvokeCanExecuteChanged;
-        r_waiting.PropertyChanged += InvokeCanExecuteChanged;
+        CurrentCanExecute.PropertyChanged += InvokeCanExecuteChanged;
+        CurrentCanExecute.ValueChanging += CurrentCanExecute_ValueChanging;
+    }
+
+    private bool CurrentCanExecute_ValueChanging(bool oldValue, bool newValue)
+    {
+        if (newValue is true && CanExecuteProperty.Value is false)
+            return true;
+        return false;
     }
 
     private void InvokeCanExecuteChanged(object? sender, PropertyChangedEventArgs e)
@@ -48,9 +55,7 @@ public class ObservableCommand : ICommand
     /// <returns>能被执行为 <see langword="true"/> 否则为 <see langword="false"/></returns>
     public bool CanExecute(object? parameter)
     {
-        if (r_waiting.Value is true)
-            return false;
-        return CanExecuteProperty.Value;
+        return CurrentCanExecute.Value && CanExecuteProperty.Value;
     }
 
     /// <summary>
@@ -71,12 +76,12 @@ public class ObservableCommand : ICommand
     {
         if (AsyncExecuteEvent is null)
             return;
-        r_waiting.Value = true;
+        CurrentCanExecute.Value = false;
         foreach (
             var asyncEvent in AsyncExecuteEvent.GetInvocationList().Cast<AsyncExecuteHandler>()
         )
             await asyncEvent.Invoke();
-        r_waiting.Value = false;
+        CurrentCanExecute.Value = true;
     }
     #endregion
 

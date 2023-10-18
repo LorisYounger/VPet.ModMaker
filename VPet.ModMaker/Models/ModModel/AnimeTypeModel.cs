@@ -142,6 +142,26 @@ public class AnimeTypeModel
         }
     }
 
+    public void Close()
+    {
+        foreach (var anime in HappyAnimes)
+            anime.Close();
+        foreach (var anime in NomalAnimes)
+            anime.Close();
+        foreach (var anime in PoorConditionAnimes)
+            anime.Close();
+        foreach (var anime in IllAnimes)
+            anime.Close();
+    }
+
+    public void Clear()
+    {
+        HappyAnimes.Clear();
+        NomalAnimes.Clear();
+        PoorConditionAnimes.Clear();
+        IllAnimes.Clear();
+    }
+
     public AnimeTypeModel(GraphInfo.GraphType graphType, string path)
     {
         Name.Value = Path.GetFileName(path);

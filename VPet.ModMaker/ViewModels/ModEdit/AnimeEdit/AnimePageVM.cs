@@ -61,12 +61,12 @@ public class AnimePageVM
     /// <summary>
     /// 编辑命令
     /// </summary>
-    public ObservableCommand<AnimeTypeModel> EditCommand { get; } = new();
+    public ObservableCommand<object> EditCommand { get; } = new();
 
     /// <summary>
     /// 删除命令
     /// </summary>
-    public ObservableCommand<AnimeTypeModel> RemoveCommand { get; } = new();
+    public ObservableCommand<object> RemoveCommand { get; } = new();
     #endregion
     public AnimePageVM()
     {
@@ -143,43 +143,83 @@ public class AnimePageVM
         selectGraphTypeWindow.CurrentPet.Value = CurrentPet.Value;
         selectGraphTypeWindow.ShowDialog();
         var graphType = selectGraphTypeWindow.GraphType.Value;
+        var animeName = selectGraphTypeWindow.AnimeName.Value;
         if (selectGraphTypeWindow.IsCancel)
             return;
-        // TODO: FoodAnime
-        var window = new AnimeEditWindow();
-        var vm = window.ViewModel;
-        vm.CurrentPet = CurrentPet.Value;
-        vm.Anime.Value.GraphType.Value = graphType;
-        vm.Anime.Value.Name.Value = selectGraphTypeWindow.AnimeName.Value;
-        window.ShowDialog();
-        if (window.IsCancel)
-            return;
-        Animes.Add(vm.Anime.Value);
+        if (
+            graphType is VPet_Simulator.Core.GraphInfo.GraphType.Common
+            && FoodAnimeTypeModel.FoodAnimeNames.Contains(animeName)
+        )
+        {
+            var window = new FoodAnimeEditWindow();
+            var vm = window.ViewModel;
+            vm.CurrentPet = CurrentPet.Value;
+            vm.Anime.Value.Name.Value = animeName;
+            window.ShowDialog();
+            if (window.IsCancel)
+                return;
+            FoodAnimes.Add(vm.Anime.Value);
+        }
+        else
+        {
+            var window = new AnimeEditWindow();
+            var vm = window.ViewModel;
+            vm.CurrentPet = CurrentPet.Value;
+            vm.Anime.Value.GraphType.Value = graphType;
+            vm.Anime.Value.Name.Value = animeName;
+            window.ShowDialog();
+            if (window.IsCancel)
+                return;
+            Animes.Add(vm.Anime.Value);
+        }
     }
 
     /// <summary>
     /// 编辑动画
     /// </summary>
     /// <param name="model">动画类型模型</param>
-    public void Edit(AnimeTypeModel model)
+    public void Edit(object model)
     {
-        // TODO: FoodAnime
-        var window = new AnimeEditWindow();
-        var vm = window.ViewModel;
-        vm.CurrentPet = CurrentPet.Value;
-        vm.OldAnime = model;
-        var newAnime = vm.Anime.Value = new(model);
-        window.ShowDialog();
-        if (window.IsCancel)
-            return;
-        if (ShowAnimes.Value.Count == Animes.Count)
+        if (model is AnimeTypeModel animeTypeModel)
         {
-            Animes[Animes.IndexOf(model)] = newAnime;
+            // TODO: FoodAnime
+            var window = new AnimeEditWindow();
+            var vm = window.ViewModel;
+            vm.CurrentPet = CurrentPet.Value;
+            vm.OldAnime = animeTypeModel;
+            var newAnime = vm.Anime.Value = new(animeTypeModel);
+            window.ShowDialog();
+            if (window.IsCancel)
+                return;
+            if (ShowAnimes.Value.Count == Animes.Count)
+            {
+                Animes[Animes.IndexOf(animeTypeModel)] = newAnime;
+            }
+            else
+            {
+                Animes[Animes.IndexOf(animeTypeModel)] = newAnime;
+                ShowAnimes.Value[ShowAnimes.Value.IndexOf(animeTypeModel)] = newAnime;
+            }
         }
-        else
+        else if (model is FoodAnimeTypeModel foodAnimeTypeModel)
         {
-            Animes[Animes.IndexOf(model)] = newAnime;
-            ShowAnimes.Value[ShowAnimes.Value.IndexOf(model)] = newAnime;
+            var window = new FoodAnimeEditWindow();
+            var vm = window.ViewModel;
+            vm.CurrentPet = CurrentPet.Value;
+            vm.OldAnime = foodAnimeTypeModel;
+            var newAnime = vm.Anime.Value = new(foodAnimeTypeModel);
+            window.ShowDialog();
+            if (window.IsCancel)
+                return;
+            if (ShowAnimes.Value.Count == FoodAnimes.Count)
+            {
+                FoodAnimes[FoodAnimes.IndexOf(foodAnimeTypeModel)] = newAnime;
+            }
+            else
+            {
+                FoodAnimes[FoodAnimes.IndexOf(foodAnimeTypeModel)] = newAnime;
+                ShowAnimes.Value[ShowAnimes.Value.IndexOf(foodAnimeTypeModel)] = newAnime;
+            }
         }
     }
 
@@ -187,18 +227,20 @@ public class AnimePageVM
     /// 删除动画
     /// </summary>
     /// <param name="model">动画类型模型</param>
-    private void Remove(AnimeTypeModel model)
+    private void Remove(object model)
     {
         if (MessageBox.Show("确定删除吗".Translate(), "", MessageBoxButton.YesNo) is MessageBoxResult.No)
             return;
-        if (ShowAnimes.Value.Count == AllAnimes.Count)
+        ShowAnimes.Value.Remove(model);
+        if (model is AnimeTypeModel animeTypeModel)
         {
-            AllAnimes.Remove(model);
+            Animes.Remove(animeTypeModel);
+            animeTypeModel.Close();
         }
-        else
+        else if (model is FoodAnimeTypeModel foodAnimeTypeModel)
         {
-            ShowAnimes.Value.Remove(model);
-            AllAnimes.Remove(model);
+            FoodAnimes.Remove(foodAnimeTypeModel);
+            foodAnimeTypeModel.Close();
         }
     }
 }
