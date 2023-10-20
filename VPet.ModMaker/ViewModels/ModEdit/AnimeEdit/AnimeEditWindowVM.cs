@@ -316,8 +316,7 @@ public class AnimeEditWindowVM
     /// </summary>
     private void StopCommand_ExecuteEvent()
     {
-        if (_playing is false)
-            return;
+        _playing = false;
     }
 
     /// <summary>

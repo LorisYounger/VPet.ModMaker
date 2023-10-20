@@ -6,6 +6,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using VPet.ModMaker.Models.ModModel;
@@ -158,5 +159,34 @@ public static class Extensions
             }
             return bytesRead;
         }
+    }
+
+    public static T? FindVisualChild<T>(this DependencyObject obj)
+        where T : DependencyObject
+    {
+        if (obj is null)
+            return null;
+        var count = VisualTreeHelper.GetChildrenCount(obj);
+        for (int i = 0; i < count; i++)
+        {
+            var child = VisualTreeHelper.GetChild(obj, i);
+            if (child is T t)
+                return t;
+            if (FindVisualChild<T>(child) is T childItem)
+                return childItem;
+        }
+        return null;
+    }
+
+    public static T FindParent<T>(this DependencyObject obj)
+        where T : class
+    {
+        while (obj != null)
+        {
+            if (obj is T)
+                return obj as T;
+            obj = VisualTreeHelper.GetParent(obj);
+        }
+        return null;
     }
 }

@@ -25,7 +25,7 @@
     <DataTemplate x:Key="Expander_AnimeItem" DataType="Expander">
       <Expander
         HorizontalAlignment="Stretch"
-        VerticalAlignment="Stretch"
+        VerticalAlignment="Top"
         d:DataContext=""
         Tag="{Binding DataContext, RelativeSource={RelativeSource AncestorType=Window, Mode=FindAncestor}}">
         <Expander.ContextMenu>
@@ -80,7 +80,16 @@
             </Grid.RowDefinitions>
             <GroupBox>
               <GroupBox.Header>
-                <Label d:Content="顶层图片" Content="{ll:Str 顶层图片}" />
+                <StackPanel Orientation="Horizontal">
+                  <Label d:Content="顶层图片" Content="{ll:Str 顶层图片}" />
+                  <TextBlock Margin="10,0,0,0">
+                    <TextBlock.Text>
+                      <MultiBinding Converter="{StaticResource StringFormatConverter}" ConverterParameter="{}({0})">
+                        <Binding Path="FrontImages.Count" />
+                      </MultiBinding>
+                    </TextBlock.Text>
+                  </TextBlock>
+                </StackPanel>
               </GroupBox.Header>
               <ListBox
                 d:ItemsSource="{d:SampleData ItemCount=5}"
@@ -88,7 +97,6 @@
                 Drop="ListBox_Drop"
                 ItemsSource="{Binding FrontImages, IsAsync=True}"
                 PreviewMouseMove="ListBox_PreviewMouseMove"
-                PreviewMouseWheel="ListBox_PreviewMouseWheel"
                 SelectedItem="{Binding DataContext.CurrentFrontImageModel.Value, RelativeSource={RelativeSource AncestorType=Window, Mode=FindAncestor}}"
                 SelectionChanged="ListBox_SelectionChanged">
                 <ListBox.ItemsPanel>
@@ -147,7 +155,16 @@
             </GroupBox>
             <GroupBox Grid.Row="1">
               <GroupBox.Header>
-                <Label d:Content="底层图片" Content="{ll:Str 底层图片}" />
+                <StackPanel Orientation="Horizontal">
+                  <Label d:Content="底层图片" Content="{ll:Str 底层图片}" />
+                  <TextBlock Margin="10,0,0,0">
+                    <TextBlock.Text>
+                      <MultiBinding Converter="{StaticResource StringFormatConverter}" ConverterParameter="{}({0})">
+                        <Binding Path="BackImages.Count" />
+                      </MultiBinding>
+                    </TextBlock.Text>
+                  </TextBlock>
+                </StackPanel>
               </GroupBox.Header>
               <ListBox
                 d:ItemsSource="{d:SampleData ItemCount=5}"
@@ -155,7 +172,6 @@
                 Drop="ListBox_Drop"
                 ItemsSource="{Binding BackImages, IsAsync=True}"
                 PreviewMouseMove="ListBox_PreviewMouseMove"
-                PreviewMouseWheel="ListBox_PreviewMouseWheel"
                 SelectedItem="{Binding DataContext.CurrentBackImageModel.Value, RelativeSource={RelativeSource AncestorType=Window, Mode=FindAncestor}}"
                 SelectionChanged="ListBox_SelectionChanged">
                 <ListBox.ItemsPanel>
@@ -214,13 +230,22 @@
           </Grid>
           <GroupBox Grid.Column="1">
             <GroupBox.Header>
-              <Label d:Content="食物位置" Content="{ll:Str 食物位置}" />
+              <StackPanel Orientation="Horizontal">
+                <Label d:Content="食物位置" Content="{ll:Str 食物位置}" />
+                <TextBlock Margin="10,0,0,0">
+                  <TextBlock.Text>
+                    <MultiBinding Converter="{StaticResource StringFormatConverter}" ConverterParameter="{}({0})">
+                      <Binding Path="FrontImages.Count" />
+                    </MultiBinding>
+                  </TextBlock.Text>
+                </TextBlock>
+              </StackPanel>
             </GroupBox.Header>
             <ListBox
               d:ItemsSource="{d:SampleData ItemCount=5}"
               ItemsSource="{Binding FoodLocations, IsAsync=True}"
-              PreviewMouseWheel="ListBox_PreviewMouseWheel"
-              SelectedItem="{Binding DataContext.CurrentFoodLocationModel.Value, RelativeSource={RelativeSource AncestorType=Window, Mode=FindAncestor}}">
+              SelectedItem="{Binding DataContext.CurrentFoodLocationModel.Value, RelativeSource={RelativeSource AncestorType=Window, Mode=FindAncestor}}"
+              SelectionChanged="ListBox_SelectionChanged">
               <ListBox.ItemTemplate>
                 <DataTemplate>
                   <Grid>
@@ -371,15 +396,48 @@
               <Image
                 Width="500"
                 Height="500"
-                Source="{Binding Source, ElementName=Image_Back}" />
+                Source="{Binding CurrentBackImageModel.Value.Image.Value}" />
+              <Image
+                Height="{Binding Width, RelativeSource={RelativeSource Mode=Self}}"
+                HorizontalAlignment="Left"
+                VerticalAlignment="Top"
+                Opacity="{Binding CurrentFoodLocationModel.Value.Opacity.Value}"
+                RenderTransformOrigin="0,0"
+                Source="{Binding FoodImage.Value}">
+                <Image.RenderTransform>
+                  <TransformGroup>
+                    <ScaleTransform />
+                    <SkewTransform />
+                    <RotateTransform Angle="{Binding CurrentFoodLocationModel.Value.Rotate.Value}" />
+                    <TranslateTransform />
+                  </TransformGroup>
+                </Image.RenderTransform>
+                <Image.Style>
+                  <Style TargetType="Image">
+                    <Setter Property="Width">
+                      <Setter.Value>
+                        <MultiBinding Converter="{StaticResource CalculatorConverter}" ConverterParameter="*">
+                          <Binding Path="CurrentFoodLocationModel.Value.Rect.Width.Value" />
+                          <Binding Source="1" />
+                        </MultiBinding>
+                      </Setter.Value>
+                    </Setter>
+                    <Setter Property="Margin">
+                      <Setter.Value>
+                        <MultiBinding Converter="{StaticResource RatioMarginConverter}">
+                          <Binding Source="1" />
+                          <Binding Path="CurrentFoodLocationModel.Value.Rect.X.Value" />
+                          <Binding Path="CurrentFoodLocationModel.Value.Rect.Y.Value" />
+                        </MultiBinding>
+                      </Setter.Value>
+                    </Setter>
+                  </Style>
+                </Image.Style>
+              </Image>
               <Image
                 Width="500"
                 Height="500"
-                Source="{Binding Source, ElementName=Image_Center}" />
-              <Image
-                Width="500"
-                Height="500"
-                Source="{Binding Source, ElementName=Image_Front}" />
+                Source="{Binding CurrentFrontImageModel.Value.Image.Value}" />
             </Grid>
           </Image.ToolTip>
         </Image>
@@ -447,7 +505,7 @@
             ItemsSource="{Binding Anime.Value.HappyAnimes, IsAsync=True}"
             SelectionChanged="ListBox_Animes_SelectionChanged" />
         </TabItem>
-        <!--<TabItem d:Header="Nomal (0)" Tag="Nomal">
+        <TabItem d:Header="Nomal (0)" Tag="Nomal">
           <TabItem.Header>
             <MultiBinding Converter="{StaticResource StringFormatConverter}" ConverterParameter="{}{0} ({1})">
               <Binding Path="Tag" RelativeSource="{RelativeSource Mode=Self}" />
@@ -488,7 +546,7 @@
             ItemContainerStyle="{StaticResource ListBoxItem_Style}"
             ItemTemplate="{StaticResource Expander_AnimeItem}"
             ItemsSource="{Binding Anime.Value.IllAnimes, IsAsync=True}" />
-        </TabItem>-->
+        </TabItem>
       </TabControl>
       <Grid Grid.Row="1">
         <Grid.ColumnDefinitions>

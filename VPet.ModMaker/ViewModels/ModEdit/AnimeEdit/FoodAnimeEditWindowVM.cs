@@ -479,8 +479,7 @@ public class FoodAnimeEditWindowVM
     /// </summary>
     private void StopCommand_ExecuteEvent()
     {
-        if (_playing is false)
-            return;
+        _playing = false;
     }
 
     /// <summary>
@@ -494,11 +493,16 @@ public class FoodAnimeEditWindowVM
             return;
         }
         _playing = true;
-        _frontPlayerTask.Start();
-        _backPlayerTask.Start();
-        _foodPlayerTask.Start();
-        await Task.WhenAll(_frontPlayerTask, _backPlayerTask, _foodPlayerTask);
-        Reset();
+        do
+        {
+            _frontPlayerTask.Start();
+            _backPlayerTask.Start();
+            _foodPlayerTask.Start();
+            await Task.WhenAll(_frontPlayerTask, _backPlayerTask, _foodPlayerTask);
+            _frontPlayerTask = new(FrontPlay);
+            _backPlayerTask = new(BackPlay);
+            _foodPlayerTask = new(FoodPlay);
+        } while (Loop.Value && _playing);
     }
 
     /// <summary>
@@ -506,16 +510,13 @@ public class FoodAnimeEditWindowVM
     /// </summary>
     private void FrontPlay()
     {
-        do
+        foreach (var model in CurrentAnimeModel.Value.FrontImages)
         {
-            foreach (var model in CurrentAnimeModel.Value.FrontImages)
-            {
-                CurrentFrontImageModel.Value = model;
-                Task.Delay(model.Duration.Value).Wait();
-                if (_playing is false)
-                    return;
-            }
-        } while (Loop.Value);
+            CurrentFrontImageModel.Value = model;
+            Task.Delay(model.Duration.Value).Wait();
+            if (_playing is false)
+                return;
+        }
     }
 
     /// <summary>
@@ -523,16 +524,13 @@ public class FoodAnimeEditWindowVM
     /// </summary>
     private void BackPlay()
     {
-        do
+        foreach (var model in CurrentAnimeModel.Value.BackImages)
         {
-            foreach (var model in CurrentAnimeModel.Value.BackImages)
-            {
-                CurrentBackImageModel.Value = model;
-                Task.Delay(model.Duration.Value).Wait();
-                if (_playing is false)
-                    return;
-            }
-        } while (Loop.Value);
+            CurrentBackImageModel.Value = model;
+            Task.Delay(model.Duration.Value).Wait();
+            if (_playing is false)
+                return;
+        }
     }
 
     /// <summary>
@@ -540,16 +538,13 @@ public class FoodAnimeEditWindowVM
     /// </summary>
     private void FoodPlay()
     {
-        do
+        foreach (var model in CurrentAnimeModel.Value.FoodLocations)
         {
-            foreach (var model in CurrentAnimeModel.Value.FoodLocations)
-            {
-                CurrentFoodLocationModel.Value = model;
-                Task.Delay(model.Duration.Value).Wait();
-                if (_playing is false)
-                    return;
-            }
-        } while (Loop.Value);
+            CurrentFoodLocationModel.Value = model;
+            Task.Delay(model.Duration.Value).Wait();
+            if (_playing is false)
+                return;
+        }
     }
 
     /// <summary>

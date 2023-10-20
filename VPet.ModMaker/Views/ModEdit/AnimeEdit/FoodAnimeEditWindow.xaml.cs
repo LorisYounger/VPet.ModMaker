@@ -54,6 +54,8 @@ public partial class FoodAnimeEditWindow : Window
 
     private void TabControl_SelectionChanged(object sender, SelectionChangedEventArgs e)
     {
+        if (ViewModel is null)
+            return;
         if (
             sender is not TabControl tabControl
             || tabControl.SelectedItem is not TabItem item
@@ -134,35 +136,6 @@ public partial class FoodAnimeEditWindow : Window
         //var temp = list[sourceIndex];
         //list[sourceIndex] = list[targetIndex];
         //list[targetIndex] = temp;
-    }
-
-    public static T? FindVisualChild<T>(DependencyObject obj)
-        where T : DependencyObject
-    {
-        if (obj is null)
-            return null;
-        var count = VisualTreeHelper.GetChildrenCount(obj);
-        for (int i = 0; i < count; i++)
-        {
-            var child = VisualTreeHelper.GetChild(obj, i);
-            if (child is T t)
-                return t;
-            if (FindVisualChild<T>(child) is T childItem)
-                return childItem;
-        }
-        return null;
-    }
-
-    public static T FindVisualParent<T>(DependencyObject obj)
-        where T : class
-    {
-        while (obj != null)
-        {
-            if (obj is T)
-                return obj as T;
-            obj = VisualTreeHelper.GetParent(obj);
-        }
-        return null;
     }
 
     private void ListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)

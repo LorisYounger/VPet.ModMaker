@@ -137,14 +137,25 @@ public class FoodAnimeTypeModel
         : this()
     {
         Name.Value = Path.GetFileName(path);
-        var infoFile = Path.Combine(path, ModMakerInfo.InfoFile);
-        if (
-            Directory.EnumerateFiles(path, ModMakerInfo.InfoFile, SearchOption.AllDirectories).Any()
-            is false
-        )
-            throw new Exception("信息文件\n{0}\n不存在".Translate(infoFile));
-        if (File.Exists(infoFile))
-            ParseInfoFile(path, infoFile);
+        //var infoFile = Path.Combine(path, ModMakerInfo.InfoFile);
+        //if (
+        //    Directory.EnumerateFiles(path, ModMakerInfo.InfoFile, SearchOption.AllDirectories).Any()
+        //    is false
+        //)
+        //    throw new Exception("信息文件\n{0}\n不存在".Translate(infoFile));
+        //if (File.Exists(infoFile))
+        //    ParseInfoFile(path, infoFile);
+        var infoFiles = Directory.EnumerateFiles(
+            path,
+            ModMakerInfo.InfoFile,
+            SearchOption.AllDirectories
+        );
+        if (infoFiles.Any() is false)
+            throw new Exception("信息文件不存在".Translate());
+        foreach (var file in infoFiles)
+        {
+            ParseInfoFile(Path.GetDirectoryName(file), file);
+        }
     }
 
     public FoodAnimeTypeModel(FoodAnimeTypeModel model)
@@ -278,6 +289,8 @@ public class FoodAnimeTypeModel
             );
         }
     }
+
+    public void Save(string path) { }
 }
 
 public class PNGAnimeInfo

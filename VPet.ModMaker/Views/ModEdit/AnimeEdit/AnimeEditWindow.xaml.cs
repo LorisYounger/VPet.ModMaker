@@ -12,6 +12,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using VPet.ModMaker.Models;
 using VPet.ModMaker.Models.ModModel;
 using VPet.ModMaker.ViewModels.ModEdit.AnimeEdit;
 using VPet_Simulator.Core;
@@ -92,7 +93,7 @@ public partial class AnimeEditWindow : Window
         HitTestResult result = VisualTreeHelper.HitTest(listBox, pos);
         if (result is null)
             return;
-        var listBoxItem = FindVisualParent<ListBoxItem>(result.VisualHit);
+        var listBoxItem = result.VisualHit.FindParent<ListBoxItem>();
         if (listBoxItem == null || listBoxItem.Content != listBox.SelectedItem)
             return;
         var dataObj = new DataObject(listBoxItem.Content);
@@ -119,7 +120,7 @@ public partial class AnimeEditWindow : Window
         if (e.Data.GetData(typeof(ImageModel)) is not ImageModel sourcePerson)
             return;
         //查找目标数据
-        var listBoxItem = FindVisualParent<ListBoxItem>(result.VisualHit);
+        var listBoxItem = result.VisualHit.FindParent<ListBoxItem>();
         if (listBoxItem == null)
             return;
         var targetPerson = listBoxItem.Content as ImageModel;
@@ -132,35 +133,6 @@ public partial class AnimeEditWindow : Window
         var temp = list[sourceIndex];
         list[sourceIndex] = list[targetIndex];
         list[targetIndex] = temp;
-    }
-
-    public static T? FindVisualChild<T>(DependencyObject obj)
-        where T : DependencyObject
-    {
-        if (obj is null)
-            return null;
-        var count = VisualTreeHelper.GetChildrenCount(obj);
-        for (int i = 0; i < count; i++)
-        {
-            var child = VisualTreeHelper.GetChild(obj, i);
-            if (child is T t)
-                return t;
-            if (FindVisualChild<T>(child) is T childItem)
-                return childItem;
-        }
-        return null;
-    }
-
-    public static T FindVisualParent<T>(DependencyObject obj)
-        where T : class
-    {
-        while (obj != null)
-        {
-            if (obj is T)
-                return obj as T;
-            obj = VisualTreeHelper.GetParent(obj);
-        }
-        return null;
     }
 
     private void ListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)

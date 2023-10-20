@@ -56,13 +56,12 @@ public static class Utils
             using var sr = new StreamReader(imagePath);
             sr.BaseStream.CopyTo(ms);
             bitmapImage.StreamSource = ms;
+            bitmapImage.DecodePixelWidth = DecodePixelWidth;
         }
         finally
         {
             bitmapImage.EndInit();
         }
-        if (bitmapImage.PixelWidth > DecodePixelWidth)
-            bitmapImage.DecodePixelWidth = DecodePixelWidth;
         return bitmapImage;
     }
 }
