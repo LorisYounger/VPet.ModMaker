@@ -97,8 +97,8 @@ public partial class AnimeEditWindow : Window
         if (listBoxItem == null || listBoxItem.Content != listBox.SelectedItem)
             return;
         var dataObj = new DataObject(listBoxItem.Content);
-        DragDrop.DoDragDrop(listBox, dataObj, DragDropEffects.Move);
         _dropSender = sender;
+        DragDrop.DoDragDrop(listBox, dataObj, DragDropEffects.Move);
     }
 
     private void ListBox_Drop(object sender, DragEventArgs e)
@@ -141,6 +141,7 @@ public partial class AnimeEditWindow : Window
             return;
         if (listBox.DataContext is AnimeModel model)
             ViewModel.CurrentAnimeModel.Value = model;
+        listBox.ScrollIntoView(listBox.SelectedItem);
         e.Handled = true;
     }
 

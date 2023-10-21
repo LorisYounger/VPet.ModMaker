@@ -217,8 +217,8 @@ public class AnimeEditWindowVM
     /// <param name="value">动画模型</param>
     private void RemoveImageCommand_ExecuteEvent(AnimeModel value)
     {
-        value.Images.Remove(CurrentImageModel.Value);
         CurrentImageModel.Value.Close();
+        value.Images.Remove(CurrentImageModel.Value);
     }
 
     /// <summary>

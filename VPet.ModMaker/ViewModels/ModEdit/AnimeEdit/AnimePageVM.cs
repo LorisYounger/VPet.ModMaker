@@ -1,5 +1,6 @@
 ﻿using HKW.HKWViewModels.SimpleObservable;
 using LinePutScript.Localization.WPF;
+using Panuon.WPF.UI;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -180,14 +181,15 @@ public class AnimePageVM
     /// <param name="model">动画类型模型</param>
     public void Edit(object model)
     {
+        var pendingHandler = PendingBox.Show("载入中".Translate());
         if (model is AnimeTypeModel animeTypeModel)
         {
-            // TODO: FoodAnime
             var window = new AnimeEditWindow();
             var vm = window.ViewModel;
             vm.CurrentPet = CurrentPet.Value;
             vm.OldAnime = animeTypeModel;
             var newAnime = vm.Anime.Value = new(animeTypeModel);
+            pendingHandler.Close();
             window.ShowDialog();
             if (window.IsCancel)
                 return;
@@ -208,6 +210,7 @@ public class AnimePageVM
             vm.CurrentPet = CurrentPet.Value;
             vm.OldAnime = foodAnimeTypeModel;
             var newAnime = vm.Anime.Value = new(foodAnimeTypeModel);
+            pendingHandler.Close();
             window.ShowDialog();
             if (window.IsCancel)
                 return;

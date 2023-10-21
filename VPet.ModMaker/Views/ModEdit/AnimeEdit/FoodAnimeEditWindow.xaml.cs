@@ -1,5 +1,6 @@
 ﻿using LinePutScript.Localization.WPF;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -12,6 +13,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using VPet.ModMaker.Models;
 using VPet.ModMaker.Models.ModModel;
 using VPet.ModMaker.ViewModels.ModEdit.AnimeEdit;
 using VPet_Simulator.Core;
@@ -88,54 +90,69 @@ public partial class FoodAnimeEditWindow : Window
 
     private void ListBox_PreviewMouseMove(object sender, MouseEventArgs e)
     {
-        //if (sender is not ListBox listBox)
-        //    return;
-        //if (e.LeftButton != MouseButtonState.Pressed)
-        //    return;
-        //var pos = e.GetPosition(listBox);
-        //HitTestResult result = VisualTreeHelper.HitTest(listBox, pos);
-        //if (result is null)
-        //    return;
-        //var listBoxItem = FindVisualParent<ListBoxItem>(result.VisualHit);
-        //if (listBoxItem == null || listBoxItem.Content != listBox.SelectedItem)
-        //    return;
-        //var dataObj = new DataObject(listBoxItem.Content);
-        //DragDrop.DoDragDrop(listBox, dataObj, DragDropEffects.Move);
-        //_dropSender = sender;
+        if (sender is not ListBox listBox)
+            return;
+        if (e.LeftButton != MouseButtonState.Pressed)
+            return;
+        var pos = e.GetPosition(listBox);
+        HitTestResult result = VisualTreeHelper.HitTest(listBox, pos);
+        if (result is null)
+            return;
+        var listBoxItem = result.VisualHit.FindParent<ListBoxItem>();
+        if (listBoxItem == null || listBoxItem.Content != listBox.SelectedItem)
+            return;
+        var dataObj = new DataObject(listBoxItem.Content);
+        _dropSender = sender;
+        DragDrop.DoDragDrop(listBox, dataObj, DragDropEffects.Move);
     }
 
     private void ListBox_Drop(object sender, DragEventArgs e)
     {
-        //if (sender is not ListBox listBox)
-        //    return;
-        //if (e.Data.GetData(DataFormats.FileDrop) is Array array)
-        //    ViewModel.AddImages(((AnimeModel)listBox.DataContext, array.Cast<string>());
-        //if (_dropSender is not null && sender.Equals(_dropSender) is false)
-        //{
-        //    MessageBox.Show("无法移动不同动画的图片".Translate());
-        //    return;
-        //}
-        //var pos = e.GetPosition(listBox);
-        //var result = VisualTreeHelper.HitTest(listBox, pos);
-        //if (result == null)
-        //    return;
-        ////查找元数据
-        //if (e.Data.GetData(typeof(ImageModel)) is not ImageModel sourcePerson)
-        //    return;
-        ////查找目标数据
-        //var listBoxItem = FindVisualParent<ListBoxItem>(result.VisualHit);
-        //if (listBoxItem == null)
-        //    return;
-        //var targetPerson = listBoxItem.Content as ImageModel;
-        //if (ReferenceEquals(targetPerson, sourcePerson))
-        //    return;
-        //if (listBox.ItemsSource is not IList<ImageModel> list)
-        //    return;
-        //var sourceIndex = list.IndexOf(sourcePerson);
-        //var targetIndex = list.IndexOf(targetPerson);
-        //var temp = list[sourceIndex];
-        //list[sourceIndex] = list[targetIndex];
-        //list[targetIndex] = temp;
+        if (sender is not ListBox listBox)
+            return;
+        if (e.Data.GetData(DataFormats.FileDrop) is Array array)
+        {
+            if (listBox.Name == "ListBox_FrontImages")
+            {
+                ViewModel.AddImages(
+                    ((FoodAnimeModel)listBox.DataContext).FrontImages,
+                    array.Cast<string>()
+                );
+            }
+            else if (listBox.Name == "ListBox_BackImages")
+            {
+                ViewModel.AddImages(
+                    ((FoodAnimeModel)listBox.DataContext).BackImages,
+                    array.Cast<string>()
+                );
+            }
+        }
+        if (_dropSender is not null && sender.Equals(_dropSender) is false)
+        {
+            MessageBox.Show("无法移动不同动画的图片".Translate());
+            return;
+        }
+        var pos = e.GetPosition(listBox);
+        var result = VisualTreeHelper.HitTest(listBox, pos);
+        if (result == null)
+            return;
+        //查找元数据
+        if (e.Data.GetData(typeof(ImageModel)) is not ImageModel sourcePerson)
+            return;
+        //查找目标数据
+        var listBoxItem = result.VisualHit.FindParent<ListBoxItem>();
+        if (listBoxItem == null)
+            return;
+        var targetPerson = listBoxItem.Content as ImageModel;
+        if (ReferenceEquals(targetPerson, sourcePerson))
+            return;
+        if (listBox.ItemsSource is not IList<ImageModel> list)
+            return;
+        var sourceIndex = list.IndexOf(sourcePerson);
+        var targetIndex = list.IndexOf(targetPerson);
+        var temp = list[sourceIndex];
+        list[sourceIndex] = list[targetIndex];
+        list[targetIndex] = temp;
     }
 
     private void ListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -144,6 +161,7 @@ public partial class FoodAnimeEditWindow : Window
             return;
         if (listBox.DataContext is FoodAnimeModel model)
             ViewModel.CurrentAnimeModel.Value = model;
+        listBox.ScrollIntoView(listBox.SelectedItem);
         e.Handled = true;
     }
 

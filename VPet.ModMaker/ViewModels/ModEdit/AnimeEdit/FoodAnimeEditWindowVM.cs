@@ -126,6 +126,11 @@ public class FoodAnimeEditWindowVM
     /// 清除顶层图片命令
     /// </summary>
     public ObservableCommand<FoodAnimeModel> ClearFrontImageCommand { get; } = new();
+
+    /// <summary>
+    /// 改变顶层图片命令
+    /// </summary>
+    public ObservableCommand<FoodAnimeModel> ChangeFrontImageCommand { get; } = new();
     #endregion
 
     #region BackImage
@@ -143,6 +148,11 @@ public class FoodAnimeEditWindowVM
     /// 清除底层图片命令
     /// </summary>
     public ObservableCommand<FoodAnimeModel> ClearBackImageCommand { get; } = new();
+
+    /// <summary>
+    /// 改变底层图片命令
+    /// </summary>
+    public ObservableCommand<FoodAnimeModel> ChangeBackImageCommand { get; } = new();
     #endregion
     #region FoodLocation
     /// <summary>
@@ -169,6 +179,7 @@ public class FoodAnimeEditWindowVM
     /// 重置食物图片
     /// </summary>
     public ObservableCommand ResetFoodImageCommand { get; } = new();
+
     #endregion
 
     /// <summary>
@@ -210,10 +221,12 @@ public class FoodAnimeEditWindowVM
         AddFrontImageCommand.ExecuteEvent += AddFrontImageCommand_ExecuteEvent;
         RemoveFrontImageCommand.ExecuteEvent += RemoveFrontImageCommand_ExecuteEvent;
         ClearFrontImageCommand.ExecuteEvent += ClearFrontImageCommand_ExecuteEvent;
+        ChangeFrontImageCommand.ExecuteEvent += ChangeFrontImageCommand_ExecuteEvent;
 
         AddBackImageCommand.ExecuteEvent += AddBackImageCommand_ExecuteEvent;
         RemoveBackImageCommand.ExecuteEvent += RemoveBackImageCommand_ExecuteEvent;
         ClearBackImageCommand.ExecuteEvent += ClearBackImageCommand_ExecuteEvent;
+        ChangeBackImageCommand.ExecuteEvent += ChangeBackImageCommand_ExecuteEvent;
 
         AddeFoodLocationCommand.ExecuteEvent += AddeFoodLocationCommand_ExecuteEvent;
         RemoveFoodLocationCommand.ExecuteEvent += RemoveFoodLocationCommand_ExecuteEvent;
@@ -318,8 +331,8 @@ public class FoodAnimeEditWindowVM
     /// <param name="value">动画模型</param>
     private void RemoveFrontImageCommand_ExecuteEvent(FoodAnimeModel value)
     {
-        value.FrontImages.Remove(CurrentFrontImageModel.Value);
         CurrentFrontImageModel.Value.Close();
+        value.FrontImages.Remove(CurrentFrontImageModel.Value);
     }
 
     /// <summary>
@@ -336,6 +349,33 @@ public class FoodAnimeEditWindowVM
                 image.Close();
             value.FrontImages.Clear();
         }
+    }
+
+    /// <summary>
+    /// 替换顶层图片
+    /// </summary>
+    /// <param name="value"></param>
+    /// <exception cref="NotImplementedException"></exception>
+    private void ChangeFrontImageCommand_ExecuteEvent(FoodAnimeModel value)
+    {
+        OpenFileDialog openFileDialog =
+            new() { Title = "选择图片".Translate(), Filter = $"图片|*.png".Translate() };
+        if (openFileDialog.ShowDialog() is not true)
+            return;
+        BitmapImage newImage;
+        try
+        {
+            newImage = Utils.LoadImageToMemoryStream(openFileDialog.FileName);
+        }
+        catch (Exception ex)
+        {
+            MessageBox.Show("替换失败失败 \n{0}".Translate(ex));
+            return;
+        }
+        if (newImage is null)
+            return;
+        CurrentFrontImageModel.Value.Close();
+        CurrentFrontImageModel.Value.Image.Value = newImage;
     }
 
     private void ShowFrontImagesPathInfo(FoodImagesPath imagesPath)
@@ -375,8 +415,8 @@ public class FoodAnimeEditWindowVM
     /// <param name="value">动画模型</param>
     private void RemoveBackImageCommand_ExecuteEvent(FoodAnimeModel value)
     {
-        value.BackImages.Remove(CurrentBackImageModel.Value);
         CurrentBackImageModel.Value.Close();
+        value.BackImages.Remove(CurrentBackImageModel.Value);
     }
 
     /// <summary>
@@ -393,6 +433,33 @@ public class FoodAnimeEditWindowVM
                 image.Close();
             value.BackImages.Clear();
         }
+    }
+
+    /// <summary>
+    /// 替换底层图片
+    /// </summary>
+    /// <param name="value"></param>
+    /// <exception cref="NotImplementedException"></exception>
+    private void ChangeBackImageCommand_ExecuteEvent(FoodAnimeModel value)
+    {
+        OpenFileDialog openFileDialog =
+            new() { Title = "选择图片".Translate(), Filter = $"图片|*.png".Translate() };
+        if (openFileDialog.ShowDialog() is not true)
+            return;
+        BitmapImage newImage;
+        try
+        {
+            newImage = Utils.LoadImageToMemoryStream(openFileDialog.FileName);
+        }
+        catch (Exception ex)
+        {
+            MessageBox.Show("替换失败失败 \n{0}".Translate(ex));
+            return;
+        }
+        if (newImage is null)
+            return;
+        CurrentBackImageModel.Value.Close();
+        CurrentBackImageModel.Value.Image.Value = newImage;
     }
     #endregion
 

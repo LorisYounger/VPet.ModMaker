@@ -84,11 +84,13 @@
           ItemsSource="{Binding Images, IsAsync=True}"
           PreviewMouseMove="ListBox_PreviewMouseMove"
           PreviewMouseWheel="ListBox_PreviewMouseWheel"
+          ScrollViewer.HorizontalScrollBarVisibility="Auto"
+          ScrollViewer.VerticalScrollBarVisibility="Hidden"
           SelectedItem="{Binding DataContext.CurrentImageModel.Value, RelativeSource={RelativeSource AncestorType=Window, Mode=FindAncestor}}"
           SelectionChanged="ListBox_SelectionChanged">
           <ListBox.ItemsPanel>
             <ItemsPanelTemplate>
-              <WrapPanel />
+              <StackPanel Orientation="Horizontal" />
             </ItemsPanelTemplate>
           </ListBox.ItemsPanel>
           <ListBox.ItemTemplate>
