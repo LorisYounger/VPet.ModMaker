@@ -54,6 +54,7 @@
           <Grid>
             <Grid.ColumnDefinitions>
               <ColumnDefinition Width="Auto" />
+              <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
             <TextBlock Margin="10,0,10,0">
               <TextBlock.Text>
@@ -91,6 +92,7 @@
               </StackPanel>
             </GroupBox.Header>
             <ListBox
+              x:Name="ListBox_FrontImages"
               d:ItemsSource="{d:SampleData ItemCount=5}"
               AllowDrop="True"
               Drop="ListBox_Drop"
@@ -168,6 +170,7 @@
               </StackPanel>
             </GroupBox.Header>
             <ListBox
+              x:Name="ListBox_BackImages"
               d:ItemsSource="{d:SampleData ItemCount=5}"
               AllowDrop="True"
               Drop="ListBox_Drop"
