@@ -614,12 +614,8 @@ public class AnimeTypeModel
         static void SaveAnimes(string animePath, ObservableCollection<AnimeModel> animes)
         {
             Directory.CreateDirectory(animePath);
-            var count = 0;
-            foreach (var anime in animes)
-            {
-                SaveImages(Path.Combine(animePath, count.ToString()), anime);
-                count++;
-            }
+            foreach (var anime in animes.Enumerate())
+                SaveImages(Path.Combine(animePath, anime.Index.ToString()), anime.Value);
         }
     }
 
@@ -631,16 +627,14 @@ public class AnimeTypeModel
     static void SaveImages(string imagesPath, AnimeModel model)
     {
         Directory.CreateDirectory(imagesPath);
-        var imageIndex = 0;
-        foreach (var image in model.Images)
+        foreach (var image in model.Images.Enumerate())
         {
-            image.Image.Value.SaveToPng(
+            image.Value.Image.Value.SaveToPng(
                 Path.Combine(
                     imagesPath,
-                    $"{model.Id.Value}_{imageIndex:000}_{image.Duration.Value}.png"
+                    $"{model.Id.Value}_{image.Index:000}_{image.Value.Duration.Value}.png"
                 )
             );
-            imageIndex++;
         }
     }
     #endregion

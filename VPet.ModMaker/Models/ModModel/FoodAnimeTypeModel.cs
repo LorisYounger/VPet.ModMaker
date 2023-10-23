@@ -27,6 +27,16 @@ public class FoodAnimeTypeModel
         new(StringComparer.InvariantCultureIgnoreCase) { "Eat", "Drink", "Gift", };
 
     /// <summary>
+    /// 顶层名称
+    /// </summary>
+    public const string FrontLayName = "front_lay";
+
+    /// <summary>
+    /// 底层名称
+    /// </summary>
+    public const string BackLayName = "back_lay";
+
+    /// <summary>
     /// Id
     /// </summary>
     public ObservableValue<string> Id { get; } = new();
@@ -58,7 +68,6 @@ public class FoodAnimeTypeModel
 
     public FoodAnimeTypeModel()
     {
-        HappyAnimes.CollectionChanged += Animes_CollectionChanged;
         Name.ValueChanged += (_, _) =>
         {
             Id.Value = $"{GraphType}_{Name.Value}";
@@ -83,54 +92,6 @@ public class FoodAnimeTypeModel
         NomalAnimes.Clear();
         PoorConditionAnimes.Clear();
         IllAnimes.Clear();
-    }
-
-    private void Animes_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
-    {
-        if (e.NewItems is not null)
-        {
-            foreach (var model in e.NewItems.Cast<FoodAnimeModel>())
-            {
-                SetImagesPathValueChanged(model);
-            }
-        }
-        if (e.OldItems is not null)
-        {
-            foreach (var model in e.OldItems.Cast<FoodAnimeModel>())
-            {
-                SetImagesPathValueChanged(model);
-            }
-        }
-    }
-
-    private void SetImagesPathValueChanged(FoodAnimeModel model)
-    {
-        model.FrontImagesPath.ValueChanged += (o, n) =>
-        {
-            if (n is null)
-                return;
-            if (n.Mode.Value is GameSave.ModeType.Happy)
-                model.FrontImages = HappyAnimes[n.Index.Value].FrontImages;
-            else if (n.Mode.Value is GameSave.ModeType.Nomal)
-                model.FrontImages = NomalAnimes[n.Index.Value].FrontImages;
-            else if (n.Mode.Value is GameSave.ModeType.PoorCondition)
-                model.FrontImages = PoorConditionAnimes[n.Index.Value].FrontImages;
-            else if (n.Mode.Value is GameSave.ModeType.Ill)
-                model.FrontImages = IllAnimes[n.Index.Value].FrontImages;
-        };
-        model.BackImagesPath.ValueChanged += (o, n) =>
-        {
-            if (n is null)
-                return;
-            if (n.Mode.Value is GameSave.ModeType.Happy)
-                model.BackImages = HappyAnimes[n.Index.Value].BackImages;
-            else if (n.Mode.Value is GameSave.ModeType.Nomal)
-                model.BackImages = NomalAnimes[n.Index.Value].BackImages;
-            else if (n.Mode.Value is GameSave.ModeType.PoorCondition)
-                model.BackImages = PoorConditionAnimes[n.Index.Value].BackImages;
-            else if (n.Mode.Value is GameSave.ModeType.Ill)
-                model.BackImages = IllAnimes[n.Index.Value].BackImages;
-        };
     }
 
     public FoodAnimeTypeModel(string path)
@@ -192,6 +153,12 @@ public class FoodAnimeTypeModel
         }
     }
 
+    /// <summary>
+    /// 解析信息文件
+    /// </summary>
+    /// <param name="path">路径</param>
+    /// <param name="infoPath">信息文件路径</param>
+    /// <exception cref="Exception"></exception>
     public void ParseInfoFile(string path, string infoPath)
     {
         var lps = new LPS(File.ReadAllText(infoPath));
@@ -215,6 +182,12 @@ public class FoodAnimeTypeModel
         }
     }
 
+    /// <summary>
+    /// 解析食物动画信息
+    /// </summary>
+    /// <param name="path">路径</param>
+    /// <param name="line">食物动画信息</param>
+    /// <param name="pngAnimeInfos">PNG动画信息</param>
     public void ParseFoodAnimeInfo(string path, ILine line, List<PNGAnimeInfo> pngAnimeInfos)
     {
         var mode = (GameSave.ModeType)
@@ -235,6 +208,14 @@ public class FoodAnimeTypeModel
             AddModeAnime(path, GameSave.ModeType.Ill, IllAnimes, line, pngAnimeInfos);
     }
 
+    /// <summary>
+    /// 添加模式动画
+    /// </summary>
+    /// <param name="path">路径</param>
+    /// <param name="mode">模式</param>
+    /// <param name="foodAnimes">食物动画</param>
+    /// <param name="line">食物动画信息</param>
+    /// <param name="pngAnimeInfos">PNG动画信息</param>
     public void AddModeAnime(
         string path,
         GameSave.ModeType mode,
@@ -290,7 +271,157 @@ public class FoodAnimeTypeModel
         }
     }
 
-    public void Save(string path) { }
+    /// <summary>
+    /// 保存
+    /// </summary>
+    /// <param name="path">路径</param>
+    public void Save(string path)
+    {
+        var animePath = Path.Combine(path, Name.Value);
+        if (
+            Directory.Exists(animePath)
+            && HappyAnimes.Count == 0
+            && NomalAnimes.Count == 0
+            && PoorConditionAnimes.Count == 0
+            && IllAnimes.Count == 0
+        )
+        {
+            Directory.Delete(animePath, true);
+            return;
+        }
+        if (HappyAnimes.Count > 0)
+            SaveAnimeInfo(animePath, HappyAnimes, GameSave.ModeType.Happy);
+        if (NomalAnimes.Count > 0)
+            SaveAnimeInfo(animePath, NomalAnimes, GameSave.ModeType.Nomal);
+        if (PoorConditionAnimes.Count > 0)
+            SaveAnimeInfo(animePath, PoorConditionAnimes, GameSave.ModeType.PoorCondition);
+        if (IllAnimes.Count > 0)
+            SaveAnimeInfo(animePath, IllAnimes, GameSave.ModeType.Ill);
+    }
+
+    /// <summary>
+    /// 保存动画信息
+    /// </summary>
+    /// <param name="animePath">路径</param>
+    /// <param name="animes">动画</param>
+    /// <param name="mode">模式</param>
+    private void SaveAnimeInfo(
+        string animePath,
+        ObservableCollection<FoodAnimeModel> animes,
+        GameSave.ModeType mode
+    )
+    {
+        var modeAnimePath = Path.Combine(animePath, mode.ToString());
+        foreach (var anime in animes.Enumerate())
+        {
+            var indexPath = Path.Combine(modeAnimePath, anime.Index.ToString());
+            Directory.CreateDirectory(indexPath);
+            var infoFile = Path.Combine(indexPath, ModMakerInfo.InfoFile);
+            var frontLayName = $"{Name.Value.ToLower()}_{FrontLayName}_{anime.Index}";
+            var backLayName = $"{Name.Value.ToLower()}_{BackLayName}_{anime.Index}";
+            SaveInfoFile(infoFile, frontLayName, backLayName, anime.Value, mode);
+            SaveImages(anime.Value, indexPath, frontLayName, backLayName);
+        }
+    }
+
+    /// <summary>
+    /// 保存图片
+    /// </summary>
+    /// <param name="anime">动画</param>
+    /// <param name="indexPath">索引路径</param>
+    /// <param name="frontLayName">顶层名称</param>
+    /// <param name="backLayName">底层名称</param>
+    private static void SaveImages(
+        FoodAnimeModel anime,
+        string indexPath,
+        string frontLayName,
+        string backLayName
+    )
+    {
+        var frontLayPath = Path.Combine(indexPath, frontLayName);
+        var backLayPath = Path.Combine(indexPath, backLayName);
+        Directory.CreateDirectory(frontLayPath);
+        Directory.CreateDirectory(backLayPath);
+        foreach (var frontImage in anime.FrontImages.Enumerate())
+        {
+            frontImage.Value.Image.Value.SaveToPng(
+                Path.Combine(
+                    frontLayPath,
+                    $"{anime.Id.Value}_{frontImage.Index:000}_{frontImage.Value.Duration.Value}.png"
+                )
+            );
+        }
+        foreach (var backImage in anime.BackImages.Enumerate())
+        {
+            backImage.Value.Image.Value.SaveToPng(
+                Path.Combine(
+                    backLayPath,
+                    $"{anime.Id.Value}_{backImage.Index:000}_{backImage.Value.Duration.Value}.png"
+                )
+            );
+        }
+    }
+
+    private void SaveInfoFile(
+        string infoFile,
+        string frontLayName,
+        string backLayName,
+        FoodAnimeModel anime,
+        GameSave.ModeType mode
+    )
+    {
+        var lps = new LPS()
+        {
+            new Line(nameof(PNGAnimation), frontLayName)
+            {
+                new Sub("path", FrontLayName),
+                new Sub("mode", mode.ToString()),
+                new Sub("graph", nameof(GraphInfo.GraphType.Common))
+            },
+            new Line(nameof(PNGAnimation), backLayName)
+            {
+                new Sub("path", BackLayName),
+                new Sub("mode", mode.ToString()),
+                new Sub("graph", nameof(GraphInfo.GraphType.Common))
+            },
+        };
+        var line = new Line(nameof(FoodAnimation), Name.Value.ToLower())
+        {
+            new Sub("mode", mode.ToString()),
+            new Sub("graph", Name.Value)
+        };
+        foreach (var foodLocation in anime.FoodLocations.Enumerate())
+        {
+            var sub = new Sub($"a{foodLocation.Index}");
+            sub.info = foodLocation.Value.ToString();
+            line.Add(sub);
+        }
+        line.Add(new Sub(FrontLayName, frontLayName));
+        line.Add(new Sub(BackLayName, backLayName));
+        lps.Add(line);
+        File.WriteAllText(infoFile, lps.ToString());
+    }
+
+    /// <summary>
+    /// 保存图片
+    /// </summary>
+    /// <param name="imagesPath"></param>
+    /// <param name="model"></param>
+    static void SaveImages(string imagesPath, AnimeModel model)
+    {
+        Directory.CreateDirectory(imagesPath);
+        var imageIndex = 0;
+        foreach (var image in model.Images)
+        {
+            image.Image.Value.SaveToPng(
+                Path.Combine(
+                    imagesPath,
+                    $"{model.Id.Value}_{imageIndex:000}_{image.Duration.Value}.png"
+                )
+            );
+            imageIndex++;
+        }
+    }
 }
 
 public class PNGAnimeInfo

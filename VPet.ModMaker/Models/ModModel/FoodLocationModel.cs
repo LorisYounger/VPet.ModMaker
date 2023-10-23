@@ -49,4 +49,9 @@ public class FoodLocationModel
         model.Opacity.Value = Opacity.Value;
         return model;
     }
+
+    public override string ToString()
+    {
+        return $"{Duration.Value},{Rect.X.Value},{Rect.Y.Value},{Rect.Width.Value},{Rotate.Value},{Opacity.Value}";
+    }
 }

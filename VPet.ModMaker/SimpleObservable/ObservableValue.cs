@@ -59,15 +59,14 @@ public class ObservableValue<T> : INotifyPropertyChanging, INotifyPropertyChange
     /// </summary>
     /// <param name="oldValue">旧值</param>
     /// <param name="newValue">新值</param>
+    /// <returns>取消改变</returns>
     private bool NotifyPropertyChanging(T oldValue, T newValue)
     {
         PropertyChanging?.Invoke(this, new(nameof(Value)));
+        var cancel = false;
         // 若全部事件取消改变 则取消改变
-        return ValueChanging
-            ?.GetInvocationList()
-            .Cast<ValueChangingEventHandler>()
-            .All(e => e.Invoke(oldValue, newValue) is true)
-            is true;
+        ValueChanging?.Invoke(oldValue, newValue, ref cancel);
+        return cancel;
     }
 
     /// <summary>
@@ -168,8 +167,8 @@ public class ObservableValue<T> : INotifyPropertyChanging, INotifyPropertyChange
     /// </summary>
     /// <param name="oldValue">旧值</param>
     /// <param name="newValue">新值</param>
-    /// <returns>取消改变</returns>
-    public delegate bool ValueChangingEventHandler(T oldValue, T newValue);
+    /// <param name="cancel">取消</param>
+    public delegate void ValueChangingEventHandler(T oldValue, T newValue, ref bool cancel);
 
     /// <summary>
     /// 值改变后事件

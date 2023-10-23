@@ -204,8 +204,10 @@ public class PetModel : I18nModel<I18nPetInfoModel>
         File.WriteAllText(petFile, lps.ToString());
 
         var petAnimePath = Path.Combine(path, Id.Value);
-        foreach (var animeType in Animes)
-            animeType.Save(petAnimePath);
+        foreach (var anime in Animes)
+            anime.Save(petAnimePath);
+        foreach (var anime in FoodAnimes)
+            anime.Save(petAnimePath);
     }
 
     private void SaveSimplePetInfo(string path)

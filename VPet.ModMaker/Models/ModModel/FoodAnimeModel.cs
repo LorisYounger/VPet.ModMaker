@@ -24,13 +24,11 @@ public class FoodAnimeModel
     /// 后图像列表
     /// </summary>
     public ObservableCollection<ImageModel> BackImages { get; set; } = new();
-    public ObservableValue<FoodImagesPath?> BackImagesPath { get; } = new();
 
     /// <summary>
     /// 前图像列表
     /// </summary>
     public ObservableCollection<ImageModel> FrontImages { get; set; } = new();
-    public ObservableValue<FoodImagesPath?> FrontImagesPath { get; } = new();
 
     /// <summary>
     /// 食物定位列表
