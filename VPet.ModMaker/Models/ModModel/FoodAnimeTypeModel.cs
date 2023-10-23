@@ -98,14 +98,6 @@ public class FoodAnimeTypeModel
         : this()
     {
         Name.Value = Path.GetFileName(path);
-        //var infoFile = Path.Combine(path, ModMakerInfo.InfoFile);
-        //if (
-        //    Directory.EnumerateFiles(path, ModMakerInfo.InfoFile, SearchOption.AllDirectories).Any()
-        //    is false
-        //)
-        //    throw new Exception("信息文件\n{0}\n不存在".Translate(infoFile));
-        //if (File.Exists(infoFile))
-        //    ParseInfoFile(path, infoFile);
         var infoFiles = Directory.EnumerateFiles(
             path,
             ModMakerInfo.InfoFile,
@@ -320,7 +312,7 @@ public class FoodAnimeTypeModel
             var frontLayName = $"{Name.Value.ToLower()}_{FrontLayName}_{anime.Index}";
             var backLayName = $"{Name.Value.ToLower()}_{BackLayName}_{anime.Index}";
             SaveInfoFile(infoFile, frontLayName, backLayName, anime.Value, mode);
-            SaveImages(anime.Value, indexPath, frontLayName, backLayName);
+            SaveImages(anime.Value, indexPath);
         }
     }
 
@@ -331,15 +323,10 @@ public class FoodAnimeTypeModel
     /// <param name="indexPath">索引路径</param>
     /// <param name="frontLayName">顶层名称</param>
     /// <param name="backLayName">底层名称</param>
-    private static void SaveImages(
-        FoodAnimeModel anime,
-        string indexPath,
-        string frontLayName,
-        string backLayName
-    )
+    private static void SaveImages(FoodAnimeModel anime, string indexPath)
     {
-        var frontLayPath = Path.Combine(indexPath, frontLayName);
-        var backLayPath = Path.Combine(indexPath, backLayName);
+        var frontLayPath = Path.Combine(indexPath, FrontLayName);
+        var backLayPath = Path.Combine(indexPath, BackLayName);
         Directory.CreateDirectory(frontLayPath);
         Directory.CreateDirectory(backLayPath);
         foreach (var frontImage in anime.FrontImages.Enumerate())
@@ -400,27 +387,6 @@ public class FoodAnimeTypeModel
         line.Add(new Sub(BackLayName, backLayName));
         lps.Add(line);
         File.WriteAllText(infoFile, lps.ToString());
-    }
-
-    /// <summary>
-    /// 保存图片
-    /// </summary>
-    /// <param name="imagesPath"></param>
-    /// <param name="model"></param>
-    static void SaveImages(string imagesPath, AnimeModel model)
-    {
-        Directory.CreateDirectory(imagesPath);
-        var imageIndex = 0;
-        foreach (var image in model.Images)
-        {
-            image.Image.Value.SaveToPng(
-                Path.Combine(
-                    imagesPath,
-                    $"{model.Id.Value}_{imageIndex:000}_{image.Duration.Value}.png"
-                )
-            );
-            imageIndex++;
-        }
     }
 }
 

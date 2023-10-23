@@ -26,32 +26,19 @@
       <Expander
         HorizontalAlignment="Stretch"
         VerticalAlignment="Top"
-        d:DataContext=""
-        Tag="{Binding DataContext, RelativeSource={RelativeSource AncestorType=Window, Mode=FindAncestor}}">
-        <Expander.ContextMenu>
-          <ContextMenu d:DataContext="">
-            <MenuItem
-              d:Header="添加图片"
-              Command="{Binding PlacementTarget.Tag.AddImageCommand, RelativeSource={RelativeSource AncestorType=ContextMenu, Mode=FindAncestor}}"
-              CommandParameter="{Binding PlacementTarget.DataContext, RelativeSource={RelativeSource AncestorType=ContextMenu, Mode=FindAncestor}}"
-              Header="{ll:Str 添加图片}"
-              IsEnabled="{Binding PlacementTarget.Tag.PlayCommand.CurrentCanExecute.Value, RelativeSource={RelativeSource AncestorType=ContextMenu, Mode=FindAncestor}}" />
-            <MenuItem
-              d:Header="添加图片"
-              Command="{Binding PlacementTarget.Tag.ClearImageCommand, RelativeSource={RelativeSource AncestorType=ContextMenu, Mode=FindAncestor}}"
-              CommandParameter="{Binding PlacementTarget.DataContext, RelativeSource={RelativeSource AncestorType=ContextMenu, Mode=FindAncestor}}"
-              Header="{ll:Str 清空图片}"
-              IsEnabled="{Binding PlacementTarget.Tag.PlayCommand.CurrentCanExecute.Value, RelativeSource={RelativeSource AncestorType=ContextMenu, Mode=FindAncestor}}" />
-            <MenuItem
-              d:Header="添加图片"
-              Command="{Binding PlacementTarget.Tag.RemoveAnimeCommand, RelativeSource={RelativeSource AncestorType=ContextMenu, Mode=FindAncestor}}"
-              CommandParameter="{Binding PlacementTarget.DataContext, RelativeSource={RelativeSource AncestorType=ContextMenu, Mode=FindAncestor}}"
-              Header="{ll:Str 删除此项}"
-              IsEnabled="{Binding PlacementTarget.Tag.PlayCommand.CurrentCanExecute.Value, RelativeSource={RelativeSource AncestorType=ContextMenu, Mode=FindAncestor}}" />
-          </ContextMenu>
-        </Expander.ContextMenu>
+        d:DataContext="">
         <Expander.Header>
-          <Grid>
+          <Grid Tag="{Binding DataContext, RelativeSource={RelativeSource AncestorType=Window, Mode=FindAncestor}}">
+            <Grid.ContextMenu>
+              <ContextMenu d:DataContext="">
+                <MenuItem
+                  d:Header="添加图片"
+                  Command="{Binding PlacementTarget.Tag.RemoveAnimeCommand, RelativeSource={RelativeSource AncestorType=ContextMenu, Mode=FindAncestor}}"
+                  CommandParameter="{Binding PlacementTarget.DataContext, RelativeSource={RelativeSource AncestorType=ContextMenu, Mode=FindAncestor}}"
+                  Header="{ll:Str 删除此动画}"
+                  IsEnabled="{Binding PlacementTarget.Tag.PlayCommand.CurrentCanExecute.Value, RelativeSource={RelativeSource AncestorType=ContextMenu, Mode=FindAncestor}}" />
+              </ContextMenu>
+            </Grid.ContextMenu>
             <Grid.ColumnDefinitions>
               <ColumnDefinition Width="Auto" />
               <ColumnDefinition Width="Auto" />
@@ -80,7 +67,23 @@
           </Grid.RowDefinitions>
           <GroupBox>
             <GroupBox.Header>
-              <StackPanel Orientation="Horizontal">
+              <StackPanel Orientation="Horizontal" Tag="{Binding DataContext, RelativeSource={RelativeSource AncestorType=Window, Mode=FindAncestor}}">
+                <StackPanel.ContextMenu>
+                  <ContextMenu d:DataContext="">
+                    <MenuItem
+                      d:Header="添加图片"
+                      Command="{Binding PlacementTarget.Tag.AddFrontImageCommand, RelativeSource={RelativeSource AncestorType=ContextMenu, Mode=FindAncestor}}"
+                      CommandParameter="{Binding PlacementTarget.DataContext, RelativeSource={RelativeSource AncestorType=ContextMenu, Mode=FindAncestor}}"
+                      Header="{ll:Str 添加图片}"
+                      IsEnabled="{Binding PlacementTarget.Tag.PlayCommand.CurrentCanExecute.Value, RelativeSource={RelativeSource AncestorType=ContextMenu, Mode=FindAncestor}}" />
+                    <MenuItem
+                      d:Header="添加图片"
+                      Command="{Binding PlacementTarget.Tag.ClearFrontImageCommand, RelativeSource={RelativeSource AncestorType=ContextMenu, Mode=FindAncestor}}"
+                      CommandParameter="{Binding PlacementTarget.DataContext, RelativeSource={RelativeSource AncestorType=ContextMenu, Mode=FindAncestor}}"
+                      Header="{ll:Str 清空图片}"
+                      IsEnabled="{Binding PlacementTarget.Tag.PlayCommand.CurrentCanExecute.Value, RelativeSource={RelativeSource AncestorType=ContextMenu, Mode=FindAncestor}}" />
+                  </ContextMenu>
+                </StackPanel.ContextMenu>
                 <Label d:Content="顶层图片" Content="{ll:Str 顶层图片}" />
                 <TextBlock Margin="10,0,0,0">
                   <TextBlock.Text>
@@ -158,7 +161,23 @@
           </GroupBox>
           <GroupBox Grid.Row="1">
             <GroupBox.Header>
-              <StackPanel Orientation="Horizontal">
+              <StackPanel Orientation="Horizontal" Tag="{Binding DataContext, RelativeSource={RelativeSource AncestorType=Window, Mode=FindAncestor}}">
+                <StackPanel.ContextMenu>
+                  <ContextMenu d:DataContext="">
+                    <MenuItem
+                      d:Header="添加图片"
+                      Command="{Binding PlacementTarget.Tag.AddBackImageCommand, RelativeSource={RelativeSource AncestorType=ContextMenu, Mode=FindAncestor}}"
+                      CommandParameter="{Binding PlacementTarget.DataContext, RelativeSource={RelativeSource AncestorType=ContextMenu, Mode=FindAncestor}}"
+                      Header="{ll:Str 添加图片}"
+                      IsEnabled="{Binding PlacementTarget.Tag.PlayCommand.CurrentCanExecute.Value, RelativeSource={RelativeSource AncestorType=ContextMenu, Mode=FindAncestor}}" />
+                    <MenuItem
+                      d:Header="添加图片"
+                      Command="{Binding PlacementTarget.Tag.ClearBackImageCommand, RelativeSource={RelativeSource AncestorType=ContextMenu, Mode=FindAncestor}}"
+                      CommandParameter="{Binding PlacementTarget.DataContext, RelativeSource={RelativeSource AncestorType=ContextMenu, Mode=FindAncestor}}"
+                      Header="{ll:Str 清空图片}"
+                      IsEnabled="{Binding PlacementTarget.Tag.PlayCommand.CurrentCanExecute.Value, RelativeSource={RelativeSource AncestorType=ContextMenu, Mode=FindAncestor}}" />
+                  </ContextMenu>
+                </StackPanel.ContextMenu>
                 <Label d:Content="底层图片" Content="{ll:Str 底层图片}" />
                 <TextBlock Margin="10,0,0,0">
                   <TextBlock.Text>
@@ -236,7 +255,23 @@
           </GroupBox>
           <GroupBox Grid.Row="2">
             <GroupBox.Header>
-              <StackPanel Orientation="Horizontal">
+              <StackPanel Orientation="Horizontal" Tag="{Binding DataContext, RelativeSource={RelativeSource AncestorType=Window, Mode=FindAncestor}}">
+                <StackPanel.ContextMenu>
+                  <ContextMenu d:DataContext="">
+                    <MenuItem
+                      d:Header="添加食物定位"
+                      Command="{Binding PlacementTarget.Tag.AddFoodLocationCommand, RelativeSource={RelativeSource AncestorType=ContextMenu, Mode=FindAncestor}}"
+                      CommandParameter="{Binding PlacementTarget.DataContext, RelativeSource={RelativeSource AncestorType=ContextMenu, Mode=FindAncestor}}"
+                      Header="{ll:Str 添加食物定位}"
+                      IsEnabled="{Binding PlacementTarget.Tag.PlayCommand.CurrentCanExecute.Value, RelativeSource={RelativeSource AncestorType=ContextMenu, Mode=FindAncestor}}" />
+                    <MenuItem
+                      d:Header="清空食物定位"
+                      Command="{Binding PlacementTarget.Tag.ClearFoodLocationCommand, RelativeSource={RelativeSource AncestorType=ContextMenu, Mode=FindAncestor}}"
+                      CommandParameter="{Binding PlacementTarget.DataContext, RelativeSource={RelativeSource AncestorType=ContextMenu, Mode=FindAncestor}}"
+                      Header="{ll:Str 清空食物定位}"
+                      IsEnabled="{Binding PlacementTarget.Tag.PlayCommand.CurrentCanExecute.Value, RelativeSource={RelativeSource AncestorType=ContextMenu, Mode=FindAncestor}}" />
+                  </ContextMenu>
+                </StackPanel.ContextMenu>
                 <Label d:Content="食物位置" Content="{ll:Str 食物位置}" />
                 <TextBlock Margin="10,0,0,0">
                   <TextBlock.Text>
@@ -262,6 +297,16 @@
               <ListBox.ItemTemplate>
                 <DataTemplate>
                   <Grid>
+                    <Grid.ContextMenu>
+                      <ContextMenu>
+                        <MenuItem
+                          d:Header="删除食物定位"
+                          Command="{Binding PlacementTarget.Tag.RemoveFoodLocationCommand, RelativeSource={RelativeSource AncestorType=ContextMenu, Mode=FindAncestor}}"
+                          CommandParameter="{Binding PlacementTarget.DataContext, RelativeSource={RelativeSource AncestorType=ContextMenu, Mode=FindAncestor}}"
+                          Header="{ll:Str 删除食物定位}"
+                          IsEnabled="{Binding PlacementTarget.Tag.PlayCommand.CurrentCanExecute.Value, RelativeSource={RelativeSource AncestorType=ContextMenu, Mode=FindAncestor}}" />
+                      </ContextMenu>
+                    </Grid.ContextMenu>
                     <Grid.ColumnDefinitions>
                       <ColumnDefinition Width="Auto" />
                       <ColumnDefinition />

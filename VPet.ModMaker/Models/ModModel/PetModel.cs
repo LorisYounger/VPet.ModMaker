@@ -75,6 +75,8 @@ public class PetModel : I18nModel<I18nPetInfoModel>
     /// </summary>
     public ObservableCollection<FoodAnimeTypeModel> FoodAnimes { get; } = new();
 
+    public ObservableValue<int> AnimeCount { get; } = new();
+
     public bool IsSimplePetModel { get; } = false;
 
     public PetModel()
@@ -83,6 +85,12 @@ public class PetModel : I18nModel<I18nPetInfoModel>
         Id.ValueChanged += (o, n) =>
         {
             DescriptionId.Value = $"{n}_{nameof(DescriptionId)}";
+        };
+        AnimeCount.AddNotifyReceiver(Animes);
+        AnimeCount.AddNotifyReceiver(FoodAnimes);
+        AnimeCount.NotifyReceived += (ref int v) =>
+        {
+            v = Animes.Count + FoodAnimes.Count;
         };
     }
 

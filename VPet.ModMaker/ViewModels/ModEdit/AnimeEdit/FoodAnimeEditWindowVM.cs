@@ -158,7 +158,7 @@ public class FoodAnimeEditWindowVM
     /// <summary>
     /// 添加食物定位命令
     /// </summary>
-    public ObservableCommand<FoodAnimeModel> AddeFoodLocationCommand { get; } = new();
+    public ObservableCommand<FoodAnimeModel> AddFoodLocationCommand { get; } = new();
 
     /// <summary>
     /// 删除食物定位命令
@@ -228,7 +228,7 @@ public class FoodAnimeEditWindowVM
         ClearBackImageCommand.ExecuteEvent += ClearBackImageCommand_ExecuteEvent;
         ChangeBackImageCommand.ExecuteEvent += ChangeBackImageCommand_ExecuteEvent;
 
-        AddeFoodLocationCommand.ExecuteEvent += AddeFoodLocationCommand_ExecuteEvent;
+        AddFoodLocationCommand.ExecuteEvent += AddeFoodLocationCommand_ExecuteEvent;
         RemoveFoodLocationCommand.ExecuteEvent += RemoveFoodLocationCommand_ExecuteEvent;
         ClearFoodLocationCommand.ExecuteEvent += ClearFoodLocationCommand_ExecuteEvent;
     }
