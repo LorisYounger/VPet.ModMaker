@@ -37,6 +37,12 @@ public class PetModel : I18nModel<I18nPetInfoModel>
         new(new(159, 16, 189, 178));
 
     /// <summary>
+    /// 身体区域
+    /// </summary>
+    public ObservableValue<ObservableRect<double>> TouchBodyRect { get; } =
+        new(new(166, 206, 163, 136));
+
+    /// <summary>
     /// 提起区域
     /// </summary>
     public ObservableValue<ObservableMultiStateRect> TouchRaisedRect { get; } =
@@ -99,6 +105,7 @@ public class PetModel : I18nModel<I18nPetInfoModel>
     {
         Id.Value = model.Id.Value;
         TouchHeadRect.Value = model.TouchHeadRect.Value.Copy();
+        TouchBodyRect.Value = model.TouchBodyRect.Value.Copy();
         TouchRaisedRect.Value = model.TouchRaisedRect.Value.Copy();
         RaisePoint.Value = model.RaisePoint.Value.Copy();
         foreach (var work in model.Works)
@@ -120,6 +127,13 @@ public class PetModel : I18nModel<I18nPetInfoModel>
             loader.Config.TouchHeadLocate.Y,
             loader.Config.TouchHeadSize.Width,
             loader.Config.TouchHeadSize.Height
+        );
+
+        TouchBodyRect.Value.SetValue(
+            loader.Config.TouchBodyLocate.X,
+            loader.Config.TouchBodyLocate.Y,
+            loader.Config.TouchBodySize.Width,
+            loader.Config.TouchBodySize.Height
         );
 
         TouchRaisedRect.Value.Happy.Value.SetValue(
@@ -287,6 +301,15 @@ public class PetModel : I18nModel<I18nPetInfoModel>
                 new Sub("py", TouchHeadRect.Value.Y.Value),
                 new Sub("sw", TouchHeadRect.Value.Width.Value),
                 new Sub("sh", TouchHeadRect.Value.Height.Value),
+            }
+        );
+        lps.Add(
+            new Line("touchbody")
+            {
+                new Sub("px", TouchBodyRect.Value.X.Value),
+                new Sub("py", TouchBodyRect.Value.Y.Value),
+                new Sub("sw", TouchBodyRect.Value.Width.Value),
+                new Sub("sh", TouchBodyRect.Value.Height.Value),
             }
         );
         lps.Add(

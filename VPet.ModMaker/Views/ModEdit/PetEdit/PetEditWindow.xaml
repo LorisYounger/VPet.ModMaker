@@ -89,6 +89,37 @@
               </Style>
             </Label.Style>
           </Label>
+          <Label Content="{ll:Str 身体触碰范围}" Tag="{Binding IsChecked, ElementName=ToggleButton_TouchBody}">
+            <Label.Style>
+              <Style BasedOn="{StaticResource Label_ThouchRect}" TargetType="Label">
+                <Setter Property="Width">
+                  <Setter.Value>
+                    <MultiBinding Converter="{StaticResource CalculatorConverter}" ConverterParameter="*">
+                      <Binding Path="Pet.Value.TouchBodyRect.Value.Width.Value" />
+                      <Binding Path="LengthRatio.Value" />
+                    </MultiBinding>
+                  </Setter.Value>
+                </Setter>
+                <Setter Property="Height">
+                  <Setter.Value>
+                    <MultiBinding Converter="{StaticResource CalculatorConverter}" ConverterParameter="*">
+                      <Binding Path="Pet.Value.TouchBodyRect.Value.Height.Value" />
+                      <Binding Path="LengthRatio.Value" />
+                    </MultiBinding>
+                  </Setter.Value>
+                </Setter>
+                <Setter Property="Margin">
+                  <Setter.Value>
+                    <MultiBinding Converter="{StaticResource RatioMarginConverter}">
+                      <Binding Path="LengthRatio.Value" />
+                      <Binding Path="Pet.Value.TouchBodyRect.Value.X.Value" />
+                      <Binding Path="Pet.Value.TouchBodyRect.Value.Y.Value" />
+                    </MultiBinding>
+                  </Setter.Value>
+                </Setter>
+              </Style>
+            </Label.Style>
+          </Label>
           <Label Content="{ll:Str 开心状态提起范围}" Tag="{Binding IsChecked, ElementName=ToggleButton_TouchRaisedRect_HappyState}">
             <Label.Style>
               <Style BasedOn="{StaticResource Label_ThouchRect}" TargetType="Label">
@@ -400,6 +431,53 @@
                 Grid.Row="1"
                 Grid.Column="3"
                 Value="{Binding Pet.Value.TouchHeadRect.Value.Height.Value, Mode=TwoWay}" />
+            </Grid>
+          </Grid>
+          <Grid>
+            <Grid.ColumnDefinitions>
+              <ColumnDefinition Width="Auto" />
+              <ColumnDefinition />
+            </Grid.ColumnDefinitions>
+            <ToggleButton
+              x:Name="ToggleButton_TouchBody"
+              Padding="5"
+              HorizontalContentAlignment="Stretch"
+              Content="{ll:Str 身体触碰范围}" />
+            <Grid Grid.Column="1" Margin="5">
+              <Grid.RowDefinitions>
+                <RowDefinition />
+                <RowDefinition />
+              </Grid.RowDefinitions>
+              <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition />
+              </Grid.ColumnDefinitions>
+              <Label Background="{x:Null}" Content="x:" />
+              <pu:NumberInput Grid.Column="1" Value="{Binding Pet.Value.TouchBodyRect.Value.X.Value}" />
+              <Label
+                Grid.Column="2"
+                Background="{x:Null}"
+                Content="y:" />
+              <pu:NumberInput Grid.Column="3" Value="{Binding Pet.Value.TouchBodyRect.Value.Y.Value, Mode=TwoWay}" />
+              <Label
+                Grid.Row="1"
+                Background="{x:Null}"
+                Content="w:" />
+              <pu:NumberInput
+                Grid.Row="1"
+                Grid.Column="1"
+                Value="{Binding Pet.Value.TouchBodyRect.Value.Width.Value, Mode=TwoWay}" />
+              <Label
+                Grid.Row="1"
+                Grid.Column="2"
+                Background="{x:Null}"
+                Content="h:" />
+              <pu:NumberInput
+                Grid.Row="1"
+                Grid.Column="3"
+                Value="{Binding Pet.Value.TouchBodyRect.Value.Height.Value, Mode=TwoWay}" />
             </Grid>
           </Grid>
           <Expander Header="{ll:Str 提起范围}">
