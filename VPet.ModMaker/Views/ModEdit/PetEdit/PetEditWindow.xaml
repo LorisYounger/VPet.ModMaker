@@ -351,6 +351,7 @@
           <RowDefinition Height="Auto" />
           <RowDefinition Height="Auto" />
           <RowDefinition Height="Auto" />
+          <RowDefinition Height="Auto" />
           <RowDefinition />
         </Grid.RowDefinitions>
         <Label Content="Id" />
@@ -370,9 +371,15 @@
           Grid.Column="1"
           pu:TextBoxHelper.Watermark="{ll:Str 名称}"
           Text="{Binding Pet.Value.CurrentI18nData.Value.Name.Value, UpdateSourceTrigger=PropertyChanged}" />
-        <Label Grid.Row="3" Content="{ll:Str 描述}" />
+        <Label Grid.Row="3" Content="{ll:Str 宠物名称}" />
         <TextBox
           Grid.Row="3"
+          Grid.Column="1"
+          pu:TextBoxHelper.Watermark="{ll:Str 宠物名称}"
+          Text="{Binding Pet.Value.CurrentI18nData.Value.PetName.Value, UpdateSourceTrigger=PropertyChanged}" />
+        <Label Grid.Row="4" Content="{ll:Str 描述}" />
+        <TextBox
+          Grid.Row="4"
           Grid.Column="1"
           pu:TextBoxHelper.Watermark="{ll:Str 描述}"
           Style="{StaticResource TextBox_Wrap}"

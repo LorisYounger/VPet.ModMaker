@@ -292,6 +292,8 @@ public class ModInfoModel : I18nModel<I18nModInfoModel>
                 var petI18n = pet.I18nDatas[i18nData.Key];
                 if (i18nData.Value.TryGetValue(pet.Id.Value, out var name))
                     petI18n.Name.Value = name;
+                if (i18nData.Value.TryGetValue(pet.PetNameId.Value, out var petName))
+                    petI18n.PetName.Value = petName;
                 if (i18nData.Value.TryGetValue(pet.DescriptionId.Value, out var description))
                     petI18n.Description.Value = description;
                 foreach (var work in pet.Works)

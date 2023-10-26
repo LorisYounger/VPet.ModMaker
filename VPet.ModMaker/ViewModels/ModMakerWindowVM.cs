@@ -119,7 +119,7 @@ public class ModMakerWindowVM
             lps.Add(
                 new Line(nameof(history))
                 {
-                    new Sub("Id", history.Id),
+                    new Sub("PetName", history.Id),
                     new Sub("SourcePath", history.SourcePath),
                     new Sub("LastTime", history.LastTime.ToString("yyyy/MM/dd HH:mm"))
                 }

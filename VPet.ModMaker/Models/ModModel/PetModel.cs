@@ -26,6 +26,11 @@ public class PetModel : I18nModel<I18nPetInfoModel>
     public ObservableValue<string> Id { get; } = new();
 
     /// <summary>
+    /// 名称Id
+    /// </summary>
+    public ObservableValue<string> PetNameId { get; } = new();
+
+    /// <summary>
     /// 描述Id
     /// </summary>
     public ObservableValue<string> DescriptionId { get; } = new();
@@ -90,6 +95,7 @@ public class PetModel : I18nModel<I18nPetInfoModel>
         DescriptionId.Value = $"{Id.Value}_{nameof(DescriptionId)}";
         Id.ValueChanged += (o, n) =>
         {
+            PetNameId.Value = $"{n}_{nameof(PetNameId)}";
             DescriptionId.Value = $"{n}_{nameof(DescriptionId)}";
         };
         AnimeCount.AddNotifyReceiver(Animes);
@@ -104,6 +110,7 @@ public class PetModel : I18nModel<I18nPetInfoModel>
         : this()
     {
         Id.Value = model.Id.Value;
+        PetNameId.Value = model.PetNameId.Value;
         TouchHeadRect.Value = model.TouchHeadRect.Value.Copy();
         TouchBodyRect.Value = model.TouchBodyRect.Value.Copy();
         TouchRaisedRect.Value = model.TouchRaisedRect.Value.Copy();
@@ -119,7 +126,8 @@ public class PetModel : I18nModel<I18nPetInfoModel>
     public PetModel(PetLoader loader)
         : this()
     {
-        Id.Value = loader.PetName;
+        Id.Value = loader.Name;
+        PetNameId.Value = loader.PetName;
         DescriptionId.Value = loader.Intor;
 
         TouchHeadRect.Value.SetValue(
@@ -187,7 +195,7 @@ public class PetModel : I18nModel<I18nPetInfoModel>
     public PetModel(PetLoader loader, bool isSimplePet)
         : this()
     {
-        Id.Value = loader.PetName;
+        Id.Value = loader.Name;
         IsSimplePetModel = isSimplePet;
     }
 
@@ -210,6 +218,10 @@ public class PetModel : I18nModel<I18nPetInfoModel>
             ModInfoModel.SaveI18nDatas[cultureName].TryAdd(
                 Id.Value,
                 I18nDatas[cultureName].Name.Value
+            );
+            ModInfoModel.SaveI18nDatas[cultureName].TryAdd(
+                PetNameId.Value,
+                I18nDatas[cultureName].PetName.Value
             );
             ModInfoModel.SaveI18nDatas[cultureName].TryAdd(
                 DescriptionId.Value,
@@ -291,7 +303,7 @@ public class PetModel : I18nModel<I18nPetInfoModel>
             {
                 new Sub("intor", DescriptionId.Value),
                 new Sub("path", Id.Value),
-                new Sub("petname", Id.Value)
+                new Sub("petname", PetNameId.Value)
             }
         );
         lps.Add(
@@ -359,12 +371,14 @@ public class PetModel : I18nModel<I18nPetInfoModel>
 public class I18nPetInfoModel
 {
     public ObservableValue<string> Name { get; } = new();
+    public ObservableValue<string> PetName { get; } = new();
     public ObservableValue<string> Description { get; } = new();
 
     public I18nPetInfoModel Copy()
     {
         var result = new I18nPetInfoModel();
         result.Name.Value = Name.Value;
+        result.PetName.Value = PetName.Value;
         result.Description.Value = Description.Value;
         return result;
     }
