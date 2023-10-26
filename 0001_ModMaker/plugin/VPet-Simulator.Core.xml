@@ -836,6 +836,16 @@
             摸头触发大小
             </summary>
         </member>
+        <member name="F:VPet_Simulator.Core.GraphCore.Config.TouchBodyLocate">
+            <summary>
+            摸身体触发位置
+            </summary>
+        </member>
+        <member name="F:VPet_Simulator.Core.GraphCore.Config.TouchBodySize">
+            <summary>
+            摸身体触发大小
+            </summary>
+        </member>
         <member name="F:VPet_Simulator.Core.GraphCore.Config.TouchRaisedSize">
             <summary>
             提起触发大小
