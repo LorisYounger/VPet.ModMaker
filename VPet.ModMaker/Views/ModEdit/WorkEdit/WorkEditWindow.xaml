@@ -14,7 +14,10 @@
   d:DataContext="{d:DesignInstance Type=vm:WorkEditWindowVM}"
   WindowStartupLocation="CenterScreen"
   mc:Ignorable="d">
-  <Grid>
+    <Window.Resources>
+        <ResourceDictionary Source="/VPet-Simulator.Windows.Interface;component/ResourceStyle.xaml" />
+    </Window.Resources>
+    <Grid>
     <Grid.ColumnDefinitions>
       <ColumnDefinition Width="Auto" />
       <ColumnDefinition />

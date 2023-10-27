@@ -11,7 +11,10 @@
   Width="500"
   Height="300"
   mc:Ignorable="d">
-  <d:Window.DataContext>
+    <Window.Resources>
+        <ResourceDictionary Source="/VPet-Simulator.Windows.Interface;component/ResourceStyle.xaml" />
+    </Window.Resources>
+    <d:Window.DataContext>
     <local:SelectGraphTypeWindow />
   </d:Window.DataContext>
   <Grid>

@@ -14,25 +14,30 @@
   d:DataContext="{d:DesignInstance Type=vm:PetEditWindowVM}"
   WindowStartupLocation="CenterScreen"
   mc:Ignorable="d">
-  <Window.Resources>
-    <Style
-      x:Key="Label_ThouchRect"
-      BasedOn="{StaticResource {x:Type Label}}"
-      TargetType="Label">
-      <Setter Property="Visibility" Value="Collapsed" />
-      <Setter Property="HorizontalAlignment" Value="Left" />
-      <Setter Property="VerticalAlignment" Value="Top" />
-      <Setter Property="HorizontalContentAlignment" Value="Center" />
-      <Setter Property="VerticalContentAlignment" Value="Center" />
-      <Setter Property="BorderThickness" Value="1" />
-      <Setter Property="Background" Value="#19FF0000" />
-      <Setter Property="BorderBrush" Value="Red" />
-      <Style.Triggers>
-        <DataTrigger Binding="{Binding Tag, RelativeSource={RelativeSource Mode=Self}}" Value="True">
-          <Setter Property="Visibility" Value="Visible" />
-        </DataTrigger>
-      </Style.Triggers>
-    </Style>
+    <Window.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/VPet-Simulator.Windows.Interface;component/ResourceStyle.xaml" />
+                <ResourceDictionary>
+                    <Style x:Key="Label_ThouchRect" BasedOn="{StaticResource {x:Type Label}}" TargetType="Label">
+                        <Setter Property="Visibility" Value="Collapsed" />
+                        <Setter Property="HorizontalAlignment" Value="Left" />
+                        <Setter Property="VerticalAlignment" Value="Top" />
+                        <Setter Property="HorizontalContentAlignment" Value="Center" />
+                        <Setter Property="VerticalContentAlignment" Value="Center" />
+                        <Setter Property="BorderThickness" Value="1" />
+                        <Setter Property="Background" Value="#19FF0000" />
+                        <Setter Property="BorderBrush" Value="Red" />
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding Tag, RelativeSource={RelativeSource Mode=Self}}" Value="True">
+                                <Setter Property="Visibility" Value="Visible" />
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </ResourceDictionary>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+
   </Window.Resources>
   <Grid>
     <Grid.ColumnDefinitions>

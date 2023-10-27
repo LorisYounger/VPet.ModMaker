@@ -13,7 +13,10 @@
   d:DesignHeight="450"
   d:DesignWidth="800"
   mc:Ignorable="d">
-  <Grid>
+    <Page.Resources>
+        <ResourceDictionary Source="/VPet-Simulator.Windows.Interface;component/ResourceStyle.xaml" />
+    </Page.Resources>
+    <Grid>
     <Grid.RowDefinitions>
       <RowDefinition Height="Auto" />
       <RowDefinition />
@@ -25,7 +28,7 @@
       </Grid.ColumnDefinitions>
       <TextBox pu:TextBoxHelper.Watermark="{ll:Str 搜索Id}" Text="{Binding Search.Value, UpdateSourceTrigger=PropertyChanged}">
         <TextBox.Style>
-          <Style BasedOn="{StaticResource {x:Type TextBox}}" TargetType="TextBox">
+          <Style BasedOn="{StaticResource StandardTextBoxStyle}" TargetType="TextBox">
             <Setter Property="IsEnabled" Value="True" />
             <Style.Triggers>
               <DataTrigger Binding="{Binding SelectedItem, ElementName=ComboBox_Pet}" Value="{x:Null}">
@@ -36,11 +39,13 @@
         </TextBox.Style>
       </TextBox>
       <ComboBox
+          MinWidth="150"
         x:Name="ComboBox_Pet"
         Grid.Column="1"
         pu:ComboBoxHelper.Watermark="{ll:Str 选择宠物}"
         DisplayMemberPath="Id.Value"
         ItemsSource="{Binding Pets}"
+                    Style="{DynamicResource StandardComboBoxStyle}"
         SelectedItem="{Binding CurrentPet.Value}">
         <ComboBox.ItemContainerStyle>
           <Style BasedOn="{StaticResource {x:Type ComboBoxItem}}" TargetType="ComboBoxItem">
