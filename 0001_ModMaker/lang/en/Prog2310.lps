@@ -36,3 +36,14 @@ Id不可为空#Id must not be empty:|
 指定动画Id不可为空#The specified animation Id cannot be empty:|
 名称不可为空#Name cannot be empty:|
 选项名不可为空#Option name cannot be empty:|
+清空历史#Clear History:|
+宠物名称#Pet Name:|
+清空图片#Clear Picture:|
+删除此项#Delete this item:|
+动画Id(非必要)#Animation Id (not required):|
+删除图片#Delete image:|
+持续时间(ms)#Duration(ms):|
+完成奖励倍率#Completion bonus multiplier:|
+身体触碰范围#Body Touch Range:|
+参考价格#Reference Price:|
+自动设置#Auto Setting:|
