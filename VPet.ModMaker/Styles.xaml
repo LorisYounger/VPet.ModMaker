@@ -27,4 +27,8 @@
     <Setter Property="HorizontalContentAlignment" Value="Left" />
     <Setter Property="VerticalContentAlignment" Value="Top" />
   </Style>
+  <Style x:Key="WindowXStyle" TargetType="pu:WindowX">
+    <Setter Property="pu:WindowXCaption.Background" Value="{DynamicResource DARKPrimary}" />
+    <Setter Property="pu:WindowXCaption.Foreground" Value="{DynamicResource DARKPrimaryText}" />
+  </Style>
 </ResourceDictionary>

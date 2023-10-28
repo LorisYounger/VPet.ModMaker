@@ -13,10 +13,10 @@
   d:DesignHeight="450"
   d:DesignWidth="800"
   mc:Ignorable="d">
-    <Page.Resources>
-        <ResourceDictionary Source="/VPet-Simulator.Windows.Interface;component/ResourceStyle.xaml" />
-    </Page.Resources>
-    <Grid>
+  <Page.Resources>
+    <ResourceDictionary Source="/VPet-Simulator.Windows.Interface;component/ResourceStyle.xaml" />
+  </Page.Resources>
+  <Grid>
     <Grid.RowDefinitions>
       <RowDefinition Height="Auto" />
       <RowDefinition />
@@ -39,14 +39,14 @@
         </TextBox.Style>
       </TextBox>
       <ComboBox
-          MinWidth="150"
         x:Name="ComboBox_Pet"
         Grid.Column="1"
+        MinWidth="150"
         pu:ComboBoxHelper.Watermark="{ll:Str 选择宠物}"
         DisplayMemberPath="Id.Value"
         ItemsSource="{Binding Pets}"
-                    Style="{DynamicResource StandardComboBoxStyle}"
-        SelectedItem="{Binding CurrentPet.Value}">
+        SelectedItem="{Binding CurrentPet.Value}"
+        Style="{DynamicResource StandardComboBoxStyle}">
         <ComboBox.ItemContainerStyle>
           <Style BasedOn="{StaticResource {x:Type ComboBoxItem}}" TargetType="ComboBoxItem">
             <Setter Property="ToolTip" Value="{Binding CurrentI18nData.Value.Name.Value}" />

@@ -55,5 +55,5 @@ public class ModMakeHistory
     /// 最后编辑时间
     /// </summary>
     [Line(ignoreCase: true)]
-    public DateTime LastTime { get; set; }
+    public DateTime LastTime { get; set; } = DateTime.Now;
 }

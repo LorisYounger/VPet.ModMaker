@@ -1,5 +1,6 @@
 ﻿using LinePutScript;
 using LinePutScript.Localization.WPF;
+using Panuon.WPF.UI;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -26,7 +27,7 @@ namespace VPet.ModMaker.Views;
 /// <summary>
 /// winModMaker.xaml 的交互逻辑
 /// </summary>
-public partial class ModMakerWindow : Window
+public partial class ModMakerWindow : WindowX
 {
     public ModMakerWindowVM ViewModel => (ModMakerWindowVM)DataContext;
     public ModEditWindow ModEditWindow { get; set; }
