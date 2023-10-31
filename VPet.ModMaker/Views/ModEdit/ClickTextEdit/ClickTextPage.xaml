@@ -32,12 +32,12 @@
       ItemsSource="{Binding ShowClickTexts.Value}"
       MouseDoubleClick="DataGrid_MouseDoubleClick"
       RowDetailsVisibilityMode="Visible"
-      RowHeight="50"
+      RowHeight="64"
       VirtualizingStackPanel.IsVirtualizing="True"
       VirtualizingStackPanel.VirtualizationMode="Recycling">
       <DataGrid.RowStyle>
         <Style BasedOn="{StaticResource {x:Type DataGridRow}}" TargetType="DataGridRow">
-          <Setter Property="Height" Value="50" />
+          <Setter Property="Height" Value="64" />
           <Setter Property="Tag" Value="{Binding}" />
           <Setter Property="ContextMenu" Value="{StaticResource ContextMenu_DataGridRow}" />
         </Style>

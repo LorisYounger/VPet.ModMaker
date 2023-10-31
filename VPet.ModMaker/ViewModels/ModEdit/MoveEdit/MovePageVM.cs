@@ -45,16 +45,18 @@ public class MovePageVM
 
     private void Search_ValueChanged(string oldValue, string newValue)
     {
-        //if (string.IsNullOrWhiteSpace(newValue))
-        //{
-        //    ShowMoves.EnumValue = Moves;
-        //}
-        //else
-        //{
-        //    ShowMoves.EnumValue = new(
-        //        Moves.Where(m => m.Id.EnumValue.Contains(newValue, StringComparison.OrdinalIgnoreCase))
-        //    );
-        //}
+        if (string.IsNullOrWhiteSpace(newValue))
+        {
+            ShowMoves.Value = Moves;
+        }
+        else
+        {
+            ShowMoves.Value = new(
+                Moves.Where(
+                    m => m.Graph.Value.Contains(newValue, StringComparison.OrdinalIgnoreCase)
+                )
+            );
+        }
     }
 
     public void Close() { }

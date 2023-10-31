@@ -23,9 +23,9 @@
         <ColumnDefinition />
         <ColumnDefinition Width="Auto" />
       </Grid.ColumnDefinitions>
-      <!--<TextBox pu:TextBoxHelper.Watermark="{ll:Str 搜索Id}" Text="{Binding Search.Value, UpdateSourceTrigger=PropertyChanged}">
+      <TextBox pu:TextBoxHelper.Watermark="{ll:Str 搜索动画}" Text="{Binding Search.Value, UpdateSourceTrigger=PropertyChanged}">
         <TextBox.Style>
-          <Style BasedOn="{StaticResource {x:Type TextBox}}" TargetType="TextBox">
+          <Style BasedOn="{StaticResource StandardTextBoxStyle}" TargetType="TextBox">
             <Setter Property="IsEnabled" Value="True" />
             <Style.Triggers>
               <DataTrigger Binding="{Binding SelectedItem, ElementName=ComboBox_Pet}" Value="{x:Null}">
@@ -34,14 +34,15 @@
             </Style.Triggers>
           </Style>
         </TextBox.Style>
-      </TextBox>-->
+      </TextBox>
       <ComboBox
         x:Name="ComboBox_Pet"
         Grid.Column="1"
         pu:ComboBoxHelper.Watermark="{ll:Str 选择宠物}"
         DisplayMemberPath="Id.Value"
         ItemsSource="{Binding Pets}"
-        SelectedItem="{Binding CurrentPet.Value}">
+        SelectedItem="{Binding CurrentPet.Value}"
+        Style="{DynamicResource StandardComboBoxStyle}">
         <ComboBox.ItemContainerStyle>
           <Style BasedOn="{StaticResource {x:Type ComboBoxItem}}" TargetType="ComboBoxItem">
             <Setter Property="ToolTip" Value="{Binding CurrentI18nData.Value.Name.Value}" />
@@ -69,12 +70,12 @@
         ItemsSource="{Binding ShowMoves.Value}"
         MouseDoubleClick="DataGrid_MouseDoubleClick"
         RowDetailsVisibilityMode="Visible"
-        RowHeight="64"
+        RowHeight="50"
         VirtualizingStackPanel.IsVirtualizing="True"
         VirtualizingStackPanel.VirtualizationMode="Recycling">
         <DataGrid.RowStyle>
           <Style BasedOn="{StaticResource {x:Type DataGridRow}}" TargetType="DataGridRow">
-            <Setter Property="Height" Value="64" />
+            <Setter Property="Height" Value="50" />
             <Setter Property="Tag" Value="{Binding}" />
             <Setter Property="ContextMenu" Value="{StaticResource ContextMenu_DataGridRow}" />
           </Style>
