@@ -43,39 +43,31 @@
         <DataGridTextColumn
           Binding="{Binding Id.Value}"
           CanUserSort="True"
+          ElementStyle="{DynamicResource TextBlock_LeftCenter}"
+          Header="Id"
           IsReadOnly="True"
-          SortMemberPath="Id.Value">
-          <DataGridTextColumn.Header>
-            <TextBlock Text="Id" />
-          </DataGridTextColumn.Header>
-        </DataGridTextColumn>
+          SortMemberPath="Id.Value" />
         <DataGridTextColumn
           Binding="{Binding CurrentI18nData.Value.Name.Value}"
           CanUserSort="True"
+          ElementStyle="{DynamicResource TextBlock_LeftCenter}"
+          Header="{ll:Str 名称}"
           IsReadOnly="True"
-          SortMemberPath="CurrentI18nData.Value.Name.Value">
-          <DataGridTextColumn.Header>
-            <TextBlock Text="{ll:Str 名称}" />
-          </DataGridTextColumn.Header>
-        </DataGridTextColumn>
+          SortMemberPath="CurrentI18nData.Value.Name.Value" />
         <DataGridTextColumn
           Binding="{Binding CurrentI18nData.Value.PetName.Value}"
           CanUserSort="True"
+          ElementStyle="{DynamicResource TextBlock_LeftCenter}"
+          Header="{ll:Str 宠物名称}"
           IsReadOnly="True"
-          SortMemberPath="CurrentI18nData.Value.Name.Value">
-          <DataGridTextColumn.Header>
-            <TextBlock Text="{ll:Str 宠物名称}" />
-          </DataGridTextColumn.Header>
-        </DataGridTextColumn>
+          SortMemberPath="CurrentI18nData.Value.Name.Value" />
         <DataGridTextColumn
           Binding="{Binding CurrentI18nData.Value.Description.Value}"
           CanUserSort="True"
+          ElementStyle="{DynamicResource TextBlock_LeftCenter}"
+          Header="{ll:Str 描述}"
           IsReadOnly="True"
-          SortMemberPath="CurrentI18nData.Value.Description.Value">
-          <DataGridTextColumn.Header>
-            <TextBlock Text="{ll:Str 描述}" />
-          </DataGridTextColumn.Header>
-        </DataGridTextColumn>
+          SortMemberPath="CurrentI18nData.Value.Description.Value" />
       </DataGrid.Columns>
     </DataGrid>
     <Button

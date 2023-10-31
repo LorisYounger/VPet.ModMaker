@@ -83,66 +83,52 @@
           <DataGridTextColumn
             Binding="{Binding Graph.Value}"
             CanUserSort="True"
+            ElementStyle="{DynamicResource TextBlock_LeftCenter}"
+            Header="{ll:Str 绑定动画}"
             IsReadOnly="True"
-            SortMemberPath="Graph.Value">
-            <DataGridTextColumn.Header>
-              <TextBlock Text="{ll:Str 绑定动画}" />
-            </DataGridTextColumn.Header>
-          </DataGridTextColumn>
+            SortMemberPath="Graph.Value" />
           <DataGridTextColumn
             Binding="{Binding LocateType.EnumValue.Value}"
             CanUserSort="True"
+            ElementStyle="{DynamicResource TextBlock_LeftCenter}"
+            Header="{ll:Str 定位类型}"
             IsReadOnly="True"
-            SortMemberPath="LocateType.EnumValue.Value">
-            <DataGridTextColumn.Header>
-              <TextBlock Text="{ll:Str 定位类型}" />
-            </DataGridTextColumn.Header>
-          </DataGridTextColumn>
+            SortMemberPath="LocateType.EnumValue.Value" />
           <DataGridTextColumn
             Binding="{Binding TriggerType.EnumValue.Value}"
             CanUserSort="True"
+            ElementStyle="{DynamicResource TextBlock_LeftCenter}"
+            Header="{ll:Str 触发类型}"
             IsReadOnly="True"
-            SortMemberPath="TriggerType.EnumValue.Value">
-            <DataGridTextColumn.Header>
-              <TextBlock Text="{ll:Str 触发类型}" />
-            </DataGridTextColumn.Header>
-          </DataGridTextColumn>
+            SortMemberPath="TriggerType.EnumValue.Value" />
           <DataGridTextColumn
             Binding="{Binding ModeType.EnumValue.Value}"
             CanUserSort="True"
+            ElementStyle="{DynamicResource TextBlock_LeftCenter}"
+            Header="{ll:Str 状态类型}"
             IsReadOnly="True"
-            SortMemberPath="ModeType.EnumValue.Value">
-            <DataGridTextColumn.Header>
-              <TextBlock Text="{ll:Str 状态类型}" />
-            </DataGridTextColumn.Header>
-          </DataGridTextColumn>
+            SortMemberPath="ModeType.EnumValue.Value" />
           <DataGridTextColumn
             Binding="{Binding Distance.Value}"
             CanUserSort="True"
+            ElementStyle="{DynamicResource TextBlock_LeftCenter}"
+            Header="{ll:Str 移动距离}"
             IsReadOnly="True"
-            SortMemberPath="Distance.Value">
-            <DataGridTextColumn.Header>
-              <TextBlock Text="{ll:Str 移动距离}" />
-            </DataGridTextColumn.Header>
-          </DataGridTextColumn>
+            SortMemberPath="Distance.Value" />
           <DataGridTextColumn
             Binding="{Binding Interval.Value}"
             CanUserSort="True"
+            ElementStyle="{DynamicResource TextBlock_LeftCenter}"
+            Header="{ll:Str 移动间隔}"
             IsReadOnly="True"
-            SortMemberPath="Interval.Value">
-            <DataGridTextColumn.Header>
-              <TextBlock Text="{ll:Str 移动间隔}" />
-            </DataGridTextColumn.Header>
-          </DataGridTextColumn>
+            SortMemberPath="Interval.Value" />
           <DataGridTextColumn
             Binding="{Binding LocateLength.Value}"
             CanUserSort="True"
+            ElementStyle="{DynamicResource TextBlock_LeftCenter}"
+            Header="{ll:Str 定位长度}"
             IsReadOnly="True"
-            SortMemberPath="LocateLength.Value">
-            <DataGridTextColumn.Header>
-              <TextBlock Text="{ll:Str 定位长度}" />
-            </DataGridTextColumn.Header>
-          </DataGridTextColumn>
+            SortMemberPath="LocateLength.Value" />
         </DataGrid.Columns>
       </DataGrid>
       <Button

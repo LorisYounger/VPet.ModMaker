@@ -20,12 +20,40 @@
     <Setter Property="TextWrapping" Value="Wrap" />
   </Style>
   <Style
+    x:Key="TextBlock_Center"
+    BasedOn="{StaticResource {x:Type TextBlock}}"
+    TargetType="TextBlock">
+    <Setter Property="VerticalAlignment" Value="Center" />
+    <Setter Property="HorizontalAlignment" Value="Center" />
+  </Style>
+  <Style
+    x:Key="TextBlock_LeftCenter"
+    BasedOn="{StaticResource {x:Type TextBlock}}"
+    TargetType="TextBlock">
+    <Setter Property="VerticalAlignment" Value="Center" />
+    <Setter Property="HorizontalAlignment" Value="Left" />
+  </Style>
+  <Style
     x:Key="TextBox_Wrap"
     BasedOn="{StaticResource {x:Type TextBox}}"
     TargetType="TextBox">
     <Setter Property="TextWrapping" Value="Wrap" />
     <Setter Property="HorizontalContentAlignment" Value="Left" />
     <Setter Property="VerticalContentAlignment" Value="Top" />
+  </Style>
+  <Style
+    x:Key="TextBox_Center"
+    BasedOn="{StaticResource {x:Type TextBox}}"
+    TargetType="TextBox">
+    <Setter Property="VerticalAlignment" Value="Center" />
+    <Setter Property="HorizontalAlignment" Value="Center" />
+  </Style>
+  <Style
+    x:Key="TextBox_LeftCenter"
+    BasedOn="{StaticResource {x:Type TextBox}}"
+    TargetType="TextBox">
+    <Setter Property="VerticalAlignment" Value="Center" />
+    <Setter Property="HorizontalAlignment" Value="Left" />
   </Style>
   <Style x:Key="WindowXStyle" TargetType="pu:WindowX">
     <Setter Property="pu:WindowXCaption.Background" Value="{DynamicResource DARKPrimary}" />

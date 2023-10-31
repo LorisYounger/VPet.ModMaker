@@ -57,6 +57,16 @@ public partial class PetEditWindow : Window
             MessageBox.Show("名称不可为空".Translate(), "", MessageBoxButton.OK, MessageBoxImage.Warning);
             return;
         }
+        if (string.IsNullOrWhiteSpace(ViewModel.Pet.Value.CurrentI18nData.Value.PetName.Value))
+        {
+            MessageBox.Show(
+                "宠物名称不可为空".Translate(),
+                "",
+                MessageBoxButton.OK,
+                MessageBoxImage.Warning
+            );
+            return;
+        }
         if (
             ViewModel.OldPet?.Id.Value != ViewModel.Pet.Value.Id.Value
             && ModInfoModel.Current.Pets.Any(i => i.Id == ViewModel.Pet.Value.Id)

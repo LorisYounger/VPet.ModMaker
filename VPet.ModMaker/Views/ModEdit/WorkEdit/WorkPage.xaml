@@ -88,120 +88,94 @@
           <DataGridTextColumn
             Binding="{Binding Id.Value}"
             CanUserSort="True"
+            ElementStyle="{DynamicResource TextBlock_LeftCenter}"
+            Header="Id"
             IsReadOnly="True"
-            SortMemberPath="Id.Value">
-            <DataGridTextColumn.Header>
-              <TextBlock Text="Id" />
-            </DataGridTextColumn.Header>
-          </DataGridTextColumn>
+            SortMemberPath="Id.Value" />
           <DataGridTextColumn
             Binding="{Binding CurrentI18nData.Value.Name.Value}"
             CanUserSort="True"
+            ElementStyle="{DynamicResource TextBlock_LeftCenter}"
+            Header="{ll:Str 工作名称}"
             IsReadOnly="True"
-            SortMemberPath="CurrentI18nData.Value.Name.Value">
-            <DataGridTextColumn.Header>
-              <TextBlock Text="{ll:Str 工作名称}" />
-            </DataGridTextColumn.Header>
-          </DataGridTextColumn>
+            SortMemberPath="CurrentI18nData.Value.Name.Value" />
           <DataGridTextColumn
             Binding="{Binding WorkType.Value}"
             CanUserSort="True"
+            ElementStyle="{DynamicResource TextBlock_LeftCenter}"
+            Header="{ll:Str 工作类型}"
             IsReadOnly="True"
-            SortMemberPath="WorkType.Value">
-            <DataGridTextColumn.Header>
-              <TextBlock Text="{ll:Str 工作类型}" />
-            </DataGridTextColumn.Header>
-          </DataGridTextColumn>
+            SortMemberPath="WorkType.Value" />
           <DataGridTextColumn
             Binding="{Binding Graph.Value}"
             CanUserSort="True"
+            ElementStyle="{DynamicResource TextBlock_LeftCenter}"
+            Header="{ll:Str 动画名称}"
             IsReadOnly="True"
-            SortMemberPath="Graph.Value">
-            <DataGridTextColumn.Header>
-              <TextBlock Text="{ll:Str 动画名称}" />
-            </DataGridTextColumn.Header>
-          </DataGridTextColumn>
+            SortMemberPath="Graph.Value" />
           <DataGridTextColumn
             Binding="{Binding IsOverLoad.Value}"
             CanUserSort="True"
+            ElementStyle="{DynamicResource TextBlock_LeftCenter}"
+            Header="{ll:Str 是否超模}"
             IsReadOnly="True"
-            SortMemberPath="Graph.Value">
-            <DataGridTextColumn.Header>
-              <TextBlock Text="{ll:Str 是否超模}" />
-            </DataGridTextColumn.Header>
-          </DataGridTextColumn>
+            SortMemberPath="Graph.Value" />
           <DataGridTextColumn
             Binding="{Binding MoneyBase.Value}"
             CanUserSort="True"
+            ElementStyle="{DynamicResource TextBlock_LeftCenter}"
+            Header="{ll:Str 基本倍率}"
             IsReadOnly="True"
-            SortMemberPath="MoneyBase.Value">
-            <DataGridTextColumn.Header>
-              <TextBlock Text="{ll:Str 基本倍率}" />
-            </DataGridTextColumn.Header>
-          </DataGridTextColumn>
+            SortMemberPath="MoneyBase.Value" />
           <DataGridTextColumn
             Binding="{Binding MoneyLevel.Value}"
             CanUserSort="True"
+            ElementStyle="{DynamicResource TextBlock_LeftCenter}"
+            Header="{ll:Str 等级倍率}"
             IsReadOnly="True"
-            SortMemberPath="MoneyLevel.Value">
-            <DataGridTextColumn.Header>
-              <TextBlock Text="{ll:Str 等级倍率}" />
-            </DataGridTextColumn.Header>
-          </DataGridTextColumn>
+            SortMemberPath="MoneyLevel.Value" />
           <DataGridTextColumn
             Binding="{Binding StrengthFood.Value}"
             CanUserSort="True"
+            ElementStyle="{DynamicResource TextBlock_LeftCenter}"
+            Header="{ll:Str 饱食度消耗倍率}"
             IsReadOnly="True"
-            SortMemberPath="StrengthFood.Value">
-            <DataGridTextColumn.Header>
-              <TextBlock Text="{ll:Str 饱食度消耗倍率}" />
-            </DataGridTextColumn.Header>
-          </DataGridTextColumn>
+            SortMemberPath="StrengthFood.Value" />
           <DataGridTextColumn
             Binding="{Binding StrengthDrink.Value}"
             CanUserSort="True"
+            ElementStyle="{DynamicResource TextBlock_LeftCenter}"
+            Header="{ll:Str 口渴度消耗倍率}"
             IsReadOnly="True"
-            SortMemberPath="StrengthDrink.Value">
-            <DataGridTextColumn.Header>
-              <TextBlock Text="{ll:Str 口渴度消耗倍率}" />
-            </DataGridTextColumn.Header>
-          </DataGridTextColumn>
+            SortMemberPath="StrengthDrink.Value" />
           <DataGridTextColumn
             Binding="{Binding Feeling.Value}"
             CanUserSort="True"
+            ElementStyle="{DynamicResource TextBlock_LeftCenter}"
+            Header="{ll:Str 心情消耗倍率}"
             IsReadOnly="True"
-            SortMemberPath="Feeling.Value">
-            <DataGridTextColumn.Header>
-              <TextBlock Text="{ll:Str 心情消耗倍率}" />
-            </DataGridTextColumn.Header>
-          </DataGridTextColumn>
+            SortMemberPath="Feeling.Value" />
           <DataGridTextColumn
             Binding="{Binding LevelLimit.Value}"
             CanUserSort="True"
+            ElementStyle="{DynamicResource TextBlock_LeftCenter}"
+            Header="{ll:Str 等级限制}"
             IsReadOnly="True"
-            SortMemberPath="LevelLimit.Value">
-            <DataGridTextColumn.Header>
-              <TextBlock Text="{ll:Str 等级限制}" />
-            </DataGridTextColumn.Header>
-          </DataGridTextColumn>
+            SortMemberPath="LevelLimit.Value" />
           <DataGridTextColumn
             Binding="{Binding Time.Value}"
             CanUserSort="True"
+            ElementStyle="{DynamicResource TextBlock_LeftCenter}"
+            Header="{ll:Str 花费时间}"
             IsReadOnly="True"
-            SortMemberPath="Time.Value">
-            <DataGridTextColumn.Header>
-              <TextBlock Text="{ll:Str 花费时间}" />
-            </DataGridTextColumn.Header>
-          </DataGridTextColumn>
+            SortMemberPath="Time.Value" />
           <DataGridTextColumn
             Binding="{Binding FinishBonus.Value}"
             CanUserSort="True"
+            ElementStyle="{DynamicResource TextBlock_LeftCenter}"
+            Header="{ll:Str 奖励倍率}"
             IsReadOnly="True"
-            SortMemberPath="FinishBonus.Value">
-            <DataGridTextColumn.Header>
-              <TextBlock Text="{ll:Str 奖励倍率}" />
-            </DataGridTextColumn.Header>
-          </DataGridTextColumn>
+            SortMemberPath="FinishBonus.Value" />
         </DataGrid.Columns>
       </DataGrid>
       <Button

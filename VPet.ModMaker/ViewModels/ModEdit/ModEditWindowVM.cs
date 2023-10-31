@@ -160,27 +160,19 @@ public class ModEditWindowVM
     /// </summary>
     private void Save()
     {
+        if (ValidationData(ModInfo.Value) is false)
+            return;
         if (
             MessageBox.Show("确定保存吗".Translate(), "", MessageBoxButton.YesNo)
             is not MessageBoxResult.Yes
         )
             return;
-
         if (string.IsNullOrEmpty(ModInfo.Value.SourcePath.Value))
         {
             MessageBox.Show("源路径为空, 请使用 保存至".Translate());
             return;
         }
-        try
-        {
-            ModInfo.Value.SaveTo(ModInfo.Value.SourcePath.Value);
-        }
-        catch (Exception ex)
-        {
-            MessageBox.Show("保存失败 错误信息:\n{0}".Translate(ex));
-            return;
-        }
-        MessageBox.Show("保存成功".Translate());
+        SaveTo(ModInfo.Value.SourcePath.Value);
     }
 
     /// <summary>
@@ -197,25 +189,32 @@ public class ModEditWindowVM
                 Filter = $"LPS文件|*.lps;".Translate(),
                 FileName = "info.lps".Translate()
             };
-        if (saveFileDialog.ShowDialog() is true)
-        {
-            var pending = PendingBox.Show("保存中".Translate());
-            //try
-            //{
-            var path = Path.GetDirectoryName(saveFileDialog.FileName);
-            ModInfo.Value.SaveTo(path);
-            if (string.IsNullOrWhiteSpace(ModInfo.Value.SourcePath.Value))
-                ModInfo.Value.SourcePath.Value = path;
-            pending.Close();
-            MessageBox.Show(ModEditWindow, "保存成功".Translate());
-            //}
-            //catch (Exception ex)
-            //{
-            //    pending.Close();
-            //    MessageBox.Show("保存失败 错误信息:\n{0}".Translate(ex));
-            //    return;
-            //}
-        }
+        if (saveFileDialog.ShowDialog() is not true)
+            return;
+        SaveTo(Path.GetDirectoryName(saveFileDialog.FileName));
+    }
+
+    /// <summary>
+    /// 保存至
+    /// </summary>
+    /// <param name="path"></param>
+    private void SaveTo(string path)
+    {
+        var pending = PendingBox.Show("保存中".Translate());
+        //try
+        //{
+        ModInfo.Value.SaveTo(path);
+        if (string.IsNullOrWhiteSpace(ModInfo.Value.SourcePath.Value))
+            ModInfo.Value.SourcePath.Value = path;
+        pending.Close();
+        MessageBox.Show(ModEditWindow, "保存成功".Translate());
+        //}
+        //catch (Exception ex)
+        //{
+        //    pending.Close();
+        //    MessageBox.Show("保存失败 错误信息:\n{0}".Translate(ex));
+        //    return;
+        //}
     }
 
     /// <summary>
