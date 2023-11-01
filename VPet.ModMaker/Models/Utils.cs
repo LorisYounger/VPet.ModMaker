@@ -53,11 +53,8 @@ public static class Utils
         bitmapImage.BeginInit();
         try
         {
-            var ms = new MemoryStream();
-            using var sr = new StreamReader(imagePath);
-            sr.BaseStream.CopyTo(ms);
-            bitmapImage.StreamSource = ms;
-            bitmapImage.DecodePixelWidth = DecodePixelWidth;
+            var bytes = File.ReadAllBytes(imagePath);
+            bitmapImage.StreamSource = new MemoryStream(bytes);
         }
         finally
         {
