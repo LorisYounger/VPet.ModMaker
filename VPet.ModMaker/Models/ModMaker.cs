@@ -53,7 +53,8 @@ public class ModMaker : MainPlugin
             foreach (var pet in MW.Pets)
             {
                 var petModel = new PetModel();
-                petModel.Id.Value = pet.Name;
+                petModel.SourceId = pet.Name;
+                petModel.Id.Value = pet.Name + " (来自本体)".Translate();
                 ModMakerInfo.Pets.Add(petModel);
             }
             //Maker.ModMaker = this;

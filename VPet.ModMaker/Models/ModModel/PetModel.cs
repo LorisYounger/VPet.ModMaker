@@ -1,6 +1,7 @@
 ﻿using HKW.HKWViewModels.SimpleObservable;
 using LinePutScript;
 using LinePutScript.Converter;
+using LinePutScript.Localization.WPF;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -20,6 +21,11 @@ namespace VPet.ModMaker.Models;
 /// </summary>
 public class PetModel : I18nModel<I18nPetInfoModel>
 {
+    /// <summary>
+    /// 显示的Id 若不为空则判断为来自本体的宠物
+    /// </summary>
+    public string? SourceId { get; set; } = null;
+
     /// <summary>
     /// Id
     /// </summary>
@@ -92,6 +98,7 @@ public class PetModel : I18nModel<I18nPetInfoModel>
 
     public PetModel()
     {
+        PetNameId.Value = $"{Id.Value}_{nameof(PetNameId)}";
         DescriptionId.Value = $"{Id.Value}_{nameof(DescriptionId)}";
         Id.ValueChanged += (o, n) =>
         {
@@ -208,6 +215,8 @@ public class PetModel : I18nModel<I18nPetInfoModel>
     /// <param name="path">路径</param>
     public void Save(string path)
     {
+        if (SourceId is not null)
+            Id.Value = SourceId;
         if (IsSimplePetModel)
         {
             SaveSimplePetInfo(path);
@@ -242,6 +251,8 @@ public class PetModel : I18nModel<I18nPetInfoModel>
             anime.Save(petAnimePath);
         foreach (var anime in FoodAnimes)
             anime.Save(petAnimePath);
+        if (SourceId is not null)
+            Id.Value = SourceId + " (来自本体)".Translate();
     }
 
     private void SaveSimplePetInfo(string path)

@@ -32,5 +32,8 @@ public static class ModMakerInfo
     /// </summary>
     public static int GameVersion { get; set; } = 100;
 
+    /// <summary>
+    /// 本体的宠物
+    /// </summary>
     public static List<PetModel> Pets { get; } = new();
 }
