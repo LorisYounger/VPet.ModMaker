@@ -130,7 +130,7 @@ public class FoodModel : I18nModel<I18nFoodModel>
         Likability.Value = model.Likability.Value;
         Price.Value = model.Price.Value;
         Exp.Value = model.Exp.Value;
-        Image.Value = model.Image.Value;
+        Image.Value = model.Image.Value.Copy();
         foreach (var item in model.I18nDatas)
             I18nDatas[item.Key] = item.Value.Copy();
         CurrentI18nData.Value = I18nDatas[I18nHelper.Current.CultureName.Value];

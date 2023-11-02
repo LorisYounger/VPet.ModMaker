@@ -170,6 +170,8 @@ public class ModInfoModel : I18nModel<I18nModInfoModel>
     /// <param name="path">路径</param>
     static void LoadAnime(PetModel petModel, string path)
     {
+        if (Directory.Exists(path) is false)
+            return;
         foreach (var animeDir in Directory.EnumerateDirectories(path))
         {
             var dirName = Path.GetFileName(animeDir);

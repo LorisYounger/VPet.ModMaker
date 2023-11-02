@@ -14,10 +14,10 @@
   d:DataContext="{d:DesignInstance Type=vm:ModEditWindowVM}"
   WindowStartupLocation="CenterScreen"
   mc:Ignorable="d">
-    <Window.Resources>
-        <ResourceDictionary Source="/VPet-Simulator.Windows.Interface;component/ResourceStyle.xaml" />
-    </Window.Resources>
-    <Grid>
+  <Window.Resources>
+    <ResourceDictionary Source="/VPet-Simulator.Windows.Interface;component/ResourceStyle.xaml" />
+  </Window.Resources>
+  <Grid>
     <Grid.ColumnDefinitions>
       <ColumnDefinition />
       <ColumnDefinition Width="Auto" />
@@ -64,7 +64,7 @@
           Command="{Binding ChangeImageCommand}"
           Content="{ll:Str 添加图片}">
           <Button.Style>
-            <Style BasedOn="{StaticResource {x:Type Button}}" TargetType="Button">
+            <Style BasedOn="{StaticResource ThemedButtonStyle}" TargetType="Button">
               <Setter Property="Visibility" Value="Hidden" />
               <Style.Triggers>
                 <DataTrigger Binding="{Binding ModInfo.Value.Image.Value}" Value="{x:Null}">
@@ -271,7 +271,10 @@
         <RowDefinition />
         <RowDefinition Height="Auto" />
       </Grid.RowDefinitions>
-      <Button Command="{Binding AddCultureCommand}" Content="{ll:Str 添加文化}" />
+      <Button
+        Command="{Binding AddCultureCommand}"
+        Content="{ll:Str 添加文化}"
+        Style="{DynamicResource ThemedButtonStyle}" />
       <ListBox
         x:Name="ListBox_Cultures"
         Grid.Row="1"
@@ -304,11 +307,13 @@
         <Button
           x:Name="Button_Save"
           Command="{Binding SaveCommand}"
-          Content="{ll:Str 保存}" />
+          Content="{ll:Str 保存}"
+          Style="{DynamicResource ThemedButtonStyle}" />
         <Button
           x:Name="Button_SaveTo"
           Command="{Binding SaveToCommand}"
-          Content="{ll:Str 保存至}" />
+          Content="{ll:Str 保存至}"
+          Style="{DynamicResource ThemedButtonStyle}" />
       </StackPanel>
     </Grid>
   </Grid>
