@@ -139,25 +139,21 @@ public class ModInfoModel : I18nModel<I18nModInfoModel>
             LowTexts.Add(new(lowText));
         foreach (var selectText in loader.SelectTexts)
             SelectTexts.Add(new(selectText));
-        // 缓存pets
-        var pets = new List<PetModel>();
+
         foreach (var pet in loader.Pets)
         {
             var petModel = new PetModel(pet);
-            pets.Add(petModel);
+            Pets.Add(petModel);
             foreach (var p in pet.path)
                 LoadAnime(petModel, p);
         }
-        // 先载入本体宠物
+        // 插入本体宠物
         foreach (var pet in ModMakerInfo.Pets)
         {
             // 确保Id不重复
-            if (pets.All(i => i.Id.Value != pet.SourceId))
-                Pets.Add(pet);
+            if (Pets.All(i => i.Id.Value != pet.SourceId))
+                Pets.Insert(0, pet);
         }
-        // 再载入模组宠物
-        foreach (var pet in pets)
-            Pets.Add(pet);
 
         foreach (var lang in loader.I18nDatas)
             I18nDatas.Add(lang.Key, lang.Value);

@@ -55,6 +55,7 @@ public static class Utils
         {
             var bytes = File.ReadAllBytes(imagePath);
             bitmapImage.StreamSource = new MemoryStream(bytes);
+            bitmapImage.DecodePixelWidth = DecodePixelWidth;
         }
         finally
         {
