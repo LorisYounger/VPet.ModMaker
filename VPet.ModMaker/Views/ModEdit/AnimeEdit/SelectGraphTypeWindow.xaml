@@ -11,10 +11,10 @@
   Width="500"
   Height="300"
   mc:Ignorable="d">
-    <Window.Resources>
-        <ResourceDictionary Source="/VPet-Simulator.Windows.Interface;component/ResourceStyle.xaml" />
-    </Window.Resources>
-    <d:Window.DataContext>
+  <Window.Resources>
+    <ResourceDictionary Source="/VPet-Simulator.Windows.Interface;component/ResourceStyle.xaml" />
+  </Window.Resources>
+  <d:Window.DataContext>
     <local:SelectGraphTypeWindow />
   </d:Window.DataContext>
   <Grid>
@@ -39,7 +39,8 @@
       <ComboBox
         Grid.Column="1"
         ItemsSource="{Binding GraphTypes.Value}"
-        SelectedItem="{Binding GraphType.Value}" />
+        SelectedItem="{Binding GraphType.Value}"
+        Style="{DynamicResource StandardComboBoxStyle}" />
       <Label
         Grid.Row="1"
         Content="{ll:Str 动画名称}"
@@ -47,6 +48,7 @@
       <TextBox
         Grid.Row="1"
         Grid.Column="1"
+        Style="{DynamicResource StandardTextBoxStyle}"
         Text="{Binding AnimeName.Value, UpdateSourceTrigger=PropertyChanged}"
         Visibility="{Binding HasNameAnime.Value, Converter={StaticResource FalseToHiddenConverter}}" />
     </Grid>
@@ -59,13 +61,15 @@
         x:Name="Button_Cancel"
         Margin="10"
         Click="Button_Cancel_Click"
-        Content="{ll:Str 取消}" />
+        Content="{ll:Str 取消}"
+        Style="{DynamicResource ThemedButtonStyle}" />
       <Button
         x:Name="Button_Yes"
         Grid.Column="1"
         Margin="10"
         Click="Button_Yes_Click"
-        Content="{ll:Str 确定}" />
+        Content="{ll:Str 确定}"
+        Style="{DynamicResource ThemedButtonStyle}" />
     </Grid>
   </Grid>
 </Window>

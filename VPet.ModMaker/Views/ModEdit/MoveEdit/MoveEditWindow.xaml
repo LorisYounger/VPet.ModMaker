@@ -14,10 +14,10 @@
   d:DataContext="{d:DesignInstance Type=vm:MoveEditWindowVM}"
   WindowStartupLocation="CenterScreen"
   mc:Ignorable="d">
-    <Window.Resources>
-        <ResourceDictionary Source="/VPet-Simulator.Windows.Interface;component/ResourceStyle.xaml" />
-    </Window.Resources>
-    <Grid>
+  <Window.Resources>
+    <ResourceDictionary Source="/VPet-Simulator.Windows.Interface;component/ResourceStyle.xaml" />
+  </Window.Resources>
+  <Grid>
     <Grid.ColumnDefinitions>
       <ColumnDefinition Width="Auto" />
       <ColumnDefinition />
@@ -45,7 +45,7 @@
           Command="{Binding AddImageCommand}"
           Content="{ll:Str 添加测试图片}">
           <Button.Style>
-            <Style BasedOn="{StaticResource {x:Type Button}}" TargetType="Button">
+            <Style BasedOn="{StaticResource ThemedButtonStyle}" TargetType="Button">
               <Setter Property="Visibility" Value="Hidden" />
               <Style.Triggers>
                 <DataTrigger Binding="{Binding Image.Value}" Value="{x:Null}">
@@ -282,13 +282,15 @@
           x:Name="Button_Cancel"
           Margin="10"
           Click="Button_Cancel_Click"
-          Content="{ll:Str 取消}" />
+          Content="{ll:Str 取消}"
+          Style="{DynamicResource ThemedButtonStyle}" />
         <Button
           x:Name="Button_Yes"
           Grid.Column="1"
           Margin="10"
           Click="Button_Yes_Click"
-          Content="{ll:Str 确定}" />
+          Content="{ll:Str 确定}"
+          Style="{DynamicResource ThemedButtonStyle}" />
       </Grid>
     </Grid>
   </Grid>

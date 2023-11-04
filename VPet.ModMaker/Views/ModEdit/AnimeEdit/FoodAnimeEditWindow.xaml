@@ -15,334 +15,372 @@
   WindowStartupLocation="CenterScreen"
   mc:Ignorable="d">
   <Window.Resources>
-        <ResourceDictionary>
-            <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="/VPet-Simulator.Windows.Interface;component/ResourceStyle.xaml" />
-            </ResourceDictionary.MergedDictionaries>
-            <Style x:Key="ListBoxItem_Style" BasedOn="{StaticResource {x:Type ListBoxItem}}" TargetType="ListBoxItem">
-                <Setter Property="HorizontalContentAlignment" Value="Stretch" />
-                <Setter Property="VerticalContentAlignment" Value="Stretch" />
-            </Style>
-            <DataTemplate x:Key="Expander_AnimeItem" DataType="Expander">
-                <Expander HorizontalAlignment="Stretch" VerticalAlignment="Top" d:DataContext="">
-                    <Expander.Header>
-                        <Grid
-                                Tag="{Binding DataContext, RelativeSource={RelativeSource AncestorType=Window, Mode=FindAncestor}}">
-                            <Grid.ContextMenu>
-                                <ContextMenu d:DataContext="">
-                                    <MenuItem d:Header="添加图片"
-                                            Command="{Binding PlacementTarget.Tag.RemoveAnimeCommand, RelativeSource={RelativeSource AncestorType=ContextMenu, Mode=FindAncestor}}"
-                                            CommandParameter="{Binding PlacementTarget.DataContext, RelativeSource={RelativeSource AncestorType=ContextMenu, Mode=FindAncestor}}"
-                                            Header="{ll:Str 删除此动画}"
-                                            IsEnabled="{Binding PlacementTarget.Tag.PlayCommand.CurrentCanExecute.Value, RelativeSource={RelativeSource AncestorType=ContextMenu, Mode=FindAncestor}}" />
-                                </ContextMenu>
-                            </Grid.ContextMenu>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="Auto" />
-                                <ColumnDefinition Width="Auto" />
-                            </Grid.ColumnDefinitions>
-                            <TextBlock Margin="10,0,10,0">
-                                <TextBlock.Text>
-                                    <MultiBinding Converter="{StaticResource StringFormatConverter}"
-                                            ConverterParameter="{}({0}, {1}, {2})">
-                                        <Binding Path="FrontImages.Count" />
-                                        <Binding Path="BackImages.Count" />
-                                        <Binding Path="FoodLocations.Count" />
-                                    </MultiBinding>
-                                </TextBlock.Text>
-                            </TextBlock>
-                            <!--<TextBox
+    <ResourceDictionary>
+      <ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary Source="/VPet-Simulator.Windows.Interface;component/ResourceStyle.xaml" />
+      </ResourceDictionary.MergedDictionaries>
+      <Style
+        x:Key="ListBoxItem_Style"
+        BasedOn="{StaticResource {x:Type ListBoxItem}}"
+        TargetType="ListBoxItem">
+        <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+        <Setter Property="VerticalContentAlignment" Value="Stretch" />
+      </Style>
+      <DataTemplate x:Key="Expander_AnimeItem" DataType="Expander">
+        <Expander
+          HorizontalAlignment="Stretch"
+          VerticalAlignment="Top"
+          d:DataContext="">
+          <Expander.Header>
+            <Grid Tag="{Binding DataContext, RelativeSource={RelativeSource AncestorType=Window, Mode=FindAncestor}}">
+              <Grid.ContextMenu>
+                <ContextMenu d:DataContext="">
+                  <MenuItem
+                    d:Header="添加图片"
+                    Command="{Binding PlacementTarget.Tag.RemoveAnimeCommand, RelativeSource={RelativeSource AncestorType=ContextMenu, Mode=FindAncestor}}"
+                    CommandParameter="{Binding PlacementTarget.DataContext, RelativeSource={RelativeSource AncestorType=ContextMenu, Mode=FindAncestor}}"
+                    Header="{ll:Str 删除此动画}"
+                    IsEnabled="{Binding PlacementTarget.Tag.PlayCommand.CurrentCanExecute.Value, RelativeSource={RelativeSource AncestorType=ContextMenu, Mode=FindAncestor}}" />
+                </ContextMenu>
+              </Grid.ContextMenu>
+              <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto" />
+              </Grid.ColumnDefinitions>
+              <TextBlock Margin="10,0,10,0">
+                <TextBlock.Text>
+                  <MultiBinding Converter="{StaticResource StringFormatConverter}" ConverterParameter="{}({0}, {1}, {2})">
+                    <Binding Path="FrontImages.Count" />
+                    <Binding Path="BackImages.Count" />
+                    <Binding Path="FoodLocations.Count" />
+                  </MultiBinding>
+                </TextBlock.Text>
+              </TextBlock>
+              <!--<TextBox
            Grid.Column="1"
            pu:TextBoxHelper.Watermark="{ll:Str 动画Id(非必要)}"
            Text="{Binding Id.Value, UpdateSourceTrigger=PropertyChanged}" />-->
-                            <!--  pu:TextBoxHelper.Watermark="{ll:Str 动画Id(非必要)}"  -->
-                        </Grid>
-                    </Expander.Header>
-                    <Grid>
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="Auto" />
-                            <RowDefinition Height="Auto" />
-                            <RowDefinition Height="Auto" />
-                        </Grid.RowDefinitions>
-                        <GroupBox>
-                            <GroupBox.Header>
-                                <StackPanel Orientation="Horizontal"
-                                        Tag="{Binding DataContext, RelativeSource={RelativeSource AncestorType=Window, Mode=FindAncestor}}">
-                                    <StackPanel.ContextMenu>
-                                        <ContextMenu d:DataContext="">
-                                            <MenuItem d:Header="添加图片"
-                                                    Command="{Binding PlacementTarget.Tag.AddFrontImageCommand, RelativeSource={RelativeSource AncestorType=ContextMenu, Mode=FindAncestor}}"
-                                                    CommandParameter="{Binding PlacementTarget.DataContext, RelativeSource={RelativeSource AncestorType=ContextMenu, Mode=FindAncestor}}"
-                                                    Header="{ll:Str 添加图片}"
-                                                    IsEnabled="{Binding PlacementTarget.Tag.PlayCommand.CurrentCanExecute.Value, RelativeSource={RelativeSource AncestorType=ContextMenu, Mode=FindAncestor}}" />
-                                            <MenuItem d:Header="添加图片"
-                                                    Command="{Binding PlacementTarget.Tag.ClearFrontImageCommand, RelativeSource={RelativeSource AncestorType=ContextMenu, Mode=FindAncestor}}"
-                                                    CommandParameter="{Binding PlacementTarget.DataContext, RelativeSource={RelativeSource AncestorType=ContextMenu, Mode=FindAncestor}}"
-                                                    Header="{ll:Str 清空图片}"
-                                                    IsEnabled="{Binding PlacementTarget.Tag.PlayCommand.CurrentCanExecute.Value, RelativeSource={RelativeSource AncestorType=ContextMenu, Mode=FindAncestor}}" />
-                                        </ContextMenu>
-                                    </StackPanel.ContextMenu>
-                                    <Label d:Content="顶层图片" Content="{ll:Str 顶层图片}" />
-                                    <TextBlock Margin="10,0,0,0">
-                                        <TextBlock.Text>
-                                            <MultiBinding Converter="{StaticResource StringFormatConverter}"
-                                                    ConverterParameter="{}({0})">
-                                                <Binding Path="FrontImages.Count" />
-                                            </MultiBinding>
-                                        </TextBlock.Text>
-                                    </TextBlock>
-                                </StackPanel>
-                            </GroupBox.Header>
-                            <ListBox x:Name="ListBox_FrontImages" d:ItemsSource="{d:SampleData ItemCount=5}"
-                                    AllowDrop="True" Drop="ListBox_Drop"
-                                    ItemsSource="{Binding FrontImages, IsAsync=True}"
-                                    PreviewMouseMove="ListBox_PreviewMouseMove"
-                                    ScrollViewer.HorizontalScrollBarVisibility="Auto"
-                                    ScrollViewer.VerticalScrollBarVisibility="Hidden"
-                                    SelectedItem="{Binding DataContext.CurrentFrontImageModel.Value, RelativeSource={RelativeSource AncestorType=Window, Mode=FindAncestor}}"
-                                    SelectionChanged="ListBox_SelectionChanged">
-                                <ListBox.ItemsPanel>
-                                    <ItemsPanelTemplate>
-                                        <StackPanel Orientation="Horizontal" />
-                                    </ItemsPanelTemplate>
-                                </ListBox.ItemsPanel>
-                                <ListBox.ItemTemplate>
-                                    <DataTemplate>
-                                        <Grid
-                                                DataContext="{Binding DataContext, RelativeSource={RelativeSource AncestorType=Expander, Mode=FindAncestor}}"
-                                                Tag="{Binding DataContext, RelativeSource={RelativeSource AncestorType=Window, Mode=FindAncestor}}">
-                                            <Grid.ContextMenu>
-                                                <ContextMenu>
-                                                    <MenuItem d:Header="修改图片"
-                                                            Command="{Binding PlacementTarget.Tag.ChangeFrontImageCommand, RelativeSource={RelativeSource AncestorType=ContextMenu, Mode=FindAncestor}}"
-                                                            CommandParameter="{Binding PlacementTarget.DataContext, RelativeSource={RelativeSource AncestorType=ContextMenu, Mode=FindAncestor}}"
-                                                            Header="{ll:Str 修改图片}"
-                                                            IsEnabled="{Binding PlacementTarget.Tag.PlayCommand.CurrentCanExecute.Value, RelativeSource={RelativeSource AncestorType=ContextMenu, Mode=FindAncestor}}" />
-                                                    <MenuItem d:Header="删除图片"
-                                                            Command="{Binding PlacementTarget.Tag.RemoveFrontImageCommand, RelativeSource={RelativeSource AncestorType=ContextMenu, Mode=FindAncestor}}"
-                                                            CommandParameter="{Binding PlacementTarget.DataContext, RelativeSource={RelativeSource AncestorType=ContextMenu, Mode=FindAncestor}}"
-                                                            Header="{ll:Str 删除图片}"
-                                                            IsEnabled="{Binding PlacementTarget.Tag.PlayCommand.CurrentCanExecute.Value, RelativeSource={RelativeSource AncestorType=ContextMenu, Mode=FindAncestor}}" />
-                                                </ContextMenu>
-                                            </Grid.ContextMenu>
-                                            <Grid.RowDefinitions>
-                                                <RowDefinition Height="Auto" />
-                                                <RowDefinition />
-                                            </Grid.RowDefinitions>
-                                            <Image Width="150" Height="150" d:DataContext=""
-                                                    DataContext="{Binding DataContext, RelativeSource={RelativeSource AncestorType=ListBoxItem, Mode=FindAncestor}}"
-                                                    Source="{Binding Image.Value, IsAsync=True}">
-                                                <Image.ToolTip>
-                                                    <Image Width="250" Height="250"
-                                                            Source="{Binding Image.Value, IsAsync=True}" />
-                                                </Image.ToolTip>
-                                            </Image>
-                                            <Grid Grid.Row="1">
-                                                <Grid.ColumnDefinitions>
-                                                    <ColumnDefinition Width="Auto" />
-                                                    <ColumnDefinition />
-                                                </Grid.ColumnDefinitions>
-                                                <Label d:Content="持续时间(ms)" Content="{ll:Str 持续时间(ms)}" />
-                                                <pu:NumberInput Grid.Column="1"
-                                                        Value="{Binding DataContext.Duration.Value, RelativeSource={RelativeSource AncestorType=ListBoxItem, Mode=FindAncestor}}" />
-                                            </Grid>
-                                        </Grid>
-                                    </DataTemplate>
-                                </ListBox.ItemTemplate>
-                            </ListBox>
-                        </GroupBox>
-                        <GroupBox Grid.Row="1">
-                            <GroupBox.Header>
-                                <StackPanel Orientation="Horizontal"
-                                        Tag="{Binding DataContext, RelativeSource={RelativeSource AncestorType=Window, Mode=FindAncestor}}">
-                                    <StackPanel.ContextMenu>
-                                        <ContextMenu d:DataContext="">
-                                            <MenuItem d:Header="添加图片"
-                                                    Command="{Binding PlacementTarget.Tag.AddBackImageCommand, RelativeSource={RelativeSource AncestorType=ContextMenu, Mode=FindAncestor}}"
-                                                    CommandParameter="{Binding PlacementTarget.DataContext, RelativeSource={RelativeSource AncestorType=ContextMenu, Mode=FindAncestor}}"
-                                                    Header="{ll:Str 添加图片}"
-                                                    IsEnabled="{Binding PlacementTarget.Tag.PlayCommand.CurrentCanExecute.Value, RelativeSource={RelativeSource AncestorType=ContextMenu, Mode=FindAncestor}}" />
-                                            <MenuItem d:Header="添加图片"
-                                                    Command="{Binding PlacementTarget.Tag.ClearBackImageCommand, RelativeSource={RelativeSource AncestorType=ContextMenu, Mode=FindAncestor}}"
-                                                    CommandParameter="{Binding PlacementTarget.DataContext, RelativeSource={RelativeSource AncestorType=ContextMenu, Mode=FindAncestor}}"
-                                                    Header="{ll:Str 清空图片}"
-                                                    IsEnabled="{Binding PlacementTarget.Tag.PlayCommand.CurrentCanExecute.Value, RelativeSource={RelativeSource AncestorType=ContextMenu, Mode=FindAncestor}}" />
-                                        </ContextMenu>
-                                    </StackPanel.ContextMenu>
-                                    <Label d:Content="底层图片" Content="{ll:Str 底层图片}" />
-                                    <TextBlock Margin="10,0,0,0">
-                                        <TextBlock.Text>
-                                            <MultiBinding Converter="{StaticResource StringFormatConverter}"
-                                                    ConverterParameter="{}({0})">
-                                                <Binding Path="BackImages.Count" />
-                                            </MultiBinding>
-                                        </TextBlock.Text>
-                                    </TextBlock>
-                                </StackPanel>
-                            </GroupBox.Header>
-                            <ListBox x:Name="ListBox_BackImages" d:ItemsSource="{d:SampleData ItemCount=5}"
-                                    AllowDrop="True" Drop="ListBox_Drop"
-                                    ItemsSource="{Binding BackImages, IsAsync=True}"
-                                    PreviewMouseMove="ListBox_PreviewMouseMove"
-                                    ScrollViewer.HorizontalScrollBarVisibility="Auto"
-                                    ScrollViewer.VerticalScrollBarVisibility="Hidden"
-                                    SelectedItem="{Binding DataContext.CurrentBackImageModel.Value, RelativeSource={RelativeSource AncestorType=Window, Mode=FindAncestor}}"
-                                    SelectionChanged="ListBox_SelectionChanged">
-                                <ListBox.ItemsPanel>
-                                    <ItemsPanelTemplate>
-                                        <StackPanel Orientation="Horizontal" />
-                                    </ItemsPanelTemplate>
-                                </ListBox.ItemsPanel>
-                                <ListBox.ItemTemplate>
-                                    <DataTemplate>
-                                        <Grid
-                                                DataContext="{Binding DataContext, RelativeSource={RelativeSource AncestorType=Expander, Mode=FindAncestor}}"
-                                                Tag="{Binding DataContext, RelativeSource={RelativeSource AncestorType=Window, Mode=FindAncestor}}">
-                                            <Grid.ContextMenu>
-                                                <ContextMenu>
-                                                    <MenuItem d:Header="修改图片"
-                                                            Command="{Binding PlacementTarget.Tag.ChangeBackImageCommand, RelativeSource={RelativeSource AncestorType=ContextMenu, Mode=FindAncestor}}"
-                                                            CommandParameter="{Binding PlacementTarget.DataContext, RelativeSource={RelativeSource AncestorType=ContextMenu, Mode=FindAncestor}}"
-                                                            Header="{ll:Str 修改图片}"
-                                                            IsEnabled="{Binding PlacementTarget.Tag.PlayCommand.CurrentCanExecute.Value, RelativeSource={RelativeSource AncestorType=ContextMenu, Mode=FindAncestor}}" />
-                                                    <MenuItem d:Header="删除图片"
-                                                            Command="{Binding PlacementTarget.Tag.RemoveBackImageCommand, RelativeSource={RelativeSource AncestorType=ContextMenu, Mode=FindAncestor}}"
-                                                            CommandParameter="{Binding PlacementTarget.DataContext, RelativeSource={RelativeSource AncestorType=ContextMenu, Mode=FindAncestor}}"
-                                                            Header="{ll:Str 删除图片}"
-                                                            IsEnabled="{Binding PlacementTarget.Tag.PlayCommand.CurrentCanExecute.Value, RelativeSource={RelativeSource AncestorType=ContextMenu, Mode=FindAncestor}}" />
-                                                </ContextMenu>
-                                            </Grid.ContextMenu>
-                                            <Grid.RowDefinitions>
-                                                <RowDefinition Height="Auto" />
-                                                <RowDefinition />
-                                            </Grid.RowDefinitions>
-                                            <Image Width="150" Height="150" d:DataContext=""
-                                                    DataContext="{Binding DataContext, RelativeSource={RelativeSource AncestorType=ListBoxItem, Mode=FindAncestor}}"
-                                                    Source="{Binding Image.Value, IsAsync=True}">
-                                                <Image.ToolTip>
-                                                    <Image Width="250" Height="250"
-                                                            Source="{Binding Image.Value, IsAsync=True}" />
-                                                </Image.ToolTip>
-                                            </Image>
-                                            <Grid Grid.Row="1">
-                                                <Grid.ColumnDefinitions>
-                                                    <ColumnDefinition Width="Auto" />
-                                                    <ColumnDefinition />
-                                                </Grid.ColumnDefinitions>
-                                                <Label d:Content="持续时间(ms)" Content="{ll:Str 持续时间(ms)}" />
-                                                <pu:NumberInput Grid.Column="1"
-                                                        Value="{Binding DataContext.Duration.Value, RelativeSource={RelativeSource AncestorType=ListBoxItem, Mode=FindAncestor}}" />
-                                            </Grid>
-                                        </Grid>
-                                    </DataTemplate>
-                                </ListBox.ItemTemplate>
-                            </ListBox>
-                        </GroupBox>
-                        <GroupBox Grid.Row="2">
-                            <GroupBox.Header>
-                                <StackPanel Orientation="Horizontal"
-                                        Tag="{Binding DataContext, RelativeSource={RelativeSource AncestorType=Window, Mode=FindAncestor}}">
-                                    <StackPanel.ContextMenu>
-                                        <ContextMenu d:DataContext="">
-                                            <MenuItem d:Header="添加食物定位"
-                                                    Command="{Binding PlacementTarget.Tag.AddFoodLocationCommand, RelativeSource={RelativeSource AncestorType=ContextMenu, Mode=FindAncestor}}"
-                                                    CommandParameter="{Binding PlacementTarget.DataContext, RelativeSource={RelativeSource AncestorType=ContextMenu, Mode=FindAncestor}}"
-                                                    Header="{ll:Str 添加食物定位}"
-                                                    IsEnabled="{Binding PlacementTarget.Tag.PlayCommand.CurrentCanExecute.Value, RelativeSource={RelativeSource AncestorType=ContextMenu, Mode=FindAncestor}}" />
-                                            <MenuItem d:Header="清空食物定位"
-                                                    Command="{Binding PlacementTarget.Tag.ClearFoodLocationCommand, RelativeSource={RelativeSource AncestorType=ContextMenu, Mode=FindAncestor}}"
-                                                    CommandParameter="{Binding PlacementTarget.DataContext, RelativeSource={RelativeSource AncestorType=ContextMenu, Mode=FindAncestor}}"
-                                                    Header="{ll:Str 清空食物定位}"
-                                                    IsEnabled="{Binding PlacementTarget.Tag.PlayCommand.CurrentCanExecute.Value, RelativeSource={RelativeSource AncestorType=ContextMenu, Mode=FindAncestor}}" />
-                                        </ContextMenu>
-                                    </StackPanel.ContextMenu>
-                                    <Label d:Content="食物位置" Content="{ll:Str 食物位置}" />
-                                    <TextBlock Margin="10,0,0,0">
-                                        <TextBlock.Text>
-                                            <MultiBinding Converter="{StaticResource StringFormatConverter}"
-                                                    ConverterParameter="{}({0})">
-                                                <Binding Path="FoodLocations.Count" />
-                                            </MultiBinding>
-                                        </TextBlock.Text>
-                                    </TextBlock>
-                                </StackPanel>
-                            </GroupBox.Header>
-                            <ListBox d:ItemsSource="{d:SampleData ItemCount=5}"
-                                    ItemsSource="{Binding FoodLocations, IsAsync=True}"
-                                    ScrollViewer.HorizontalScrollBarVisibility="Auto"
-                                    ScrollViewer.VerticalScrollBarVisibility="Hidden"
-                                    SelectedItem="{Binding DataContext.CurrentFoodLocationModel.Value, RelativeSource={RelativeSource AncestorType=Window, Mode=FindAncestor}}"
-                                    SelectionChanged="ListBox_SelectionChanged">
-                                <ListBox.ItemsPanel>
-                                    <ItemsPanelTemplate>
-                                        <StackPanel Orientation="Horizontal" />
-                                    </ItemsPanelTemplate>
-                                </ListBox.ItemsPanel>
-                                <ListBox.ItemTemplate>
-                                    <DataTemplate>
-                                        <Grid>
-                                            <Grid.ContextMenu>
-                                                <ContextMenu>
-                                                    <MenuItem d:Header="删除食物定位"
-                                                            Command="{Binding PlacementTarget.Tag.RemoveFoodLocationCommand, RelativeSource={RelativeSource AncestorType=ContextMenu, Mode=FindAncestor}}"
-                                                            CommandParameter="{Binding PlacementTarget.DataContext, RelativeSource={RelativeSource AncestorType=ContextMenu, Mode=FindAncestor}}"
-                                                            Header="{ll:Str 删除食物定位}"
-                                                            IsEnabled="{Binding PlacementTarget.Tag.PlayCommand.CurrentCanExecute.Value, RelativeSource={RelativeSource AncestorType=ContextMenu, Mode=FindAncestor}}" />
-                                                </ContextMenu>
-                                            </Grid.ContextMenu>
-                                            <Grid.ColumnDefinitions>
-                                                <ColumnDefinition Width="Auto" />
-                                                <ColumnDefinition />
-                                            </Grid.ColumnDefinitions>
-                                            <Grid.RowDefinitions>
-                                                <RowDefinition Height="Auto" />
-                                                <RowDefinition Height="Auto" />
-                                                <RowDefinition Height="Auto" />
-                                                <RowDefinition Height="Auto" />
-                                                <RowDefinition Height="Auto" />
-                                                <RowDefinition Height="Auto" />
-                                            </Grid.RowDefinitions>
-                                            <Label d:Content="持续时间 (ms)" Content="{ll:Str 持续时间 (ms)}" />
-                                            <pu:NumberInput Grid.Column="1" Value="{Binding Duration.Value}" />
-                                            <Label Grid.Row="1" d:Content="旋转角度" Content="{ll:Str 旋转角度}" />
-                                            <pu:NumberInput Grid.Row="1" Grid.Column="1" Value="{Binding Rotate.Value}" />
-                                            <Label Grid.Row="2" d:Content="透明度" Content="{ll:Str 透明度}" />
-                                            <pu:NumberInput Grid.Row="2" Grid.Column="1" Value="{Binding Opacity.Value}" />
-                                            <Label Grid.Row="3" d:Content="长度" Content="{ll:Str 长度}" />
-                                            <pu:NumberInput Grid.Row="3" Grid.Column="1"
-                                                    Value="{Binding Rect.Width.Value}" />
-                                            <Grid Grid.Row="4" Grid.ColumnSpan="2">
-                                                <Grid.ColumnDefinitions>
-                                                    <ColumnDefinition />
-                                                    <ColumnDefinition />
-                                                </Grid.ColumnDefinitions>
-                                                <Grid>
-                                                    <Grid.ColumnDefinitions>
-                                                        <ColumnDefinition Width="Auto" />
-                                                        <ColumnDefinition />
-                                                    </Grid.ColumnDefinitions>
-                                                    <Label Content="X:" />
-                                                    <pu:NumberInput Grid.Column="1" Value="{Binding Rect.X.Value}" />
-                                                </Grid>
-                                                <Grid Grid.Column="1">
-                                                    <Grid.ColumnDefinitions>
-                                                        <ColumnDefinition Width="Auto" />
-                                                        <ColumnDefinition />
-                                                    </Grid.ColumnDefinitions>
-                                                    <Label Content="Y:" />
-                                                    <pu:NumberInput Grid.Column="1" Value="{Binding Rect.Y.Value}" />
-                                                </Grid>
-                                            </Grid>
-                                        </Grid>
-                                    </DataTemplate>
-                                </ListBox.ItemTemplate>
-                            </ListBox>
-                        </GroupBox>
+              <!--  pu:TextBoxHelper.Watermark="{ll:Str 动画Id(非必要)}"  -->
+            </Grid>
+          </Expander.Header>
+          <Grid>
+            <Grid.RowDefinitions>
+              <RowDefinition Height="Auto" />
+              <RowDefinition Height="Auto" />
+              <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+            <GroupBox>
+              <GroupBox.Header>
+                <StackPanel Orientation="Horizontal" Tag="{Binding DataContext, RelativeSource={RelativeSource AncestorType=Window, Mode=FindAncestor}}">
+                  <StackPanel.ContextMenu>
+                    <ContextMenu d:DataContext="">
+                      <MenuItem
+                        d:Header="添加图片"
+                        Command="{Binding PlacementTarget.Tag.AddFrontImageCommand, RelativeSource={RelativeSource AncestorType=ContextMenu, Mode=FindAncestor}}"
+                        CommandParameter="{Binding PlacementTarget.DataContext, RelativeSource={RelativeSource AncestorType=ContextMenu, Mode=FindAncestor}}"
+                        Header="{ll:Str 添加图片}"
+                        IsEnabled="{Binding PlacementTarget.Tag.PlayCommand.CurrentCanExecute.Value, RelativeSource={RelativeSource AncestorType=ContextMenu, Mode=FindAncestor}}" />
+                      <MenuItem
+                        d:Header="添加图片"
+                        Command="{Binding PlacementTarget.Tag.ClearFrontImageCommand, RelativeSource={RelativeSource AncestorType=ContextMenu, Mode=FindAncestor}}"
+                        CommandParameter="{Binding PlacementTarget.DataContext, RelativeSource={RelativeSource AncestorType=ContextMenu, Mode=FindAncestor}}"
+                        Header="{ll:Str 清空图片}"
+                        IsEnabled="{Binding PlacementTarget.Tag.PlayCommand.CurrentCanExecute.Value, RelativeSource={RelativeSource AncestorType=ContextMenu, Mode=FindAncestor}}" />
+                    </ContextMenu>
+                  </StackPanel.ContextMenu>
+                  <Label d:Content="顶层图片" Content="{ll:Str 顶层图片}" />
+                  <TextBlock Margin="10,0,0,0">
+                    <TextBlock.Text>
+                      <MultiBinding Converter="{StaticResource StringFormatConverter}" ConverterParameter="{}({0})">
+                        <Binding Path="FrontImages.Count" />
+                      </MultiBinding>
+                    </TextBlock.Text>
+                  </TextBlock>
+                </StackPanel>
+              </GroupBox.Header>
+              <ListBox
+                x:Name="ListBox_FrontImages"
+                d:ItemsSource="{d:SampleData ItemCount=5}"
+                AllowDrop="True"
+                Drop="ListBox_Drop"
+                ItemsSource="{Binding FrontImages, IsAsync=True}"
+                PreviewMouseMove="ListBox_PreviewMouseMove"
+                ScrollViewer.HorizontalScrollBarVisibility="Auto"
+                ScrollViewer.VerticalScrollBarVisibility="Hidden"
+                SelectedItem="{Binding DataContext.CurrentFrontImageModel.Value, RelativeSource={RelativeSource AncestorType=Window, Mode=FindAncestor}}"
+                SelectionChanged="ListBox_SelectionChanged">
+                <ListBox.ItemsPanel>
+                  <ItemsPanelTemplate>
+                    <StackPanel Orientation="Horizontal" />
+                  </ItemsPanelTemplate>
+                </ListBox.ItemsPanel>
+                <ListBox.ItemTemplate>
+                  <DataTemplate>
+                    <Grid DataContext="{Binding DataContext, RelativeSource={RelativeSource AncestorType=Expander, Mode=FindAncestor}}" Tag="{Binding DataContext, RelativeSource={RelativeSource AncestorType=Window, Mode=FindAncestor}}">
+                      <Grid.ContextMenu>
+                        <ContextMenu>
+                          <MenuItem
+                            d:Header="修改图片"
+                            Command="{Binding PlacementTarget.Tag.ChangeFrontImageCommand, RelativeSource={RelativeSource AncestorType=ContextMenu, Mode=FindAncestor}}"
+                            CommandParameter="{Binding PlacementTarget.DataContext, RelativeSource={RelativeSource AncestorType=ContextMenu, Mode=FindAncestor}}"
+                            Header="{ll:Str 修改图片}"
+                            IsEnabled="{Binding PlacementTarget.Tag.PlayCommand.CurrentCanExecute.Value, RelativeSource={RelativeSource AncestorType=ContextMenu, Mode=FindAncestor}}" />
+                          <MenuItem
+                            d:Header="删除图片"
+                            Command="{Binding PlacementTarget.Tag.RemoveFrontImageCommand, RelativeSource={RelativeSource AncestorType=ContextMenu, Mode=FindAncestor}}"
+                            CommandParameter="{Binding PlacementTarget.DataContext, RelativeSource={RelativeSource AncestorType=ContextMenu, Mode=FindAncestor}}"
+                            Header="{ll:Str 删除图片}"
+                            IsEnabled="{Binding PlacementTarget.Tag.PlayCommand.CurrentCanExecute.Value, RelativeSource={RelativeSource AncestorType=ContextMenu, Mode=FindAncestor}}" />
+                        </ContextMenu>
+                      </Grid.ContextMenu>
+                      <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition />
+                      </Grid.RowDefinitions>
+                      <Image
+                        Width="150"
+                        Height="150"
+                        d:DataContext=""
+                        DataContext="{Binding DataContext, RelativeSource={RelativeSource AncestorType=ListBoxItem, Mode=FindAncestor}}"
+                        Source="{Binding Image.Value, IsAsync=True}">
+                        <Image.ToolTip>
+                          <Image
+                            Width="250"
+                            Height="250"
+                            Source="{Binding Image.Value, IsAsync=True}" />
+                        </Image.ToolTip>
+                      </Image>
+                      <Grid Grid.Row="1">
+                        <Grid.ColumnDefinitions>
+                          <ColumnDefinition Width="Auto" />
+                          <ColumnDefinition />
+                        </Grid.ColumnDefinitions>
+                        <Label d:Content="持续时间(ms)" Content="{ll:Str 持续时间(ms)}" />
+                        <pu:NumberInput Grid.Column="1" Value="{Binding DataContext.Duration.Value, RelativeSource={RelativeSource AncestorType=ListBoxItem, Mode=FindAncestor}}" />
+                      </Grid>
                     </Grid>
-                </Expander>
-            </DataTemplate>
-        </ResourceDictionary>
-   
+                  </DataTemplate>
+                </ListBox.ItemTemplate>
+              </ListBox>
+            </GroupBox>
+            <GroupBox Grid.Row="1">
+              <GroupBox.Header>
+                <StackPanel Orientation="Horizontal" Tag="{Binding DataContext, RelativeSource={RelativeSource AncestorType=Window, Mode=FindAncestor}}">
+                  <StackPanel.ContextMenu>
+                    <ContextMenu d:DataContext="">
+                      <MenuItem
+                        d:Header="添加图片"
+                        Command="{Binding PlacementTarget.Tag.AddBackImageCommand, RelativeSource={RelativeSource AncestorType=ContextMenu, Mode=FindAncestor}}"
+                        CommandParameter="{Binding PlacementTarget.DataContext, RelativeSource={RelativeSource AncestorType=ContextMenu, Mode=FindAncestor}}"
+                        Header="{ll:Str 添加图片}"
+                        IsEnabled="{Binding PlacementTarget.Tag.PlayCommand.CurrentCanExecute.Value, RelativeSource={RelativeSource AncestorType=ContextMenu, Mode=FindAncestor}}" />
+                      <MenuItem
+                        d:Header="添加图片"
+                        Command="{Binding PlacementTarget.Tag.ClearBackImageCommand, RelativeSource={RelativeSource AncestorType=ContextMenu, Mode=FindAncestor}}"
+                        CommandParameter="{Binding PlacementTarget.DataContext, RelativeSource={RelativeSource AncestorType=ContextMenu, Mode=FindAncestor}}"
+                        Header="{ll:Str 清空图片}"
+                        IsEnabled="{Binding PlacementTarget.Tag.PlayCommand.CurrentCanExecute.Value, RelativeSource={RelativeSource AncestorType=ContextMenu, Mode=FindAncestor}}" />
+                    </ContextMenu>
+                  </StackPanel.ContextMenu>
+                  <Label d:Content="底层图片" Content="{ll:Str 底层图片}" />
+                  <TextBlock Margin="10,0,0,0">
+                    <TextBlock.Text>
+                      <MultiBinding Converter="{StaticResource StringFormatConverter}" ConverterParameter="{}({0})">
+                        <Binding Path="BackImages.Count" />
+                      </MultiBinding>
+                    </TextBlock.Text>
+                  </TextBlock>
+                </StackPanel>
+              </GroupBox.Header>
+              <ListBox
+                x:Name="ListBox_BackImages"
+                d:ItemsSource="{d:SampleData ItemCount=5}"
+                AllowDrop="True"
+                Drop="ListBox_Drop"
+                ItemsSource="{Binding BackImages, IsAsync=True}"
+                PreviewMouseMove="ListBox_PreviewMouseMove"
+                ScrollViewer.HorizontalScrollBarVisibility="Auto"
+                ScrollViewer.VerticalScrollBarVisibility="Hidden"
+                SelectedItem="{Binding DataContext.CurrentBackImageModel.Value, RelativeSource={RelativeSource AncestorType=Window, Mode=FindAncestor}}"
+                SelectionChanged="ListBox_SelectionChanged">
+                <ListBox.ItemsPanel>
+                  <ItemsPanelTemplate>
+                    <StackPanel Orientation="Horizontal" />
+                  </ItemsPanelTemplate>
+                </ListBox.ItemsPanel>
+                <ListBox.ItemTemplate>
+                  <DataTemplate>
+                    <Grid DataContext="{Binding DataContext, RelativeSource={RelativeSource AncestorType=Expander, Mode=FindAncestor}}" Tag="{Binding DataContext, RelativeSource={RelativeSource AncestorType=Window, Mode=FindAncestor}}">
+                      <Grid.ContextMenu>
+                        <ContextMenu>
+                          <MenuItem
+                            d:Header="修改图片"
+                            Command="{Binding PlacementTarget.Tag.ChangeBackImageCommand, RelativeSource={RelativeSource AncestorType=ContextMenu, Mode=FindAncestor}}"
+                            CommandParameter="{Binding PlacementTarget.DataContext, RelativeSource={RelativeSource AncestorType=ContextMenu, Mode=FindAncestor}}"
+                            Header="{ll:Str 修改图片}"
+                            IsEnabled="{Binding PlacementTarget.Tag.PlayCommand.CurrentCanExecute.Value, RelativeSource={RelativeSource AncestorType=ContextMenu, Mode=FindAncestor}}" />
+                          <MenuItem
+                            d:Header="删除图片"
+                            Command="{Binding PlacementTarget.Tag.RemoveBackImageCommand, RelativeSource={RelativeSource AncestorType=ContextMenu, Mode=FindAncestor}}"
+                            CommandParameter="{Binding PlacementTarget.DataContext, RelativeSource={RelativeSource AncestorType=ContextMenu, Mode=FindAncestor}}"
+                            Header="{ll:Str 删除图片}"
+                            IsEnabled="{Binding PlacementTarget.Tag.PlayCommand.CurrentCanExecute.Value, RelativeSource={RelativeSource AncestorType=ContextMenu, Mode=FindAncestor}}" />
+                        </ContextMenu>
+                      </Grid.ContextMenu>
+                      <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition />
+                      </Grid.RowDefinitions>
+                      <Image
+                        Width="150"
+                        Height="150"
+                        d:DataContext=""
+                        DataContext="{Binding DataContext, RelativeSource={RelativeSource AncestorType=ListBoxItem, Mode=FindAncestor}}"
+                        Source="{Binding Image.Value, IsAsync=True}">
+                        <Image.ToolTip>
+                          <Image
+                            Width="250"
+                            Height="250"
+                            Source="{Binding Image.Value, IsAsync=True}" />
+                        </Image.ToolTip>
+                      </Image>
+                      <Grid Grid.Row="1">
+                        <Grid.ColumnDefinitions>
+                          <ColumnDefinition Width="Auto" />
+                          <ColumnDefinition />
+                        </Grid.ColumnDefinitions>
+                        <Label d:Content="持续时间(ms)" Content="{ll:Str 持续时间(ms)}" />
+                        <pu:NumberInput Grid.Column="1" Value="{Binding DataContext.Duration.Value, RelativeSource={RelativeSource AncestorType=ListBoxItem, Mode=FindAncestor}}" />
+                      </Grid>
+                    </Grid>
+                  </DataTemplate>
+                </ListBox.ItemTemplate>
+              </ListBox>
+            </GroupBox>
+            <GroupBox Grid.Row="2">
+              <GroupBox.Header>
+                <StackPanel Orientation="Horizontal" Tag="{Binding DataContext, RelativeSource={RelativeSource AncestorType=Window, Mode=FindAncestor}}">
+                  <StackPanel.ContextMenu>
+                    <ContextMenu d:DataContext="">
+                      <MenuItem
+                        d:Header="添加食物定位"
+                        Command="{Binding PlacementTarget.Tag.AddFoodLocationCommand, RelativeSource={RelativeSource AncestorType=ContextMenu, Mode=FindAncestor}}"
+                        CommandParameter="{Binding PlacementTarget.DataContext, RelativeSource={RelativeSource AncestorType=ContextMenu, Mode=FindAncestor}}"
+                        Header="{ll:Str 添加食物定位}"
+                        IsEnabled="{Binding PlacementTarget.Tag.PlayCommand.CurrentCanExecute.Value, RelativeSource={RelativeSource AncestorType=ContextMenu, Mode=FindAncestor}}" />
+                      <MenuItem
+                        d:Header="清空食物定位"
+                        Command="{Binding PlacementTarget.Tag.ClearFoodLocationCommand, RelativeSource={RelativeSource AncestorType=ContextMenu, Mode=FindAncestor}}"
+                        CommandParameter="{Binding PlacementTarget.DataContext, RelativeSource={RelativeSource AncestorType=ContextMenu, Mode=FindAncestor}}"
+                        Header="{ll:Str 清空食物定位}"
+                        IsEnabled="{Binding PlacementTarget.Tag.PlayCommand.CurrentCanExecute.Value, RelativeSource={RelativeSource AncestorType=ContextMenu, Mode=FindAncestor}}" />
+                    </ContextMenu>
+                  </StackPanel.ContextMenu>
+                  <Label d:Content="食物位置" Content="{ll:Str 食物位置}" />
+                  <TextBlock Margin="10,0,0,0">
+                    <TextBlock.Text>
+                      <MultiBinding Converter="{StaticResource StringFormatConverter}" ConverterParameter="{}({0})">
+                        <Binding Path="FoodLocations.Count" />
+                      </MultiBinding>
+                    </TextBlock.Text>
+                  </TextBlock>
+                </StackPanel>
+              </GroupBox.Header>
+              <ListBox
+                d:ItemsSource="{d:SampleData ItemCount=5}"
+                ItemsSource="{Binding FoodLocations, IsAsync=True}"
+                ScrollViewer.HorizontalScrollBarVisibility="Auto"
+                ScrollViewer.VerticalScrollBarVisibility="Hidden"
+                SelectedItem="{Binding DataContext.CurrentFoodLocationModel.Value, RelativeSource={RelativeSource AncestorType=Window, Mode=FindAncestor}}"
+                SelectionChanged="ListBox_SelectionChanged">
+                <ListBox.ItemsPanel>
+                  <ItemsPanelTemplate>
+                    <StackPanel Orientation="Horizontal" />
+                  </ItemsPanelTemplate>
+                </ListBox.ItemsPanel>
+                <ListBox.ItemTemplate>
+                  <DataTemplate>
+                    <Grid>
+                      <Grid.ContextMenu>
+                        <ContextMenu>
+                          <MenuItem
+                            d:Header="删除食物定位"
+                            Command="{Binding PlacementTarget.Tag.RemoveFoodLocationCommand, RelativeSource={RelativeSource AncestorType=ContextMenu, Mode=FindAncestor}}"
+                            CommandParameter="{Binding PlacementTarget.DataContext, RelativeSource={RelativeSource AncestorType=ContextMenu, Mode=FindAncestor}}"
+                            Header="{ll:Str 删除食物定位}"
+                            IsEnabled="{Binding PlacementTarget.Tag.PlayCommand.CurrentCanExecute.Value, RelativeSource={RelativeSource AncestorType=ContextMenu, Mode=FindAncestor}}" />
+                        </ContextMenu>
+                      </Grid.ContextMenu>
+                      <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition />
+                      </Grid.ColumnDefinitions>
+                      <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                      </Grid.RowDefinitions>
+                      <Label d:Content="持续时间 (ms)" Content="{ll:Str 持续时间 (ms)}" />
+                      <pu:NumberInput Grid.Column="1" Value="{Binding Duration.Value}" />
+                      <Label
+                        Grid.Row="1"
+                        d:Content="旋转角度"
+                        Content="{ll:Str 旋转角度}" />
+                      <pu:NumberInput
+                        Grid.Row="1"
+                        Grid.Column="1"
+                        Value="{Binding Rotate.Value}" />
+                      <Label
+                        Grid.Row="2"
+                        d:Content="透明度"
+                        Content="{ll:Str 透明度}" />
+                      <pu:NumberInput
+                        Grid.Row="2"
+                        Grid.Column="1"
+                        Value="{Binding Opacity.Value}" />
+                      <Label
+                        Grid.Row="3"
+                        d:Content="长度"
+                        Content="{ll:Str 长度}" />
+                      <pu:NumberInput
+                        Grid.Row="3"
+                        Grid.Column="1"
+                        Value="{Binding Rect.Width.Value}" />
+                      <Grid Grid.Row="4" Grid.ColumnSpan="2">
+                        <Grid.ColumnDefinitions>
+                          <ColumnDefinition />
+                          <ColumnDefinition />
+                        </Grid.ColumnDefinitions>
+                        <Grid>
+                          <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition />
+                          </Grid.ColumnDefinitions>
+                          <Label Content="X:" />
+                          <pu:NumberInput Grid.Column="1" Value="{Binding Rect.X.Value}" />
+                        </Grid>
+                        <Grid Grid.Column="1">
+                          <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition />
+                          </Grid.ColumnDefinitions>
+                          <Label Content="Y:" />
+                          <pu:NumberInput Grid.Column="1" Value="{Binding Rect.Y.Value}" />
+                        </Grid>
+                      </Grid>
+                    </Grid>
+                  </DataTemplate>
+                </ListBox.ItemTemplate>
+              </ListBox>
+            </GroupBox>
+          </Grid>
+        </Expander>
+      </DataTemplate>
+    </ResourceDictionary>
+
   </Window.Resources>
   <Grid>
     <Grid.ColumnDefinitions>
@@ -474,15 +512,20 @@
           <ColumnDefinition />
           <ColumnDefinition />
         </Grid.ColumnDefinitions>
-        <Button Command="{Binding StopCommand}" Content="{ll:Str 停止}" />
+        <Button
+          Command="{Binding StopCommand}"
+          Content="{ll:Str 停止}"
+          Style="{DynamicResource ThemedButtonStyle}" />
         <Button
           Grid.Column="1"
           Command="{Binding PlayCommand}"
-          Content="{ll:Str 播放}" />
+          Content="{ll:Str 播放}"
+          Style="{DynamicResource ThemedButtonStyle}" />
         <ToggleButton
           Grid.Column="2"
           Content="{ll:Str 循环}"
-          IsChecked="{Binding Loop.Value}" />
+          IsChecked="{Binding Loop.Value}"
+          Style="{DynamicResource StndardToggleButtonStyle}" />
       </Grid>
       <Grid Grid.Row="2">
         <Grid.ColumnDefinitions>

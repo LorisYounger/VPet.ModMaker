@@ -172,15 +172,20 @@
           <ColumnDefinition />
           <ColumnDefinition />
         </Grid.ColumnDefinitions>
-        <Button Command="{Binding StopCommand}" Content="{ll:Str 停止}" />
+        <Button
+          Command="{Binding StopCommand}"
+          Content="{ll:Str 停止}"
+          Style="{DynamicResource ThemedButtonStyle}" />
         <Button
           Grid.Column="1"
           Command="{Binding PlayCommand}"
-          Content="{ll:Str 播放}" />
+          Content="{ll:Str 播放}"
+          Style="{DynamicResource ThemedButtonStyle}" />
         <ToggleButton
           Grid.Column="2"
           Content="{ll:Str 循环}"
-          IsChecked="{Binding Loop.Value}" />
+          IsChecked="{Binding Loop.Value}"
+          Style="{DynamicResource StndardToggleButtonStyle}" />
       </Grid>
       <Grid Grid.Row="2">
         <Grid.ColumnDefinitions>

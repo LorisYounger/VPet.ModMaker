@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Imaging;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -195,5 +196,10 @@ public static class Extensions
             obj = VisualTreeHelper.GetParent(obj);
         }
         return null;
+    }
+
+    public static string GetFullInfo(this CultureInfo cultureInfo)
+    {
+        return $"{cultureInfo.DisplayName} [{cultureInfo.Name}]";
     }
 }

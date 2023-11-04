@@ -14,6 +14,28 @@
     <Setter Property="pu:ButtonHelper.CornerRadius" Value="24" />
   </Style>
   <Style
+    x:Key="Button_HiddenOnTagNull"
+    BasedOn="{StaticResource ThemedButtonStyle}"
+    TargetType="Button">
+    <Setter Property="Visibility" Value="Hidden" />
+    <Style.Triggers>
+      <DataTrigger Binding="{Binding Tag, RelativeSource={RelativeSource Mode=Self}}" Value="{x:Null}">
+        <Setter Property="Visibility" Value="Visible" />
+      </DataTrigger>
+    </Style.Triggers>
+  </Style>
+  <Style
+    x:Key="Button_CollapsedOnTagNull"
+    BasedOn="{StaticResource ThemedButtonStyle}"
+    TargetType="Button">
+    <Setter Property="Visibility" Value="Collapsed" />
+    <Style.Triggers>
+      <DataTrigger Binding="{Binding Tag, RelativeSource={RelativeSource Mode=Self}}" Value="{x:Null}">
+        <Setter Property="Visibility" Value="Visible" />
+      </DataTrigger>
+    </Style.Triggers>
+  </Style>
+  <Style
     x:Key="TextBlock_Wrap"
     BasedOn="{StaticResource {x:Type TextBlock}}"
     TargetType="TextBlock">

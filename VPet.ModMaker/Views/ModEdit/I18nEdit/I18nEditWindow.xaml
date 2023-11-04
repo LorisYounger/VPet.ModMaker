@@ -1,12 +1,32 @@
-﻿<Window x:Class="VPet.ModMaker.Views.ModEdit.I18nEdit.I18nEditWindow"
-        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:VPet.ModMaker.Views.ModEdit.I18nEdit"
-        mc:Ignorable="d"
-        Title="I18nEditWindow" Height="450" Width="800">
-    <Grid>
-        
-    </Grid>
-</Window>
+﻿<pu:WindowX
+  x:Class="VPet.ModMaker.Views.ModEdit.I18nEdit.I18nEditWindow"
+  xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+  xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+  xmlns:ll="clr-namespace:LinePutScript.Localization.WPF;assembly=LinePutScript.Localization.WPF"
+  xmlns:local="clr-namespace:VPet.ModMaker.Views.ModEdit.I18nEdit"
+  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+  xmlns:pu="https://opensource.panuon.com/wpf-ui"
+  xmlns:vm="clr-namespace:VPet.ModMaker.ViewModels.ModEdit.I18nEdit"
+  Title="I18nEditWindow"
+  Width="800"
+  Height="450"
+  d:DataContext="{d:DesignInstance Type=vm:I18nEditWindowVM}"
+  mc:Ignorable="d">
+  <Grid>
+    <DataGrid
+      x:Name="DataGrid_Datas"
+      d:ItemsSource="{d:SampleData ItemCount=5}"
+      CanUserAddRows="False"
+      CanUserReorderColumns="False"
+      ScrollViewer.IsDeferredScrollingEnabled="True"
+      VirtualizingStackPanel.VirtualizationMode="Recycling">
+      <DataGrid.Columns>
+        <DataGridTextColumn
+          Binding="{Binding Id}"
+          Header="Id"
+          IsReadOnly="True" />
+      </DataGrid.Columns>
+    </DataGrid>
+  </Grid>
+</pu:WindowX>

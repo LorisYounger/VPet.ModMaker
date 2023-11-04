@@ -14,10 +14,10 @@
   d:DataContext="{d:DesignInstance Type=vm:ClickTextEditWindowVM}"
   WindowStartupLocation="CenterScreen"
   mc:Ignorable="d">
-    <Window.Resources>
-        <ResourceDictionary Source="/VPet-Simulator.Windows.Interface;component/ResourceStyle.xaml" />
-    </Window.Resources>
-    <Grid>
+  <Window.Resources>
+    <ResourceDictionary Source="/VPet-Simulator.Windows.Interface;component/ResourceStyle.xaml" />
+  </Window.Resources>
+  <Grid>
     <Grid.ColumnDefinitions>
       <ColumnDefinition MinWidth="300" />
       <ColumnDefinition Width="Auto" MinWidth="300" />

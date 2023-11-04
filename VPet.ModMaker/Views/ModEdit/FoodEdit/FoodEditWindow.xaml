@@ -14,10 +14,10 @@
   d:DataContext="{d:DesignInstance Type=vm:FoodEditWindowVM}"
   WindowStartupLocation="CenterScreen"
   mc:Ignorable="d">
-    <Window.Resources>
-        <ResourceDictionary Source="/VPet-Simulator.Windows.Interface;component/ResourceStyle.xaml" />
-    </Window.Resources>
-    <Grid>
+  <Window.Resources>
+    <ResourceDictionary Source="/VPet-Simulator.Windows.Interface;component/ResourceStyle.xaml" />
+  </Window.Resources>
+  <Grid>
     <Grid.ColumnDefinitions>
       <ColumnDefinition Width="250" />
       <ColumnDefinition />
@@ -45,18 +45,9 @@
           HorizontalAlignment="Center"
           VerticalAlignment="Center"
           Command="{Binding AddImageCommand}"
-          Content="{ll:Str 添加图片}">
-          <Button.Style>
-            <Style BasedOn="{StaticResource {x:Type Button}}" TargetType="Button">
-              <Setter Property="Visibility" Value="Hidden" />
-              <Style.Triggers>
-                <DataTrigger Binding="{Binding Food.Value.Image.Value}" Value="{x:Null}">
-                  <Setter Property="Visibility" Value="Visible" />
-                </DataTrigger>
-              </Style.Triggers>
-            </Style>
-          </Button.Style>
-        </Button>
+          Content="{ll:Str 添加图片}"
+          Style="{DynamicResource Button_HiddenOnTagNull}"
+          Tag="{Binding Food.Value.Image.Value}" />
       </Grid>
       <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
         <Grid>
@@ -177,12 +168,13 @@
               <ColumnDefinition Width="Auto" />
               <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
-            <TextBlock Text="{Binding Food.Value.ReferencePrice.Value}" />
+            <TextBlock Style="{DynamicResource TextBlock_LeftCenter}" Text="{Binding Food.Value.ReferencePrice.Value}" />
             <Button
               Grid.Column="1"
               Command="{Binding SetReferencePriceCommand}"
               CommandParameter="{Binding Food.Value.ReferencePrice.Value}"
-              Content="{ll:Str 设置}" />
+              Content="{ll:Str 设置}"
+              Style="{DynamicResource ThemedButtonStyle}" />
             <pu:Switch
               Grid.Column="2"
               BoxHeight="16"
@@ -201,13 +193,15 @@
           x:Name="Button_Cancel"
           Margin="10"
           Click="Button_Cancel_Click"
-          Content="{ll:Str 取消}" />
+          Content="{ll:Str 取消}"
+          Style="{DynamicResource ThemedButtonStyle}" />
         <Button
           x:Name="Button_Yes"
           Grid.Column="1"
           Margin="10"
           Click="Button_Yes_Click"
-          Content="{ll:Str 确定}" />
+          Content="{ll:Str 确定}"
+          Style="{DynamicResource ThemedButtonStyle}" />
       </Grid>
     </Grid>
     <ListBox Grid.Column="2" Template="{StaticResource ListBox_ShowLangs}" />
