@@ -14,15 +14,11 @@
   d:DataContext="{d:DesignInstance Type=vm:AddCultureWindowVM}"
   WindowStartupLocation="CenterScreen"
   mc:Ignorable="d">
-    <Window.Resources>
-        <ResourceDictionary Source="/VPet-Simulator.Windows.Interface;component/ResourceStyle.xaml" />
-    </Window.Resources>
-    <Grid>
+  <Grid>
     <Grid.ColumnDefinitions>
       <ColumnDefinition />
       <ColumnDefinition Width="Auto" MinWidth="100" />
     </Grid.ColumnDefinitions>
-
     <Grid>
       <Grid.RowDefinitions>
         <RowDefinition />
@@ -32,12 +28,27 @@
         <Grid.RowDefinitions>
           <RowDefinition />
           <RowDefinition />
+          <RowDefinition />
         </Grid.RowDefinitions>
+        <Grid>
+          <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition />
+          </Grid.ColumnDefinitions>
+          <Label Content="{ll:Str 当前文化}" />
+          <TextBlock
+            Grid.Column="1"
+            Margin="10,0,0,0"
+            VerticalAlignment="Center"
+            Text="{Binding CultureFullName.Value}" />
+        </Grid>
         <TextBox
           x:Name="TextBox_Lang"
+          Grid.Row="1"
           pu:TextBoxHelper.Watermark="{ll:Str 文化名称}"
+          Style="{DynamicResource StandardTextBoxStyle}"
           Text="{Binding Culture.Value, UpdateSourceTrigger=PropertyChanged}" />
-        <TextBlock Grid.Row="1">
+        <TextBlock Grid.Row="2">
           <Hyperlink Click="Hyperlink_Click">
             <TextBlock Text="{ll:Str 详情请参阅 Windows 支持的语言/区域名称列表中的“语言标记”列}" />
           </Hyperlink>
@@ -53,14 +64,16 @@
           Margin="10"
           Click="Button_Cancel_Click"
           Content="{ll:Str 取消}"
-          IsCancel="True" />
+          IsCancel="True"
+          Style="{DynamicResource ThemedButtonStyle}" />
         <Button
           x:Name="Button_Yes"
           Grid.Column="1"
           Margin="10"
           Click="Button_Yes_Click"
           Content="{ll:Str 确定}"
-          IsDefault="True" />
+          IsDefault="True"
+          Style="{DynamicResource ThemedButtonStyle}" />
       </Grid>
     </Grid>
     <Grid Grid.Column="1">
@@ -68,7 +81,10 @@
         <RowDefinition Height="Auto" />
         <RowDefinition />
       </Grid.RowDefinitions>
-      <TextBox pu:TextBoxHelper.Watermark="{ll:Str 搜索}" Text="{Binding Search.Value, UpdateSourceTrigger=PropertyChanged}" />
+      <TextBox
+        pu:TextBoxHelper.Watermark="{ll:Str 搜索}"
+        Style="{DynamicResource StandardTextBoxStyle}"
+        Text="{Binding Search.Value, UpdateSourceTrigger=PropertyChanged}" />
       <ListBox
         Grid.Row="1"
         ItemsSource="{Binding ShowCultures.Value}"

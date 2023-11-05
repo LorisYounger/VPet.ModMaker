@@ -15,6 +15,8 @@ using System.Windows;
 using System.IO;
 using LinePutScript.Localization.WPF;
 using Panuon.WPF.UI;
+using VPet.ModMaker.Views.ModEdit.I18nEdit;
+using System.Globalization;
 
 namespace VPet.ModMaker.ViewModels.ModEdit;
 
@@ -65,6 +67,11 @@ public class ModEditWindowVM
     /// 保存至命令
     /// </summary>
     public ObservableCommand SaveToCommand { get; } = new();
+
+    /// <summary>
+    /// 编辑多语言内容
+    /// </summary>
+    public ObservableCommand EditI18nCommand { get; } = new();
     #endregion
 
     public ModEditWindowVM(ModEditWindow window)
@@ -75,9 +82,23 @@ public class ModEditWindowVM
         AddCultureCommand.ExecuteEvent += AddCulture;
         EditCultureCommand.ExecuteEvent += EditCulture;
         RemoveCultureCommand.ExecuteEvent += RemoveCulture;
+        EditI18nCommand.ExecuteEvent += EditI18n;
 
         SaveCommand.ExecuteEvent += Save;
         SaveToCommand.ExecuteEvent += SaveTo;
+    }
+
+    private void EditI18n()
+    {
+        var window = new I18nEditWindow();
+        foreach (var culture in I18nHelper.Current.CultureNames)
+            window.AddCulture(culture);
+        //if (window.IsCancel)
+        //    return;
+        //I18nHelper.Current.CultureNames.Add(window.ViewModel.Culture.Value);
+        //if (I18nHelper.Current.CultureNames.Count == 1)
+        //    I18nHelper.Current.CultureName.Value = window.ViewModel.Culture.Value;
+        window.ShowDialog();
     }
 
     /// <summary>

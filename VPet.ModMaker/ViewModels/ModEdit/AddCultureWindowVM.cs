@@ -1,7 +1,9 @@
 ﻿using HKW.HKWViewModels.SimpleObservable;
+using LinePutScript.Localization.WPF;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -28,14 +30,44 @@ public class AddCultureWindowVM
     public ObservableValue<string> Culture { get; } = new();
 
     /// <summary>
+    /// 当前文化全名
+    /// </summary>
+    public ObservableValue<string> CultureFullName { get; } = new(UnknownCulture);
+
+    /// <summary>
     /// 搜索文化
     /// </summary>
     public ObservableValue<string> Search { get; } = new();
+
+    public static string UnknownCulture = "未知文化".Translate();
 
     public AddCultureWindowVM()
     {
         ShowCultures.Value = AllCultures;
         Search.ValueChanged += Search_ValueChanged;
+        Culture.ValueChanged += Culture_ValueChanged;
+    }
+
+    private void Culture_ValueChanged(string oldValue, string newValue)
+    {
+        if (string.IsNullOrWhiteSpace(newValue))
+        {
+            CultureFullName.Value = UnknownCulture;
+            return;
+        }
+        CultureInfo info = null!;
+        try
+        {
+            info = CultureInfo.GetCultureInfo(newValue);
+        }
+        catch
+        {
+            CultureFullName.Value = UnknownCulture;
+        }
+        if (info is not null)
+        {
+            CultureFullName.Value = info.GetFullInfo();
+        }
     }
 
     private void Search_ValueChanged(string oldValue, string newValue)

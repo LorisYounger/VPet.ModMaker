@@ -124,7 +124,7 @@
     <Compile Include="Models\ModModel\SelectTextModel.cs" />
     <Compile Include="Models\ModModel\WorkModel.cs" />
     <Compile Include="SimpleObservable\ObservableCommandT.cs" />
-    <Compile Include="Styles.cs" />
+    <Compile Include="ModMakerStyles.cs" />
     <Compile Include="ViewModels\ModEdit\AddCultureWindowVM.cs" />
     <Compile Include="ViewModels\ModEdit\AnimeEdit\FoodAnimeEditWindowVM.cs" />
     <Compile Include="ViewModels\ModEdit\AnimeEdit\AnimeEditWindowVM.cs" />

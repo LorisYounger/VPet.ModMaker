@@ -305,6 +305,11 @@
       </ListBox>
       <StackPanel Grid.Row="2">
         <Button
+          x:Name="Button_EditI18n"
+          Command="{Binding EditI18nCommand}"
+          Content="{ll:Str 编辑多语言内容}"
+          Style="{DynamicResource ThemedButtonStyle}" />
+        <Button
           x:Name="Button_Save"
           Command="{Binding SaveCommand}"
           Content="{ll:Str 保存}"

@@ -51,29 +51,31 @@ public partial class I18nEditWindow : WindowX
     /// 添加文化列
     /// </summary>
     /// <param name="culture"></param>
-    public void AddCulture(CultureInfo culture)
+    public void AddCulture(string culture)
     {
         // 文化数据列
         var column = new DataGridTextColumn()
         {
-            Header = culture.GetFullInfo(),
-            Binding = new Binding(string.Format(ValueBindingFormat, culture.Name))
+            MaxWidth = 200,
+            Header = culture,
+            Binding = new Binding(string.Format(ValueBindingFormat, culture))
             {
                 Mode = BindingMode.TwoWay
-            }
+            },
+            ElementStyle = (Style)Utils.ModMakerStyles["TextBlock_LeftCenter"],
         };
         DataGrid_Datas.Columns.Add(column);
-        _dataGridI18nColumns.Add(culture.Name, column);
+        _dataGridI18nColumns.Add(culture, column);
     }
 
     /// <summary>
     /// 删除文化列
     /// </summary>
     /// <param name="culture"></param>
-    public void RemoveCulture(CultureInfo culture)
+    public void RemoveCulture(string culture)
     {
-        DataGrid_Datas.Columns.Remove(_dataGridI18nColumns[culture.Name]);
-        _dataGridI18nColumns.Remove(culture.Name);
+        DataGrid_Datas.Columns.Remove(_dataGridI18nColumns[culture]);
+        _dataGridI18nColumns.Remove(culture);
     }
 
     /// <summary>
@@ -81,14 +83,14 @@ public partial class I18nEditWindow : WindowX
     /// </summary>
     /// <param name="oldCulture"></param>
     /// <param name="newCulture"></param>
-    public void ReplaceCulture(CultureInfo oldCulture, CultureInfo newCulture)
+    public void ReplaceCulture(string oldCulture, string newCulture)
     {
         //if (_dataGridI18nColumns.ContainsKey(newCultureName))
         //    throw new();
-        var column = _dataGridI18nColumns[oldCulture.Name];
-        column.Header = newCulture.GetFullInfo();
-        column.Binding = new Binding(string.Format(ValueBindingFormat, newCulture.Name));
-        _dataGridI18nColumns.Remove(oldCulture.Name);
-        _dataGridI18nColumns.Add(newCulture.Name, column);
+        var column = _dataGridI18nColumns[oldCulture];
+        column.Header = newCulture;
+        column.Binding = new Binding(string.Format(ValueBindingFormat, newCulture));
+        _dataGridI18nColumns.Remove(oldCulture);
+        _dataGridI18nColumns.Add(newCulture, column);
     }
 }

@@ -15,7 +15,6 @@ namespace VPet.ModMaker.Models;
 public class ModMaker : MainPlugin
 {
     public ILine Set;
-
     public override string PluginName => "ModMaker";
 
     public ModMakerWindow Maker;
@@ -38,7 +37,7 @@ public class ModMaker : MainPlugin
             Setting();
         };
         modset.Items.Add(menuset);
-        Application.Current.Resources.MergedDictionaries.Add(new ModMakerStyles());
+        Application.Current.Resources.MergedDictionaries.Add(Utils.ModMakerStyles);
     }
 
     public override void Setting()
