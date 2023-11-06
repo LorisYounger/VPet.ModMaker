@@ -90,9 +90,14 @@ public class ModEditWindowVM
 
     private void EditI18n()
     {
-        var window = new I18nEditWindow();
-        foreach (var culture in I18nHelper.Current.CultureNames)
-            window.AddCulture(culture);
+        if (I18nEditWindow.Instance is not null)
+        {
+            I18nEditWindow.Instance.Activate();
+            return;
+        }
+        var window = new I18nEditWindow(ModInfo.Value);
+        //foreach (var culture in I18nHelper.Current.CultureNames)
+        //    window.AddCulture(culture);
         //if (window.IsCancel)
         //    return;
         //I18nHelper.Current.CultureNames.Add(window.ViewModel.Culture.Value);

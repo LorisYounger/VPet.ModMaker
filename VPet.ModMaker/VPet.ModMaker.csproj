@@ -103,6 +103,7 @@
     <Compile Include="Converters\MaxConverter.cs" />
     <Compile Include="Converters\MarginConverter.cs" />
     <Compile Include="Models\EnumFlagsVM.cs" />
+    <Compile Include="Models\I18nData.cs" />
     <Compile Include="Models\ModModel\AnimeModel.cs" />
     <Compile Include="Models\ModModel\AnimeTypeModel.cs" />
     <Compile Include="Models\ModModel\ClickTextModel.cs" />

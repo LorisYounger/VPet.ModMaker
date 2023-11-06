@@ -40,6 +40,7 @@
     BasedOn="{StaticResource {x:Type TextBlock}}"
     TargetType="TextBlock">
     <Setter Property="TextWrapping" Value="Wrap" />
+    <Setter Property="ToolTip" Value="{Binding Text, RelativeSource={RelativeSource Mode=Self}}" />
   </Style>
   <Style
     x:Key="TextBlock_Center"
@@ -47,6 +48,7 @@
     TargetType="TextBlock">
     <Setter Property="VerticalAlignment" Value="Center" />
     <Setter Property="HorizontalAlignment" Value="Center" />
+    <Setter Property="ToolTip" Value="{Binding Text, RelativeSource={RelativeSource Mode=Self}}" />
   </Style>
   <Style
     x:Key="TextBlock_LeftCenter"
@@ -54,6 +56,7 @@
     TargetType="TextBlock">
     <Setter Property="VerticalAlignment" Value="Center" />
     <Setter Property="HorizontalAlignment" Value="Left" />
+    <Setter Property="ToolTip" Value="{Binding Text, RelativeSource={RelativeSource Mode=Self}}" />
   </Style>
   <Style
     x:Key="TextBox_Wrap"
@@ -62,6 +65,7 @@
     <Setter Property="TextWrapping" Value="Wrap" />
     <Setter Property="HorizontalContentAlignment" Value="Left" />
     <Setter Property="VerticalContentAlignment" Value="Top" />
+    <Setter Property="ToolTip" Value="{Binding Text, RelativeSource={RelativeSource Mode=Self}}" />
   </Style>
   <Style
     x:Key="TextBox_Center"
@@ -69,6 +73,7 @@
     TargetType="TextBox">
     <Setter Property="VerticalAlignment" Value="Center" />
     <Setter Property="HorizontalAlignment" Value="Center" />
+    <Setter Property="ToolTip" Value="{Binding Text, RelativeSource={RelativeSource Mode=Self}}" />
   </Style>
   <Style
     x:Key="TextBox_LeftCenter"
@@ -76,6 +81,7 @@
     TargetType="TextBox">
     <Setter Property="VerticalAlignment" Value="Center" />
     <Setter Property="HorizontalAlignment" Value="Left" />
+    <Setter Property="ToolTip" Value="{Binding Text, RelativeSource={RelativeSource Mode=Self}}" />
   </Style>
   <Style x:Key="WindowXStyle" TargetType="pu:WindowX">
     <Setter Property="pu:WindowXCaption.Background" Value="{DynamicResource DARKPrimary}" />

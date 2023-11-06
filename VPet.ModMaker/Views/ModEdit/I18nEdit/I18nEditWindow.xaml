@@ -12,20 +12,38 @@
   Width="800"
   Height="450"
   d:DataContext="{d:DesignInstance Type=vm:I18nEditWindowVM}"
+  WindowStartupLocation="CenterScreen"
   mc:Ignorable="d">
+  <Window.Resources />
   <Grid>
+    <Grid.RowDefinitions>
+      <RowDefinition Height="Auto" />
+      <RowDefinition />
+    </Grid.RowDefinitions>
+    <TextBox
+      pu:TextBoxHelper.Watermark="{ll:Str 搜索Id}"
+      Style="{DynamicResource StandardTextBoxStyle}"
+      Text="{Binding Search.Value, UpdateSourceTrigger=PropertyChanged}" />
     <DataGrid
       x:Name="DataGrid_Datas"
+      Grid.Row="1"
       d:ItemsSource="{d:SampleData ItemCount=5}"
+      AutoGenerateColumns="False"
       CanUserAddRows="False"
+      CanUserDeleteRows="False"
       CanUserReorderColumns="False"
+      ItemsSource="{Binding ShowI18nDatas.Value}"
       ScrollViewer.IsDeferredScrollingEnabled="True"
       VirtualizingStackPanel.VirtualizationMode="Recycling">
       <DataGrid.Columns>
         <DataGridTextColumn
-          Binding="{Binding Id}"
+          MaxWidth="300"
+          Binding="{Binding Id.Value}"
+          CanUserSort="True"
+          ElementStyle="{StaticResource TextBlock_Wrap}"
           Header="Id"
-          IsReadOnly="True" />
+          IsReadOnly="True"
+          SortMemberPath="Id.Value" />
       </DataGrid.Columns>
     </DataGrid>
   </Grid>
