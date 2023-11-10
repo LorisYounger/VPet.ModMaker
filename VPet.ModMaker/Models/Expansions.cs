@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.Globalization;
@@ -201,5 +202,63 @@ public static class Extensions
     public static string GetFullInfo(this CultureInfo cultureInfo)
     {
         return $"{cultureInfo.DisplayName} [{cultureInfo.Name}]";
+    }
+
+    /// <summary>
+    /// 获取目标
+    /// </summary>
+    /// <typeparam name="T">类型</typeparam>
+    /// <param name="weakReference">弱引用</param>
+    /// <returns>获取成功返回目标值, 获取失败则返回 <see langword="null"/></returns>
+    public static T? GetTarget<T>(this WeakReference<T> weakReference)
+        where T : class
+    {
+        return weakReference.TryGetTarget(out var t) ? t : null;
+    }
+
+    /// <summary>
+    /// 枚举出带有索引值的枚举值
+    /// </summary>
+    /// <typeparam name="T">值类型</typeparam>
+    /// <param name="collection">集合</param>
+    /// <returns>带有索引的枚举值</returns>
+    public static IEnumerable<ItemInfo<T>> Enumerate<T>(this IEnumerable<T> collection)
+    {
+        var index = 0;
+        foreach (var item in collection)
+            yield return new(index++, item);
+    }
+}
+
+/// <summary>
+/// 项信息
+/// </summary>
+/// <typeparam name="T"></typeparam>
+[DebuggerDisplay("[{Index}, {Value}]")]
+public readonly struct ItemInfo<T>
+{
+    /// <summary>
+    /// 索引值
+    /// </summary>
+    public int Index { get; }
+
+    /// <summary>
+    /// 值
+    /// </summary>
+    public T Value { get; }
+
+    /// <inheritdoc/>
+    /// <param name="value">值</param>
+    /// <param name="index">索引值</param>
+    public ItemInfo(int index, T value)
+    {
+        Index = index;
+        Value = value;
+    }
+
+    /// <inheritdoc/>
+    public override string ToString()
+    {
+        return $"[{Index}, {Value}]";
     }
 }

@@ -28,11 +28,25 @@ public partial class I18nEditWindow : WindowX
         {
             ShowI18nDatas.Value = I18nDatas;
         }
-        else
+        else if (SearchTarget.Value == nameof(ModInfoModel.Id))
         {
             ShowI18nDatas.Value = new(
                 I18nDatas.Where(
-                    m => m.Id.Value.Contains(newValue, StringComparison.OrdinalIgnoreCase)
+                    m => m.Id.Value?.Contains(newValue, StringComparison.OrdinalIgnoreCase) is true
+                )
+            );
+        }
+        else
+        {
+            var cultureIndex = I18nHelper.Current.CultureNames.IndexOf(SearchTarget.Value);
+            ShowI18nDatas.Value = new(
+                I18nDatas.Where(
+                    m =>
+                        m.Datas[cultureIndex].Value?.Contains(
+                            newValue,
+                            StringComparison.OrdinalIgnoreCase
+                        )
+                            is true
                 )
             );
         }
@@ -66,6 +80,7 @@ public partial class I18nEditWindow : WindowX
         foreach (var culture in I18nHelper.Current.CultureNames)
         {
             AddCulture(culture);
+            SearchTargets.Add(culture);
         }
         LoadFood(model);
         LoadClickText(model);
@@ -78,19 +93,54 @@ public partial class I18nEditWindow : WindowX
     {
         foreach (var food in model.Foods)
         {
-            var nameData = new I18nData();
-            var descriptionData = new I18nData();
-            nameData.Id.Value = food.Id.Value;
-            descriptionData.Id.Value = food.DescriptionId.Value;
-            foreach (var culture in I18nHelper.Current.CultureNames)
+            if (AllData.TryGetValue(food.Id.Value, out var outData))
             {
-                nameData.Cultures.Add(culture);
-                nameData.Datas.Add(food.I18nDatas[culture].Name);
-                descriptionData.Cultures.Add(culture);
-                descriptionData.Datas.Add(food.I18nDatas[culture].Description);
+                foreach (var culture in I18nHelper.Current.CultureNames.Enumerate())
+                {
+                    if (outData.Datas[culture.Index].Group is null)
+                    {
+                        var group = new ObservableValueGroup<string>()
+                        {
+                            outData.Datas[culture.Index]
+                        };
+                    }
+                    outData.Datas[culture.Index].Group!.Add(food.I18nDatas[culture.Value].Name);
+                }
             }
-            I18nDatas.Add(nameData);
-            I18nDatas.Add(descriptionData);
+            else
+            {
+                var data = new I18nData();
+                data.Id.Value = food.Id.Value;
+                foreach (var culture in I18nHelper.Current.CultureNames)
+                    data.Datas.Add(food.I18nDatas[culture].Name);
+                I18nDatas.Add(data);
+                AllData.Add(food.Id.Value, data);
+            }
+            if (AllData.TryGetValue(food.DescriptionId.Value, out var outData1))
+            {
+                foreach (var culture in I18nHelper.Current.CultureNames.Enumerate())
+                {
+                    if (outData1.Datas[culture.Index].Group is null)
+                    {
+                        var group = new ObservableValueGroup<string>()
+                        {
+                            outData1.Datas[culture.Index]
+                        };
+                    }
+                    outData1.Datas[culture.Index].Group!.Add(
+                        food.I18nDatas[culture.Value].Description
+                    );
+                }
+            }
+            else
+            {
+                var data = new I18nData();
+                data.Id.Value = food.DescriptionId.Value;
+                foreach (var culture in I18nHelper.Current.CultureNames)
+                    data.Datas.Add(food.I18nDatas[culture].Description);
+                I18nDatas.Add(data);
+                AllData.Add(food.DescriptionId.Value, data);
+            }
         }
     }
 
@@ -98,14 +148,29 @@ public partial class I18nEditWindow : WindowX
     {
         foreach (var text in model.ClickTexts)
         {
-            var data = new I18nData();
-            data.Id.Value = text.Id.Value;
-            foreach (var culture in I18nHelper.Current.CultureNames)
+            if (AllData.TryGetValue(text.Id.Value, out var outData))
             {
-                data.Cultures.Add(culture);
-                data.Datas.Add(text.I18nDatas[culture].Text);
+                foreach (var culture in I18nHelper.Current.CultureNames.Enumerate())
+                {
+                    if (outData.Datas[culture.Index].Group is null)
+                    {
+                        var group = new ObservableValueGroup<string>()
+                        {
+                            outData.Datas[culture.Index]
+                        };
+                    }
+                    outData.Datas[culture.Index].Group!.Add(text.I18nDatas[culture.Value].Text);
+                }
             }
-            I18nDatas.Add(data);
+            else
+            {
+                var data = new I18nData();
+                data.Id.Value = text.Id.Value;
+                foreach (var culture in I18nHelper.Current.CultureNames)
+                    data.Datas.Add(text.I18nDatas[culture].Text);
+                I18nDatas.Add(data);
+                AllData.Add(text.Id.Value, data);
+            }
         }
     }
 
@@ -113,14 +178,29 @@ public partial class I18nEditWindow : WindowX
     {
         foreach (var text in model.LowTexts)
         {
-            var data = new I18nData();
-            data.Id.Value = text.Id.Value;
-            foreach (var culture in I18nHelper.Current.CultureNames)
+            if (AllData.TryGetValue(text.Id.Value, out var outData))
             {
-                data.Cultures.Add(culture);
-                data.Datas.Add(text.I18nDatas[culture].Text);
+                foreach (var culture in I18nHelper.Current.CultureNames.Enumerate())
+                {
+                    if (outData.Datas[culture.Index].Group is null)
+                    {
+                        var group = new ObservableValueGroup<string>()
+                        {
+                            outData.Datas[culture.Index]
+                        };
+                    }
+                    outData.Datas[culture.Index].Group!.Add(text.I18nDatas[culture.Value].Text);
+                }
             }
-            I18nDatas.Add(data);
+            else
+            {
+                var data = new I18nData();
+                data.Id.Value = text.Id.Value;
+                foreach (var culture in I18nHelper.Current.CultureNames)
+                    data.Datas.Add(text.I18nDatas[culture].Text);
+                I18nDatas.Add(data);
+                AllData.Add(text.Id.Value, data);
+            }
         }
     }
 
@@ -128,19 +208,52 @@ public partial class I18nEditWindow : WindowX
     {
         foreach (var text in model.SelectTexts)
         {
-            var data = new I18nData();
-            var chooseData = new I18nData();
-            data.Id.Value = text.Id.Value;
-            chooseData.Id.Value = text.ChooseId.Value;
-            foreach (var culture in I18nHelper.Current.CultureNames)
+            if (AllData.TryGetValue(text.Id.Value, out var outData))
             {
-                data.Cultures.Add(culture);
-                data.Datas.Add(text.I18nDatas[culture].Text);
-                chooseData.Cultures.Add(culture);
-                chooseData.Datas.Add(text.I18nDatas[culture].Choose);
+                foreach (var culture in I18nHelper.Current.CultureNames.Enumerate())
+                {
+                    if (outData.Datas[culture.Index].Group is null)
+                    {
+                        var group = new ObservableValueGroup<string>()
+                        {
+                            outData.Datas[culture.Index]
+                        };
+                    }
+                    outData.Datas[culture.Index].Group!.Add(text.I18nDatas[culture.Value].Text);
+                }
             }
-            I18nDatas.Add(data);
-            I18nDatas.Add(chooseData);
+            else
+            {
+                var data = new I18nData();
+                data.Id.Value = text.Id.Value;
+                foreach (var culture in I18nHelper.Current.CultureNames)
+                    data.Datas.Add(text.I18nDatas[culture].Text);
+                I18nDatas.Add(data);
+                AllData.Add(text.Id.Value, data);
+            }
+            if (AllData.TryGetValue(text.ChooseId.Value, out var outData1))
+            {
+                foreach (var culture in I18nHelper.Current.CultureNames.Enumerate())
+                {
+                    if (outData1.Datas[culture.Index].Group is null)
+                    {
+                        var group = new ObservableValueGroup<string>()
+                        {
+                            outData1.Datas[culture.Index]
+                        };
+                    }
+                    outData1.Datas[culture.Index].Group!.Add(text.I18nDatas[culture.Value].Choose);
+                }
+            }
+            else
+            {
+                var data = new I18nData();
+                data.Id.Value = text.ChooseId.Value;
+                foreach (var culture in I18nHelper.Current.CultureNames)
+                    data.Datas.Add(text.I18nDatas[culture].Choose);
+                I18nDatas.Add(data);
+                AllData.Add(text.ChooseId.Value, data);
+            }
         }
     }
 
@@ -148,31 +261,111 @@ public partial class I18nEditWindow : WindowX
     {
         foreach (var pet in model.Pets)
         {
-            var data = new I18nData();
-            var petNameData = new I18nData();
-            var descriptionData = new I18nData();
-            data.Id.Value = pet.Id.Value;
-            petNameData.Id.Value = pet.PetNameId.Value;
-            descriptionData.Id.Value = pet.DescriptionId.Value;
-            foreach (var culture in I18nHelper.Current.CultureNames)
+            if (pet.IsSimplePetModel)
+                continue;
+            if (AllData.TryGetValue(pet.Id.Value, out var outData))
             {
-                data.Cultures.Add(culture);
-                data.Datas.Add(pet.I18nDatas[culture].Name);
-                petNameData.Cultures.Add(culture);
-                petNameData.Datas.Add(pet.I18nDatas[culture].PetName);
-                descriptionData.Cultures.Add(culture);
-                descriptionData.Datas.Add(pet.I18nDatas[culture].Description);
+                foreach (var culture in I18nHelper.Current.CultureNames.Enumerate())
+                {
+                    if (outData.Datas[culture.Index].Group is null)
+                    {
+                        var group = new ObservableValueGroup<string>()
+                        {
+                            outData.Datas[culture.Index]
+                        };
+                    }
+                    outData.Datas[culture.Index].Group!.Add(pet.I18nDatas[culture.Value].Name);
+                }
             }
-            I18nDatas.Add(data);
-            I18nDatas.Add(petNameData);
-            I18nDatas.Add(descriptionData);
+            else
+            {
+                var data = new I18nData();
+                data.Id.Value = pet.Id.Value;
+                foreach (var culture in I18nHelper.Current.CultureNames)
+                    data.Datas.Add(pet.I18nDatas[culture].Name);
+                I18nDatas.Add(data);
+                AllData.Add(pet.Id.Value, data);
+            }
+            if (AllData.TryGetValue(pet.PetNameId.Value, out var outData1))
+            {
+                foreach (var culture in I18nHelper.Current.CultureNames.Enumerate())
+                {
+                    if (outData1.Datas[culture.Index].Group is null)
+                    {
+                        var group = new ObservableValueGroup<string>()
+                        {
+                            outData1.Datas[culture.Index]
+                        };
+                    }
+                    outData1.Datas[culture.Index].Group!.Add(pet.I18nDatas[culture.Value].PetName);
+                }
+            }
+            else
+            {
+                var data = new I18nData();
+                data.Id.Value = pet.PetNameId.Value;
+                foreach (var culture in I18nHelper.Current.CultureNames)
+                    data.Datas.Add(pet.I18nDatas[culture].PetName);
+                I18nDatas.Add(data);
+                AllData.Add(pet.PetNameId.Value, data);
+            }
+            if (AllData.TryGetValue(pet.DescriptionId.Value, out var outData2))
+            {
+                foreach (var culture in I18nHelper.Current.CultureNames.Enumerate())
+                {
+                    if (outData2.Datas[culture.Index].Group is null)
+                    {
+                        var group = new ObservableValueGroup<string>()
+                        {
+                            outData2.Datas[culture.Index]
+                        };
+                    }
+                    outData2.Datas[culture.Index].Group!.Add(
+                        pet.I18nDatas[culture.Value].Description
+                    );
+                }
+            }
+            else
+            {
+                var data = new I18nData();
+                data.Id.Value = pet.DescriptionId.Value;
+                foreach (var culture in I18nHelper.Current.CultureNames)
+                    data.Datas.Add(pet.I18nDatas[culture].Description);
+                I18nDatas.Add(data);
+                AllData.Add(pet.DescriptionId.Value, data);
+            }
+            //var data = new I18nData();
+            //var petNameData = new I18nData();
+            //var descriptionData = new I18nData();
+            //data.Id.Value = pet.Id.Value;
+            //petNameData.Id.Value = pet.PetNameId.Value;
+            //descriptionData.Id.Value = pet.DescriptionId.Value;
+            //foreach (var culture in I18nHelper.Current.CultureNames)
+            //{
+            //    data.Datas.Add(pet.I18nDatas[culture].Name);
+            //    petNameData.Datas.Add(pet.I18nDatas[culture].PetName);
+            //    descriptionData.Datas.Add(pet.I18nDatas[culture].Description);
+            //}
+            //I18nDatas.Add(data);
+            //I18nDatas.Add(petNameData);
+            //I18nDatas.Add(descriptionData);
         }
     }
 
     private readonly Dictionary<string, DataGridTextColumn> _dataGridI18nColumns = new();
-    public HashSet<string> Ids { get; } = new();
+    public Dictionary<string, I18nData> AllData { get; } = new();
     public ObservableCollection<I18nData> I18nDatas { get; } = new();
     public ObservableValue<ObservableCollection<I18nData>> ShowI18nDatas { get; } = new();
+
+    /// <summary>
+    /// 搜索目标列表
+    /// </summary>
+    public ObservableCollection<string> SearchTargets { get; } = new() { nameof(ModInfoModel.Id) };
+
+    /// <summary>
+    /// 搜索目标
+    /// </summary>
+    public ObservableValue<string> SearchTarget { get; } = new();
 
     #region CultureEdit
     // TODO: 国际化标头

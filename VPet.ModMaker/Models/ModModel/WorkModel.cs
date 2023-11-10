@@ -131,7 +131,7 @@ public class WorkModel : I18nModel<I18nWorkModel>
 
     public WorkModel()
     {
-        IsOverLoad.AddNotifyReceiver(
+        IsOverLoad.AddNotifySender(
             WorkType,
             MoneyBase,
             MoneyLevel,
@@ -141,9 +141,9 @@ public class WorkModel : I18nModel<I18nWorkModel>
             LevelLimit,
             FinishBonus
         );
-        IsOverLoad.NotifyReceived += (ref bool v) =>
+        IsOverLoad.SenderPropertyChanged += (s, _) =>
         {
-            v = VPet_Simulator.Windows.Interface.ExtensionFunction.IsOverLoad(ToWork());
+            s.Value = VPet_Simulator.Windows.Interface.ExtensionFunction.IsOverLoad(ToWork());
         };
     }
 

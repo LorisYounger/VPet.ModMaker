@@ -2,47 +2,47 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace HKW.HKWViewModels.SimpleObservable;
 
 /// <summary>
 /// 可观察值
 /// </summary>
-/// <typeparam name="T"></typeparam>
-[DebuggerDisplay("{Value}")]
-public class ObservableValue<T>
+[DebuggerDisplay("\\{ObservableValue, Value = {Value}\\}")]
+public class ObservableValue
     : INotifyPropertyChanging,
         INotifyPropertyChanged,
-        IEquatable<ObservableValue<T>>
+        IEquatable<ObservableValue>
 {
     [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-    private T _value = default!;
+    private object _value = default!;
 
     /// <summary>
     /// 当前值
     /// </summary>
-    public T Value
+    public object Value
     {
         get => _value;
         set
         {
             if (_value?.Equals(value) is true)
                 return;
+            NotifyPropertyChanging();
             var oldValue = _value;
-            if (NotifyPropertyChanging(oldValue, value))
-                return;
             _value = value;
-            NotifyPropertyChanged(oldValue, value);
+            NotifyPropertyChanged(oldValue!, value);
         }
     }
 
     /// <summary>
-    /// 含有值
+    /// 包含值
     /// </summary>
     public bool HasValue => Value != null;
+
+    /// <summary>
+    /// 唯一标识符
+    /// </summary>
+    public Guid Guid { get; } = Guid.NewGuid();
 
     #region Ctor
     /// <inheritdoc/>
@@ -50,7 +50,7 @@ public class ObservableValue<T>
 
     /// <inheritdoc/>
     /// <param name="value">初始值</param>
-    public ObservableValue(T value)
+    public ObservableValue(object value)
     {
         _value = value;
     }
@@ -60,16 +60,10 @@ public class ObservableValue<T>
     /// <summary>
     /// 通知属性改变前
     /// </summary>
-    /// <param name="oldValue">旧值</param>
-    /// <param name="newValue">新值</param>
     /// <returns>取消改变</returns>
-    private bool NotifyPropertyChanging(T oldValue, T newValue)
+    protected void NotifyPropertyChanging()
     {
         PropertyChanging?.Invoke(this, new(nameof(Value)));
-        var cancel = false;
-        // 若全部事件取消改变 则取消改变
-        ValueChanging?.Invoke(oldValue, newValue, ref cancel);
-        return cancel;
     }
 
     /// <summary>
@@ -77,59 +71,120 @@ public class ObservableValue<T>
     /// </summary>
     /// <param name="oldValue">旧值</param>
     /// <param name="newValue">新值</param>
-    private void NotifyPropertyChanged(T oldValue, T newValue)
+    protected void NotifyPropertyChanged(object oldValue, object newValue)
     {
         PropertyChanged?.Invoke(this, new(nameof(Value)));
-        ValueChanged?.Invoke(oldValue, newValue);
+        if (oldValue is null || newValue is null)
+            PropertyChanged?.Invoke(this, new(nameof(HasValue)));
     }
     #endregion
 
-    #region NotifyReceiver
+    #region NotifySender
     /// <summary>
-    /// 添加通知属性改变后接收器
+    /// 通知发送者
+    /// </summary>
+    public ICollection<ObservableValue> NotifySenders => _notifySenders.Values;
+
+    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+    private readonly Dictionary<Guid, ObservableValue> _notifySenders = new();
+
+    /// <summary>
+    /// 添加通知发送者
     /// <para>
-    /// 添加的接口触发后会执行 <see cref="NotifyReceived"/>
+    /// 添加的发送者改变后会执行 <see cref="SenderPropertyChanged"/>
     /// </para>
     /// <para>示例:
     /// <code><![CDATA[
     /// ObservableValue<string> value1 = new();
     /// ObservableValue<string> value2 = new();
-    /// value2.AddNotifyReceiver(value1);
-    /// value2.NotifyReceived += (ref string v) =>
+    /// value2.AddNotifySender(value1);
+    /// value2.NotifyReceived += (source, sender) =>
     /// {
-    ///     v = "B"; // trigger this
+    ///     source.Value = sender.Value;
     /// };
-    /// value1.Value = "A"; // execute this
-    /// // result: value1.Value == "A" , value2.Value == "B"
+    /// value1.Value = "A";
+    /// // value1.Value == "A", value2.Value == "A"
     /// ]]>
     /// </code></para>
     /// </summary>
-    /// <param name="notifies">通知属性改变后接口</param>
-    public void AddNotifyReceiver(params INotifyPropertyChanged[] notifies)
+    /// <param name="items">发送者</param>
+    public void AddNotifySender(params ObservableValue[] items)
     {
-        foreach (var notify in notifies)
-            notify.PropertyChanged += Notify_PropertyChanged;
+        foreach (var item in items)
+        {
+            item.PropertyChanged += Notify_SenderPropertyChanged;
+            _notifySenders.Add(item.Guid, item);
+        }
     }
 
     /// <summary>
-    /// 删除通知属性改变后接收器
+    /// 添加通知发送者
+    /// <para>
+    /// 注: 此方法添加的发送者不会被记录到 <see cref="NotifySenders"/> 中
+    /// </para>
     /// </summary>
-    /// <param name="notifies">通知属性改变后接口</param>
-    public void RemoveNotifyReceiver(params INotifyPropertyChanged[] notifies)
+    /// <param name="notices">发送者</param>
+    public void AddNotifySender(params INotifyPropertyChanged[] notices)
     {
-        foreach (var notify in notifies)
-            notify.PropertyChanged -= Notify_PropertyChanged;
+        foreach (var item in notices)
+        {
+            item.PropertyChanged += Notify_SenderPropertyChanged;
+        }
     }
 
-    private void Notify_PropertyChanged(object? sender, PropertyChangedEventArgs e)
+    /// <summary>
+    /// 删除通知发送者
+    /// </summary>
+    /// <param name="items">发送者</param>
+    public void RemoveNotifySender(params ObservableValue[] items)
     {
-        var temp = Value;
-        NotifyReceived?.Invoke(ref temp);
-        Value = temp;
+        foreach (var item in items)
+        {
+            item.PropertyChanged -= Notify_SenderPropertyChanged;
+            _notifySenders.Remove(item.Guid);
+        }
     }
 
+    /// <summary>
+    /// 删除通知发送者
+    /// <para>
+    /// 注: 此方法删除的发送者不会从 <see cref="NotifySenders"/> 中删除
+    /// </para>
+    /// </summary>
+    /// <param name="notices">发送者</param>
+    public void RemoveNotifySender(params INotifyPropertyChanged[] notices)
+    {
+        foreach (var item in notices)
+        {
+            item.PropertyChanged -= Notify_SenderPropertyChanged;
+        }
+    }
+
+    /// <summary>
+    /// 清空通知发送者
+    /// </summary>
+    public void ClearNotifySender()
+    {
+        foreach (var sender in _notifySenders.Values)
+            sender.PropertyChanged -= Notify_SenderPropertyChanged;
+        _notifySenders.Clear();
+    }
+
+    private void Notify_SenderPropertyChanged(object? sender, PropertyChangedEventArgs e)
+    {
+        NotifySenderPropertyChanged(this, sender);
+    }
+
+    /// <summary>
+    /// 通知接收事件
+    /// </summary>
+    /// <param name="source">源</param>
+    /// <param name="sender">发送者</param>
+    protected void NotifySenderPropertyChanged(ObservableValue source, object? sender)
+    {
+        SenderPropertyChanged?.Invoke(source, sender);
+    }
     #endregion
-
 
     #region Other
     /// <inheritdoc/>
@@ -141,7 +196,7 @@ public class ObservableValue<T>
     /// <inheritdoc/>
     public override bool Equals(object? obj)
     {
-        return Equals(obj as ObservableValue<T>);
+        return Equals(obj as ObservableValue);
     }
 
     /// <inheritdoc/>
@@ -151,9 +206,9 @@ public class ObservableValue<T>
     }
 
     /// <inheritdoc/>
-    public bool Equals(ObservableValue<T>? other)
+    public bool Equals(ObservableValue? other)
     {
-        return Value?.Equals(other) is true;
+        return Guid.Equals(other?.Guid) is true;
     }
 
     /// <summary>
@@ -162,7 +217,7 @@ public class ObservableValue<T>
     /// <param name="value1">左值</param>
     /// <param name="value2">右值</param>
     /// <returns>相等为 <see langword="true"/> 否则为 <see langword="false"/></returns>
-    public static bool operator ==(ObservableValue<T> value1, ObservableValue<T> value2)
+    public static bool operator ==(ObservableValue value1, ObservableValue value2)
     {
         return value1.Value?.Equals(value2.Value) is true;
     }
@@ -173,7 +228,7 @@ public class ObservableValue<T>
     /// <param name="value1">左值</param>
     /// <param name="value2">右值</param>
     /// <returns>不相等为 <see langword="true"/> 否则为 <see langword="false"/></returns>
-    public static bool operator !=(ObservableValue<T> value1, ObservableValue<T> value2)
+    public static bool operator !=(ObservableValue value1, ObservableValue value2)
     {
         return value1.Value?.Equals(value2.Value) is not true;
     }
@@ -192,41 +247,17 @@ public class ObservableValue<T>
     public event PropertyChangedEventHandler? PropertyChanged;
 
     /// <summary>
-    /// 值改变前事件
+    /// 通知接收事件
     /// </summary>
-    public event ValueChangingEventHandler? ValueChanging;
-
-    /// <summary>
-    /// 值改变后事件
-    /// </summary>
-    public event ValueChangedEventHandler? ValueChanged;
-
-    /// <summary>
-    /// 通知接收器事件
-    /// </summary>
-    public event NotifyReceivedHandler? NotifyReceived;
+    public event NotifySenderPropertyChangedHandler? SenderPropertyChanged;
     #endregion
 
     #region Delegate
     /// <summary>
-    /// 值改变事件
+    /// 通知发送者属性改变接收器
     /// </summary>
-    /// <param name="oldValue">旧值</param>
-    /// <param name="newValue">新值</param>
-    /// <param name="cancel">取消</param>
-    public delegate void ValueChangingEventHandler(T oldValue, T newValue, ref bool cancel);
-
-    /// <summary>
-    /// 值改变后事件
-    /// </summary>
-    /// <param name="oldValue">旧值</param>
-    /// <param name="newValue">新值</param>
-    public delegate void ValueChangedEventHandler(T oldValue, T newValue);
-
-    /// <summary>
-    /// 通知接收器
-    /// </summary>
-    /// <param name="value">引用值</param>
-    public delegate void NotifyReceivedHandler(ref T value);
+    /// <param name="source">源</param>
+    /// <param name="sender">发送者</param>
+    public delegate void NotifySenderPropertyChangedHandler(ObservableValue source, object? sender);
     #endregion
 }

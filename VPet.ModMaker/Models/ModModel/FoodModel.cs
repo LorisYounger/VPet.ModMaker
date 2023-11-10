@@ -100,7 +100,7 @@ public class FoodModel : I18nModel<I18nFoodModel>
         {
             DescriptionId.Value = $"{n}_{nameof(DescriptionId)}";
         };
-        ReferencePrice.AddNotifyReceiver(
+        ReferencePrice.AddNotifySender(
             Strength,
             StrengthFood,
             StrengthDrink,
@@ -109,9 +109,9 @@ public class FoodModel : I18nModel<I18nFoodModel>
             Likability,
             Exp
         );
-        ReferencePrice.NotifyReceived += (ref double v) =>
+        ReferencePrice.SenderPropertyChanged += (s, _) =>
         {
-            v = Math.Floor(SetValueToFood(_food).RealPrice);
+            s.Value = Math.Floor(SetValueToFood(_food).RealPrice);
         };
     }
 

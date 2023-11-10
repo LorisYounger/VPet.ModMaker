@@ -105,11 +105,11 @@ public class PetModel : I18nModel<I18nPetInfoModel>
             PetNameId.Value = $"{n}_{nameof(PetNameId)}";
             DescriptionId.Value = $"{n}_{nameof(DescriptionId)}";
         };
-        AnimeCount.AddNotifyReceiver(Animes);
-        AnimeCount.AddNotifyReceiver(FoodAnimes);
-        AnimeCount.NotifyReceived += (ref int v) =>
+        AnimeCount.AddNotifySender(Animes);
+        AnimeCount.AddNotifySender(FoodAnimes);
+        AnimeCount.SenderPropertyChanged += (s, _) =>
         {
-            v = Animes.Count + FoodAnimes.Count;
+            s.Value = Animes.Count + FoodAnimes.Count;
         };
     }
 

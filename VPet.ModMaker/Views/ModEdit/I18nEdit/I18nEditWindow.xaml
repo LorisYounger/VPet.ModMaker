@@ -8,7 +8,7 @@
   xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
   xmlns:pu="https://opensource.panuon.com/wpf-ui"
   xmlns:vm="clr-namespace:VPet.ModMaker.ViewModels.ModEdit.I18nEdit"
-  Title="I18nEditWindow"
+  Title="{ll:Str 多语言编辑器}"
   Width="800"
   Height="450"
   d:DataContext="{d:DesignInstance Type=vm:I18nEditWindowVM}"
@@ -20,10 +20,20 @@
       <RowDefinition Height="Auto" />
       <RowDefinition />
     </Grid.RowDefinitions>
-    <TextBox
-      pu:TextBoxHelper.Watermark="{ll:Str 搜索Id}"
-      Style="{DynamicResource StandardTextBoxStyle}"
-      Text="{Binding Search.Value, UpdateSourceTrigger=PropertyChanged}" />
+    <Grid>
+      <Grid.ColumnDefinitions>
+        <ColumnDefinition />
+        <ColumnDefinition Width="Auto" />
+      </Grid.ColumnDefinitions>
+      <TextBox
+        pu:TextBoxHelper.Watermark="{ll:Str 搜索}"
+        Style="{DynamicResource StandardTextBoxStyle}"
+        Text="{Binding Search.Value, UpdateSourceTrigger=PropertyChanged}" />
+      <ComboBox
+        Grid.Column="1"
+        ItemsSource="{Binding SearchTargets}"
+        SelectedItem="{Binding SearchTarget.Value}" />
+    </Grid>
     <DataGrid
       x:Name="DataGrid_Datas"
       Grid.Row="1"
