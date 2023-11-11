@@ -127,7 +127,6 @@
     <Compile Include="SimpleObservable\ObservableCommandT.cs" />
     <Compile Include="ModMakerStyles.cs" />
     <Compile Include="SimpleObservable\ObservableValueGroup.cs" />
-    <Compile Include="SimpleObservable\ObservableValueT.cs" />
     <Compile Include="ViewModels\ModEdit\AddCultureWindowVM.cs" />
     <Compile Include="ViewModels\ModEdit\AnimeEdit\FoodAnimeEditWindowVM.cs" />
     <Compile Include="ViewModels\ModEdit\AnimeEdit\AnimeEditWindowVM.cs" />

@@ -65,7 +65,7 @@
           Click="Button_Cancel_Click"
           Content="{ll:Str 取消}"
           IsCancel="True"
-          Style="{DynamicResource ThemedButtonStyle}" />
+          Style="{DynamicResource Button_Cancel}" />
         <Button
           x:Name="Button_Yes"
           Grid.Column="1"

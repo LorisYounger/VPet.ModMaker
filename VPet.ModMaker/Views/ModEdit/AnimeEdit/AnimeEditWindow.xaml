@@ -287,19 +287,22 @@
           x:Name="Button_AddAnime"
           Margin="10"
           Command="{Binding AddAnimeCommand}"
-          Content="{ll:Str 添加动画}" />
+          Content="{ll:Str 添加动画}"
+          Style="{DynamicResource ThemedButtonStyle}" />
         <Button
           x:Name="Button_Cancel"
           Grid.Column="1"
           Margin="10"
           Click="Button_Cancel_Click"
-          Content="{ll:Str 取消}" />
+          Content="{ll:Str 取消}"
+          Style="{DynamicResource Button_Cancel}" />
         <Button
           x:Name="Button_Yes"
           Grid.Column="2"
           Margin="10"
           Click="Button_Yes_Click"
-          Content="{ll:Str 确定}" />
+          Content="{ll:Str 确定}"
+          Style="{DynamicResource ThemedButtonStyle}" />
       </Grid>
     </Grid>
   </Grid>

@@ -14,6 +14,13 @@
     <Setter Property="pu:ButtonHelper.CornerRadius" Value="24" />
   </Style>
   <Style
+    x:Key="Button_Cancel"
+    BasedOn="{StaticResource ThemedButtonStyle}"
+    TargetType="Button">
+    <Setter Property="Background" Value="{StaticResource PrimaryLight}" />
+    <Setter Property="Foreground" Value="{StaticResource SecondaryText}" />
+  </Style>
+  <Style
     x:Key="Button_HiddenOnTagNull"
     BasedOn="{StaticResource ThemedButtonStyle}"
     TargetType="Button">

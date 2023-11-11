@@ -14,10 +14,10 @@
   d:DataContext="{d:DesignInstance Type=vm:WorkEditWindowVM}"
   WindowStartupLocation="CenterScreen"
   mc:Ignorable="d">
-    <Window.Resources>
-        <ResourceDictionary Source="/VPet-Simulator.Windows.Interface;component/ResourceStyle.xaml" />
-    </Window.Resources>
-    <Grid>
+  <Window.Resources>
+    <ResourceDictionary Source="/VPet-Simulator.Windows.Interface;component/ResourceStyle.xaml" />
+  </Window.Resources>
+  <Grid>
     <Grid.ColumnDefinitions>
       <ColumnDefinition Width="Auto" />
       <ColumnDefinition />
@@ -294,13 +294,15 @@
           x:Name="Button_Cancel"
           Margin="10"
           Click="Button_Cancel_Click"
-          Content="{ll:Str 取消}" />
+          Content="{ll:Str 取消}"
+          Style="{DynamicResource Button_Cancel}" />
         <Button
           x:Name="Button_Yes"
           Grid.Column="1"
           Margin="10"
           Click="Button_Yes_Click"
-          Content="{ll:Str 确定}" />
+          Content="{ll:Str 确定}"
+          Style="{DynamicResource ThemedButtonStyle}" />
       </Grid>
     </Grid>
     <ListBox Grid.Column="2" Template="{StaticResource ListBox_ShowLangs}" />

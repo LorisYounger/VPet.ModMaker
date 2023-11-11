@@ -46,10 +46,10 @@ public class ObservableValueGroup<T> : IEnumerable<ObservableValue<T>?>
     public void Add(params ObservableValue<T>[] items)
     {
         foreach (var item in items)
-            AddX(item);
+            AddToGroup(item);
     }
 
-    private void AddX(ObservableValue<T> item)
+    private void AddToGroup(ObservableValue<T> item)
     {
         if (item.Group is not null)
             throw new ArgumentException("item.Group must be null", nameof(item));
@@ -77,10 +77,10 @@ public class ObservableValueGroup<T> : IEnumerable<ObservableValue<T>?>
     public void Remove(params ObservableValue<T>[] items)
     {
         foreach (var item in items)
-            RemoveX(item);
+            RemoveFromGroup(item);
     }
 
-    private void RemoveX(ObservableValue<T> item)
+    private void RemoveFromGroup(ObservableValue<T> item)
     {
         var result = _bindingValues.Remove(item.Guid);
         if (result)
