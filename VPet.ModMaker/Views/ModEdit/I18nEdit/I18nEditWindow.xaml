@@ -32,6 +32,7 @@
       <ComboBox
         Grid.Column="1"
         ItemsSource="{Binding SearchTargets}"
+        SelectedIndex="0"
         SelectedItem="{Binding SearchTarget.Value}" />
     </Grid>
     <DataGrid

@@ -113,21 +113,10 @@ public class ModMakerWindowVM
         Directory.CreateDirectory(nameof(ModMaker));
         if (File.Exists(ModMakerInfo.HistoryFile) is false)
             File.Create(ModMakerInfo.HistoryFile).Close();
+
         var lps = new LPS();
         foreach (var history in Histories)
-        {
-            lps.Add(
-                new Line(nameof(history))
-                {
-                    new Sub(nameof(ModMakeHistory.Id), history.Id),
-                    new Sub(nameof(ModMakeHistory.SourcePath), history.SourcePath),
-                    new Sub(
-                        nameof(ModMakeHistory.LastTime),
-                        history.LastTime.ToString("yyyy/MM/dd HH:mm")
-                    )
-                }
-            );
-        }
+            lps.Add(LPSConvert.SerializeObjectToLine<Line>(history, nameof(history)));
         File.WriteAllText(ModMakerInfo.HistoryFile, lps.ToString());
     }
 

@@ -3,6 +3,7 @@ using Panuon.WPF.UI;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Collections.Specialized;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
@@ -89,88 +90,146 @@ public partial class I18nEditWindow : WindowX
         LoadPets(model);
     }
 
+    private void AddData<T>(
+        ObservableValue<string> id,
+        I18nModel<T> i18nModel,
+        Func<T, ObservableValue<string>> i18nValue
+    )
+        where T : class, new()
+    {
+        if (AllData.TryGetValue(id.Value, out var outData))
+        {
+            foreach (var culture in I18nHelper.Current.CultureNames.Enumerate())
+            {
+                if (outData.Datas[culture.Index].Group is null)
+                {
+                    var group = new ObservableValueGroup<string>() { outData.Datas[culture.Index] };
+                }
+                outData.Datas[culture.Index].Group!.Add(
+                    i18nValue(i18nModel.I18nDatas[culture.Value])
+                );
+            }
+        }
+        else
+        {
+            var data = new I18nData();
+            data.Id.Value = id.Value;
+            foreach (var culture in I18nHelper.Current.CultureNames)
+                data.Datas.Add(i18nValue(i18nModel.I18nDatas[culture]));
+            I18nDatas.Add(data);
+            AllData.Add(id.Value, data);
+            //id.ValueChanged += IdChange;
+        }
+    }
+
+    private void IdChange(string oldValue, string newValue)
+    {
+        var sourceData = AllData[oldValue];
+        sourceData.Id.Group?.Remove(sourceData.Id);
+        if (AllData.TryGetValue(oldValue, out var outData))
+        {
+            foreach (var culture in I18nHelper.Current.CultureNames.Enumerate())
+            {
+                if (outData.Datas[culture.Index].Group is null)
+                {
+                    var group = new ObservableValueGroup<string>() { outData.Datas[culture.Index] };
+                }
+                outData.Datas[culture.Index].Group!.Add(sourceData.Datas[culture.Index]);
+            }
+        }
+        else
+        {
+            sourceData.Id.Value = newValue;
+            AllData.Remove(oldValue);
+            AllData.Add(newValue, sourceData);
+        }
+    }
+
+    private void RemoveData<T>(
+        ObservableValue<string> id,
+        I18nModel<T> i18nModel,
+        Func<T, ObservableValue<string>> i18nValue
+    )
+        where T : class, new()
+    {
+        var data = AllData[id.Value];
+        foreach (var culture in I18nHelper.Current.CultureNames.Enumerate())
+        {
+            if (data.Datas[culture.Index].Group is ObservableValueGroup<string> group)
+            {
+                group.Remove(i18nValue(i18nModel.I18nDatas[culture.Value]));
+                if (group.Count == 1)
+                {
+                    group.Clear();
+                    return;
+                }
+            }
+            else
+            {
+                I18nDatas.Remove(data);
+                AllData.Remove(id.Value);
+                return;
+            }
+        }
+    }
+
+    private void ReplaceData<T>(
+        ObservableValue<string> id,
+        I18nModel<T> i18nModel,
+        Func<T, ObservableValue<string>> i18nValue
+    )
+        where T : class, new()
+    {
+        var data = AllData[id.Value];
+        foreach (var culture in I18nHelper.Current.CultureNames.Enumerate())
+        {
+            var oldValue = data.Datas[culture.Index];
+            var newValue = i18nValue(i18nModel.I18nDatas[culture.Value]);
+            if (oldValue.Group is ObservableValueGroup<string> group)
+            {
+                group.Add(newValue);
+                group.Remove(oldValue);
+            }
+            data.Datas[culture.Index] = newValue;
+        }
+    }
+
     private void LoadFood(ModInfoModel model)
     {
         foreach (var food in model.Foods)
         {
-            if (AllData.TryGetValue(food.Id.Value, out var outData))
-            {
-                foreach (var culture in I18nHelper.Current.CultureNames.Enumerate())
-                {
-                    if (outData.Datas[culture.Index].Group is null)
-                    {
-                        var group = new ObservableValueGroup<string>()
-                        {
-                            outData.Datas[culture.Index]
-                        };
-                    }
-                    outData.Datas[culture.Index].Group!.Add(food.I18nDatas[culture.Value].Name);
-                }
-            }
-            else
-            {
-                var data = new I18nData();
-                data.Id.Value = food.Id.Value;
-                foreach (var culture in I18nHelper.Current.CultureNames)
-                    data.Datas.Add(food.I18nDatas[culture].Name);
-                I18nDatas.Add(data);
-                AllData.Add(food.Id.Value, data);
-            }
-            if (AllData.TryGetValue(food.DescriptionId.Value, out var outData1))
-            {
-                foreach (var culture in I18nHelper.Current.CultureNames.Enumerate())
-                {
-                    if (outData1.Datas[culture.Index].Group is null)
-                    {
-                        var group = new ObservableValueGroup<string>()
-                        {
-                            outData1.Datas[culture.Index]
-                        };
-                    }
-                    outData1.Datas[culture.Index].Group!.Add(
-                        food.I18nDatas[culture.Value].Description
-                    );
-                }
-            }
-            else
-            {
-                var data = new I18nData();
-                data.Id.Value = food.DescriptionId.Value;
-                foreach (var culture in I18nHelper.Current.CultureNames)
-                    data.Datas.Add(food.I18nDatas[culture].Description);
-                I18nDatas.Add(data);
-                AllData.Add(food.DescriptionId.Value, data);
-            }
+            AddData(food.Id, food, (m) => m.Name);
+            AddData(food.DescriptionId, food, (m) => m.Description);
         }
+        model.Foods.CollectionChanged += (s, e) =>
+        {
+            if (e.Action is NotifyCollectionChangedAction.Add)
+            {
+                var newFood = (FoodModel)e.NewItems[0];
+                AddData(newFood.Id, newFood, (m) => m.Name);
+                AddData(newFood.DescriptionId, newFood, (m) => m.Description);
+            }
+            else if (e.Action is NotifyCollectionChangedAction.Remove)
+            {
+                var oldFood = (FoodModel)e.OldItems[0];
+                RemoveData(oldFood.Id, oldFood, (m) => m.Name);
+                RemoveData(oldFood.DescriptionId, oldFood, (m) => m.Description);
+            }
+            else if (e.Action is NotifyCollectionChangedAction.Replace)
+            {
+                var newFood = (FoodModel)e.NewItems[0];
+                var oldFood = (FoodModel)e.OldItems[0];
+                ReplaceData(newFood.Id, newFood, (m) => m.Name);
+                ReplaceData(newFood.DescriptionId, newFood, (m) => m.Description);
+            }
+        };
     }
 
     private void LoadClickText(ModInfoModel model)
     {
         foreach (var text in model.ClickTexts)
         {
-            if (AllData.TryGetValue(text.Id.Value, out var outData))
-            {
-                foreach (var culture in I18nHelper.Current.CultureNames.Enumerate())
-                {
-                    if (outData.Datas[culture.Index].Group is null)
-                    {
-                        var group = new ObservableValueGroup<string>()
-                        {
-                            outData.Datas[culture.Index]
-                        };
-                    }
-                    outData.Datas[culture.Index].Group!.Add(text.I18nDatas[culture.Value].Text);
-                }
-            }
-            else
-            {
-                var data = new I18nData();
-                data.Id.Value = text.Id.Value;
-                foreach (var culture in I18nHelper.Current.CultureNames)
-                    data.Datas.Add(text.I18nDatas[culture].Text);
-                I18nDatas.Add(data);
-                AllData.Add(text.Id.Value, data);
-            }
+            AddData(text.Id, text, (m) => m.Text);
         }
     }
 
@@ -178,29 +237,7 @@ public partial class I18nEditWindow : WindowX
     {
         foreach (var text in model.LowTexts)
         {
-            if (AllData.TryGetValue(text.Id.Value, out var outData))
-            {
-                foreach (var culture in I18nHelper.Current.CultureNames.Enumerate())
-                {
-                    if (outData.Datas[culture.Index].Group is null)
-                    {
-                        var group = new ObservableValueGroup<string>()
-                        {
-                            outData.Datas[culture.Index]
-                        };
-                    }
-                    outData.Datas[culture.Index].Group!.Add(text.I18nDatas[culture.Value].Text);
-                }
-            }
-            else
-            {
-                var data = new I18nData();
-                data.Id.Value = text.Id.Value;
-                foreach (var culture in I18nHelper.Current.CultureNames)
-                    data.Datas.Add(text.I18nDatas[culture].Text);
-                I18nDatas.Add(data);
-                AllData.Add(text.Id.Value, data);
-            }
+            AddData(text.Id, text, (m) => m.Text);
         }
     }
 
@@ -208,52 +245,8 @@ public partial class I18nEditWindow : WindowX
     {
         foreach (var text in model.SelectTexts)
         {
-            if (AllData.TryGetValue(text.Id.Value, out var outData))
-            {
-                foreach (var culture in I18nHelper.Current.CultureNames.Enumerate())
-                {
-                    if (outData.Datas[culture.Index].Group is null)
-                    {
-                        var group = new ObservableValueGroup<string>()
-                        {
-                            outData.Datas[culture.Index]
-                        };
-                    }
-                    outData.Datas[culture.Index].Group!.Add(text.I18nDatas[culture.Value].Text);
-                }
-            }
-            else
-            {
-                var data = new I18nData();
-                data.Id.Value = text.Id.Value;
-                foreach (var culture in I18nHelper.Current.CultureNames)
-                    data.Datas.Add(text.I18nDatas[culture].Text);
-                I18nDatas.Add(data);
-                AllData.Add(text.Id.Value, data);
-            }
-            if (AllData.TryGetValue(text.ChooseId.Value, out var outData1))
-            {
-                foreach (var culture in I18nHelper.Current.CultureNames.Enumerate())
-                {
-                    if (outData1.Datas[culture.Index].Group is null)
-                    {
-                        var group = new ObservableValueGroup<string>()
-                        {
-                            outData1.Datas[culture.Index]
-                        };
-                    }
-                    outData1.Datas[culture.Index].Group!.Add(text.I18nDatas[culture.Value].Choose);
-                }
-            }
-            else
-            {
-                var data = new I18nData();
-                data.Id.Value = text.ChooseId.Value;
-                foreach (var culture in I18nHelper.Current.CultureNames)
-                    data.Datas.Add(text.I18nDatas[culture].Choose);
-                I18nDatas.Add(data);
-                AllData.Add(text.ChooseId.Value, data);
-            }
+            AddData(text.Id, text, (m) => m.Text);
+            AddData(text.ChooseId, text, (m) => m.Choose);
         }
     }
 
@@ -263,92 +256,9 @@ public partial class I18nEditWindow : WindowX
         {
             if (pet.IsSimplePetModel)
                 continue;
-            if (AllData.TryGetValue(pet.Id.Value, out var outData))
-            {
-                foreach (var culture in I18nHelper.Current.CultureNames.Enumerate())
-                {
-                    if (outData.Datas[culture.Index].Group is null)
-                    {
-                        var group = new ObservableValueGroup<string>()
-                        {
-                            outData.Datas[culture.Index]
-                        };
-                    }
-                    outData.Datas[culture.Index].Group!.Add(pet.I18nDatas[culture.Value].Name);
-                }
-            }
-            else
-            {
-                var data = new I18nData();
-                data.Id.Value = pet.Id.Value;
-                foreach (var culture in I18nHelper.Current.CultureNames)
-                    data.Datas.Add(pet.I18nDatas[culture].Name);
-                I18nDatas.Add(data);
-                AllData.Add(pet.Id.Value, data);
-            }
-            if (AllData.TryGetValue(pet.PetNameId.Value, out var outData1))
-            {
-                foreach (var culture in I18nHelper.Current.CultureNames.Enumerate())
-                {
-                    if (outData1.Datas[culture.Index].Group is null)
-                    {
-                        var group = new ObservableValueGroup<string>()
-                        {
-                            outData1.Datas[culture.Index]
-                        };
-                    }
-                    outData1.Datas[culture.Index].Group!.Add(pet.I18nDatas[culture.Value].PetName);
-                }
-            }
-            else
-            {
-                var data = new I18nData();
-                data.Id.Value = pet.PetNameId.Value;
-                foreach (var culture in I18nHelper.Current.CultureNames)
-                    data.Datas.Add(pet.I18nDatas[culture].PetName);
-                I18nDatas.Add(data);
-                AllData.Add(pet.PetNameId.Value, data);
-            }
-            if (AllData.TryGetValue(pet.DescriptionId.Value, out var outData2))
-            {
-                foreach (var culture in I18nHelper.Current.CultureNames.Enumerate())
-                {
-                    if (outData2.Datas[culture.Index].Group is null)
-                    {
-                        var group = new ObservableValueGroup<string>()
-                        {
-                            outData2.Datas[culture.Index]
-                        };
-                    }
-                    outData2.Datas[culture.Index].Group!.Add(
-                        pet.I18nDatas[culture.Value].Description
-                    );
-                }
-            }
-            else
-            {
-                var data = new I18nData();
-                data.Id.Value = pet.DescriptionId.Value;
-                foreach (var culture in I18nHelper.Current.CultureNames)
-                    data.Datas.Add(pet.I18nDatas[culture].Description);
-                I18nDatas.Add(data);
-                AllData.Add(pet.DescriptionId.Value, data);
-            }
-            //var data = new I18nData();
-            //var petNameData = new I18nData();
-            //var descriptionData = new I18nData();
-            //data.Id.Value = pet.Id.Value;
-            //petNameData.Id.Value = pet.PetNameId.Value;
-            //descriptionData.Id.Value = pet.DescriptionId.Value;
-            //foreach (var culture in I18nHelper.Current.CultureNames)
-            //{
-            //    data.Datas.Add(pet.I18nDatas[culture].Name);
-            //    petNameData.Datas.Add(pet.I18nDatas[culture].PetName);
-            //    descriptionData.Datas.Add(pet.I18nDatas[culture].Description);
-            //}
-            //I18nDatas.Add(data);
-            //I18nDatas.Add(petNameData);
-            //I18nDatas.Add(descriptionData);
+            AddData(pet.Id, pet, (m) => m.Name);
+            AddData(pet.PetNameId, pet, (m) => m.PetName);
+            AddData(pet.DescriptionId, pet, (m) => m.Description);
         }
     }
 

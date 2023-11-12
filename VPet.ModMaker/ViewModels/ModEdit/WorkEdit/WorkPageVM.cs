@@ -80,15 +80,9 @@ public class WorkPageVM
         window.ShowDialog();
         if (window.IsCancel)
             return;
-        if (ShowWorks.Value.Count == Works.Count)
-        {
-            Works[Works.IndexOf(model)] = newWork;
-        }
-        else
-        {
-            Works[Works.IndexOf(model)] = newWork;
+        Works[Works.IndexOf(model)] = newWork;
+        if (ShowWorks.Value.Count != Works.Count)
             ShowWorks.Value[ShowWorks.Value.IndexOf(model)] = newWork;
-        }
     }
 
     private void Remove(WorkModel model)

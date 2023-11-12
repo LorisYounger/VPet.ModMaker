@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
@@ -202,6 +203,40 @@ public static class Extensions
     public static string GetFullInfo(this CultureInfo cultureInfo)
     {
         return $"{cultureInfo.DisplayName} [{cultureInfo.Name}]";
+    }
+
+    /// <summary>
+    /// 尝试使用索引获取值
+    /// </summary>
+    /// <typeparam name="T">值类型</typeparam>
+    /// <param name="list">列表</param>
+    /// <param name="index">索引</param>
+    /// <param name="value">值</param>
+    /// <returns>成功为 <see langword="true"/> 失败为 <see langword="false"/></returns>
+    public static bool TryGetValue<T>(this IList<T> list, int index, out T value)
+    {
+        value = default;
+        if (index < 0 || index >= list.Count)
+            return false;
+        value = list[index];
+        return true;
+    }
+
+    /// <summary>
+    /// 尝试使用索引获取值
+    /// </summary>
+    /// <typeparam name="T">值类型</typeparam>
+    /// <param name="list">列表</param>
+    /// <param name="index">索引</param>
+    /// <param name="value">值</param>
+    /// <returns>成功为 <see langword="true"/> 失败为 <see langword="false"/></returns>
+    public static bool TryGetValue<T>(this IList list, int index, out object value)
+    {
+        value = default;
+        if (index < 0 || index >= list.Count)
+            return false;
+        value = list[index];
+        return true;
     }
 
     /// <summary>

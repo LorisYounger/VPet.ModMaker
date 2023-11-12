@@ -69,15 +69,9 @@ public class SelectTextPageVM
         window.ShowDialog();
         if (window.IsCancel)
             return;
-        if (ShowSelectTexts.Value.Count == SelectTexts.Count)
-        {
-            SelectTexts[SelectTexts.IndexOf(model)] = newLowTest;
-        }
-        else
-        {
-            SelectTexts[SelectTexts.IndexOf(model)] = newLowTest;
+        SelectTexts[SelectTexts.IndexOf(model)] = newLowTest;
+        if (ShowSelectTexts.Value.Count != SelectTexts.Count)
             ShowSelectTexts.Value[ShowSelectTexts.Value.IndexOf(model)] = newLowTest;
-        }
     }
 
     private void Remove(SelectTextModel model)

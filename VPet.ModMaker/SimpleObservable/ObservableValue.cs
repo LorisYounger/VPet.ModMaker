@@ -62,6 +62,7 @@ public class ObservableValue<T>
     /// <inheritdoc/>
     /// <param name="value">初始值</param>
     public ObservableValue(T value)
+        : this()
     {
         _value = value;
     }

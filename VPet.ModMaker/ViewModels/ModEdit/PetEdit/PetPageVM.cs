@@ -74,15 +74,9 @@ public class PetPageVM
         window.ShowDialog();
         if (window.IsCancel)
             return;
-        if (ShowPets.Value.Count == Pets.Count)
-        {
-            Pets[Pets.IndexOf(model)] = newPet;
-        }
-        else
-        {
-            Pets[Pets.IndexOf(model)] = newPet;
+        Pets[Pets.IndexOf(model)] = newPet;
+        if (ShowPets.Value.Count != Pets.Count)
             ShowPets.Value[ShowPets.Value.IndexOf(model)] = newPet;
-        }
         model.Close();
     }
 

@@ -34,7 +34,7 @@ public class ObservableValueGroup<T> : IEnumerable<ObservableValue<T>?>
     /// 在添加的时候改变值 (如果分组中存在值)
     /// </summary>
     [DefaultValue(false)]
-    public bool ChangeOnAdd { get; set; } = false;
+    public bool ChangeOnAdd { get; set; } = true;
 
     [DebuggerBrowsable(DebuggerBrowsableState.Never)]
     private readonly Dictionary<Guid, WeakReference<ObservableValue<T>>> _bindingValues = new();

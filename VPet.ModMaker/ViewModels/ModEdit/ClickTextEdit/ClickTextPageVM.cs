@@ -98,15 +98,9 @@ public class ClickTextPageVM
         window.ShowDialog();
         if (window.IsCancel)
             return;
-        if (ShowClickTexts.Value.Count == ClickTexts.Count)
-        {
-            ClickTexts[ClickTexts.IndexOf(model)] = newLowTest;
-        }
-        else
-        {
-            ClickTexts[ClickTexts.IndexOf(model)] = newLowTest;
+        ClickTexts[ClickTexts.IndexOf(model)] = newLowTest;
+        if (ShowClickTexts.Value.Count != ClickTexts.Count)
             ShowClickTexts.Value[ShowClickTexts.Value.IndexOf(model)] = newLowTest;
-        }
     }
 
     /// <summary>

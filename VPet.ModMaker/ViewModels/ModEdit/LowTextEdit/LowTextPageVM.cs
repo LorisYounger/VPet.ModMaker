@@ -72,15 +72,9 @@ public class LowTextPageVM
         window.ShowDialog();
         if (window.IsCancel)
             return;
-        if (ShowLowTexts.Value.Count == LowTexts.Count)
-        {
-            LowTexts[LowTexts.IndexOf(model)] = newLowTest;
-        }
-        else
-        {
-            LowTexts[LowTexts.IndexOf(model)] = newLowTest;
+        LowTexts[LowTexts.IndexOf(model)] = newLowTest;
+        if (ShowLowTexts.Value.Count != LowTexts.Count)
             ShowLowTexts.Value[ShowLowTexts.Value.IndexOf(model)] = newLowTest;
-        }
     }
 
     private void Remove(LowTextModel model)

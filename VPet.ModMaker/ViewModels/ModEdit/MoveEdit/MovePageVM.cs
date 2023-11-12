@@ -82,15 +82,9 @@ public class MovePageVM
         window.ShowDialog();
         if (window.IsCancel)
             return;
-        if (ShowMoves.Value.Count == Moves.Count)
-        {
-            Moves[Moves.IndexOf(model)] = newMove;
-        }
-        else
-        {
-            Moves[Moves.IndexOf(model)] = newMove;
+        Moves[Moves.IndexOf(model)] = newMove;
+        if (ShowMoves.Value.Count != Moves.Count)
             ShowMoves.Value[ShowMoves.Value.IndexOf(model)] = newMove;
-        }
     }
 
     private void Remove(MoveModel model)

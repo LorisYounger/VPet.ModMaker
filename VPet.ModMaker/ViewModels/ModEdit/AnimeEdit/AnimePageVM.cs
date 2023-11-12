@@ -193,15 +193,10 @@ public class AnimePageVM
             window.ShowDialog();
             if (window.IsCancel)
                 return;
-            if (ShowAnimes.Value.Count == Animes.Count)
-            {
-                Animes[Animes.IndexOf(animeTypeModel)] = newAnime;
-            }
-            else
-            {
-                Animes[Animes.IndexOf(animeTypeModel)] = newAnime;
+            Animes[Animes.IndexOf(animeTypeModel)] = newAnime;
+            Animes[Animes.IndexOf(animeTypeModel)] = newAnime;
+            if (ShowAnimes.Value.Count != Animes.Count)
                 ShowAnimes.Value[ShowAnimes.Value.IndexOf(animeTypeModel)] = newAnime;
-            }
         }
         else if (model is FoodAnimeTypeModel foodAnimeTypeModel)
         {
@@ -214,15 +209,9 @@ public class AnimePageVM
             window.ShowDialog();
             if (window.IsCancel)
                 return;
-            if (ShowAnimes.Value.Count == FoodAnimes.Count)
-            {
-                FoodAnimes[FoodAnimes.IndexOf(foodAnimeTypeModel)] = newAnime;
-            }
-            else
-            {
-                FoodAnimes[FoodAnimes.IndexOf(foodAnimeTypeModel)] = newAnime;
+            FoodAnimes[FoodAnimes.IndexOf(foodAnimeTypeModel)] = newAnime;
+            if (ShowAnimes.Value.Count != FoodAnimes.Count)
                 ShowAnimes.Value[ShowAnimes.Value.IndexOf(foodAnimeTypeModel)] = newAnime;
-            }
         }
     }
 

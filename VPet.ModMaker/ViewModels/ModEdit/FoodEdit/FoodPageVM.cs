@@ -71,15 +71,9 @@ public class FoodPageVM
         window.ShowDialog();
         if (window.IsCancel)
             return;
-        if (ShowFoods.Value.Count == Foods.Count)
-        {
-            Foods[Foods.IndexOf(food)] = newFood;
-        }
-        else
-        {
-            Foods[Foods.IndexOf(food)] = newFood;
+        Foods[Foods.IndexOf(food)] = newFood;
+        if (ShowFoods.Value.Count != Foods.Count)
             ShowFoods.Value[ShowFoods.Value.IndexOf(food)] = newFood;
-        }
         food.Close();
     }
 
