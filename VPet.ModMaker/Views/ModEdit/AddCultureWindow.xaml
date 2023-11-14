@@ -60,20 +60,20 @@
           <ColumnDefinition />
         </Grid.ColumnDefinitions>
         <Button
-          x:Name="Button_Cancel"
-          Margin="10"
-          Click="Button_Cancel_Click"
-          Content="{ll:Str 取消}"
-          IsCancel="True"
-          Style="{DynamicResource Button_Cancel}" />
-        <Button
           x:Name="Button_Yes"
-          Grid.Column="1"
           Margin="10"
           Click="Button_Yes_Click"
           Content="{ll:Str 确定}"
           IsDefault="True"
           Style="{DynamicResource ThemedButtonStyle}" />
+        <Button
+          x:Name="Button_Cancel"
+          Grid.Column="1"
+          Margin="10"
+          Click="Button_Cancel_Click"
+          Content="{ll:Str 取消}"
+          IsCancel="True"
+          Style="{DynamicResource Button_Cancel}" />
       </Grid>
     </Grid>
     <Grid Grid.Column="1">

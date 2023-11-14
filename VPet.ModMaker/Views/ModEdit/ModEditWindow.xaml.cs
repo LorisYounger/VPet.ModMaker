@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
+using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -50,6 +51,7 @@ public partial class ModEditWindow : Window
     {
         InitializeComponent();
         DataContext = new ModEditWindowVM(this);
+        Closing += ModEditWindow_Closing;
         Closed += ModEditWindow_Closed;
         Loaded += ModEditWindow_Loaded;
     }
@@ -64,6 +66,14 @@ public partial class ModEditWindow : Window
             )
                 ViewModel.AddCulture();
         }
+    }
+
+    private void ModEditWindow_Closing(object sender, CancelEventArgs e)
+    {
+        if (
+            MessageBox.Show("确认退出吗?".Translate(), "", MessageBoxButton.YesNo) is MessageBoxResult.No
+        )
+            e.Cancel = true;
     }
 
     private void ModEditWindow_Closed(object sender, EventArgs e)

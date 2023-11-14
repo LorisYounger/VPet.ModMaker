@@ -46,7 +46,9 @@ public class I18nModel<T>
     /// <param name="newValue"></param>
     private void CultureChanged(string oldValue, string newValue)
     {
-        if (I18nDatas.TryGetValue(newValue, out var result))
+        if (newValue is null)
+            CurrentI18nData.Value = null;
+        else if (I18nDatas.TryGetValue(newValue, out var result))
             CurrentI18nData.Value = result;
     }
 

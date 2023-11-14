@@ -96,14 +96,7 @@ public class ModEditWindowVM
             return;
         }
         var window = new I18nEditWindow(ModInfo.Value);
-        //foreach (var culture in I18nHelper.Current.CultureNames)
-        //    window.AddCulture(culture);
-        //if (window.IsCancel)
-        //    return;
-        //I18nHelper.Current.CultureNames.Add(window.ViewModel.Culture.Value);
-        //if (I18nHelper.Current.CultureNames.Count == 1)
-        //    I18nHelper.Current.CultureName.Value = window.ViewModel.Culture.Value;
-        window.ShowDialog();
+        window.Show();
     }
 
     /// <summary>
@@ -112,6 +105,7 @@ public class ModEditWindowVM
     public void Close()
     {
         ModInfo.Value.Image.Value?.StreamSource?.Close();
+        I18nEditWindow.Instance?.Close();
     }
 
     /// <summary>
@@ -227,20 +221,20 @@ public class ModEditWindowVM
     private void SaveTo(string path)
     {
         var pending = PendingBox.Show("保存中".Translate());
-        //try
-        //{
-        ModInfo.Value.SaveTo(path);
-        if (string.IsNullOrWhiteSpace(ModInfo.Value.SourcePath.Value))
-            ModInfo.Value.SourcePath.Value = path;
-        pending.Close();
-        MessageBox.Show(ModEditWindow, "保存成功".Translate());
-        //}
-        //catch (Exception ex)
-        //{
-        //    pending.Close();
-        //    MessageBox.Show("保存失败 错误信息:\n{0}".Translate(ex));
-        //    return;
-        //}
+        try
+        {
+            ModInfo.Value.SaveTo(path);
+            if (string.IsNullOrWhiteSpace(ModInfo.Value.SourcePath.Value))
+                ModInfo.Value.SourcePath.Value = path;
+            pending.Close();
+            MessageBox.Show(ModEditWindow, "保存成功".Translate());
+        }
+        catch (Exception ex)
+        {
+            pending.Close();
+            MessageBox.Show("保存失败 错误信息:\n{0}".Translate(ex));
+            return;
+        }
     }
 
     /// <summary>

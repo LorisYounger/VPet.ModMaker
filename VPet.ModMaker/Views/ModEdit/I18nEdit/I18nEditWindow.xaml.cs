@@ -65,6 +65,12 @@ public partial class I18nEditWindow : WindowX
         {
             //if (IsCancel)
             //ViewModel.Close();
+            I18nHelper.Current.CultureNames.CollectionChanged -= CultureNames_CollectionChanged;
+            foreach (var i18nData in AllI18nDatas)
+            {
+                foreach (var data in i18nData.Value.Datas)
+                    data.Group?.Clear();
+            }
             try
             {
                 DataContext = null;
@@ -74,6 +80,7 @@ public partial class I18nEditWindow : WindowX
         };
         InitializeI18nData(model);
         ShowI18nDatas.Value = I18nDatas;
+        SearchTarget.Value = nameof(ModInfoModel.Id);
     }
 
     public void InitializeI18nData(ModInfoModel model)
@@ -83,11 +90,46 @@ public partial class I18nEditWindow : WindowX
             AddCulture(culture);
             SearchTargets.Add(culture);
         }
+        I18nHelper.Current.CultureNames.CollectionChanged -= CultureNames_CollectionChanged;
+        I18nHelper.Current.CultureNames.CollectionChanged += CultureNames_CollectionChanged;
         LoadFood(model);
         LoadClickText(model);
         LoadLowText(model);
         LoadSelectText(model);
         LoadPets(model);
+    }
+
+    private void CultureNames_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
+    {
+        if (e.Action is NotifyCollectionChangedAction.Add)
+        {
+            var newCulture = (string)e.NewItems[0];
+            AddCulture(newCulture);
+            SearchTargets.Add(newCulture);
+            foreach (var data in AllI18nDatas)
+                data.Value.Datas.Add(new());
+        }
+        else if (e.Action is NotifyCollectionChangedAction.Remove)
+        {
+            var oldCulture = (string)e.OldItems[0];
+            RemoveCulture(oldCulture);
+            SearchTargets.Remove(oldCulture);
+            foreach (var data in AllI18nDatas)
+            {
+                var value = data.Value.Datas[e.OldStartingIndex];
+                value.Group?.Remove(value);
+                data.Value.Datas.RemoveAt(e.OldStartingIndex);
+            }
+            if (SearchTarget.Value is null)
+                SearchTarget.Value = nameof(ModInfoModel.Id);
+        }
+        else if (e.Action is NotifyCollectionChangedAction.Replace)
+        {
+            var oldCulture = (string)e.OldItems[0];
+            var newCulture = (string)e.NewItems[0];
+            ReplaceCulture(oldCulture, newCulture);
+            SearchTargets[SearchTargets.IndexOf(oldCulture)] = newCulture;
+        }
     }
 
     private void AddData<T>(
@@ -97,7 +139,7 @@ public partial class I18nEditWindow : WindowX
     )
         where T : class, new()
     {
-        if (AllData.TryGetValue(id.Value, out var outData))
+        if (AllI18nDatas.TryGetValue(id.Value, out var outData))
         {
             foreach (var culture in I18nHelper.Current.CultureNames.Enumerate())
             {
@@ -117,16 +159,16 @@ public partial class I18nEditWindow : WindowX
             foreach (var culture in I18nHelper.Current.CultureNames)
                 data.Datas.Add(i18nValue(i18nModel.I18nDatas[culture]));
             I18nDatas.Add(data);
-            AllData.Add(id.Value, data);
+            AllI18nDatas.Add(id.Value, data);
             //id.ValueChanged += IdChange;
         }
     }
 
     private void IdChange(string oldValue, string newValue)
     {
-        var sourceData = AllData[oldValue];
+        var sourceData = AllI18nDatas[oldValue];
         sourceData.Id.Group?.Remove(sourceData.Id);
-        if (AllData.TryGetValue(oldValue, out var outData))
+        if (AllI18nDatas.TryGetValue(oldValue, out var outData))
         {
             foreach (var culture in I18nHelper.Current.CultureNames.Enumerate())
             {
@@ -140,8 +182,8 @@ public partial class I18nEditWindow : WindowX
         else
         {
             sourceData.Id.Value = newValue;
-            AllData.Remove(oldValue);
-            AllData.Add(newValue, sourceData);
+            AllI18nDatas.Remove(oldValue);
+            AllI18nDatas.Add(newValue, sourceData);
         }
     }
 
@@ -152,7 +194,7 @@ public partial class I18nEditWindow : WindowX
     )
         where T : class, new()
     {
-        var data = AllData[id.Value];
+        var data = AllI18nDatas[id.Value];
         foreach (var culture in I18nHelper.Current.CultureNames.Enumerate())
         {
             if (data.Datas[culture.Index].Group is ObservableValueGroup<string> group)
@@ -167,7 +209,7 @@ public partial class I18nEditWindow : WindowX
             else
             {
                 I18nDatas.Remove(data);
-                AllData.Remove(id.Value);
+                AllI18nDatas.Remove(id.Value);
                 return;
             }
         }
@@ -180,7 +222,7 @@ public partial class I18nEditWindow : WindowX
     )
         where T : class, new()
     {
-        var data = AllData[id.Value];
+        var data = AllI18nDatas[id.Value];
         foreach (var culture in I18nHelper.Current.CultureNames.Enumerate())
         {
             var oldValue = data.Datas[culture.Index];
@@ -205,22 +247,22 @@ public partial class I18nEditWindow : WindowX
         {
             if (e.Action is NotifyCollectionChangedAction.Add)
             {
-                var newFood = (FoodModel)e.NewItems[0];
-                AddData(newFood.Id, newFood, (m) => m.Name);
-                AddData(newFood.DescriptionId, newFood, (m) => m.Description);
+                var newModel = (FoodModel)e.NewItems[0];
+                AddData(newModel.Id, newModel, (m) => m.Name);
+                AddData(newModel.DescriptionId, newModel, (m) => m.Description);
             }
             else if (e.Action is NotifyCollectionChangedAction.Remove)
             {
-                var oldFood = (FoodModel)e.OldItems[0];
-                RemoveData(oldFood.Id, oldFood, (m) => m.Name);
-                RemoveData(oldFood.DescriptionId, oldFood, (m) => m.Description);
+                var oldModel = (FoodModel)e.OldItems[0];
+                RemoveData(oldModel.Id, oldModel, (m) => m.Name);
+                RemoveData(oldModel.DescriptionId, oldModel, (m) => m.Description);
             }
             else if (e.Action is NotifyCollectionChangedAction.Replace)
             {
-                var newFood = (FoodModel)e.NewItems[0];
-                var oldFood = (FoodModel)e.OldItems[0];
-                ReplaceData(newFood.Id, newFood, (m) => m.Name);
-                ReplaceData(newFood.DescriptionId, newFood, (m) => m.Description);
+                var newModel = (FoodModel)e.NewItems[0];
+                var oldModel = (FoodModel)e.OldItems[0];
+                ReplaceData(newModel.Id, newModel, (m) => m.Name);
+                ReplaceData(newModel.DescriptionId, newModel, (m) => m.Description);
             }
         };
     }
@@ -231,6 +273,25 @@ public partial class I18nEditWindow : WindowX
         {
             AddData(text.Id, text, (m) => m.Text);
         }
+        model.ClickTexts.CollectionChanged += (s, e) =>
+        {
+            if (e.Action is NotifyCollectionChangedAction.Add)
+            {
+                var newModel = (ClickTextModel)e.NewItems[0];
+                AddData(newModel.Id, newModel, (m) => m.Text);
+            }
+            else if (e.Action is NotifyCollectionChangedAction.Remove)
+            {
+                var oldModel = (ClickTextModel)e.OldItems[0];
+                RemoveData(oldModel.Id, oldModel, (m) => m.Text);
+            }
+            else if (e.Action is NotifyCollectionChangedAction.Replace)
+            {
+                var newModel = (ClickTextModel)e.NewItems[0];
+                var oldModel = (ClickTextModel)e.OldItems[0];
+                ReplaceData(newModel.Id, newModel, (m) => m.Text);
+            }
+        };
     }
 
     private void LoadLowText(ModInfoModel model)
@@ -239,6 +300,25 @@ public partial class I18nEditWindow : WindowX
         {
             AddData(text.Id, text, (m) => m.Text);
         }
+        model.LowTexts.CollectionChanged += (s, e) =>
+        {
+            if (e.Action is NotifyCollectionChangedAction.Add)
+            {
+                var newModel = (LowTextModel)e.NewItems[0];
+                AddData(newModel.Id, newModel, (m) => m.Text);
+            }
+            else if (e.Action is NotifyCollectionChangedAction.Remove)
+            {
+                var oldModel = (LowTextModel)e.OldItems[0];
+                RemoveData(oldModel.Id, oldModel, (m) => m.Text);
+            }
+            else if (e.Action is NotifyCollectionChangedAction.Replace)
+            {
+                var newModel = (LowTextModel)e.NewItems[0];
+                var oldModel = (LowTextModel)e.OldItems[0];
+                ReplaceData(newModel.Id, newModel, (m) => m.Text);
+            }
+        };
     }
 
     private void LoadSelectText(ModInfoModel model)
@@ -248,6 +328,28 @@ public partial class I18nEditWindow : WindowX
             AddData(text.Id, text, (m) => m.Text);
             AddData(text.ChooseId, text, (m) => m.Choose);
         }
+        model.SelectTexts.CollectionChanged += (s, e) =>
+        {
+            if (e.Action is NotifyCollectionChangedAction.Add)
+            {
+                var newModel = (SelectTextModel)e.NewItems[0];
+                AddData(newModel.Id, newModel, (m) => m.Text);
+                AddData(newModel.ChooseId, newModel, (m) => m.Choose);
+            }
+            else if (e.Action is NotifyCollectionChangedAction.Remove)
+            {
+                var oldModel = (SelectTextModel)e.OldItems[0];
+                RemoveData(oldModel.Id, oldModel, (m) => m.Text);
+                RemoveData(oldModel.ChooseId, oldModel, (m) => m.Choose);
+            }
+            else if (e.Action is NotifyCollectionChangedAction.Replace)
+            {
+                var newModel = (SelectTextModel)e.NewItems[0];
+                var oldModel = (SelectTextModel)e.OldItems[0];
+                ReplaceData(newModel.Id, newModel, (m) => m.Text);
+                ReplaceData(newModel.ChooseId, newModel, (m) => m.Choose);
+            }
+        };
     }
 
     private void LoadPets(ModInfoModel model)
@@ -259,11 +361,45 @@ public partial class I18nEditWindow : WindowX
             AddData(pet.Id, pet, (m) => m.Name);
             AddData(pet.PetNameId, pet, (m) => m.PetName);
             AddData(pet.DescriptionId, pet, (m) => m.Description);
+            foreach (var work in pet.Works)
+                AddData(work.Id, work, (m) => m.Name);
         }
+        model.Pets.CollectionChanged += (s, e) =>
+        {
+            if (e.Action is NotifyCollectionChangedAction.Add)
+            {
+                var newModel = (PetModel)e.NewItems[0];
+                AddData(newModel.Id, newModel, (m) => m.Name);
+                AddData(newModel.DescriptionId, newModel, (m) => m.Description);
+                foreach (var work in newModel.Works)
+                    AddData(work.Id, work, (m) => m.Name);
+            }
+            else if (e.Action is NotifyCollectionChangedAction.Remove)
+            {
+                var oldModel = (PetModel)e.OldItems[0];
+                RemoveData(oldModel.Id, oldModel, (m) => m.Name);
+                RemoveData(oldModel.DescriptionId, oldModel, (m) => m.Description);
+                foreach (var work in oldModel.Works)
+                    RemoveData(work.Id, work, (m) => m.Name);
+            }
+            else if (e.Action is NotifyCollectionChangedAction.Replace)
+            {
+                var newModel = (PetModel)e.NewItems[0];
+                var oldModel = (PetModel)e.OldItems[0];
+                ReplaceData(newModel.Id, newModel, (m) => m.Name);
+                ReplaceData(newModel.DescriptionId, newModel, (m) => m.Description);
+                foreach (var work in newModel.Works)
+                    ReplaceData(work.Id, work, (m) => m.Name);
+            }
+        };
     }
 
     private readonly Dictionary<string, DataGridTextColumn> _dataGridI18nColumns = new();
-    public Dictionary<string, I18nData> AllData { get; } = new();
+
+    /// <summary>
+    /// (Id, I18nData)
+    /// </summary>
+    public Dictionary<string, I18nData> AllI18nDatas { get; } = new();
     public ObservableCollection<I18nData> I18nDatas { get; } = new();
     public ObservableValue<ObservableCollection<I18nData>> ShowI18nDatas { get; } = new();
 
@@ -312,6 +448,13 @@ public partial class I18nEditWindow : WindowX
     {
         DataGrid_Datas.Columns.Remove(_dataGridI18nColumns[culture]);
         _dataGridI18nColumns.Remove(culture);
+        for (var i = 1; i < DataGrid_Datas.Columns.Count; i++)
+        {
+            var column = (DataGridTextColumn)DataGrid_Datas.Columns[i];
+            var dataPath = string.Format(ValueBindingFormat, i - 1);
+            column.Binding = new Binding(dataPath) { Mode = BindingMode.TwoWay };
+            column.SortMemberPath = dataPath;
+        }
     }
 
     /// <summary>
@@ -323,16 +466,11 @@ public partial class I18nEditWindow : WindowX
     {
         //if (_dataGridI18nColumns.ContainsKey(newCultureName))
         //    throw new();
-        var dataPath = string.Format(
-            ValueBindingFormat,
-            I18nHelper.Current.CultureNames.IndexOf(newCulture)
-        );
         var column = _dataGridI18nColumns[oldCulture];
         column.Header = newCulture;
-        column.Binding = new Binding(dataPath) { Mode = BindingMode.TwoWay };
-        column.SortMemberPath = dataPath;
         _dataGridI18nColumns.Remove(oldCulture);
         _dataGridI18nColumns.Add(newCulture, column);
     }
+
     #endregion
 }

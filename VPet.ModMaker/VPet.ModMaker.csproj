@@ -98,6 +98,7 @@
     <Compile Include="Converters\FalseToHiddenConverter.cs" />
     <Compile Include="Converters\MediaColorToBrushConverter.cs" />
     <Compile Include="Converters\NotEqualsConverter.cs" />
+    <Compile Include="Converters\NullToFalseConverter.cs" />
     <Compile Include="Converters\StringFormatConverter.cs" />
     <Compile Include="Converters\RatioMarginConverter.cs" />
     <Compile Include="Converters\MaxConverter.cs" />

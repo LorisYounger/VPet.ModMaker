@@ -366,7 +366,7 @@ public class ModInfoModel : I18nModel<I18nModInfoModel>
             new Line("intro", DescriptionId.Value),
             new Line("authorid", AuthorID.ToString()),
             new Line("itemid", ItemID.ToString()),
-            new Line("cachedate", DateTime.Now.Date.ToString())
+            new Line("cachedate", DateTime.Now.Date.ToString("s"))
         };
         foreach (var cultureName in I18nHelper.Current.CultureNames)
         {
