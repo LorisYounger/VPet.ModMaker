@@ -49,7 +49,9 @@
       VirtualizingStackPanel.VirtualizationMode="Recycling">
       <DataGrid.Columns>
         <DataGridTextColumn
-          MaxWidth="300"
+          Width="300"
+          MinWidth="200"
+          MaxWidth="500"
           Binding="{Binding Id.Value}"
           CanUserSort="True"
           ElementStyle="{StaticResource TextBlock_Wrap}"
