@@ -35,8 +35,17 @@ public class SaveTranslationModWindowVM
             CheckCultures.Add(model);
             CheckAll.AddNotifySender(model.IsChecked);
         }
+        CheckAll.ValueChanged += CheckAll_ValueChanged;
         CheckAll.SenderPropertyChanged += CheckAll_SenderPropertyChanged;
         SaveCommand.ExecuteEvent += Save;
+    }
+
+    private void CheckAll_ValueChanged(bool? oldValue, bool? newValue)
+    {
+        if (newValue is null)
+            return;
+        foreach (var model in CheckCultures)
+            model.IsChecked.Value = newValue.Value;
     }
 
     private void CheckAll_SenderPropertyChanged(ObservableValue<bool?> source, INotifyPropertyChanged sender)
