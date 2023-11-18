@@ -47,7 +47,7 @@ public static class Utils
     /// <summary>
     /// 载入图片至内存流
     /// </summary>
-    /// <param name="imagePath"></param>
+    /// <param name="imagePath">图片路径</param>
     /// <returns></returns>
     public static BitmapImage LoadImageToMemoryStream(string imagePath)
     {
@@ -57,6 +57,27 @@ public static class Utils
         {
             var bytes = File.ReadAllBytes(imagePath);
             bitmapImage.StreamSource = new MemoryStream(bytes);
+            bitmapImage.DecodePixelWidth = DecodePixelWidth;
+        }
+        finally
+        {
+            bitmapImage.EndInit();
+        }
+        return bitmapImage;
+    }
+
+    /// <summary>
+    /// 载入图片至内存流
+    /// </summary>
+    /// <param name="imageStream">图片流</param>
+    /// <returns></returns>
+    public static BitmapImage LoadImageToMemoryStream(Stream imageStream)
+    {
+        BitmapImage bitmapImage = new();
+        bitmapImage.BeginInit();
+        try
+        {
+            bitmapImage.StreamSource = imageStream;
             bitmapImage.DecodePixelWidth = DecodePixelWidth;
         }
         finally

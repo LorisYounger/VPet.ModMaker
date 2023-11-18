@@ -206,7 +206,13 @@ public class PetModel : I18nModel<I18nPetInfoModel>
         IsSimplePetModel = isSimplePet;
     }
 
-    public void Close() { }
+    public void Close()
+    {
+        foreach (var anime in Animes)
+            anime.Close();
+        foreach (var anime in FoodAnimes)
+            anime.Close();
+    }
 
     #region Save
     /// <summary>

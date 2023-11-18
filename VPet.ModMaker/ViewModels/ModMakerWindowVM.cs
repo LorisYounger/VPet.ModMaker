@@ -202,7 +202,6 @@ public class ModMakerWindowVM
                 SaveHistories();
             }
             ModInfoModel.Current.Close();
-            ModInfoModel.Current = null;
             I18nHelper.Current = new();
             ModMakerWindow.Show();
         };

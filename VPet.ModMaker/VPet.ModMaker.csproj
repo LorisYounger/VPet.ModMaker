@@ -125,6 +125,7 @@
     <Compile Include="Models\ModModel\PetModel.cs" />
     <Compile Include="Models\ModModel\SelectTextModel.cs" />
     <Compile Include="Models\ModModel\WorkModel.cs" />
+    <Compile Include="Resources\NativeResources.cs" />
     <Compile Include="SimpleObservable\ObservableCommandT.cs" />
     <Compile Include="ModMakerStyles.cs" />
     <Compile Include="SimpleObservable\ObservableValueGroup.cs" />
@@ -144,6 +145,7 @@
     <Compile Include="ViewModels\ModEdit\MoveEdit\MovePageVM.cs" />
     <Compile Include="ViewModels\ModEdit\PetEdit\PetEditWindowVM.cs" />
     <Compile Include="ViewModels\ModEdit\PetEdit\PetPageVM.cs" />
+    <Compile Include="ViewModels\ModEdit\SaveTranslationModWindowVM.cs" />
     <Compile Include="ViewModels\ModEdit\SelectTextEdit\SelectTextEditWindowVM.cs" />
     <Compile Include="ViewModels\ModEdit\SelectTextEdit\SelectTextPageVM.cs" />
     <Compile Include="ViewModels\ModEdit\WorkEdit\WorkEditWindowVM.cs" />
@@ -217,6 +219,9 @@
     </Compile>
     <Compile Include="Views\ModEdit\PetEdit\PetPage.xaml.cs">
       <DependentUpon>PetPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\ModEdit\SaveTranslationModWindow.xaml.cs">
+      <DependentUpon>SaveTranslationModWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\ModEdit\SelectTextEdit\SelectTextPage.xaml.cs">
       <DependentUpon>SelectTextPage.xaml</DependentUpon>
@@ -329,6 +334,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Views\ModEdit\SaveTranslationModWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\ModEdit\SelectTextEdit\SelectTextPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -366,6 +375,8 @@
       <Install>false</Install>
     </BootstrapperPackage>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\food.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

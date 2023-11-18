@@ -11,6 +11,7 @@ using System.Windows;
 using System.Windows.Media.Imaging;
 using VPet.ModMaker.Models;
 using VPet.ModMaker.Models.ModModel;
+using VPet.ModMaker.Resources;
 using VPet_Simulator.Core;
 
 namespace VPet.ModMaker.ViewModels.ModEdit.AnimeEdit;
@@ -22,13 +23,12 @@ public class FoodAnimeEditWindowVM
     /// </summary>
     public PetModel CurrentPet { get; set; }
 
+    // TODO: 使用内部资源
     /// <summary>
     /// 默认食物图片
     /// </summary>
     public static BitmapImage DefaultFoodImage { get; } =
-        Utils.LoadImageToMemoryStream(
-            "C:\\Users\\HKW\\Desktop\\TestPicture\\0000_core\\image\\food.png"
-        );
+        Utils.LoadImageToMemoryStream(NativeResources.GetStream(NativeResources.FoodImage));
 
     /// <summary>
     /// 食物图片
@@ -376,16 +376,6 @@ public class FoodAnimeEditWindowVM
             return;
         CurrentFrontImageModel.Value.Close();
         CurrentFrontImageModel.Value.Image.Value = newImage;
-    }
-
-    private void ShowFrontImagesPathInfo(FoodImagesPath imagesPath)
-    {
-        MessageBox.Show(
-            "此顶层动画源位于其它位置\n请去源位置修改此动画\n源位置 模式:{0} 索引:{1}".Translate(
-                imagesPath.Mode,
-                imagesPath.Index
-            )
-        );
     }
     #endregion
 

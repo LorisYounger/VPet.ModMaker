@@ -13,6 +13,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Media.Imaging;
 using VPet.ModMaker.Models.ModModel;
+using VPet.ModMaker.Views.ModEdit.I18nEdit;
 using VPet_Simulator.Core;
 using VPet_Simulator.Windows.Interface;
 
@@ -578,11 +579,42 @@ public class ModInfoModel : I18nModel<I18nModInfoModel>
         }
     }
     #endregion
+    /// <summary>
+    /// 关闭
+    /// </summary>
     public void Close()
     {
         Image.Value.CloseStream();
         foreach (var food in Foods)
             food.Close();
+        foreach (var pet in Pets)
+            pet.Close();
+        Current = null;
+    }
+
+    public void SaveTranslationMod(string path, IEnumerable<string> cultures)
+    {
+        // 保存模型信息
+        SaveModInfo(path);
+        // 保存文化数据
+        var langPath = Path.Combine(path, "lang");
+        Directory.CreateDirectory(langPath);
+        foreach (var cultureName in cultures)
+        {
+            var culturePath = Path.Combine(langPath, cultureName);
+            Directory.CreateDirectory(culturePath);
+            var cultureFile = Path.Combine(culturePath, $"{cultureName}.lps");
+            File.Create(cultureFile).Close();
+            var lps = new LPS();
+            foreach (var data in I18nEditWindow.Current.ViewModel.AllI18nDatas)
+                lps.Add(
+                    new Line(
+                        data.Key,
+                        data.Value.Datas[I18nHelper.Current.CultureNames.IndexOf(cultureName)].Value
+                    )
+                );
+            File.WriteAllText(cultureFile, lps.ToString());
+        }
     }
 }
 

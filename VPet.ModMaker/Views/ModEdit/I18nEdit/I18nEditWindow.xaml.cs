@@ -20,27 +20,40 @@ public partial class I18nEditWindow : WindowX
 {
     public bool IsCancel { get; private set; } = true;
 
-    public static I18nEditWindow Instance { get; private set; }
+    public static I18nEditWindow Current { get; private set; }
 
     public I18nEditWindowVM ViewModel => (I18nEditWindowVM)DataContext;
 
-    public I18nEditWindow(ModInfoModel model)
+    public I18nEditWindow()
     {
         InitializeComponent();
         DataContext = new I18nEditWindowVM();
         ViewModel.CultureChanged += ViewModel_CultureChanged;
-        ViewModel.InitializeI18nData(model);
-        Instance = this;
+        ViewModel.InitializeI18nData(ModInfoModel.Current);
+        Current = this;
+        // 只隐藏, 不关闭
+        Closing += (s, e) =>
+        {
+            Visibility = Visibility.Hidden;
+            if (_close is false)
+                e.Cancel = true;
+        };
         Closed += (s, e) =>
         {
             ViewModel.Close();
             try
             {
                 DataContext = null;
-                Instance = null;
+                Current = null;
             }
             catch { }
         };
+    }
+    private bool _close = false;
+    public void Close(bool close)
+    {
+        _close = close;
+        Close();
     }
 
     private void ViewModel_CultureChanged(object sender, string newCulture)
@@ -60,7 +73,7 @@ public partial class I18nEditWindow : WindowX
     /// <summary>
     /// (culture, Column)
     /// </summary>
-    private readonly Dictionary<string, DataGridTextColumn> _dataGridI18nColumns = new();
+    private readonly Dictionary<string, DataGridTextColumn> _dataGridI18nColumns = [];
 
     /// <summary>
     /// 添加文化列

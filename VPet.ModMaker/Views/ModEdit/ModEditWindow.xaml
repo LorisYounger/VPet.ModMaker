@@ -305,20 +305,30 @@
       </ListBox>
       <StackPanel Grid.Row="2">
         <Button
-          x:Name="Button_EditI18n"
           Command="{Binding EditI18nCommand}"
           Content="{ll:Str 编辑多语言内容}"
           Style="{DynamicResource ThemedButtonStyle}" />
         <Button
-          x:Name="Button_Save"
           Command="{Binding SaveCommand}"
           Content="{ll:Str 保存}"
           Style="{DynamicResource ThemedButtonStyle}" />
         <Button
-          x:Name="Button_SaveTo"
           Command="{Binding SaveToCommand}"
           Content="{ll:Str 保存至}"
           Style="{DynamicResource ThemedButtonStyle}" />
+        <Button
+          Command="{Binding SaveAsTranslationModCommand}"
+          Content="{ll:Str 保存为翻译模组}"
+          Style="{DynamicResource ThemedButtonStyle}" />
+        <!--<Menu
+          x:Name="Button_SaveAs"
+          HorizontalContentAlignment="Stretch"
+          pu:MenuHelper.TopLevelItemsHorizontalContentAlignment="Stretch"
+          Style="{DynamicResource Menu_Style}">
+          <MenuItem Header="{ll:Str 保存为}">
+            <MenuItem Command="{Binding SaveAsCommand}" />
+          </MenuItem>
+        </Menu>-->
       </StackPanel>
     </Grid>
   </Grid>

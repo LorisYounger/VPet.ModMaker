@@ -72,12 +72,17 @@ public class ModEditWindowVM
     /// 编辑多语言内容
     /// </summary>
     public ObservableCommand EditI18nCommand { get; } = new();
+
+    /// <summary>
+    /// 保存为翻译模组
+    /// </summary>
+    public ObservableCommand SaveAsTranslationModCommand { get; } = new();
     #endregion
 
     public ModEditWindowVM(ModEditWindow window)
     {
         ModEditWindow = window;
-
+        new I18nEditWindow();
         ChangeImageCommand.ExecuteEvent += ChangeImage;
         AddCultureCommand.ExecuteEvent += AddCulture;
         EditCultureCommand.ExecuteEvent += EditCulture;
@@ -86,17 +91,21 @@ public class ModEditWindowVM
 
         SaveCommand.ExecuteEvent += Save;
         SaveToCommand.ExecuteEvent += SaveTo;
+        SaveAsTranslationModCommand.ExecuteEvent += SaveAsTranslationMod;
+    }
+
+    private void SaveAsTranslationMod()
+    {
+        if (ValidationData(ModInfo.Value) is false)
+            return;
+        var window = new SaveTranslationModWindow();
+        window.ShowDialog();
     }
 
     private void EditI18n()
     {
-        if (I18nEditWindow.Instance is not null)
-        {
-            I18nEditWindow.Instance.Activate();
-            return;
-        }
-        var window = new I18nEditWindow(ModInfo.Value);
-        window.Show();
+        I18nEditWindow.Current.Visibility = Visibility.Visible;
+        I18nEditWindow.Current.Activate();
     }
 
     /// <summary>
@@ -105,7 +114,7 @@ public class ModEditWindowVM
     public void Close()
     {
         ModInfo.Value.Image.Value?.StreamSource?.Close();
-        I18nEditWindow.Instance?.Close();
+        I18nEditWindow.Current?.Close(true);
     }
 
     /// <summary>
@@ -205,7 +214,7 @@ public class ModEditWindowVM
         SaveFileDialog saveFileDialog =
             new()
             {
-                Title = "保存 模组信息文件,并在文件夹内保存模组数据".Translate(),
+                Title = "保存模组信息文件,并在文件夹内保存模组数据".Translate(),
                 Filter = $"LPS文件|*.lps;".Translate(),
                 FileName = "info.lps".Translate()
             };
