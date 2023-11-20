@@ -40,15 +40,21 @@ public partial class SelectGraphTypeWindow : Window
         };
     }
 
-    private void GraphType_ValueChanged(GraphInfo.GraphType oldValue, GraphInfo.GraphType newValue)
+    private void GraphType_ValueChanged(
+        ObservableValue<GraphInfo.GraphType> sender,
+        ValueChangedEventArgs<GraphInfo.GraphType> e
+    )
     {
-        if (newValue.IsHasNameAnime())
+        if (e.NewValue.IsHasNameAnime())
             HasNameAnime.Value = true;
         else
             HasNameAnime.Value = false;
     }
 
-    private void CurrentPet_ValueChanged(PetModel oldValue, PetModel newValue)
+    private void CurrentPet_ValueChanged(
+        ObservableValue<PetModel> sender,
+        ValueChangedEventArgs<PetModel> e
+    )
     {
         GraphTypes.Value = new(
             AnimeTypeModel.GraphTypes.Except(CurrentPet.Value.Animes.Select(m => m.GraphType.Value))

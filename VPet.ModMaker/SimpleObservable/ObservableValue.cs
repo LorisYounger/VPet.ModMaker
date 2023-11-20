@@ -62,7 +62,6 @@ public class ObservableValue<T>
     /// <inheritdoc/>
     /// <param name="value">初始值</param>
     public ObservableValue(T value)
-        : this()
     {
         _value = value;
     }
@@ -80,7 +79,7 @@ public class ObservableValue<T>
         PropertyChanging?.Invoke(this, new(nameof(Value)));
         var cancel = false;
         // 若全部事件取消改变 则取消改变
-        ValueChanging?.Invoke(oldValue, newValue, ref cancel);
+        ValueChanging?.Invoke(this, new(oldValue, newValue));
         return cancel;
     }
 
@@ -92,7 +91,7 @@ public class ObservableValue<T>
     private void NotifyPropertyChanged(T oldValue, T newValue)
     {
         PropertyChanged?.Invoke(this, new(nameof(Value)));
-        ValueChanged?.Invoke(oldValue, newValue);
+        ValueChanged?.Invoke(this, new(oldValue, newValue));
     }
     #endregion
 
@@ -244,19 +243,24 @@ public class ObservableValue<T>
 
     #region Delegate
     /// <summary>
-    /// 值改变事件
+    /// 值改变前事件
     /// </summary>
-    /// <param name="oldValue">旧值</param>
-    /// <param name="newValue">新值</param>
-    /// <param name="cancel">取消</param>
-    public delegate void ValueChangingEventHandler(T oldValue, T newValue, ref bool cancel);
+    /// <param name="sender">发送者</param>
+    /// <param name="e">参数</param>
+    public delegate void ValueChangingEventHandler(
+        ObservableValue<T> sender,
+        ValueChangingEventArgs<T> e
+    );
 
     /// <summary>
     /// 值改变后事件
     /// </summary>
-    /// <param name="oldValue">旧值</param>
-    /// <param name="newValue">新值</param>
-    public delegate void ValueChangedEventHandler(T oldValue, T newValue);
+    /// <param name="sender">发送者</param>
+    /// <param name="e">参数</param>
+    public delegate void ValueChangedEventHandler(
+        ObservableValue<T> sender,
+        ValueChangedEventArgs<T> e
+    );
 
     /// <summary>
     /// 通知发送者属性改变接收器
@@ -268,4 +272,56 @@ public class ObservableValue<T>
         INotifyPropertyChanged? sender
     );
     #endregion
+}
+
+/// <summary>
+/// 值改变前事件参数
+/// </summary>
+/// <typeparam name="T">值类型</typeparam>
+public class ValueChangingEventArgs<T> : CancelEventArgs
+{
+    /// <summary>
+    /// 旧值
+    /// </summary>
+    public T? OldValue { get; }
+
+    /// <summary>
+    /// 新值
+    /// </summary>
+    public T? NewValue { get; }
+
+    /// <inheritdoc/>
+    /// <param name="oldValue">旧值</param>
+    /// <param name="newValue">新值</param>
+    public ValueChangingEventArgs(T? oldValue, T? newValue)
+    {
+        OldValue = oldValue;
+        NewValue = newValue;
+    }
+}
+
+/// <summary>
+/// 值改变后事件参数
+/// </summary>
+/// <typeparam name="T">值类型</typeparam>
+public class ValueChangedEventArgs<T> : EventArgs
+{
+    /// <summary>
+    /// 旧值
+    /// </summary>
+    public T OldValue { get; }
+
+    /// <summary>
+    /// 新值
+    /// </summary>
+    public T NewValue { get; }
+
+    /// <inheritdoc/>
+    /// <param name="oldValue">旧值</param>
+    /// <param name="newValue">新值</param>
+    public ValueChangedEventArgs(T oldValue, T newValue)
+    {
+        OldValue = oldValue;
+        NewValue = newValue;
+    }
 }

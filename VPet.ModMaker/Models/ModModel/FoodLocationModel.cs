@@ -34,9 +34,9 @@ public class FoodLocationModel
 
     public FoodLocationModel()
     {
-        Rect.Width.ValueChanged += (o, n) =>
+        Rect.Width.ValueChanged += (s, e) =>
         {
-            Rect.Height.Value = n;
+            Rect.Height.Value = e.NewValue;
         };
     }
 

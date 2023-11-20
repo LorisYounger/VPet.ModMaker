@@ -135,9 +135,12 @@ public class AnimeEditWindowVM
     }
 
     #region LoadAnime
-    private void Anime_ValueChanged(AnimeTypeModel oldValue, AnimeTypeModel newValue)
+    private void Anime_ValueChanged(
+        ObservableValue<AnimeTypeModel> sender,
+        ValueChangedEventArgs<AnimeTypeModel> e
+    )
     {
-        CheckGraphType(newValue);
+        CheckGraphType(e.NewValue);
     }
 
     private void CheckGraphType(AnimeTypeModel model)
@@ -297,13 +300,16 @@ public class AnimeEditWindowVM
     }
     #endregion
     #region Player
-    private void CurrentAnimeModel_ValueChanged(AnimeModel oldValue, AnimeModel newValue)
+    private void CurrentAnimeModel_ValueChanged(
+        ObservableValue<AnimeModel> sender,
+        ValueChangedEventArgs<AnimeModel> e
+    )
     {
         StopCommand_ExecuteEvent();
-        if (oldValue is not null)
-            oldValue.Images.CollectionChanged -= Images_CollectionChanged;
-        if (newValue is not null)
-            newValue.Images.CollectionChanged += Images_CollectionChanged;
+        if (e.OldValue is not null)
+            e.OldValue.Images.CollectionChanged -= Images_CollectionChanged;
+        if (e.NewValue is not null)
+            e.NewValue.Images.CollectionChanged += Images_CollectionChanged;
     }
 
     private void Images_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)

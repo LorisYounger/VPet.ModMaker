@@ -38,14 +38,20 @@ public class MovePageVM
         RemoveCommand.ExecuteEvent += Remove;
     }
 
-    private void CurrentPet_ValueChanged(PetModel oldValue, PetModel newValue)
+    private void CurrentPet_ValueChanged(
+        ObservableValue<PetModel> sender,
+        ValueChangedEventArgs<PetModel> e
+    )
     {
-        ShowMoves.Value = newValue.Moves;
+        ShowMoves.Value = e.NewValue.Moves;
     }
 
-    private void Search_ValueChanged(string oldValue, string newValue)
+    private void Search_ValueChanged(
+        ObservableValue<string> sender,
+        ValueChangedEventArgs<string> e
+    )
     {
-        if (string.IsNullOrWhiteSpace(newValue))
+        if (string.IsNullOrWhiteSpace(e.NewValue))
         {
             ShowMoves.Value = Moves;
         }
@@ -53,7 +59,7 @@ public class MovePageVM
         {
             ShowMoves.Value = new(
                 Moves.Where(
-                    m => m.Graph.Value.Contains(newValue, StringComparison.OrdinalIgnoreCase)
+                    m => m.Graph.Value.Contains(e.NewValue, StringComparison.OrdinalIgnoreCase)
                 )
             );
         }

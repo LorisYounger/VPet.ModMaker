@@ -44,11 +44,11 @@ public class I18nModel<T>
     /// </summary>
     /// <param name="oldValue"></param>
     /// <param name="newValue"></param>
-    private void CultureChanged(string oldValue, string newValue)
+    private void CultureChanged(ObservableValue<string> sender, ValueChangedEventArgs<string> e)
     {
-        if (newValue is null)
+        if (e.NewValue is null)
             CurrentI18nData.Value = null;
-        else if (I18nDatas.TryGetValue(newValue, out var result))
+        else if (I18nDatas.TryGetValue(e.NewValue, out var result))
             CurrentI18nData.Value = result;
     }
 

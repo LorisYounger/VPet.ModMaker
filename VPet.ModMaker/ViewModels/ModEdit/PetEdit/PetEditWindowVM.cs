@@ -32,7 +32,10 @@ public class PetEditWindowVM
         Image.ValueChanged += Image_ValueChanged;
     }
 
-    private void Image_ValueChanged(BitmapImage oldValue, BitmapImage newValue)
+    private void Image_ValueChanged(
+        ObservableValue<BitmapImage> sender,
+        ValueChangedEventArgs<BitmapImage> e
+    )
     {
         //LengthRatio.EnumValue = BorderLength.EnumValue / value.PixelWidth;
     }

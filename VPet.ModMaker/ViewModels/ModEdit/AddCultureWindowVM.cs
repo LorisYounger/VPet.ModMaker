@@ -48,9 +48,12 @@ public class AddCultureWindowVM
         Culture.ValueChanged += Culture_ValueChanged;
     }
 
-    private void Culture_ValueChanged(string oldValue, string newValue)
+    private void Culture_ValueChanged(
+        ObservableValue<string> sender,
+        ValueChangedEventArgs<string> e
+    )
     {
-        if (string.IsNullOrWhiteSpace(newValue))
+        if (string.IsNullOrWhiteSpace(e.NewValue))
         {
             CultureFullName.Value = UnknownCulture;
             return;
@@ -58,7 +61,7 @@ public class AddCultureWindowVM
         CultureInfo info = null!;
         try
         {
-            info = CultureInfo.GetCultureInfo(newValue);
+            info = CultureInfo.GetCultureInfo(e.NewValue);
         }
         catch
         {
@@ -70,16 +73,19 @@ public class AddCultureWindowVM
         }
     }
 
-    private void Search_ValueChanged(string oldValue, string newValue)
+    private void Search_ValueChanged(
+        ObservableValue<string> sender,
+        ValueChangedEventArgs<string> e
+    )
     {
-        if (string.IsNullOrWhiteSpace(newValue))
+        if (string.IsNullOrWhiteSpace(e.NewValue))
         {
             ShowCultures.Value = AllCultures;
         }
         else
         {
             ShowCultures.Value = new(
-                AllCultures.Where(s => s.Contains(newValue, StringComparison.OrdinalIgnoreCase))
+                AllCultures.Where(s => s.Contains(e.NewValue, StringComparison.OrdinalIgnoreCase))
             );
         }
     }

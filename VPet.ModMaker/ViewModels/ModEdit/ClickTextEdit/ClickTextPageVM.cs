@@ -56,9 +56,12 @@ public class ClickTextPageVM
         RemoveCommand.ExecuteEvent += Remove;
     }
 
-    private void Search_ValueChanged(string oldValue, string newValue)
+    private void Search_ValueChanged(
+        ObservableValue<string> sender,
+        ValueChangedEventArgs<string> e
+    )
     {
-        if (string.IsNullOrWhiteSpace(newValue))
+        if (string.IsNullOrWhiteSpace(e.NewValue))
         {
             ShowClickTexts.Value = ClickTexts;
         }
@@ -66,7 +69,7 @@ public class ClickTextPageVM
         {
             ShowClickTexts.Value = new(
                 ClickTexts.Where(
-                    m => m.Id.Value.Contains(newValue, StringComparison.OrdinalIgnoreCase)
+                    m => m.Id.Value.Contains(e.NewValue, StringComparison.OrdinalIgnoreCase)
                 )
             );
         }

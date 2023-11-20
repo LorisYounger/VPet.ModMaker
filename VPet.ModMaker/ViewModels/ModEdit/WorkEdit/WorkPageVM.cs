@@ -38,21 +38,29 @@ public class WorkPageVM
         RemoveCommand.ExecuteEvent += Remove;
     }
 
-    private void CurrentPet_ValueChanged(PetModel oldValue, PetModel newValue)
+    private void CurrentPet_ValueChanged(
+        ObservableValue<PetModel> sender,
+        ValueChangedEventArgs<PetModel> e
+    )
     {
-        ShowWorks.Value = newValue.Works;
+        ShowWorks.Value = e.NewValue.Works;
     }
 
-    private void Search_ValueChanged(string oldValue, string newValue)
+    private void Search_ValueChanged(
+        ObservableValue<string> sender,
+        ValueChangedEventArgs<string> e
+    )
     {
-        if (string.IsNullOrWhiteSpace(newValue))
+        if (string.IsNullOrWhiteSpace(e.NewValue))
         {
             ShowWorks.Value = Works;
         }
         else
         {
             ShowWorks.Value = new(
-                Works.Where(m => m.Id.Value.Contains(newValue, StringComparison.OrdinalIgnoreCase))
+                Works.Where(
+                    m => m.Id.Value.Contains(e.NewValue, StringComparison.OrdinalIgnoreCase)
+                )
             );
         }
     }

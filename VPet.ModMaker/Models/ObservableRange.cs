@@ -35,7 +35,7 @@ public class ObservableRange<T>
         SetValue(min, max);
     }
 
-    private void ValueChanged(T oldValue, T newValue)
+    private void ValueChanged(ObservableValue<T> sender, ValueChangedEventArgs<T> e)
     {
         Info.Value = $"({Min.Value}, {Max.Value})";
     }

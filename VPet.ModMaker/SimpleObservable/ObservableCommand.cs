@@ -35,12 +35,15 @@ public class ObservableCommand : ICommand
         CurrentCanExecute.ValueChanging += CurrentCanExecute_ValueChanging;
     }
 
-    private void CurrentCanExecute_ValueChanging(bool oldValue, bool newValue, ref bool cancel)
+    private void CurrentCanExecute_ValueChanging(
+        ObservableValue<bool> sender,
+        ValueChangingEventArgs<bool> e
+    )
     {
-        if (newValue is true && CanExecuteProperty.Value is false)
-            cancel = true;
+        if (e.NewValue is true && CanExecuteProperty.Value is false)
+            e.Cancel = true;
         else
-            cancel = false;
+            e.Cancel = false;
     }
 
     private void InvokeCanExecuteChanged(object? sender, PropertyChangedEventArgs e)

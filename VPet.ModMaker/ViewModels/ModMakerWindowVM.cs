@@ -74,12 +74,15 @@ public class ModMakerWindowVM
         HistoriesSearchText.ValueChanged += HistoriesSearchText_ValueChanged;
     }
 
-    private void HistoriesSearchText_ValueChanged(string oldValue, string newValue)
+    private void HistoriesSearchText_ValueChanged(
+        ObservableValue<string> sender,
+        ValueChangedEventArgs<string> e
+    )
     {
-        if (string.IsNullOrEmpty(newValue))
+        if (string.IsNullOrEmpty(e.NewValue))
             ShowHistories.Value = Histories;
         else
-            ShowHistories.Value = new(Histories.Where(i => i.Id.Contains(newValue)));
+            ShowHistories.Value = new(Histories.Where(i => i.Id.Contains(e.NewValue)));
     }
 
     #region History

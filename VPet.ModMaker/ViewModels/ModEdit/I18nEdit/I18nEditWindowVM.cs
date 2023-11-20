@@ -54,9 +54,12 @@ public class I18nEditWindowVM
     /// </summary>
     /// <param name="oldValue"></param>
     /// <param name="newValue"></param>
-    private void Search_ValueChanged(string oldValue, string newValue)
+    private void Search_ValueChanged(
+        ObservableValue<string> sender,
+        ValueChangedEventArgs<string> e
+    )
     {
-        if (string.IsNullOrWhiteSpace(newValue))
+        if (string.IsNullOrWhiteSpace(e.NewValue))
         {
             ShowI18nDatas.Value = I18nDatas;
         }
@@ -64,7 +67,8 @@ public class I18nEditWindowVM
         {
             ShowI18nDatas.Value = new(
                 I18nDatas.Where(
-                    m => m.Id.Value?.Contains(newValue, StringComparison.OrdinalIgnoreCase) is true
+                    m =>
+                        m.Id.Value?.Contains(e.NewValue, StringComparison.OrdinalIgnoreCase) is true
                 )
             );
         }
@@ -75,7 +79,7 @@ public class I18nEditWindowVM
                 I18nDatas.Where(
                     m =>
                         m.Datas[cultureIndex].Value?.Contains(
-                            newValue,
+                            e.NewValue,
                             StringComparison.OrdinalIgnoreCase
                         )
                             is true
@@ -367,11 +371,11 @@ public class I18nEditWindowVM
     /// </summary>
     /// <param name="oldValue"></param>
     /// <param name="newValue"></param>
-    private void IdChange(string oldValue, string newValue)
+    private void IdChange(ObservableValue<string> sender, ValueChangedEventArgs<string> e)
     {
-        var sourceData = AllI18nDatas[oldValue];
+        var sourceData = AllI18nDatas[e.OldValue];
         sourceData.Id.Group?.Remove(sourceData.Id);
-        if (AllI18nDatas.TryGetValue(oldValue, out var outData))
+        if (AllI18nDatas.TryGetValue(e.OldValue, out var outData))
         {
             foreach (var culture in I18nHelper.Current.CultureNames.Enumerate())
             {
@@ -384,9 +388,9 @@ public class I18nEditWindowVM
         }
         else
         {
-            sourceData.Id.Value = newValue;
-            AllI18nDatas.Remove(oldValue);
-            AllI18nDatas.Add(newValue, sourceData);
+            sourceData.Id.Value = e.NewValue;
+            AllI18nDatas.Remove(e.OldValue);
+            AllI18nDatas.Add(e.NewValue, sourceData);
         }
     }
 

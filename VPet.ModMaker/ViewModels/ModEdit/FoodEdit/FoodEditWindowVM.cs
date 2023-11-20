@@ -39,19 +39,25 @@ public class FoodEditWindowVM
         Food.Value.ReferencePrice.ValueChanged += ReferencePrice_ValueChanged;
     }
 
-    private void AutoSetReferencePrice_ValueChanged(bool oldValue, bool newValue)
+    private void AutoSetReferencePrice_ValueChanged(
+        ObservableValue<bool> sender,
+        ValueChangedEventArgs<bool> e
+    )
     {
-        if (newValue)
+        if (e.NewValue)
         {
             SetReferencePriceToPrice(Food.Value.ReferencePrice.Value);
         }
     }
 
-    private void ReferencePrice_ValueChanged(double oldValue, double newValue)
+    private void ReferencePrice_ValueChanged(
+        ObservableValue<double> sender,
+        ValueChangedEventArgs<double> e
+    )
     {
         if (AutoSetReferencePrice.Value)
         {
-            SetReferencePriceToPrice(newValue);
+            SetReferencePriceToPrice(e.NewValue);
         }
     }
 

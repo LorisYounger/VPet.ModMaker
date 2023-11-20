@@ -101,15 +101,21 @@ public class AnimePageVM
             AllAnimes[AllAnimes.IndexOf(e.OldItems[0])] = e.NewItems[0];
     }
 
-    private void CurrentPet_ValueChanged(PetModel oldValue, PetModel newValue)
+    private void CurrentPet_ValueChanged(
+        ObservableValue<PetModel> sender,
+        ValueChangedEventArgs<PetModel> e
+    )
     {
         InitializeAllAnimes();
         ShowAnimes.Value = AllAnimes;
     }
 
-    private void Search_ValueChanged(string oldValue, string newValue)
+    private void Search_ValueChanged(
+        ObservableValue<string> sender,
+        ValueChangedEventArgs<string> e
+    )
     {
-        if (string.IsNullOrWhiteSpace(newValue))
+        if (string.IsNullOrWhiteSpace(e.NewValue))
         {
             ShowAnimes.Value = AllAnimes;
         }
@@ -120,12 +126,12 @@ public class AnimePageVM
                 {
                     if (m is AnimeTypeModel animeTypeModel)
                         return animeTypeModel.Id.Value.Contains(
-                            newValue,
+                            e.NewValue,
                             StringComparison.OrdinalIgnoreCase
                         );
                     else if (m is FoodAnimeTypeModel foodAnimeTypeModel)
                         return foodAnimeTypeModel.Id.Value.Contains(
-                            newValue,
+                            e.NewValue,
                             StringComparison.OrdinalIgnoreCase
                         );
                     else

@@ -253,7 +253,7 @@ public class FoodAnimeEditWindowVM
     }
 
     //#region LoadAnime
-    //private void Anime_ValueChanged(FoodAnimeTypeModel oldValue, FoodAnimeTypeModel newValue)
+    //private void Anime_ValueChanged(ObservableValue<FoodAnimeTypeModel> sender, ValueChangedEventArgs<FoodAnimeTypeModel> e)
     //{
     //    CheckGraphType(newValue);
     //}
@@ -509,20 +509,23 @@ public class FoodAnimeEditWindowVM
     }
     #endregion
     #region FrontPlayer
-    private void CurrentAnimeModel_ValueChanged(FoodAnimeModel oldValue, FoodAnimeModel newValue)
+    private void CurrentAnimeModel_ValueChanged(
+        ObservableValue<FoodAnimeModel> sender,
+        ValueChangedEventArgs<FoodAnimeModel> e
+    )
     {
         StopCommand_ExecuteEvent();
-        if (oldValue is not null)
+        if (e.OldValue is not null)
         {
-            oldValue.FrontImages.CollectionChanged -= Images_CollectionChanged;
-            oldValue.BackImages.CollectionChanged -= Images_CollectionChanged;
-            oldValue.FoodLocations.CollectionChanged -= Images_CollectionChanged;
+            e.OldValue.FrontImages.CollectionChanged -= Images_CollectionChanged;
+            e.OldValue.BackImages.CollectionChanged -= Images_CollectionChanged;
+            e.OldValue.FoodLocations.CollectionChanged -= Images_CollectionChanged;
         }
-        if (newValue is not null)
+        if (e.NewValue is not null)
         {
-            newValue.FrontImages.CollectionChanged += Images_CollectionChanged;
-            newValue.BackImages.CollectionChanged += Images_CollectionChanged;
-            newValue.FoodLocations.CollectionChanged += Images_CollectionChanged;
+            e.NewValue.FrontImages.CollectionChanged += Images_CollectionChanged;
+            e.NewValue.BackImages.CollectionChanged += Images_CollectionChanged;
+            e.NewValue.FoodLocations.CollectionChanged += Images_CollectionChanged;
         }
     }
 

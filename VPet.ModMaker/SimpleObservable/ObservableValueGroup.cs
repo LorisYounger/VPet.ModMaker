@@ -34,7 +34,7 @@ public class ObservableValueGroup<T> : IEnumerable<ObservableValue<T>?>
     /// 在添加的时候改变值 (如果分组中存在值)
     /// </summary>
     [DefaultValue(false)]
-    public bool ChangeOnAdd { get; set; } = true;
+    public bool ChangeOnAdd { get; set; } = false;
 
     [DebuggerBrowsable(DebuggerBrowsableState.Never)]
     private readonly Dictionary<Guid, WeakReference<ObservableValue<T>>> _bindingValues = new();
@@ -52,7 +52,7 @@ public class ObservableValueGroup<T> : IEnumerable<ObservableValue<T>?>
     private void AddToGroup(ObservableValue<T> item)
     {
         if (item.Group is not null)
-            throw new ArgumentException("item.Group must be null", nameof(item));
+            throw new ArgumentException("item Group must be null", nameof(item));
         _bindingValues.Add(item.Guid, new(item));
         item.ValueChanged -= Item_ValueChanged;
         if (ChangeOnAdd)
@@ -132,7 +132,7 @@ public class ObservableValueGroup<T> : IEnumerable<ObservableValue<T>?>
     [DebuggerBrowsable(DebuggerBrowsableState.Never)]
     private bool _onChange = false;
 
-    private void Item_ValueChanged(T oldValue, T newValue)
+    private void Item_ValueChanged(ObservableValue<T> sender, ValueChangedEventArgs<T> e)
     {
         if (_onChange)
             return;
@@ -140,7 +140,7 @@ public class ObservableValueGroup<T> : IEnumerable<ObservableValue<T>?>
         foreach (var bindingValue in _bindingValues.AsEnumerable())
         {
             if (bindingValue.Value.TryGetTarget(out var target))
-                target.Value = newValue;
+                target.Value = e.NewValue!;
             else
                 _bindingValues.Remove(bindingValue.Key);
         }
