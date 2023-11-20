@@ -77,10 +77,10 @@ public class ObservableValue<T>
     private bool NotifyPropertyChanging(T oldValue, T newValue)
     {
         PropertyChanging?.Invoke(this, new(nameof(Value)));
-        var cancel = false;
         // 若全部事件取消改变 则取消改变
-        ValueChanging?.Invoke(this, new(oldValue, newValue));
-        return cancel;
+        var args = new ValueChangingEventArgs<T>(oldValue, newValue);
+        ValueChanging?.Invoke(this, args);
+        return args.Cancel;
     }
 
     /// <summary>
