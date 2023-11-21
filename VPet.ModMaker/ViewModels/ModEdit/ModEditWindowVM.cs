@@ -59,6 +59,11 @@ public class ModEditWindowVM
     public ObservableCommand<string> RemoveCultureCommand { get; } = new();
 
     /// <summary>
+    /// 设置主要文化命令
+    /// </summary>
+    public ObservableCommand<string> SetMainCultureCommand { get; } = new();
+
+    /// <summary>
     /// 保存命令
     /// </summary>
     public ObservableCommand SaveCommand { get; } = new();
@@ -180,6 +185,43 @@ public class ModEditWindowVM
         )
             return;
         I18nHelper.Current.CultureNames.Remove(oldCulture);
+    }
+
+    public void SetMainCulture(string culture)
+    {
+        if (
+            MessageBox.Show(
+                "!!!注意!!!\n此操作会将所有Id设为当前文化的翻译内容,仅适用于初次设置多文化的模组\n确定要继续吗?".Translate(),
+                "",
+                MessageBoxButton.YesNo
+            )
+            is not MessageBoxResult.Yes
+        )
+            return;
+        ModInfo.Value.I18nDatas[culture].Name.Value = ModInfo.Value.Id.Value;
+        ModInfo.Value.I18nDatas[culture].Description.Value = ModInfo.Value.DescriptionId.Value;
+        foreach (var food in ModInfo.Value.Foods)
+        {
+            food.I18nDatas[culture].Name.Value = food.Id.Value;
+            food.I18nDatas[culture].Description.Value = food.DescriptionId.Value;
+        }
+        foreach (var text in ModInfo.Value.LowTexts)
+            text.I18nDatas[culture].Text.Value = text.Id.Value;
+        foreach (var text in ModInfo.Value.ClickTexts)
+            text.I18nDatas[culture].Text.Value = text.Id.Value;
+        foreach (var text in ModInfo.Value.SelectTexts)
+        {
+            text.I18nDatas[culture].Text.Value = text.Id.Value;
+            text.I18nDatas[culture].Choose.Value = text.ChooseId.Value;
+        }
+        foreach (var pet in ModInfo.Value.Pets)
+        {
+            pet.I18nDatas[culture].Name.Value = pet.Id.Value;
+            pet.I18nDatas[culture].PetName.Value = pet.PetNameId.Value;
+            pet.I18nDatas[culture].Description.Value = pet.DescriptionId.Value;
+            foreach (var work in pet.Works)
+                work.I18nDatas[culture].Name.Value = work.Id.Value;
+        }
     }
     #endregion
 

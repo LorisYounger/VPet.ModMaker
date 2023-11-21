@@ -235,6 +235,7 @@ public class ModMakerWindowVM
     public void LoadMod(string path)
     {
         ModLoader? loader = null;
+        var pendingHandler = PendingBox.Show("载入中".Translate());
         try
         {
             loader = new ModLoader(new DirectoryInfo(path));
@@ -242,13 +243,14 @@ public class ModMakerWindowVM
         catch (Exception ex)
         {
             MessageBox.Show("模组载入失败:\n{0}".Translate(ex));
+            pendingHandler.Close();
         }
         if (loader is not null)
         {
-            var pendingHandler = PendingBox.Show("载入中".Translate());
             var modInfo = new ModInfoModel(loader);
             EditMod(modInfo);
             pendingHandler.Close();
+            ModEditWindow.InitializeData();
         }
     }
     #endregion

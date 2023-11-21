@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.ComponentModel;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -53,18 +54,32 @@ public partial class ModEditWindow : Window
         DataContext = new ModEditWindowVM(this);
         Closing += ModEditWindow_Closing;
         Closed += ModEditWindow_Closed;
-        Loaded += ModEditWindow_Loaded;
     }
 
-    private void ModEditWindow_Loaded(object sender, RoutedEventArgs e)
+    /// <summary>
+    /// 初始化数据
+    /// </summary>
+    public void InitializeData()
     {
         if (I18nHelper.Current.CultureNames.Count == 0)
         {
             if (
                 MessageBox.Show("未添加任何文化,确定要添加文化吗?".Translate(), "", MessageBoxButton.YesNo)
-                is MessageBoxResult.Yes
+                is not MessageBoxResult.Yes
             )
-                ViewModel.AddCulture();
+                return;
+            ViewModel.AddCulture();
+            if (
+                I18nHelper.Current.CultureNames.Count == 0
+                || MessageBox.Show(
+                    "需要将文化 {0} 设为主要文化吗?".Translate(I18nHelper.Current.CultureNames.First()),
+                    "",
+                    MessageBoxButton.YesNo
+                )
+                    is not MessageBoxResult.Yes
+            )
+                return;
+            ViewModel.SetMainCulture(I18nHelper.Current.CultureNames.First());
         }
     }
 

@@ -290,6 +290,10 @@
               <Setter.Value>
                 <ContextMenu>
                   <MenuItem
+                    Command="{Binding PlacementTarget.Tag.SetMainCultureCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ContextMenu}}"
+                    CommandParameter="{Binding}"
+                    Header="{ll:Str 设为主要语言}" />
+                  <MenuItem
                     Command="{Binding PlacementTarget.Tag.EditCultureCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ContextMenu}}"
                     CommandParameter="{Binding}"
                     Header="{ll:Str 修改语言}" />
