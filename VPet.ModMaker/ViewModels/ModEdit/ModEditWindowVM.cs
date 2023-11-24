@@ -93,6 +93,7 @@ public class ModEditWindowVM
         EditCultureCommand.ExecuteEvent += EditCulture;
         RemoveCultureCommand.ExecuteEvent += RemoveCulture;
         EditI18nCommand.ExecuteEvent += EditI18n;
+        SetMainCultureCommand.ExecuteEvent += SetMainCulture;
 
         SaveCommand.ExecuteEvent += Save;
         SaveToCommand.ExecuteEvent += SaveTo;
