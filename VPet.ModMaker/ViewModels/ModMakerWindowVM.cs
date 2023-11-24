@@ -245,12 +245,26 @@ public class ModMakerWindowVM
             MessageBox.Show("模组载入失败:\n{0}".Translate(ex));
             pendingHandler.Close();
         }
-        if (loader is not null)
+        if (loader is null)
+            return;
+        ModInfoModel? modInfo = null;
+        try
         {
-            var modInfo = new ModInfoModel(loader);
+            modInfo = new ModInfoModel(loader);
             EditMod(modInfo);
-            pendingHandler.Close();
             ModEditWindow.InitializeData();
+        }
+        catch (Exception ex)
+        {
+            pendingHandler.Close();
+            ModEditWindow?.Close();
+            ModMakerWindow.Show();
+            MessageBox.Show("模组载入失败:\n{0}".Translate(ex));
+            ModInfoModel.Current = null;
+        }
+        finally
+        {
+            pendingHandler.Close();
         }
     }
     #endregion
