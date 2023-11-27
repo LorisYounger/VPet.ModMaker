@@ -42,16 +42,12 @@ public partial class ModMakerWindow : WindowX
 
     private void ModMakerWindow_Closed(object sender, EventArgs e)
     {
+        // 当模组载入错误时, 会产生野窗口, 需要手动关闭
         foreach (var item in Application.Current.Windows)
         {
             if (item is ModEditWindow window)
                 window.Close();
         }
-        try
-        {
-            DataContext = null;
-        }
-        catch { }
     }
 
     private void ListBoxItem_MouseDoubleClick(object sender, MouseButtonEventArgs e)

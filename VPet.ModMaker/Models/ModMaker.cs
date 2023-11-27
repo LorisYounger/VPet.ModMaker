@@ -62,7 +62,7 @@ public class ModMaker : MainPlugin
         }
         else
         {
-            Maker.Topmost = true;
+            Maker.Activate();
         }
     }
 
