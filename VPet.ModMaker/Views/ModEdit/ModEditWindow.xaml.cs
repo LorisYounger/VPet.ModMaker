@@ -1,6 +1,7 @@
 ﻿using LinePutScript.Localization.WPF;
 using Microsoft.Win32;
 using Panuon.WPF;
+using Panuon.WPF.UI;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -36,17 +37,17 @@ namespace VPet.ModMaker.Views.ModEdit;
 /// <summary>
 /// winModInfo.xaml 的交互逻辑
 /// </summary>
-public partial class ModEditWindow : Window
+public partial class ModEditWindow : WindowX
 {
     public ModEditWindowVM ViewModel => (ModEditWindowVM)DataContext;
-    public FoodPage FoodPage { get; } = new();
-    public LowTextPage LowTextPage { get; } = new();
-    public ClickTextPage ClickTextPage { get; } = new();
-    public SelectTextPage SelectTextPage { get; } = new();
-    public PetPage PetPage { get; } = new();
-    public WorkPage WorkPage { get; } = new();
-    public MovePage MovePage { get; } = new();
-    public AnimePage AnimePage { get; } = new();
+    public FoodPage FoodPage { get; }
+    public LowTextPage LowTextPage { get; }
+    public ClickTextPage ClickTextPage { get; }
+    public SelectTextPage SelectTextPage { get; }
+    public PetPage PetPage { get; }
+    public WorkPage WorkPage { get; }
+    public MovePage MovePage { get; }
+    public AnimePage AnimePage { get; }
 
     public ModEditWindow()
     {
@@ -54,6 +55,14 @@ public partial class ModEditWindow : Window
         DataContext = new ModEditWindowVM(this);
         Closing += ModEditWindow_Closing;
         Closed += ModEditWindow_Closed;
+        FoodPage = new();
+        LowTextPage = new();
+        ClickTextPage = new();
+        SelectTextPage = new();
+        PetPage = new();
+        WorkPage = new();
+        MovePage = new();
+        AnimePage = new();
     }
 
     /// <summary>
@@ -93,7 +102,7 @@ public partial class ModEditWindow : Window
 
     private void ModEditWindow_Closed(object sender, EventArgs e)
     {
-        ViewModel.Close();
+        ViewModel?.Close();
         try
         {
             DataContext = null;

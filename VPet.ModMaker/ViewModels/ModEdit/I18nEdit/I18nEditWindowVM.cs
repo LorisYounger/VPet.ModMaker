@@ -138,13 +138,21 @@ public class I18nEditWindowVM
             AddCulture(culture);
             SearchTargets.Add(culture);
         }
+        try
+        {
+            LoadFood(model);
+            LoadClickText(model);
+            LoadLowText(model);
+            LoadSelectText(model);
+            LoadPets(model);
+        }
+        catch
+        {
+            Close();
+            throw;
+        }
         I18nHelper.Current.CultureNames.CollectionChanged -= CultureNames_CollectionChanged;
         I18nHelper.Current.CultureNames.CollectionChanged += CultureNames_CollectionChanged;
-        LoadFood(model);
-        LoadClickText(model);
-        LoadLowText(model);
-        LoadSelectText(model);
-        LoadPets(model);
     }
 
     /// <summary>

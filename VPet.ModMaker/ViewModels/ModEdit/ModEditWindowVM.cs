@@ -17,6 +17,7 @@ using LinePutScript.Localization.WPF;
 using Panuon.WPF.UI;
 using VPet.ModMaker.Views.ModEdit.I18nEdit;
 using System.Globalization;
+using Ookii.Dialogs.Wpf;
 
 namespace VPet.ModMaker.ViewModels.ModEdit;
 
@@ -86,8 +87,8 @@ public class ModEditWindowVM
 
     public ModEditWindowVM(ModEditWindow window)
     {
-        ModEditWindow = window;
         new I18nEditWindow();
+        ModEditWindow = window;
         ChangeImageCommand.ExecuteEvent += ChangeImage;
         AddCultureCommand.ExecuteEvent += AddCulture;
         EditCultureCommand.ExecuteEvent += EditCulture;
@@ -254,16 +255,10 @@ public class ModEditWindowVM
     {
         if (ValidationData(ModInfo.Value) is false)
             return;
-        SaveFileDialog saveFileDialog =
-            new()
-            {
-                Title = "保存模组信息文件,并在文件夹内保存模组数据".Translate(),
-                Filter = $"LPS文件|*.lps;".Translate(),
-                FileName = "info.lps".Translate()
-            };
-        if (saveFileDialog.ShowDialog() is not true)
+        var dialog = new VistaFolderBrowserDialog();
+        if (dialog.ShowDialog() is not true)
             return;
-        SaveTo(Path.GetDirectoryName(saveFileDialog.FileName));
+        SaveTo(dialog.SelectedPath);
     }
 
     /// <summary>

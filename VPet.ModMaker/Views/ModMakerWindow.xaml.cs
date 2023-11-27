@@ -30,14 +30,28 @@ namespace VPet.ModMaker.Views;
 public partial class ModMakerWindow : WindowX
 {
     public ModMakerWindowVM ViewModel => (ModMakerWindowVM)DataContext;
-    public ModEditWindow ModEditWindow { get; set; }
     public Models.ModMaker ModMaker { get; internal set; }
 
     public ModMakerWindow()
     {
         InitializeComponent();
         DataContext = new ModMakerWindowVM(this);
+        Closed += ModMakerWindow_Closed;
         //new AnimeEditWindow().Show();
+    }
+
+    private void ModMakerWindow_Closed(object sender, EventArgs e)
+    {
+        foreach (var item in Application.Current.Windows)
+        {
+            if (item is ModEditWindow window)
+                window.Close();
+        }
+        try
+        {
+            DataContext = null;
+        }
+        catch { }
     }
 
     private void ListBoxItem_MouseDoubleClick(object sender, MouseButtonEventArgs e)

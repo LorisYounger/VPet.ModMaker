@@ -15,6 +15,7 @@ using System.Windows;
 using VPet.ModMaker.Models;
 using VPet.ModMaker.Views;
 using VPet.ModMaker.Views.ModEdit;
+using VPet.ModMaker.Views.ModEdit.I18nEdit;
 
 namespace VPet.ModMaker.ViewModels;
 
@@ -189,6 +190,7 @@ public class ModMakerWindowVM
     /// </summary>
     private void ShowEditWindow()
     {
+        GC.Collect();
         ModMakerWindow.Hide();
         // 将当前模组添加到历史
         if (string.IsNullOrEmpty(ModInfoModel.Current.SourcePath.Value) is false)
@@ -196,6 +198,7 @@ public class ModMakerWindowVM
         SaveHistories();
         ModEditWindow = new();
         ModEditWindow.Show();
+        ModEditWindow.InitializeData();
         ModEditWindow.Closed += (s, e) =>
         {
             var modInfo = ModInfoModel.Current;
@@ -204,9 +207,11 @@ public class ModMakerWindowVM
                 AddHistories(modInfo);
                 SaveHistories();
             }
-            ModInfoModel.Current.Close();
+            ModInfoModel.Current?.Close();
             I18nHelper.Current = new();
             ModMakerWindow.Show();
+            ModMakerWindow.Activate();
+            GC.Collect();
         };
     }
 
@@ -238,33 +243,32 @@ public class ModMakerWindowVM
         var pendingHandler = PendingBox.Show("载入中".Translate());
         try
         {
-            loader = new ModLoader(new DirectoryInfo(path));
+            loader = new ModLoader(new(path));
         }
         catch (Exception ex)
         {
-            MessageBox.Show("模组载入失败:\n{0}".Translate(ex));
+            MessageBox.Show(ModMakerWindow, "模组载入失败:\n{0}".Translate(ex));
             pendingHandler.Close();
         }
         if (loader is null)
             return;
-        ModInfoModel? modInfo = null;
         try
         {
-            modInfo = new ModInfoModel(loader);
+            var modInfo = new ModInfoModel(loader);
             EditMod(modInfo);
-            ModEditWindow.InitializeData();
+            pendingHandler.Close();
         }
         catch (Exception ex)
         {
             pendingHandler.Close();
             ModEditWindow?.Close();
+            ModEditWindow = null;
+            ModInfoModel.Current?.Close();
+            I18nHelper.Current = new();
+            I18nEditWindow.Current?.Close(true);
             ModMakerWindow.Show();
-            MessageBox.Show("模组载入失败:\n{0}".Translate(ex));
-            ModInfoModel.Current = null;
-        }
-        finally
-        {
-            pendingHandler.Close();
+            ModMakerWindow.Activate();
+            MessageBox.Show(ModMakerWindow, "模组载入失败:\n{0}".Translate(ex));
         }
     }
     #endregion
