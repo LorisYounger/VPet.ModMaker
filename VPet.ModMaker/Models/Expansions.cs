@@ -58,6 +58,8 @@ public static class Extensions
     /// <returns>复制的图像</returns>
     public static BitmapImage Copy(this BitmapImage image)
     {
+        if (image is null)
+            return null;
         BitmapImage newImage = new();
         newImage.BeginInit();
         newImage.DecodePixelWidth = image.DecodePixelWidth;

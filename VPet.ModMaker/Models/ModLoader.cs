@@ -166,7 +166,8 @@ public class ModLoader
                         foreach (ILine li in tmp)
                         {
                             var food = LPSConvert.DeserializeObject<Food>(li);
-                            var imagePath = $"{path.FullName}\\image\\food\\{food.Name}.png";
+                            var imagePath =
+                                $"{path.FullName}\\image\\food\\{(string.IsNullOrWhiteSpace(food.Image) ? food.Name : food.Image)}.png";
                             if (File.Exists(imagePath))
                                 food.Image = imagePath;
                             Foods.Add(food);
