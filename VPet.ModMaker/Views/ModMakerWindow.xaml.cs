@@ -3,6 +3,7 @@ using LinePutScript.Localization.WPF;
 using Panuon.WPF.UI;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
@@ -68,5 +69,10 @@ public partial class ModMakerWindow : WindowX
             }
         }
         ViewModel.LoadMod(history.SourcePath);
+    }
+
+    private void Hyperlink_Click(object sender, RoutedEventArgs e)
+    {
+        Process.Start(new ProcessStartInfo("https://github.com/LorisYounger/VPet.ModMaker/wiki"));
     }
 }

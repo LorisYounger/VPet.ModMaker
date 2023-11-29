@@ -26,6 +26,7 @@
         <RowDefinition Height="Auto" />
         <RowDefinition Height="Auto" />
         <RowDefinition />
+        <RowDefinition Height="Auto" />
       </Grid.RowDefinitions>
       <Label Background="{x:Null}" Content="{ll:Str 打开最近的内容}" />
       <Grid Grid.Row="1">
@@ -90,7 +91,7 @@
                       <TextBlock
                         Grid.Row="1"
                         VerticalAlignment="Bottom"
-                        d:Text="{ll:Str Mod描述}"
+                        d:Text="{ll:Str 路径}"
                         Text="{Binding SourcePath}"
                         TextWrapping="Wrap" />
                     </Grid>
@@ -101,6 +102,11 @@
           </Style>
         </ListBox.ItemContainerStyle>
       </ListBox>
+      <TextBlock Grid.Row="3" HorizontalAlignment="Center">
+        <Hyperlink Click="Hyperlink_Click">
+          <TextBlock Text="{ll:Str 模组制作教程}" />
+        </Hyperlink>
+      </TextBlock>
     </Grid>
     <Grid Grid.Column="1">
       <Grid.RowDefinitions>

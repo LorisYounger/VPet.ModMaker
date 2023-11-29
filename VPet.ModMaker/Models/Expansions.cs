@@ -84,23 +84,39 @@ public static class Extensions
     /// </summary>
     /// <param name="image">图片资源</param>
     /// <param name="path">路径</param>
+    //public static void SaveToPng(this BitmapImage image, string path)
+    //{
+    //    if (image is null)
+    //        return;
+    //    if (path.EndsWith(".png") is false)
+    //        path += ".png";
+    //    var encoder = new PngBitmapEncoder();
+    //    var stream = image.StreamSource;
+    //    // 保存位置
+    //    var position = stream.Position;
+    //    // 必须要重置位置, 否则EndInit将出错
+    //    stream.Seek(0, SeekOrigin.Begin);
+    //    encoder.Frames.Add(BitmapFrame.Create(image.StreamSource));
+    //    // 恢复位置
+    //    stream.Seek(position, SeekOrigin.Begin);
+    //    using var fs = new FileStream(path, FileMode.Create);
+    //    encoder.Save(fs);
+    //}
     public static void SaveToPng(this BitmapImage image, string path)
     {
         if (image is null)
             return;
         if (path.EndsWith(".png") is false)
             path += ".png";
-        var encoder = new PngBitmapEncoder();
         var stream = image.StreamSource;
         // 保存位置
         var position = stream.Position;
         // 必须要重置位置, 否则EndInit将出错
         stream.Seek(0, SeekOrigin.Begin);
-        encoder.Frames.Add(BitmapFrame.Create(image.StreamSource));
+        using var fs = new FileStream(path, FileMode.Create);
+        stream.CopyTo(fs);
         // 恢复位置
         stream.Seek(position, SeekOrigin.Begin);
-        using var fs = new FileStream(path, FileMode.Create);
-        encoder.Save(fs);
     }
 
     /// <summary>

@@ -221,11 +221,11 @@ public class PetModel : I18nModel<I18nPetInfoModel>
     /// <param name="path">路径</param>
     public void Save(string path)
     {
-        if (SourceId is not null)
-            Id.Value = SourceId;
         if (IsSimplePetModel)
         {
+            Id.Value = SourceId;
             SaveSimplePetInfo(path);
+            Id.Value = SourceId + " (来自本体)".Translate();
             return;
         }
         foreach (var cultureName in I18nHelper.Current.CultureNames)
@@ -252,13 +252,8 @@ public class PetModel : I18nModel<I18nPetInfoModel>
         SaveMoveInfo(lps);
         File.WriteAllText(petFile, lps.ToString());
 
-        var petAnimePath = Path.Combine(path, Id.Value);
-        foreach (var anime in Animes)
-            anime.Save(petAnimePath);
-        foreach (var anime in FoodAnimes)
-            anime.Save(petAnimePath);
-        if (SourceId is not null)
-            Id.Value = SourceId + " (来自本体)".Translate();
+        // 保存图片
+        SaveAnime(path);
     }
 
     private void SaveSimplePetInfo(string path)
@@ -270,9 +265,16 @@ public class PetModel : I18nModel<I18nPetInfoModel>
         SaveWorksInfo(lps);
         SaveMoveInfo(lps);
         File.WriteAllText(petFile, lps.ToString());
+        SaveAnime(path);
+    }
+
+    private void SaveAnime(string path)
+    {
         var petAnimePath = Path.Combine(path, Id.Value);
-        foreach (var animeType in Animes)
-            animeType.Save(petAnimePath);
+        foreach (var anime in Animes)
+            anime.Save(petAnimePath);
+        foreach (var anime in FoodAnimes)
+            anime.Save(petAnimePath);
     }
 
     /// <summary>
