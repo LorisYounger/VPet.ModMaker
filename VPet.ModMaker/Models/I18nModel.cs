@@ -1,4 +1,4 @@
-﻿using HKW.HKWViewModels.SimpleObservable;
+﻿using HKW.HKWUtils.Observable;
 using System;
 using System.Collections.Generic;
 using System.Linq;

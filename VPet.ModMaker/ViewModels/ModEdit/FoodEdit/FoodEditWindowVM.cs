@@ -1,4 +1,5 @@
-﻿using HKW.HKWViewModels.SimpleObservable;
+﻿using HKW.HKWUtils.Observable;
+using HKW.Models;
 using LinePutScript.Localization.WPF;
 using Microsoft.Win32;
 using System;
@@ -32,10 +33,10 @@ public class FoodEditWindowVM
 
     public FoodEditWindowVM()
     {
-        AddImageCommand.ExecuteEvent += AddImage;
-        ChangeImageCommand.ExecuteEvent += ChangeImage;
+        AddImageCommand.ExecuteCommand += AddImage;
+        ChangeImageCommand.ExecuteCommand += ChangeImage;
         AutoSetReferencePrice.ValueChanged += AutoSetReferencePrice_ValueChanged;
-        SetReferencePriceCommand.ExecuteEvent += SetReferencePriceToPrice;
+        SetReferencePriceCommand.ExecuteCommand += SetReferencePriceToPrice;
         Food.Value.ReferencePrice.ValueChanged += ReferencePrice_ValueChanged;
     }
 

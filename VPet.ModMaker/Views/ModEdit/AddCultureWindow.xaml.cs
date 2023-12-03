@@ -1,4 +1,4 @@
-﻿using HKW.HKWViewModels.SimpleObservable;
+﻿using HKW.HKWUtils.Observable;
 using LinePutScript.Localization.WPF;
 using Panuon.WPF.UI;
 using System;

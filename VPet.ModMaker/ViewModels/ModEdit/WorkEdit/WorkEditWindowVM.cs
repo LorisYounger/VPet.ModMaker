@@ -1,4 +1,5 @@
-﻿using HKW.HKWViewModels.SimpleObservable;
+﻿using HKW.HKWUtils.Observable;
+using HKW.Models;
 using LinePutScript.Localization.WPF;
 using Microsoft.Win32;
 using System;
@@ -28,8 +29,8 @@ public class WorkEditWindowVM
     #endregion
     public WorkEditWindowVM()
     {
-        AddImageCommand.ExecuteEvent += AddImage;
-        ChangeImageCommand.ExecuteEvent += ChangeImage;
+        AddImageCommand.ExecuteCommand += AddImage;
+        ChangeImageCommand.ExecuteCommand += ChangeImage;
         Image.ValueChanged += Image_ValueChanged;
     }
 

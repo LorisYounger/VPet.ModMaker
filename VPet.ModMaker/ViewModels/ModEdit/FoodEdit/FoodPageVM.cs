@@ -1,4 +1,5 @@
-﻿using HKW.HKWViewModels.SimpleObservable;
+﻿using HKW.HKWUtils.Observable;
+using HKW.Models;
 using LinePutScript.Localization.WPF;
 using System;
 using System.Collections.Generic;
@@ -31,9 +32,9 @@ public class FoodPageVM
         ShowFoods.Value = Foods;
         Search.ValueChanged += Search_ValueChanged;
 
-        AddCommand.ExecuteEvent += Add;
-        EditCommand.ExecuteEvent += Edit;
-        RemoveCommand.ExecuteEvent += Remove;
+        AddCommand.ExecuteCommand += Add;
+        EditCommand.ExecuteCommand += Edit;
+        RemoveCommand.ExecuteCommand += Remove;
     }
 
     private void Search_ValueChanged(

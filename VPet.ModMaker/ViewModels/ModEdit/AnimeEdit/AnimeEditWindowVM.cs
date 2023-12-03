@@ -1,4 +1,5 @@
-﻿using HKW.HKWViewModels.SimpleObservable;
+﻿using HKW.HKWUtils.Observable;
+using HKW.Models;
 using LinePutScript.Localization.WPF;
 using Microsoft.Win32;
 using System;
@@ -122,14 +123,14 @@ public class AnimeEditWindowVM
 
         CurrentAnimeModel.ValueChanged += CurrentAnimeModel_ValueChanged;
 
-        PlayCommand.AsyncExecuteEvent += PlayCommand_AsyncExecuteEvent;
-        StopCommand.ExecuteEvent += StopCommand_ExecuteEvent;
-        AddAnimeCommand.ExecuteEvent += AddAnimeCommand_ExecuteEvent;
-        RemoveAnimeCommand.ExecuteEvent += RemoveAnimeCommand_ExecuteEvent;
-        AddImageCommand.ExecuteEvent += AddImageCommand_ExecuteEvent;
-        RemoveImageCommand.ExecuteEvent += RemoveImageCommand_ExecuteEvent;
-        ChangeImageCommand.ExecuteEvent += ChangeImageCommand_ExecuteEvent;
-        ClearImageCommand.ExecuteEvent += ClearImageCommand_ExecuteEvent;
+        PlayCommand.AsyncExecuteCommand += PlayCommand_AsyncExecuteEvent;
+        StopCommand.ExecuteCommand += StopCommand_ExecuteEvent;
+        AddAnimeCommand.ExecuteCommand += AddAnimeCommand_ExecuteEvent;
+        RemoveAnimeCommand.ExecuteCommand += RemoveAnimeCommand_ExecuteEvent;
+        AddImageCommand.ExecuteCommand += AddImageCommand_ExecuteEvent;
+        RemoveImageCommand.ExecuteCommand += RemoveImageCommand_ExecuteEvent;
+        ChangeImageCommand.ExecuteCommand += ChangeImageCommand_ExecuteEvent;
+        ClearImageCommand.ExecuteCommand += ClearImageCommand_ExecuteEvent;
 
         Anime.ValueChanged += Anime_ValueChanged;
     }

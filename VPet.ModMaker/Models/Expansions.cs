@@ -15,7 +15,7 @@ using System.Windows.Media.Imaging;
 using VPet.ModMaker.Models.ModModel;
 using VPet_Simulator.Core;
 
-namespace VPet.ModMaker.Models;
+namespace HKW.Models;
 
 /// <summary>
 /// 拓展
@@ -275,11 +275,25 @@ public static class Extensions
     /// <typeparam name="T">值类型</typeparam>
     /// <param name="collection">集合</param>
     /// <returns>带有索引的枚举值</returns>
-    public static IEnumerable<ItemInfo<T>> Enumerate<T>(this IEnumerable<T> collection)
+    public static IEnumerable<ItemInfo<T>> EnumerateIndex<T>(this IEnumerable<T> collection)
     {
         var index = 0;
         foreach (var item in collection)
             yield return new(index++, item);
+    }
+
+    public static void SetDataContext<T>(this Window window)
+        where T : new()
+    {
+        window.DataContext = new T();
+        window.Closed += (s, e) =>
+        {
+            try
+            {
+                window.DataContext = null;
+            }
+            catch { }
+        };
     }
 }
 

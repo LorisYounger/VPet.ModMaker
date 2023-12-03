@@ -1,10 +1,11 @@
-﻿using HKW.HKWViewModels.SimpleObservable;
+﻿using HKW.HKWUtils.Observable;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Input;
 
 namespace VPet.ModMaker.Models;
 
@@ -44,8 +45,8 @@ public class ObservableEnumFlags<T>
     {
         if (Attribute.IsDefined(EnumType, typeof(FlagsAttribute)) is false)
             throw new Exception("此枚举类型未使用特性 [Flags]");
-        AddCommand.ExecuteEvent += AddCommand_ExecuteEvent;
-        RemoveCommand.ExecuteEvent += RemoveCommand_ExecuteEvent;
+        AddCommand.ExecuteCommand += AddCommand_ExecuteEvent;
+        RemoveCommand.ExecuteCommand += RemoveCommand_ExecuteEvent;
     }
 
     public ObservableEnumFlags(T value)

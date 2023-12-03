@@ -4,11 +4,10 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
 using System.Windows.Media.Imaging;
+using VPet.ModMaker;
 
-namespace VPet.ModMaker.Models;
+namespace HKW.Models;
 
 /// <summary>
 /// 工具
@@ -25,8 +24,6 @@ public static class Utils
     /// </summary>
     public const int DecodePixelHeight = 250;
     public static char[] Separator { get; } = new char[] { '_' };
-
-    public static ModMakerStyles ModMakerStyles { get; } = new ModMakerStyles();
 
     //public static BitmapImage LoadImageToStream(string imagePath)
     //{

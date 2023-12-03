@@ -1,4 +1,5 @@
-﻿using HKW.HKWViewModels.SimpleObservable;
+﻿using HKW.HKWUtils.Observable;
+using HKW.Models;
 using LinePutScript.Localization.WPF;
 using Panuon.WPF.UI;
 using System;
@@ -75,9 +76,9 @@ public class AnimePageVM
         CurrentPet.ValueChanged += CurrentPet_ValueChanged;
         Search.ValueChanged += Search_ValueChanged;
 
-        AddCommand.ExecuteEvent += Add;
-        EditCommand.ExecuteEvent += Edit;
-        RemoveCommand.ExecuteEvent += Remove;
+        AddCommand.ExecuteCommand += Add;
+        EditCommand.ExecuteCommand += Edit;
+        RemoveCommand.ExecuteCommand += Remove;
     }
 
     private void InitializeAllAnimes()

@@ -133,9 +133,19 @@
     <Compile Include="Models\ModModel\SelectTextModel.cs" />
     <Compile Include="Models\ModModel\WorkModel.cs" />
     <Compile Include="Resources\NativeResources.cs" />
-    <Compile Include="SimpleObservable\ObservableCommandT.cs" />
-    <Compile Include="ModMakerStyles.cs" />
-    <Compile Include="SimpleObservable\ObservableValueGroup.cs" />
+    <Compile Include="NativeStyles.cs" />
+    <Compile Include="SimpleObservable\ObservableCommand\AsyncExecuteEventHandler.cs" />
+    <Compile Include="SimpleObservable\ObservableCommand\ExecuteEventHandler.cs" />
+    <Compile Include="SimpleObservable\ObservableCommand\NotifyReceivedEventHandler.cs" />
+    <Compile Include="SimpleObservable\ObservableCommand\ObservableCommand.cs" />
+    <Compile Include="SimpleObservable\ObservableCommand\ObservableCommandT.cs" />
+    <Compile Include="SimpleObservable\ObservableValue\NotifySenderPropertyChangedHandler.cs" />
+    <Compile Include="SimpleObservable\ObservableValue\ObservableValue.cs" />
+    <Compile Include="SimpleObservable\ObservableValue\ObservableValueGroup.cs" />
+    <Compile Include="SimpleObservable\ObservableValue\ValueChangedEventArgs.cs" />
+    <Compile Include="SimpleObservable\ObservableValue\ValueChangedEventHandler.cs" />
+    <Compile Include="SimpleObservable\ObservableValue\ValueChangingEventArgs.cs" />
+    <Compile Include="SimpleObservable\ObservableValue\ValueChangingEventHandler.cs" />
     <Compile Include="ViewModels\ModEdit\AddCultureWindowVM.cs" />
     <Compile Include="ViewModels\ModEdit\AnimeEdit\FoodAnimeEditWindowVM.cs" />
     <Compile Include="ViewModels\ModEdit\AnimeEdit\AnimeEditWindowVM.cs" />
@@ -205,8 +215,6 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
-    <Compile Include="SimpleObservable\ObservableCommand.cs" />
-    <Compile Include="SimpleObservable\ObservableValue.cs" />
     <Compile Include="Models\Utils.cs" />
     <Compile Include="Views\ModEdit\FoodEdit\FoodEditWindow.xaml.cs">
       <DependentUpon>FoodEditWindow.xaml</DependentUpon>
@@ -260,7 +268,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </ApplicationDefinition>
-    <Page Include="Properties\DesignTimeResources.xaml">
+    <Page Include="NativeStyles.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
       <ContainsDesignTimeResources>true</ContainsDesignTimeResources>
@@ -385,5 +393,6 @@
   <ItemGroup>
     <EmbeddedResource Include="Resources\food.png" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

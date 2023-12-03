@@ -1,4 +1,5 @@
-﻿using HKW.HKWViewModels.SimpleObservable;
+﻿using HKW.HKWUtils.Observable;
+using HKW.Models;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -351,7 +352,7 @@ public class I18nEditWindowVM
     {
         if (AllI18nDatas.TryGetValue(id.Value, out var outData))
         {
-            foreach (var culture in I18nHelper.Current.CultureNames.Enumerate())
+            foreach (var culture in I18nHelper.Current.CultureNames.EnumerateIndex())
             {
                 if (outData.Datas[culture.Index].Group is null)
                 {
@@ -385,7 +386,7 @@ public class I18nEditWindowVM
         sourceData.Id.Group?.Remove(sourceData.Id);
         if (AllI18nDatas.TryGetValue(e.OldValue, out var outData))
         {
-            foreach (var culture in I18nHelper.Current.CultureNames.Enumerate())
+            foreach (var culture in I18nHelper.Current.CultureNames.EnumerateIndex())
             {
                 if (outData.Datas[culture.Index].Group is null)
                 {
@@ -417,7 +418,7 @@ public class I18nEditWindowVM
         where T : class, new()
     {
         var data = AllI18nDatas[id.Value];
-        foreach (var culture in I18nHelper.Current.CultureNames.Enumerate())
+        foreach (var culture in I18nHelper.Current.CultureNames.EnumerateIndex())
         {
             if (data.Datas[culture.Index].Group is ObservableValueGroup<string> group)
             {
@@ -452,7 +453,7 @@ public class I18nEditWindowVM
         where T : class, new()
     {
         var data = AllI18nDatas[id.Value];
-        foreach (var culture in I18nHelper.Current.CultureNames.Enumerate())
+        foreach (var culture in I18nHelper.Current.CultureNames.EnumerateIndex())
         {
             var oldValue = data.Datas[culture.Index];
             var newValue = i18nValue(i18nModel.I18nDatas[culture.Value]);

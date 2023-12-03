@@ -1,4 +1,4 @@
-﻿using HKW.HKWViewModels.SimpleObservable;
+﻿using HKW.HKWUtils.Observable;
 using LinePutScript.Localization.WPF;
 using Microsoft.Win32;
 using System;
@@ -37,7 +37,7 @@ public class SaveTranslationModWindowVM
         }
         CheckAll.ValueChanged += CheckAll_ValueChanged;
         CheckAll.SenderPropertyChanged += CheckAll_SenderPropertyChanged;
-        SaveCommand.ExecuteEvent += Save;
+        SaveCommand.ExecuteCommand += Save;
     }
 
     private void CheckAll_ValueChanged(ObservableValue<bool?> sender, ValueChangedEventArgs<bool?> e)

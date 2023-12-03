@@ -1,4 +1,5 @@
-﻿using LinePutScript;
+﻿using HKW.Models;
+using LinePutScript;
 using LinePutScript.Converter;
 using LinePutScript.Dictionary;
 using System;

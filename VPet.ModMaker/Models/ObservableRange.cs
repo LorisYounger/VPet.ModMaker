@@ -1,6 +1,6 @@
-﻿using HKW.HKWViewModels.SimpleObservable;
+﻿using HKW.HKWUtils.Observable;
 
-namespace VPet.ModMaker.Models;
+namespace HKW.Models;
 
 /// <summary>
 /// 可观察的范围

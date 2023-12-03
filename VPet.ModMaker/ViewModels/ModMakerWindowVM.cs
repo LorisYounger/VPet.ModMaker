@@ -1,4 +1,4 @@
-﻿using HKW.HKWViewModels.SimpleObservable;
+﻿using HKW.HKWUtils.Observable;
 using LinePutScript;
 using LinePutScript.Converter;
 using LinePutScript.Localization.WPF;
@@ -12,6 +12,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Input;
 using VPet.ModMaker.Models;
 using VPet.ModMaker.Views;
 using VPet.ModMaker.Views.ModEdit;
@@ -68,10 +69,10 @@ public class ModMakerWindowVM
         LoadHistories();
         ModMakerWindow = window;
         ShowHistories.Value = Histories;
-        CreateNewModCommand.ExecuteEvent += CreateNewMod;
-        LoadModFromFileCommand.ExecuteEvent += LoadModFromFile;
-        ClearHistoriesCommand.ExecuteEvent += ClearHistories;
-        RemoveHistoryCommand.ExecuteEvent += RemoveHistory;
+        CreateNewModCommand.ExecuteCommand += CreateNewMod;
+        LoadModFromFileCommand.ExecuteCommand += LoadModFromFile;
+        ClearHistoriesCommand.ExecuteCommand += ClearHistories;
+        RemoveHistoryCommand.ExecuteCommand += RemoveHistory;
         HistoriesSearchText.ValueChanged += HistoriesSearchText_ValueChanged;
     }
 

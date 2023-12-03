@@ -1,4 +1,4 @@
-﻿using HKW.HKWViewModels.SimpleObservable;
+﻿using HKW.HKWUtils.Observable;
 using Panuon.WPF.UI;
 using System;
 using System.Collections.Generic;
@@ -93,7 +93,7 @@ public partial class I18nEditWindow : WindowX
             MaxWidth = 500,
             Header = culture,
             Binding = new Binding(dataPath) { Mode = BindingMode.TwoWay },
-            ElementStyle = (Style)Utils.ModMakerStyles["TextBlock_Wrap"],
+            ElementStyle = (Style)ModMakerInfo.NativeStyles["TextBlock_Wrap"],
             SortMemberPath = dataPath
         };
         DataGrid_Datas.Columns.Add(column);

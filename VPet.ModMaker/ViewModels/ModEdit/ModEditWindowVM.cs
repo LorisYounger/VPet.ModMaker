@@ -1,4 +1,4 @@
-﻿using HKW.HKWViewModels.SimpleObservable;
+﻿using HKW.HKWUtils.Observable;
 using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
@@ -18,6 +18,7 @@ using Panuon.WPF.UI;
 using VPet.ModMaker.Views.ModEdit.I18nEdit;
 using System.Globalization;
 using Ookii.Dialogs.Wpf;
+using HKW.Models;
 
 namespace VPet.ModMaker.ViewModels.ModEdit;
 
@@ -89,16 +90,16 @@ public class ModEditWindowVM
     {
         new I18nEditWindow();
         ModEditWindow = window;
-        ChangeImageCommand.ExecuteEvent += ChangeImage;
-        AddCultureCommand.ExecuteEvent += AddCulture;
-        EditCultureCommand.ExecuteEvent += EditCulture;
-        RemoveCultureCommand.ExecuteEvent += RemoveCulture;
-        EditI18nCommand.ExecuteEvent += EditI18n;
-        SetMainCultureCommand.ExecuteEvent += SetMainCulture;
+        ChangeImageCommand.ExecuteCommand += ChangeImage;
+        AddCultureCommand.ExecuteCommand += AddCulture;
+        EditCultureCommand.ExecuteCommand += EditCulture;
+        RemoveCultureCommand.ExecuteCommand += RemoveCulture;
+        EditI18nCommand.ExecuteCommand += EditI18n;
+        SetMainCultureCommand.ExecuteCommand += SetMainCulture;
 
-        SaveCommand.ExecuteEvent += Save;
-        SaveToCommand.ExecuteEvent += SaveTo;
-        SaveAsTranslationModCommand.ExecuteEvent += SaveAsTranslationMod;
+        SaveCommand.ExecuteCommand += Save;
+        SaveToCommand.ExecuteCommand += SaveTo;
+        SaveAsTranslationModCommand.ExecuteCommand += SaveAsTranslationMod;
     }
 
     private void SaveAsTranslationMod()

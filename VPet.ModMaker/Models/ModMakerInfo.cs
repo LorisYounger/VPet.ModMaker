@@ -36,4 +36,9 @@ public static class ModMakerInfo
     /// 本体的宠物
     /// </summary>
     public static List<PetModel> Pets { get; } = new();
+
+    /// <summary>
+    /// 本地风格
+    /// </summary>
+    public static NativeStyles NativeStyles { get; } = new();
 }

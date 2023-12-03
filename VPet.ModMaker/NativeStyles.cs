@@ -7,9 +7,9 @@ using System.Windows;
 
 namespace VPet.ModMaker;
 
-public partial class ModMakerStyles : ResourceDictionary
+public partial class NativeStyles : ResourceDictionary
 {
-    public ModMakerStyles()
+    public NativeStyles()
     {
         InitializeComponent();
     }

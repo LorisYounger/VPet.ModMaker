@@ -1,4 +1,5 @@
-﻿using LinePutScript.Localization.WPF;
+﻿using HKW.Models;
+using LinePutScript.Localization.WPF;
 using System;
 using System.Collections;
 using System.Collections.Generic;

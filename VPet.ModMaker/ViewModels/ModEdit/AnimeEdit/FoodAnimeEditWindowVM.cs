@@ -1,4 +1,5 @@
-﻿using HKW.HKWViewModels.SimpleObservable;
+﻿using HKW.HKWUtils.Observable;
+using HKW.Models;
 using LinePutScript.Localization.WPF;
 using Microsoft.Win32;
 using System;
@@ -210,27 +211,27 @@ public class FoodAnimeEditWindowVM
 
         CurrentAnimeModel.ValueChanged += CurrentAnimeModel_ValueChanged;
 
-        PlayCommand.AsyncExecuteEvent += PlayCommand_AsyncExecuteEvent;
-        StopCommand.ExecuteEvent += StopCommand_ExecuteEvent;
-        ReplaceFoodImageCommand.ExecuteEvent += ChangeFoodImageCommand_ExecuteEvent;
-        ResetFoodImageCommand.ExecuteEvent += ResetFoodImageCommand_ExecuteEvent;
+        PlayCommand.AsyncExecuteCommand += PlayCommand_AsyncExecuteEvent;
+        StopCommand.ExecuteCommand += StopCommand_ExecuteEvent;
+        ReplaceFoodImageCommand.ExecuteCommand += ChangeFoodImageCommand_ExecuteEvent;
+        ResetFoodImageCommand.ExecuteCommand += ResetFoodImageCommand_ExecuteEvent;
 
-        AddAnimeCommand.ExecuteEvent += AddAnimeCommand_ExecuteEvent;
-        RemoveAnimeCommand.ExecuteEvent += RemoveAnimeCommand_ExecuteEvent;
+        AddAnimeCommand.ExecuteCommand += AddAnimeCommand_ExecuteEvent;
+        RemoveAnimeCommand.ExecuteCommand += RemoveAnimeCommand_ExecuteEvent;
 
-        AddFrontImageCommand.ExecuteEvent += AddFrontImageCommand_ExecuteEvent;
-        RemoveFrontImageCommand.ExecuteEvent += RemoveFrontImageCommand_ExecuteEvent;
-        ClearFrontImageCommand.ExecuteEvent += ClearFrontImageCommand_ExecuteEvent;
-        ChangeFrontImageCommand.ExecuteEvent += ChangeFrontImageCommand_ExecuteEvent;
+        AddFrontImageCommand.ExecuteCommand += AddFrontImageCommand_ExecuteEvent;
+        RemoveFrontImageCommand.ExecuteCommand += RemoveFrontImageCommand_ExecuteEvent;
+        ClearFrontImageCommand.ExecuteCommand += ClearFrontImageCommand_ExecuteEvent;
+        ChangeFrontImageCommand.ExecuteCommand += ChangeFrontImageCommand_ExecuteEvent;
 
-        AddBackImageCommand.ExecuteEvent += AddBackImageCommand_ExecuteEvent;
-        RemoveBackImageCommand.ExecuteEvent += RemoveBackImageCommand_ExecuteEvent;
-        ClearBackImageCommand.ExecuteEvent += ClearBackImageCommand_ExecuteEvent;
-        ChangeBackImageCommand.ExecuteEvent += ChangeBackImageCommand_ExecuteEvent;
+        AddBackImageCommand.ExecuteCommand += AddBackImageCommand_ExecuteEvent;
+        RemoveBackImageCommand.ExecuteCommand += RemoveBackImageCommand_ExecuteEvent;
+        ClearBackImageCommand.ExecuteCommand += ClearBackImageCommand_ExecuteEvent;
+        ChangeBackImageCommand.ExecuteCommand += ChangeBackImageCommand_ExecuteEvent;
 
-        AddFoodLocationCommand.ExecuteEvent += AddeFoodLocationCommand_ExecuteEvent;
-        RemoveFoodLocationCommand.ExecuteEvent += RemoveFoodLocationCommand_ExecuteEvent;
-        ClearFoodLocationCommand.ExecuteEvent += ClearFoodLocationCommand_ExecuteEvent;
+        AddFoodLocationCommand.ExecuteCommand += AddeFoodLocationCommand_ExecuteEvent;
+        RemoveFoodLocationCommand.ExecuteCommand += RemoveFoodLocationCommand_ExecuteEvent;
+        ClearFoodLocationCommand.ExecuteCommand += ClearFoodLocationCommand_ExecuteEvent;
     }
 
     private void ResetFoodImageCommand_ExecuteEvent()

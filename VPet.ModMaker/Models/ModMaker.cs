@@ -9,6 +9,7 @@ using System.Windows.Controls;
 using System.Windows;
 using VPet_Simulator.Windows.Interface;
 using VPet.ModMaker.Views;
+using HKW.Models;
 
 namespace VPet.ModMaker.Models;
 
@@ -37,7 +38,7 @@ public class ModMaker : MainPlugin
             Setting();
         };
         modset.Items.Add(menuset);
-        Application.Current.Resources.MergedDictionaries.Add(Utils.ModMakerStyles);
+        Application.Current.Resources.MergedDictionaries.Add(ModMakerInfo.NativeStyles);
     }
 
     public override void Setting()

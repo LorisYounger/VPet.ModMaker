@@ -1,4 +1,5 @@
-﻿using HKW.HKWViewModels.SimpleObservable;
+﻿using HKW.HKWUtils.Observable;
+using HKW.Models;
 using LinePutScript;
 using LinePutScript.Localization.WPF;
 using System;
@@ -304,7 +305,7 @@ public class FoodAnimeTypeModel
     )
     {
         var modeAnimePath = Path.Combine(animePath, mode.ToString());
-        foreach (var anime in animes.Enumerate())
+        foreach (var anime in animes.EnumerateIndex())
         {
             var indexPath = Path.Combine(modeAnimePath, anime.Index.ToString());
             Directory.CreateDirectory(indexPath);
@@ -329,7 +330,7 @@ public class FoodAnimeTypeModel
         var backLayPath = Path.Combine(indexPath, BackLayName);
         Directory.CreateDirectory(frontLayPath);
         Directory.CreateDirectory(backLayPath);
-        foreach (var frontImage in anime.FrontImages.Enumerate())
+        foreach (var frontImage in anime.FrontImages.EnumerateIndex())
         {
             frontImage.Value.Image.Value.SaveToPng(
                 Path.Combine(
@@ -338,7 +339,7 @@ public class FoodAnimeTypeModel
                 )
             );
         }
-        foreach (var backImage in anime.BackImages.Enumerate())
+        foreach (var backImage in anime.BackImages.EnumerateIndex())
         {
             backImage.Value.Image.Value.SaveToPng(
                 Path.Combine(
@@ -377,7 +378,7 @@ public class FoodAnimeTypeModel
             new Sub("mode", mode.ToString()),
             new Sub("graph", Name.Value)
         };
-        foreach (var foodLocation in anime.FoodLocations.Enumerate())
+        foreach (var foodLocation in anime.FoodLocations.EnumerateIndex())
         {
             var sub = new Sub($"a{foodLocation.Index}");
             sub.info = foodLocation.Value.ToString();

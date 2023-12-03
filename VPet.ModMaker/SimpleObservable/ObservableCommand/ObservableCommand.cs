@@ -1,20 +1,16 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
 
-namespace HKW.HKWViewModels.SimpleObservable;
+namespace HKW.HKWUtils.Observable;
 
 /// <summary>
 /// 可观察命令
 /// </summary>
-[DebuggerDisplay(
-    "CanExecute = {CanExecuteProperty.Value}, EventCount =  {ExecuteEvent.GetInvocationList().Length}, AsyncEventCount = {AsyncExecuteEvent.GetInvocationList().Length}"
-)]
+[DebuggerDisplay("\\{ObservableCommand, CanExecute = {CanExecuteProperty.Value}\\}")]
 public class ObservableCommand : ICommand
 {
     /// <summary>
@@ -68,7 +64,7 @@ public class ObservableCommand : ICommand
     /// <param name="parameter">参数</param>
     public async void Execute(object? parameter)
     {
-        ExecuteEvent?.Invoke();
+        ExecuteCommand?.Invoke();
         await ExecuteAsync();
     }
 
@@ -78,11 +74,13 @@ public class ObservableCommand : ICommand
     /// <returns>等待</returns>
     private async Task ExecuteAsync()
     {
-        if (AsyncExecuteEvent is null)
+        if (AsyncExecuteCommand is null)
             return;
         CurrentCanExecute.Value = false;
         foreach (
-            var asyncEvent in AsyncExecuteEvent.GetInvocationList().Cast<AsyncExecuteHandler>()
+            var asyncEvent in AsyncExecuteCommand
+                .GetInvocationList()
+                .Cast<AsyncExecuteEventHandler>()
         )
             await asyncEvent.Invoke();
         CurrentCanExecute.Value = true;
@@ -128,9 +126,9 @@ public class ObservableCommand : ICommand
 
     private void Notify_PropertyChanged(object? sender, PropertyChangedEventArgs e)
     {
-        var temp = CanExecuteProperty.Value;
-        NotifyCanExecuteReceived?.Invoke(ref temp);
-        CanExecuteProperty.Value = temp;
+        var args = new CancelEventArgs();
+        NotifyCanExecuteReceived?.Invoke(this, args);
+        CanExecuteProperty.Value = args.Cancel;
     }
     #endregion
 
@@ -143,35 +141,16 @@ public class ObservableCommand : ICommand
     /// <summary>
     /// 执行事件
     /// </summary>
-    public event ExecuteHandler? ExecuteEvent;
+    public event ExecuteEventHandler? ExecuteCommand;
 
     /// <summary>
     /// 异步执行事件
     /// </summary>
-    public event AsyncExecuteHandler? AsyncExecuteEvent;
+    public event AsyncExecuteEventHandler? AsyncExecuteCommand;
 
     /// <summary>
     /// 可执行通知接收器事件
     /// </summary>
-    public event NotifyReceivedHandler? NotifyCanExecuteReceived;
-    #endregion
-
-    #region Delegate
-    /// <summary>
-    /// 执行
-    /// </summary>
-    public delegate void ExecuteHandler();
-
-    /// <summary>
-    /// 异步执行
-    /// </summary>
-    /// <returns></returns>
-    public delegate Task AsyncExecuteHandler();
-
-    /// <summary>
-    /// 通知接收器
-    /// </summary>
-    /// <param name="value">引用值</param>
-    public delegate void NotifyReceivedHandler(ref bool value);
+    public event NotifyReceivedEventHandler? NotifyCanExecuteReceived;
     #endregion
 }
