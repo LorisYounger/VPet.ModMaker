@@ -128,6 +128,8 @@
     <Compile Include="Models\ModMakeHistory.cs" />
     <Compile Include="Models\ModMakerInfo.cs" />
     <Compile Include="Models\ModModel\MoveModel.cs" />
+    <Compile Include="Models\ObservablePoint.cs" />
+    <Compile Include="Models\ObservableRect.cs" />
     <Compile Include="Models\ObservableRange.cs" />
     <Compile Include="Models\ModModel\PetModel.cs" />
     <Compile Include="Models\ModModel\SelectTextModel.cs" />
