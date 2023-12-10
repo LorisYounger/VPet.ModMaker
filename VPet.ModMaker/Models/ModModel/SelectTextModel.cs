@@ -125,8 +125,8 @@ public class SelectTextModel : I18nModel<I18nSelectTextModel>
     public SelectTextModel(SelectText text)
         : this()
     {
-        Id.Value = text.Text;
         ChooseId.Value = text.Choose ?? string.Empty;
+        Id.Value = text.Text;
         Mode.EnumValue.Value = text.Mode;
         Tags.Value = text.Tags is null ? string.Empty : string.Join(", ", text.Tags);
         ToTags.Value = text.ToTags is null ? string.Empty : string.Join(", ", text.ToTags);
@@ -138,6 +138,11 @@ public class SelectTextModel : I18nModel<I18nSelectTextModel>
         Drink = new(text.DrinkMin, text.DrinkMax);
         Feel = new(text.FeelMin, text.FeelMax);
         Strength = new(text.StrengthMin, text.StrengthMax);
+    }
+
+    public void RefreshId()
+    {
+        ChooseId.Value = $"{Id.Value}_{nameof(ChooseId)}";
     }
 
     private readonly static char[] rs_splitChar = { ',', ' ' };

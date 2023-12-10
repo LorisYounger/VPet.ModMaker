@@ -192,6 +192,12 @@ public class PetModel : I18nModel<I18nPetInfoModel>
             Moves.Add(new(move));
     }
 
+    public void RefreshId()
+    {
+        PetNameId.Value = $"{Id.Value}_{nameof(PetNameId)}";
+        DescriptionId.Value = $"{Id.Value}_{nameof(DescriptionId)}";
+    }
+
     public void Close()
     {
         foreach (var anime in Animes)

@@ -167,6 +167,12 @@ public class ModInfoModel : I18nModel<I18nModInfoModel>
         OtherI18nDatas = loader.OtherI18nDatas;
 
         LoadI18nData();
+        RefreshId();
+    }
+
+    public void RefreshId()
+    {
+        DescriptionId.Value = $"{Id.Value}_{nameof(DescriptionId)}";
     }
 
     #region Load
@@ -281,6 +287,7 @@ public class ModInfoModel : I18nModel<I18nModInfoModel>
                     foodI18n.Name.Value = name;
                 if (i18nData.Value.TryGetValue(food.DescriptionId.Value, out var description))
                     foodI18n.Description.Value = description;
+                food.RefreshId();
             }
             foreach (var lowText in LowTexts)
             {
@@ -301,6 +308,7 @@ public class ModInfoModel : I18nModel<I18nModInfoModel>
                     selectTextI18n.Text.Value = text;
                 if (i18nData.Value.TryGetValue(selectText.ChooseId.Value, out var choose))
                     selectTextI18n.Choose.Value = choose;
+                selectText.RefreshId();
             }
             foreach (var pet in Pets)
             {
@@ -311,6 +319,7 @@ public class ModInfoModel : I18nModel<I18nModInfoModel>
                     petI18n.PetName.Value = petName;
                 if (i18nData.Value.TryGetValue(pet.DescriptionId.Value, out var description))
                     petI18n.Description.Value = description;
+                pet.RefreshId();
                 foreach (var work in pet.Works)
                 {
                     var workI18n = work.I18nDatas[i18nData.Key];

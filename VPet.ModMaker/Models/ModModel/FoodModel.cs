@@ -140,8 +140,8 @@ public class FoodModel : I18nModel<I18nFoodModel>
     public FoodModel(Food food)
         : this()
     {
-        Id.Value = food.Name;
         DescriptionId.Value = food.Desc;
+        Id.Value = food.Name;
         Graph.Value = food.Graph;
         Type.Value = food.Type;
         Strength.Value = food.Strength;
@@ -185,6 +185,11 @@ public class FoodModel : I18nModel<I18nFoodModel>
         food.Likability = Likability.Value;
         food.Exp = Exp.Value;
         return food;
+    }
+
+    public void RefreshId()
+    {
+        DescriptionId.Value = $"{Id.Value}_{nameof(DescriptionId)}";
     }
 
     public void Close()
