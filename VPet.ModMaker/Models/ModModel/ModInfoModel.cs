@@ -149,11 +149,10 @@ public class ModInfoModel : I18nModel<I18nModInfoModel>
         {
             var petModel = new PetModel(pet);
             Pets.Add(petModel);
-            ModMakerInfo.MainPets.Add(petModel.Id.Value, new(pet, true));
             foreach (var p in pet.path)
                 LoadAnime(petModel, p);
         }
-        Pets.Clear();
+
         // 插入本体宠物
         foreach (var pet in ModMakerInfo.MainPets)
         {
@@ -402,7 +401,8 @@ public class ModInfoModel : I18nModel<I18nModInfoModel>
         Directory.CreateDirectory(petPath);
         foreach (var pet in Pets)
         {
-            pet.Save(petPath);
+            if (pet.CanSave())
+                pet.Save(petPath);
         }
         // 如果没有一个完成保存, 则删除文件夹
         if (Directory.EnumerateFiles(petPath).Any() is false)

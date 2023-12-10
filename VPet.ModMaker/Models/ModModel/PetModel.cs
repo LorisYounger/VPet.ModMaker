@@ -208,7 +208,13 @@ public class PetModel : I18nModel<I18nPetInfoModel>
     /// <returns></returns>
     public bool CanSave()
     {
-        if (FromMain.Value && Works.Count == 0 && Animes.Count == 0 && FoodAnimes.Count == 0)
+        if (
+            FromMain.Value
+            && Works.Count == 0
+            && Moves.Count == 0
+            && Animes.Count == 0
+            && FoodAnimes.Count == 0
+        )
             return false;
         return true;
     }
