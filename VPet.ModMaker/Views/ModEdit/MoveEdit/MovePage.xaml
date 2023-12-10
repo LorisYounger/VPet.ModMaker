@@ -39,7 +39,6 @@
         x:Name="ComboBox_Pet"
         Grid.Column="1"
         pu:ComboBoxHelper.Watermark="{ll:Str 选择宠物}"
-        DisplayMemberPath="Id.Value"
         ItemsSource="{Binding Pets}"
         SelectedItem="{Binding CurrentPet.Value}"
         Style="{DynamicResource StandardComboBoxStyle}">
@@ -48,6 +47,14 @@
             <Setter Property="ToolTip" Value="{Binding CurrentI18nData.Value.Name.Value}" />
           </Style>
         </ComboBox.ItemContainerStyle>
+        <ComboBox.ItemTemplate>
+          <DataTemplate>
+            <StackPanel Orientation="Horizontal">
+              <TextBlock Text="{Binding Id.Value}" />
+              <TextBlock IsEnabled="{Binding FromMain.Value, Converter={StaticResource FalseToCollapsedConverter}}" Text="{ll:Str {} (来自本体)}" />
+            </StackPanel>
+          </DataTemplate>
+        </ComboBox.ItemTemplate>
       </ComboBox>
     </Grid>
     <Grid Grid.Row="1">

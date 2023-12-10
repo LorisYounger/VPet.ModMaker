@@ -18,7 +18,6 @@ using Panuon.WPF.UI;
 using VPet.ModMaker.Views.ModEdit.I18nEdit;
 using System.Globalization;
 using Ookii.Dialogs.Wpf;
-using HKW.Models;
 
 namespace VPet.ModMaker.ViewModels.ModEdit;
 

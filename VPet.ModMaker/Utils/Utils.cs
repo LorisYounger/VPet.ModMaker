@@ -5,9 +5,8 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Windows.Media.Imaging;
-using VPet.ModMaker;
 
-namespace HKW.Models;
+namespace HKW.HKWUtils;
 
 /// <summary>
 /// 工具

@@ -8,110 +8,112 @@ using System.Windows.Input;
 namespace HKW.HKWUtils.Observable;
 
 /// <summary>
-/// 带参数的可观察命令
+/// 具有参数的可观察命令
 /// </summary>
-/// <typeparam name="T">参数类型</typeparam>
-[DebuggerDisplay("\\{ObservableCommand, CanExecute = {CanExecuteProperty.Value}\\}")]
-public class ObservableCommand<T> : ICommand
-    where T : notnull
+[DebuggerDisplay("\\{ObservableCommand, CanExecute = {IsCanExecute.Value}\\}")]
+public class ObservableCommand<T> : ObservableClass<ObservableCommand>, ICommand
 {
-    /// <inheritdoc cref="ObservableCommand.CanExecuteProperty"/>
-    public ObservableValue<bool> CanExecuteProperty { get; } = new(true);
+    bool _isCanExecute = true;
+
+    /// <summary>
+    /// 能执行的属性
+    /// </summary>
+    public bool IsCanExecute
+    {
+        get => _isCanExecute;
+        set => SetProperty(ref _isCanExecute, value);
+    }
+
+    bool _currentCanExecute = true;
 
     /// <summary>
     /// 当前可执行状态
+    /// <para>
+    /// 在执行异步事件时会强制为 <see langword="false"/>, 但异步结束后会恢复为 <see cref="IsCanExecute"/> 的值
+    /// </para>
     /// </summary>
-    public ObservableValue<bool> CurrentCanExecute { get; } = new(true);
+    public bool CurrentCanExecute
+    {
+        get => _currentCanExecute;
+        private set => SetProperty(ref _currentCanExecute, value);
+    }
 
     /// <inheritdoc/>
     public ObservableCommand()
     {
-        CanExecuteProperty.PropertyChanged += InvokeCanExecuteChanged;
-        CurrentCanExecute.PropertyChanged += InvokeCanExecuteChanged;
-        CurrentCanExecute.ValueChanging += CurrentCanExecute_ValueChanging;
+        PropertyChanged += OnCanExecuteChanged;
     }
 
-    private void CurrentCanExecute_ValueChanging(
-        ObservableValue<bool> sender,
-        ValueChangingEventArgs<bool> e
-    )
+    private void OnCanExecuteChanged(object? sender, PropertyChangedEventArgs e)
     {
-        if (e.NewValue is true && CanExecuteProperty.Value is false)
-            e.Cancel = true;
-        else
-            e.Cancel = false;
-    }
-
-    private void InvokeCanExecuteChanged(object? sender, PropertyChangedEventArgs e)
-    {
-        CanExecuteChanged?.Invoke(sender, e);
+        CanExecuteChanged?.Invoke(this, new());
     }
 
     #region ICommand
-    /// <inheritdoc cref="ObservableCommand.CanExecute(object?)"/>
+    /// <summary>
+    /// 能否被执行
+    /// </summary>
+    /// <param name="parameter">参数</param>
+    /// <returns>能被执行为 <see langword="true"/> 否则为 <see langword="false"/></returns>
     public bool CanExecute(object? parameter)
     {
-        return CurrentCanExecute.Value && CanExecuteProperty.Value;
+        return CurrentCanExecute && IsCanExecute;
     }
 
-    /// <inheritdoc cref="ObservableCommand.Execute(object?)"/>
+    /// <summary>
+    /// 执行方法
+    /// </summary>
+    /// <param name="parameter">参数</param>
     public async void Execute(object? parameter)
     {
+        if (IsCanExecute is not true)
+            return;
         ExecuteCommand?.Invoke((T)parameter!);
         await ExecuteAsync((T)parameter!);
     }
 
-    /// <inheritdoc cref="ObservableCommand.ExecuteAsync"/>
+    /// <summary>
+    /// 执行异步方法, 会在等待中修改 <see cref="CurrentCanExecute"/>, 完成后恢复
+    /// <para>
+    /// 若要在执行此方法时触发 <see cref="ExecuteCommand"/> 事件, 请将 <paramref name="runAlone"/> 设置为 <see langword="true"/>
+    /// </para>
+    /// </summary>
     /// <param name="parameter">参数</param>
-    private async Task ExecuteAsync(T parameter)
+    /// <param name="runAlone">设置为 <see langword="true"/> 时触发 <see cref="ExecuteCommand"/> 事件</param>
+    /// <returns>任务</returns>
+    public async Task ExecuteAsync(T parameter, bool runAlone = false)
     {
-        if (AsyncExecuteCommand is null)
+        if (IsCanExecute is not true)
             return;
-        CurrentCanExecute.Value = false;
+        if (runAlone)
+            ExecuteCommand?.Invoke(parameter);
+        if (ExecuteAsyncCommand is null)
+            return;
+        CurrentCanExecute = false;
         foreach (
-            var asyncEvent in AsyncExecuteCommand
+            var asyncEvent in ExecuteAsyncCommand
                 .GetInvocationList()
-                .Cast<AsyncExecuteEventHandler<T>>()
+                .Cast<ExecuteAsyncEventHandler<T>>()
         )
             await asyncEvent.Invoke(parameter);
-        CurrentCanExecute.Value = true;
-    }
-    #endregion
-
-    #region NotifyReceiver
-    /// <inheritdoc cref="ObservableCommand.AddNotifyReceiver(INotifyPropertyChanged[])"/>
-    public void AddNotifyReceiver(params INotifyPropertyChanged[] notifies)
-    {
-        foreach (var notify in notifies)
-            notify.PropertyChanged += Notify_PropertyChanged;
-    }
-
-    /// <inheritdoc cref="ObservableCommand.RemoveNotifyReceiver(INotifyPropertyChanged[])"/>
-    public void RemoveNotifyReceiver(params INotifyPropertyChanged[] notifies)
-    {
-        foreach (var notify in notifies)
-            notify.PropertyChanged -= Notify_PropertyChanged;
-    }
-
-    private void Notify_PropertyChanged(object? sender, PropertyChangedEventArgs e)
-    {
-        var args = new CancelEventArgs();
-        NotifyCanExecuteReceived?.Invoke(this, args);
-        CanExecuteProperty.Value = args.Cancel;
+        CurrentCanExecute = true;
     }
     #endregion
 
     #region Event
-    /// <inheritdoc cref="ObservableCommand.CanExecuteChanged"/>
+    /// <summary>
+    /// 能否执行属性改变后事件
+    /// </summary>
     public event EventHandler? CanExecuteChanged;
 
-    /// <inheritdoc cref="ObservableCommand.ExecuteCommand"/>
+    /// <summary>
+    /// 执行事件
+    /// </summary>
     public event ExecuteEventHandler<T>? ExecuteCommand;
 
-    /// <inheritdoc cref="ObservableCommand.AsyncExecuteCommand"/>
-    public event AsyncExecuteEventHandler<T>? AsyncExecuteCommand;
-
-    /// <inheritdoc cref="ObservableCommand.NotifyCanExecuteReceived"/>
-    public event NotifyReceivedEventHandler? NotifyCanExecuteReceived;
+    /// <summary>
+    /// 异步执行事件
+    /// </summary>
+    public event ExecuteAsyncEventHandler<T>? ExecuteAsyncCommand;
     #endregion
 }

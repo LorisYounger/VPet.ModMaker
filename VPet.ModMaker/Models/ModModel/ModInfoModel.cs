@@ -1,5 +1,6 @@
-﻿using HKW.HKWUtils.Observable;
-using HKW.Models;
+﻿using HKW.HKWUtils;
+using HKW.HKWUtils.Observable;
+
 using LinePutScript;
 using LinePutScript.Converter;
 using LinePutScript.Localization.WPF;
@@ -20,6 +21,7 @@ using VPet_Simulator.Windows.Interface;
 
 namespace VPet.ModMaker.Models;
 
+// TODO: 本体模组显示开关
 /// <summary>
 /// 模组信息模型
 /// </summary>
@@ -142,6 +144,7 @@ public class ModInfoModel : I18nModel<I18nModInfoModel>
         foreach (var selectText in loader.SelectTexts)
             SelectTexts.Add(new(selectText));
 
+        // 载入模组宠物
         foreach (var pet in loader.Pets)
         {
             var petModel = new PetModel(pet);
@@ -149,14 +152,16 @@ public class ModInfoModel : I18nModel<I18nModInfoModel>
             foreach (var p in pet.path)
                 LoadAnime(petModel, p);
         }
+
         // 插入本体宠物
-        foreach (var pet in ModMakerInfo.Pets)
+        foreach (var pet in ModMakerInfo.MainPets)
         {
             // 确保Id不重复
-            if (Pets.All(i => i.Id.Value != pet.SourceId))
-                Pets.Insert(0, pet);
+            if (Pets.All(i => i.Id.Value != pet.Key))
+                Pets.Insert(0, pet.Value);
         }
 
+        // 载入本地化
         foreach (var lang in loader.I18nDatas)
             I18nDatas.Add(lang.Key, lang.Value);
         OtherI18nDatas = loader.OtherI18nDatas;

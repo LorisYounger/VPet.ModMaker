@@ -20,7 +20,7 @@ public class FoodLocationModel
     /// <summary>
     /// 范围
     /// </summary>
-    public ObservableRect<double> Rect { get; } = new();
+    public ObservableRect<double> Rect { get; set; } = new();
 
     /// <summary>
     /// 旋转角度
@@ -34,9 +34,9 @@ public class FoodLocationModel
 
     public FoodLocationModel()
     {
-        Rect.Width.ValueChanged += (s, e) =>
+        Rect.PropertyChangedX += (s, e) =>
         {
-            Rect.Height.Value = e.NewValue;
+            Rect.Height = (int)e.NewValue;
         };
     }
 
@@ -44,7 +44,7 @@ public class FoodLocationModel
     {
         var model = new FoodLocationModel();
         model.Duration.Value = Duration.Value;
-        model.Rect.SetValue(Rect.X.Value, Rect.Y.Value, Rect.Width.Value, Rect.Height.Value);
+        model.Rect = new(Rect.X, Rect.Y, Rect.Width, Rect.Height);
         model.Rotate.Value = Rotate.Value;
         model.Opacity.Value = Opacity.Value;
         return model;
@@ -52,6 +52,6 @@ public class FoodLocationModel
 
     public override string ToString()
     {
-        return $"{Duration.Value},{Rect.X.Value},{Rect.Y.Value},{Rect.Width.Value},{Rotate.Value},{Opacity.Value}";
+        return $"{Duration.Value}, {Rect.X}, {Rect.Y}, {Rect.Width}, {Rotate.Value}, {Opacity.Value}";
     }
 }

@@ -10,41 +10,43 @@ namespace HKW.HKWUtils.Observable;
 /// <summary>
 /// 可观察命令
 /// </summary>
-[DebuggerDisplay("\\{ObservableCommand, CanExecute = {CanExecuteProperty.Value}\\}")]
-public class ObservableCommand : ICommand
+[DebuggerDisplay("\\{ObservableCommand, CanExecute = {IsCanExecute.Value}\\}")]
+public class ObservableCommand : ObservableClass<ObservableCommand>, ICommand
 {
+    bool _isCanExecute = true;
+
     /// <summary>
     /// 能执行的属性
     /// </summary>
-    public ObservableValue<bool> CanExecuteProperty { get; } = new(true);
+    public bool IsCanExecute
+    {
+        get => _isCanExecute;
+        set => SetProperty(ref _isCanExecute, value);
+    }
+
+    bool _currentCanExecute = true;
 
     /// <summary>
     /// 当前可执行状态
+    /// <para>
+    /// 在执行异步事件时会强制为 <see langword="false"/>, 但异步结束后会恢复为 <see cref="IsCanExecute"/> 的值
+    /// </para>
     /// </summary>
-    public ObservableValue<bool> CurrentCanExecute { get; } = new(true);
+    public bool CurrentCanExecute
+    {
+        get => _currentCanExecute;
+        private set => SetProperty(ref _currentCanExecute, value);
+    }
 
     /// <inheritdoc/>
     public ObservableCommand()
     {
-        CanExecuteProperty.PropertyChanged += InvokeCanExecuteChanged;
-        CurrentCanExecute.PropertyChanged += InvokeCanExecuteChanged;
-        CurrentCanExecute.ValueChanging += CurrentCanExecute_ValueChanging;
+        PropertyChanged += OnCanExecuteChanged;
     }
 
-    private void CurrentCanExecute_ValueChanging(
-        ObservableValue<bool> sender,
-        ValueChangingEventArgs<bool> e
-    )
+    private void OnCanExecuteChanged(object? sender, PropertyChangedEventArgs e)
     {
-        if (e.NewValue is true && CanExecuteProperty.Value is false)
-            e.Cancel = true;
-        else
-            e.Cancel = false;
-    }
-
-    private void InvokeCanExecuteChanged(object? sender, PropertyChangedEventArgs e)
-    {
-        CanExecuteChanged?.Invoke(sender, e);
+        CanExecuteChanged?.Invoke(this, new());
     }
 
     #region ICommand
@@ -55,7 +57,7 @@ public class ObservableCommand : ICommand
     /// <returns>能被执行为 <see langword="true"/> 否则为 <see langword="false"/></returns>
     public bool CanExecute(object? parameter)
     {
-        return CurrentCanExecute.Value && CanExecuteProperty.Value;
+        return CurrentCanExecute && IsCanExecute;
     }
 
     /// <summary>
@@ -64,71 +66,36 @@ public class ObservableCommand : ICommand
     /// <param name="parameter">参数</param>
     public async void Execute(object? parameter)
     {
+        if (IsCanExecute is not true)
+            return;
         ExecuteCommand?.Invoke();
         await ExecuteAsync();
     }
 
     /// <summary>
-    /// 执行异步方法, 会在等待中关闭按钮的可执行性, 完成后恢复
+    /// 执行异步方法, 会在等待中修改 <see cref="CurrentCanExecute"/>, 完成后恢复
+    /// <para>
+    /// 若要在执行此方法时触发 <see cref="ExecuteCommand"/> 事件, 请将 <paramref name="runAlone"/> 设置为 <see langword="true"/>
+    /// </para>
     /// </summary>
-    /// <returns>等待</returns>
-    private async Task ExecuteAsync()
+    /// <param name="runAlone">设置为 <see langword="true"/> 时触发 <see cref="ExecuteCommand"/> 事件</param>
+    /// <returns>任务</returns>
+    public async Task ExecuteAsync(bool runAlone = false)
     {
-        if (AsyncExecuteCommand is null)
+        if (IsCanExecute is not true)
             return;
-        CurrentCanExecute.Value = false;
+        if (runAlone)
+            ExecuteCommand?.Invoke();
+        if (ExecuteAsyncCommand is null)
+            return;
+        CurrentCanExecute = false;
         foreach (
-            var asyncEvent in AsyncExecuteCommand
+            var asyncEvent in ExecuteAsyncCommand
                 .GetInvocationList()
-                .Cast<AsyncExecuteEventHandler>()
+                .Cast<ExecuteAsyncEventHandler>()
         )
             await asyncEvent.Invoke();
-        CurrentCanExecute.Value = true;
-    }
-    #endregion
-
-    #region NotifyReceiver
-    /// <summary>
-    /// 添加通知属性改变后接收器
-    /// <para>
-    /// 添加的接口触发后会执行 <see cref="NotifyCanExecuteReceived"/>
-    /// </para>
-    /// <para>示例:
-    /// <code><![CDATA[
-    /// ObservableValue<string> value = new();
-    /// ObservableCommand command = new();
-    /// command.AddNotifyReceiver(value);
-    /// command.NotifyCanExecuteReceived += (ref bool canExecute) =>
-    /// {
-    ///     canExecute = false; // trigger this
-    /// };
-    /// value.EnumValue = "A"; // execute this
-    /// // result: value.EnumValue == "A" , command.CanExecuteProperty == false
-    /// ]]>
-    /// </code></para>
-    /// </summary>
-    /// <param name="notifies">通知属性改变后接口</param>
-    public void AddNotifyReceiver(params INotifyPropertyChanged[] notifies)
-    {
-        foreach (var notify in notifies)
-            notify.PropertyChanged += Notify_PropertyChanged;
-    }
-
-    /// <summary>
-    /// 删除通知属性改变后接收器
-    /// </summary>
-    /// <param name="notifies">通知属性改变后接口</param>
-    public void RemoveNotifyReceiver(params INotifyPropertyChanged[] notifies)
-    {
-        foreach (var notify in notifies)
-            notify.PropertyChanged -= Notify_PropertyChanged;
-    }
-
-    private void Notify_PropertyChanged(object? sender, PropertyChangedEventArgs e)
-    {
-        var args = new CancelEventArgs();
-        NotifyCanExecuteReceived?.Invoke(this, args);
-        CanExecuteProperty.Value = args.Cancel;
+        CurrentCanExecute = true;
     }
     #endregion
 
@@ -146,11 +113,6 @@ public class ObservableCommand : ICommand
     /// <summary>
     /// 异步执行事件
     /// </summary>
-    public event AsyncExecuteEventHandler? AsyncExecuteCommand;
-
-    /// <summary>
-    /// 可执行通知接收器事件
-    /// </summary>
-    public event NotifyReceivedEventHandler? NotifyCanExecuteReceived;
+    public event ExecuteAsyncEventHandler? ExecuteAsyncCommand;
     #endregion
 }

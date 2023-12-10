@@ -1,5 +1,5 @@
 ﻿using HKW.HKWUtils.Observable;
-using HKW.Models;
+
 using LinePutScript.Localization.WPF;
 using Microsoft.Win32;
 using System;
@@ -123,7 +123,7 @@ public class AnimeEditWindowVM
 
         CurrentAnimeModel.ValueChanged += CurrentAnimeModel_ValueChanged;
 
-        PlayCommand.AsyncExecuteCommand += PlayCommand_AsyncExecuteEvent;
+        PlayCommand.ExecuteAsyncCommand += PlayCommand_AsyncExecuteEvent;
         StopCommand.ExecuteCommand += StopCommand_ExecuteEvent;
         AddAnimeCommand.ExecuteCommand += AddAnimeCommand_ExecuteEvent;
         RemoveAnimeCommand.ExecuteCommand += RemoveAnimeCommand_ExecuteEvent;

@@ -1,5 +1,5 @@
 ﻿using HKW.HKWUtils.Observable;
-using HKW.Models;
+
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -296,7 +296,7 @@ public class I18nEditWindowVM
     {
         foreach (var pet in model.Pets)
         {
-            if (pet.IsSimplePetModel)
+            if (pet.FromMain.Value)
                 continue;
             AddData(pet.Id, pet, (m) => m.Name);
             AddData(pet.PetNameId, pet, (m) => m.PetName);

@@ -1,5 +1,5 @@
 ﻿using HKW.HKWUtils.Observable;
-using HKW.Models;
+
 using LinePutScript.Localization.WPF;
 using System;
 using System.Collections.Generic;
@@ -66,11 +66,12 @@ public class PetPageVM
 
     public void Edit(PetModel model)
     {
-        if (model.IsSimplePetModel)
-        {
-            MessageBox.Show("这是本体自带的宠物, 无法编辑".Translate());
+        if (
+            model.FromMain.Value
+            && MessageBox.Show("这是本体自带的宠物, 确定要编辑吗".Translate(), "", MessageBoxButton.YesNo)
+                is not MessageBoxResult.Yes
+        )
             return;
-        }
         var window = new PetEditWindow();
         var vm = window.ViewModel;
         vm.OldPet = model;
@@ -86,7 +87,7 @@ public class PetPageVM
 
     private void Remove(PetModel model)
     {
-        if (model.IsSimplePetModel)
+        if (model.FromMain.Value)
         {
             MessageBox.Show("这是本体自带的宠物, 无法删除".Translate());
             return;

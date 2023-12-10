@@ -12,10 +12,9 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using VPet.ModMaker.Models.ModModel;
 using VPet_Simulator.Core;
 
-namespace HKW.Models;
+namespace HKW.HKWUtils;
 
 /// <summary>
 /// 拓展
@@ -45,10 +44,9 @@ public static class Extensions
     /// <param name="source">图像资源</param>
     public static void CloseStream(this ImageSource source)
     {
-        if (source is BitmapImage image)
-        {
-            image.StreamSource?.Close();
-        }
+        if (source is not BitmapImage image)
+            return;
+        image.StreamSource?.Close();
     }
 
     /// <summary>
@@ -138,16 +136,6 @@ public static class Extensions
             return false;
         dictionary.Add(key, value);
         return true;
-    }
-
-    /// <summary>
-    /// 是含有名称的动画
-    /// </summary>
-    /// <param name="graphType"></param>
-    /// <returns></returns>
-    public static bool IsHasNameAnime(this GraphInfo.GraphType graphType)
-    {
-        return AnimeTypeModel.HasNameAnimes.Contains(graphType);
     }
 
     /// <summary>

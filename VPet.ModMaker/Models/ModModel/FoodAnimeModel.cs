@@ -48,7 +48,7 @@ public class FoodAnimeModel
             foodLocationInfo.Duration.Value = int.Parse(infos[0]);
             if (infos.Length > 1)
             {
-                foodLocationInfo.Rect.SetValue(
+                foodLocationInfo.Rect = new(
                     double.Parse(infos[1]),
                     double.Parse(infos[2]),
                     double.Parse(infos[3]),

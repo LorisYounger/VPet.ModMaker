@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
+using System.Runtime.CompilerServices;
 
 namespace HKW.HKWUtils.Observable;
 
@@ -169,55 +170,36 @@ public class ObservableValue<T>
     }
 
     /// <inheritdoc/>
-    public override bool Equals(object? obj)
+    public override int GetHashCode()
     {
-        return Equals(obj as ObservableValue<T>);
+        return Value?.GetHashCode() ?? 0;
     }
 
     /// <inheritdoc/>
-    public override int GetHashCode()
+    public override bool Equals(object? obj)
     {
-        return Guid.GetHashCode();
+        return obj is ObservableValue<T> value
+            && EqualityComparer<T>.Default.Equals(Value, value.Value);
     }
 
     /// <inheritdoc/>
     public bool Equals(ObservableValue<T>? other)
     {
-        return Guid.Equals(other?.Guid) is true;
+        return other is ObservableValue<T> value
+            && EqualityComparer<T>.Default.Equals(Value, value.Value);
     }
 
-    /// <summary>
-    /// 值相等
-    /// </summary>
-    /// <param name="other">其它可观察值</param>
-    /// <returns>相等为 <see langword="true"/> 否则为 <see langword="false"/></returns>
-    public bool ValueEquals(ObservableValue<T> other)
+    /// <inheritdoc/>
+    public static bool operator ==(ObservableValue<T> a, ObservableValue<T> b)
     {
-        return Value?.Equals(other.Value) is true;
+        return EqualityComparer<T>.Default.Equals(a.Value, b.Value);
     }
 
-    /// <summary>
-    /// 判断 <see cref="Value"/> 相等
-    /// </summary>
-    /// <param name="value1">左值</param>
-    /// <param name="value2">右值</param>
-    /// <returns>相等为 <see langword="true"/> 否则为 <see langword="false"/></returns>
-    public static bool operator ==(ObservableValue<T> value1, ObservableValue<T> value2)
+    /// <inheritdoc/>
+    public static bool operator !=(ObservableValue<T> a, ObservableValue<T> b)
     {
-        return value1.Value?.Equals(value2.Value) is true;
+        return (a == b) is not true;
     }
-
-    /// <summary>
-    /// 判断 <see cref="Value"/> 不相等
-    /// </summary>
-    /// <param name="value1">左值</param>
-    /// <param name="value2">右值</param>
-    /// <returns>不相等为 <see langword="true"/> 否则为 <see langword="false"/></returns>
-    public static bool operator !=(ObservableValue<T> value1, ObservableValue<T> value2)
-    {
-        return value1.Value?.Equals(value2.Value) is not true;
-    }
-
     #endregion
 
     #region Event

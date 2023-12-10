@@ -1,5 +1,6 @@
-﻿using HKW.HKWUtils.Observable;
-using HKW.Models;
+﻿using HKW.HKWUtils;
+using HKW.HKWUtils.Observable;
+
 using LinePutScript.Converter;
 using System;
 using System.Collections.Generic;
@@ -145,14 +146,14 @@ public class ClickTextModel : I18nModel<I18nClickTextModel>
         Working.Value = clickText.Working;
         WorkingState.Value = clickText.State;
         DayTime.EnumValue.Value = clickText.DaiTime;
-        Like.SetValue(clickText.LikeMin, clickText.LikeMax);
-        Health.SetValue(clickText.HealthMin, clickText.HealthMax);
-        Level.SetValue(clickText.LevelMin, clickText.LevelMax);
-        Money.SetValue(clickText.MoneyMin, clickText.MoneyMax);
-        Food.SetValue(clickText.FoodMin, clickText.FoodMax);
-        Drink.SetValue(clickText.DrinkMin, clickText.DrinkMax);
-        Feel.SetValue(clickText.FeelMin, clickText.FeelMax);
-        Strength.SetValue(clickText.StrengthMin, clickText.StrengthMax);
+        Like = new(clickText.LikeMin, clickText.LikeMax);
+        Health = new(clickText.HealthMin, clickText.HealthMax);
+        Level = new(clickText.LevelMin, clickText.LevelMax);
+        Money = new(clickText.MoneyMin, clickText.MoneyMax);
+        Food = new(clickText.FoodMin, clickText.FoodMax);
+        Drink = new(clickText.DrinkMin, clickText.DrinkMax);
+        Feel = new(clickText.FeelMin, clickText.FeelMax);
+        Strength = new(clickText.StrengthMin, clickText.StrengthMax);
     }
 
     public ClickText ToClickText()
@@ -164,22 +165,22 @@ public class ClickTextModel : I18nModel<I18nClickTextModel>
             Working = Working.Value,
             State = WorkingState.Value,
             DaiTime = DayTime.EnumValue.Value,
-            LikeMax = Like.Max.Value,
-            LikeMin = Like.Min.Value,
-            HealthMin = Health.Min.Value,
-            HealthMax = Health.Max.Value,
-            LevelMin = Level.Min.Value,
-            LevelMax = Level.Max.Value,
-            MoneyMin = Money.Min.Value,
-            MoneyMax = Money.Max.Value,
-            FoodMin = Food.Min.Value,
-            FoodMax = Food.Max.Value,
-            DrinkMin = Drink.Min.Value,
-            DrinkMax = Drink.Max.Value,
-            FeelMin = Feel.Min.Value,
-            FeelMax = Feel.Max.Value,
-            StrengthMin = Strength.Min.Value,
-            StrengthMax = Strength.Max.Value,
+            LikeMax = Like.Max,
+            LikeMin = Like.Min,
+            HealthMin = Health.Min,
+            HealthMax = Health.Max,
+            LevelMin = Level.Min,
+            LevelMax = Level.Max,
+            MoneyMin = Money.Min,
+            MoneyMax = Money.Max,
+            FoodMin = Food.Min,
+            FoodMax = Food.Max,
+            DrinkMin = Drink.Min,
+            DrinkMax = Drink.Max,
+            FeelMin = Feel.Min,
+            FeelMax = Feel.Max,
+            StrengthMin = Strength.Min,
+            StrengthMax = Strength.Max,
         };
     }
 }

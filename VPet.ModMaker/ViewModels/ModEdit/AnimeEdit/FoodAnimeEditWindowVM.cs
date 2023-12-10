@@ -1,5 +1,5 @@
 ﻿using HKW.HKWUtils.Observable;
-using HKW.Models;
+
 using LinePutScript.Localization.WPF;
 using Microsoft.Win32;
 using System;
@@ -24,7 +24,6 @@ public class FoodAnimeEditWindowVM
     /// </summary>
     public PetModel CurrentPet { get; set; }
 
-    // TODO: 使用内部资源
     /// <summary>
     /// 默认食物图片
     /// </summary>
@@ -211,7 +210,7 @@ public class FoodAnimeEditWindowVM
 
         CurrentAnimeModel.ValueChanged += CurrentAnimeModel_ValueChanged;
 
-        PlayCommand.AsyncExecuteCommand += PlayCommand_AsyncExecuteEvent;
+        PlayCommand.ExecuteAsyncCommand += PlayCommand_AsyncExecuteEvent;
         StopCommand.ExecuteCommand += StopCommand_ExecuteEvent;
         ReplaceFoodImageCommand.ExecuteCommand += ChangeFoodImageCommand_ExecuteEvent;
         ResetFoodImageCommand.ExecuteCommand += ResetFoodImageCommand_ExecuteEvent;

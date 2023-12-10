@@ -98,6 +98,7 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Usings.cs" />
     <Compile Include="Converters\BrushToMediaColorConverter.cs" />
     <Compile Include="Converters\CalculatorConverter.cs" />
     <Compile Include="Converters\EqualsConverter.cs" />
@@ -110,12 +111,37 @@
     <Compile Include="Converters\RatioMarginConverter.cs" />
     <Compile Include="Converters\MaxConverter.cs" />
     <Compile Include="Converters\MarginConverter.cs" />
+    <Compile Include="SimpleObservable\ObservableClass\INotifyPropertyChangedX.cs" />
+    <Compile Include="SimpleObservable\ObservableClass\INotifyPropertyChangingX.cs" />
+    <Compile Include="SimpleObservable\ObservableClass\ObservableClass.cs" />
+    <Compile Include="SimpleObservable\ObservableClass\PropertyChangedXEventArgs.cs" />
+    <Compile Include="SimpleObservable\ObservableClass\PropertyChangedXEventHandler.cs" />
+    <Compile Include="SimpleObservable\ObservableClass\PropertyChangingXEventArgs.cs" />
+    <Compile Include="SimpleObservable\ObservableClass\PropertyChangingXEventHandler.cs" />
+    <Compile Include="SimpleObservable\ObservableCommand\ExecuteAsyncEventHandler.cs" />
+    <Compile Include="SimpleObservable\ObservableCommand\ExecuteEventHandler.cs" />
+    <Compile Include="SimpleObservable\ObservableCommand\NotifyReceivedEventHandler.cs" />
+    <Compile Include="SimpleObservable\ObservableCommand\ObservableCommand.cs" />
+    <Compile Include="SimpleObservable\ObservableCommand\ObservableCommandT.cs" />
+    <Compile Include="SimpleObservable\ObservableValue\NotifySenderPropertyChangedHandler.cs" />
+    <Compile Include="SimpleObservable\ObservableValue\ObservableValue.cs" />
+    <Compile Include="SimpleObservable\ObservableValue\ObservableValueGroup.cs" />
+    <Compile Include="SimpleObservable\ObservableValue\ValueChangedEventArgs.cs" />
+    <Compile Include="SimpleObservable\ObservableValue\ValueChangedEventHandler.cs" />
+    <Compile Include="SimpleObservable\ObservableValue\ValueChangingEventArgs.cs" />
+    <Compile Include="SimpleObservable\ObservableValue\ValueChangingEventHandler.cs" />
+    <Compile Include="Utils\ObservableEnumFlags.cs" />
+    <Compile Include="Utils\Expansions.cs" />
+    <Compile Include="Utils\HashCode.cs" />
+    <Compile Include="Utils\ObservableRange.cs" />
+    <Compile Include="Utils\ObservablePoint.cs" />
+    <Compile Include="Utils\ObservableRect.cs" />
+    <Compile Include="Utils\Utils.cs" />
     <Compile Include="Models\EnumFlagsVM.cs" />
     <Compile Include="Models\I18nData.cs" />
     <Compile Include="Models\ModModel\AnimeModel.cs" />
     <Compile Include="Models\ModModel\AnimeTypeModel.cs" />
     <Compile Include="Models\ModModel\ClickTextModel.cs" />
-    <Compile Include="Models\Expansions.cs" />
     <Compile Include="Models\ModModel\FoodAnimeModel.cs" />
     <Compile Include="Models\ModModel\FoodAnimeTypeModel.cs" />
     <Compile Include="Models\ModModel\FoodLocationModel.cs" />
@@ -136,18 +162,6 @@
     <Compile Include="Models\ModModel\WorkModel.cs" />
     <Compile Include="Resources\NativeResources.cs" />
     <Compile Include="NativeStyles.cs" />
-    <Compile Include="SimpleObservable\ObservableCommand\AsyncExecuteEventHandler.cs" />
-    <Compile Include="SimpleObservable\ObservableCommand\ExecuteEventHandler.cs" />
-    <Compile Include="SimpleObservable\ObservableCommand\NotifyReceivedEventHandler.cs" />
-    <Compile Include="SimpleObservable\ObservableCommand\ObservableCommand.cs" />
-    <Compile Include="SimpleObservable\ObservableCommand\ObservableCommandT.cs" />
-    <Compile Include="SimpleObservable\ObservableValue\NotifySenderPropertyChangedHandler.cs" />
-    <Compile Include="SimpleObservable\ObservableValue\ObservableValue.cs" />
-    <Compile Include="SimpleObservable\ObservableValue\ObservableValueGroup.cs" />
-    <Compile Include="SimpleObservable\ObservableValue\ValueChangedEventArgs.cs" />
-    <Compile Include="SimpleObservable\ObservableValue\ValueChangedEventHandler.cs" />
-    <Compile Include="SimpleObservable\ObservableValue\ValueChangingEventArgs.cs" />
-    <Compile Include="SimpleObservable\ObservableValue\ValueChangingEventHandler.cs" />
     <Compile Include="ViewModels\ModEdit\AddCultureWindowVM.cs" />
     <Compile Include="ViewModels\ModEdit\AnimeEdit\FoodAnimeEditWindowVM.cs" />
     <Compile Include="ViewModels\ModEdit\AnimeEdit\AnimeEditWindowVM.cs" />
@@ -217,7 +231,6 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
-    <Compile Include="Models\Utils.cs" />
     <Compile Include="Views\ModEdit\FoodEdit\FoodEditWindow.xaml.cs">
       <DependentUpon>FoodEditWindow.xaml</DependentUpon>
     </Compile>

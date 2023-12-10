@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using VPet.ModMaker.Models.ModModel;
+using VPet_Simulator.Core;
 
 namespace VPet.ModMaker.Models;
 
@@ -34,11 +35,24 @@ public static class ModMakerInfo
 
     /// <summary>
     /// 本体的宠物
+    /// <para>
+    /// (PetId, PetModel)
+    /// </para>
     /// </summary>
-    public static List<PetModel> Pets { get; } = new();
+    public static Dictionary<string, PetModel> MainPets { get; } = new();
 
     /// <summary>
     /// 本地风格
     /// </summary>
     public static NativeStyles NativeStyles { get; } = new();
+
+    /// <summary>
+    /// 是含有名称的动画
+    /// </summary>
+    /// <param name="graphType"></param>
+    /// <returns></returns>
+    public static bool IsHasNameAnime(this GraphInfo.GraphType graphType)
+    {
+        return AnimeTypeModel.HasNameAnimes.Contains(graphType);
+    }
 }

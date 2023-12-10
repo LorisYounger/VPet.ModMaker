@@ -9,6 +9,7 @@
   <c:BrushToMediaColorConverter x:Key="BrushToMediaColorConverter" />
   <c:MaxConverter x:Key="MaxConverter" />
   <c:FalseToHiddenConverter x:Key="FalseToHiddenConverter" />
+  <c:FalseToCollapsedConverter x:Key="FalseToCollapsedConverter" />
   <c:EqualsConverter x:Key="EqualsConverter" />
   <c:NotEqualsConverter x:Key="NotEqualsConverter" />
   <c:NullToFalseConverter x:Key="NullToFalseConverter" />

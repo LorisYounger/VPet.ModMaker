@@ -1,5 +1,5 @@
-﻿using HKW.HKWUtils.Observable;
-using HKW.Models;
+﻿using HKW.HKWUtils;
+using HKW.HKWUtils.Observable;
 using LinePutScript;
 using LinePutScript.Converter;
 using LinePutScript.Localization.WPF;
@@ -23,9 +23,9 @@ namespace VPet.ModMaker.Models;
 public class PetModel : I18nModel<I18nPetInfoModel>
 {
     /// <summary>
-    /// 显示的Id 若不为空则判断为来自本体的宠物
+    /// 来自本体
     /// </summary>
-    public string? SourceId { get; set; } = null;
+    public ObservableValue<bool> FromMain { get; set; } = new(false);
 
     /// <summary>
     /// Id
@@ -95,8 +95,6 @@ public class PetModel : I18nModel<I18nPetInfoModel>
 
     public ObservableValue<int> AnimeCount { get; } = new();
 
-    public bool IsSimplePetModel { get; } = false;
-
     public PetModel()
     {
         PetNameId.Value = $"{Id.Value}_{nameof(PetNameId)}";
@@ -131,80 +129,67 @@ public class PetModel : I18nModel<I18nPetInfoModel>
         CurrentI18nData.Value = I18nDatas[I18nHelper.Current.CultureName.Value];
     }
 
-    public PetModel(PetLoader loader)
+    public PetModel(PetLoader loader, bool fromMain = false)
         : this()
     {
         Id.Value = loader.Name;
         PetNameId.Value = loader.PetName;
         DescriptionId.Value = loader.Intor;
 
-        TouchHeadRect.Value.SetValue(
+        TouchHeadRect.Value = new(
             loader.Config.TouchHeadLocate.X,
             loader.Config.TouchHeadLocate.Y,
             loader.Config.TouchHeadSize.Width,
             loader.Config.TouchHeadSize.Height
         );
 
-        TouchBodyRect.Value.SetValue(
+        TouchBodyRect.Value = new(
             loader.Config.TouchBodyLocate.X,
             loader.Config.TouchBodyLocate.Y,
             loader.Config.TouchBodySize.Width,
             loader.Config.TouchBodySize.Height
         );
 
-        TouchRaisedRect.Value.Happy.Value.SetValue(
+        TouchRaisedRect.Value.Happy = new(
             loader.Config.TouchRaisedLocate[0].X,
             loader.Config.TouchRaisedLocate[0].Y,
             loader.Config.TouchRaisedSize[0].Width,
             loader.Config.TouchRaisedSize[0].Height
         );
-        TouchRaisedRect.Value.Nomal.Value.SetValue(
+        TouchRaisedRect.Value.Nomal = new(
             loader.Config.TouchRaisedLocate[1].X,
             loader.Config.TouchRaisedLocate[1].Y,
             loader.Config.TouchRaisedSize[1].Width,
             loader.Config.TouchRaisedSize[1].Height
         );
-        TouchRaisedRect.Value.PoorCondition.Value.SetValue(
+        TouchRaisedRect.Value.PoorCondition = new(
             loader.Config.TouchRaisedLocate[2].X,
             loader.Config.TouchRaisedLocate[2].Y,
             loader.Config.TouchRaisedSize[2].Width,
             loader.Config.TouchRaisedSize[2].Height
         );
-        TouchRaisedRect.Value.Ill.Value.SetValue(
+        TouchRaisedRect.Value.Ill = new(
             loader.Config.TouchRaisedLocate[3].X,
             loader.Config.TouchRaisedLocate[3].Y,
             loader.Config.TouchRaisedSize[3].Width,
             loader.Config.TouchRaisedSize[3].Height
         );
 
-        RaisePoint.Value.Happy.Value.SetValue(
-            loader.Config.RaisePoint[0].X,
-            loader.Config.RaisePoint[0].Y
-        );
-        RaisePoint.Value.Nomal.Value.SetValue(
-            loader.Config.RaisePoint[1].X,
-            loader.Config.RaisePoint[1].Y
-        );
-        RaisePoint.Value.PoorCondition.Value.SetValue(
+        RaisePoint.Value.Happy = new(loader.Config.RaisePoint[0].X, loader.Config.RaisePoint[0].Y);
+        RaisePoint.Value.Nomal = new(loader.Config.RaisePoint[1].X, loader.Config.RaisePoint[1].Y);
+        RaisePoint.Value.PoorCondition = new(
             loader.Config.RaisePoint[2].X,
             loader.Config.RaisePoint[2].Y
         );
-        RaisePoint.Value.Ill.Value.SetValue(
-            loader.Config.RaisePoint[3].X,
-            loader.Config.RaisePoint[3].Y
-        );
+        RaisePoint.Value.Ill = new(loader.Config.RaisePoint[3].X, loader.Config.RaisePoint[3].Y);
+        // 如果这个宠物数据来自本体, 则不载入 Work 和 Move
+        if (FromMain.Value = fromMain)
+            return;
 
         foreach (var work in loader.Config.Works)
             Works.Add(new(work));
         foreach (var move in loader.Config.Moves)
             Moves.Add(new(move));
-    }
-
-    public PetModel(PetLoader loader, bool isSimplePet)
-        : this()
-    {
-        Id.Value = loader.Name;
-        IsSimplePetModel = isSimplePet;
     }
 
     public void Close()
@@ -222,13 +207,6 @@ public class PetModel : I18nModel<I18nPetInfoModel>
     /// <param name="path">路径</param>
     public void Save(string path)
     {
-        if (IsSimplePetModel)
-        {
-            Id.Value = SourceId;
-            SaveSimplePetInfo(path);
-            Id.Value = SourceId + " (来自本体)".Translate();
-            return;
-        }
         foreach (var cultureName in I18nHelper.Current.CultureNames)
         {
             ModInfoModel.SaveI18nDatas[cultureName].TryAdd(
@@ -248,24 +226,16 @@ public class PetModel : I18nModel<I18nPetInfoModel>
         if (File.Exists(petFile) is false)
             File.Create(petFile).Close();
         var lps = new LPS();
-        SavePetInfo(lps);
+        // 如果本体中存在相同的宠物, 则只保存差异信息
+        if (ModMakerInfo.MainPets.TryGetValue(Id.Value, out var mainPet))
+            SaveDifferentPetInfo(lps, mainPet);
+        else
+            SavePetInfo(lps);
         SaveWorksInfo(lps);
         SaveMoveInfo(lps);
         File.WriteAllText(petFile, lps.ToString());
 
         // 保存图片
-        SaveAnime(path);
-    }
-
-    private void SaveSimplePetInfo(string path)
-    {
-        if (Works.Count == 0 && Moves.Count == 0 && Animes.Count == 0)
-            return;
-        var petFile = Path.Combine(path, $"{Id.Value}.lps");
-        var lps = new LPS { new Line("pet", Id.Value) { new Sub("path", Id.Value), } };
-        SaveWorksInfo(lps);
-        SaveMoveInfo(lps);
-        File.WriteAllText(petFile, lps.ToString());
         SaveAnime(path);
     }
 
@@ -311,12 +281,42 @@ public class PetModel : I18nModel<I18nPetInfoModel>
         }
     }
 
+    #region SavePetInfo
     /// <summary>
     /// 保存宠物信息
     /// </summary>
     /// <param name="lps"></param>
-    /// <param name="pet"></param>
     private void SavePetInfo(LPS lps)
+    {
+        SavePetBasicInfo(lps);
+        SavePetTouchHeadInfo(lps);
+        SavePetTouchBodyInfo(lps);
+        SavePetTouchRaisedInfo(lps);
+        SavePetRaisePointInfo(lps);
+    }
+
+    /// <summary>
+    /// 保存差异宠物信息
+    /// <para>
+    /// 用于本体存在同名宠物的情况下
+    /// </para>
+    /// </summary>
+    /// <param name="lps"></param>
+    /// <param name="mainPet">本体宠物</param>
+    private void SaveDifferentPetInfo(LPS lps, PetModel mainPet)
+    {
+        SavePetBasicInfo(lps);
+        if (TouchHeadRect != mainPet.TouchHeadRect)
+            SavePetTouchHeadInfo(lps);
+        if (TouchBodyRect != mainPet.TouchBodyRect)
+            SavePetTouchBodyInfo(lps);
+        if (TouchRaisedRect != mainPet.TouchRaisedRect)
+            SavePetTouchRaisedInfo(lps);
+        if (RaisePoint != mainPet.RaisePoint)
+            SavePetRaisePointInfo(lps);
+    }
+
+    private void SavePetBasicInfo(LPS lps)
     {
         lps.Add(
             new Line("pet", Id.Value)
@@ -326,65 +326,82 @@ public class PetModel : I18nModel<I18nPetInfoModel>
                 new Sub("petname", PetNameId.Value)
             }
         );
+    }
+
+    private void SavePetTouchHeadInfo(LPS lps)
+    {
         lps.Add(
             new Line("touchhead")
             {
-                new Sub("px", TouchHeadRect.Value.X.Value),
-                new Sub("py", TouchHeadRect.Value.Y.Value),
-                new Sub("sw", TouchHeadRect.Value.Width.Value),
-                new Sub("sh", TouchHeadRect.Value.Height.Value),
-            }
-        );
-        lps.Add(
-            new Line("touchbody")
-            {
-                new Sub("px", TouchBodyRect.Value.X.Value),
-                new Sub("py", TouchBodyRect.Value.Y.Value),
-                new Sub("sw", TouchBodyRect.Value.Width.Value),
-                new Sub("sh", TouchBodyRect.Value.Height.Value),
-            }
-        );
-        lps.Add(
-            new Line("touchraised")
-            {
-                new Sub("happy_px", TouchRaisedRect.Value.Happy.Value.X.Value),
-                new Sub("happy_py", TouchRaisedRect.Value.Happy.Value.Y.Value),
-                new Sub("happy_sw", TouchRaisedRect.Value.Happy.Value.Width.Value),
-                new Sub("happy_sh", TouchRaisedRect.Value.Happy.Value.Height.Value),
-                //
-                new Sub("nomal_px", TouchRaisedRect.Value.Nomal.Value.X.Value),
-                new Sub("nomal_py", TouchRaisedRect.Value.Nomal.Value.Y.Value),
-                new Sub("nomal_sw", TouchRaisedRect.Value.Nomal.Value.Width.Value),
-                new Sub("nomal_sh", TouchRaisedRect.Value.Nomal.Value.Height.Value),
-                //
-                new Sub("poorcondition_px", TouchRaisedRect.Value.PoorCondition.Value.X.Value),
-                new Sub("poorcondition_py", TouchRaisedRect.Value.PoorCondition.Value.Y.Value),
-                new Sub("poorcondition_sw", TouchRaisedRect.Value.PoorCondition.Value.Width.Value),
-                new Sub("poorcondition_sh", TouchRaisedRect.Value.PoorCondition.Value.Height.Value),
-                //
-                new Sub("ill_px", TouchRaisedRect.Value.Ill.Value.X.Value),
-                new Sub("ill_py", TouchRaisedRect.Value.Ill.Value.Y.Value),
-                new Sub("ill_sw", TouchRaisedRect.Value.Ill.Value.Width.Value),
-                new Sub("ill_sh", TouchRaisedRect.Value.Ill.Value.Height.Value),
-            }
-        );
-        lps.Add(
-            new Line("raisepoint")
-            {
-                new Sub("happy_x", RaisePoint.Value.Happy.Value.X.Value),
-                new Sub("happy_y", RaisePoint.Value.Happy.Value.Y.Value),
-                //
-                new Sub("nomal_x", RaisePoint.Value.Nomal.Value.X.Value),
-                new Sub("nomal_y", RaisePoint.Value.Nomal.Value.Y.Value),
-                //
-                new Sub("poorcondition_x", RaisePoint.Value.PoorCondition.Value.X.Value),
-                new Sub("poorcondition_y", RaisePoint.Value.PoorCondition.Value.Y.Value),
-                //
-                new Sub("ill_x", RaisePoint.Value.Ill.Value.X.Value),
-                new Sub("ill_y", RaisePoint.Value.Ill.Value.Y.Value),
+                new Sub("px", TouchHeadRect.Value.X),
+                new Sub("py", TouchHeadRect.Value.Y),
+                new Sub("sw", TouchHeadRect.Value.Width),
+                new Sub("sh", TouchHeadRect.Value.Height),
             }
         );
     }
+
+    private void SavePetTouchBodyInfo(LPS lps)
+    {
+        lps.Add(
+            new Line("touchbody")
+            {
+                new Sub("px", TouchBodyRect.Value.X),
+                new Sub("py", TouchBodyRect.Value.Y),
+                new Sub("sw", TouchBodyRect.Value.Width),
+                new Sub("sh", TouchBodyRect.Value.Height),
+            }
+        );
+    }
+
+    private void SavePetTouchRaisedInfo(LPS lps)
+    {
+        lps.Add(
+            new Line("touchraised")
+            {
+                new Sub("happy_px", TouchRaisedRect.Value.Happy.X),
+                new Sub("happy_py", TouchRaisedRect.Value.Happy.Y),
+                new Sub("happy_sw", TouchRaisedRect.Value.Happy.Width),
+                new Sub("happy_sh", TouchRaisedRect.Value.Happy.Height),
+                //
+                new Sub("nomal_px", TouchRaisedRect.Value.Nomal.X),
+                new Sub("nomal_py", TouchRaisedRect.Value.Nomal.Y),
+                new Sub("nomal_sw", TouchRaisedRect.Value.Nomal.Width),
+                new Sub("nomal_sh", TouchRaisedRect.Value.Nomal.Height),
+                //
+                new Sub("poorcondition_px", TouchRaisedRect.Value.PoorCondition.X),
+                new Sub("poorcondition_py", TouchRaisedRect.Value.PoorCondition.Y),
+                new Sub("poorcondition_sw", TouchRaisedRect.Value.PoorCondition.Width),
+                new Sub("poorcondition_sh", TouchRaisedRect.Value.PoorCondition.Height),
+                //
+                new Sub("ill_px", TouchRaisedRect.Value.Ill.X),
+                new Sub("ill_py", TouchRaisedRect.Value.Ill.Y),
+                new Sub("ill_sw", TouchRaisedRect.Value.Ill.Width),
+                new Sub("ill_sh", TouchRaisedRect.Value.Ill.Height),
+            }
+        );
+    }
+
+    private void SavePetRaisePointInfo(LPS lps)
+    {
+        lps.Add(
+            new Line("raisepoint")
+            {
+                new Sub("happy_x", RaisePoint.Value.Happy.X),
+                new Sub("happy_y", RaisePoint.Value.Happy.Y),
+                //
+                new Sub("nomal_x", RaisePoint.Value.Nomal.X),
+                new Sub("nomal_y", RaisePoint.Value.Nomal.Y),
+                //
+                new Sub("poorcondition_x", RaisePoint.Value.PoorCondition.X),
+                new Sub("poorcondition_y", RaisePoint.Value.PoorCondition.Y),
+                //
+                new Sub("ill_x", RaisePoint.Value.Ill.X),
+                new Sub("ill_y", RaisePoint.Value.Ill.Y),
+            }
+        );
+    }
+    #endregion
     #endregion
 }
 
@@ -405,13 +422,41 @@ public class I18nPetInfoModel
 }
 
 public class ObservableMultiStateRect
+    : ObservableClass<ObservableMultiStateRect>,
+        IEquatable<ObservableMultiStateRect>
 {
-    public ObservableValue<ObservableRect<double>> Happy { get; } = new(new());
-    public ObservableValue<ObservableRect<double>> Nomal { get; } = new(new());
-    public ObservableValue<ObservableRect<double>> PoorCondition { get; } = new(new());
-    public ObservableValue<ObservableRect<double>> Ill { get; } = new(new());
+    private ObservableRect<double> _happy;
+    public ObservableRect<double> Happy
+    {
+        get => _happy;
+        set => SetProperty(ref _happy, value);
+    }
+    private ObservableRect<double> _nomal;
+    public ObservableRect<double> Nomal
+    {
+        get => _nomal;
+        set => SetProperty(ref _nomal, value);
+    }
+    private ObservableRect<double> _poorCondition;
+    public ObservableRect<double> PoorCondition
+    {
+        get => _poorCondition;
+        set => SetProperty(ref _poorCondition, value);
+    }
+    private ObservableRect<double> _ill;
+    public ObservableRect<double> Ill
+    {
+        get => _ill;
+        set => SetProperty(ref _ill, value);
+    }
 
-    public ObservableMultiStateRect() { }
+    public ObservableMultiStateRect()
+    {
+        Happy = new();
+        Nomal = new();
+        PoorCondition = new();
+        Ill = new();
+    }
 
     public ObservableMultiStateRect(
         ObservableRect<double> happy,
@@ -420,31 +465,101 @@ public class ObservableMultiStateRect
         ObservableRect<double> ill
     )
     {
-        Happy.Value = happy;
-        Nomal.Value = nomal;
-        PoorCondition.Value = poorCondition;
-        Ill.Value = ill;
+        Happy = happy;
+        Nomal = nomal;
+        PoorCondition = poorCondition;
+        Ill = ill;
     }
 
     public ObservableMultiStateRect Copy()
     {
-        var result = new ObservableMultiStateRect();
-        result.Happy.Value = Happy.Value.Copy();
-        result.Nomal.Value = Nomal.Value.Copy();
-        result.PoorCondition.Value = PoorCondition.Value.Copy();
-        result.Ill.Value = Ill.Value.Copy();
-        return result;
+        return new()
+        {
+            Happy = Happy.Copy(),
+            Nomal = Nomal.Copy(),
+            PoorCondition = PoorCondition.Copy(),
+            Ill = Ill.Copy(),
+        };
     }
+
+    #region Other
+
+    /// <inheritdoc/>
+    public override int GetHashCode()
+    {
+        return HashCode.Combine(Happy, Nomal, PoorCondition, Ill);
+    }
+
+    /// <inheritdoc/>
+    public override bool Equals(object? obj)
+    {
+        return obj is ObservableMultiStateRect temp
+            && EqualityComparer<ObservableRect<double>>.Default.Equals(Happy, temp.Happy)
+            && EqualityComparer<ObservableRect<double>>.Default.Equals(Nomal, temp.Nomal)
+            && EqualityComparer<ObservableRect<double>>.Default.Equals(
+                PoorCondition,
+                temp.PoorCondition
+            )
+            && EqualityComparer<ObservableRect<double>>.Default.Equals(Ill, temp.Ill);
+    }
+
+    /// <inheritdoc/>
+    public bool Equals(ObservableMultiStateRect? other)
+    {
+        return Equals(obj: other);
+    }
+
+    /// <inheritdoc/>
+    public static bool operator ==(ObservableMultiStateRect a, ObservableMultiStateRect b)
+    {
+        return Equals(a, b);
+    }
+
+    /// <inheritdoc/>
+    public static bool operator !=(ObservableMultiStateRect a, ObservableMultiStateRect b)
+    {
+        return Equals(a, b) is not true;
+    }
+
+    #endregion
 }
 
 public class ObservableMultiStatePoint
+    : ObservableClass<ObservableMultiStatePoint>,
+        IEquatable<ObservableMultiStatePoint>
 {
-    public ObservableValue<ObservablePoint<double>> Happy { get; } = new(new());
-    public ObservableValue<ObservablePoint<double>> Nomal { get; } = new(new());
-    public ObservableValue<ObservablePoint<double>> PoorCondition { get; } = new(new());
-    public ObservableValue<ObservablePoint<double>> Ill { get; } = new(new());
+    private ObservablePoint<double> _happy;
+    public ObservablePoint<double> Happy
+    {
+        get => _happy;
+        set => SetProperty(ref _happy, value);
+    }
+    private ObservablePoint<double> _nomal;
+    public ObservablePoint<double> Nomal
+    {
+        get => _nomal;
+        set => SetProperty(ref _nomal, value);
+    }
+    private ObservablePoint<double> _poorCondition;
+    public ObservablePoint<double> PoorCondition
+    {
+        get => _poorCondition;
+        set => SetProperty(ref _poorCondition, value);
+    }
+    private ObservablePoint<double> _ill;
+    public ObservablePoint<double> Ill
+    {
+        get => _ill;
+        set => SetProperty(ref _ill, value);
+    }
 
-    public ObservableMultiStatePoint() { }
+    public ObservableMultiStatePoint()
+    {
+        Happy = new();
+        Nomal = new();
+        PoorCondition = new();
+        Ill = new();
+    }
 
     public ObservableMultiStatePoint(
         ObservablePoint<double> happy,
@@ -453,19 +568,61 @@ public class ObservableMultiStatePoint
         ObservablePoint<double> ill
     )
     {
-        Happy.Value = happy;
-        Nomal.Value = nomal;
-        PoorCondition.Value = poorCondition;
-        Ill.Value = ill;
+        Happy = happy;
+        Nomal = nomal;
+        PoorCondition = poorCondition;
+        Ill = ill;
     }
 
     public ObservableMultiStatePoint Copy()
     {
-        var result = new ObservableMultiStatePoint();
-        result.Happy.Value = Happy.Value.Copy();
-        result.Nomal.Value = Nomal.Value.Copy();
-        result.PoorCondition.Value = PoorCondition.Value.Copy();
-        result.Ill.Value = Ill.Value.Copy();
-        return result;
+        return new()
+        {
+            Happy = Happy.Copy(),
+            Nomal = Nomal.Copy(),
+            PoorCondition = PoorCondition.Copy(),
+            Ill = Ill.Copy(),
+        };
     }
+
+    #region Other
+
+    /// <inheritdoc/>
+    public override int GetHashCode()
+    {
+        return HashCode.Combine(Happy, Nomal, PoorCondition, Ill);
+    }
+
+    /// <inheritdoc/>
+    public override bool Equals(object? obj)
+    {
+        return obj is ObservableMultiStatePoint temp
+            && EqualityComparer<ObservablePoint<double>>.Default.Equals(Happy, temp.Happy)
+            && EqualityComparer<ObservablePoint<double>>.Default.Equals(Nomal, temp.Nomal)
+            && EqualityComparer<ObservablePoint<double>>.Default.Equals(
+                PoorCondition,
+                temp.PoorCondition
+            )
+            && EqualityComparer<ObservablePoint<double>>.Default.Equals(Ill, temp.Ill);
+    }
+
+    /// <inheritdoc/>
+    public bool Equals(ObservableMultiStatePoint? other)
+    {
+        return Equals(obj: other);
+    }
+
+    /// <inheritdoc/>
+    public static bool operator ==(ObservableMultiStatePoint a, ObservableMultiStatePoint b)
+    {
+        return Equals(a, b);
+    }
+
+    /// <inheritdoc/>
+    public static bool operator !=(ObservableMultiStatePoint a, ObservableMultiStatePoint b)
+    {
+        return Equals(a, b) is not true;
+    }
+
+    #endregion
 }

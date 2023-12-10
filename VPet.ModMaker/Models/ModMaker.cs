@@ -9,7 +9,6 @@ using System.Windows.Controls;
 using System.Windows;
 using VPet_Simulator.Windows.Interface;
 using VPet.ModMaker.Views;
-using HKW.Models;
 
 namespace VPet.ModMaker.Models;
 
@@ -51,12 +50,7 @@ public class ModMaker : MainPlugin
             ModMakerInfo.GameVersion = MW.version;
             // 载入本体宠物
             foreach (var pet in MW.Pets)
-            {
-                var petModel = new PetModel();
-                petModel.SourceId = pet.Name;
-                petModel.Id.Value = pet.Name + " (来自本体)".Translate();
-                ModMakerInfo.Pets.Add(petModel);
-            }
+                ModMakerInfo.MainPets.Add(pet.Name, new(pet, true));
             //Maker.ModMaker = this;
             Maker.Show();
             Maker.Closed += Maker_Closed;

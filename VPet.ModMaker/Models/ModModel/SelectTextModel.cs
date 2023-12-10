@@ -1,5 +1,5 @@
 ﻿using HKW.HKWUtils.Observable;
-using HKW.Models;
+
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -130,14 +130,14 @@ public class SelectTextModel : I18nModel<I18nSelectTextModel>
         Mode.EnumValue.Value = text.Mode;
         Tags.Value = text.Tags is null ? string.Empty : string.Join(", ", text.Tags);
         ToTags.Value = text.ToTags is null ? string.Empty : string.Join(", ", text.ToTags);
-        Like.SetValue(text.LikeMin, text.LikeMax);
-        Health.SetValue(text.HealthMin, text.HealthMax);
-        Level.SetValue(text.LevelMin, text.LevelMax);
-        Money.SetValue(text.MoneyMin, text.MoneyMax);
-        Food.SetValue(text.FoodMin, text.FoodMax);
-        Drink.SetValue(text.DrinkMin, text.DrinkMax);
-        Feel.SetValue(text.FeelMin, text.FeelMax);
-        Strength.SetValue(text.StrengthMin, text.StrengthMax);
+        Like = new(text.LikeMin, text.LikeMax);
+        Health = new(text.HealthMin, text.HealthMax);
+        Level = new(text.LevelMin, text.LevelMax);
+        Money = new(text.MoneyMin, text.MoneyMax);
+        Food = new(text.FoodMin, text.FoodMax);
+        Drink = new(text.DrinkMin, text.DrinkMax);
+        Feel = new(text.FeelMin, text.FeelMax);
+        Strength = new(text.StrengthMin, text.StrengthMax);
     }
 
     private readonly static char[] rs_splitChar = { ',', ' ' };
@@ -151,22 +151,22 @@ public class SelectTextModel : I18nModel<I18nSelectTextModel>
             Mode = Mode.EnumValue.Value,
             Tags = new(Tags.Value.Split(rs_splitChar, StringSplitOptions.RemoveEmptyEntries)),
             ToTags = new(ToTags.Value.Split(rs_splitChar, StringSplitOptions.RemoveEmptyEntries)),
-            LikeMax = Like.Max.Value,
-            LikeMin = Like.Min.Value,
-            HealthMin = Health.Min.Value,
-            HealthMax = Health.Max.Value,
-            LevelMin = Level.Min.Value,
-            LevelMax = Level.Max.Value,
-            MoneyMin = Money.Min.Value,
-            MoneyMax = Money.Max.Value,
-            FoodMin = Food.Min.Value,
-            FoodMax = Food.Max.Value,
-            DrinkMin = Drink.Min.Value,
-            DrinkMax = Drink.Max.Value,
-            FeelMin = Feel.Min.Value,
-            FeelMax = Feel.Max.Value,
-            StrengthMin = Strength.Min.Value,
-            StrengthMax = Strength.Max.Value,
+            LikeMax = Like.Max,
+            LikeMin = Like.Min,
+            HealthMin = Health.Min,
+            HealthMax = Health.Max,
+            LevelMin = Level.Min,
+            LevelMax = Level.Max,
+            MoneyMin = Money.Min,
+            MoneyMax = Money.Max,
+            FoodMin = Food.Min,
+            FoodMax = Food.Max,
+            DrinkMin = Drink.Min,
+            DrinkMax = Drink.Max,
+            FeelMin = Feel.Min,
+            FeelMax = Feel.Max,
+            StrengthMin = Strength.Min,
+            StrengthMax = Strength.Max,
         };
     }
 }
