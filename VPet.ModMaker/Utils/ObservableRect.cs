@@ -78,13 +78,13 @@ public class ObservableRect<T> : ObservableClass<ObservableRect<T>>, IEquatable<
     /// <inheritdoc/>
     public static bool operator ==(ObservableRect<T> a, ObservableRect<T> b)
     {
-        return Equals(a, b);
+        return a.Equals(b);
     }
 
     /// <inheritdoc/>
     public static bool operator !=(ObservableRect<T> a, ObservableRect<T> b)
     {
-        return Equals(a, b) is not true;
+        return a.Equals(b) is not true;
     }
 
     #endregion

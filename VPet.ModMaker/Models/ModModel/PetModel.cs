@@ -22,6 +22,8 @@ namespace VPet.ModMaker.Models;
 /// </summary>
 public class PetModel : I18nModel<I18nPetInfoModel>
 {
+    public static PetModel Default { get; } = new();
+
     /// <summary>
     /// 来自本体
     /// </summary>
@@ -330,13 +332,16 @@ public class PetModel : I18nModel<I18nPetInfoModel>
     private void SaveDifferentPetInfo(LPS lps, PetModel mainPet)
     {
         SavePetBasicInfo(lps);
-        if (TouchHeadRect != mainPet.TouchHeadRect)
+        // 如果值不为默认并且不与本体值相同, 则保存
+        if (TouchHeadRect != Default.TouchHeadRect && TouchHeadRect != mainPet.TouchHeadRect)
             SavePetTouchHeadInfo(lps);
-        if (TouchBodyRect != mainPet.TouchBodyRect)
+        if (TouchBodyRect != Default.TouchBodyRect && TouchBodyRect != mainPet.TouchBodyRect)
             SavePetTouchBodyInfo(lps);
-        if (TouchRaisedRect != mainPet.TouchRaisedRect)
+        if (
+            TouchRaisedRect != Default.TouchRaisedRect && TouchRaisedRect != mainPet.TouchRaisedRect
+        )
             SavePetTouchRaisedInfo(lps);
-        if (RaisePoint != mainPet.RaisePoint)
+        if (RaisePoint != Default.RaisePoint && RaisePoint != mainPet.RaisePoint)
             SavePetRaisePointInfo(lps);
     }
 

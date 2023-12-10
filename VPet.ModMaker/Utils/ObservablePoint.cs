@@ -66,13 +66,13 @@ public class ObservablePoint<T>
     /// <inheritdoc/>
     public static bool operator ==(ObservablePoint<T> a, ObservablePoint<T> b)
     {
-        return Equals(a, b);
+        return a.Equals(b);
     }
 
     /// <inheritdoc/>
     public static bool operator !=(ObservablePoint<T> a, ObservablePoint<T> b)
     {
-        return Equals(a, b) is not true;
+        return a.Equals(b) is not true;
     }
 
     #endregion

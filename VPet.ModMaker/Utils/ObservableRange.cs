@@ -69,13 +69,13 @@ public class ObservableRange<T>
     /// <inheritdoc/>
     public static bool operator ==(ObservableRange<T> a, ObservableRange<T> b)
     {
-        return Equals(a, b);
+        return a.Equals(b);
     }
 
     /// <inheritdoc/>
     public static bool operator !=(ObservableRange<T> a, ObservableRange<T> b)
     {
-        return Equals(a, b) is not true;
+        return a.Equals(b) is not true;
     }
 
     #endregion

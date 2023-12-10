@@ -185,20 +185,19 @@ public class ObservableValue<T>
     /// <inheritdoc/>
     public bool Equals(ObservableValue<T>? other)
     {
-        return other is ObservableValue<T> value
-            && EqualityComparer<T>.Default.Equals(Value, value.Value);
+        return Equals(obj: other);
     }
 
     /// <inheritdoc/>
     public static bool operator ==(ObservableValue<T> a, ObservableValue<T> b)
     {
-        return EqualityComparer<T>.Default.Equals(a.Value, b.Value);
+        return a.Equals(obj: b);
     }
 
     /// <inheritdoc/>
     public static bool operator !=(ObservableValue<T> a, ObservableValue<T> b)
     {
-        return (a == b) is not true;
+        return a.Equals(obj: b) is not true;
     }
     #endregion
 

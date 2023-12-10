@@ -148,6 +148,31 @@ public class ModInfoModel : I18nModel<I18nModInfoModel>
         foreach (var pet in loader.Pets)
         {
             var petModel = new PetModel(pet);
+            // 如果检测到本体存在同名宠物
+            if (ModMakerInfo.MainPets.TryGetValue(petModel.Id.Value, out var mainPet))
+            {
+                // 若宠物的值为默认值并且本体同名宠物不为默认值, 则把本体宠物的值作为模组宠物的默认值
+                if (
+                    petModel.TouchHeadRect == PetModel.Default.TouchHeadRect
+                    && petModel.TouchHeadRect != mainPet.TouchHeadRect
+                )
+                    petModel.TouchHeadRect.Value = mainPet.TouchHeadRect.Value;
+                if (
+                    petModel.TouchBodyRect == PetModel.Default.TouchBodyRect
+                    && petModel.TouchBodyRect != mainPet.TouchBodyRect
+                )
+                    petModel.TouchBodyRect.Value = mainPet.TouchBodyRect.Value;
+                if (
+                    petModel.TouchRaisedRect == PetModel.Default.TouchRaisedRect
+                    && petModel.TouchRaisedRect != mainPet.TouchRaisedRect
+                )
+                    petModel.TouchRaisedRect.Value = mainPet.TouchRaisedRect.Value;
+                if (
+                    petModel.RaisePoint == PetModel.Default.RaisePoint
+                    && petModel.RaisePoint != mainPet.RaisePoint
+                )
+                    petModel.RaisePoint.Value = mainPet.RaisePoint.Value;
+            }
             Pets.Add(petModel);
             foreach (var p in pet.path)
                 LoadAnime(petModel, p);
