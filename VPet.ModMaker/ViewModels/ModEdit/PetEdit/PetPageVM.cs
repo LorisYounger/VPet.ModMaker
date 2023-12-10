@@ -9,6 +9,8 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using VPet.ModMaker.Models;
+using VPet.ModMaker.ViewModels.ModEdit.I18nEdit;
+using VPet.ModMaker.Views.ModEdit.I18nEdit;
 using VPet.ModMaker.Views.ModEdit.PetEdit;
 
 namespace VPet.ModMaker.ViewModels.ModEdit.PetEdit;
@@ -66,12 +68,14 @@ public class PetPageVM
 
     public void Edit(PetModel model)
     {
-        if (
-            model.FromMain.Value
-            && MessageBox.Show("这是本体自带的宠物, 确定要编辑吗".Translate(), "", MessageBoxButton.YesNo)
+        if (model.FromMain.Value)
+        {
+            if (
+                MessageBox.Show("这是本体自带的宠物, 确定要编辑吗".Translate(), "", MessageBoxButton.YesNo)
                 is not MessageBoxResult.Yes
-        )
-            return;
+            )
+                return;
+        }
         var window = new PetEditWindow();
         var vm = window.ViewModel;
         vm.OldPet = model;
@@ -79,7 +83,16 @@ public class PetPageVM
         window.ShowDialog();
         if (window.IsCancel)
             return;
-        Pets[Pets.IndexOf(model)] = newPet;
+        if (model.FromMain.Value)
+        {
+            var index = Pets.IndexOf(model);
+            Pets.Remove(model);
+            Pets.Insert(index, newPet);
+        }
+        else
+        {
+            Pets[Pets.IndexOf(model)] = newPet;
+        }
         if (ShowPets.Value.Count != Pets.Count)
             ShowPets.Value[ShowPets.Value.IndexOf(model)] = newPet;
         model.Close();

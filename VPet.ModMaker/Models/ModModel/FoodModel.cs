@@ -97,9 +97,9 @@ public class FoodModel : I18nModel<I18nFoodModel>
     public FoodModel()
     {
         DescriptionId.Value = $"{Id.Value}_{nameof(DescriptionId)}";
-        Id.ValueChanged += (o, n) =>
+        Id.ValueChanged += (s, e) =>
         {
-            DescriptionId.Value = $"{n}_{nameof(DescriptionId)}";
+            DescriptionId.Value = $"{e.NewValue}_{nameof(DescriptionId)}";
         };
         ReferencePrice.AddNotifySender(
             Strength,

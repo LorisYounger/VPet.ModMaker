@@ -51,7 +51,7 @@
           <DataTemplate>
             <StackPanel Orientation="Horizontal">
               <TextBlock Text="{Binding Id.Value}" />
-              <TextBlock IsEnabled="{Binding FromMain, Converter={StaticResource FalseToCollapsedConverter}}" Text="{ll:Str {} (来自本体)}" />
+              <TextBlock Text="{ll:Str {} (来自本体)}" Visibility="{Binding FromMain, Converter={StaticResource FalseToCollapsedConverter}}" />
             </StackPanel>
           </DataTemplate>
         </ComboBox.ItemTemplate>

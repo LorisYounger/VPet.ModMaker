@@ -25,7 +25,7 @@ public class PetModel : I18nModel<I18nPetInfoModel>
     /// <summary>
     /// 来自本体
     /// </summary>
-    public ObservableValue<bool> FromMain { get; set; } = new(false);
+    public ObservableValue<bool> FromMain { get; } = new(false);
 
     /// <summary>
     /// Id
@@ -99,10 +99,10 @@ public class PetModel : I18nModel<I18nPetInfoModel>
     {
         PetNameId.Value = $"{Id.Value}_{nameof(PetNameId)}";
         DescriptionId.Value = $"{Id.Value}_{nameof(DescriptionId)}";
-        Id.ValueChanged += (o, n) =>
+        Id.ValueChanged += (s, e) =>
         {
-            PetNameId.Value = $"{n}_{nameof(PetNameId)}";
-            DescriptionId.Value = $"{n}_{nameof(DescriptionId)}";
+            PetNameId.Value = $"{e.NewValue}_{nameof(PetNameId)}";
+            DescriptionId.Value = $"{e.NewValue}_{nameof(DescriptionId)}";
         };
         AnimeCount.AddNotifySender(Animes);
         AnimeCount.AddNotifySender(FoodAnimes);
@@ -201,6 +201,18 @@ public class PetModel : I18nModel<I18nPetInfoModel>
     }
 
     #region Save
+
+    /// <summary>
+    /// 能被保存
+    /// </summary>
+    /// <returns></returns>
+    public bool CanSave()
+    {
+        if (FromMain.Value && Works.Count == 0 && Animes.Count == 0 && FoodAnimes.Count == 0)
+            return false;
+        return true;
+    }
+
     /// <summary>
     /// 保存宠物
     /// </summary>

@@ -292,7 +292,7 @@ public class I18nEditWindowVM
     /// 载入宠物
     /// </summary>
     /// <param name="model"></param>
-    private void LoadPets(ModInfoModel model)
+    public void LoadPets(ModInfoModel model)
     {
         foreach (var pet in model.Pets)
         {
@@ -317,6 +317,8 @@ public class I18nEditWindowVM
             else if (e.Action is NotifyCollectionChangedAction.Remove)
             {
                 var oldModel = (PetModel)e.OldItems[0];
+                if (oldModel.FromMain.Value)
+                    return;
                 RemoveData(oldModel.Id, oldModel, (m) => m.Name);
                 RemoveData(oldModel.DescriptionId, oldModel, (m) => m.Description);
                 foreach (var work in oldModel.Works)

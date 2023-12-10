@@ -149,10 +149,11 @@ public class ModInfoModel : I18nModel<I18nModInfoModel>
         {
             var petModel = new PetModel(pet);
             Pets.Add(petModel);
+            ModMakerInfo.MainPets.Add(petModel.Id.Value, new(pet, true));
             foreach (var p in pet.path)
                 LoadAnime(petModel, p);
         }
-
+        Pets.Clear();
         // 插入本体宠物
         foreach (var pet in ModMakerInfo.MainPets)
         {
@@ -392,7 +393,7 @@ public class ModInfoModel : I18nModel<I18nModInfoModel>
     private void SavePets(string path)
     {
         var petPath = Path.Combine(path, "pet");
-        if (Pets.Count == 0)
+        if (Pets.Count == 0 || Pets.All(m => m.CanSave() is false))
         {
             if (Directory.Exists(petPath))
                 Directory.Delete(petPath, true);

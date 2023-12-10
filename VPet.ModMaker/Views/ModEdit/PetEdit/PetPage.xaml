@@ -43,13 +43,23 @@
         </Style>
       </DataGrid.RowStyle>
       <DataGrid.Columns>
-        <DataGridTextColumn
-          Binding="{Binding Id.Value}"
+        <DataGridTemplateColumn
           CanUserSort="True"
-          ElementStyle="{DynamicResource TextBlock_LeftCenter}"
           Header="Id"
           IsReadOnly="True"
-          SortMemberPath="Id.Value" />
+          SortMemberPath="Id.Value">
+          <DataGridTemplateColumn.CellTemplate>
+            <DataTemplate>
+              <StackPanel Orientation="Horizontal">
+                <TextBlock Style="{DynamicResource TextBlock_LeftCenter}" Text="{Binding Id.Value}" />
+                <TextBlock
+                  Style="{DynamicResource TextBlock_LeftCenter}"
+                  Text="{ll:Str {} (来自本体)}"
+                  Visibility="{Binding FromMain.Value, Converter={StaticResource FalseToCollapsedConverter}}" />
+              </StackPanel>
+            </DataTemplate>
+          </DataGridTemplateColumn.CellTemplate>
+        </DataGridTemplateColumn>
         <DataGridTextColumn
           Binding="{Binding CurrentI18nData.Value.Name.Value}"
           CanUserSort="True"
