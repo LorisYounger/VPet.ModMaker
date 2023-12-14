@@ -214,8 +214,8 @@ public class ModInfoModel : I18nModel<I18nModInfoModel>
                 LoadAnime(petModel, p);
         }
 
-        loader.Pets.First().Name = "TestMainPet";
-        Pets.Insert(0, new(loader.Pets.First(), true));
+        //loader.Pets.First().Name = "TestMainPet";
+        //Pets.Insert(0, new(loader.Pets.First(), true));
 
         // 插入本体宠物
         foreach (var pet in ModMakerInfo.MainPets)
