@@ -18,10 +18,20 @@
       <RowDefinition Height="Auto" />
       <RowDefinition />
     </Grid.RowDefinitions>
-    <TextBox
-      pu:TextBoxHelper.Watermark="{ll:Str 搜索Id}"
-      Style="{DynamicResource StandardTextBoxStyle}"
-      Text="{Binding Search.Value, UpdateSourceTrigger=PropertyChanged}" />
+    <Grid>
+      <Grid.ColumnDefinitions>
+        <ColumnDefinition />
+        <ColumnDefinition Width="Auto" />
+      </Grid.ColumnDefinitions>
+      <TextBox
+        pu:TextBoxHelper.Watermark="{ll:Str 搜索Id}"
+        Style="{DynamicResource StandardTextBoxStyle}"
+        Text="{Binding Search.Value, UpdateSourceTrigger=PropertyChanged}" />
+      <pu:Switch
+        Grid.Column="1"
+        Content="{ll:Str 不显示本体宠物}"
+        IsChecked="{Binding ModInfo.DontShowMainPet.Value}" />
+    </Grid>
     <DataGrid
       Grid.Row="1"
       d:ItemsSource="{d:SampleData ItemCount=5}"
@@ -40,6 +50,14 @@
           <Setter Property="Height" Value="64" />
           <Setter Property="Tag" Value="{Binding}" />
           <Setter Property="ContextMenu" Value="{StaticResource ContextMenu_DataGridRow}" />
+          <Setter Property="Visibility">
+            <Setter.Value>
+              <MultiBinding Converter="{StaticResource AllTrueToCollapsedConverter}">
+                <Binding Path="DataContext.ModInfo.DontShowMainPet.Value" RelativeSource="{RelativeSource AncestorType=Page}" />
+                <Binding Path="FromMain.Value" />
+              </MultiBinding>
+            </Setter.Value>
+          </Setter>
         </Style>
       </DataGrid.RowStyle>
       <DataGrid.Columns>

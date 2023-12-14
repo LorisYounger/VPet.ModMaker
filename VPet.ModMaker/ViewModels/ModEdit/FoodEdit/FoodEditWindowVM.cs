@@ -17,17 +17,16 @@ namespace VPet.ModMaker.ViewModels.ModEdit.FoodEdit;
 
 public class FoodEditWindowVM
 {
-    public I18nHelper I18nData => I18nHelper.Current;
+    public static ModInfoModel ModInfo => ModInfoModel.Current;
+    public static I18nHelper I18nData => I18nHelper.Current;
     #region Value
     public FoodModel OldFood { get; set; }
     public ObservableValue<FoodModel> Food { get; } = new(new());
-    public ObservableValue<bool> AutoSetReferencePrice { get; } = new(false);
     #endregion
 
     #region Command
     public ObservableCommand AddImageCommand { get; } = new();
     public ObservableCommand ChangeImageCommand { get; } = new();
-
     public ObservableCommand<double> SetReferencePriceCommand { get; } = new();
     #endregion
 
@@ -35,20 +34,8 @@ public class FoodEditWindowVM
     {
         AddImageCommand.ExecuteCommand += AddImage;
         ChangeImageCommand.ExecuteCommand += ChangeImage;
-        AutoSetReferencePrice.ValueChanged += AutoSetReferencePrice_ValueChanged;
         SetReferencePriceCommand.ExecuteCommand += SetReferencePriceToPrice;
         Food.Value.ReferencePrice.ValueChanged += ReferencePrice_ValueChanged;
-    }
-
-    private void AutoSetReferencePrice_ValueChanged(
-        ObservableValue<bool> sender,
-        ValueChangedEventArgs<bool> e
-    )
-    {
-        if (e.NewValue)
-        {
-            SetReferencePriceToPrice(Food.Value.ReferencePrice.Value);
-        }
     }
 
     private void ReferencePrice_ValueChanged(
@@ -56,7 +43,7 @@ public class FoodEditWindowVM
         ValueChangedEventArgs<double> e
     )
     {
-        if (AutoSetReferencePrice.Value)
+        if (ModInfo.AutoSetFoodPrice.Value)
         {
             SetReferencePriceToPrice(e.NewValue);
         }

@@ -33,13 +33,13 @@
         <pu:NumberInput
           Grid.Column="1"
           ToolTip="{Binding Value, RelativeSource={RelativeSource Mode=Self}}"
-          Value="{Binding DataContext.Min.Value, RelativeSource={RelativeSource AncestorType=ListBoxItem, Mode=FindAncestor}}" />
+          Value="{Binding DataContext.Min, RelativeSource={RelativeSource AncestorType=ListBoxItem}}" />
         <Label Grid.Row="1" Content="{ll:Str 最大值}" />
         <pu:NumberInput
           Grid.Row="1"
           Grid.Column="1"
           ToolTip="{Binding Value, RelativeSource={RelativeSource Mode=Self}}"
-          Value="{Binding DataContext.Max.Value, RelativeSource={RelativeSource AncestorType=ListBoxItem, Mode=FindAncestor}}" />
+          Value="{Binding DataContext.Max, RelativeSource={RelativeSource AncestorType=ListBoxItem}}" />
       </Grid>
     </Grid>
   </ControlTemplate>

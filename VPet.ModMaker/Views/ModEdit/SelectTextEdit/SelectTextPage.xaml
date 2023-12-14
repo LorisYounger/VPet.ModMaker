@@ -91,61 +91,109 @@
           IsReadOnly="True"
           SortMemberPath="Mode.EnumValue" />
         <DataGridTextColumn
-          Binding="{Binding Like.Info.Value}"
           CanUserSort="True"
           ElementStyle="{DynamicResource TextBlock_LeftCenter}"
           Header="{ll:Str 好感度范围}"
           IsReadOnly="True"
-          SortMemberPath="Like.Info.Value" />
+          SortMemberPath="Like.Min">
+          <DataGridTextColumn.Binding>
+            <MultiBinding Converter="{StaticResource StringFormatConverter}" ConverterParameter="({0} ~ {1})">
+              <Binding Path="Like.Min" />
+              <Binding Path="Like.Max" />
+            </MultiBinding>
+          </DataGridTextColumn.Binding>
+        </DataGridTextColumn>
         <DataGridTextColumn
-          Binding="{Binding Health.Info.Value}"
           CanUserSort="True"
           ElementStyle="{DynamicResource TextBlock_LeftCenter}"
           Header="{ll:Str 健康度范围}"
           IsReadOnly="True"
-          SortMemberPath="Health.Info.Value" />
+          SortMemberPath="Health.Min">
+          <DataGridTextColumn.Binding>
+            <MultiBinding Converter="{StaticResource StringFormatConverter}" ConverterParameter="({0} ~ {1})">
+              <Binding Path="Health.Min" />
+              <Binding Path="Like.Max" />
+            </MultiBinding>
+          </DataGridTextColumn.Binding>
+        </DataGridTextColumn>
         <DataGridTextColumn
-          Binding="{Binding Level.Info.Value}"
           CanUserSort="True"
           ElementStyle="{DynamicResource TextBlock_LeftCenter}"
           Header="{ll:Str 等级范围}"
           IsReadOnly="True"
-          SortMemberPath="Level.Info.Value" />
+          SortMemberPath="Level.Min">
+          <DataGridTextColumn.Binding>
+            <MultiBinding Converter="{StaticResource StringFormatConverter}" ConverterParameter="({0} ~ {1})">
+              <Binding Path="Level.Min" />
+              <Binding Path="Like.Max" />
+            </MultiBinding>
+          </DataGridTextColumn.Binding>
+        </DataGridTextColumn>
         <DataGridTextColumn
-          Binding="{Binding Money.Info.Value}"
           CanUserSort="True"
           ElementStyle="{DynamicResource TextBlock_LeftCenter}"
           Header="{ll:Str 金钱范围}"
           IsReadOnly="True"
-          SortMemberPath="Money.Info.Value" />
+          SortMemberPath="Money.Min">
+          <DataGridTextColumn.Binding>
+            <MultiBinding Converter="{StaticResource StringFormatConverter}" ConverterParameter="({0} ~ {1})">
+              <Binding Path="Money.Min" />
+              <Binding Path="Like.Max" />
+            </MultiBinding>
+          </DataGridTextColumn.Binding>
+        </DataGridTextColumn>
         <DataGridTextColumn
-          Binding="{Binding Food.Info.Value}"
           CanUserSort="True"
           ElementStyle="{DynamicResource TextBlock_LeftCenter}"
           Header="{ll:Str 食物范围}"
           IsReadOnly="True"
-          SortMemberPath="Food.Info.Value" />
+          SortMemberPath="Food.Min">
+          <DataGridTextColumn.Binding>
+            <MultiBinding Converter="{StaticResource StringFormatConverter}" ConverterParameter="({0} ~ {1})">
+              <Binding Path="Food.Min" />
+              <Binding Path="Like.Max" />
+            </MultiBinding>
+          </DataGridTextColumn.Binding>
+        </DataGridTextColumn>
         <DataGridTextColumn
-          Binding="{Binding Drink.Info.Value}"
           CanUserSort="True"
           ElementStyle="{DynamicResource TextBlock_LeftCenter}"
           Header="{ll:Str 口渴范围}"
           IsReadOnly="True"
-          SortMemberPath="Drink.Info.Value" />
+          SortMemberPath="Drink.Min">
+          <DataGridTextColumn.Binding>
+            <MultiBinding Converter="{StaticResource StringFormatConverter}" ConverterParameter="({0} ~ {1})">
+              <Binding Path="Drink.Min" />
+              <Binding Path="Like.Max" />
+            </MultiBinding>
+          </DataGridTextColumn.Binding>
+        </DataGridTextColumn>
         <DataGridTextColumn
-          Binding="{Binding Feel.Info.Value}"
           CanUserSort="True"
           ElementStyle="{DynamicResource TextBlock_LeftCenter}"
           Header="{ll:Str 心情范围}"
           IsReadOnly="True"
-          SortMemberPath="Feel.Info.Value" />
+          SortMemberPath="Feel.Min">
+          <DataGridTextColumn.Binding>
+            <MultiBinding Converter="{StaticResource StringFormatConverter}" ConverterParameter="({0} ~ {1})">
+              <Binding Path="Feel.Min" />
+              <Binding Path="Like.Max" />
+            </MultiBinding>
+          </DataGridTextColumn.Binding>
+        </DataGridTextColumn>
         <DataGridTextColumn
-          Binding="{Binding Strength.Info.Value}"
           CanUserSort="True"
           ElementStyle="{DynamicResource TextBlock_LeftCenter}"
           Header="{ll:Str 体力范围}"
           IsReadOnly="True"
-          SortMemberPath="Strength.Info.Value" />
+          SortMemberPath="Strength.Min">
+          <DataGridTextColumn.Binding>
+            <MultiBinding Converter="{StaticResource StringFormatConverter}" ConverterParameter="({0} ~ {1})">
+              <Binding Path="Strength.Min" />
+              <Binding Path="Like.Max" />
+            </MultiBinding>
+          </DataGridTextColumn.Binding>
+        </DataGridTextColumn>
       </DataGrid.Columns>
     </DataGrid>
     <Button

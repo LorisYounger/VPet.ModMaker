@@ -98,6 +98,9 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Converters\AllTrueToCollapsedConverter.cs" />
+    <Compile Include="Converters\AnyFalseToVisibleConverter.cs" />
+    <Compile Include="Models\I18nModelBase.cs" />
     <Compile Include="Usings.cs" />
     <Compile Include="Converters\BrushToMediaColorConverter.cs" />
     <Compile Include="Converters\CalculatorConverter.cs" />

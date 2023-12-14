@@ -15,6 +15,7 @@ namespace VPet.ModMaker.ViewModels.ModEdit.WorkEdit;
 
 public class WorkPageVM
 {
+    public static ModInfoModel ModInfo => ModInfoModel.Current;
     #region Value
     public ObservableValue<ObservableCollection<WorkModel>> ShowWorks { get; } = new();
     public ObservableCollection<WorkModel> Works => CurrentPet.Value.Works;

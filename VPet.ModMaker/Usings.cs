@@ -5,5 +5,6 @@ global using global::System.Linq;
 global using global::System.Net.Http;
 global using global::System.Threading;
 global using global::System.Threading.Tasks;
+global using global::System.Collections.ObjectModel;
 global using global::HKW.HKWUtils;
 global using global::HKW.HKWUtils.Observable;

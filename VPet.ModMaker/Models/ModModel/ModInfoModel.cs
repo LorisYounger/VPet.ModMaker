@@ -21,12 +21,22 @@ using VPet_Simulator.Windows.Interface;
 
 namespace VPet.ModMaker.Models;
 
-// TODO: 本体模组显示开关
 /// <summary>
 /// 模组信息模型
 /// </summary>
 public class ModInfoModel : I18nModel<I18nModInfoModel>
 {
+    /// <summary>
+    /// 自动设置食物推荐价格
+    /// </summary>
+    public ObservableValue<bool> AutoSetFoodPrice { get; } = new();
+
+    /// <summary>
+    /// 不显示本体宠物
+    /// </summary>
+    public ObservableValue<bool> DontShowMainPet { get; } = new(true);
+
+    #region ModInfo
     /// <summary>
     /// 作者Id
     /// </summary>
@@ -77,6 +87,9 @@ public class ModInfoModel : I18nModel<I18nModInfoModel>
     /// </summary>
     public ObservableValue<string> SourcePath { get; } = new();
 
+    #endregion
+
+    #region ModDatas
     /// <summary>
     /// 食物
     /// </summary>
@@ -103,6 +116,11 @@ public class ModInfoModel : I18nModel<I18nModInfoModel>
     public ObservableCollection<PetModel> Pets { get; } = new();
 
     /// <summary>
+    /// 宠物实际数量
+    /// </summary>
+    public ObservableValue<int> PetDisplayedCount { get; } = new();
+
+    /// <summary>
     /// 其它I18n数据
     /// </summary>
     public Dictionary<string, Dictionary<string, string>> OtherI18nDatas { get; } = new();
@@ -111,7 +129,7 @@ public class ModInfoModel : I18nModel<I18nModInfoModel>
     /// 需要保存的I18n数据
     /// </summary>
     public static Dictionary<string, Dictionary<string, string>> SaveI18nDatas { get; } = new();
-
+    #endregion
     public ModInfoModel()
     {
         DescriptionId.Value = $"{Id.Value}_{nameof(DescriptionId)}";
@@ -119,6 +137,24 @@ public class ModInfoModel : I18nModel<I18nModInfoModel>
         {
             DescriptionId.Value = $"{n}_{nameof(DescriptionId)}";
         };
+        Pets.CollectionChanged += Pets_CollectionChanged;
+        DontShowMainPet.ValueChanged += ShowMainPet_ValueChanged;
+    }
+
+    private void ShowMainPet_ValueChanged(
+        ObservableValue<bool> sender,
+        ValueChangedEventArgs<bool> e
+    )
+    {
+        Pets_CollectionChanged(null, null);
+    }
+
+    private void Pets_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
+    {
+        if (DontShowMainPet.Value)
+            PetDisplayedCount.Value = Pets.Count - Pets.Count(m => m.FromMain.Value);
+        else
+            PetDisplayedCount.Value = Pets.Count;
     }
 
     public ModInfoModel(ModLoader loader)
@@ -177,6 +213,9 @@ public class ModInfoModel : I18nModel<I18nModInfoModel>
             foreach (var p in pet.path)
                 LoadAnime(petModel, p);
         }
+
+        loader.Pets.First().Name = "TestMainPet";
+        Pets.Insert(0, new(loader.Pets.First(), true));
 
         // 插入本体宠物
         foreach (var pet in ModMakerInfo.MainPets)

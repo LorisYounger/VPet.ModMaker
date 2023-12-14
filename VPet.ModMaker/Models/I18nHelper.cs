@@ -2,12 +2,14 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Collections.Specialized;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace VPet.ModMaker.Models;
 
+// TODO: 更新事件
 /// <summary>
 /// I18n助手
 /// </summary>
@@ -33,10 +35,7 @@ public class I18nHelper
         CultureNames.CollectionChanged += Cultures_CollectionChanged;
     }
 
-    private void Cultures_CollectionChanged(
-        object sender,
-        System.Collections.Specialized.NotifyCollectionChangedEventArgs e
-    )
+    private void Cultures_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
     {
         // 替换
         if (e.NewStartingIndex == e.OldStartingIndex)

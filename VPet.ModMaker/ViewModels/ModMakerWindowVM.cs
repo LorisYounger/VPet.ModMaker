@@ -40,7 +40,7 @@ public class ModMakerWindowVM
     /// <summary>
     /// 历史
     /// </summary>
-    public ObservableCollection<ModMakeHistory> Histories { get; } = new();
+    public ObservableCollection<ModMakeHistory> Histories { get; set; } = new();
     #endregion
     #region Command
     /// <summary>
@@ -108,6 +108,7 @@ public class ModMakerWindowVM
             if (Histories.All(h => h.InfoFile != history.InfoFile))
                 Histories.Add(history);
         }
+        Histories = new(Histories.OrderByDescending(h => h.LastTime));
     }
 
     /// <summary>

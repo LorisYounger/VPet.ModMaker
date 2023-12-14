@@ -177,7 +177,7 @@
               BoxHeight="16"
               BoxWidth="30"
               Content="{ll:Str 自动设置}"
-              IsChecked="{Binding AutoSetReferencePrice.Value}" />
+              IsChecked="{Binding ModInfo.AutoSetFoodPrice.Value}" />
           </Grid>
         </Grid>
       </ScrollViewer>

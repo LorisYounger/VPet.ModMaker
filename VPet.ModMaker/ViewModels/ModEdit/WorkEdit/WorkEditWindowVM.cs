@@ -14,7 +14,8 @@ namespace VPet.ModMaker.ViewModels.ModEdit.WorkEdit;
 
 public class WorkEditWindowVM
 {
-    public I18nHelper I18nData => I18nHelper.Current;
+    public static ModInfoModel ModInfo => ModInfoModel.Current;
+    public static I18nHelper I18nData => I18nHelper.Current;
     #region Value
     public PetModel CurrentPet { get; set; }
     public WorkModel OldWork { get; set; }

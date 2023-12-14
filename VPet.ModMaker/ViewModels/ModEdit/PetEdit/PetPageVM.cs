@@ -17,6 +17,7 @@ namespace VPet.ModMaker.ViewModels.ModEdit.PetEdit;
 
 public class PetPageVM
 {
+    public static ModInfoModel ModInfo => ModInfoModel.Current;
     #region Value
     public ObservableValue<ObservableCollection<PetModel>> ShowPets { get; } = new();
     public ObservableCollection<PetModel> Pets => ModInfoModel.Current.Pets;

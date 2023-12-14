@@ -15,6 +15,7 @@ namespace VPet.ModMaker.ViewModels.ModEdit.MoveEdit;
 
 public class MovePageVM
 {
+    public static ModInfoModel ModInfo => ModInfoModel.Current;
     #region Value
     public ObservableValue<ObservableCollection<MoveModel>> ShowMoves { get; } = new();
     public ObservableCollection<MoveModel> Moves => CurrentPet.Value.Moves;

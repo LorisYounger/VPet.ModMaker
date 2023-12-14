@@ -18,6 +18,8 @@ namespace VPet.ModMaker.ViewModels.ModEdit.AnimeEdit;
 
 public class AnimePageVM
 {
+    public static ModInfoModel ModInfo => ModInfoModel.Current;
+
     #region Value
     /// <summary>
     /// 显示的动画
