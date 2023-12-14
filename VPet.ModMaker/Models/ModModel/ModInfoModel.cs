@@ -34,7 +34,7 @@ public class ModInfoModel : I18nModel<I18nModInfoModel>
     /// <summary>
     /// 不显示本体宠物
     /// </summary>
-    public ObservableValue<bool> DontShowMainPet { get; } = new(true);
+    public ObservableValue<bool> ShowMainPet { get; } = new(true);
 
     #region ModInfo
     /// <summary>
@@ -138,7 +138,7 @@ public class ModInfoModel : I18nModel<I18nModInfoModel>
             DescriptionId.Value = $"{n}_{nameof(DescriptionId)}";
         };
         Pets.CollectionChanged += Pets_CollectionChanged;
-        DontShowMainPet.ValueChanged += ShowMainPet_ValueChanged;
+        ShowMainPet.ValueChanged += ShowMainPet_ValueChanged;
     }
 
     private void ShowMainPet_ValueChanged(
@@ -151,10 +151,10 @@ public class ModInfoModel : I18nModel<I18nModInfoModel>
 
     private void Pets_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
     {
-        if (DontShowMainPet.Value)
-            PetDisplayedCount.Value = Pets.Count - Pets.Count(m => m.FromMain.Value);
-        else
+        if (ShowMainPet.Value)
             PetDisplayedCount.Value = Pets.Count;
+        else
+            PetDisplayedCount.Value = Pets.Count - Pets.Count(m => m.FromMain.Value);
     }
 
     public ModInfoModel(ModLoader loader)

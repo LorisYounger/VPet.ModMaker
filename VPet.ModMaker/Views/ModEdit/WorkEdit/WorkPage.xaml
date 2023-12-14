@@ -52,7 +52,10 @@
             <Setter Property="Visibility">
               <Setter.Value>
                 <MultiBinding Converter="{StaticResource AllTrueToCollapsedConverter}">
-                  <Binding Path="DataContext.ModInfo.DontShowMainPet.Value" RelativeSource="{RelativeSource AncestorType=Page}" />
+                  <Binding
+                    Converter="{StaticResource BoolInverter}"
+                    Path="DataContext.ModInfo.ShowMainPet.Value"
+                    RelativeSource="{RelativeSource AncestorType=Page}" />
                   <Binding Path="FromMain.Value" />
                 </MultiBinding>
               </Setter.Value>

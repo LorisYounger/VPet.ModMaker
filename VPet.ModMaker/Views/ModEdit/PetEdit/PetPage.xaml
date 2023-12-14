@@ -29,8 +29,8 @@
         Text="{Binding Search.Value, UpdateSourceTrigger=PropertyChanged}" />
       <pu:Switch
         Grid.Column="1"
-        Content="{ll:Str 不显示本体宠物}"
-        IsChecked="{Binding ModInfo.DontShowMainPet.Value}" />
+        Content="{ll:Str 显示本体宠物}"
+        IsChecked="{Binding ModInfo.ShowMainPet.Value}" />
     </Grid>
     <DataGrid
       Grid.Row="1"
@@ -53,7 +53,10 @@
           <Setter Property="Visibility">
             <Setter.Value>
               <MultiBinding Converter="{StaticResource AllTrueToCollapsedConverter}">
-                <Binding Path="DataContext.ModInfo.DontShowMainPet.Value" RelativeSource="{RelativeSource AncestorType=Page}" />
+                <Binding
+                  Converter="{StaticResource BoolInverter}"
+                  Path="DataContext.ModInfo.ShowMainPet.Value"
+                  RelativeSource="{RelativeSource AncestorType=Page}" />
                 <Binding Path="FromMain.Value" />
               </MultiBinding>
             </Setter.Value>

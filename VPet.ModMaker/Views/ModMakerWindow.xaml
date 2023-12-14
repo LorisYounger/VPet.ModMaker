@@ -92,8 +92,7 @@
                         Grid.Row="1"
                         VerticalAlignment="Bottom"
                         d:Text="{ll:Str 路径}"
-                        Text="{Binding SourcePath}"
-                        TextWrapping="Wrap" />
+                        Text="{Binding SourcePath}" />
                     </Grid>
                   </Grid>
                 </ControlTemplate>

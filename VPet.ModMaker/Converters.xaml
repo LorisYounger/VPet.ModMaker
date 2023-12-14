@@ -14,4 +14,5 @@
   <c:NotEqualsConverter x:Key="NotEqualsConverter" />
   <c:NullToFalseConverter x:Key="NullToFalseConverter" />
   <c:AllTrueToCollapsedConverter x:Key="AllTrueToCollapsedConverter" />
+  <c:BoolInverter x:Key="BoolInverter" />
 </ResourceDictionary>
