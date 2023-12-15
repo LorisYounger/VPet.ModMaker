@@ -32,4 +32,26 @@ public class PropertyChangingXEventArgs : CancelEventArgs
         OldValue = oldValue;
         NewValue = newValue;
     }
+
+#if  NETCOREAPP2_0_OR_GREATER
+    /// <summary>
+    /// 获取值
+    /// </summary>
+    /// <typeparam name="T">类型</typeparam>
+    /// <returns>(旧值, 新值)</returns>
+    public (T oldValue, T newValye) GetValue<T>()
+    {
+        return ((T)OldValue!, (T)NewValue!)!;
+    }
+#else
+    /// <summary>
+    /// 获取值
+    /// </summary>
+    /// <typeparam name="T">类型</typeparam>
+    /// <returns>(旧值, 新值)</returns>
+    public ValueInfo<T> GetValue<T>()
+    {
+        return new((T)OldValue!, (T)NewValue!)!;
+    }
+#endif
 }
