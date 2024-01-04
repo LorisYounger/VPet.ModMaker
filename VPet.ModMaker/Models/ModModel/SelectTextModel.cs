@@ -125,8 +125,8 @@ public class SelectTextModel : I18nModel<I18nSelectTextModel>
     public SelectTextModel(SelectText text)
         : this()
     {
-        ChooseId.Value = text.Choose ?? string.Empty;
         Id.Value = text.Text;
+        ChooseId.Value = text.Choose ?? string.Empty;
         Mode.EnumValue.Value = text.Mode;
         Tags.Value = text.Tags is null ? string.Empty : string.Join(", ", text.Tags);
         ToTags.Value = text.ToTags is null ? string.Empty : string.Join(", ", text.ToTags);

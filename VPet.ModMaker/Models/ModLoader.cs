@@ -149,7 +149,10 @@ public class ModLoader
                         {
                             var name = lps.First().Info;
                             var pet = new PetLoader(lps, di);
+                            if (pet.Name is null)
+                                break;
                             Pets.Add(pet);
+
                             // ! : 此方法会导致 LoadImageToStream 无法使用
                             //var graphCore = new GraphCore(0);
                             //foreach (var p in pet.path)
@@ -166,6 +169,8 @@ public class ModLoader
                         foreach (ILine li in tmp)
                         {
                             var food = LPSConvert.DeserializeObject<Food>(li);
+                            if (food.Name is null)
+                                break;
                             var imagePath =
                                 $"{path.FullName}\\image\\food\\{(string.IsNullOrWhiteSpace(food.Image) ? food.Name : food.Image)}.png";
                             if (File.Exists(imagePath))

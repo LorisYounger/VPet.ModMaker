@@ -230,7 +230,8 @@ public class ModInfoModel : I18nModel<I18nModInfoModel>
             I18nDatas.Add(lang.Key, lang.Value);
         OtherI18nDatas = loader.OtherI18nDatas;
 
-        LoadI18nData();
+        LoadI18nDatas();
+        RefreshAllId();
         RefreshId();
     }
 
@@ -332,7 +333,7 @@ public class ModInfoModel : I18nModel<I18nModInfoModel>
     /// <summary>
     /// 加载本地化数据
     /// </summary>
-    private void LoadI18nData()
+    private void LoadI18nDatas()
     {
         foreach (var lang in I18nDatas.Keys.Union(OtherI18nDatas.Keys))
         {
@@ -344,54 +345,92 @@ public class ModInfoModel : I18nModel<I18nModInfoModel>
         I18nHelper.Current.CultureName.Value = I18nHelper.Current.CultureNames.First();
         foreach (var i18nData in OtherI18nDatas)
         {
-            foreach (var food in Foods)
+            LoadFoodI18nData(i18nData.Key, i18nData.Value);
+            LoadLowTextI18nData(i18nData.Key, i18nData.Value);
+            LoadClickTextI18nData(i18nData.Key, i18nData.Value);
+            LoadSelectTextI18nData(i18nData.Key, i18nData.Value);
+            LoadPetI18nData(i18nData.Key, i18nData.Value);
+        }
+    }
+
+    private void LoadFoodI18nData(string key, Dictionary<string, string> i18nData)
+    {
+        foreach (var food in Foods)
+        {
+            if (food.I18nDatas.TryGetValue(key, out var data) is false)
+                continue;
+            if (i18nData.TryGetValue(food.Id.Value, out var name))
+                data.Name.Value = name;
+            if (i18nData.TryGetValue(food.DescriptionId.Value, out var description))
+                data.Description.Value = description;
+        }
+    }
+
+    private void LoadLowTextI18nData(string key, Dictionary<string, string> i18nData)
+    {
+        foreach (var lowText in LowTexts)
+        {
+            if (lowText.I18nDatas.TryGetValue(key, out var data) is false)
+                continue;
+            if (i18nData.TryGetValue(lowText.Id.Value, out var text))
+                data.Text.Value = text;
+        }
+    }
+
+    private void LoadClickTextI18nData(string key, Dictionary<string, string> i18nData)
+    {
+        foreach (var clickText in ClickTexts)
+        {
+            if (clickText.I18nDatas.TryGetValue(key, out var data) is false)
+                continue;
+            if (i18nData.TryGetValue(clickText.Id.Value, out var text))
+                data.Text.Value = text;
+        }
+    }
+
+    private void LoadSelectTextI18nData(string key, Dictionary<string, string> i18nData)
+    {
+        foreach (var selectText in SelectTexts)
+        {
+            if (selectText.I18nDatas.TryGetValue(key, out var data) is false)
+                continue;
+            if (i18nData.TryGetValue(selectText.Id.Value, out var text))
+                data.Text.Value = text;
+            if (i18nData.TryGetValue(selectText.ChooseId.Value, out var choose))
+                data.Choose.Value = choose;
+        }
+    }
+
+    private void LoadPetI18nData(string key, Dictionary<string, string> i18nData)
+    {
+        foreach (var pet in Pets)
+        {
+            if (pet.I18nDatas.TryGetValue(key, out var data) is false)
+                continue;
+            if (i18nData.TryGetValue(pet.Id.Value, out var name))
+                data.Name.Value = name;
+            if (i18nData.TryGetValue(pet.PetNameId.Value, out var petName))
+                data.PetName.Value = petName;
+            if (i18nData.TryGetValue(pet.DescriptionId.Value, out var description))
+                data.Description.Value = description;
+            foreach (var work in pet.Works)
             {
-                var foodI18n = food.I18nDatas[i18nData.Key];
-                if (i18nData.Value.TryGetValue(food.Id.Value, out var name))
-                    foodI18n.Name.Value = name;
-                if (i18nData.Value.TryGetValue(food.DescriptionId.Value, out var description))
-                    foodI18n.Description.Value = description;
-                food.RefreshId();
-            }
-            foreach (var lowText in LowTexts)
-            {
-                var lowTextI18n = lowText.I18nDatas[i18nData.Key];
-                if (i18nData.Value.TryGetValue(lowText.Id.Value, out var text))
-                    lowTextI18n.Text.Value = text;
-            }
-            foreach (var clickText in ClickTexts)
-            {
-                var clickTextI18n = clickText.I18nDatas[i18nData.Key];
-                if (i18nData.Value.TryGetValue(clickText.Id.Value, out var text))
-                    clickTextI18n.Text.Value = text;
-            }
-            foreach (var selectText in SelectTexts)
-            {
-                var selectTextI18n = selectText.I18nDatas[i18nData.Key];
-                if (i18nData.Value.TryGetValue(selectText.Id.Value, out var text))
-                    selectTextI18n.Text.Value = text;
-                if (i18nData.Value.TryGetValue(selectText.ChooseId.Value, out var choose))
-                    selectTextI18n.Choose.Value = choose;
-                selectText.RefreshId();
-            }
-            foreach (var pet in Pets)
-            {
-                var petI18n = pet.I18nDatas[i18nData.Key];
-                if (i18nData.Value.TryGetValue(pet.Id.Value, out var name))
-                    petI18n.Name.Value = name;
-                if (i18nData.Value.TryGetValue(pet.PetNameId.Value, out var petName))
-                    petI18n.PetName.Value = petName;
-                if (i18nData.Value.TryGetValue(pet.DescriptionId.Value, out var description))
-                    petI18n.Description.Value = description;
-                pet.RefreshId();
-                foreach (var work in pet.Works)
-                {
-                    var workI18n = work.I18nDatas[i18nData.Key];
-                    if (i18nData.Value.TryGetValue(work.Id.Value, out var workName))
-                        workI18n.Name.Value = workName;
-                }
+                if (work.I18nDatas.TryGetValue(key, out var workData) is false)
+                    continue;
+                if (i18nData.TryGetValue(work.Id.Value, out var workName))
+                    workData.Name.Value = workName;
             }
         }
+    }
+
+    private void RefreshAllId()
+    {
+        foreach (var food in Foods)
+            food.RefreshId();
+        foreach (var selectText in SelectTexts)
+            selectText.RefreshId();
+        foreach (var pet in Pets)
+            pet.RefreshId();
     }
     #endregion
     #region Save
