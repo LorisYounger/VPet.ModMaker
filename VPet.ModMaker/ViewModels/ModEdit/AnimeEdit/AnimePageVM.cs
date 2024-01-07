@@ -203,7 +203,6 @@ public class AnimePageVM
             if (window.IsCancel)
                 return;
             Animes[Animes.IndexOf(animeTypeModel)] = newAnime;
-            Animes[Animes.IndexOf(animeTypeModel)] = newAnime;
             if (ShowAnimes.Value.Count != Animes.Count)
                 ShowAnimes.Value[ShowAnimes.Value.IndexOf(animeTypeModel)] = newAnime;
         }

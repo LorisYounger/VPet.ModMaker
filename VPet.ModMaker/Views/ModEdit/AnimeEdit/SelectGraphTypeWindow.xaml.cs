@@ -1,5 +1,5 @@
 ﻿using HKW.HKWUtils.Observable;
-
+using LinePutScript.Localization.WPF;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -72,7 +72,7 @@ public partial class SelectGraphTypeWindow : Window
         new(new());
     public ObservableValue<string> AnimeName { get; } = new();
 
-    public ObservableValue<bool> HasNameAnime { get; } = new();
+    public ObservableValue<bool> HasNameAnime { get; } = new(true);
 
     public bool IsCancel { get; private set; } = true;
 
@@ -83,6 +83,16 @@ public partial class SelectGraphTypeWindow : Window
 
     private void Button_Yes_Click(object sender, RoutedEventArgs e)
     {
+        //if (string.IsNullOrWhiteSpace(AnimeName.Value))
+        //{
+        //    MessageBox.Show(
+        //        "动画名称不能为空".Translate(),
+        //        "",
+        //        MessageBoxButton.OK,
+        //        MessageBoxImage.Warning
+        //    );
+        //    return;
+        //}
         IsCancel = false;
         Close();
     }
