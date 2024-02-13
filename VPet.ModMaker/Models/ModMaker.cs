@@ -50,7 +50,7 @@ public class ModMaker : MainPlugin
             ModMakerInfo.GameVersion = MW.version;
             // 载入本体宠物
             foreach (var pet in MW.Pets)
-                ModMakerInfo.MainPets.Add(pet.Name, new(pet, true));
+                ModMakerInfo.MainPets.TryAdd(pet.Name, new(pet, true));
             //Maker.ModMaker = this;
             Maker.Show();
             Maker.Closed += Maker_Closed;
