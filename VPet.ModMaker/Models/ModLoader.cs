@@ -1,6 +1,7 @@
 ﻿using LinePutScript;
 using LinePutScript.Converter;
 using LinePutScript.Dictionary;
+using LinePutScript.Localization.WPF;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -213,30 +214,23 @@ public class ModLoader
                 case "lang":
                     Tag.Add("lang");
                     langDirectory = di;
-                    //foreach (FileInfo fi in di.EnumerateFiles("*.lps"))
-                    //{
-                    //    //LocalizeCore.AddCulture(
-                    //    //    fi.Id.Substring(0, fi.Id.Length - fi.Extension.Length),
-                    //    //    new LPS_D(File.ReadAllText(fi.FullName))
-                    //    //);
-                    //}
-                    //foreach (DirectoryInfo dis in di.EnumerateDirectories())
-                    //{
-                    //    foreach (FileInfo fi in dis.EnumerateFiles("*.lps"))
-                    //    {
-                    //        //LocalizeCore.AddCulture(
-                    //        //    dis.Id,
-                    //        //    new LPS_D(File.ReadAllText(fi.FullName))
-                    //        //);
-                    //    }
-                    //}
-
-                    //if (mw.Set.Language == "null")
-                    //{
-                    //    LocalizeCore.LoadDefaultCulture();
-                    //}
-                    //else
-                    //    LocalizeCore.LoadCulture(mw.Set.Language);
+                    foreach (FileInfo fi in di.EnumerateFiles("*.lps"))
+                    {
+                        LocalizeCore.AddCulture(
+                            Path.GetFileNameWithoutExtension(fi.Name),
+                            new LPS_D(File.ReadAllText(fi.FullName))
+                        );
+                    }
+                    foreach (DirectoryInfo dis in di.EnumerateDirectories())
+                    {
+                        foreach (FileInfo fi in dis.EnumerateFiles("*.lps"))
+                        {
+                            LocalizeCore.AddCulture(
+                                dis.Name,
+                                new LPS_D(File.ReadAllText(fi.FullName))
+                            );
+                        }
+                    }
                     break;
             }
         }

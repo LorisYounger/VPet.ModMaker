@@ -168,7 +168,7 @@
               <ComboBox
                 x:Name="ComboBox_ModeType"
                 Grid.Column="1"
-                ItemsSource="{Binding Move.Value.DirectionTypes}"
+                ItemsSource="{Binding Move.Value.ModeTypes}"
                 SelectedIndex="0" />
               <Button
                 Grid.Column="2"
