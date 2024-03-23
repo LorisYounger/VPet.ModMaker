@@ -1,8 +1,4 @@
-﻿using HKW.HKWUtils.Observable;
-
-using LinePutScript;
-using LinePutScript.Localization.WPF;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
@@ -10,7 +6,11 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using HKW.HKWUtils.Observable;
+using LinePutScript;
+using LinePutScript.Localization.WPF;
 using VPet_Simulator.Core;
+using static VPet_Simulator.Core.IGameSave;
 
 namespace VPet.ModMaker.Models.ModModel;
 
@@ -159,15 +159,11 @@ public class FoodAnimeTypeModel
         if (foodAnimeInfos.Any() is false)
             throw new Exception("信息文件\n{0}\n未包含食物动画信息".Translate(infoPath));
         var pngAnimeInfos = lps.FindAllLine(nameof(PNGAnimation))
-            .Select(
-                i =>
-                    new PNGAnimeInfo(
-                        i.Info,
-                        i.Find("path").Info,
-                        (GameSave.ModeType)
-                            Enum.Parse(typeof(GameSave.ModeType), i.Find("mode").Info, true)
-                    )
-            )
+            .Select(i => new PNGAnimeInfo(
+                i.Info,
+                i.Find("path").Info,
+                (ModeType)Enum.Parse(typeof(ModeType), i.Find("mode").Info, true)
+            ))
             .ToList();
         foreach (var foodAnimation in foodAnimeInfos)
         {
@@ -183,22 +179,15 @@ public class FoodAnimeTypeModel
     /// <param name="pngAnimeInfos">PNG动画信息</param>
     public void ParseFoodAnimeInfo(string path, ILine line, List<PNGAnimeInfo> pngAnimeInfos)
     {
-        var mode = (GameSave.ModeType)
-            Enum.Parse(typeof(GameSave.ModeType), line.Find("mode").Info, true);
-        if (mode is GameSave.ModeType.Happy)
-            AddModeAnime(path, GameSave.ModeType.Happy, HappyAnimes, line, pngAnimeInfos);
-        else if (mode is GameSave.ModeType.Nomal)
-            AddModeAnime(path, GameSave.ModeType.Nomal, NomalAnimes, line, pngAnimeInfos);
-        else if (mode is GameSave.ModeType.PoorCondition)
-            AddModeAnime(
-                path,
-                GameSave.ModeType.PoorCondition,
-                PoorConditionAnimes,
-                line,
-                pngAnimeInfos
-            );
-        else if (mode is GameSave.ModeType.Ill)
-            AddModeAnime(path, GameSave.ModeType.Ill, IllAnimes, line, pngAnimeInfos);
+        var mode = (ModeType)Enum.Parse(typeof(ModeType), line.Find("mode").Info, true);
+        if (mode is ModeType.Happy)
+            AddModeAnime(path, ModeType.Happy, HappyAnimes, line, pngAnimeInfos);
+        else if (mode is ModeType.Nomal)
+            AddModeAnime(path, ModeType.Nomal, NomalAnimes, line, pngAnimeInfos);
+        else if (mode is ModeType.PoorCondition)
+            AddModeAnime(path, ModeType.PoorCondition, PoorConditionAnimes, line, pngAnimeInfos);
+        else if (mode is ModeType.Ill)
+            AddModeAnime(path, ModeType.Ill, IllAnimes, line, pngAnimeInfos);
     }
 
     /// <summary>
@@ -211,7 +200,7 @@ public class FoodAnimeTypeModel
     /// <param name="pngAnimeInfos">PNG动画信息</param>
     public void AddModeAnime(
         string path,
-        GameSave.ModeType mode,
+        ModeType mode,
         ObservableCollection<FoodAnimeModel> foodAnimes,
         ILine line,
         List<PNGAnimeInfo> pngAnimeInfos
@@ -232,7 +221,7 @@ public class FoodAnimeTypeModel
             // 若没有则获取通用动画
             anime.FrontImages = GetImages(
                 path,
-                frontLayAnimes.First(i => i.Mode == GameSave.ModeType.Nomal)
+                frontLayAnimes.First(i => i.Mode == ModeType.Nomal)
             );
         }
         if (backLayAnimes.FirstOrDefault(i => i.Mode == mode) is PNGAnimeInfo backAnimeInfo)
@@ -241,10 +230,7 @@ public class FoodAnimeTypeModel
         }
         else
         {
-            anime.BackImages = GetImages(
-                path,
-                backLayAnimes.First(i => i.Mode == GameSave.ModeType.Nomal)
-            );
+            anime.BackImages = GetImages(path, backLayAnimes.First(i => i.Mode == ModeType.Nomal));
         }
         foodAnimes.Add(anime);
 
@@ -253,13 +239,10 @@ public class FoodAnimeTypeModel
             return new(
                 Directory
                     .EnumerateFiles(Path.Combine(path, pngAnimeInfo.Path))
-                    .Select(
-                        i =>
-                            new ImageModel(
-                                Utils.LoadImageToMemoryStream(i),
-                                int.Parse(Path.GetFileNameWithoutExtension(i).Split('_')[2])
-                            )
-                    )
+                    .Select(i => new ImageModel(
+                        NativeUtils.LoadImageToMemoryStream(i),
+                        int.Parse(Path.GetFileNameWithoutExtension(i).Split('_')[2])
+                    ))
             );
         }
     }
@@ -283,13 +266,13 @@ public class FoodAnimeTypeModel
             return;
         }
         if (HappyAnimes.Count > 0)
-            SaveAnimeInfo(animePath, HappyAnimes, GameSave.ModeType.Happy);
+            SaveAnimeInfo(animePath, HappyAnimes, ModeType.Happy);
         if (NomalAnimes.Count > 0)
-            SaveAnimeInfo(animePath, NomalAnimes, GameSave.ModeType.Nomal);
+            SaveAnimeInfo(animePath, NomalAnimes, ModeType.Nomal);
         if (PoorConditionAnimes.Count > 0)
-            SaveAnimeInfo(animePath, PoorConditionAnimes, GameSave.ModeType.PoorCondition);
+            SaveAnimeInfo(animePath, PoorConditionAnimes, ModeType.PoorCondition);
         if (IllAnimes.Count > 0)
-            SaveAnimeInfo(animePath, IllAnimes, GameSave.ModeType.Ill);
+            SaveAnimeInfo(animePath, IllAnimes, ModeType.Ill);
     }
 
     /// <summary>
@@ -301,7 +284,7 @@ public class FoodAnimeTypeModel
     private void SaveAnimeInfo(
         string animePath,
         ObservableCollection<FoodAnimeModel> animes,
-        GameSave.ModeType mode
+        ModeType mode
     )
     {
         var modeAnimePath = Path.Combine(animePath, mode.ToString());
@@ -355,7 +338,7 @@ public class FoodAnimeTypeModel
         string frontLayName,
         string backLayName,
         FoodAnimeModel anime,
-        GameSave.ModeType mode
+        ModeType mode
     )
     {
         var lps = new LPS()
@@ -395,9 +378,9 @@ public class PNGAnimeInfo
 {
     public string Name { get; }
     public string Path { get; }
-    public GameSave.ModeType Mode { get; }
+    public ModeType Mode { get; }
 
-    public PNGAnimeInfo(string name, string path, GameSave.ModeType mode)
+    public PNGAnimeInfo(string name, string path, ModeType mode)
     {
         Name = name;
         Path = path;

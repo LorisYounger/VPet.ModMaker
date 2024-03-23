@@ -2,11 +2,12 @@
   x:Class="VPet.ModMaker.App"
   xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
   xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+  xmlns:pu="https://opensource.panuon.com/wpf-ui"
   StartupUri="Views/ModMakerWindow.xaml">
   <Application.Resources>
     <ResourceDictionary>
       <ResourceDictionary.MergedDictionaries>
-        <ResourceDictionary Source="pack://application:,,,/Panuon.WPF.UI;component/Control.xaml" />
+        <pu:StyleDictionary Includes="All" />
         <ResourceDictionary Source="/VPet-Simulator.Windows.Interface;component/ResourceStyle.xaml" />
         <ResourceDictionary Source="Converters.xaml" />
         <ResourceDictionary Source="Templates.xaml" />

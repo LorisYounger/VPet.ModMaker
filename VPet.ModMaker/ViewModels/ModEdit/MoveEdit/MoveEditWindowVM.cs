@@ -1,13 +1,12 @@
-﻿using HKW.HKWUtils.Observable;
-
-using LinePutScript.Localization.WPF;
-using Microsoft.Win32;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Media.Imaging;
+using HKW.HKWUtils.Observable;
+using LinePutScript.Localization.WPF;
+using Microsoft.Win32;
 using VPet.ModMaker.Models;
 
 namespace VPet.ModMaker.ViewModels.ModEdit.MoveEdit;
@@ -56,7 +55,7 @@ public class MoveEditWindowVM
             };
         if (openFileDialog.ShowDialog() is true)
         {
-            Image.Value = Utils.LoadImageToMemoryStream(openFileDialog.FileName);
+            Image.Value = NativeUtils.LoadImageToMemoryStream(openFileDialog.FileName);
         }
     }
 
@@ -71,7 +70,7 @@ public class MoveEditWindowVM
         if (openFileDialog.ShowDialog() is true)
         {
             Image.Value?.StreamSource?.Close();
-            Image.Value = Utils.LoadImageToMemoryStream(openFileDialog.FileName);
+            Image.Value = NativeUtils.LoadImageToMemoryStream(openFileDialog.FileName);
         }
     }
 }

@@ -1,13 +1,12 @@
-﻿using HKW.HKWUtils.Observable;
-
-using LinePutScript.Localization.WPF;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using HKW.HKWUtils.Observable;
+using LinePutScript.Localization.WPF;
 using VPet.ModMaker.Models;
 using VPet.ModMaker.Views.ModEdit.WorkEdit;
 
@@ -60,14 +59,12 @@ public class WorkPageVM
         else
         {
             ShowWorks.Value = new(
-                Works.Where(
-                    m => m.Id.Value.Contains(e.NewValue, StringComparison.OrdinalIgnoreCase)
+                Works.Where(m =>
+                    m.Id.Value.Contains(e.NewValue, StringComparison.OrdinalIgnoreCase)
                 )
             );
         }
     }
-
-    public void Close() { }
 
     private void Add()
     {

@@ -1,14 +1,14 @@
-﻿using HKW.HKWUtils.Observable;
-
-using LinePutScript.Localization.WPF;
-using Microsoft.Win32;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Media.Imaging;
+using HKW.HKWUtils.Observable;
+using LinePutScript.Localization.WPF;
+using Microsoft.Win32;
 using VPet.ModMaker.Models;
+using VPet_Simulator.Windows.Interface;
 
 namespace VPet.ModMaker.ViewModels.ModEdit.WorkEdit;
 
@@ -23,29 +23,24 @@ public class WorkEditWindowVM
     #endregion
     public ObservableValue<double> BorderLength { get; } = new(250);
     public ObservableValue<double> LengthRatio { get; } = new(250.0 / 500.0);
-    public ObservableValue<BitmapImage> Image { get; } = new();
     #region Command
     public ObservableCommand AddImageCommand { get; } = new();
     public ObservableCommand ChangeImageCommand { get; } = new();
+
+    public ObservableCommand FixOverLoadCommand { get; } = new();
     #endregion
     public WorkEditWindowVM()
     {
         AddImageCommand.ExecuteCommand += AddImage;
         ChangeImageCommand.ExecuteCommand += ChangeImage;
-        Image.ValueChanged += Image_ValueChanged;
+        FixOverLoadCommand.ExecuteCommand += FixOverLoadCommand_ExecuteCommand;
     }
 
-    private void Image_ValueChanged(
-        ObservableValue<BitmapImage> sender,
-        ValueChangedEventArgs<BitmapImage> e
-    )
+    private void FixOverLoadCommand_ExecuteCommand()
     {
-        //LengthRatio.EnumValue = BorderLength.EnumValue / value.PixelWidth;
-    }
-
-    public void Close()
-    {
-        Image.Value?.CloseStream();
+        var work = Work.Value.ToWork();
+        work.FixOverLoad();
+        Work.Value = new(work);
     }
 
     private void AddImage()
@@ -58,7 +53,7 @@ public class WorkEditWindowVM
             };
         if (openFileDialog.ShowDialog() is true)
         {
-            Image.Value = Utils.LoadImageToMemoryStream(openFileDialog.FileName);
+            Work.Value.Image.Value = NativeUtils.LoadImageToMemoryStream(openFileDialog.FileName);
         }
     }
 
@@ -72,8 +67,8 @@ public class WorkEditWindowVM
             };
         if (openFileDialog.ShowDialog() is true)
         {
-            Image.Value?.StreamSource?.Close();
-            Image.Value = Utils.LoadImageToMemoryStream(openFileDialog.FileName);
+            Work.Value.Image.Value?.CloseStream();
+            Work.Value.Image.Value = NativeUtils.LoadImageToMemoryStream(openFileDialog.FileName);
         }
     }
 }

@@ -1,23 +1,23 @@
-﻿using HKW.HKWUtils.Observable;
-using Microsoft.Win32;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Collections.Specialized;
+using System.ComponentModel;
+using System.Globalization;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.Windows.Media.Imaging;
-using VPet.ModMaker.Models;
-using System.Collections.Specialized;
-using System.ComponentModel;
-using VPet.ModMaker.Views.ModEdit;
 using System.Windows;
-using System.IO;
+using System.Windows.Media.Imaging;
+using HKW.HKWUtils.Observable;
 using LinePutScript.Localization.WPF;
-using Panuon.WPF.UI;
-using VPet.ModMaker.Views.ModEdit.I18nEdit;
-using System.Globalization;
+using Microsoft.Win32;
 using Ookii.Dialogs.Wpf;
+using Panuon.WPF.UI;
+using VPet.ModMaker.Models;
+using VPet.ModMaker.Views.ModEdit;
+using VPet.ModMaker.Views.ModEdit.I18nEdit;
 
 namespace VPet.ModMaker.ViewModels.ModEdit;
 
@@ -138,7 +138,9 @@ public class ModEditWindowVM
         if (openFileDialog.ShowDialog() is true)
         {
             ModInfo.Value.Image.Value?.StreamSource?.Close();
-            ModInfo.Value.Image.Value = Utils.LoadImageToMemoryStream(openFileDialog.FileName);
+            ModInfo.Value.Image.Value = NativeUtils.LoadImageToMemoryStream(
+                openFileDialog.FileName
+            );
         }
     }
 

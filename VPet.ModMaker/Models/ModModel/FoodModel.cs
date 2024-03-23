@@ -1,8 +1,4 @@
-﻿using HKW.HKWUtils.Observable;
-
-using LinePutScript;
-using LinePutScript.Converter;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
@@ -10,6 +6,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Media.Imaging;
+using HKW.HKWUtils.Observable;
+using LinePutScript;
+using LinePutScript.Converter;
 using VPet_Simulator.Windows.Interface;
 
 namespace VPet.ModMaker.Models;
@@ -153,7 +152,7 @@ public class FoodModel : I18nModel<I18nFoodModel>
         Price.Value = food.Price;
         Exp.Value = food.Exp;
         if (File.Exists(food.Image))
-            Image.Value = Utils.LoadImageToMemoryStream(food.Image);
+            Image.Value = NativeUtils.LoadImageToMemoryStream(food.Image);
     }
 
     public Food ToFood()

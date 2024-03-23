@@ -1,8 +1,4 @@
-﻿using HKW.HKWUtils.Observable;
-
-using LinePutScript.Localization.WPF;
-using Microsoft.Win32;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
@@ -10,10 +6,14 @@ using System.IO;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Media.Imaging;
+using HKW.HKWUtils.Observable;
+using LinePutScript.Localization.WPF;
+using Microsoft.Win32;
 using VPet.ModMaker.Models;
 using VPet.ModMaker.Models.ModModel;
 using VPet.ModMaker.Resources;
 using VPet_Simulator.Core;
+using static VPet_Simulator.Core.IGameSave;
 
 namespace VPet.ModMaker.ViewModels.ModEdit.AnimeEdit;
 
@@ -28,7 +28,7 @@ public class FoodAnimeEditWindowVM
     /// 默认食物图片
     /// </summary>
     public static BitmapImage DefaultFoodImage { get; } =
-        Utils.LoadImageToMemoryStream(NativeResources.GetStream(NativeResources.FoodImage));
+        NativeUtils.LoadImageToMemoryStream(NativeResources.GetStream(NativeResources.FoodImage));
 
     /// <summary>
     /// 食物图片
@@ -73,7 +73,7 @@ public class FoodAnimeEditWindowVM
     /// <summary>
     /// 当前模式
     /// </summary>
-    public GameSave.ModeType CurrentMode { get; set; }
+    public ModeType CurrentMode { get; set; }
 
     /// <summary>
     /// 循环
@@ -248,7 +248,7 @@ public class FoodAnimeEditWindowVM
         {
             if (FoodImage.Value != DefaultFoodImage)
                 FoodImage.Value.CloseStream();
-            FoodImage.Value = Utils.LoadImageToMemoryStream(openFileDialog.FileName);
+            FoodImage.Value = NativeUtils.LoadImageToMemoryStream(openFileDialog.FileName);
         }
     }
 
@@ -270,13 +270,13 @@ public class FoodAnimeEditWindowVM
     #region AnimeCommand
     private void AddAnimeCommand_ExecuteEvent()
     {
-        if (CurrentMode is GameSave.ModeType.Happy)
+        if (CurrentMode is ModeType.Happy)
             Anime.Value.HappyAnimes.Add(new());
-        else if (CurrentMode is GameSave.ModeType.Nomal)
+        else if (CurrentMode is ModeType.Nomal)
             Anime.Value.NomalAnimes.Add(new());
-        else if (CurrentMode is GameSave.ModeType.PoorCondition)
+        else if (CurrentMode is ModeType.PoorCondition)
             Anime.Value.PoorConditionAnimes.Add(new());
-        else if (CurrentMode is GameSave.ModeType.Ill)
+        else if (CurrentMode is ModeType.Ill)
             Anime.Value.IllAnimes.Add(new());
     }
 
@@ -291,13 +291,13 @@ public class FoodAnimeEditWindowVM
             MessageBox.Show("确定删除吗".Translate(), "", MessageBoxButton.YesNo) is MessageBoxResult.Yes
         )
         {
-            if (CurrentMode is GameSave.ModeType.Happy)
+            if (CurrentMode is ModeType.Happy)
                 Anime.Value.HappyAnimes.Remove(value);
-            else if (CurrentMode is GameSave.ModeType.Nomal)
+            else if (CurrentMode is ModeType.Nomal)
                 Anime.Value.NomalAnimes.Remove(value);
-            else if (CurrentMode is GameSave.ModeType.PoorCondition)
+            else if (CurrentMode is ModeType.PoorCondition)
                 Anime.Value.PoorConditionAnimes.Remove(value);
-            else if (CurrentMode is GameSave.ModeType.Ill)
+            else if (CurrentMode is ModeType.Ill)
                 Anime.Value.IllAnimes.Remove(value);
             value.Close();
         }
@@ -365,7 +365,7 @@ public class FoodAnimeEditWindowVM
         BitmapImage newImage;
         try
         {
-            newImage = Utils.LoadImageToMemoryStream(openFileDialog.FileName);
+            newImage = NativeUtils.LoadImageToMemoryStream(openFileDialog.FileName);
         }
         catch (Exception ex)
         {
@@ -439,7 +439,7 @@ public class FoodAnimeEditWindowVM
         BitmapImage newImage;
         try
         {
-            newImage = Utils.LoadImageToMemoryStream(openFileDialog.FileName);
+            newImage = NativeUtils.LoadImageToMemoryStream(openFileDialog.FileName);
         }
         catch (Exception ex)
         {
@@ -467,13 +467,13 @@ public class FoodAnimeEditWindowVM
             {
                 if (File.Exists(path))
                 {
-                    newImages.Add(new(Utils.LoadImageToMemoryStream(path)));
+                    newImages.Add(new(NativeUtils.LoadImageToMemoryStream(path)));
                 }
                 else if (Directory.Exists(path))
                 {
                     foreach (var file in Directory.EnumerateFiles(path, "*.png"))
                     {
-                        newImages.Add(new(Utils.LoadImageToMemoryStream(path)));
+                        newImages.Add(new(NativeUtils.LoadImageToMemoryStream(path)));
                     }
                 }
             }

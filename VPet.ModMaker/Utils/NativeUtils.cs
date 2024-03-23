@@ -11,7 +11,7 @@ namespace HKW.HKWUtils;
 /// <summary>
 /// 工具
 /// </summary>
-public static class Utils
+public static class NativeUtils
 {
     /// <summary>
     /// 解码像素宽度

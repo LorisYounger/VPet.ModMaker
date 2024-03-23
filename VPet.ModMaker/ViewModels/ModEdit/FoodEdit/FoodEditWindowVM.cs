@@ -1,8 +1,4 @@
-﻿using HKW.HKWUtils.Observable;
-
-using LinePutScript.Localization.WPF;
-using Microsoft.Win32;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -10,6 +6,9 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Media.Imaging;
+using HKW.HKWUtils.Observable;
+using LinePutScript.Localization.WPF;
+using Microsoft.Win32;
 using VPet.ModMaker.Models;
 using VPet_Simulator.Windows.Interface;
 
@@ -69,7 +68,7 @@ public class FoodEditWindowVM
             };
         if (openFileDialog.ShowDialog() is true)
         {
-            Food.Value.Image.Value = Utils.LoadImageToMemoryStream(openFileDialog.FileName);
+            Food.Value.Image.Value = NativeUtils.LoadImageToMemoryStream(openFileDialog.FileName);
         }
     }
 
@@ -84,7 +83,7 @@ public class FoodEditWindowVM
         if (openFileDialog.ShowDialog() is true)
         {
             Food.Value.Image.Value?.StreamSource?.Close();
-            Food.Value.Image.Value = Utils.LoadImageToMemoryStream(openFileDialog.FileName);
+            Food.Value.Image.Value = NativeUtils.LoadImageToMemoryStream(openFileDialog.FileName);
         }
     }
 }

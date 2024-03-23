@@ -19,7 +19,7 @@ namespace HKW.HKWUtils;
 /// <summary>
 /// 拓展
 /// </summary>
-public static class Extensions
+public static class NativeExtensions
 {
     /// <summary>
     ///

@@ -1,11 +1,12 @@
-﻿using HKW.HKWUtils.Observable;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Media;
+using System.Windows.Media.Imaging;
+using HKW.HKWUtils.Observable;
 
 namespace VPet.ModMaker.Models;
 
@@ -36,7 +37,7 @@ public class WorkModel : I18nModel<I18nWorkModel>
     /// <summary>
     /// 收获倍率
     /// </summary>
-    public ObservableValue<double> MoneyLevel { get; } = new();
+    //public ObservableValue<double> MoneyLevel { get; } = new();
 
     /// <summary>
     /// 收获基础
@@ -77,6 +78,11 @@ public class WorkModel : I18nModel<I18nWorkModel>
     /// 是否超模
     /// </summary>
     public ObservableValue<bool> IsOverLoad { get; } = new();
+
+    /// <summary>
+    /// 图片
+    /// </summary>
+    public ObservableValue<BitmapImage> Image { get; } = new();
 
     /// <summary>
     /// 类型
@@ -134,7 +140,7 @@ public class WorkModel : I18nModel<I18nWorkModel>
         IsOverLoad.AddNotifySender(
             WorkType,
             MoneyBase,
-            MoneyLevel,
+            //MoneyLevel,
             StrengthFood,
             StrengthDrink,
             Feeling,
@@ -153,7 +159,7 @@ public class WorkModel : I18nModel<I18nWorkModel>
         WorkType.Value = model.WorkType.Value;
         Id.Value = model.Id.Value;
         Graph.Value = model.Graph.Value;
-        MoneyLevel.Value = model.MoneyLevel.Value;
+        //MoneyLevel.Value = model.MoneyLevel.Value;
         MoneyBase.Value = model.MoneyBase.Value;
         StrengthFood.Value = model.StrengthFood.Value;
         StrengthDrink.Value = model.StrengthDrink.Value;
@@ -183,7 +189,7 @@ public class WorkModel : I18nModel<I18nWorkModel>
         WorkType.Value = work.Type;
         Id.Value = work.Name;
         Graph.Value = work.Graph;
-        MoneyLevel.Value = work.MoneyLevel;
+        //MoneyLevel.Value = work.MoneyLevel;
         MoneyBase.Value = work.MoneyBase;
         StrengthFood.Value = work.StrengthFood;
         StrengthDrink.Value = work.StrengthDrink;
@@ -214,7 +220,7 @@ public class WorkModel : I18nModel<I18nWorkModel>
             Type = WorkType.Value,
             Name = Id.Value,
             Graph = Graph.Value,
-            MoneyLevel = MoneyLevel.Value,
+            //MoneyLevel = MoneyLevel.Value,
             MoneyBase = MoneyBase.Value,
             StrengthFood = StrengthFood.Value,
             StrengthDrink = StrengthDrink.Value,
@@ -223,16 +229,21 @@ public class WorkModel : I18nModel<I18nWorkModel>
             Time = Time.Value,
             FinishBonus = FinishBonus.Value,
             //
-            BorderBrush = BorderBrush.Value.ToString().Substring(3),
-            Background = Background.Value.ToString().Substring(3),
-            ButtonBackground = ButtonBackground.Value.ToString().Substring(3),
-            ButtonForeground = ButtonForeground.Value.ToString().Substring(3),
-            Foreground = Foreground.Value.ToString().Substring(3),
+            BorderBrush = BorderBrush.Value.ToString()[3..],
+            Background = Background.Value.ToString()[3..],
+            ButtonBackground = ButtonBackground.Value.ToString()[3..],
+            ButtonForeground = ButtonForeground.Value.ToString()[3..],
+            Foreground = Foreground.Value.ToString()[3..],
             //
             Left = Left.Value,
             Top = Top.Value,
             Width = Width.Value,
         };
+    }
+
+    public void Close()
+    {
+        Image.Value.CloseStream();
     }
 }
 

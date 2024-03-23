@@ -1,10 +1,4 @@
-﻿using HKW.HKWUtils;
-using HKW.HKWUtils.Observable;
-
-using LinePutScript;
-using LinePutScript.Converter;
-using LinePutScript.Localization.WPF;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
@@ -14,6 +8,11 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Media.Imaging;
+using HKW.HKWUtils;
+using HKW.HKWUtils.Observable;
+using LinePutScript;
+using LinePutScript.Converter;
+using LinePutScript.Localization.WPF;
 using VPet.ModMaker.Models.ModModel;
 using VPet.ModMaker.Views.ModEdit.I18nEdit;
 using VPet_Simulator.Core;
@@ -170,7 +169,7 @@ public class ModInfoModel : I18nModel<I18nModInfoModel>
         AuthorID = loader.AuthorID;
         var imagePath = Path.Combine(loader.ModPath.FullName, "icon.png");
         if (File.Exists(imagePath))
-            Image.Value = Utils.LoadImageToMemoryStream(imagePath);
+            Image.Value = NativeUtils.LoadImageToMemoryStream(imagePath);
         foreach (var food in loader.Foods)
             Foods.Add(new(food));
         foreach (var clickText in loader.ClickTexts)
@@ -544,14 +543,13 @@ public class ModInfoModel : I18nModel<I18nModInfoModel>
             lps.Add(LPSConvert.SerializeObjectToLine<Line>(food.ToFood(), "food"));
             foreach (var cultureName in I18nHelper.Current.CultureNames)
             {
-                SaveI18nDatas[cultureName].TryAdd(
-                    food.Id.Value,
-                    food.I18nDatas[cultureName].Name.Value
-                );
-                SaveI18nDatas[cultureName].TryAdd(
-                    food.DescriptionId.Value,
-                    food.I18nDatas[cultureName].Description.Value
-                );
+                SaveI18nDatas[cultureName]
+                    .TryAdd(food.Id.Value, food.I18nDatas[cultureName].Name.Value);
+                SaveI18nDatas[cultureName]
+                    .TryAdd(
+                        food.DescriptionId.Value,
+                        food.I18nDatas[cultureName].Description.Value
+                    );
             }
         }
         File.WriteAllText(foodFile, lps.ToString());
@@ -593,14 +591,10 @@ public class ModInfoModel : I18nModel<I18nModInfoModel>
             lps.Add(LPSConvert.SerializeObjectToLine<Line>(text.ToSelectText(), "SelectText"));
             foreach (var cultureName in I18nHelper.Current.CultureNames)
             {
-                SaveI18nDatas[cultureName].TryAdd(
-                    text.Id.Value,
-                    text.I18nDatas[cultureName].Text.Value
-                );
-                SaveI18nDatas[cultureName].TryAdd(
-                    text.ChooseId.Value,
-                    text.I18nDatas[cultureName].Choose.Value
-                );
+                SaveI18nDatas[cultureName]
+                    .TryAdd(text.Id.Value, text.I18nDatas[cultureName].Text.Value);
+                SaveI18nDatas[cultureName]
+                    .TryAdd(text.ChooseId.Value, text.I18nDatas[cultureName].Choose.Value);
             }
         }
         File.WriteAllText(textFile, lps.ToString());
@@ -622,10 +616,8 @@ public class ModInfoModel : I18nModel<I18nModInfoModel>
             lps.Add(LPSConvert.SerializeObjectToLine<Line>(text.ToLowText(), "lowfoodtext"));
             foreach (var cultureName in I18nHelper.Current.CultureNames)
             {
-                SaveI18nDatas[cultureName].TryAdd(
-                    text.Id.Value,
-                    text.I18nDatas[cultureName].Text.Value
-                );
+                SaveI18nDatas[cultureName]
+                    .TryAdd(text.Id.Value, text.I18nDatas[cultureName].Text.Value);
             }
         }
         File.WriteAllText(textFile, lps.ToString());
@@ -647,10 +639,8 @@ public class ModInfoModel : I18nModel<I18nModInfoModel>
             lps.Add(LPSConvert.SerializeObjectToLine<Line>(text.ToClickText(), "clicktext"));
             foreach (var cultureName in I18nHelper.Current.CultureNames)
             {
-                SaveI18nDatas[cultureName].TryAdd(
-                    text.Id.Value,
-                    text.I18nDatas[cultureName].Text.Value
-                );
+                SaveI18nDatas[cultureName]
+                    .TryAdd(text.Id.Value, text.I18nDatas[cultureName].Text.Value);
             }
         }
         File.WriteAllText(textFile, lps.ToString());

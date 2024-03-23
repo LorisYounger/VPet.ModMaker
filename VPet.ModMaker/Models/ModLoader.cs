@@ -1,13 +1,13 @@
-﻿using LinePutScript;
-using LinePutScript.Converter;
-using LinePutScript.Dictionary;
-using LinePutScript.Localization.WPF;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using LinePutScript;
+using LinePutScript.Converter;
+using LinePutScript.Dictionary;
+using LinePutScript.Localization.WPF;
 using VPet_Simulator.Core;
 using VPet_Simulator.Windows.Interface;
 
@@ -106,7 +106,7 @@ public class ModLoader
     public ModLoader(DirectoryInfo path)
     {
         ModPath = path;
-        LpsDocument modlps = new LpsDocument(File.ReadAllText(path.FullName + @"\info.lps"));
+        var modlps = new LPS(File.ReadAllText(path.FullName + @"\info.lps"));
         Name = modlps.FindLine("vupmod").Info;
         Intro = modlps.FindLine("intro").Info;
         GameVer = modlps.FindSub("gamever").InfoToInt;

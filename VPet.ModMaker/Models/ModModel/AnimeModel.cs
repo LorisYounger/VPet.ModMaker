@@ -1,8 +1,7 @@
-﻿using HKW.HKWUtils.Observable;
-
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
+using HKW.HKWUtils.Observable;
 using VPet_Simulator.Core;
 
 namespace VPet.ModMaker.Models.ModModel;
@@ -34,11 +33,11 @@ public class AnimeModel
     {
         foreach (var file in Directory.EnumerateFiles(imagesPath))
         {
-            var info = Path.GetFileNameWithoutExtension(file).Split(Utils.Separator);
+            var info = Path.GetFileNameWithoutExtension(file).Split(NativeUtils.Separator);
             Id.Value = info[0];
             var duration = info.Last();
             var imageModel = new ImageModel(
-                Utils.LoadImageToMemoryStream(file),
+                NativeUtils.LoadImageToMemoryStream(file),
                 int.Parse(duration)
             );
             Images.Add(imageModel);

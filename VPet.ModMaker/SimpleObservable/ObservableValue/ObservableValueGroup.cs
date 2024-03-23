@@ -117,8 +117,8 @@ public class ObservableValueGroup<T> : IEnumerable<ObservableValue<T>?>
     /// <inheritdoc/>
     public IEnumerator<ObservableValue<T>?> GetEnumerator()
     {
-        return _bindingValues.Values
-            .Select(v => v.TryGetTarget(out var t) ? t : null)
+        return _bindingValues
+            .Values.Select(v => v.TryGetTarget(out var t) ? t : null)
             .GetEnumerator();
     }
 

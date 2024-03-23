@@ -1,20 +1,20 @@
-﻿using LinePutScript;
-using LinePutScript.Localization.WPF;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.Windows.Controls;
 using System.Windows;
-using VPet_Simulator.Windows.Interface;
+using System.Windows.Controls;
+using LinePutScript;
+using LinePutScript.Localization.WPF;
 using VPet.ModMaker.Views;
+using VPet_Simulator.Windows.Interface;
 
 namespace VPet.ModMaker.Models;
 
 public class ModMaker : MainPlugin
 {
-    public ILine Set;
+    //public ILine Set;
     public override string PluginName => "ModMaker";
 
     public ModMakerWindow Maker;
@@ -24,7 +24,7 @@ public class ModMaker : MainPlugin
 
     public override void LoadPlugin()
     {
-        Set = MW.Set.FindLine("ModMaker");
+        //Set = MW.Set.FindLine("ModMaker");
         MenuItem modset = MW.Main.ToolBar.MenuMODConfig;
         modset.Visibility = Visibility.Visible;
         var menuset = new MenuItem()

@@ -1,5 +1,4 @@
-﻿using LinePutScript.Localization.WPF;
-using System;
+﻿using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,10 +12,12 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using LinePutScript.Localization.WPF;
 using VPet.ModMaker.Models;
 using VPet.ModMaker.Models.ModModel;
 using VPet.ModMaker.ViewModels.ModEdit.AnimeEdit;
 using VPet_Simulator.Core;
+using static VPet_Simulator.Core.IGameSave;
 
 namespace VPet.ModMaker.Views.ModEdit.AnimeEdit;
 
@@ -64,7 +65,7 @@ public partial class FoodAnimeEditWindow : Window
             || item.Tag is not string str
         )
             return;
-        if (Enum.TryParse<GameSave.ModeType>(str, true, out var mode))
+        if (Enum.TryParse<ModeType>(str, true, out var mode))
         {
             ViewModel.CurrentMode = mode;
             ViewModel.CurrentFrontImageModel.Value = null;

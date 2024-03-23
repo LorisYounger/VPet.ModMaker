@@ -1,13 +1,14 @@
-﻿using HKW.HKWUtils.Observable;
-using LinePutScript;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using HKW.HKWUtils.Observable;
+using LinePutScript;
 using VPet_Simulator.Core;
+using static VPet_Simulator.Core.IGameSave;
 
 namespace VPet.ModMaker.Models.ModModel;
 
@@ -18,7 +19,7 @@ public class FoodAnimeModel
     /// </summary>
     public ObservableValue<string> Id { get; } = new();
 
-    public ObservableValue<GameSave.ModeType> Mode { get; }
+    public ObservableValue<ModeType> Mode { get; }
 
     /// <summary>
     /// 后图像列表
@@ -94,7 +95,7 @@ public class FoodAnimeModel
 
 public class FoodImagesPath
 {
-    public ObservableValue<GameSave.ModeType> Mode { get; } = new();
+    public ObservableValue<ModeType> Mode { get; } = new();
 
     public ObservableValue<int> Index { get; } = new();
 }

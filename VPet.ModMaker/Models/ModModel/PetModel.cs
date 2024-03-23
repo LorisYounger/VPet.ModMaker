@@ -1,9 +1,4 @@
-﻿using HKW.HKWUtils;
-using HKW.HKWUtils.Observable;
-using LinePutScript;
-using LinePutScript.Converter;
-using LinePutScript.Localization.WPF;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
@@ -12,6 +7,11 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Media.Imaging;
+using HKW.HKWUtils;
+using HKW.HKWUtils.Observable;
+using LinePutScript;
+using LinePutScript.Converter;
+using LinePutScript.Localization.WPF;
 using VPet.ModMaker.Models.ModModel;
 using VPet_Simulator.Core;
 
@@ -235,18 +235,15 @@ public class PetModel : I18nModel<I18nPetInfoModel>
     {
         foreach (var cultureName in I18nHelper.Current.CultureNames)
         {
-            ModInfoModel.SaveI18nDatas[cultureName].TryAdd(
-                Id.Value,
-                I18nDatas[cultureName].Name.Value
-            );
-            ModInfoModel.SaveI18nDatas[cultureName].TryAdd(
-                PetNameId.Value,
-                I18nDatas[cultureName].PetName.Value
-            );
-            ModInfoModel.SaveI18nDatas[cultureName].TryAdd(
-                DescriptionId.Value,
-                I18nDatas[cultureName].Description.Value
-            );
+            ModInfoModel
+                .SaveI18nDatas[cultureName]
+                .TryAdd(Id.Value, I18nDatas[cultureName].Name.Value);
+            ModInfoModel
+                .SaveI18nDatas[cultureName]
+                .TryAdd(PetNameId.Value, I18nDatas[cultureName].PetName.Value);
+            ModInfoModel
+                .SaveI18nDatas[cultureName]
+                .TryAdd(DescriptionId.Value, I18nDatas[cultureName].Description.Value);
         }
         var petFile = Path.Combine(path, $"{Id.Value}.lps");
         if (File.Exists(petFile) is false)
@@ -299,10 +296,9 @@ public class PetModel : I18nModel<I18nPetInfoModel>
             lps.Add(LPSConvert.SerializeObjectToLine<Line>(work.ToWork(), "work"));
             foreach (var cultureName in I18nHelper.Current.CultureNames)
             {
-                ModInfoModel.SaveI18nDatas[cultureName].TryAdd(
-                    work.Id.Value,
-                    work.I18nDatas[cultureName].Name.Value
-                );
+                ModInfoModel
+                    .SaveI18nDatas[cultureName]
+                    .TryAdd(work.Id.Value, work.I18nDatas[cultureName].Name.Value);
             }
         }
     }
@@ -338,7 +334,8 @@ public class PetModel : I18nModel<I18nPetInfoModel>
         if (TouchBodyRect != Default.TouchBodyRect && TouchBodyRect != mainPet.TouchBodyRect)
             SavePetTouchBodyInfo(lps);
         if (
-            TouchRaisedRect != Default.TouchRaisedRect && TouchRaisedRect != mainPet.TouchRaisedRect
+            TouchRaisedRect != Default.TouchRaisedRect
+            && TouchRaisedRect != mainPet.TouchRaisedRect
         )
             SavePetTouchRaisedInfo(lps);
         if (RaisePoint != Default.RaisePoint && RaisePoint != mainPet.RaisePoint)

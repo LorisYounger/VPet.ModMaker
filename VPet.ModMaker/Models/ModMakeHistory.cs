@@ -1,11 +1,11 @@
-﻿using LinePutScript.Converter;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Media.Imaging;
+using LinePutScript.Converter;
 
 namespace VPet.ModMaker.Models;
 
@@ -42,7 +42,7 @@ public class ModMakeHistory
             _path = value;
             var imagePath = Path.Combine(_path, "icon.png");
             if (File.Exists(imagePath))
-                Image = Utils.LoadImageToMemoryStream(imagePath);
+                Image = NativeUtils.LoadImageToMemoryStream(imagePath);
         }
     }
 

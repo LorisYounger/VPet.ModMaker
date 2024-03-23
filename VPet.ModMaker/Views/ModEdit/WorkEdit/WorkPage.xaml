@@ -145,13 +145,13 @@
             Header="{ll:Str 基本倍率}"
             IsReadOnly="True"
             SortMemberPath="MoneyBase.Value" />
-          <DataGridTextColumn
+          <!--<DataGridTextColumn
             Binding="{Binding MoneyLevel.Value}"
             CanUserSort="True"
             ElementStyle="{DynamicResource TextBlock_LeftCenter}"
             Header="{ll:Str 等级倍率}"
             IsReadOnly="True"
-            SortMemberPath="MoneyLevel.Value" />
+            SortMemberPath="MoneyLevel.Value" />-->
           <DataGridTextColumn
             Binding="{Binding StrengthFood.Value}"
             CanUserSort="True"

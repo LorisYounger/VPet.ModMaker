@@ -1,9 +1,9 @@
-﻿
+
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.4.33213.308
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VPet.ModMaker", "VPet.ModMaker\VPet.ModMaker.csproj", "{8F804A27-A57E-4799-801C-4DE96BA153BC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "VPet.ModMaker", "VPet.ModMaker\VPet.ModMaker.csproj", "{8F804A27-A57E-4799-801C-4DE96BA153BC}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

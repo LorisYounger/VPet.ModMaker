@@ -145,10 +145,17 @@
           Grid.Column="1"
           Text="{Binding Work.Value.Graph.Value}" />
         <Label Grid.Row="4" Content="{ll:Str 是否超模}" />
-        <TextBlock
-          Grid.Row="4"
-          Grid.Column="1"
-          Text="{Binding Work.Value.IsOverLoad.Value}" />
+        <Grid Grid.Row="4" Grid.Column="1">
+          <Grid.ColumnDefinitions>
+            <ColumnDefinition />
+            <ColumnDefinition Width="Auto" />
+          </Grid.ColumnDefinitions>
+          <TextBlock
+            d:Text="True"
+            Style="{DynamicResource TextBlock_LeftCenter}"
+            Text="{Binding Work.Value.IsOverLoad.Value}" />
+          <Button Grid.Column="1" Content="{ll:Str 修复超模}" />
+        </Grid>
         <!--<Label Grid.Row="3" Content="{ll:Str 宠物描述}" />
         <TextBox
           Grid.Row="3"
@@ -185,11 +192,11 @@
             </Grid.RowDefinitions>
             <Label Content="{ll:Str 基础倍率}" />
             <pu:NumberInput Grid.Column="1" Value="{Binding Work.Value.MoneyBase.Value}" />
-            <Label Grid.Row="1" Content="{ll:Str 等级倍率}" />
+            <!--<Label Grid.Row="1" Content="{ll:Str 等级倍率}" />
             <pu:NumberInput
               Grid.Row="1"
               Grid.Column="1"
-              Value="{Binding Work.Value.MoneyLevel.Value}" />
+              Value="{Binding Work.Value.MoneyLevel.Value}" />-->
             <Label Grid.Row="2" Content="{ll:Str 饱食度消耗倍率}" />
             <pu:NumberInput
               Grid.Row="2"
