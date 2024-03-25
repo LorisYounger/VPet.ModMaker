@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
+using System.Diagnostics;
 using System.IO;
 using System.Threading.Tasks;
 using System.Windows;
@@ -17,7 +18,7 @@ using static VPet_Simulator.Core.IGameSave;
 
 namespace VPet.ModMaker.ViewModels.ModEdit.AnimeEdit;
 
-public class FoodAnimeEditWindowVM
+public class FoodAnimeEditWindowVM : ObservableObjectX<FoodAnimeEditWindowVM>
 {
     /// <summary>
     /// 当前宠物
@@ -30,15 +31,33 @@ public class FoodAnimeEditWindowVM
     public static BitmapImage DefaultFoodImage { get; } =
         NativeUtils.LoadImageToMemoryStream(NativeResources.GetStream(NativeResources.FoodImage));
 
+    #region FoodImage
+    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+    private BitmapImage _foodImage;
+
     /// <summary>
     /// 食物图片
     /// </summary>
-    public ObservableValue<BitmapImage> FoodImage { get; } = new(DefaultFoodImage);
+    public BitmapImage FoodImage
+    {
+        get => _foodImage;
+        set => SetProperty(ref _foodImage, value);
+    }
+    #endregion
+
+    #region LengthRatio
+    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+    private double _lengthRatio;
 
     /// <summary>
     /// 比例
     /// </summary>
-    public ObservableValue<double> LengthRatio { get; } = new(250.0 / 500.0);
+    public double LengthRatio
+    {
+        get => _lengthRatio;
+        set => SetProperty(ref _lengthRatio, value);
+    }
+    #endregion
 
     /// <summary>
     /// 旧动画
@@ -50,45 +69,108 @@ public class FoodAnimeEditWindowVM
     /// </summary>
     public ObservableValue<FoodAnimeTypeModel> Anime { get; } = new(new());
 
+    #region CurrentFrontImageModel
+    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+    private ImageModel _currentFrontImageModel;
+
     /// <summary>
     /// 当前顶层图像模型
     /// </summary>
-    public ObservableValue<ImageModel> CurrentFrontImageModel { get; } = new();
+    public ImageModel CurrentFrontImageModel
+    {
+        get => _currentFrontImageModel;
+        set => SetProperty(ref _currentFrontImageModel, value);
+    }
+    #endregion
+
+    #region CurrentBackImageModel
+    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+    private ImageModel _currentBackImageModel;
 
     /// <summary>
     /// 当前底层图像模型
     /// </summary>
-    public ObservableValue<ImageModel> CurrentBackImageModel { get; } = new();
+    public ImageModel CurrentBackImageModel
+    {
+        get => _currentBackImageModel;
+        set => SetProperty(ref _currentBackImageModel, value);
+    }
+    #endregion
+
+    #region CurrentFoodLocationModel
+    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+    private FoodLocationModel _currentFoodLocationModel;
 
     /// <summary>
     /// 当前食物定位模型
     /// </summary>
-    public ObservableValue<FoodLocationModel> CurrentFoodLocationModel { get; } = new();
+    public FoodLocationModel CurrentFoodLocationModel
+    {
+        get => _currentFoodLocationModel;
+        set => SetProperty(ref _currentFoodLocationModel, value);
+    }
+    #endregion
+
+    #region CurrentAnimeModel
+    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+    private FoodAnimeModel _currentAnimeModel;
 
     /// <summary>
     /// 当前动画模型
     /// </summary>
-    public ObservableValue<FoodAnimeModel> CurrentAnimeModel { get; } = new();
+    public FoodAnimeModel CurrentAnimeModel
+    {
+        get => _currentAnimeModel;
+        set => SetProperty(ref _currentAnimeModel, value);
+    }
+    #endregion
 
     /// <summary>
     /// 当前模式
     /// </summary>
     public ModeType CurrentMode { get; set; }
 
+    #region Loop
+    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+    private bool _loop;
+
     /// <summary>
     /// 循环
     /// </summary>
-    public ObservableValue<bool> Loop { get; } = new();
+    public bool Loop
+    {
+        get => _loop;
+        set => SetProperty(ref _loop, value);
+    }
+    #endregion
+
+    #region HasMultiType
+    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+    private bool _hasMultiType;
 
     /// <summary>
     /// 含有多个状态 参见 <see cref="AnimeTypeModel.HasMultiTypeAnimes"/>
     /// </summary>
-    public ObservableValue<bool> HasMultiType { get; } = new(false);
+    public bool HasMultiType
+    {
+        get => _hasMultiType;
+        set => SetProperty(ref _hasMultiType, value);
+    }
+    #endregion
+
+    #region HasAnimeName
+    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+    private bool _hasAnimeName;
 
     /// <summary>
     /// 含有动画名称 参见 <see cref="AnimeTypeModel.HasNameAnimes"/>
     /// </summary>
-    public ObservableValue<bool> HasAnimeName { get; } = new(false);
+    public bool HasAnimeName
+    {
+        get => _hasAnimeName;
+        set => SetProperty(ref _hasAnimeName, value);
+    }
+    #endregion
 
     #region Command
     /// <summary>
@@ -207,8 +289,8 @@ public class FoodAnimeEditWindowVM
         _frontPlayerTask = new(FrontPlay);
         _backPlayerTask = new(BackPlay);
         _foodPlayerTask = new(FoodPlay);
-
-        CurrentAnimeModel.ValueChanged += CurrentAnimeModel_ValueChanged;
+        //TODO
+        //CurrentAnimeModel.ValueChanged += CurrentAnimeModel_ValueChanged;
 
         PlayCommand.ExecuteAsyncCommand += PlayCommand_AsyncExecuteEvent;
         StopCommand.ExecuteCommand += StopCommand_ExecuteEvent;
@@ -235,9 +317,9 @@ public class FoodAnimeEditWindowVM
 
     private void ResetFoodImageCommand_ExecuteEvent()
     {
-        if (FoodImage.Value != DefaultFoodImage)
-            FoodImage.Value.CloseStream();
-        FoodImage.Value = DefaultFoodImage;
+        if (FoodImage != DefaultFoodImage)
+            FoodImage.CloseStream();
+        FoodImage = DefaultFoodImage;
     }
 
     private void ChangeFoodImageCommand_ExecuteEvent()
@@ -246,9 +328,9 @@ public class FoodAnimeEditWindowVM
             new() { Title = "选择食物图片".Translate(), Filter = $"图片|*.png".Translate() };
         if (openFileDialog.ShowDialog() is true)
         {
-            if (FoodImage.Value != DefaultFoodImage)
-                FoodImage.Value.CloseStream();
-            FoodImage.Value = NativeUtils.LoadImageToMemoryStream(openFileDialog.FileName);
+            if (FoodImage != DefaultFoodImage)
+                FoodImage.CloseStream();
+            FoodImage = NativeUtils.LoadImageToMemoryStream(openFileDialog.FileName);
         }
     }
 
@@ -331,8 +413,8 @@ public class FoodAnimeEditWindowVM
     /// <param name="value">动画模型</param>
     private void RemoveFrontImageCommand_ExecuteEvent(FoodAnimeModel value)
     {
-        CurrentFrontImageModel.Value.Close();
-        value.FrontImages.Remove(CurrentFrontImageModel.Value);
+        CurrentFrontImageModel.Close();
+        value.FrontImages.Remove(CurrentFrontImageModel);
     }
 
     /// <summary>
@@ -374,8 +456,8 @@ public class FoodAnimeEditWindowVM
         }
         if (newImage is null)
             return;
-        CurrentFrontImageModel.Value.Close();
-        CurrentFrontImageModel.Value.Image.Value = newImage;
+        CurrentFrontImageModel.Close();
+        CurrentFrontImageModel.Image = newImage;
     }
     #endregion
 
@@ -405,8 +487,8 @@ public class FoodAnimeEditWindowVM
     /// <param name="value">动画模型</param>
     private void RemoveBackImageCommand_ExecuteEvent(FoodAnimeModel value)
     {
-        CurrentBackImageModel.Value.Close();
-        value.BackImages.Remove(CurrentBackImageModel.Value);
+        CurrentBackImageModel.Close();
+        value.BackImages.Remove(CurrentBackImageModel);
     }
 
     /// <summary>
@@ -448,8 +530,8 @@ public class FoodAnimeEditWindowVM
         }
         if (newImage is null)
             return;
-        CurrentBackImageModel.Value.Close();
-        CurrentBackImageModel.Value.Image.Value = newImage;
+        CurrentBackImageModel.Close();
+        CurrentBackImageModel.Image = newImage;
     }
     #endregion
 
@@ -494,8 +576,8 @@ public class FoodAnimeEditWindowVM
 
     private void RemoveFoodLocationCommand_ExecuteEvent(FoodAnimeModel value)
     {
-        value.FoodLocations.Remove(CurrentFoodLocationModel.Value);
-        CurrentFoodLocationModel.Value = null;
+        value.FoodLocations.Remove(CurrentFoodLocationModel);
+        CurrentFoodLocationModel = null;
     }
 
     private void ClearFoodLocationCommand_ExecuteEvent(FoodAnimeModel value)
@@ -547,7 +629,7 @@ public class FoodAnimeEditWindowVM
     /// </summary>
     private async Task PlayCommand_AsyncExecuteEvent()
     {
-        if (CurrentAnimeModel.Value is null)
+        if (CurrentAnimeModel is null)
         {
             MessageBox.Show("未选中动画".Translate());
             return;
@@ -562,7 +644,7 @@ public class FoodAnimeEditWindowVM
             _frontPlayerTask = new(FrontPlay);
             _backPlayerTask = new(BackPlay);
             _foodPlayerTask = new(FoodPlay);
-        } while (Loop.Value && _playing);
+        } while (Loop && _playing);
     }
 
     /// <summary>
@@ -570,10 +652,10 @@ public class FoodAnimeEditWindowVM
     /// </summary>
     private void FrontPlay()
     {
-        foreach (var model in CurrentAnimeModel.Value.FrontImages)
+        foreach (var model in CurrentAnimeModel.FrontImages)
         {
-            CurrentFrontImageModel.Value = model;
-            Task.Delay(model.Duration.Value).Wait();
+            CurrentFrontImageModel = model;
+            Task.Delay(model.Duration).Wait();
             if (_playing is false)
                 return;
         }
@@ -584,10 +666,10 @@ public class FoodAnimeEditWindowVM
     /// </summary>
     private void BackPlay()
     {
-        foreach (var model in CurrentAnimeModel.Value.BackImages)
+        foreach (var model in CurrentAnimeModel.BackImages)
         {
-            CurrentBackImageModel.Value = model;
-            Task.Delay(model.Duration.Value).Wait();
+            CurrentBackImageModel = model;
+            Task.Delay(model.Duration).Wait();
             if (_playing is false)
                 return;
         }
@@ -598,10 +680,10 @@ public class FoodAnimeEditWindowVM
     /// </summary>
     private void FoodPlay()
     {
-        foreach (var model in CurrentAnimeModel.Value.FoodLocations)
+        foreach (var model in CurrentAnimeModel.FoodLocations)
         {
-            CurrentFoodLocationModel.Value = model;
-            Task.Delay(model.Duration.Value).Wait();
+            CurrentFoodLocationModel = model;
+            Task.Delay(model.Duration).Wait();
             if (_playing is false)
                 return;
         }

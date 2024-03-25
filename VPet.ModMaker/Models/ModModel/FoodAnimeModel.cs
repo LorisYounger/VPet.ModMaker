@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -12,12 +13,18 @@ using static VPet_Simulator.Core.IGameSave;
 
 namespace VPet.ModMaker.Models.ModModel;
 
-public class FoodAnimeModel
+public class FoodAnimeModel : ObservableObjectX<FoodAnimeModel>
 {
-    /// <summary>
-    /// Id
-    /// </summary>
-    public ObservableValue<string> Id { get; } = new();
+    #region Id
+    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+    private string _Id;
+
+    public string Id
+    {
+        get => _Id;
+        set => SetProperty(ref _Id, value);
+    }
+    #endregion
 
     public ObservableValue<ModeType> Mode { get; }
 
@@ -46,7 +53,7 @@ public class FoodAnimeModel
             //var index = int.Parse(item.Name.Substring(1));
             var infos = item.Info.Split(',');
             var foodLocationInfo = new FoodLocationModel();
-            foodLocationInfo.Duration.Value = int.Parse(infos[0]);
+            foodLocationInfo.Duration = int.Parse(infos[0]);
             if (infos.Length > 1)
             {
                 foodLocationInfo.Rect = new(
@@ -57,9 +64,9 @@ public class FoodAnimeModel
                 );
             }
             if (infos.Length > 4)
-                foodLocationInfo.Rotate.Value = double.Parse(infos[4]);
+                foodLocationInfo.Rotate = double.Parse(infos[4]);
             if (infos.Length > 5)
-                foodLocationInfo.Opacity.Value = double.Parse(infos[5]);
+                foodLocationInfo.Opacity = double.Parse(infos[5]);
             FoodLocations.Add(foodLocationInfo);
         }
     }
@@ -71,7 +78,7 @@ public class FoodAnimeModel
     public FoodAnimeModel Copy()
     {
         var model = new FoodAnimeModel();
-        model.Id.Value = Id.Value;
+        model.Id = Id;
         foreach (var image in FrontImages)
             model.FrontImages.Add(image.Copy());
         foreach (var image in BackImages)
@@ -91,11 +98,4 @@ public class FoodAnimeModel
         foreach (var image in BackImages)
             image.Close();
     }
-}
-
-public class FoodImagesPath
-{
-    public ObservableValue<ModeType> Mode { get; } = new();
-
-    public ObservableValue<int> Index { get; } = new();
 }

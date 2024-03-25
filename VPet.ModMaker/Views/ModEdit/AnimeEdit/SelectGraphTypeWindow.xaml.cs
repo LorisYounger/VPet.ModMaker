@@ -1,6 +1,4 @@
-﻿using HKW.HKWUtils.Observable;
-using LinePutScript.Localization.WPF;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -14,6 +12,8 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using HKW.HKWUtils.Observable;
+using LinePutScript.Localization.WPF;
 using VPet.ModMaker.Models;
 using VPet.ModMaker.Models.ModModel;
 using VPet_Simulator.Core;
@@ -58,7 +58,7 @@ public partial class SelectGraphTypeWindow : Window
     )
     {
         GraphTypes.Value = new(
-            AnimeTypeModel.GraphTypes.Except(CurrentPet.Value.Animes.Select(m => m.GraphType.Value))
+            AnimeTypeModel.GraphTypes.Except(CurrentPet.Value.Animes.Select(m => m.GraphType))
         );
         // 可添加多个项的类型
         foreach (var graphType in AnimeTypeModel.HasNameAnimes)

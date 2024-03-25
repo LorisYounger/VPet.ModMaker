@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -12,17 +13,45 @@ using VPet_Simulator.Windows.Interface;
 
 namespace VPet.ModMaker.ViewModels.ModEdit.WorkEdit;
 
-public class WorkEditWindowVM
+public class WorkEditWindowVM : ObservableObjectX<WorkEditWindowVM>
 {
     public static ModInfoModel ModInfo => ModInfoModel.Current;
     public static I18nHelper I18nData => I18nHelper.Current;
     #region Value
     public PetModel CurrentPet { get; set; }
     public WorkModel OldWork { get; set; }
-    public ObservableValue<WorkModel> Work { get; } = new(new());
+
+    #region Work
+    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+    private WorkModel _work;
+
+    public WorkModel Work
+    {
+        get => _work;
+        set => SetProperty(ref _work, value);
+    }
     #endregion
-    public ObservableValue<double> BorderLength { get; } = new(250);
-    public ObservableValue<double> LengthRatio { get; } = new(250.0 / 500.0);
+    #endregion
+    #region BorderLength
+    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+    private double _borderLength = 250;
+
+    public double BorderLength
+    {
+        get => _borderLength;
+        set => SetProperty(ref _borderLength, value);
+    }
+    #endregion
+    #region LengthRatio
+    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+    private double _lengthRatio = 250 / 500;
+
+    public double LengthRatio
+    {
+        get => _lengthRatio;
+        set => SetProperty(ref _lengthRatio, value);
+    }
+    #endregion
     #region Command
     public ObservableCommand AddImageCommand { get; } = new();
     public ObservableCommand ChangeImageCommand { get; } = new();
@@ -38,9 +67,9 @@ public class WorkEditWindowVM
 
     private void FixOverLoadCommand_ExecuteCommand()
     {
-        var work = Work.Value.ToWork();
-        work.FixOverLoad();
-        Work.Value = new(work);
+        //var work = Work.ToWork();
+        //work.FixOverLoad();
+        //Work = new(work);
     }
 
     private void AddImage()
@@ -53,7 +82,7 @@ public class WorkEditWindowVM
             };
         if (openFileDialog.ShowDialog() is true)
         {
-            Work.Value.Image.Value = NativeUtils.LoadImageToMemoryStream(openFileDialog.FileName);
+            Work.Image = NativeUtils.LoadImageToMemoryStream(openFileDialog.FileName);
         }
     }
 
@@ -67,8 +96,8 @@ public class WorkEditWindowVM
             };
         if (openFileDialog.ShowDialog() is true)
         {
-            Work.Value.Image.Value?.CloseStream();
-            Work.Value.Image.Value = NativeUtils.LoadImageToMemoryStream(openFileDialog.FileName);
+            Work.Image?.CloseStream();
+            Work.Image = NativeUtils.LoadImageToMemoryStream(openFileDialog.FileName);
         }
     }
 }

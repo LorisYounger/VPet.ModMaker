@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -12,16 +13,46 @@ using VPet.ModMaker.Views.ModEdit.WorkEdit;
 
 namespace VPet.ModMaker.ViewModels.ModEdit.WorkEdit;
 
-public class WorkPageVM
+public class WorkPageVM : ObservableObjectX<WorkPageVM>
 {
     public static ModInfoModel ModInfo => ModInfoModel.Current;
+
     #region Value
-    public ObservableValue<ObservableCollection<WorkModel>> ShowWorks { get; } = new();
-    public ObservableCollection<WorkModel> Works => CurrentPet.Value.Works;
+    #region ShowWorks
+    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+    private ObservableCollection<WorkModel> _showWorks;
+
+    public ObservableCollection<WorkModel> ShowWorks
+    {
+        get => _showWorks;
+        set => SetProperty(ref _showWorks, value);
+    }
+    #endregion
+    public ObservableCollection<WorkModel> Works => CurrentPet.Works;
 
     public ObservableCollection<PetModel> Pets => ModInfoModel.Current.Pets;
-    public ObservableValue<PetModel> CurrentPet { get; } = new(new());
-    public ObservableValue<string> Search { get; } = new();
+
+    #region CurrentPet
+    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+    private PetModel _currentPet;
+
+    public PetModel CurrentPet
+    {
+        get => _currentPet;
+        set => SetProperty(ref _currentPet, value);
+    }
+    #endregion
+
+    #region Search
+    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+    private string _search;
+
+    public string Search
+    {
+        get => _search;
+        set => SetProperty(ref _search, value);
+    }
+    #endregion
     #endregion
     #region Command
     public ObservableCommand AddCommand { get; } = new();
@@ -30,9 +61,10 @@ public class WorkPageVM
     #endregion
     public WorkPageVM()
     {
-        ShowWorks.Value = Works;
-        CurrentPet.ValueChanged += CurrentPet_ValueChanged;
-        Search.ValueChanged += Search_ValueChanged;
+        ShowWorks = Works;
+        //TODO
+        //CurrentPet.ValueChanged += CurrentPet_ValueChanged;
+        //Search.ValueChanged += Search_ValueChanged;
 
         AddCommand.ExecuteCommand += Add;
         EditCommand.ExecuteCommand += Edit;
@@ -44,7 +76,7 @@ public class WorkPageVM
         ValueChangedEventArgs<PetModel> e
     )
     {
-        ShowWorks.Value = e.NewValue.Works;
+        ShowWorks = e.NewValue.Works;
     }
 
     private void Search_ValueChanged(
@@ -54,14 +86,12 @@ public class WorkPageVM
     {
         if (string.IsNullOrWhiteSpace(e.NewValue))
         {
-            ShowWorks.Value = Works;
+            ShowWorks = Works;
         }
         else
         {
-            ShowWorks.Value = new(
-                Works.Where(m =>
-                    m.Id.Value.Contains(e.NewValue, StringComparison.OrdinalIgnoreCase)
-                )
+            ShowWorks = new(
+                Works.Where(m => m.Id.Contains(e.NewValue, StringComparison.OrdinalIgnoreCase))
             );
         }
     }
@@ -70,39 +100,39 @@ public class WorkPageVM
     {
         var window = new WorkEditWindow();
         var vm = window.ViewModel;
-        vm.CurrentPet = CurrentPet.Value;
+        vm.CurrentPet = CurrentPet;
         window.ShowDialog();
         if (window.IsCancel)
             return;
-        Works.Add(vm.Work.Value);
+        Works.Add(vm.Work);
     }
 
     public void Edit(WorkModel model)
     {
         var window = new WorkEditWindow();
         var vm = window.ViewModel;
-        vm.CurrentPet = CurrentPet.Value;
+        vm.CurrentPet = CurrentPet;
         vm.OldWork = model;
-        var newWork = vm.Work.Value = new(model);
+        var newWork = vm.Work = new(model);
         window.ShowDialog();
         if (window.IsCancel)
             return;
         Works[Works.IndexOf(model)] = newWork;
-        if (ShowWorks.Value.Count != Works.Count)
-            ShowWorks.Value[ShowWorks.Value.IndexOf(model)] = newWork;
+        if (ShowWorks.Count != Works.Count)
+            ShowWorks[ShowWorks.IndexOf(model)] = newWork;
     }
 
     private void Remove(WorkModel model)
     {
         if (MessageBox.Show("确定删除吗".Translate(), "", MessageBoxButton.YesNo) is MessageBoxResult.No)
             return;
-        if (ShowWorks.Value.Count == Works.Count)
+        if (ShowWorks.Count == Works.Count)
         {
             Works.Remove(model);
         }
         else
         {
-            ShowWorks.Value.Remove(model);
+            ShowWorks.Remove(model);
             Works.Remove(model);
         }
     }

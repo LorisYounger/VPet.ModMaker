@@ -42,7 +42,7 @@
           Grid.Column="1"
           pu:TextBoxHelper.Watermark="Id"
           Style="{StaticResource TextBox_Wrap}"
-          Text="{Binding SelectText.Value.Id.Value, UpdateSourceTrigger=PropertyChanged}"
+          Text="{Binding SelectText.Id, UpdateSourceTrigger=PropertyChanged}"
           TextWrapping="Wrap" />
         <Label Grid.Row="1" Content="{ll:Str 选项名}" />
         <TextBox
@@ -50,7 +50,7 @@
           Grid.Column="1"
           pu:TextBoxHelper.Watermark="{ll:Str 显示在选项列表中的名称}"
           Style="{StaticResource TextBox_Wrap}"
-          Text="{Binding SelectText.Value.CurrentI18nData.Value.Choose.Value, UpdateSourceTrigger=PropertyChanged}"
+          Text="{Binding SelectText.CurrentI18nData.Choose, UpdateSourceTrigger=PropertyChanged}"
           TextWrapping="Wrap" />
       </Grid>
       <TextBox
@@ -59,7 +59,7 @@
         d:Text="这是一个测试文本,这是一个测试文本,这是一个测试文本,这是一个测试文本,这是一个测试文本,这是一个测试文本,这是一个测试文本,"
         pu:TextBoxHelper.Watermark="{ll:Str 文本}"
         Style="{StaticResource TextBox_Wrap}"
-        Text="{Binding SelectText.Value.CurrentI18nData.Value.Text.Value, UpdateSourceTrigger=PropertyChanged}" />
+        Text="{Binding SelectText.CurrentI18nData.Text, UpdateSourceTrigger=PropertyChanged}" />
     </Grid>
     <Grid Grid.Column="1">
       <Grid.RowDefinitions>
@@ -86,13 +86,13 @@
           Grid.Row="2"
           Grid.Column="1"
           pu:TextBoxHelper.Watermark="{ll:Str 多标签使用逗号分隔}"
-          Text="{Binding SelectText.Value.Tags.Value, UpdateSourceTrigger=PropertyChanged}" />
+          Text="{Binding SelectText.Tags, UpdateSourceTrigger=PropertyChanged}" />
         <Label Grid.Row="3" Content="{ll:Str 跳转标签}" />
         <TextBox
           Grid.Row="3"
           Grid.Column="1"
           pu:TextBoxHelper.Watermark="{ll:Str 多标签使用逗号分隔}"
-          Text="{Binding SelectText.Value.ToTags.Value, UpdateSourceTrigger=PropertyChanged}" />
+          Text="{Binding SelectText.ToTags, UpdateSourceTrigger=PropertyChanged}" />
         <Label Grid.Row="4" Content="{ll:Str 宠物状态}" />
         <Grid Grid.Row="4" Grid.Column="1">
           <Grid.ColumnDefinitions>
@@ -101,54 +101,54 @@
             <ColumnDefinition Width="Auto" />
             <ColumnDefinition Width="Auto" />
           </Grid.ColumnDefinitions>
-          <TextBlock Text="{Binding SelectText.Value.Mode.EnumValue.Value}" />
+          <TextBlock Text="{Binding SelectText.Mode.Value}" />
           <ComboBox
             x:Name="ComboBox_Mode"
             Grid.Column="1"
-            ItemsSource="{Binding SelectText.Value.ModeTypes}"
+            ItemsSource="{Binding SelectText.ModeTypes}"
             SelectedIndex="0" />
           <Button
             Grid.Column="2"
-            Command="{Binding SelectText.Value.Mode.AddCommand}"
+            Command="{Binding SelectText.Mode.AddFlagCommand}"
             CommandParameter="{Binding SelectedItem, ElementName=ComboBox_Mode}"
             Content="+" />
           <Button
             Grid.Column="3"
-            Command="{Binding SelectText.Value.Mode.RemoveCommand}"
+            Command="{Binding SelectText.Mode.RemoveFlagCommand}"
             CommandParameter="{Binding SelectedItem, ElementName=ComboBox_Mode}"
             Content="-" />
         </Grid>
         <ListBox Grid.Row="7" Grid.ColumnSpan="2">
           <ListBoxItem
-            DataContext="{Binding SelectText.Value.Like}"
+            DataContext="{Binding SelectText.Like}"
             Tag="{ll:Str 好感度范围}"
             Template="{StaticResource ListBoxItem_RangeData}" />
           <ListBoxItem
-            DataContext="{Binding SelectText.Value.Health}"
+            DataContext="{Binding SelectText.Health}"
             Tag="{ll:Str 健康度范围}"
             Template="{StaticResource ListBoxItem_RangeData}" />
           <ListBoxItem
-            DataContext="{Binding SelectText.Value.Level}"
+            DataContext="{Binding SelectText.Level}"
             Tag="{ll:Str 等级范围}"
             Template="{StaticResource ListBoxItem_RangeData}" />
           <ListBoxItem
-            DataContext="{Binding SelectText.Value.Money}"
+            DataContext="{Binding SelectText.Money}"
             Tag="{ll:Str 金钱范围}"
             Template="{StaticResource ListBoxItem_RangeData}" />
           <ListBoxItem
-            DataContext="{Binding SelectText.Value.Food}"
+            DataContext="{Binding SelectText.Food}"
             Tag="{ll:Str 食物范围}"
             Template="{StaticResource ListBoxItem_RangeData}" />
           <ListBoxItem
-            DataContext="{Binding SelectText.Value.Drink}"
+            DataContext="{Binding SelectText.Drink}"
             Tag="{ll:Str 口渴范围}"
             Template="{StaticResource ListBoxItem_RangeData}" />
           <ListBoxItem
-            DataContext="{Binding SelectText.Value.Feel}"
+            DataContext="{Binding SelectText.Feel}"
             Tag="{ll:Str 心情范围}"
             Template="{StaticResource ListBoxItem_RangeData}" />
           <ListBoxItem
-            DataContext="{Binding SelectText.Value.Strength}"
+            DataContext="{Binding SelectText.Strength}"
             Tag="{ll:Str 体力范围}"
             Template="{StaticResource ListBoxItem_RangeData}" />
         </ListBox>

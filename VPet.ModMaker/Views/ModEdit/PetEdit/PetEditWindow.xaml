@@ -57,7 +57,7 @@
         <Image
           Width="250"
           Height="250"
-          Source="{Binding Image.Value}"
+          Source="{Binding Image}"
           Stretch="Uniform">
           <Image.ContextMenu>
             <ContextMenu>
@@ -72,25 +72,25 @@
                 <Setter Property="Width">
                   <Setter.Value>
                     <MultiBinding Converter="{StaticResource CalculatorConverter}" ConverterParameter="*">
-                      <Binding Path="Pet.Value.TouchHeadRect.Value.Width" />
-                      <Binding Path="LengthRatio.Value" />
+                      <Binding Path="Pet.TouchHeadRect.Width" />
+                      <Binding Path="LengthRatio" />
                     </MultiBinding>
                   </Setter.Value>
                 </Setter>
                 <Setter Property="Height">
                   <Setter.Value>
                     <MultiBinding Converter="{StaticResource CalculatorConverter}" ConverterParameter="*">
-                      <Binding Path="Pet.Value.TouchHeadRect.Value.Height" />
-                      <Binding Path="LengthRatio.Value" />
+                      <Binding Path="Pet.TouchHeadRect.Height" />
+                      <Binding Path="LengthRatio" />
                     </MultiBinding>
                   </Setter.Value>
                 </Setter>
                 <Setter Property="Margin">
                   <Setter.Value>
                     <MultiBinding Converter="{StaticResource RatioMarginConverter}">
-                      <Binding Path="LengthRatio.Value" />
-                      <Binding Path="Pet.Value.TouchHeadRect.Value.X" />
-                      <Binding Path="Pet.Value.TouchHeadRect.Value.Y" />
+                      <Binding Path="LengthRatio" />
+                      <Binding Path="Pet.TouchHeadRect.X" />
+                      <Binding Path="Pet.TouchHeadRect.Y" />
                     </MultiBinding>
                   </Setter.Value>
                 </Setter>
@@ -103,25 +103,25 @@
                 <Setter Property="Width">
                   <Setter.Value>
                     <MultiBinding Converter="{StaticResource CalculatorConverter}" ConverterParameter="*">
-                      <Binding Path="Pet.Value.TouchBodyRect.Value.Width" />
-                      <Binding Path="LengthRatio.Value" />
+                      <Binding Path="Pet.TouchBodyRect.Width" />
+                      <Binding Path="LengthRatio" />
                     </MultiBinding>
                   </Setter.Value>
                 </Setter>
                 <Setter Property="Height">
                   <Setter.Value>
                     <MultiBinding Converter="{StaticResource CalculatorConverter}" ConverterParameter="*">
-                      <Binding Path="Pet.Value.TouchBodyRect.Value.Height" />
-                      <Binding Path="LengthRatio.Value" />
+                      <Binding Path="Pet.TouchBodyRect.Height" />
+                      <Binding Path="LengthRatio" />
                     </MultiBinding>
                   </Setter.Value>
                 </Setter>
                 <Setter Property="Margin">
                   <Setter.Value>
                     <MultiBinding Converter="{StaticResource RatioMarginConverter}">
-                      <Binding Path="LengthRatio.Value" />
-                      <Binding Path="Pet.Value.TouchBodyRect.Value.X" />
-                      <Binding Path="Pet.Value.TouchBodyRect.Value.Y" />
+                      <Binding Path="LengthRatio" />
+                      <Binding Path="Pet.TouchBodyRect.X" />
+                      <Binding Path="Pet.TouchBodyRect.Y" />
                     </MultiBinding>
                   </Setter.Value>
                 </Setter>
@@ -134,25 +134,25 @@
                 <Setter Property="Width">
                   <Setter.Value>
                     <MultiBinding Converter="{StaticResource CalculatorConverter}" ConverterParameter="*">
-                      <Binding Path="Pet.Value.TouchRaisedRect.Value.Happy.Width" />
-                      <Binding Path="LengthRatio.Value" />
+                      <Binding Path="Pet.TouchRaisedRect.Happy.Width" />
+                      <Binding Path="LengthRatio" />
                     </MultiBinding>
                   </Setter.Value>
                 </Setter>
                 <Setter Property="Height">
                   <Setter.Value>
                     <MultiBinding Converter="{StaticResource CalculatorConverter}" ConverterParameter="*">
-                      <Binding Path="Pet.Value.TouchRaisedRect.Value.Happy.Height" />
-                      <Binding Path="LengthRatio.Value" />
+                      <Binding Path="Pet.TouchRaisedRect.Happy.Height" />
+                      <Binding Path="LengthRatio" />
                     </MultiBinding>
                   </Setter.Value>
                 </Setter>
                 <Setter Property="Margin">
                   <Setter.Value>
                     <MultiBinding Converter="{StaticResource RatioMarginConverter}">
-                      <Binding Path="LengthRatio.Value" />
-                      <Binding Path="Pet.Value.TouchRaisedRect.Value.Happy.X" />
-                      <Binding Path="Pet.Value.TouchRaisedRect.Value.Happy.Y" />
+                      <Binding Path="LengthRatio" />
+                      <Binding Path="Pet.TouchRaisedRect.Happy.X" />
+                      <Binding Path="Pet.TouchRaisedRect.Happy.Y" />
                     </MultiBinding>
                   </Setter.Value>
                 </Setter>
@@ -165,25 +165,25 @@
                 <Setter Property="Width">
                   <Setter.Value>
                     <MultiBinding Converter="{StaticResource CalculatorConverter}" ConverterParameter="*">
-                      <Binding Path="Pet.Value.TouchRaisedRect.Value.Nomal.Width" />
-                      <Binding Path="LengthRatio.Value" />
+                      <Binding Path="Pet.TouchRaisedRect.Nomal.Width" />
+                      <Binding Path="LengthRatio" />
                     </MultiBinding>
                   </Setter.Value>
                 </Setter>
                 <Setter Property="Height">
                   <Setter.Value>
                     <MultiBinding Converter="{StaticResource CalculatorConverter}" ConverterParameter="*">
-                      <Binding Path="Pet.Value.TouchRaisedRect.Value.Nomal.Height" />
-                      <Binding Path="LengthRatio.Value" />
+                      <Binding Path="Pet.TouchRaisedRect.Nomal.Height" />
+                      <Binding Path="LengthRatio" />
                     </MultiBinding>
                   </Setter.Value>
                 </Setter>
                 <Setter Property="Margin">
                   <Setter.Value>
                     <MultiBinding Converter="{StaticResource RatioMarginConverter}">
-                      <Binding Path="LengthRatio.Value" />
-                      <Binding Path="Pet.Value.TouchRaisedRect.Value.Nomal.X" />
-                      <Binding Path="Pet.Value.TouchRaisedRect.Value.Nomal.Y" />
+                      <Binding Path="LengthRatio" />
+                      <Binding Path="Pet.TouchRaisedRect.Nomal.X" />
+                      <Binding Path="Pet.TouchRaisedRect.Nomal.Y" />
                     </MultiBinding>
                   </Setter.Value>
                 </Setter>
@@ -196,25 +196,25 @@
                 <Setter Property="Width">
                   <Setter.Value>
                     <MultiBinding Converter="{StaticResource CalculatorConverter}" ConverterParameter="*">
-                      <Binding Path="Pet.Value.TouchRaisedRect.Value.PoorCondition.Width" />
-                      <Binding Path="LengthRatio.Value" />
+                      <Binding Path="Pet.TouchRaisedRect.PoorCondition.Width" />
+                      <Binding Path="LengthRatio" />
                     </MultiBinding>
                   </Setter.Value>
                 </Setter>
                 <Setter Property="Height">
                   <Setter.Value>
                     <MultiBinding Converter="{StaticResource CalculatorConverter}" ConverterParameter="*">
-                      <Binding Path="Pet.Value.TouchRaisedRect.Value.PoorCondition.Height" />
-                      <Binding Path="LengthRatio.Value" />
+                      <Binding Path="Pet.TouchRaisedRect.PoorCondition.Height" />
+                      <Binding Path="LengthRatio" />
                     </MultiBinding>
                   </Setter.Value>
                 </Setter>
                 <Setter Property="Margin">
                   <Setter.Value>
                     <MultiBinding Converter="{StaticResource RatioMarginConverter}">
-                      <Binding Path="LengthRatio.Value" />
-                      <Binding Path="Pet.Value.TouchRaisedRect.Value.PoorCondition.X" />
-                      <Binding Path="Pet.Value.TouchRaisedRect.Value.PoorCondition.Y" />
+                      <Binding Path="LengthRatio" />
+                      <Binding Path="Pet.TouchRaisedRect.PoorCondition.X" />
+                      <Binding Path="Pet.TouchRaisedRect.PoorCondition.Y" />
                     </MultiBinding>
                   </Setter.Value>
                 </Setter>
@@ -227,25 +227,25 @@
                 <Setter Property="Width">
                   <Setter.Value>
                     <MultiBinding Converter="{StaticResource CalculatorConverter}" ConverterParameter="*">
-                      <Binding Path="Pet.Value.TouchRaisedRect.Value.Ill.Width" />
-                      <Binding Path="LengthRatio.Value" />
+                      <Binding Path="Pet.TouchRaisedRect.Ill.Width" />
+                      <Binding Path="LengthRatio" />
                     </MultiBinding>
                   </Setter.Value>
                 </Setter>
                 <Setter Property="Height">
                   <Setter.Value>
                     <MultiBinding Converter="{StaticResource CalculatorConverter}" ConverterParameter="*">
-                      <Binding Path="Pet.Value.TouchRaisedRect.Value.Ill.Height" />
-                      <Binding Path="LengthRatio.Value" />
+                      <Binding Path="Pet.TouchRaisedRect.Ill.Height" />
+                      <Binding Path="LengthRatio" />
                     </MultiBinding>
                   </Setter.Value>
                 </Setter>
                 <Setter Property="Margin">
                   <Setter.Value>
                     <MultiBinding Converter="{StaticResource RatioMarginConverter}">
-                      <Binding Path="LengthRatio.Value" />
-                      <Binding Path="Pet.Value.TouchRaisedRect.Value.Ill.X" />
-                      <Binding Path="Pet.Value.TouchRaisedRect.Value.Ill.Y" />
+                      <Binding Path="LengthRatio" />
+                      <Binding Path="Pet.TouchRaisedRect.Ill.X" />
+                      <Binding Path="Pet.TouchRaisedRect.Ill.Y" />
                     </MultiBinding>
                   </Setter.Value>
                 </Setter>
@@ -263,9 +263,9 @@
                 <Setter Property="Margin">
                   <Setter.Value>
                     <MultiBinding Converter="{StaticResource RatioMarginConverter}">
-                      <Binding Path="LengthRatio.Value" />
-                      <Binding Path="Pet.Value.RaisePoint.Value.Happy.X" />
-                      <Binding Path="Pet.Value.RaisePoint.Value.Happy.Y" />
+                      <Binding Path="LengthRatio" />
+                      <Binding Path="Pet.RaisePoint.Happy.X" />
+                      <Binding Path="Pet.RaisePoint.Happy.Y" />
                     </MultiBinding>
                   </Setter.Value>
                 </Setter>
@@ -283,9 +283,9 @@
                 <Setter Property="Margin">
                   <Setter.Value>
                     <MultiBinding Converter="{StaticResource RatioMarginConverter}">
-                      <Binding Path="LengthRatio.Value" />
-                      <Binding Path="Pet.Value.RaisePoint.Value.Nomal.X" />
-                      <Binding Path="Pet.Value.RaisePoint.Value.Nomal.Y" />
+                      <Binding Path="LengthRatio" />
+                      <Binding Path="Pet.RaisePoint.Nomal.X" />
+                      <Binding Path="Pet.RaisePoint.Nomal.Y" />
                     </MultiBinding>
                   </Setter.Value>
                 </Setter>
@@ -303,9 +303,9 @@
                 <Setter Property="Margin">
                   <Setter.Value>
                     <MultiBinding Converter="{StaticResource RatioMarginConverter}">
-                      <Binding Path="LengthRatio.Value" />
-                      <Binding Path="Pet.Value.RaisePoint.Value.PoorCondition.X" />
-                      <Binding Path="Pet.Value.RaisePoint.Value.PoorCondition.Y" />
+                      <Binding Path="LengthRatio" />
+                      <Binding Path="Pet.RaisePoint.PoorCondition.X" />
+                      <Binding Path="Pet.RaisePoint.PoorCondition.Y" />
                     </MultiBinding>
                   </Setter.Value>
                 </Setter>
@@ -323,9 +323,9 @@
                 <Setter Property="Margin">
                   <Setter.Value>
                     <MultiBinding Converter="{StaticResource RatioMarginConverter}">
-                      <Binding Path="LengthRatio.Value" />
-                      <Binding Path="Pet.Value.RaisePoint.Value.Ill.X" />
-                      <Binding Path="Pet.Value.RaisePoint.Value.Ill.Y" />
+                      <Binding Path="LengthRatio" />
+                      <Binding Path="Pet.RaisePoint.Ill.X" />
+                      <Binding Path="Pet.RaisePoint.Ill.Y" />
                     </MultiBinding>
                   </Setter.Value>
                 </Setter>
@@ -339,7 +339,7 @@
           Command="{Binding AddImageCommand}"
           Content="{ll:Str 添加测试图片}"
           Style="{DynamicResource Button_HiddenOnTagNull}"
-          Tag="{Binding Image.Value}" />
+          Tag="{Binding Image}" />
       </Grid>
       <Grid Grid.Row="1">
         <Grid.ColumnDefinitions>
@@ -357,32 +357,32 @@
         <TextBox
           Grid.Column="1"
           pu:TextBoxHelper.Watermark="Id"
-          Text="{Binding Pet.Value.Id.Value, UpdateSourceTrigger=PropertyChanged}" />
+          Text="{Binding Pet.Id, UpdateSourceTrigger=PropertyChanged}" />
         <!--<Label Grid.Row="1" Content="{ll:Str 名称}" />
         <TextBox
           Grid.Row="1"
           Grid.Column="1"
           pu:TextBoxHelper.Watermark="{ll:Str 名称}"
-          Text="{Binding Pet.Value.CurrentI18nData.Value.Name.Value, UpdateSourceTrigger=PropertyChanged}" />-->
+          Text="{Binding Pet.CurrentI18nData.Name, UpdateSourceTrigger=PropertyChanged}" />-->
         <Label Grid.Row="2" Content="{ll:Str 名称}" />
         <TextBox
           Grid.Row="2"
           Grid.Column="1"
           pu:TextBoxHelper.Watermark="{ll:Str 名称}"
-          Text="{Binding Pet.Value.CurrentI18nData.Value.Name.Value, UpdateSourceTrigger=PropertyChanged}" />
+          Text="{Binding Pet.CurrentI18nData.Name, UpdateSourceTrigger=PropertyChanged}" />
         <Label Grid.Row="3" Content="{ll:Str 宠物名称}" />
         <TextBox
           Grid.Row="3"
           Grid.Column="1"
           pu:TextBoxHelper.Watermark="{ll:Str 宠物名称}"
-          Text="{Binding Pet.Value.CurrentI18nData.Value.PetName.Value, UpdateSourceTrigger=PropertyChanged}" />
+          Text="{Binding Pet.CurrentI18nData.PetName, UpdateSourceTrigger=PropertyChanged}" />
         <Label Grid.Row="4" Content="{ll:Str 描述}" />
         <TextBox
           Grid.Row="4"
           Grid.Column="1"
           pu:TextBoxHelper.Watermark="{ll:Str 描述}"
           Style="{StaticResource TextBox_Wrap}"
-          Text="{Binding Pet.Value.CurrentI18nData.Value.Description.Value, UpdateSourceTrigger=PropertyChanged}" />
+          Text="{Binding Pet.CurrentI18nData.Description, UpdateSourceTrigger=PropertyChanged}" />
       </Grid>
     </Grid>
     <Grid Grid.Column="1">
@@ -414,12 +414,12 @@
                 <ColumnDefinition />
               </Grid.ColumnDefinitions>
               <Label Background="{x:Null}" Content="x:" />
-              <pu:NumberInput Grid.Column="1" Value="{Binding Pet.Value.TouchHeadRect.Value.X}" />
+              <pu:NumberInput Grid.Column="1" Value="{Binding Pet.TouchHeadRect.X}" />
               <Label
                 Grid.Column="2"
                 Background="{x:Null}"
                 Content="y:" />
-              <pu:NumberInput Grid.Column="3" Value="{Binding Pet.Value.TouchHeadRect.Value.Y, Mode=TwoWay}" />
+              <pu:NumberInput Grid.Column="3" Value="{Binding Pet.TouchHeadRect.Y, Mode=TwoWay}" />
               <Label
                 Grid.Row="1"
                 Background="{x:Null}"
@@ -427,7 +427,7 @@
               <pu:NumberInput
                 Grid.Row="1"
                 Grid.Column="1"
-                Value="{Binding Pet.Value.TouchHeadRect.Value.Width, Mode=TwoWay}" />
+                Value="{Binding Pet.TouchHeadRect.Width, Mode=TwoWay}" />
               <Label
                 Grid.Row="1"
                 Grid.Column="2"
@@ -436,7 +436,7 @@
               <pu:NumberInput
                 Grid.Row="1"
                 Grid.Column="3"
-                Value="{Binding Pet.Value.TouchHeadRect.Value.Height, Mode=TwoWay}" />
+                Value="{Binding Pet.TouchHeadRect.Height, Mode=TwoWay}" />
             </Grid>
           </Grid>
           <Grid>
@@ -461,12 +461,12 @@
                 <ColumnDefinition />
               </Grid.ColumnDefinitions>
               <Label Background="{x:Null}" Content="x:" />
-              <pu:NumberInput Grid.Column="1" Value="{Binding Pet.Value.TouchBodyRect.Value.X}" />
+              <pu:NumberInput Grid.Column="1" Value="{Binding Pet.TouchBodyRect.X}" />
               <Label
                 Grid.Column="2"
                 Background="{x:Null}"
                 Content="y:" />
-              <pu:NumberInput Grid.Column="3" Value="{Binding Pet.Value.TouchBodyRect.Value.Y, Mode=TwoWay}" />
+              <pu:NumberInput Grid.Column="3" Value="{Binding Pet.TouchBodyRect.Y, Mode=TwoWay}" />
               <Label
                 Grid.Row="1"
                 Background="{x:Null}"
@@ -474,7 +474,7 @@
               <pu:NumberInput
                 Grid.Row="1"
                 Grid.Column="1"
-                Value="{Binding Pet.Value.TouchBodyRect.Value.Width, Mode=TwoWay}" />
+                Value="{Binding Pet.TouchBodyRect.Width, Mode=TwoWay}" />
               <Label
                 Grid.Row="1"
                 Grid.Column="2"
@@ -483,7 +483,7 @@
               <pu:NumberInput
                 Grid.Row="1"
                 Grid.Column="3"
-                Value="{Binding Pet.Value.TouchBodyRect.Value.Height, Mode=TwoWay}" />
+                Value="{Binding Pet.TouchBodyRect.Height, Mode=TwoWay}" />
             </Grid>
           </Grid>
           <Expander Header="{ll:Str 提起范围}">
@@ -516,12 +516,12 @@
                   <ColumnDefinition />
                 </Grid.ColumnDefinitions>
                 <Label Background="{x:Null}" Content="x:" />
-                <pu:NumberInput Grid.Column="1" Value="{Binding Pet.Value.TouchRaisedRect.Value.Happy.X, Mode=TwoWay}" />
+                <pu:NumberInput Grid.Column="1" Value="{Binding Pet.TouchRaisedRect.Happy.X, Mode=TwoWay}" />
                 <Label
                   Grid.Column="2"
                   Background="{x:Null}"
                   Content="y:" />
-                <pu:NumberInput Grid.Column="3" Value="{Binding Pet.Value.TouchRaisedRect.Value.Happy.Y, Mode=TwoWay}" />
+                <pu:NumberInput Grid.Column="3" Value="{Binding Pet.TouchRaisedRect.Happy.Y, Mode=TwoWay}" />
                 <Label
                   Grid.Row="1"
                   Background="{x:Null}"
@@ -529,7 +529,7 @@
                 <pu:NumberInput
                   Grid.Row="1"
                   Grid.Column="1"
-                  Value="{Binding Pet.Value.TouchRaisedRect.Value.Happy.Width, Mode=TwoWay}" />
+                  Value="{Binding Pet.TouchRaisedRect.Happy.Width, Mode=TwoWay}" />
                 <Label
                   Grid.Row="1"
                   Grid.Column="2"
@@ -538,7 +538,7 @@
                 <pu:NumberInput
                   Grid.Row="1"
                   Grid.Column="3"
-                  Value="{Binding Pet.Value.TouchRaisedRect.Value.Happy.Height, Mode=TwoWay}" />
+                  Value="{Binding Pet.TouchRaisedRect.Happy.Height, Mode=TwoWay}" />
               </Grid>
               <ToggleButton
                 x:Name="ToggleButton_TouchRaisedRect_NomalState"
@@ -562,12 +562,12 @@
                   <ColumnDefinition />
                 </Grid.ColumnDefinitions>
                 <Label Background="{x:Null}" Content="x:" />
-                <pu:NumberInput Grid.Column="1" Value="{Binding Pet.Value.TouchRaisedRect.Value.Nomal.X, Mode=TwoWay}" />
+                <pu:NumberInput Grid.Column="1" Value="{Binding Pet.TouchRaisedRect.Nomal.X, Mode=TwoWay}" />
                 <Label
                   Grid.Column="2"
                   Background="{x:Null}"
                   Content="y:" />
-                <pu:NumberInput Grid.Column="3" Value="{Binding Pet.Value.TouchRaisedRect.Value.Nomal.Y, Mode=TwoWay}" />
+                <pu:NumberInput Grid.Column="3" Value="{Binding Pet.TouchRaisedRect.Nomal.Y, Mode=TwoWay}" />
                 <Label
                   Grid.Row="1"
                   Background="{x:Null}"
@@ -575,7 +575,7 @@
                 <pu:NumberInput
                   Grid.Row="1"
                   Grid.Column="1"
-                  Value="{Binding Pet.Value.TouchRaisedRect.Value.Nomal.Width, Mode=TwoWay}" />
+                  Value="{Binding Pet.TouchRaisedRect.Nomal.Width, Mode=TwoWay}" />
                 <Label
                   Grid.Row="1"
                   Grid.Column="2"
@@ -584,7 +584,7 @@
                 <pu:NumberInput
                   Grid.Row="1"
                   Grid.Column="3"
-                  Value="{Binding Pet.Value.TouchRaisedRect.Value.Nomal.Height, Mode=TwoWay}" />
+                  Value="{Binding Pet.TouchRaisedRect.Nomal.Height, Mode=TwoWay}" />
               </Grid>
               <ToggleButton
                 x:Name="ToggleButton_TouchRaisedRect_PoorConditionState"
@@ -608,12 +608,12 @@
                   <ColumnDefinition />
                 </Grid.ColumnDefinitions>
                 <Label Background="{x:Null}" Content="x:" />
-                <pu:NumberInput Grid.Column="1" Value="{Binding Pet.Value.TouchRaisedRect.Value.PoorCondition.X, Mode=TwoWay}" />
+                <pu:NumberInput Grid.Column="1" Value="{Binding Pet.TouchRaisedRect.PoorCondition.X, Mode=TwoWay}" />
                 <Label
                   Grid.Column="2"
                   Background="{x:Null}"
                   Content="y:" />
-                <pu:NumberInput Grid.Column="3" Value="{Binding Pet.Value.TouchRaisedRect.Value.PoorCondition.Y, Mode=TwoWay}" />
+                <pu:NumberInput Grid.Column="3" Value="{Binding Pet.TouchRaisedRect.PoorCondition.Y, Mode=TwoWay}" />
                 <Label
                   Grid.Row="1"
                   Background="{x:Null}"
@@ -621,7 +621,7 @@
                 <pu:NumberInput
                   Grid.Row="1"
                   Grid.Column="1"
-                  Value="{Binding Pet.Value.TouchRaisedRect.Value.PoorCondition.Width, Mode=TwoWay}" />
+                  Value="{Binding Pet.TouchRaisedRect.PoorCondition.Width, Mode=TwoWay}" />
                 <Label
                   Grid.Row="1"
                   Grid.Column="2"
@@ -630,7 +630,7 @@
                 <pu:NumberInput
                   Grid.Row="1"
                   Grid.Column="3"
-                  Value="{Binding Pet.Value.TouchRaisedRect.Value.PoorCondition.Height, Mode=TwoWay}" />
+                  Value="{Binding Pet.TouchRaisedRect.PoorCondition.Height, Mode=TwoWay}" />
               </Grid>
               <ToggleButton
                 x:Name="ToggleButton_TouchRaisedRect_IllState"
@@ -654,12 +654,12 @@
                   <ColumnDefinition />
                 </Grid.ColumnDefinitions>
                 <Label Background="{x:Null}" Content="x:" />
-                <pu:NumberInput Grid.Column="1" Value="{Binding Pet.Value.TouchRaisedRect.Value.Ill.X, Mode=TwoWay}" />
+                <pu:NumberInput Grid.Column="1" Value="{Binding Pet.TouchRaisedRect.Ill.X, Mode=TwoWay}" />
                 <Label
                   Grid.Column="2"
                   Background="{x:Null}"
                   Content="y:" />
-                <pu:NumberInput Grid.Column="3" Value="{Binding Pet.Value.TouchRaisedRect.Value.Ill.Y, Mode=TwoWay}" />
+                <pu:NumberInput Grid.Column="3" Value="{Binding Pet.TouchRaisedRect.Ill.Y, Mode=TwoWay}" />
                 <Label
                   Grid.Row="1"
                   Background="{x:Null}"
@@ -667,7 +667,7 @@
                 <pu:NumberInput
                   Grid.Row="1"
                   Grid.Column="1"
-                  Value="{Binding Pet.Value.TouchRaisedRect.Value.Ill.Width, Mode=TwoWay}" />
+                  Value="{Binding Pet.TouchRaisedRect.Ill.Width, Mode=TwoWay}" />
                 <Label
                   Grid.Row="1"
                   Grid.Column="2"
@@ -676,7 +676,7 @@
                 <pu:NumberInput
                   Grid.Row="1"
                   Grid.Column="3"
-                  Value="{Binding Pet.Value.TouchRaisedRect.Value.Ill.Height, Mode=TwoWay}" />
+                  Value="{Binding Pet.TouchRaisedRect.Ill.Height, Mode=TwoWay}" />
               </Grid>
             </Grid>
           </Expander>
@@ -709,12 +709,12 @@
                   <ColumnDefinition />
                 </Grid.ColumnDefinitions>
                 <Label Background="{x:Null}" Content="x:" />
-                <pu:NumberInput Grid.Column="1" Value="{Binding Pet.Value.RaisePoint.Value.Happy.X, Mode=TwoWay}" />
+                <pu:NumberInput Grid.Column="1" Value="{Binding Pet.RaisePoint.Happy.X, Mode=TwoWay}" />
                 <Label
                   Grid.Column="2"
                   Background="{x:Null}"
                   Content="y:" />
-                <pu:NumberInput Grid.Column="3" Value="{Binding Pet.Value.RaisePoint.Value.Happy.Y, Mode=TwoWay}" />
+                <pu:NumberInput Grid.Column="3" Value="{Binding Pet.RaisePoint.Happy.Y, Mode=TwoWay}" />
               </Grid>
               <ToggleButton
                 x:Name="ToggleButton_RaisePoint_Nomal"
@@ -737,12 +737,12 @@
                   <ColumnDefinition />
                 </Grid.ColumnDefinitions>
                 <Label Background="{x:Null}" Content="x:" />
-                <pu:NumberInput Grid.Column="1" Value="{Binding Pet.Value.RaisePoint.Value.Nomal.X, Mode=TwoWay}" />
+                <pu:NumberInput Grid.Column="1" Value="{Binding Pet.RaisePoint.Nomal.X, Mode=TwoWay}" />
                 <Label
                   Grid.Column="2"
                   Background="{x:Null}"
                   Content="y:" />
-                <pu:NumberInput Grid.Column="3" Value="{Binding Pet.Value.RaisePoint.Value.Nomal.Y, Mode=TwoWay}" />
+                <pu:NumberInput Grid.Column="3" Value="{Binding Pet.RaisePoint.Nomal.Y, Mode=TwoWay}" />
               </Grid>
               <ToggleButton
                 x:Name="ToggleButton_RaisePoint_PoorCondition"
@@ -765,12 +765,12 @@
                   <ColumnDefinition />
                 </Grid.ColumnDefinitions>
                 <Label Background="{x:Null}" Content="x:" />
-                <pu:NumberInput Grid.Column="1" Value="{Binding Pet.Value.RaisePoint.Value.PoorCondition.X, Mode=TwoWay}" />
+                <pu:NumberInput Grid.Column="1" Value="{Binding Pet.RaisePoint.PoorCondition.X, Mode=TwoWay}" />
                 <Label
                   Grid.Column="2"
                   Background="{x:Null}"
                   Content="y:" />
-                <pu:NumberInput Grid.Column="3" Value="{Binding Pet.Value.RaisePoint.Value.PoorCondition.Y, Mode=TwoWay}" />
+                <pu:NumberInput Grid.Column="3" Value="{Binding Pet.RaisePoint.PoorCondition.Y, Mode=TwoWay}" />
               </Grid>
               <ToggleButton
                 x:Name="ToggleButton_RaisePoint_Ill"
@@ -793,12 +793,12 @@
                   <ColumnDefinition />
                 </Grid.ColumnDefinitions>
                 <Label Background="{x:Null}" Content="x:" />
-                <pu:NumberInput Grid.Column="1" Value="{Binding Pet.Value.RaisePoint.Value.Ill.X, Mode=TwoWay}" />
+                <pu:NumberInput Grid.Column="1" Value="{Binding Pet.RaisePoint.Ill.X, Mode=TwoWay}" />
                 <Label
                   Grid.Column="2"
                   Background="{x:Null}"
                   Content="y:" />
-                <pu:NumberInput Grid.Column="3" Value="{Binding Pet.Value.RaisePoint.Value.Ill.Y, Mode=TwoWay}" />
+                <pu:NumberInput Grid.Column="3" Value="{Binding Pet.RaisePoint.Ill.Y, Mode=TwoWay}" />
               </Grid>
             </Grid>
           </Expander>

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.Linq;
@@ -21,7 +22,7 @@ using VPet.ModMaker.Views.ModEdit.I18nEdit;
 
 namespace VPet.ModMaker.ViewModels.ModEdit;
 
-public class ModEditWindowVM
+public class ModEditWindowVM : ObservableObjectX<ModEditWindowVM>
 {
     public ModEditWindow ModEditWindow { get; }
 
@@ -29,7 +30,16 @@ public class ModEditWindowVM
     /// <summary>
     /// 当前模组信息
     /// </summary>
-    public ObservableValue<ModInfoModel> ModInfo { get; } = new(ModInfoModel.Current);
+    #region ModInfo
+    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+    private ModInfoModel _modInfo = ModInfoModel.Current;
+
+    public ModInfoModel ModInfo
+    {
+        get => _modInfo;
+        set => SetProperty(ref _modInfo, value);
+    }
+    #endregion
 
     /// <summary>
     /// I18n数据
@@ -103,7 +113,7 @@ public class ModEditWindowVM
 
     private void SaveAsTranslationMod()
     {
-        if (ValidationData(ModInfo.Value) is false)
+        if (ValidationData(ModInfo) is false)
             return;
         var window = new SaveTranslationModWindow();
         window.ShowDialog();
@@ -120,7 +130,7 @@ public class ModEditWindowVM
     /// </summary>
     public void Close()
     {
-        ModInfo.Value.Image.Value?.StreamSource?.Close();
+        ModInfo.Image?.StreamSource?.Close();
         I18nEditWindow.Current?.Close(true);
     }
 
@@ -137,10 +147,8 @@ public class ModEditWindowVM
             };
         if (openFileDialog.ShowDialog() is true)
         {
-            ModInfo.Value.Image.Value?.StreamSource?.Close();
-            ModInfo.Value.Image.Value = NativeUtils.LoadImageToMemoryStream(
-                openFileDialog.FileName
-            );
+            ModInfo.Image?.StreamSource?.Close();
+            ModInfo.Image = NativeUtils.LoadImageToMemoryStream(openFileDialog.FileName);
         }
     }
 
@@ -154,9 +162,9 @@ public class ModEditWindowVM
         window.ShowDialog();
         if (window.IsCancel)
             return;
-        I18nHelper.Current.CultureNames.Add(window.ViewModel.Culture.Value);
+        I18nHelper.Current.CultureNames.Add(window.ViewModel.Culture);
         if (I18nHelper.Current.CultureNames.Count == 1)
-            I18nHelper.Current.CultureName.Value = window.ViewModel.Culture.Value;
+            I18nHelper.Current.CultureName = window.ViewModel.Culture;
     }
 
     /// <summary>
@@ -166,12 +174,12 @@ public class ModEditWindowVM
     private void EditCulture(string oldCulture)
     {
         var window = new AddCultureWindow();
-        window.ViewModel.Culture.Value = oldCulture.Translate();
+        window.ViewModel.Culture = oldCulture.Translate();
         window.ShowDialog();
         if (window.IsCancel)
             return;
         I18nHelper.Current.CultureNames[I18nHelper.Current.CultureNames.IndexOf(oldCulture)] =
-            window.ViewModel.Culture.Value;
+            window.ViewModel.Culture;
     }
 
     /// <summary>
@@ -202,29 +210,29 @@ public class ModEditWindowVM
             is not MessageBoxResult.Yes
         )
             return;
-        ModInfo.Value.I18nDatas[culture].Name.Value = ModInfo.Value.Id.Value;
-        ModInfo.Value.I18nDatas[culture].Description.Value = ModInfo.Value.DescriptionId.Value;
-        foreach (var food in ModInfo.Value.Foods)
+        ModInfo.I18nDatas[culture].Name = ModInfo.Id;
+        ModInfo.I18nDatas[culture].Description = ModInfo.DescriptionId;
+        foreach (var food in ModInfo.Foods)
         {
-            food.I18nDatas[culture].Name.Value = food.Id.Value;
-            food.I18nDatas[culture].Description.Value = food.DescriptionId.Value;
+            food.I18nDatas[culture].Name = food.Id;
+            food.I18nDatas[culture].Description = food.DescriptionId;
         }
-        foreach (var text in ModInfo.Value.LowTexts)
-            text.I18nDatas[culture].Text.Value = text.Id.Value;
-        foreach (var text in ModInfo.Value.ClickTexts)
-            text.I18nDatas[culture].Text.Value = text.Id.Value;
-        foreach (var text in ModInfo.Value.SelectTexts)
+        foreach (var text in ModInfo.LowTexts)
+            text.I18nDatas[culture].Text = text.Id;
+        foreach (var text in ModInfo.ClickTexts)
+            text.I18nDatas[culture].Text = text.Id;
+        foreach (var text in ModInfo.SelectTexts)
         {
-            text.I18nDatas[culture].Text.Value = text.Id.Value;
-            text.I18nDatas[culture].Choose.Value = text.ChooseId.Value;
+            text.I18nDatas[culture].Text = text.Id;
+            text.I18nDatas[culture].Choose = text.ChooseId;
         }
-        foreach (var pet in ModInfo.Value.Pets)
+        foreach (var pet in ModInfo.Pets)
         {
-            pet.I18nDatas[culture].Name.Value = pet.Id.Value;
-            pet.I18nDatas[culture].PetName.Value = pet.PetNameId.Value;
-            pet.I18nDatas[culture].Description.Value = pet.DescriptionId.Value;
+            pet.I18nDatas[culture].Name = pet.ID;
+            pet.I18nDatas[culture].PetName = pet.PetNameId;
+            pet.I18nDatas[culture].Description = pet.DescriptionId;
             foreach (var work in pet.Works)
-                work.I18nDatas[culture].Name.Value = work.Id.Value;
+                work.I18nDatas[culture].Name = work.Id;
         }
     }
     #endregion
@@ -235,19 +243,19 @@ public class ModEditWindowVM
     /// </summary>
     private void Save()
     {
-        if (ValidationData(ModInfo.Value) is false)
+        if (ValidationData(ModInfo) is false)
             return;
         if (
             MessageBox.Show("确定保存吗".Translate(), "", MessageBoxButton.YesNo)
             is not MessageBoxResult.Yes
         )
             return;
-        if (string.IsNullOrEmpty(ModInfo.Value.SourcePath.Value))
+        if (string.IsNullOrEmpty(ModInfo.SourcePath))
         {
             MessageBox.Show("源路径为空, 请使用 保存至".Translate());
             return;
         }
-        SaveTo(ModInfo.Value.SourcePath.Value);
+        SaveTo(ModInfo.SourcePath);
     }
 
     /// <summary>
@@ -255,7 +263,7 @@ public class ModEditWindowVM
     /// </summary>
     private void SaveTo()
     {
-        if (ValidationData(ModInfo.Value) is false)
+        if (ValidationData(ModInfo) is false)
             return;
         var dialog = new VistaFolderBrowserDialog();
         if (dialog.ShowDialog() is not true)
@@ -272,9 +280,9 @@ public class ModEditWindowVM
         var pending = PendingBox.Show("保存中".Translate());
         try
         {
-            ModInfo.Value.SaveTo(path);
-            if (string.IsNullOrWhiteSpace(ModInfo.Value.SourcePath.Value))
-                ModInfo.Value.SourcePath.Value = path;
+            ModInfo.SaveTo(path);
+            if (string.IsNullOrWhiteSpace(ModInfo.SourcePath))
+                ModInfo.SourcePath = path;
             pending.Close();
             MessageBox.Show(ModEditWindow, "保存成功".Translate());
         }
@@ -303,12 +311,12 @@ public class ModEditWindowVM
             );
             return false;
         }
-        if (string.IsNullOrWhiteSpace(model.Id.Value))
+        if (string.IsNullOrWhiteSpace(model.Id))
         {
             MessageBox.Show("Id不可为空".Translate(), "", MessageBoxButton.OK, MessageBoxImage.Warning);
             return false;
         }
-        if (string.IsNullOrWhiteSpace(model.Author.Value))
+        if (string.IsNullOrWhiteSpace(model.Author))
         {
             MessageBox.Show("作者不可为空".Translate(), "", MessageBoxButton.OK, MessageBoxImage.Warning);
             return false;

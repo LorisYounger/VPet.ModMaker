@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -25,15 +26,33 @@ namespace VPet.ModMaker.Models;
 /// </summary>
 public class ModInfoModel : I18nModel<I18nModInfoModel>
 {
+    #region AutoSetFoodPrice
+    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+    private bool _autoSetFoodPrice;
+
     /// <summary>
     /// 自动设置食物推荐价格
     /// </summary>
-    public ObservableValue<bool> AutoSetFoodPrice { get; } = new();
+    public bool AutoSetFoodPrice
+    {
+        get => _autoSetFoodPrice;
+        set => SetProperty(ref _autoSetFoodPrice, value);
+    }
+    #endregion
+
+    #region ShowMainPet
+    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+    private bool _showMainPet;
 
     /// <summary>
     /// 不显示本体宠物
     /// </summary>
-    public ObservableValue<bool> ShowMainPet { get; } = new(true);
+    public bool ShowMainPet
+    {
+        get => _showMainPet;
+        set => SetProperty(ref _showMainPet, value);
+    }
+    #endregion
 
     #region ModInfo
     /// <summary>
@@ -51,40 +70,103 @@ public class ModInfoModel : I18nModel<I18nModInfoModel>
     /// </summary>
     public static ModInfoModel Current { get; set; } = new();
 
+    #region Id
+    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+    private string _id = string.Empty;
+
     /// <summary>
     /// Id
     /// </summary>
-    public ObservableValue<string> Id { get; } = new();
+    public string Id
+    {
+        get => _id;
+        set => SetProperty(ref _id, value);
+    }
+    #endregion
+
+    #region DescriptionId
+    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+    private string _descriptionId = string.Empty;
 
     /// <summary>
     /// 描述Id
     /// </summary>
-    public ObservableValue<string> DescriptionId { get; } = new();
+    public string DescriptionId
+    {
+        get => _descriptionId;
+        set => SetProperty(ref _descriptionId, value);
+    }
+    #endregion
 
     /// <summary>
     /// 作者
     /// </summary>
-    public ObservableValue<string> Author { get; } = new();
+    #region Author
+    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+    private string _author = string.Empty;
+
+    public string Author
+    {
+        get => _author;
+        set => SetProperty(ref _author, value);
+    }
+    #endregion
 
     /// <summary>
     /// 支持的游戏版本
     /// </summary>
-    public ObservableValue<int> GameVersion { get; } = new(ModMakerInfo.GameVersion);
+    #region GameVersion
+    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+    private int _gameVersion;
+
+    public int GameVersion
+    {
+        get => _gameVersion;
+        set => SetProperty(ref _gameVersion, value);
+    }
+    #endregion
 
     /// <summary>
     /// 模组版本
     /// </summary>
-    public ObservableValue<int> ModVersion { get; } = new(100);
+    #region ModVersion
+    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+    private int _modVersion;
+
+    public int ModVersion
+    {
+        get => _modVersion;
+        set => SetProperty(ref _modVersion, value);
+    }
+    #endregion
 
     /// <summary>
     /// 封面
     /// </summary>
-    public ObservableValue<BitmapImage> Image { get; } = new();
+    #region Image
+    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+    private BitmapImage _image;
+
+    public BitmapImage Image
+    {
+        get => _image;
+        set => SetProperty(ref _image, value);
+    }
+    #endregion
 
     /// <summary>
     /// 源路径
     /// </summary>
-    public ObservableValue<string> SourcePath { get; } = new();
+    #region SourcePath
+    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+    private string _sourcePath = string.Empty;
+
+    public string SourcePath
+    {
+        get => _sourcePath;
+        set => SetProperty(ref _sourcePath, value);
+    }
+    #endregion
 
     #endregion
 
@@ -117,7 +199,16 @@ public class ModInfoModel : I18nModel<I18nModInfoModel>
     /// <summary>
     /// 宠物实际数量
     /// </summary>
-    public ObservableValue<int> PetDisplayedCount { get; } = new();
+    #region PetDisplayedCount
+    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+    private int _petDisplayedCount;
+
+    public int PetDisplayedCount
+    {
+        get => _petDisplayedCount;
+        set => SetProperty(ref _petDisplayedCount, value);
+    }
+    #endregion
 
     /// <summary>
     /// 其它I18n数据
@@ -131,13 +222,14 @@ public class ModInfoModel : I18nModel<I18nModInfoModel>
     #endregion
     public ModInfoModel()
     {
-        DescriptionId.Value = $"{Id.Value}_{nameof(DescriptionId)}";
-        Id.ValueChanged += (o, n) =>
-        {
-            DescriptionId.Value = $"{n}_{nameof(DescriptionId)}";
-        };
-        Pets.CollectionChanged += Pets_CollectionChanged;
-        ShowMainPet.ValueChanged += ShowMainPet_ValueChanged;
+        DescriptionId = $"{Id}_{nameof(DescriptionId)}";
+        //TODO
+        //Id.ValueChanged += (o, n) =>
+        //{
+        //    DescriptionId.Value = $"{n}_{nameof(DescriptionId)}";
+        //};
+        //Pets.CollectionChanged += Pets_CollectionChanged;
+        //ShowMainPet.ValueChanged += ShowMainPet_ValueChanged;
     }
 
     private void ShowMainPet_ValueChanged(
@@ -150,26 +242,26 @@ public class ModInfoModel : I18nModel<I18nModInfoModel>
 
     private void Pets_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
     {
-        if (ShowMainPet.Value)
-            PetDisplayedCount.Value = Pets.Count;
+        if (ShowMainPet)
+            PetDisplayedCount = Pets.Count;
         else
-            PetDisplayedCount.Value = Pets.Count - Pets.Count(m => m.FromMain.Value);
+            PetDisplayedCount = Pets.Count - Pets.Count(m => m.FromMain);
     }
 
     public ModInfoModel(ModLoader loader)
         : this()
     {
-        SourcePath.Value = loader.ModPath.FullName;
-        Id.Value = loader.Name;
-        DescriptionId.Value = loader.Intro;
-        Author.Value = loader.Author;
-        GameVersion.Value = loader.GameVer;
-        ModVersion.Value = loader.Ver;
+        SourcePath = loader.ModPath.FullName;
+        Id = loader.Name;
+        DescriptionId = loader.Intro;
+        Author = loader.Author;
+        GameVersion = loader.GameVer;
+        ModVersion = loader.Ver;
         ItemID = loader.ItemID;
         AuthorID = loader.AuthorID;
         var imagePath = Path.Combine(loader.ModPath.FullName, "icon.png");
         if (File.Exists(imagePath))
-            Image.Value = NativeUtils.LoadImageToMemoryStream(imagePath);
+            Image = NativeUtils.LoadImageToMemoryStream(imagePath);
         foreach (var food in loader.Foods)
             Foods.Add(new(food));
         foreach (var clickText in loader.ClickTexts)
@@ -184,29 +276,29 @@ public class ModInfoModel : I18nModel<I18nModInfoModel>
         {
             var petModel = new PetModel(pet);
             // 如果检测到本体存在同名宠物
-            if (ModMakerInfo.MainPets.TryGetValue(petModel.Id.Value, out var mainPet))
+            if (ModMakerInfo.MainPets.TryGetValue(petModel.ID, out var mainPet))
             {
                 // 若宠物的值为默认值并且本体同名宠物不为默认值, 则把本体宠物的值作为模组宠物的默认值
                 if (
                     petModel.TouchHeadRect == PetModel.Default.TouchHeadRect
                     && petModel.TouchHeadRect != mainPet.TouchHeadRect
                 )
-                    petModel.TouchHeadRect.Value = mainPet.TouchHeadRect.Value;
+                    petModel.TouchHeadRect = mainPet.TouchHeadRect;
                 if (
                     petModel.TouchBodyRect == PetModel.Default.TouchBodyRect
                     && petModel.TouchBodyRect != mainPet.TouchBodyRect
                 )
-                    petModel.TouchBodyRect.Value = mainPet.TouchBodyRect.Value;
+                    petModel.TouchBodyRect = mainPet.TouchBodyRect;
                 if (
                     petModel.TouchRaisedRect == PetModel.Default.TouchRaisedRect
                     && petModel.TouchRaisedRect != mainPet.TouchRaisedRect
                 )
-                    petModel.TouchRaisedRect.Value = mainPet.TouchRaisedRect.Value;
+                    petModel.TouchRaisedRect = mainPet.TouchRaisedRect;
                 if (
                     petModel.RaisePoint == PetModel.Default.RaisePoint
                     && petModel.RaisePoint != mainPet.RaisePoint
                 )
-                    petModel.RaisePoint.Value = mainPet.RaisePoint.Value;
+                    petModel.RaisePoint = mainPet.RaisePoint;
             }
             Pets.Add(petModel);
             foreach (var p in pet.path)
@@ -220,7 +312,7 @@ public class ModInfoModel : I18nModel<I18nModInfoModel>
         foreach (var pet in ModMakerInfo.MainPets)
         {
             // 确保Id不重复
-            if (Pets.All(i => i.Id.Value != pet.Key))
+            if (Pets.All(i => i.ID != pet.Key))
                 Pets.Insert(0, pet.Value);
         }
 
@@ -236,7 +328,7 @@ public class ModInfoModel : I18nModel<I18nModInfoModel>
 
     public void RefreshId()
     {
-        DescriptionId.Value = $"{Id.Value}_{nameof(DescriptionId)}";
+        DescriptionId = $"{Id}_{nameof(DescriptionId)}";
     }
 
     #region Load
@@ -341,7 +433,7 @@ public class ModInfoModel : I18nModel<I18nModInfoModel>
         }
         if (I18nHelper.Current.CultureNames.Count == 0)
             return;
-        I18nHelper.Current.CultureName.Value = I18nHelper.Current.CultureNames.First();
+        I18nHelper.Current.CultureName = I18nHelper.Current.CultureNames.First();
         foreach (var i18nData in OtherI18nDatas)
         {
             LoadFoodI18nData(i18nData.Key, i18nData.Value);
@@ -358,10 +450,10 @@ public class ModInfoModel : I18nModel<I18nModInfoModel>
         {
             if (food.I18nDatas.TryGetValue(key, out var data) is false)
                 continue;
-            if (i18nData.TryGetValue(food.Id.Value, out var name))
-                data.Name.Value = name;
-            if (i18nData.TryGetValue(food.DescriptionId.Value, out var description))
-                data.Description.Value = description;
+            if (i18nData.TryGetValue(food.Id, out var name))
+                data.Name = name;
+            if (i18nData.TryGetValue(food.DescriptionId, out var description))
+                data.Description = description;
         }
     }
 
@@ -371,8 +463,8 @@ public class ModInfoModel : I18nModel<I18nModInfoModel>
         {
             if (lowText.I18nDatas.TryGetValue(key, out var data) is false)
                 continue;
-            if (i18nData.TryGetValue(lowText.Id.Value, out var text))
-                data.Text.Value = text;
+            if (i18nData.TryGetValue(lowText.Id, out var text))
+                data.Text = text;
         }
     }
 
@@ -382,8 +474,8 @@ public class ModInfoModel : I18nModel<I18nModInfoModel>
         {
             if (clickText.I18nDatas.TryGetValue(key, out var data) is false)
                 continue;
-            if (i18nData.TryGetValue(clickText.Id.Value, out var text))
-                data.Text.Value = text;
+            if (i18nData.TryGetValue(clickText.Id, out var text))
+                data.Text = text;
         }
     }
 
@@ -393,10 +485,10 @@ public class ModInfoModel : I18nModel<I18nModInfoModel>
         {
             if (selectText.I18nDatas.TryGetValue(key, out var data) is false)
                 continue;
-            if (i18nData.TryGetValue(selectText.Id.Value, out var text))
-                data.Text.Value = text;
-            if (i18nData.TryGetValue(selectText.ChooseId.Value, out var choose))
-                data.Choose.Value = choose;
+            if (i18nData.TryGetValue(selectText.Id, out var text))
+                data.Text = text;
+            if (i18nData.TryGetValue(selectText.ChooseId, out var choose))
+                data.Choose = choose;
         }
     }
 
@@ -406,18 +498,18 @@ public class ModInfoModel : I18nModel<I18nModInfoModel>
         {
             if (pet.I18nDatas.TryGetValue(key, out var data) is false)
                 continue;
-            if (i18nData.TryGetValue(pet.Id.Value, out var name))
-                data.Name.Value = name;
-            if (i18nData.TryGetValue(pet.PetNameId.Value, out var petName))
-                data.PetName.Value = petName;
-            if (i18nData.TryGetValue(pet.DescriptionId.Value, out var description))
-                data.Description.Value = description;
+            if (i18nData.TryGetValue(pet.ID, out var name))
+                data.Name = name;
+            if (i18nData.TryGetValue(pet.PetNameId, out var petName))
+                data.PetName = petName;
+            if (i18nData.TryGetValue(pet.DescriptionId, out var description))
+                data.Description = description;
             foreach (var work in pet.Works)
             {
                 if (work.I18nDatas.TryGetValue(key, out var workData) is false)
                     continue;
-                if (i18nData.TryGetValue(work.Id.Value, out var workName))
-                    workData.Name.Value = workName;
+                if (i18nData.TryGetValue(work.Id, out var workName))
+                    workData.Name = workName;
             }
         }
     }
@@ -438,7 +530,7 @@ public class ModInfoModel : I18nModel<I18nModInfoModel>
     /// </summary>
     public void Save()
     {
-        SaveTo(SourcePath.Value);
+        SaveTo(SourcePath);
     }
 
     /// <summary>
@@ -475,13 +567,13 @@ public class ModInfoModel : I18nModel<I18nModInfoModel>
 
         var lps = new LPS()
         {
-            new Line("vupmod", Id.Value)
+            new Line("vupmod", Id)
             {
-                new Sub("author", Author.Value),
-                new Sub("gamever", GameVersion.Value),
-                new Sub("ver", ModVersion.Value)
+                new Sub("author", Author),
+                new Sub("gamever", GameVersion),
+                new Sub("ver", ModVersion)
             },
-            new Line("intro", DescriptionId.Value),
+            new Line("intro", DescriptionId),
             new Line("authorid", AuthorID.ToString()),
             new Line("itemid", ItemID.ToString()),
             new Line("cachedate", DateTime.Now.Date.ToString("s"))
@@ -491,12 +583,12 @@ public class ModInfoModel : I18nModel<I18nModInfoModel>
             lps.Add(
                 new Line("lang", cultureName)
                 {
-                    new Sub(Id.Value, I18nDatas[cultureName].Name.Value),
-                    new Sub(DescriptionId.Value, I18nDatas[cultureName].Description.Value),
+                    new Sub(Id, I18nDatas[cultureName].Name),
+                    new Sub(DescriptionId, I18nDatas[cultureName].Description),
                 }
             );
         }
-        Image.Value?.SaveToPng(Path.Combine(path, "icon.png"));
+        Image?.SaveToPng(Path.Combine(path, "icon.png"));
         File.WriteAllText(modInfoFile, lps.ToString());
     }
 
@@ -543,13 +635,9 @@ public class ModInfoModel : I18nModel<I18nModInfoModel>
             lps.Add(LPSConvert.SerializeObjectToLine<Line>(food.ToFood(), "food"));
             foreach (var cultureName in I18nHelper.Current.CultureNames)
             {
+                SaveI18nDatas[cultureName].TryAdd(food.Id, food.I18nDatas[cultureName].Name);
                 SaveI18nDatas[cultureName]
-                    .TryAdd(food.Id.Value, food.I18nDatas[cultureName].Name.Value);
-                SaveI18nDatas[cultureName]
-                    .TryAdd(
-                        food.DescriptionId.Value,
-                        food.I18nDatas[cultureName].Description.Value
-                    );
+                    .TryAdd(food.DescriptionId, food.I18nDatas[cultureName].Description);
             }
         }
         File.WriteAllText(foodFile, lps.ToString());
@@ -591,10 +679,9 @@ public class ModInfoModel : I18nModel<I18nModInfoModel>
             lps.Add(LPSConvert.SerializeObjectToLine<Line>(text.ToSelectText(), "SelectText"));
             foreach (var cultureName in I18nHelper.Current.CultureNames)
             {
+                SaveI18nDatas[cultureName].TryAdd(text.Id, text.I18nDatas[cultureName].Text);
                 SaveI18nDatas[cultureName]
-                    .TryAdd(text.Id.Value, text.I18nDatas[cultureName].Text.Value);
-                SaveI18nDatas[cultureName]
-                    .TryAdd(text.ChooseId.Value, text.I18nDatas[cultureName].Choose.Value);
+                    .TryAdd(text.ChooseId, text.I18nDatas[cultureName].Choose);
             }
         }
         File.WriteAllText(textFile, lps.ToString());
@@ -616,8 +703,7 @@ public class ModInfoModel : I18nModel<I18nModInfoModel>
             lps.Add(LPSConvert.SerializeObjectToLine<Line>(text.ToLowText(), "lowfoodtext"));
             foreach (var cultureName in I18nHelper.Current.CultureNames)
             {
-                SaveI18nDatas[cultureName]
-                    .TryAdd(text.Id.Value, text.I18nDatas[cultureName].Text.Value);
+                SaveI18nDatas[cultureName].TryAdd(text.Id, text.I18nDatas[cultureName].Text);
             }
         }
         File.WriteAllText(textFile, lps.ToString());
@@ -639,8 +725,7 @@ public class ModInfoModel : I18nModel<I18nModInfoModel>
             lps.Add(LPSConvert.SerializeObjectToLine<Line>(text.ToClickText(), "clicktext"));
             foreach (var cultureName in I18nHelper.Current.CultureNames)
             {
-                SaveI18nDatas[cultureName]
-                    .TryAdd(text.Id.Value, text.I18nDatas[cultureName].Text.Value);
+                SaveI18nDatas[cultureName].TryAdd(text.Id, text.I18nDatas[cultureName].Text);
             }
         }
         File.WriteAllText(textFile, lps.ToString());
@@ -683,7 +768,7 @@ public class ModInfoModel : I18nModel<I18nModInfoModel>
             Directory.CreateDirectory(foodPath);
             foreach (var food in Foods)
             {
-                food.Image.Value.SaveToPng(Path.Combine(foodPath, food.Id.Value));
+                food.Image.SaveToPng(Path.Combine(foodPath, food.Id));
             }
         }
     }
@@ -693,7 +778,7 @@ public class ModInfoModel : I18nModel<I18nModInfoModel>
     /// </summary>
     public void Close()
     {
-        Image.Value.CloseStream();
+        Image.CloseStream();
         foreach (var food in Foods)
             food.Close();
         foreach (var pet in Pets)
@@ -715,20 +800,39 @@ public class ModInfoModel : I18nModel<I18nModInfoModel>
             var cultureFile = Path.Combine(culturePath, $"{cultureName}.lps");
             File.Create(cultureFile).Close();
             var lps = new LPS();
-            foreach (var data in I18nEditWindow.Current.ViewModel.AllI18nDatas)
-                lps.Add(
-                    new Line(
-                        data.Key,
-                        data.Value.Datas[I18nHelper.Current.CultureNames.IndexOf(cultureName)].Value
-                    )
-                );
+            //TODO
+            //foreach (var data in I18nEditWindow.Current.ViewModel.AllI18nDatas)
+            //    lps.Add(
+            //        new Line(
+            //            data.Key,
+            //            data.Value.Datas[I18nHelper.Current.CultureNames.IndexOf(cultureName)].Value
+            //        )
+            //    );
             File.WriteAllText(cultureFile, lps.ToString());
         }
     }
 }
 
-public class I18nModInfoModel
+public class I18nModInfoModel : ObservableObjectX<I18nModInfoModel>
 {
-    public ObservableValue<string> Name { get; set; } = new();
-    public ObservableValue<string> Description { get; set; } = new();
+    #region Name
+    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+    private string _name = string.Empty;
+
+    public string Name
+    {
+        get => _name;
+        set => SetProperty(ref _name, value);
+    }
+    #endregion
+    #region Description
+    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+    private string _description = string.Empty;
+
+    public string Description
+    {
+        get => _description;
+        set => SetProperty(ref _description, value);
+    }
+    #endregion
 }

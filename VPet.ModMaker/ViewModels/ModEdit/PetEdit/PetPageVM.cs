@@ -1,27 +1,46 @@
-﻿using HKW.HKWUtils.Observable;
-
-using LinePutScript.Localization.WPF;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using HKW.HKWUtils.Observable;
+using LinePutScript.Localization.WPF;
 using VPet.ModMaker.Models;
-using VPet.ModMaker.ViewModels.ModEdit.I18nEdit;
 using VPet.ModMaker.Views.ModEdit.I18nEdit;
 using VPet.ModMaker.Views.ModEdit.PetEdit;
 
 namespace VPet.ModMaker.ViewModels.ModEdit.PetEdit;
 
-public class PetPageVM
+public class PetPageVM : ObservableObjectX<PetPageVM>
 {
     public static ModInfoModel ModInfo => ModInfoModel.Current;
+
     #region Value
-    public ObservableValue<ObservableCollection<PetModel>> ShowPets { get; } = new();
+    #region ShowPets
+    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+    private ObservableCollection<PetModel> _showPets;
+
+    public ObservableCollection<PetModel> ShowPets
+    {
+        get => _showPets;
+        set => SetProperty(ref _showPets, value);
+    }
+    #endregion
     public ObservableCollection<PetModel> Pets => ModInfoModel.Current.Pets;
-    public ObservableValue<string> Search { get; } = new();
+
+    #region Search
+    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+    private string _search;
+
+    public string Search
+    {
+        get => _search;
+        set => SetProperty(ref _search, value);
+    }
+    #endregion
     #endregion
     #region Command
     public ObservableCommand AddCommand { get; } = new();
@@ -30,8 +49,9 @@ public class PetPageVM
     #endregion
     public PetPageVM()
     {
-        ShowPets.Value = Pets;
-        Search.ValueChanged += Search_ValueChanged;
+        //TODO
+        //ShowPets = Pets;
+        //Search.ValueChanged += Search_ValueChanged;
 
         AddCommand.ExecuteCommand += Add;
         EditCommand.ExecuteCommand += Edit;
@@ -45,12 +65,12 @@ public class PetPageVM
     {
         if (string.IsNullOrWhiteSpace(e.NewValue))
         {
-            ShowPets.Value = Pets;
+            ShowPets = Pets;
         }
         else
         {
-            ShowPets.Value = new(
-                Pets.Where(m => m.Id.Value.Contains(e.NewValue, StringComparison.OrdinalIgnoreCase))
+            ShowPets = new(
+                Pets.Where(m => m.ID.Contains(e.NewValue, StringComparison.OrdinalIgnoreCase))
             );
         }
     }
@@ -64,12 +84,12 @@ public class PetPageVM
         window.ShowDialog();
         if (window.IsCancel)
             return;
-        Pets.Add(vm.Pet.Value);
+        Pets.Add(vm.Pet);
     }
 
     public void Edit(PetModel model)
     {
-        if (model.FromMain.Value)
+        if (model.FromMain)
         {
             if (
                 MessageBox.Show("这是本体自带的宠物, 确定要编辑吗".Translate(), "", MessageBoxButton.YesNo)
@@ -80,11 +100,11 @@ public class PetPageVM
         var window = new PetEditWindow();
         var vm = window.ViewModel;
         vm.OldPet = model;
-        var newPet = vm.Pet.Value = new(model);
+        var newPet = vm.Pet = new(model);
         window.ShowDialog();
         if (window.IsCancel)
             return;
-        if (model.FromMain.Value)
+        if (model.FromMain)
         {
             var index = Pets.IndexOf(model);
             Pets.Remove(model);
@@ -94,27 +114,27 @@ public class PetPageVM
         {
             Pets[Pets.IndexOf(model)] = newPet;
         }
-        if (ShowPets.Value.Count != Pets.Count)
-            ShowPets.Value[ShowPets.Value.IndexOf(model)] = newPet;
+        if (ShowPets.Count != Pets.Count)
+            ShowPets[ShowPets.IndexOf(model)] = newPet;
         model.Close();
     }
 
     private void Remove(PetModel model)
     {
-        if (model.FromMain.Value)
+        if (model.FromMain)
         {
             MessageBox.Show("这是本体自带的宠物, 无法删除".Translate());
             return;
         }
         if (MessageBox.Show("确定删除吗".Translate(), "", MessageBoxButton.YesNo) is MessageBoxResult.No)
             return;
-        if (ShowPets.Value.Count == Pets.Count)
+        if (ShowPets.Count == Pets.Count)
         {
             Pets.Remove(model);
         }
         else
         {
-            ShowPets.Value.Remove(model);
+            ShowPets.Remove(model);
             Pets.Remove(model);
         }
     }

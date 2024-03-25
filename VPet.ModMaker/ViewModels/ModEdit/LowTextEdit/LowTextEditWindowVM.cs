@@ -1,21 +1,32 @@
-﻿using HKW.HKWUtils.Observable;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using HKW.HKWUtils.Observable;
 using VPet.ModMaker.Models;
 using VPet_Simulator.Windows.Interface;
 
 namespace VPet.ModMaker.ViewModels.ModEdit.LowTextEdit;
 
-public class LowTextEditWindowVM
+public class LowTextEditWindowVM : ObservableObjectX<LowTextEditWindowVM>
 {
     public I18nHelper I18nData => I18nHelper.Current;
     #region Value
     public LowTextModel OldLowText { get; set; }
-    public ObservableValue<LowTextModel> LowText { get; } = new(new());
+
+    #region LowText
+    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+    private LowTextModel _lowText;
+
+    public LowTextModel LowText
+    {
+        get => _lowText;
+        set => SetProperty(ref _lowText, value);
+    }
+    #endregion
 
     #endregion
 

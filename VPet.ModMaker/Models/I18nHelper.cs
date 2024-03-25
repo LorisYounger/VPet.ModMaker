@@ -1,11 +1,12 @@
-﻿using HKW.HKWUtils.Observable;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using HKW.HKWUtils.Observable;
 
 namespace VPet.ModMaker.Models;
 
@@ -13,7 +14,7 @@ namespace VPet.ModMaker.Models;
 /// <summary>
 /// I18n助手
 /// </summary>
-public class I18nHelper
+public class I18nHelper : ObservableObjectX<I18nHelper>
 {
     /// <summary>
     /// 当前数据
@@ -23,7 +24,16 @@ public class I18nHelper
     /// <summary>
     /// 当前文化名称
     /// </summary>
-    public ObservableValue<string> CultureName { get; } = new();
+    #region CultureName
+    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+    private string _cultureName;
+
+    public string CultureName
+    {
+        get => _cultureName;
+        set => SetProperty(ref _cultureName, value);
+    }
+    #endregion
 
     /// <summary>
     /// 文化列表

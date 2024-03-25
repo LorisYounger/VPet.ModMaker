@@ -1,4 +1,5 @@
 ﻿using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using HKW.HKWUtils.Observable;
@@ -9,17 +10,35 @@ namespace VPet.ModMaker.Models.ModModel;
 /// <summary>
 /// 动画模型
 /// </summary>
-public class AnimeModel
+public class AnimeModel : ObservableObjectX<AnimeModel>
 {
+    #region Id
+    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+    private string _id;
+
     /// <summary>
     /// Id
     /// </summary>
-    public ObservableValue<string> Id { get; } = new();
+    public string Id
+    {
+        get => _id;
+        set => SetProperty(ref _id, value);
+    }
+    #endregion
+
+    #region AnimeType
+    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+    private GraphInfo.AnimatType _animeType;
 
     /// <summary>
     /// 动画类型
     /// </summary>
-    public ObservableValue<GraphInfo.AnimatType> AnimeType { get; } = new();
+    public GraphInfo.AnimatType AnimeType
+    {
+        get => _animeType;
+        set => SetProperty(ref _animeType, value);
+    }
+    #endregion
 
     /// <summary>
     /// 图像列表
@@ -34,7 +53,7 @@ public class AnimeModel
         foreach (var file in Directory.EnumerateFiles(imagesPath))
         {
             var info = Path.GetFileNameWithoutExtension(file).Split(NativeUtils.Separator);
-            Id.Value = info[0];
+            Id = info[0];
             var duration = info.Last();
             var imageModel = new ImageModel(
                 NativeUtils.LoadImageToMemoryStream(file),
@@ -51,8 +70,8 @@ public class AnimeModel
     public AnimeModel Copy()
     {
         var model = new AnimeModel();
-        model.Id.Value = Id.Value;
-        model.AnimeType.Value = AnimeType.Value;
+        model.Id = Id;
+        model.AnimeType = AnimeType;
         foreach (var image in Images)
             model.Images.Add(image.Copy());
         return model;

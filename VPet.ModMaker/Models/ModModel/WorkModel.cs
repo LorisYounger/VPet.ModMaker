@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -24,237 +25,430 @@ public class WorkModel : I18nModel<I18nWorkModel>
                 .Cast<VPet_Simulator.Core.GraphHelper.Work.WorkType>()
         );
 
+    #region Id
+    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+    private string _id;
+
     /// <summary>
     /// Id
     /// </summary>
-    public ObservableValue<string> Id { get; } = new();
+    public string Id
+    {
+        get => _id;
+        set => SetProperty(ref _id, value);
+    }
+    #endregion
+
+    #region Graph
+    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+    private string _graph;
 
     /// <summary>
     /// 指定动画
     /// </summary>
-    public ObservableValue<string> Graph { get; } = new();
 
-    /// <summary>
-    /// 收获倍率
-    /// </summary>
-    //public ObservableValue<double> MoneyLevel { get; } = new();
+    public string Graph
+    {
+        get => _graph;
+        set => SetProperty(ref _graph, value);
+    }
+    #endregion
+
+    //#region MoneyLevel
+    //[DebuggerBrowsable(DebuggerBrowsableState.Never)]
+    //private double _moneyLevel;
+
+    ///// <summary>
+    ///// 收获倍率
+    ///// </summary>
+    //public double MoneyLevel
+    //{
+    //    get => _moneyLevel;
+    //    set => SetProperty(ref _moneyLevel, value);
+    //}
+    //#endregion
+
+    #region MoneyBase
+    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+    private double _moneyBase;
 
     /// <summary>
     /// 收获基础
     /// </summary>
-    public ObservableValue<double> MoneyBase { get; } = new();
+    public double MoneyBase
+    {
+        get => _moneyBase;
+        set => SetProperty(ref _moneyBase, value);
+    }
+    #endregion
+
+    #region StrengthFood
+    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+    private double _strengthFood;
 
     /// <summary>
     /// 饱食度消耗
     /// </summary>
-    public ObservableValue<double> StrengthFood { get; } = new();
+    public double StrengthFood
+    {
+        get => _strengthFood;
+        set => SetProperty(ref _strengthFood, value);
+    }
+    #endregion
+
+    #region StrengthDrink
+    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+    private double _strengthDrink;
 
     /// <summary>
     /// 口渴度消耗
     /// </summary>
-    public ObservableValue<double> StrengthDrink { get; } = new();
+    public double StrengthDrink
+    {
+        get => _strengthDrink;
+        set => SetProperty(ref _strengthDrink, value);
+    }
+    #endregion
+
+    #region Feeling
+    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+    private double _feeling;
 
     /// <summary>
     /// 心情消耗
     /// </summary>
-    public ObservableValue<double> Feeling { get; } = new();
+    public double Feeling
+    {
+        get => _feeling;
+        set => SetProperty(ref _feeling, value);
+    }
+    #endregion
+
+    #region LevelLimit
+    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+    private int _levelLimit;
 
     /// <summary>
     /// 等级倍率
     /// </summary>
-    public ObservableValue<int> LevelLimit { get; } = new();
+    public int LevelLimit
+    {
+        get => _levelLimit;
+        set => SetProperty(ref _levelLimit, value);
+    }
+    #endregion
+
+    #region Time
+    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+    private int _time;
 
     /// <summary>
     /// 时间
     /// </summary>
-    public ObservableValue<int> Time { get; } = new();
+    public int Time
+    {
+        get => _time;
+        set => SetProperty(ref _time, value);
+    }
+    #endregion
+
+    #region FinishBonus
+    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+    private double _finishBonus;
 
     /// <summary>
     /// 完成奖励倍率
     /// </summary>
-    public ObservableValue<double> FinishBonus { get; } = new();
+    public double FinishBonus
+    {
+        get => _finishBonus;
+        set => SetProperty(ref _finishBonus, value);
+    }
+    #endregion
+
+    #region IsOverLoad
+    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+    private bool _isOverLoad;
 
     /// <summary>
     /// 是否超模
     /// </summary>
-    public ObservableValue<bool> IsOverLoad { get; } = new();
+    public bool IsOverLoad
+    {
+        get => _isOverLoad;
+        set => SetProperty(ref _isOverLoad, value);
+    }
+    #endregion
+
+    #region Image
+    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+    private BitmapImage _image;
 
     /// <summary>
     /// 图片
     /// </summary>
-    public ObservableValue<BitmapImage> Image { get; } = new();
+    public BitmapImage Image
+    {
+        get => _image;
+        set => SetProperty(ref _image, value);
+    }
+    #endregion
+
+    #region WorkType
+    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+    private VPet_Simulator.Core.GraphHelper.Work.WorkType _workType;
 
     /// <summary>
-    /// 类型
+    /// 工作类型
     /// </summary>
-    public ObservableValue<VPet_Simulator.Core.GraphHelper.Work.WorkType> WorkType { get; } =
-        new(VPet_Simulator.Core.GraphHelper.Work.WorkType.Work);
+    public VPet_Simulator.Core.GraphHelper.Work.WorkType WorkType
+    {
+        get => _workType;
+        set => SetProperty(ref _workType, value);
+    }
+    #endregion
+
+    #region BorderBrush
+    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+    private SolidColorBrush _borderBrush =
+        new((Color)ColorConverter.ConvertFromString("#FF0290D5"));
 
     /// <summary>
     /// 边框颜色
     /// </summary>
-    public ObservableValue<SolidColorBrush> BorderBrush { get; } =
-        new(new((Color)ColorConverter.ConvertFromString("#FF0290D5")));
+
+    public SolidColorBrush BorderBrush
+    {
+        get => _borderBrush;
+        set => SetProperty(ref _borderBrush, value);
+    }
+    #endregion
 
     /// <summary>
     /// 背景色
     /// </summary>
-    public ObservableValue<SolidColorBrush> Background { get; } =
-        new(new((Color)ColorConverter.ConvertFromString("#FF81D4FA")));
+    #region Background
+    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+    private SolidColorBrush _background = new((Color)ColorConverter.ConvertFromString("#FF81D4FA"));
+
+    public SolidColorBrush Background
+    {
+        get => _background;
+        set => SetProperty(ref _background, value);
+    }
+    #endregion
 
     /// <summary>
     /// 前景色
     /// </summary>
-    public ObservableValue<SolidColorBrush> Foreground { get; } =
-        new(new((Color)ColorConverter.ConvertFromString("#FF0286C6")));
+    #region Foreground
+    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+    private SolidColorBrush _foreground = new((Color)ColorConverter.ConvertFromString("#FF0286C6"));
+
+    public SolidColorBrush Foreground
+    {
+        get => _foreground;
+        set => SetProperty(ref _foreground, value);
+    }
+    #endregion
 
     /// <summary>
     /// 按钮背景色
     /// </summary>
-    public ObservableValue<SolidColorBrush> ButtonBackground { get; } =
-        new(new((Color)ColorConverter.ConvertFromString("#AA0286C6")));
+    #region ButtonBackground
+    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+    private SolidColorBrush _buttonBackground =
+        new((Color)ColorConverter.ConvertFromString("#AA0286C6"));
+
+    public SolidColorBrush ButtonBackground
+    {
+        get => _buttonBackground;
+        set => SetProperty(ref _buttonBackground, value);
+    }
+    #endregion
 
     /// <summary>
     /// 按钮前景色
     /// </summary>
-    public ObservableValue<SolidColorBrush> ButtonForeground { get; } =
-        new(new((Color)ColorConverter.ConvertFromString("#FFFFFFFF")));
+    #region ButtonForeground
+    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+    private SolidColorBrush _buttonForeground;
 
+    public SolidColorBrush ButtonForeground
+    {
+        get => _buttonForeground;
+        set => SetProperty(ref _buttonForeground, value);
+    }
+    #endregion
     /// <summary>
     /// X位置
     /// </summary>
-    public ObservableValue<double> Left { get; } = new(100);
+    #region Left
+    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+    private double _Left;
+
+    public double Left
+    {
+        get => _Left;
+        set => SetProperty(ref _Left, value);
+    }
+    #endregion
 
     /// <summary>
     /// Y位置
     /// </summary>
-    public ObservableValue<double> Top { get; } = new(160);
+    #region Top
+    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+    private double _Top;
+
+    public double Top
+    {
+        get => _Top;
+        set => SetProperty(ref _Top, value);
+    }
+    #endregion
 
     /// <summary>
     /// 宽度
     /// </summary>
-    public ObservableValue<double> Width { get; } = new(300);
+    #region Width
+    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+    private double _Width;
+
+    public double Width
+    {
+        get => _Width;
+        set => SetProperty(ref _Width, value);
+    }
+    #endregion
 
     public WorkModel()
-    {
-        IsOverLoad.AddNotifySender(
-            WorkType,
-            MoneyBase,
-            //MoneyLevel,
-            StrengthFood,
-            StrengthDrink,
-            Feeling,
-            LevelLimit,
-            FinishBonus
-        );
-        IsOverLoad.SenderPropertyChanged += (s, _) =>
-        {
-            s.Value = VPet_Simulator.Windows.Interface.ExtensionFunction.IsOverLoad(ToWork());
-        };
+    { //TODO
+        //IsOverLoad.AddNotifySender(
+        //    WorkType,
+        //    MoneyBase,
+        //    //MoneyLevel,
+        //    StrengthFood,
+        //    StrengthDrink,
+        //    Feeling,
+        //    LevelLimit,
+        //    FinishBonus
+        //);
+        //IsOverLoad.SenderPropertyChanged += (s, _) =>
+        //{
+        //    s.Value = VPet_Simulator.Windows.Interface.ExtensionFunction.IsOverLoad(ToWork());
+        //};
     }
 
     public WorkModel(WorkModel model)
         : this()
     {
-        WorkType.Value = model.WorkType.Value;
-        Id.Value = model.Id.Value;
-        Graph.Value = model.Graph.Value;
-        //MoneyLevel.Value = model.MoneyLevel.Value;
-        MoneyBase.Value = model.MoneyBase.Value;
-        StrengthFood.Value = model.StrengthFood.Value;
-        StrengthDrink.Value = model.StrengthDrink.Value;
-        Feeling.Value = model.Feeling.Value;
-        LevelLimit.Value = model.LevelLimit.Value;
-        Time.Value = model.Time.Value;
-        FinishBonus.Value = model.FinishBonus.Value;
+        WorkType = model.WorkType;
+        Id = model.Id;
+        Graph = model.Graph;
+        //MoneyLevel = model.MoneyLevel;
+        MoneyBase = model.MoneyBase;
+        StrengthFood = model.StrengthFood;
+        StrengthDrink = model.StrengthDrink;
+        Feeling = model.Feeling;
+        LevelLimit = model.LevelLimit;
+        Time = model.Time;
+        FinishBonus = model.FinishBonus;
 
-        BorderBrush.Value = model.BorderBrush.Value;
-        Background.Value = model.Background.Value;
-        ButtonBackground.Value = model.ButtonBackground.Value;
-        ButtonForeground.Value = model.ButtonForeground.Value;
-        Foreground.Value = model.Foreground.Value;
-
-        Left.Value = model.Left.Value;
-        Top.Value = model.Top.Value;
-        Width.Value = model.Width.Value;
+        BorderBrush = model.BorderBrush;
+        Background = model.Background;
+        ButtonBackground = model.ButtonBackground;
+        ButtonForeground = model.ButtonForeground;
+        Foreground = model.Foreground;
+        Left = model.Left;
+        Top = model.Top;
+        Width = model.Width;
 
         foreach (var item in model.I18nDatas)
             I18nDatas[item.Key] = item.Value.Copy();
-        CurrentI18nData.Value = I18nDatas[I18nHelper.Current.CultureName.Value];
+        CurrentI18nData = I18nDatas[I18nHelper.Current.CultureName];
     }
 
     public WorkModel(VPet_Simulator.Core.GraphHelper.Work work)
         : this()
     {
-        WorkType.Value = work.Type;
-        Id.Value = work.Name;
-        Graph.Value = work.Graph;
-        //MoneyLevel.Value = work.MoneyLevel;
-        MoneyBase.Value = work.MoneyBase;
-        StrengthFood.Value = work.StrengthFood;
-        StrengthDrink.Value = work.StrengthDrink;
-        Feeling.Value = work.Feeling;
-        LevelLimit.Value = work.LevelLimit;
-        Time.Value = work.Time;
-        FinishBonus.Value = work.FinishBonus;
+        WorkType = work.Type;
+        Id = work.Name;
+        Graph = work.Graph;
+        //MoneyLevel = work.MoneyLevel;
+        MoneyBase = work.MoneyBase;
+        StrengthFood = work.StrengthFood;
+        StrengthDrink = work.StrengthDrink;
+        Feeling = work.Feeling;
+        LevelLimit = work.LevelLimit;
+        Time = work.Time;
+        FinishBonus = work.FinishBonus;
 
-        BorderBrush.Value = new((Color)ColorConverter.ConvertFromString("#FF" + work.BorderBrush));
-        Background.Value = new((Color)ColorConverter.ConvertFromString("#FF" + work.Background));
-        Foreground.Value = new((Color)ColorConverter.ConvertFromString("#FF" + work.Foreground));
-        ButtonBackground.Value = new(
+        BorderBrush = new((Color)ColorConverter.ConvertFromString("#FF" + work.BorderBrush));
+        Background = new((Color)ColorConverter.ConvertFromString("#FF" + work.Background));
+        Foreground = new((Color)ColorConverter.ConvertFromString("#FF" + work.Foreground));
+        ButtonBackground = new(
             (Color)ColorConverter.ConvertFromString("#AA" + work.ButtonBackground)
         );
-        ButtonForeground.Value = new(
+        ButtonForeground = new(
             (Color)ColorConverter.ConvertFromString("#FF" + work.ButtonForeground)
         );
-
-        Left.Value = work.Left;
-        Top.Value = work.Top;
-        Width.Value = work.Width;
+        Left = work.Left;
+        Top = work.Top;
+        Width = work.Width;
     }
 
     public VPet_Simulator.Core.GraphHelper.Work ToWork()
     {
         return new()
         {
-            Type = WorkType.Value,
-            Name = Id.Value,
-            Graph = Graph.Value,
-            //MoneyLevel = MoneyLevel.Value,
-            MoneyBase = MoneyBase.Value,
-            StrengthFood = StrengthFood.Value,
-            StrengthDrink = StrengthDrink.Value,
-            Feeling = Feeling.Value,
-            LevelLimit = LevelLimit.Value,
-            Time = Time.Value,
-            FinishBonus = FinishBonus.Value,
+            Type = WorkType,
+            Name = Id,
+            Graph = Graph,
+            //MoneyLevel = MoneyLevel,
+            MoneyBase = MoneyBase,
+            StrengthFood = StrengthFood,
+            StrengthDrink = StrengthDrink,
+            Feeling = Feeling,
+            LevelLimit = LevelLimit,
+            Time = Time,
+            FinishBonus = FinishBonus,
             //
-            BorderBrush = BorderBrush.Value.ToString()[3..],
-            Background = Background.Value.ToString()[3..],
-            ButtonBackground = ButtonBackground.Value.ToString()[3..],
-            ButtonForeground = ButtonForeground.Value.ToString()[3..],
-            Foreground = Foreground.Value.ToString()[3..],
+            BorderBrush = BorderBrush.ToString()[3..],
+            Background = Background.ToString()[3..],
+            ButtonBackground = ButtonBackground.ToString()[3..],
+            ButtonForeground = ButtonForeground.ToString()[3..],
+            Foreground = Foreground.ToString()[3..],
             //
-            Left = Left.Value,
-            Top = Top.Value,
-            Width = Width.Value,
+            Left = Left,
+            Top = Top,
+            Width = Width,
         };
     }
 
     public void Close()
     {
-        Image.Value.CloseStream();
+        Image.CloseStream();
     }
 }
 
-public class I18nWorkModel
+public class I18nWorkModel : ObservableObjectX<I18nWorkModel>
 {
-    public ObservableValue<string> Name { get; } = new();
+    #region Name
+    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+    private string _name;
+
+    public string Name
+    {
+        get => _name;
+        set => SetProperty(ref _name, value);
+    }
+    #endregion
 
     public I18nWorkModel Copy()
     {
         var result = new I18nWorkModel();
-        result.Name.Value = Name.Value;
+        result.Name = Name;
         return result;
     }
 }

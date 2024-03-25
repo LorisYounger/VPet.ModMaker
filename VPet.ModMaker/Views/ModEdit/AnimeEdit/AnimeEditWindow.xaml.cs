@@ -65,8 +65,8 @@ public partial class AnimeEditWindow : Window
         if (Enum.TryParse<ModeType>(str, true, out var mode))
         {
             ViewModel.CurrentMode = mode;
-            ViewModel.CurrentImageModel.Value = null;
-            ViewModel.CurrentAnimeModel.Value = null;
+            ViewModel.CurrentImageModel = null;
+            ViewModel.CurrentAnimeModel = null;
         }
     }
 
@@ -141,7 +141,7 @@ public partial class AnimeEditWindow : Window
         if (sender is not ListBox listBox)
             return;
         if (listBox.DataContext is AnimeModel model)
-            ViewModel.CurrentAnimeModel.Value = model;
+            ViewModel.CurrentAnimeModel = model;
         listBox.ScrollIntoView(listBox.SelectedItem);
         e.Handled = true;
     }

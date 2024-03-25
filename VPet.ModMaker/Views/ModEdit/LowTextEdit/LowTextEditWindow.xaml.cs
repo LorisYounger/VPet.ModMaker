@@ -1,5 +1,4 @@
-﻿using LinePutScript.Localization.WPF;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -13,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using LinePutScript.Localization.WPF;
 using VPet.ModMaker.Models;
 using VPet.ModMaker.ViewModels.ModEdit.LowTextEdit;
 
@@ -47,22 +47,20 @@ public partial class LowTextEditWindow : Window
 
     private void Button_Yes_Click(object sender, RoutedEventArgs e)
     {
-        if (string.IsNullOrEmpty(ViewModel.LowText.Value.Id.Value))
+        if (string.IsNullOrEmpty(ViewModel.LowText.Id))
         {
             MessageBox.Show("Id不可为空".Translate(), "", MessageBoxButton.OK, MessageBoxImage.Warning);
             return;
         }
         if (
-            ViewModel.OldLowText?.Id.Value != ViewModel.LowText.Value.Id.Value
-            && ModInfoModel.Current.LowTexts.Any(
-                i => i.Id.Value == ViewModel.LowText.Value.Id.Value
-            )
+            ViewModel.OldLowText?.Id != ViewModel.LowText.Id
+            && ModInfoModel.Current.LowTexts.Any(i => i.Id == ViewModel.LowText.Id)
         )
         {
             MessageBox.Show("此Id已存在".Translate(), "", MessageBoxButton.OK, MessageBoxImage.Warning);
             return;
         }
-        if (string.IsNullOrEmpty(ViewModel.LowText.Value.CurrentI18nData.Value.Text.Value))
+        if (string.IsNullOrEmpty(ViewModel.LowText.CurrentI18nData.Text))
         {
             MessageBox.Show("文本不可为空".Translate(), "", MessageBoxButton.OK, MessageBoxImage.Warning);
             return;

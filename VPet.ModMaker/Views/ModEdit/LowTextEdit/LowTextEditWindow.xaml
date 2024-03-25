@@ -38,14 +38,14 @@
           Grid.Column="1"
           pu:TextBoxHelper.Watermark="Id"
           Style="{StaticResource TextBox_Wrap}"
-          Text="{Binding LowText.Value.Id.Value, UpdateSourceTrigger=PropertyChanged}" />
+          Text="{Binding LowText.Id, UpdateSourceTrigger=PropertyChanged}" />
       </Grid>
       <TextBox
         Grid.Row="1"
         d:Text="这是一个测试文本,这是一个测试文本,这是一个测试文本,这是一个测试文本,这是一个测试文本,这是一个测试文本,这是一个测试文本,"
         pu:TextBoxHelper.Watermark="{ll:Str 文本}"
         Style="{StaticResource TextBox_Wrap}"
-        Text="{Binding LowText.Value.CurrentI18nData.Value.Text.Value, UpdateSourceTrigger=PropertyChanged}" />
+        Text="{Binding LowText.CurrentI18nData.Text, UpdateSourceTrigger=PropertyChanged}" />
     </Grid>
     <Grid Grid.Column="1">
       <Grid.RowDefinitions>
@@ -65,22 +65,22 @@
         <Label Content="{ll:Str 状态}" />
         <ComboBox
           Grid.Column="1"
-          ItemsSource="{Binding LowText.Value.ModeTypes}"
-          SelectedItem="{Binding LowText.Value.Mode.Value}"
+          ItemsSource="{Binding LowText.ModeTypes}"
+          SelectedItem="{Binding LowText.Mode}"
           Style="{DynamicResource StandardComboBoxStyle}" />
         <Label Grid.Row="1" Content="{ll:Str 饥渴状态}" />
         <ComboBox
           Grid.Row="1"
           Grid.Column="1"
-          ItemsSource="{Binding LowText.Value.StrengthTypes}"
-          SelectedItem="{Binding LowText.Value.Strength.Value}"
+          ItemsSource="{Binding LowText.StrengthTypes}"
+          SelectedItem="{Binding LowText.Strength}"
           Style="{DynamicResource StandardComboBoxStyle}" />
         <Label Grid.Row="2" Content="{ll:Str 好感度需求}" />
         <ComboBox
           Grid.Row="2"
           Grid.Column="1"
-          ItemsSource="{Binding LowText.Value.LikeTypes}"
-          SelectedItem="{Binding LowText.Value.Like.Value}"
+          ItemsSource="{Binding LowText.LikeTypes}"
+          SelectedItem="{Binding LowText.Like}"
           Style="{DynamicResource StandardComboBoxStyle}" />
       </Grid>
       <Grid Grid.Row="1">

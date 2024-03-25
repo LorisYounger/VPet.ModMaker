@@ -68,10 +68,10 @@ public partial class FoodAnimeEditWindow : Window
         if (Enum.TryParse<ModeType>(str, true, out var mode))
         {
             ViewModel.CurrentMode = mode;
-            ViewModel.CurrentFrontImageModel.Value = null;
-            ViewModel.CurrentBackImageModel.Value = null;
-            ViewModel.CurrentFoodLocationModel.Value = null;
-            ViewModel.CurrentAnimeModel.Value = null;
+            ViewModel.CurrentFrontImageModel = null;
+            ViewModel.CurrentBackImageModel = null;
+            ViewModel.CurrentFoodLocationModel = null;
+            ViewModel.CurrentAnimeModel = null;
         }
     }
 
@@ -161,7 +161,7 @@ public partial class FoodAnimeEditWindow : Window
         if (sender is not ListBox listBox)
             return;
         if (listBox.DataContext is FoodAnimeModel model)
-            ViewModel.CurrentAnimeModel.Value = model;
+            ViewModel.CurrentAnimeModel = model;
         listBox.ScrollIntoView(listBox.SelectedItem);
         e.Handled = true;
     }

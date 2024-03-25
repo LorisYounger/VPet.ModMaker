@@ -1,9 +1,10 @@
-﻿using HKW.HKWUtils.Observable;
-using System;
+﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using HKW.HKWUtils.Observable;
 
 namespace VPet.ModMaker.Models;
 
@@ -11,13 +12,22 @@ namespace VPet.ModMaker.Models;
 /// I18n模型
 /// </summary>
 /// <typeparam name="T">类型</typeparam>
-public class I18nModel<T>
+public class I18nModel<T> : ObservableObjectX<I18nModel<T>>
     where T : class, new()
 {
     /// <summary>
     /// 当前I18n数据
     /// </summary>
-    public ObservableValue<T> CurrentI18nData { get; } = new();
+    #region CurrentI18nData
+    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+    private T _currentI18nData;
+
+    public T CurrentI18nData
+    {
+        get => _currentI18nData;
+        set => SetProperty(ref _currentI18nData, value);
+    }
+    #endregion
 
     /// <summary>
     /// 所有I18n数据
@@ -26,7 +36,8 @@ public class I18nModel<T>
 
     public I18nModel()
     {
-        I18nHelper.Current.CultureName.ValueChanged += CultureChanged;
+        //TODO
+        //I18nHelper.Current.CultureName.ValueChanged += CultureChanged;
         I18nHelper.Current.AddCulture += AddCulture;
         I18nHelper.Current.RemoveCulture += RemoveCulture;
         I18nHelper.Current.ReplaceCulture += ReplaceCulture;
@@ -36,7 +47,7 @@ public class I18nModel<T>
         {
             I18nDatas.Add(item, new());
         }
-        CurrentI18nData.Value = I18nDatas[I18nHelper.Current.CultureName.Value];
+        CurrentI18nData = I18nDatas[I18nHelper.Current.CultureName];
     }
 
     /// <summary>
@@ -47,9 +58,9 @@ public class I18nModel<T>
     private void CultureChanged(ObservableValue<string> sender, ValueChangedEventArgs<string> e)
     {
         if (e.NewValue is null)
-            CurrentI18nData.Value = null;
+            CurrentI18nData = null;
         else if (I18nDatas.TryGetValue(e.NewValue, out var result))
-            CurrentI18nData.Value = result;
+            CurrentI18nData = result;
     }
 
     /// <summary>

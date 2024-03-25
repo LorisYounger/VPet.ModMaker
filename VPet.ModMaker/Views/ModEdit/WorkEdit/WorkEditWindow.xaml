@@ -32,7 +32,7 @@
         <Image
           Width="250"
           Height="250"
-          Source="{Binding Image.Value}"
+          Source="{Binding Image}"
           Stretch="Uniform">
           <Image.ContextMenu>
             <ContextMenu>
@@ -47,24 +47,24 @@
           HorizontalContentAlignment="Stretch"
           VerticalContentAlignment="Stretch"
           pu:LabelHelper.CornerRadius="5"
-          Background="{Binding Work.Value.Background.Value}"
-          BorderBrush="{Binding Work.Value.BorderBrush.Value}"
+          Background="{Binding Work.Background}"
+          BorderBrush="{Binding Work.BorderBrush}"
           BorderThickness="3">
           <Label.Style>
             <Style BasedOn="{StaticResource {x:Type Label}}" TargetType="Label">
               <Setter Property="Width">
                 <Setter.Value>
                   <MultiBinding Converter="{StaticResource CalculatorConverter}" ConverterParameter="*">
-                    <Binding Path="Work.Value.Width.Value" />
-                    <Binding Path="LengthRatio.Value" />
+                    <Binding Path="Work.Width" />
+                    <Binding Path="LengthRatio" />
                   </MultiBinding>
                 </Setter.Value>
               </Setter>
               <Setter Property="Height">
                 <Setter.Value>
                   <MultiBinding Converter="{StaticResource CalculatorConverter}" ConverterParameter="*/*">
-                    <Binding Path="Work.Value.Width.Value" />
-                    <Binding Path="LengthRatio.Value" />
+                    <Binding Path="Work.Width" />
+                    <Binding Path="LengthRatio" />
                     <Binding Source="300" />
                     <Binding Source="180" />
                   </MultiBinding>
@@ -73,9 +73,9 @@
               <Setter Property="Margin">
                 <Setter.Value>
                   <MultiBinding Converter="{StaticResource RatioMarginConverter}">
-                    <Binding Path="LengthRatio.Value" />
-                    <Binding Path="Work.Value.Left.Value" />
-                    <Binding Path="Work.Value.Top.Value" />
+                    <Binding Path="LengthRatio" />
+                    <Binding Path="Work.Left" />
+                    <Binding Path="Work.Top" />
                   </MultiBinding>
                 </Setter.Value>
               </Setter>
@@ -86,14 +86,14 @@
               <Label
                 HorizontalContentAlignment="Center"
                 VerticalContentAlignment="Center"
-                Background="{Binding Work.Value.Background.Value}"
+                Background="{Binding Work.Background}"
                 Content="{ll:Str 工作中}"
-                Foreground="{Binding Work.Value.Foreground.Value}" />
+                Foreground="{Binding Work.Foreground}" />
               <Button
                 VerticalAlignment="Bottom"
-                Background="{Binding Work.Value.ButtonBackground.Value}"
+                Background="{Binding Work.ButtonBackground}"
                 Content="{ll:Str 停止工作}"
-                Foreground="{Binding Work.Value.ButtonForeground.Value}" />
+                Foreground="{Binding Work.ButtonForeground}" />
             </Grid>
           </Label.Content>
         </Label>
@@ -106,7 +106,7 @@
             <Style BasedOn="{StaticResource ThemedButtonStyle}" TargetType="Button">
               <Setter Property="Visibility" Value="Hidden" />
               <Style.Triggers>
-                <DataTrigger Binding="{Binding Image.Value}" Value="{x:Null}">
+                <DataTrigger Binding="{Binding Image}" Value="{x:Null}">
                   <Setter Property="Visibility" Value="Visible" />
                 </DataTrigger>
               </Style.Triggers>
@@ -127,23 +127,23 @@
           <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
         <Label Content="Id" />
-        <TextBox Grid.Column="1" Text="{Binding Work.Value.Id.Value}" />
+        <TextBox Grid.Column="1" Text="{Binding Work.Id}" />
         <Label Grid.Row="1" Content="{ll:Str 名称}" />
         <TextBox
           Grid.Row="1"
           Grid.Column="1"
-          Text="{Binding Work.Value.CurrentI18nData.Value.Name.Value}" />
+          Text="{Binding Work.CurrentI18nData.Name}" />
         <Label Grid.Row="2" Content="{ll:Str 类型}" />
         <ComboBox
           Grid.Row="2"
           Grid.Column="1"
-          ItemsSource="{Binding Work.Value.WorkTypes}"
-          SelectedItem="{Binding Work.Value.WorkType.Value}" />
+          ItemsSource="{Binding Work.WorkTypes}"
+          SelectedItem="{Binding Work.WorkType}" />
         <Label Grid.Row="3" Content="{ll:Str 指定动画}" />
         <TextBox
           Grid.Row="3"
           Grid.Column="1"
-          Text="{Binding Work.Value.Graph.Value}" />
+          Text="{Binding Work.Graph}" />
         <Label Grid.Row="4" Content="{ll:Str 是否超模}" />
         <Grid Grid.Row="4" Grid.Column="1">
           <Grid.ColumnDefinitions>
@@ -153,14 +153,14 @@
           <TextBlock
             d:Text="True"
             Style="{DynamicResource TextBlock_LeftCenter}"
-            Text="{Binding Work.Value.IsOverLoad.Value}" />
+            Text="{Binding Work.IsOverLoad}" />
           <Button Grid.Column="1" Content="{ll:Str 修复超模}" />
         </Grid>
         <!--<Label Grid.Row="3" Content="{ll:Str 宠物描述}" />
         <TextBox
           Grid.Row="3"
           Grid.Column="1"
-          Text="{Binding Pet.Value.CurrentI18nData.Value.Description.Value}" />-->
+          Text="{Binding Pet.CurrentI18nData.Description}" />-->
       </Grid>
     </Grid>
     <Grid Grid.Column="1">
@@ -191,42 +191,42 @@
               <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
             <Label Content="{ll:Str 基础倍率}" />
-            <pu:NumberInput Grid.Column="1" Value="{Binding Work.Value.MoneyBase.Value}" />
+            <pu:NumberInput Grid.Column="1" Value="{Binding Work.MoneyBase}" />
             <!--<Label Grid.Row="1" Content="{ll:Str 等级倍率}" />
             <pu:NumberInput
               Grid.Row="1"
               Grid.Column="1"
-              Value="{Binding Work.Value.MoneyLevel.Value}" />-->
+              Value="{Binding Work.MoneyLevel}" />-->
             <Label Grid.Row="2" Content="{ll:Str 饱食度消耗倍率}" />
             <pu:NumberInput
               Grid.Row="2"
               Grid.Column="1"
-              Value="{Binding Work.Value.StrengthFood.Value}" />
+              Value="{Binding Work.StrengthFood}" />
             <Label Grid.Row="3" Content="{ll:Str 口渴度消耗倍率}" />
             <pu:NumberInput
               Grid.Row="3"
               Grid.Column="1"
-              Value="{Binding Work.Value.StrengthDrink.Value}" />
+              Value="{Binding Work.StrengthDrink}" />
             <Label Grid.Row="4" Content="{ll:Str 心情消耗倍率}" />
             <pu:NumberInput
               Grid.Row="4"
               Grid.Column="1"
-              Value="{Binding Work.Value.Feeling.Value}" />
+              Value="{Binding Work.Feeling}" />
             <Label Grid.Row="5" Content="{ll:Str 完成奖励倍率}" />
             <pu:NumberInput
               Grid.Row="5"
               Grid.Column="1"
-              Value="{Binding Work.Value.FinishBonus.Value}" />
+              Value="{Binding Work.FinishBonus}" />
             <Label Grid.Row="6" Content="{ll:Str 等级限制}" />
             <pu:NumberInput
               Grid.Row="6"
               Grid.Column="1"
-              Value="{Binding Work.Value.LevelLimit.Value}" />
+              Value="{Binding Work.LevelLimit}" />
             <Label Grid.Row="7" Content="{ll:Str 花费时间(分钟)}" />
             <pu:NumberInput
               Grid.Row="7"
               Grid.Column="1"
-              Value="{Binding Work.Value.Time.Value}" />
+              Value="{Binding Work.Time}" />
           </Grid>
           <Expander Grid.Row="1" Header="{ll:Str 界面样式}">
             <Grid>
@@ -248,46 +248,46 @@
               <pu:ColorPicker
                 Grid.Column="1"
                 ColorChannels="RGB"
-                SelectedColor="{Binding Work.Value.BorderBrush.Value, Converter={StaticResource BrushToMediaColorConverter}}" />
+                SelectedColor="{Binding Work.BorderBrush, Converter={StaticResource BrushToMediaColorConverter}}" />
               <Label Grid.Row="1" Content="{ll:Str 背景颜色}" />
               <pu:ColorPicker
                 Grid.Row="1"
                 Grid.Column="1"
                 ColorChannels="RGB"
-                SelectedColor="{Binding Work.Value.Background.Value, Converter={StaticResource BrushToMediaColorConverter}}" />
+                SelectedColor="{Binding Work.Background, Converter={StaticResource BrushToMediaColorConverter}}" />
               <Label Grid.Row="2" Content="{ll:Str 字体颜色}" />
               <pu:ColorPicker
                 Grid.Row="2"
                 Grid.Column="1"
                 ColorChannels="RGB"
-                SelectedColor="{Binding Work.Value.Foreground.Value, Converter={StaticResource BrushToMediaColorConverter}}" />
+                SelectedColor="{Binding Work.Foreground, Converter={StaticResource BrushToMediaColorConverter}}" />
               <Label Grid.Row="3" Content="{ll:Str 按钮背景颜色}" />
               <pu:ColorPicker
                 Grid.Row="3"
                 Grid.Column="1"
                 ColorChannels="RGB"
-                SelectedColor="{Binding Work.Value.ButtonBackground.Value, Converter={StaticResource BrushToMediaColorConverter}}" />
+                SelectedColor="{Binding Work.ButtonBackground, Converter={StaticResource BrushToMediaColorConverter}}" />
               <Label Grid.Row="4" Content="{ll:Str 按钮字体颜色}" />
               <pu:ColorPicker
                 Grid.Row="4"
                 Grid.Column="1"
                 ColorChannels="RGB"
-                SelectedColor="{Binding Work.Value.ButtonForeground.Value, Converter={StaticResource BrushToMediaColorConverter}}" />
+                SelectedColor="{Binding Work.ButtonForeground, Converter={StaticResource BrushToMediaColorConverter}}" />
               <Label Grid.Row="5" Content="X" />
               <pu:NumberInput
                 Grid.Row="5"
                 Grid.Column="1"
-                Value="{Binding Work.Value.Left.Value}" />
+                Value="{Binding Work.Left}" />
               <Label Grid.Row="6" Content="Y" />
               <pu:NumberInput
                 Grid.Row="6"
                 Grid.Column="1"
-                Value="{Binding Work.Value.Top.Value}" />
+                Value="{Binding Work.Top}" />
               <Label Grid.Row="7" Content="{ll:Str 宽}" />
               <pu:NumberInput
                 Grid.Row="7"
                 Grid.Column="1"
-                Value="{Binding Work.Value.Width.Value}" />
+                Value="{Binding Work.Width}" />
             </Grid>
           </Expander>
         </Grid>

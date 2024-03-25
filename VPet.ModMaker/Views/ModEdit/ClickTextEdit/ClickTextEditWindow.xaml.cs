@@ -1,5 +1,4 @@
-﻿using LinePutScript.Localization.WPF;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -12,6 +11,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using LinePutScript.Localization.WPF;
 using VPet.ModMaker.Models;
 using VPet.ModMaker.ViewModels.ModEdit.ClickTextEdit;
 
@@ -46,22 +46,20 @@ public partial class ClickTextEditWindow : Window
 
     private void Button_Yes_Click(object sender, RoutedEventArgs e)
     {
-        if (string.IsNullOrEmpty(ViewModel.ClickText.Value.Id.Value))
+        if (string.IsNullOrEmpty(ViewModel.ClickText.Id))
         {
             MessageBox.Show("Id不可为空".Translate(), "", MessageBoxButton.OK, MessageBoxImage.Warning);
             return;
         }
         if (
-            ViewModel.OldClickText?.Id.Value != ViewModel.ClickText.Value.Id.Value
-            && ModInfoModel.Current.ClickTexts.Any(
-                i => i.Id.Value == ViewModel.ClickText.Value.Id.Value
-            )
+            ViewModel.OldClickText?.Id != ViewModel.ClickText.Id
+            && ModInfoModel.Current.ClickTexts.Any(i => i.Id == ViewModel.ClickText.Id)
         )
         {
             MessageBox.Show("此Id已存在".Translate(), "", MessageBoxButton.OK, MessageBoxImage.Warning);
             return;
         }
-        if (string.IsNullOrEmpty(ViewModel.ClickText.Value.CurrentI18nData.Value.Text.Value))
+        if (string.IsNullOrEmpty(ViewModel.ClickText.CurrentI18nData.Text))
         {
             MessageBox.Show("文本不可为空".Translate(), "", MessageBoxButton.OK, MessageBoxImage.Warning);
             return;

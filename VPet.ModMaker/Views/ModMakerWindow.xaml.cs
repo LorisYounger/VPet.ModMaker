@@ -1,7 +1,4 @@
-﻿using LinePutScript;
-using LinePutScript.Localization.WPF;
-using Panuon.WPF.UI;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
@@ -17,6 +14,9 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using LinePutScript;
+using LinePutScript.Localization.WPF;
+using Panuon.WPF.UI;
 using VPet.ModMaker.Models;
 using VPet.ModMaker.ViewModels;
 using VPet.ModMaker.Views.ModEdit;
@@ -65,7 +65,7 @@ public partial class ModMakerWindow : WindowX
             )
             {
                 ViewModel.Histories.Remove(history);
-                ViewModel.ShowHistories.Value.Remove(history);
+                ViewModel.ShowHistories.Remove(history);
             }
         }
         ViewModel.LoadMod(history.SourcePath);

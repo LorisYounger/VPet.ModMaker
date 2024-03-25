@@ -1,13 +1,13 @@
-﻿using HKW.HKWUtils;
-using HKW.HKWUtils.Observable;
-
-using LinePutScript.Converter;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using HKW.HKWUtils;
+using HKW.HKWUtils.Observable;
+using LinePutScript.Converter;
 using VPet_Simulator.Windows.Interface;
 
 namespace VPet.ModMaker.Models;
@@ -38,20 +38,38 @@ public class ClickTextModel : I18nModel<I18nClickTextModel>
                 .Cast<VPet_Simulator.Core.Main.WorkingState>()
         );
 
+    #region Id
+    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+    private string _id = string.Empty;
+
     /// <summary>
     /// Id
     /// </summary>
-    public ObservableValue<string> Id { get; } = new();
+    public string Id
+    {
+        get => _id;
+        set => SetProperty(ref _id, value);
+    }
+    #endregion
+
+    #region Working
+    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+    private string _working = string.Empty;
 
     /// <summary>
     /// 指定工作
     /// </summary>
-    public ObservableValue<string> Working { get; } = new();
+    public string Working
+    {
+        get => _working;
+        set => SetProperty(ref _working, value);
+    }
+    #endregion
 
     /// <summary>
     /// 宠物状态
     /// </summary>
-    public ObservableEnumFlags<ClickText.ModeType> Mode { get; } =
+    public ObservableEnumCommand<ClickText.ModeType> Mode { get; } =
         new(
             ClickText.ModeType.Happy
                 | ClickText.ModeType.Nomal
@@ -59,15 +77,24 @@ public class ClickTextModel : I18nModel<I18nClickTextModel>
                 | ClickText.ModeType.Ill
         );
 
+    #region WorkingState
+    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+    private VPet_Simulator.Core.Main.WorkingState _WorkingState;
+
     /// <summary>
     /// 行动状态
     /// </summary>
-    public ObservableValue<VPet_Simulator.Core.Main.WorkingState> WorkingState { get; } = new();
+    public VPet_Simulator.Core.Main.WorkingState WorkingState
+    {
+        get => _WorkingState;
+        set => SetProperty(ref _WorkingState, value);
+    }
+    #endregion
 
     /// <summary>
     /// 日期区间
     /// </summary>
-    public ObservableEnumFlags<ClickText.DayTime> DayTime { get; } =
+    public ObservableEnumCommand<ClickText.DayTime> DayTime { get; } =
         new(
             ClickText.DayTime.Morning
                 | ClickText.DayTime.Afternoon
@@ -120,32 +147,32 @@ public class ClickTextModel : I18nModel<I18nClickTextModel>
     public ClickTextModel(ClickTextModel clickText)
         : this()
     {
-        Id.Value = clickText.Id.Value;
-        Mode.EnumValue.Value = clickText.Mode.EnumValue.Value;
-        Working.Value = clickText.Working.Value;
-        WorkingState.Value = clickText.WorkingState.Value;
-        DayTime.EnumValue.Value = clickText.DayTime.EnumValue.Value;
-        Like = clickText.Like.Copy();
-        Health = clickText.Health.Copy();
-        Level = clickText.Level.Copy();
-        Money = clickText.Money.Copy();
-        Food = clickText.Food.Copy();
-        Drink = clickText.Drink.Copy();
-        Feel = clickText.Feel.Copy();
-        Strength = clickText.Strength.Copy();
+        Id = clickText.Id;
+        Mode.Value = clickText.Mode.Value;
+        Working = clickText.Working;
+        WorkingState = clickText.WorkingState;
+        DayTime.Value = clickText.DayTime.Value;
+        Like = clickText.Like.Clone();
+        Health = clickText.Health.Clone();
+        Level = clickText.Level.Clone();
+        Money = clickText.Money.Clone();
+        Food = clickText.Food.Clone();
+        Drink = clickText.Drink.Clone();
+        Feel = clickText.Feel.Clone();
+        Strength = clickText.Strength.Clone();
         foreach (var item in clickText.I18nDatas)
             I18nDatas[item.Key] = item.Value.Copy();
-        CurrentI18nData.Value = I18nDatas[I18nHelper.Current.CultureName.Value];
+        CurrentI18nData = I18nDatas[I18nHelper.Current.CultureName];
     }
 
     public ClickTextModel(ClickText clickText)
         : this()
     {
-        Id.Value = clickText.Text;
-        Mode.EnumValue.Value = clickText.Mode;
-        Working.Value = clickText.Working;
-        WorkingState.Value = clickText.State;
-        DayTime.EnumValue.Value = clickText.DaiTime;
+        Id = clickText.Text;
+        Mode.Value = clickText.Mode;
+        Working = clickText.Working;
+        WorkingState = clickText.State;
+        DayTime.Value = clickText.DaiTime;
         Like = new(clickText.LikeMin, clickText.LikeMax);
         Health = new(clickText.HealthMin, clickText.HealthMax);
         Level = new(clickText.LevelMin, clickText.LevelMax);
@@ -160,11 +187,11 @@ public class ClickTextModel : I18nModel<I18nClickTextModel>
     {
         return new()
         {
-            Text = Id.Value,
-            Mode = Mode.EnumValue.Value,
-            Working = Working.Value,
-            State = WorkingState.Value,
-            DaiTime = DayTime.EnumValue.Value,
+            Text = Id,
+            Mode = Mode.Value,
+            Working = Working,
+            State = WorkingState,
+            DaiTime = DayTime.Value,
             LikeMax = Like.Max,
             LikeMin = Like.Min,
             HealthMin = Health.Min,
@@ -185,14 +212,23 @@ public class ClickTextModel : I18nModel<I18nClickTextModel>
     }
 }
 
-public class I18nClickTextModel
+public class I18nClickTextModel : ObservableObjectX<I18nClickTextModel>
 {
-    public ObservableValue<string> Text { get; } = new();
+    #region Text
+    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+    private string _text = string.Empty;
+
+    public string Text
+    {
+        get => _text;
+        set => SetProperty(ref _text, value);
+    }
+    #endregion
 
     public I18nClickTextModel Copy()
     {
         var result = new I18nClickTextModel();
-        result.Text.Value = Text.Value;
+        result.Text = Text;
         return result;
     }
 }

@@ -1,23 +1,32 @@
-﻿using HKW.HKWUtils.Observable;
-
-using LinePutScript.Localization.WPF;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using HKW.HKWUtils.Observable;
+using LinePutScript.Localization.WPF;
 using VPet.ModMaker.Models;
 
 namespace VPet.ModMaker.ViewModels.ModEdit;
 
-public class AddCultureWindowVM
+public class AddCultureWindowVM : ObservableObjectX<AddCultureWindowVM>
 {
     /// <summary>
     /// 显示的文化
     /// </summary>
-    public ObservableValue<ObservableCollection<string>> ShowCultures { get; } = new();
+    #region ShowCultures
+    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+    private ObservableCollection<string> _showCultures;
+
+    public ObservableCollection<string> ShowCultures
+    {
+        get => _showCultures;
+        set => SetProperty(ref _showCultures, value);
+    }
+    #endregion
 
     /// <summary>
     /// 全部文化
@@ -28,25 +37,53 @@ public class AddCultureWindowVM
     /// <summary>
     /// 当前文化
     /// </summary>
-    public ObservableValue<string> Culture { get; } = new();
+    #region Culture
+    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+    private string _culture;
+
+    public string Culture
+    {
+        get => _culture;
+        set => SetProperty(ref _culture, value);
+    }
+    #endregion
 
     /// <summary>
     /// 当前文化全名
     /// </summary>
-    public ObservableValue<string> CultureFullName { get; } = new(UnknownCulture);
+    #region CultureFullName
+    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+    private string _cultureFullName;
+
+    public string CultureFullName
+    {
+        get => _cultureFullName;
+        set => SetProperty(ref _cultureFullName, value);
+    }
+    #endregion
 
     /// <summary>
     /// 搜索文化
     /// </summary>
-    public ObservableValue<string> Search { get; } = new();
+    #region Search
+    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+    private string _Search;
+
+    public string Search
+    {
+        get => _Search;
+        set => SetProperty(ref _Search, value);
+    }
+    #endregion
 
     public static string UnknownCulture = "未知文化".Translate();
 
     public AddCultureWindowVM()
     {
-        ShowCultures.Value = AllCultures;
-        Search.ValueChanged += Search_ValueChanged;
-        Culture.ValueChanged += Culture_ValueChanged;
+        //TODO
+        //ShowCultures = AllCultures;
+        //Search.ValueChanged += Search_ValueChanged;
+        //Culture.ValueChanged += Culture_ValueChanged;
     }
 
     private void Culture_ValueChanged(
@@ -56,7 +93,7 @@ public class AddCultureWindowVM
     {
         if (string.IsNullOrWhiteSpace(e.NewValue))
         {
-            CultureFullName.Value = UnknownCulture;
+            CultureFullName = UnknownCulture;
             return;
         }
         CultureInfo info = null!;
@@ -66,11 +103,11 @@ public class AddCultureWindowVM
         }
         catch
         {
-            CultureFullName.Value = UnknownCulture;
+            CultureFullName = UnknownCulture;
         }
         if (info is not null)
         {
-            CultureFullName.Value = info.GetFullInfo();
+            CultureFullName = info.GetFullInfo();
         }
     }
 
@@ -81,11 +118,11 @@ public class AddCultureWindowVM
     {
         if (string.IsNullOrWhiteSpace(e.NewValue))
         {
-            ShowCultures.Value = AllCultures;
+            ShowCultures = AllCultures;
         }
         else
         {
-            ShowCultures.Value = new(
+            ShowCultures = new(
                 AllCultures.Where(s => s.Contains(e.NewValue, StringComparison.OrdinalIgnoreCase))
             );
         }

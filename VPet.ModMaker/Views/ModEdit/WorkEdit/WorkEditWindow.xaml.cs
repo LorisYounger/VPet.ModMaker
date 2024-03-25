@@ -1,5 +1,4 @@
-﻿using LinePutScript.Localization.WPF;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -12,6 +11,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using LinePutScript.Localization.WPF;
 using VPet.ModMaker.Models;
 using VPet.ModMaker.ViewModels.ModEdit.WorkEdit;
 
@@ -31,7 +31,8 @@ public partial class WorkEditWindow : Window
         DataContext = new WorkEditWindowVM();
         Closed += (s, e) =>
         {
-            ViewModel.Close();
+            //TODO
+            //ViewModel.Close();
             try
             {
                 DataContext = null;
@@ -47,12 +48,12 @@ public partial class WorkEditWindow : Window
 
     private void Button_Yes_Click(object sender, RoutedEventArgs e)
     {
-        if (string.IsNullOrEmpty(ViewModel.Work.Value.Id.Value))
+        if (string.IsNullOrEmpty(ViewModel.Work.Id))
         {
             MessageBox.Show("Id不可为空".Translate(), "", MessageBoxButton.OK, MessageBoxImage.Warning);
             return;
         }
-        if (string.IsNullOrEmpty(ViewModel.Work.Value.Graph.Value))
+        if (string.IsNullOrEmpty(ViewModel.Work.Graph))
         {
             MessageBox.Show(
                 "指定动画Id不可为空".Translate(),
@@ -63,8 +64,8 @@ public partial class WorkEditWindow : Window
             return;
         }
         if (
-            ViewModel.OldWork?.Id.Value != ViewModel.Work.Value.Id.Value
-            && ViewModel.CurrentPet.Works.Any(i => i.Id.Value == ViewModel.Work.Value.Id.Value)
+            ViewModel.OldWork?.Id != ViewModel.Work.Id
+            && ViewModel.CurrentPet.Works.Any(i => i.Id == ViewModel.Work.Id)
         )
         {
             MessageBox.Show("此Id已存在".Translate(), "", MessageBoxButton.OK, MessageBoxImage.Warning);

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -13,7 +14,7 @@ using static VPet_Simulator.Core.IGameSave;
 
 namespace VPet.ModMaker.Models.ModModel;
 
-public class AnimeTypeModel
+public class AnimeTypeModel : ObservableObjectX<AnimeTypeModel>
 {
     /// <summary>
     /// 动作类型
@@ -65,20 +66,47 @@ public class AnimeTypeModel
             GraphInfo.GraphType.Say
         };
 
+    #region Id
+    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+    private string _id;
+
     /// <summary>
     /// Id
     /// </summary>
-    public ObservableValue<string> Id { get; } = new();
+    public string Id
+    {
+        get => _id;
+        set => SetProperty(ref _id, value);
+    }
+    #endregion
+
+    #region Name
+    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+    private string _name;
 
     /// <summary>
     /// 名称
     /// </summary>
-    public ObservableValue<string> Name { get; } = new();
+    public string Name
+    {
+        get => _name;
+        set => SetProperty(ref _name, value);
+    }
+    #endregion
+
+    #region GraphType
+    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+    private GraphInfo.GraphType _GraphType;
 
     /// <summary>
     /// 动作类型
     /// </summary>
-    public ObservableValue<GraphInfo.GraphType> GraphType { get; } = new();
+    public GraphInfo.GraphType GraphType
+    {
+        get => _GraphType;
+        set => SetProperty(ref _GraphType, value);
+    }
+    #endregion
 
     /// <summary>
     /// 开心动画
@@ -101,19 +129,19 @@ public class AnimeTypeModel
     public ObservableCollection<AnimeModel> IllAnimes { get; } = new();
 
     public AnimeTypeModel()
-    {
-        Name.ValueChanged += (_, _) =>
-        {
-            Id.Value = $"{GraphType.Value}_{Name.Value}";
-        };
+    { //TODO
+        //Name.ValueChanged += (_, _) =>
+        //{
+        //    Id.Value = $"{GraphType.Value}_{Name.Value}";
+        //};
     }
 
     public AnimeTypeModel(AnimeTypeModel model)
         : this()
     {
-        Id.Value = model.Id.Value;
-        Name.Value = model.Name.Value;
-        GraphType.Value = model.GraphType.Value;
+        Id = model.Id;
+        Name = model.Name;
+        GraphType = model.GraphType;
         foreach (var anime in model.HappyAnimes)
             HappyAnimes.Add(anime.Copy());
         foreach (var anime in model.NomalAnimes)
@@ -165,13 +193,13 @@ public class AnimeTypeModel
 
     public AnimeTypeModel(GraphInfo.GraphType graphType, string path)
     {
-        Name.Value = Path.GetFileName(path);
+        Name = Path.GetFileName(path);
         // 为带有名字的类型设置Id
         if (graphType.IsHasNameAnime())
-            Id.Value = $"{graphType}_{Name.Value}";
+            Id = $"{graphType}_{Name}";
         else
-            Id.Value = graphType.ToString();
-        GraphType.Value = graphType;
+            Id = graphType.ToString();
+        GraphType = graphType;
         if (
             graphType
             is GraphInfo.GraphType.Default
@@ -370,7 +398,7 @@ public class AnimeTypeModel
         {
             // 如果没有文件夹 则载入全部文件
             var animeModel = new AnimeModel(path);
-            animeModel.AnimeType.Value = animatType;
+            animeModel.AnimeType = animatType;
             collection.Add(animeModel);
         }
         else
@@ -379,7 +407,7 @@ public class AnimeTypeModel
             foreach (var imagesDir in Directory.EnumerateDirectories(path))
             {
                 var animeModel = new AnimeModel(imagesDir);
-                animeModel.AnimeType.Value = animatType;
+                animeModel.AnimeType = animatType;
                 collection.Add(animeModel);
             }
         }
@@ -393,21 +421,21 @@ public class AnimeTypeModel
     public void Save(string path)
     {
         if (
-            GraphType.Value
+            GraphType
             is GraphInfo.GraphType.Default
                 or GraphInfo.GraphType.Shutdown
                 or GraphInfo.GraphType.StartUP
         )
             SaveDefault(path, this);
         else if (
-            GraphType.Value
+            GraphType
             is GraphInfo.GraphType.Touch_Head
                 or GraphInfo.GraphType.Touch_Body
                 or GraphInfo.GraphType.Sleep
         )
             SaveMultiType(path, this);
         else if (
-            GraphType.Value
+            GraphType
             is GraphInfo.GraphType.Switch_Up
                 or GraphInfo.GraphType.Switch_Down
                 or GraphInfo.GraphType.Switch_Thirsty
@@ -415,16 +443,14 @@ public class AnimeTypeModel
         )
             SaveSwitch(path, this);
         else if (
-            GraphType.Value
-            is GraphInfo.GraphType.Raised_Dynamic
-                or GraphInfo.GraphType.Raised_Static
+            GraphType is GraphInfo.GraphType.Raised_Dynamic or GraphInfo.GraphType.Raised_Static
         )
             SaveRaised(path, this);
-        else if (GraphType.Value is GraphInfo.GraphType.StateONE or GraphInfo.GraphType.StateTWO)
+        else if (GraphType is GraphInfo.GraphType.StateONE or GraphInfo.GraphType.StateTWO)
             SaveState(path, this);
-        else if (GraphType.Value is GraphInfo.GraphType.Common)
+        else if (GraphType is GraphInfo.GraphType.Common)
             SaveCommon(path, this);
-        else if (GraphType.Value.IsHasNameAnime())
+        else if (GraphType.IsHasNameAnime())
             SaveHasNameAnime(path, this);
     }
 
@@ -435,9 +461,9 @@ public class AnimeTypeModel
     /// <param name="animeTypeModel">动画模型</param>
     void SaveHasNameAnime(string path, AnimeTypeModel animeTypeModel)
     {
-        var animeTypePath = Path.Combine(path, animeTypeModel.GraphType.Value.ToString());
+        var animeTypePath = Path.Combine(path, animeTypeModel.GraphType.ToString());
         Directory.CreateDirectory(animeTypePath);
-        var animePath = Path.Combine(animeTypePath, animeTypeModel.Name.Value);
+        var animePath = Path.Combine(animeTypePath, animeTypeModel.Name);
         Directory.CreateDirectory(animePath);
         SaveWithModeType(animePath, animeTypeModel);
     }
@@ -449,7 +475,7 @@ public class AnimeTypeModel
     /// <param name="animeTypeModel">模型</param>
     void SaveCommon(string path, AnimeTypeModel animeTypeModel)
     {
-        var animePath = Path.Combine(path, animeTypeModel.Name.Value);
+        var animePath = Path.Combine(path, animeTypeModel.Name);
         Directory.CreateDirectory(animePath);
         SaveWithModeType(animePath, animeTypeModel);
     }
@@ -475,9 +501,9 @@ public class AnimeTypeModel
     {
         var animePath = Path.Combine(path, "Raise");
         Directory.CreateDirectory(animePath);
-        if (animeTypeModel.GraphType.Value is GraphInfo.GraphType.Raised_Dynamic)
+        if (animeTypeModel.GraphType is GraphInfo.GraphType.Raised_Dynamic)
             SaveDefault(animePath, animeTypeModel);
-        else if (animeTypeModel.GraphType.Value is GraphInfo.GraphType.Raised_Static)
+        else if (animeTypeModel.GraphType is GraphInfo.GraphType.Raised_Static)
             SaveMultiType(animePath, animeTypeModel);
     }
 
@@ -554,21 +580,21 @@ public class AnimeTypeModel
             var countC = 0;
             foreach (var anime in animes)
             {
-                if (anime.AnimeType.Value is GraphInfo.AnimatType.A_Start)
+                if (anime.AnimeType is GraphInfo.AnimatType.A_Start)
                 {
                     var animatTypePath = Path.Combine(animePath, "A");
                     Directory.CreateDirectory(animatTypePath);
                     SaveImages(Path.Combine(animatTypePath, countA.ToString()), anime);
                     countA++;
                 }
-                else if (anime.AnimeType.Value is GraphInfo.AnimatType.B_Loop)
+                else if (anime.AnimeType is GraphInfo.AnimatType.B_Loop)
                 {
                     var animatTypePath = Path.Combine(animePath, "B");
                     Directory.CreateDirectory(animatTypePath);
                     SaveImages(Path.Combine(animatTypePath, countB.ToString()), anime);
                     countB++;
                 }
-                else if (anime.AnimeType.Value is GraphInfo.AnimatType.C_End)
+                else if (anime.AnimeType is GraphInfo.AnimatType.C_End)
                 {
                     var animatTypePath = Path.Combine(animePath, "C");
                     Directory.CreateDirectory(animatTypePath);
@@ -624,11 +650,8 @@ public class AnimeTypeModel
         Directory.CreateDirectory(imagesPath);
         foreach (var image in model.Images.EnumerateIndex())
         {
-            image.Value.Image.Value.SaveToPng(
-                Path.Combine(
-                    imagesPath,
-                    $"{model.Id.Value}_{image.Index:000}_{image.Value.Duration.Value}.png"
-                )
+            image.Value.Image.SaveToPng(
+                Path.Combine(imagesPath, $"{model.Id}_{image.Index:000}_{image.Value.Duration}.png")
             );
         }
     }

@@ -1,11 +1,11 @@
-﻿using HKW.HKWUtils.Observable;
-
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using HKW.HKWUtils.Observable;
 using VPet.ModMaker.Models;
 using VPet_Simulator.Windows.Interface;
 
@@ -21,30 +21,67 @@ public class SelectTextModel : I18nModel<I18nSelectTextModel>
     /// </summary>
     public static ObservableCollection<ClickText.ModeType> ModeTypes => ClickTextModel.ModeTypes;
 
+    #region Tags
+    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+    private string _tags = string.Empty;
+
     /// <summary>
     /// 标签
     /// </summary>
-    public ObservableValue<string> Tags { get; } = new();
+    public string Tags
+    {
+        get => _tags;
+        set => SetProperty(ref _tags, value);
+    }
+    #endregion
+
+    #region ToTags
+    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+    private string _toTags = string.Empty;
 
     /// <summary>
     /// 跳转标签
     /// </summary>
-    public ObservableValue<string> ToTags { get; } = new();
+    public string ToTags
+    {
+        get => _toTags;
+        set => SetProperty(ref _toTags, value);
+    }
+    #endregion
+
+    #region Id
+    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+    private string _id = string.Empty;
 
     /// <summary>
     /// Id
     /// </summary>
-    public ObservableValue<string> Id { get; } = new();
+    public string Id
+    {
+        get => _id;
+        set => SetProperty(ref _id, value);
+    }
+    #endregion
+
+    #region ChooseId
+    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+    private string _chooseId = string.Empty;
 
     /// <summary>
     /// 选择Id
     /// </summary>
-    public ObservableValue<string> ChooseId { get; } = new();
+
+    public string ChooseId
+    {
+        get => _chooseId;
+        set => SetProperty(ref _chooseId, value);
+    }
+    #endregion
 
     /// <summary>
     /// 宠物状态
     /// </summary>
-    public ObservableEnumFlags<ClickText.ModeType> Mode { get; } =
+    public ObservableEnumCommand<ClickText.ModeType> Mode { get; } =
         new(
             ClickText.ModeType.Happy
                 | ClickText.ModeType.Nomal
@@ -94,42 +131,43 @@ public class SelectTextModel : I18nModel<I18nSelectTextModel>
 
     public SelectTextModel()
     {
-        ChooseId.Value = $"{Id.Value}_{nameof(ChooseId)}";
-        Id.ValueChanged += (s, e) =>
-        {
-            ChooseId.Value = $"{e.NewValue}_{nameof(ChooseId)}";
-        };
+        ChooseId = $"{Id}_{nameof(ChooseId)}";
+        //TODO
+        //Id.ValueChanged += (s, e) =>
+        //{
+        //    ChooseId.Value = $"{e.NewValue}_{nameof(ChooseId)}";
+        //};
     }
 
     public SelectTextModel(SelectTextModel model)
         : this()
     {
-        Id.Value = model.Id.Value;
-        Mode.EnumValue.Value = model.Mode.EnumValue.Value;
-        Tags.Value = model.Tags.Value;
-        ToTags.Value = model.ToTags.Value;
-        Like = model.Like.Copy();
-        Health = model.Health.Copy();
-        Level = model.Level.Copy();
-        Money = model.Money.Copy();
-        Food = model.Food.Copy();
-        Drink = model.Drink.Copy();
-        Feel = model.Feel.Copy();
-        Strength = model.Strength.Copy();
+        Id = model.Id;
+        Mode.Value = model.Mode.Value;
+        Tags = model.Tags;
+        ToTags = model.ToTags;
+        Like = model.Like.Clone();
+        Health = model.Health.Clone();
+        Level = model.Level.Clone();
+        Money = model.Money.Clone();
+        Food = model.Food.Clone();
+        Drink = model.Drink.Clone();
+        Feel = model.Feel.Clone();
+        Strength = model.Strength.Clone();
 
         foreach (var item in model.I18nDatas)
             I18nDatas[item.Key] = item.Value.Copy();
-        CurrentI18nData.Value = I18nDatas[I18nHelper.Current.CultureName.Value];
+        CurrentI18nData = I18nDatas[I18nHelper.Current.CultureName];
     }
 
     public SelectTextModel(SelectText text)
         : this()
     {
-        Id.Value = text.Text;
-        ChooseId.Value = text.Choose ?? string.Empty;
-        Mode.EnumValue.Value = text.Mode;
-        Tags.Value = text.Tags is null ? string.Empty : string.Join(", ", text.Tags);
-        ToTags.Value = text.ToTags is null ? string.Empty : string.Join(", ", text.ToTags);
+        Id = text.Text;
+        ChooseId = text.Choose ?? string.Empty;
+        Mode.Value = text.Mode;
+        Tags = text.Tags is null ? string.Empty : string.Join(", ", text.Tags);
+        ToTags = text.ToTags is null ? string.Empty : string.Join(", ", text.ToTags);
         Like = new(text.LikeMin, text.LikeMax);
         Health = new(text.HealthMin, text.HealthMax);
         Level = new(text.LevelMin, text.LevelMax);
@@ -142,20 +180,20 @@ public class SelectTextModel : I18nModel<I18nSelectTextModel>
 
     public void RefreshId()
     {
-        ChooseId.Value = $"{Id.Value}_{nameof(ChooseId)}";
+        ChooseId = $"{Id}_{nameof(ChooseId)}";
     }
 
-    private readonly static char[] rs_splitChar = { ',', ' ' };
+    private static readonly char[] rs_splitChar = { ',', ' ' };
 
     public SelectText ToSelectText()
     {
         return new()
         {
-            Text = Id.Value,
-            Choose = ChooseId.Value,
-            Mode = Mode.EnumValue.Value,
-            Tags = new(Tags.Value.Split(rs_splitChar, StringSplitOptions.RemoveEmptyEntries)),
-            ToTags = new(ToTags.Value.Split(rs_splitChar, StringSplitOptions.RemoveEmptyEntries)),
+            Text = Id,
+            Choose = ChooseId,
+            Mode = Mode.Value,
+            Tags = new(Tags.Split(rs_splitChar, StringSplitOptions.RemoveEmptyEntries)),
+            ToTags = new(ToTags.Split(rs_splitChar, StringSplitOptions.RemoveEmptyEntries)),
             LikeMax = Like.Max,
             LikeMin = Like.Min,
             HealthMin = Health.Min,
@@ -176,16 +214,34 @@ public class SelectTextModel : I18nModel<I18nSelectTextModel>
     }
 }
 
-public class I18nSelectTextModel
+public class I18nSelectTextModel : ObservableObjectX<I18nSelectTextModel>
 {
-    public ObservableValue<string> Choose { get; } = new();
-    public ObservableValue<string> Text { get; } = new();
+    #region Choose
+    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+    private string _choose = string.Empty;
+
+    public string Choose
+    {
+        get => _choose;
+        set => SetProperty(ref _choose, value);
+    }
+    #endregion
+    #region Text
+    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+    private string _text = string.Empty;
+
+    public string Text
+    {
+        get => _text;
+        set => SetProperty(ref _text, value);
+    }
+    #endregion
 
     public I18nSelectTextModel Copy()
     {
         var result = new I18nSelectTextModel();
-        result.Text.Value = Text.Value;
-        result.Choose.Value = Choose.Value;
+        result.Text = Text;
+        result.Choose = Choose;
         return result;
     }
 }

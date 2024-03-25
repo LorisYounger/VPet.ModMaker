@@ -1,24 +1,43 @@
-﻿using HKW.HKWUtils.Observable;
-
-using LinePutScript.Localization.WPF;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using HKW.HKWUtils.Observable;
+using LinePutScript.Localization.WPF;
 using VPet.ModMaker.Models;
 using VPet.ModMaker.Views.ModEdit.SelectTextEdit;
 
 namespace VPet.ModMaker.ViewModels.ModEdit.SelectTextEdit;
 
-public class SelectTextPageVM
+public class SelectTextPageVM : ObservableObjectX<SelectTextPageVM>
 {
     #region Value
-    public ObservableValue<ObservableCollection<SelectTextModel>> ShowSelectTexts { get; } = new();
+    #region ShowSelectTexts
+    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+    private ObservableCollection<SelectTextModel> _showSelectTexts;
+
+    public ObservableCollection<SelectTextModel> ShowSelectTexts
+    {
+        get => _showSelectTexts;
+        set => SetProperty(ref _showSelectTexts, value);
+    }
+    #endregion
     public ObservableCollection<SelectTextModel> SelectTexts => ModInfoModel.Current.SelectTexts;
-    public ObservableValue<string> Search { get; } = new();
+
+    #region Search
+    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+    private string _search;
+
+    public string Search
+    {
+        get => _search;
+        set => SetProperty(ref _search, value);
+    }
+    #endregion
     #endregion
     #region Command
     public ObservableCommand AddCommand { get; } = new();
@@ -28,8 +47,9 @@ public class SelectTextPageVM
 
     public SelectTextPageVM()
     {
-        ShowSelectTexts.Value = SelectTexts;
-        Search.ValueChanged += Search_ValueChanged;
+        ShowSelectTexts = SelectTexts;
+        //TODO
+        //Search.ValueChanged += Search_ValueChanged;
         AddCommand.ExecuteCommand += Add;
         EditCommand.ExecuteCommand += Edit;
         RemoveCommand.ExecuteCommand += Remove;
@@ -42,13 +62,13 @@ public class SelectTextPageVM
     {
         if (string.IsNullOrWhiteSpace(e.NewValue))
         {
-            ShowSelectTexts.Value = SelectTexts;
+            ShowSelectTexts = SelectTexts;
         }
         else
         {
-            ShowSelectTexts.Value = new(
-                SelectTexts.Where(
-                    m => m.Id.Value.Contains(e.NewValue, StringComparison.OrdinalIgnoreCase)
+            ShowSelectTexts = new(
+                SelectTexts.Where(m =>
+                    m.Id.Contains(e.NewValue, StringComparison.OrdinalIgnoreCase)
                 )
             );
         }
@@ -61,7 +81,7 @@ public class SelectTextPageVM
         window.ShowDialog();
         if (window.IsCancel)
             return;
-        SelectTexts.Add(vm.SelectText.Value);
+        SelectTexts.Add(vm.SelectText);
     }
 
     public void Edit(SelectTextModel model)
@@ -69,26 +89,26 @@ public class SelectTextPageVM
         var window = new SelectTextEditWindow();
         var vm = window.ViewModel;
         vm.OldSelectText = model;
-        var newLowTest = vm.SelectText.Value = new(model);
+        var newLowTest = vm.SelectText = new(model);
         window.ShowDialog();
         if (window.IsCancel)
             return;
         SelectTexts[SelectTexts.IndexOf(model)] = newLowTest;
-        if (ShowSelectTexts.Value.Count != SelectTexts.Count)
-            ShowSelectTexts.Value[ShowSelectTexts.Value.IndexOf(model)] = newLowTest;
+        if (ShowSelectTexts.Count != SelectTexts.Count)
+            ShowSelectTexts[ShowSelectTexts.IndexOf(model)] = newLowTest;
     }
 
     private void Remove(SelectTextModel model)
     {
         if (MessageBox.Show("确定删除吗".Translate(), "", MessageBoxButton.YesNo) is MessageBoxResult.No)
             return;
-        if (ShowSelectTexts.Value.Count == SelectTexts.Count)
+        if (ShowSelectTexts.Count == SelectTexts.Count)
         {
             SelectTexts.Remove(model);
         }
         else
         {
-            ShowSelectTexts.Value.Remove(model);
+            ShowSelectTexts.Remove(model);
             SelectTexts.Remove(model);
         }
     }

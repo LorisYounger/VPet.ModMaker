@@ -44,13 +44,13 @@
       <Label
         Grid.Row="1"
         Content="{ll:Str 动画名称}"
-        Visibility="{Binding HasNameAnime.Value, Converter={StaticResource FalseToHiddenConverter}}" />
+        Visibility="{Binding HasNameAnime.Value, Converter={StaticResource FalseToCollapsedConverter}}" />
       <TextBox
         Grid.Row="1"
         Grid.Column="1"
         Style="{DynamicResource StandardTextBoxStyle}"
         Text="{Binding AnimeName.Value, UpdateSourceTrigger=PropertyChanged}"
-        Visibility="{Binding HasNameAnime.Value, Converter={StaticResource FalseToHiddenConverter}}" />
+        Visibility="{Binding HasNameAnime.Value, Converter={StaticResource FalseToCollapsedConverter}}" />
     </Grid>
     <Grid Grid.Row="2">
       <Grid.ColumnDefinitions>

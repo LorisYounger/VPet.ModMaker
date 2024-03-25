@@ -1,35 +1,53 @@
-﻿using HKW.HKWUtils.Observable;
-
-using LinePutScript.Localization.WPF;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using HKW.HKWUtils.Observable;
+using LinePutScript.Localization.WPF;
 using VPet.ModMaker.Models;
 using VPet.ModMaker.Views.ModEdit.ClickTextEdit;
 
 namespace VPet.ModMaker.ViewModels.ModEdit.ClickTextEdit;
 
-public class ClickTextPageVM
+public class ClickTextPageVM : ObservableObjectX<ClickTextPageVM>
 {
     #region Value
+    #region ShowClickTexts
+    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+    private ObservableCollection<ClickTextModel> _showClickTexts;
+
     /// <summary>
     /// 显示的点击文本
     /// </summary>
-    public ObservableValue<ObservableCollection<ClickTextModel>> ShowClickTexts { get; } = new();
+    public ObservableCollection<ClickTextModel> ShowClickTexts
+    {
+        get => _showClickTexts;
+        set => SetProperty(ref _showClickTexts, value);
+    }
+    #endregion
 
     /// <summary>
     /// 点击文本
     /// </summary>
     public ObservableCollection<ClickTextModel> ClickTexts => ModInfoModel.Current.ClickTexts;
 
+    #region Search
+    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+    private string _search;
+
     /// <summary>
     /// 搜索
     /// </summary>
-    public ObservableValue<string> Search { get; } = new();
+    public string Search
+    {
+        get => _search;
+        set => SetProperty(ref _search, value);
+    }
+    #endregion
     #endregion
     #region Command
     /// <summary>
@@ -50,8 +68,9 @@ public class ClickTextPageVM
 
     public ClickTextPageVM()
     {
-        ShowClickTexts.Value = ClickTexts;
-        Search.ValueChanged += Search_ValueChanged;
+        ShowClickTexts = ClickTexts;
+        //TODO
+        //Search.ValueChanged += Search_ValueChanged;
         AddCommand.ExecuteCommand += Add;
         EditCommand.ExecuteCommand += Edit;
         RemoveCommand.ExecuteCommand += Remove;
@@ -64,14 +83,12 @@ public class ClickTextPageVM
     {
         if (string.IsNullOrWhiteSpace(e.NewValue))
         {
-            ShowClickTexts.Value = ClickTexts;
+            ShowClickTexts = ClickTexts;
         }
         else
         {
-            ShowClickTexts.Value = new(
-                ClickTexts.Where(
-                    m => m.Id.Value.Contains(e.NewValue, StringComparison.OrdinalIgnoreCase)
-                )
+            ShowClickTexts = new(
+                ClickTexts.Where(m => m.Id.Contains(e.NewValue, StringComparison.OrdinalIgnoreCase))
             );
         }
     }
@@ -86,7 +103,7 @@ public class ClickTextPageVM
         window.ShowDialog();
         if (window.IsCancel)
             return;
-        ClickTexts.Add(vm.ClickText.Value);
+        ClickTexts.Add(vm.ClickText);
     }
 
     /// <summary>
@@ -98,13 +115,13 @@ public class ClickTextPageVM
         var window = new ClickTextEditWindow();
         var vm = window.ViewModel;
         vm.OldClickText = model;
-        var newLowTest = vm.ClickText.Value = new(model);
+        var newLowTest = vm.ClickText = new(model);
         window.ShowDialog();
         if (window.IsCancel)
             return;
         ClickTexts[ClickTexts.IndexOf(model)] = newLowTest;
-        if (ShowClickTexts.Value.Count != ClickTexts.Count)
-            ShowClickTexts.Value[ShowClickTexts.Value.IndexOf(model)] = newLowTest;
+        if (ShowClickTexts.Count != ClickTexts.Count)
+            ShowClickTexts[ShowClickTexts.IndexOf(model)] = newLowTest;
     }
 
     /// <summary>
@@ -115,13 +132,13 @@ public class ClickTextPageVM
     {
         if (MessageBox.Show("确定删除吗".Translate(), "", MessageBoxButton.YesNo) is MessageBoxResult.No)
             return;
-        if (ShowClickTexts.Value.Count == ClickTexts.Count)
+        if (ShowClickTexts.Count == ClickTexts.Count)
         {
             ClickTexts.Remove(model);
         }
         else
         {
-            ShowClickTexts.Value.Remove(model);
+            ShowClickTexts.Remove(model);
             ClickTexts.Remove(model);
         }
     }

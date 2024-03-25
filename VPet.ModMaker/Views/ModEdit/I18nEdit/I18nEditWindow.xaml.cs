@@ -1,6 +1,4 @@
-﻿using HKW.HKWUtils.Observable;
-using Panuon.WPF.UI;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
@@ -8,6 +6,8 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
+using HKW.HKWUtils.Observable;
+using Panuon.WPF.UI;
 using VPet.ModMaker.Models;
 using VPet.ModMaker.ViewModels.ModEdit.I18nEdit;
 
@@ -36,7 +36,8 @@ public partial class I18nEditWindow : WindowX
         };
         Closed += (s, e) =>
         {
-            ViewModel.Close();
+            //TODO
+            //ViewModel.Close();
             try
             {
                 DataContext = null;
@@ -46,10 +47,12 @@ public partial class I18nEditWindow : WindowX
         };
         InitializeComponent();
         DataContext = new I18nEditWindowVM();
-        ViewModel.CultureChanged += ViewModel_CultureChanged;
-        ViewModel.InitializeI18nData(ModInfoModel.Current);
+        //ViewModel.CultureChanged += ViewModel_CultureChanged;
+        //ViewModel.InitializeI18nData(ModInfoModel.Current);
     }
+
     private bool _close = false;
+
     public void Close(bool close)
     {
         _close = close;

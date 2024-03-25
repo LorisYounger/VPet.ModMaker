@@ -31,7 +31,7 @@
         <Image
           Width="250"
           Height="250"
-          Source="{Binding Image.Value}"
+          Source="{Binding Image}"
           Stretch="Uniform">
           <Image.ContextMenu>
             <ContextMenu>
@@ -48,7 +48,7 @@
             <Style BasedOn="{StaticResource ThemedButtonStyle}" TargetType="Button">
               <Setter Property="Visibility" Value="Hidden" />
               <Style.Triggers>
-                <DataTrigger Binding="{Binding Image.Value}" Value="{x:Null}">
+                <DataTrigger Binding="{Binding Image}" Value="{x:Null}">
                   <Setter Property="Visibility" Value="Visible" />
                 </DataTrigger>
               </Style.Triggers>
@@ -71,12 +71,12 @@
         <TextBox
           Grid.Row="3"
           Grid.Column="1"
-          Text="{Binding Move.Value.Graph.Value}" />
+          Text="{Binding Move.Graph}" />
         <!--<Label Grid.Row="3" Content="{ll:Str 宠物描述}" />
       <TextBox
         Grid.Row="3"
         Grid.Column="1"
-        Text="{Binding Pet.Value.CurrentI18nData.Value.Description.Value}" />-->
+        Text="{Binding Pet.CurrentI18nData.Description}" />-->
       </Grid>
     </Grid>
     <Grid Grid.Column="1">
@@ -114,20 +114,20 @@
                 <ColumnDefinition Width="Auto" />
                 <ColumnDefinition Width="Auto" />
               </Grid.ColumnDefinitions>
-              <TextBlock Text="{Binding Move.Value.LocateType.EnumValue.Value}" />
+              <TextBlock Text="{Binding Move.LocateType.Value}" />
               <ComboBox
                 x:Name="ComboBox_LocateType"
                 Grid.Column="1"
-                ItemsSource="{Binding Move.Value.DirectionTypes}"
+                ItemsSource="{Binding Move.DirectionTypes}"
                 SelectedIndex="0" />
               <Button
                 Grid.Column="2"
-                Command="{Binding Move.Value.LocateType.AddCommand}"
+                Command="{Binding Move.LocateType.AddFlagCommand}"
                 CommandParameter="{Binding SelectedItem, ElementName=ComboBox_LocateType}"
                 Content="+" />
               <Button
                 Grid.Column="3"
-                Command="{Binding Move.Value.LocateType.RemoveCommand}"
+                Command="{Binding Move.LocateType.RemoveFlagCommand}"
                 CommandParameter="{Binding SelectedItem, ElementName=ComboBox_LocateType}"
                 Content="-" />
             </Grid>
@@ -139,20 +139,20 @@
                 <ColumnDefinition Width="Auto" />
                 <ColumnDefinition Width="Auto" />
               </Grid.ColumnDefinitions>
-              <TextBlock Text="{Binding Move.Value.TriggerType.EnumValue.Value}" />
+              <TextBlock Text="{Binding Move.TriggerType.Value}" />
               <ComboBox
                 x:Name="ComboBox_TriggerType"
                 Grid.Column="1"
-                ItemsSource="{Binding Move.Value.DirectionTypes}"
+                ItemsSource="{Binding Move.DirectionTypes}"
                 SelectedIndex="0" />
               <Button
                 Grid.Column="2"
-                Command="{Binding Move.Value.TriggerType.AddCommand}"
+                Command="{Binding Move.TriggerType.AddFlagCommand}"
                 CommandParameter="{Binding SelectedItem, ElementName=ComboBox_TriggerType}"
                 Content="+" />
               <Button
                 Grid.Column="3"
-                Command="{Binding Move.Value.TriggerType.RemoveCommand}"
+                Command="{Binding Move.TriggerType.RemoveFlagCommand}"
                 CommandParameter="{Binding SelectedItem, ElementName=ComboBox_TriggerType}"
                 Content="-" />
             </Grid>
@@ -164,20 +164,20 @@
                 <ColumnDefinition Width="Auto" />
                 <ColumnDefinition Width="Auto" />
               </Grid.ColumnDefinitions>
-              <TextBlock Text="{Binding Move.Value.ModeType.EnumValue.Value}" />
+              <TextBlock Text="{Binding Move.ModeType.Value}" />
               <ComboBox
                 x:Name="ComboBox_ModeType"
                 Grid.Column="1"
-                ItemsSource="{Binding Move.Value.ModeTypes}"
+                ItemsSource="{Binding Move.ModeTypes}"
                 SelectedIndex="0" />
               <Button
                 Grid.Column="2"
-                Command="{Binding Move.Value.ModeType.AddCommand}"
+                Command="{Binding Move.ModeType.AddFlagCommand}"
                 CommandParameter="{Binding SelectedItem, ElementName=ComboBox_ModeType}"
                 Content="+" />
               <Button
                 Grid.Column="3"
-                Command="{Binding Move.Value.ModeType.RemoveCommand}"
+                Command="{Binding Move.ModeType.RemoveFlagCommand}"
                 CommandParameter="{Binding SelectedItem, ElementName=ComboBox_ModeType}"
                 Content="-" />
             </Grid>
@@ -185,17 +185,17 @@
             <pu:NumberInput
               Grid.Row="3"
               Grid.Column="1"
-              Value="{Binding Move.Value.Distance.Value}" />
+              Value="{Binding Move.Distance}" />
             <Label Grid.Row="4" Content="{ll:Str 移动间隔(ms)}" />
             <pu:NumberInput
               Grid.Row="4"
               Grid.Column="1"
-              Value="{Binding Move.Value.Interval.Value}" />
+              Value="{Binding Move.Interval}" />
             <Label Grid.Row="5" Content="{ll:Str 定位长度}" />
             <pu:NumberInput
               Grid.Row="5"
               Grid.Column="1"
-              Value="{Binding Move.Value.LocateLength.Value}" />
+              Value="{Binding Move.LocateLength}" />
             <Expander
               Grid.Row="6"
               Grid.ColumnSpan="2"
@@ -215,22 +215,22 @@
                 <pu:NumberInput
                   Grid.Row="0"
                   Grid.Column="1"
-                  Value="{Binding Move.Value.TriggerLeft.Value}" />
+                  Value="{Binding Move.TriggerLeft}" />
                 <Label Grid.Row="1" Content="{ll:Str 上}" />
                 <pu:NumberInput
                   Grid.Row="1"
                   Grid.Column="1"
-                  Value="{Binding Move.Value.TriggerTop.Value}" />
+                  Value="{Binding Move.TriggerTop}" />
                 <Label Grid.Row="2" Content="{ll:Str 右}" />
                 <pu:NumberInput
                   Grid.Row="2"
                   Grid.Column="1"
-                  Value="{Binding Move.Value.TriggerRight.Value}" />
+                  Value="{Binding Move.TriggerRight}" />
                 <Label Grid.Row="3" Content="{ll:Str 下}" />
                 <pu:NumberInput
                   Grid.Row="3"
                   Grid.Column="1"
-                  Value="{Binding Move.Value.TriggerBottom.Value}" />
+                  Value="{Binding Move.TriggerBottom}" />
               </Grid>
             </Expander>
             <Expander
@@ -252,22 +252,22 @@
                 <pu:NumberInput
                   Grid.Row="0"
                   Grid.Column="1"
-                  Value="{Binding Move.Value.CheckLeft.Value}" />
+                  Value="{Binding Move.CheckLeft}" />
                 <Label Grid.Row="1" Content="{ll:Str 上}" />
                 <pu:NumberInput
                   Grid.Row="1"
                   Grid.Column="1"
-                  Value="{Binding Move.Value.CheckTop.Value}" />
+                  Value="{Binding Move.CheckTop}" />
                 <Label Grid.Row="2" Content="{ll:Str 右}" />
                 <pu:NumberInput
                   Grid.Row="2"
                   Grid.Column="1"
-                  Value="{Binding Move.Value.CheckRight.Value}" />
+                  Value="{Binding Move.CheckRight}" />
                 <Label Grid.Row="3" Content="{ll:Str 下}" />
                 <pu:NumberInput
                   Grid.Row="3"
                   Grid.Column="1"
-                  Value="{Binding Move.Value.CheckBottom.Value}" />
+                  Value="{Binding Move.CheckBottom}" />
               </Grid>
             </Expander>
           </Grid>

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -24,189 +25,334 @@ public class FoodModel : I18nModel<I18nFoodModel>
     public static ObservableCollection<Food.FoodType> FoodTypes { get; } =
         new(Enum.GetValues(typeof(Food.FoodType)).Cast<Food.FoodType>());
 
+    #region Id
+    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+    private string _id = string.Empty;
+
     /// <summary>
     /// Id
     /// </summary>
-    public ObservableValue<string> Id { get; } = new();
+    public string Id
+    {
+        get => _id;
+        set => SetProperty(ref _id, value);
+    }
+    #endregion
+
+    #region DescriptionId
+    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+    private string _descriptionId = string.Empty;
 
     /// <summary>
     /// 详情Id
     /// </summary>
-    public ObservableValue<string> DescriptionId { get; } = new();
+    public string DescriptionId
+    {
+        get => _descriptionId;
+        set => SetProperty(ref _descriptionId, value);
+    }
+    #endregion
+
+    #region Graph
+    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+    private string _graph = string.Empty;
 
     /// <summary>
     /// 指定动画
     /// </summary>
-    public ObservableValue<string> Graph { get; } = new("eat");
+    public string Graph
+    {
+        get => _graph;
+        set => SetProperty(ref _graph, value);
+    }
+    #endregion
+
+    #region Type
+    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+    private Food.FoodType _type;
 
     /// <summary>
     /// 类型
     /// </summary>
-    public ObservableValue<Food.FoodType> Type { get; } = new();
+    public Food.FoodType Type
+    {
+        get => _type;
+        set => SetProperty(ref _type, value);
+    }
+    #endregion
 
     /// <summary>
     /// 体力
     /// </summary>
-    public ObservableValue<double> Strength { get; } = new();
+    #region Strength
+    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+    private double _Strength;
+
+    public double Strength
+    {
+        get => _Strength;
+        set => SetProperty(ref _Strength, value);
+    }
+    #endregion
 
     /// <summary>
     /// 饱食度
     /// </summary>
-    public ObservableValue<double> StrengthFood { get; } = new();
+    #region StrengthFood
+    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+    private double _StrengthFood;
+
+    public double StrengthFood
+    {
+        get => _StrengthFood;
+        set => SetProperty(ref _StrengthFood, value);
+    }
+    #endregion
 
     /// <summary>
     /// 口渴度
     /// </summary>
-    public ObservableValue<double> StrengthDrink { get; } = new();
+    #region StrengthDrink
+    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+    private double _StrengthDrink;
+
+    public double StrengthDrink
+    {
+        get => _StrengthDrink;
+        set => SetProperty(ref _StrengthDrink, value);
+    }
+    #endregion
 
     /// <summary>
     /// 心情
     /// </summary>
-    public ObservableValue<double> Feeling { get; } = new();
+    #region Feeling
+    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+    private double _Feeling;
+
+    public double Feeling
+    {
+        get => _Feeling;
+        set => SetProperty(ref _Feeling, value);
+    }
+    #endregion
 
     /// <summary>
     /// 健康度
     /// </summary>
-    public ObservableValue<double> Health { get; } = new();
+    #region Health
+    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+    private double _Health;
+
+    public double Health
+    {
+        get => _Health;
+        set => SetProperty(ref _Health, value);
+    }
+    #endregion
 
     /// <summary>
     /// 好感度
     /// </summary>
-    public ObservableValue<double> Likability { get; } = new();
+    #region Likability
+    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+    private double _Likability;
+
+    public double Likability
+    {
+        get => _Likability;
+        set => SetProperty(ref _Likability, value);
+    }
+    #endregion
 
     /// <summary>
     /// 价格
     /// </summary>
-    public ObservableValue<double> Price { get; } = new();
+    #region Price
+    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+    private double _Price;
+
+    public double Price
+    {
+        get => _Price;
+        set => SetProperty(ref _Price, value);
+    }
+    #endregion
 
     /// <summary>
     /// 经验
     /// </summary>
-    public ObservableValue<int> Exp { get; } = new();
+    #region Exp
+    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+    private int _Exp;
+
+    public int Exp
+    {
+        get => _Exp;
+        set => SetProperty(ref _Exp, value);
+    }
+    #endregion
 
     /// <summary>
     /// 图片
     /// </summary>
-    public ObservableValue<BitmapImage> Image { get; } = new();
+    #region Image
+    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+    private BitmapImage _Image;
 
-    public ObservableValue<double> ReferencePrice { get; } = new();
+    public BitmapImage Image
+    {
+        get => _Image;
+        set => SetProperty(ref _Image, value);
+    }
+    #endregion
+
+    #region ReferencePrice
+    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+    private double _ReferencePrice;
+
+    public double ReferencePrice
+    {
+        get => _ReferencePrice;
+        set => SetProperty(ref _ReferencePrice, value);
+    }
+    #endregion
 
     private readonly Food _food = new();
 
     public FoodModel()
     {
-        DescriptionId.Value = $"{Id.Value}_{nameof(DescriptionId)}";
-        Id.ValueChanged += (s, e) =>
-        {
-            DescriptionId.Value = $"{e.NewValue}_{nameof(DescriptionId)}";
-        };
-        ReferencePrice.AddNotifySender(
-            Strength,
-            StrengthFood,
-            StrengthDrink,
-            Feeling,
-            Health,
-            Likability,
-            Exp
-        );
-        ReferencePrice.SenderPropertyChanged += (s, _) =>
-        {
-            s.Value = Math.Floor(SetValueToFood(_food).RealPrice);
-        };
+        DescriptionId = $"{Id}_{nameof(DescriptionId)}";
+        //TODO
+        //Id.ValueChanged += (s, e) =>
+        //{
+        //    DescriptionId.Value = $"{e.NewValue}_{nameof(DescriptionId)}";
+        //};
+        //ReferencePrice.AddNotifySender(
+        //    Strength,
+        //    StrengthFood,
+        //    StrengthDrink,
+        //    Feeling,
+        //    Health,
+        //    Likability,
+        //    Exp
+        //);
+        //ReferencePrice.SenderPropertyChanged += (s, _) =>
+        //{
+        //    s.Value = Math.Floor(SetValueToFood(_food).RealPrice);
+        //};
     }
 
     public FoodModel(FoodModel model)
         : this()
     {
-        Id.Value = model.Id.Value;
-        DescriptionId.Value = model.DescriptionId.Value;
-        Graph.Value = model.Graph.Value;
-        Type.Value = model.Type.Value;
-        Strength.Value = model.Strength.Value;
-        StrengthFood.Value = model.StrengthFood.Value;
-        StrengthDrink.Value = model.StrengthDrink.Value;
-        Feeling.Value = model.Feeling.Value;
-        Health.Value = model.Health.Value;
-        Likability.Value = model.Likability.Value;
-        Price.Value = model.Price.Value;
-        Exp.Value = model.Exp.Value;
-        Image.Value = model.Image.Value.Copy();
+        Id = model.Id;
+        DescriptionId = model.DescriptionId;
+        Graph = model.Graph;
+        Type = model.Type;
+        Strength = model.Strength;
+        StrengthFood = model.StrengthFood;
+        StrengthDrink = model.StrengthDrink;
+        Feeling = model.Feeling;
+        Health = model.Health;
+        Likability = model.Likability;
+        Price = model.Price;
+        Exp = model.Exp;
+        Image = model.Image.Copy();
         foreach (var item in model.I18nDatas)
             I18nDatas[item.Key] = item.Value.Copy();
-        CurrentI18nData.Value = I18nDatas[I18nHelper.Current.CultureName.Value];
+        CurrentI18nData = I18nDatas[I18nHelper.Current.CultureName];
     }
 
     public FoodModel(Food food)
         : this()
     {
-        Id.Value = food.Name;
-        DescriptionId.Value = food.Desc;
-        Graph.Value = food.Graph;
-        Type.Value = food.Type;
-        Strength.Value = food.Strength;
-        StrengthDrink.Value = food.StrengthDrink;
-        StrengthFood.Value = food.StrengthFood;
-        Feeling.Value = food.Feeling;
-        Health.Value = food.Health;
-        Likability.Value = food.Likability;
-        Price.Value = food.Price;
-        Exp.Value = food.Exp;
+        Id = food.Name;
+        DescriptionId = food.Desc;
+        Graph = food.Graph;
+        Type = food.Type;
+        Strength = food.Strength;
+        StrengthDrink = food.StrengthDrink;
+        StrengthFood = food.StrengthFood;
+        Feeling = food.Feeling;
+        Health = food.Health;
+        Likability = food.Likability;
+        Price = food.Price;
+        Exp = food.Exp;
         if (File.Exists(food.Image))
-            Image.Value = NativeUtils.LoadImageToMemoryStream(food.Image);
+            Image = NativeUtils.LoadImageToMemoryStream(food.Image);
     }
 
     public Food ToFood()
     {
         return new Food()
         {
-            Name = Id.Value,
-            Desc = DescriptionId.Value,
-            Graph = Graph.Value,
-            Type = Type.Value,
-            Strength = Strength.Value,
-            StrengthFood = StrengthFood.Value,
-            StrengthDrink = StrengthDrink.Value,
-            Feeling = Feeling.Value,
-            Health = Health.Value,
-            Likability = Likability.Value,
-            Price = Price.Value,
-            Exp = Exp.Value,
+            Name = Id,
+            Desc = DescriptionId,
+            Graph = Graph,
+            Type = Type,
+            Strength = Strength,
+            StrengthFood = StrengthFood,
+            StrengthDrink = StrengthDrink,
+            Feeling = Feeling,
+            Health = Health,
+            Likability = Likability,
+            Price = Price,
+            Exp = Exp,
         };
     }
 
     public Food SetValueToFood(Food food)
     {
-        food.Strength = Strength.Value;
-        food.StrengthFood = StrengthFood.Value;
-        food.StrengthDrink = StrengthDrink.Value;
-        food.Feeling = Feeling.Value;
-        food.Health = Health.Value;
-        food.Likability = Likability.Value;
-        food.Exp = Exp.Value;
+        food.Strength = Strength;
+        food.StrengthFood = StrengthFood;
+        food.StrengthDrink = StrengthDrink;
+        food.Feeling = Feeling;
+        food.Health = Health;
+        food.Likability = Likability;
+        food.Exp = Exp;
         return food;
     }
 
     public void RefreshId()
     {
-        DescriptionId.Value = $"{Id.Value}_{nameof(DescriptionId)}";
+        DescriptionId = $"{Id}_{nameof(DescriptionId)}";
     }
 
     public void Close()
     {
-        Image.Value?.StreamSource?.Close();
+        Image.CloseStream();
     }
 }
 
-public class I18nFoodModel
+public class I18nFoodModel : ObservableObjectX<I18nFoodModel>
 {
-    public ObservableValue<string> Name { get; } = new();
-    public ObservableValue<string> Description { get; } = new();
+    #region Name
+    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+    private string _name = string.Empty;
+
+    public string Name
+    {
+        get => _name;
+        set => SetProperty(ref _name, value);
+    }
+    #endregion
+    #region Description
+    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+    private string _description = string.Empty;
+
+    public string Description
+    {
+        get => _description;
+        set => SetProperty(ref _description, value);
+    }
+    #endregion
 
     public I18nFoodModel Copy()
     {
         var result = new I18nFoodModel();
-        result.Name.Value = Name.Value;
-        result.Description.Value = Description.Value;
+        result.Name = Name;
+        result.Description = Description;
         return result;
     }
 }

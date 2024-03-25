@@ -1,7 +1,4 @@
-﻿using HKW.HKWUtils.Observable;
-using LinePutScript.Localization.WPF;
-using Panuon.WPF.UI;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
@@ -16,6 +13,9 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using HKW.HKWUtils.Observable;
+using LinePutScript.Localization.WPF;
+using Panuon.WPF.UI;
 using VPet.ModMaker.Models;
 using VPet.ModMaker.ViewModels;
 using VPet.ModMaker.ViewModels.ModEdit;
@@ -46,12 +46,12 @@ public partial class AddCultureWindow : WindowX
 
     private void Button_Yes_Click(object sender, RoutedEventArgs e)
     {
-        if (string.IsNullOrWhiteSpace(ViewModel.Culture.Value))
+        if (string.IsNullOrWhiteSpace(ViewModel.Culture))
         {
             MessageBox.Show("文化不可为空".Translate(), "", MessageBoxButton.OK, MessageBoxImage.Warning);
             return;
         }
-        if (I18nHelper.Current.CultureNames.Contains(ViewModel.Culture.Value))
+        if (I18nHelper.Current.CultureNames.Contains(ViewModel.Culture))
         {
             MessageBox.Show("此文化已存在".Translate(), "", MessageBoxButton.OK, MessageBoxImage.Warning);
             return;

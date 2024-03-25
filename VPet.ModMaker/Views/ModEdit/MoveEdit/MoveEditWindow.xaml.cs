@@ -1,5 +1,4 @@
-﻿using LinePutScript.Localization.WPF;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -12,6 +11,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using LinePutScript.Localization.WPF;
 using VPet.ModMaker.ViewModels.ModEdit.MoveEdit;
 
 namespace VPet.ModMaker.Views.ModEdit.MoveEdit;
@@ -46,7 +46,7 @@ public partial class MoveEditWindow : Window
 
     private void Button_Yes_Click(object sender, RoutedEventArgs e)
     {
-        if (string.IsNullOrEmpty(ViewModel.Move.Value.Graph.Value))
+        if (string.IsNullOrEmpty(ViewModel.Move.Graph))
         {
             MessageBox.Show(
                 "指定动画Id不可为空".Translate(),

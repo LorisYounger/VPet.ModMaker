@@ -26,11 +26,11 @@
       <TextBox
         pu:TextBoxHelper.Watermark="{ll:Str 搜索Id}"
         Style="{DynamicResource StandardTextBoxStyle}"
-        Text="{Binding Search.Value, UpdateSourceTrigger=PropertyChanged}" />
+        Text="{Binding Search, UpdateSourceTrigger=PropertyChanged}" />
       <pu:Switch
         Grid.Column="1"
         Content="{ll:Str 显示本体宠物}"
-        IsChecked="{Binding ModInfo.ShowMainPet.Value}" />
+        IsChecked="{Binding ModInfo.ShowMainPet}" />
     </Grid>
     <DataGrid
       Grid.Row="1"
@@ -39,7 +39,7 @@
       AutoGenerateColumns="False"
       CanUserAddRows="False"
       GridLinesVisibility="Horizontal"
-      ItemsSource="{Binding ShowPets.Value}"
+      ItemsSource="{Binding ShowPets}"
       MouseDoubleClick="DataGrid_MouseDoubleClick"
       RowDetailsVisibilityMode="Visible"
       RowHeight="64"
@@ -55,9 +55,9 @@
               <MultiBinding Converter="{StaticResource AllTrueToCollapsedConverter}">
                 <Binding
                   Converter="{StaticResource BoolInverter}"
-                  Path="DataContext.ModInfo.ShowMainPet.Value"
+                  Path="DataContext.ModInfo.ShowMainPet"
                   RelativeSource="{RelativeSource AncestorType=Page}" />
-                <Binding Path="FromMain.Value" />
+                <Binding Path="FromMain" />
               </MultiBinding>
             </Setter.Value>
           </Setter>
@@ -68,40 +68,40 @@
           CanUserSort="True"
           Header="Id"
           IsReadOnly="True"
-          SortMemberPath="Id.Value">
+          SortMemberPath="Id">
           <DataGridTemplateColumn.CellTemplate>
             <DataTemplate>
               <StackPanel Orientation="Horizontal">
-                <TextBlock Style="{DynamicResource TextBlock_LeftCenter}" Text="{Binding Id.Value}" />
+                <TextBlock Style="{DynamicResource TextBlock_LeftCenter}" Text="{Binding Id}" />
                 <TextBlock
                   Style="{DynamicResource TextBlock_LeftCenter}"
                   Text="{ll:Str {} (来自本体)}"
-                  Visibility="{Binding FromMain.Value, Converter={StaticResource FalseToCollapsedConverter}}" />
+                  Visibility="{Binding FromMain, Converter={StaticResource FalseToCollapsedConverter}}" />
               </StackPanel>
             </DataTemplate>
           </DataGridTemplateColumn.CellTemplate>
         </DataGridTemplateColumn>
         <DataGridTextColumn
-          Binding="{Binding CurrentI18nData.Value.Name.Value}"
+          Binding="{Binding CurrentI18nData.Name}"
           CanUserSort="True"
           ElementStyle="{DynamicResource TextBlock_LeftCenter}"
           Header="{ll:Str 名称}"
           IsReadOnly="True"
-          SortMemberPath="CurrentI18nData.Value.Name.Value" />
+          SortMemberPath="CurrentI18nData.Name" />
         <DataGridTextColumn
-          Binding="{Binding CurrentI18nData.Value.PetName.Value}"
+          Binding="{Binding CurrentI18nData.PetName}"
           CanUserSort="True"
           ElementStyle="{DynamicResource TextBlock_LeftCenter}"
           Header="{ll:Str 宠物名称}"
           IsReadOnly="True"
-          SortMemberPath="CurrentI18nData.Value.Name.Value" />
+          SortMemberPath="CurrentI18nData.Name" />
         <DataGridTextColumn
-          Binding="{Binding CurrentI18nData.Value.Description.Value}"
+          Binding="{Binding CurrentI18nData.Description}"
           CanUserSort="True"
           ElementStyle="{DynamicResource TextBlock_LeftCenter}"
           Header="{ll:Str 描述}"
           IsReadOnly="True"
-          SortMemberPath="CurrentI18nData.Value.Description.Value" />
+          SortMemberPath="CurrentI18nData.Description" />
       </DataGrid.Columns>
     </DataGrid>
     <Button

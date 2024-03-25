@@ -1,18 +1,19 @@
-﻿using HKW.HKWUtils.Observable;
-using LinePutScript;
-using LinePutScript.Converter;
-using LinePutScript.Localization.WPF;
-using Microsoft.Win32;
-using Panuon.WPF.UI;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
+using HKW.HKWUtils.Observable;
+using LinePutScript;
+using LinePutScript.Converter;
+using LinePutScript.Localization.WPF;
+using Microsoft.Win32;
+using Panuon.WPF.UI;
 using VPet.ModMaker.Models;
 using VPet.ModMaker.Views;
 using VPet.ModMaker.Views.ModEdit;
@@ -20,7 +21,7 @@ using VPet.ModMaker.Views.ModEdit.I18nEdit;
 
 namespace VPet.ModMaker.ViewModels;
 
-public class ModMakerWindowVM
+public class ModMakerWindowVM : ObservableObjectX<ModMakerWindowVM>
 {
     #region Value
     public ModMakerWindow ModMakerWindow { get; }
@@ -30,12 +31,30 @@ public class ModMakerWindowVM
     /// <summary>
     /// 历史搜索文本
     /// </summary>
-    public ObservableValue<string> HistoriesSearchText { get; } = new();
+    #region HistoriesSearchText
+    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+    private string _historiesSearchText;
+
+    public string HistoriesSearchText
+    {
+        get => _historiesSearchText;
+        set => SetProperty(ref _historiesSearchText, value);
+    }
+    #endregion
 
     /// <summary>
     /// 显示的历史
     /// </summary>
-    public ObservableValue<ObservableCollection<ModMakeHistory>> ShowHistories { get; } = new();
+    #region ShowHistories
+    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+    private ObservableCollection<ModMakeHistory> _showHistories;
+
+    public ObservableCollection<ModMakeHistory> ShowHistories
+    {
+        get => _showHistories;
+        set => SetProperty(ref _showHistories, value);
+    }
+    #endregion
 
     /// <summary>
     /// 历史
@@ -68,12 +87,13 @@ public class ModMakerWindowVM
     {
         LoadHistories();
         ModMakerWindow = window;
-        ShowHistories.Value = Histories;
+        //TODO
+        //ShowHistories.Value = Histories;
         CreateNewModCommand.ExecuteCommand += CreateNewMod;
         LoadModFromFileCommand.ExecuteCommand += LoadModFromFile;
         ClearHistoriesCommand.ExecuteCommand += ClearHistories;
         RemoveHistoryCommand.ExecuteCommand += RemoveHistory;
-        HistoriesSearchText.ValueChanged += HistoriesSearchText_ValueChanged;
+        //HistoriesSearchText.ValueChanged += HistoriesSearchText_ValueChanged;
     }
 
     private void HistoriesSearchText_ValueChanged(
@@ -82,9 +102,9 @@ public class ModMakerWindowVM
     )
     {
         if (string.IsNullOrEmpty(e.NewValue))
-            ShowHistories.Value = Histories;
+            ShowHistories = Histories;
         else
-            ShowHistories.Value = new(Histories.Where(i => i.Id.Contains(e.NewValue)));
+            ShowHistories = new(Histories.Where(i => i.Id.Contains(e.NewValue)));
     }
 
     #region History
@@ -133,12 +153,12 @@ public class ModMakerWindowVM
     private void AddHistories(ModInfoModel modInfo)
     {
         if (
-            Histories.FirstOrDefault(h => h.SourcePath == modInfo.SourcePath.Value)
+            Histories.FirstOrDefault(h => h.SourcePath == modInfo.SourcePath)
             is ModMakeHistory history
         )
         {
-            history.Id = modInfo.Id.Value;
-            history.SourcePath = modInfo.SourcePath.Value;
+            history.Id = modInfo.Id;
+            history.SourcePath = modInfo.SourcePath;
             history.LastTime = DateTime.Now;
         }
         else
@@ -146,8 +166,8 @@ public class ModMakerWindowVM
             Histories.Add(
                 new()
                 {
-                    Id = modInfo.Id.Value,
-                    SourcePath = modInfo.SourcePath.Value,
+                    Id = modInfo.Id,
+                    SourcePath = modInfo.SourcePath,
                     LastTime = DateTime.Now,
                 }
             );
@@ -161,7 +181,7 @@ public class ModMakerWindowVM
             is not MessageBoxResult.Yes
         )
             return;
-        ShowHistories.Value.Clear();
+        ShowHistories.Clear();
         Histories.Clear();
         File.WriteAllText(ModMakerInfo.HistoryFile, string.Empty);
     }
@@ -195,7 +215,7 @@ public class ModMakerWindowVM
         GC.Collect();
         ModMakerWindow.Hide();
         // 将当前模组添加到历史
-        if (string.IsNullOrEmpty(ModInfoModel.Current.SourcePath.Value) is false)
+        if (string.IsNullOrEmpty(ModInfoModel.Current.SourcePath) is false)
             AddHistories(ModInfoModel.Current);
         SaveHistories();
         ModEditWindow = new();
@@ -204,7 +224,7 @@ public class ModMakerWindowVM
         ModEditWindow.Closed += (s, e) =>
         {
             var modInfo = ModInfoModel.Current;
-            if (string.IsNullOrEmpty(modInfo.SourcePath.Value) is false)
+            if (string.IsNullOrEmpty(modInfo.SourcePath) is false)
             {
                 AddHistories(modInfo);
                 SaveHistories();

@@ -1,5 +1,4 @@
-﻿using LinePutScript.Localization.WPF;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -12,6 +11,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using LinePutScript.Localization.WPF;
 using VPet.ModMaker.Models;
 using VPet.ModMaker.ViewModels.ModEdit.PetEdit;
 
@@ -47,17 +47,17 @@ public partial class PetEditWindow : Window
 
     private void Button_Yes_Click(object sender, RoutedEventArgs e)
     {
-        if (string.IsNullOrWhiteSpace(ViewModel.Pet.Value.Id.Value))
+        if (string.IsNullOrWhiteSpace(ViewModel.Pet.ID))
         {
             MessageBox.Show("Id不可为空".Translate(), "", MessageBoxButton.OK, MessageBoxImage.Warning);
             return;
         }
-        if (string.IsNullOrWhiteSpace(ViewModel.Pet.Value.CurrentI18nData.Value.Name.Value))
+        if (string.IsNullOrWhiteSpace(ViewModel.Pet.CurrentI18nData.Name))
         {
             MessageBox.Show("名称不可为空".Translate(), "", MessageBoxButton.OK, MessageBoxImage.Warning);
             return;
         }
-        if (string.IsNullOrWhiteSpace(ViewModel.Pet.Value.CurrentI18nData.Value.PetName.Value))
+        if (string.IsNullOrWhiteSpace(ViewModel.Pet.CurrentI18nData.PetName))
         {
             MessageBox.Show(
                 "宠物名称不可为空".Translate(),
@@ -68,8 +68,8 @@ public partial class PetEditWindow : Window
             return;
         }
         if (
-            ViewModel.OldPet?.Id.Value != ViewModel.Pet.Value.Id.Value
-            && ModInfoModel.Current.Pets.Any(i => i.Id == ViewModel.Pet.Value.Id)
+            ViewModel.OldPet?.ID != ViewModel.Pet.ID
+            && ModInfoModel.Current.Pets.Any(i => i.ID == ViewModel.Pet.ID)
         )
         {
             MessageBox.Show("此Id已存在", "", MessageBoxButton.OK, MessageBoxImage.Warning);

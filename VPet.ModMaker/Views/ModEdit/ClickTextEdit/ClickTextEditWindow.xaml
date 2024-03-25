@@ -38,7 +38,7 @@
           Grid.Column="1"
           pu:TextBoxHelper.Watermark="Id"
           Style="{StaticResource TextBox_Wrap}"
-          Text="{Binding ClickText.Value.Id.Value, UpdateSourceTrigger=PropertyChanged}"
+          Text="{Binding ClickText.Id, UpdateSourceTrigger=PropertyChanged}"
           TextWrapping="Wrap" />
       </Grid>
       <TextBox
@@ -47,7 +47,7 @@
         d:Text="这是一个测试文本,这是一个测试文本,这是一个测试文本,这是一个测试文本,这是一个测试文本,这是一个测试文本,这是一个测试文本,"
         pu:TextBoxHelper.Watermark="{ll:Str 文本}"
         Style="{StaticResource TextBox_Wrap}"
-        Text="{Binding ClickText.Value.CurrentI18nData.Value.Text.Value, UpdateSourceTrigger=PropertyChanged}" />
+        Text="{Binding ClickText.CurrentI18nData.Text, UpdateSourceTrigger=PropertyChanged}" />
     </Grid>
     <Grid Grid.Column="1">
       <Grid.RowDefinitions>
@@ -72,7 +72,7 @@
         <TextBox
           Grid.Column="1"
           pu:TextBoxHelper.Watermark="{ll:Str 非必要}"
-          Text="{Binding ClickText.Value.Working.Value, UpdateSourceTrigger=PropertyChanged}" />
+          Text="{Binding ClickText.Working, UpdateSourceTrigger=PropertyChanged}" />
         <Label Grid.Row="3" Content="{ll:Str 宠物状态}" />
         <Grid Grid.Row="3" Grid.Column="1">
           <Grid.ColumnDefinitions>
@@ -81,20 +81,20 @@
             <ColumnDefinition Width="Auto" />
             <ColumnDefinition Width="Auto" />
           </Grid.ColumnDefinitions>
-          <TextBlock Text="{Binding ClickText.Value.Mode.EnumValue.Value}" />
+          <TextBlock Text="{Binding ClickText.Mode.Value}" />
           <ComboBox
             x:Name="ComboBox_Mode"
             Grid.Column="1"
-            ItemsSource="{Binding ClickText.Value.ModeTypes}"
+            ItemsSource="{Binding ClickText.ModeTypes}"
             SelectedIndex="0" />
           <Button
             Grid.Column="2"
-            Command="{Binding ClickText.Value.Mode.AddCommand}"
+            Command="{Binding ClickText.Mode.AddCommand}"
             CommandParameter="{Binding SelectedItem, ElementName=ComboBox_Mode}"
             Content="+" />
           <Button
             Grid.Column="3"
-            Command="{Binding ClickText.Value.Mode.RemoveCommand}"
+            Command="{Binding ClickText.Mode.RemoveCommand}"
             CommandParameter="{Binding SelectedItem, ElementName=ComboBox_Mode}"
             Content="-" />
         </Grid>
@@ -102,8 +102,8 @@
         <ComboBox
           Grid.Row="4"
           Grid.Column="1"
-          ItemsSource="{Binding ClickText.Value.WorkingStates}"
-          SelectedItem="{Binding ClickText.Value.WorkingState.Value}" />
+          ItemsSource="{Binding ClickText.WorkingStates}"
+          SelectedItem="{Binding ClickText.WorkingState}" />
         <Label Grid.Row="5" Content="{ll:Str 日期区间}" />
         <Grid Grid.Row="5" Grid.Column="1">
           <Grid.ColumnDefinitions>
@@ -112,54 +112,54 @@
             <ColumnDefinition Width="Auto" />
             <ColumnDefinition Width="Auto" />
           </Grid.ColumnDefinitions>
-          <TextBlock Text="{Binding ClickText.Value.DayTime.EnumValue.Value}" />
+          <TextBlock Text="{Binding ClickText.DayTime.Value}" />
           <ComboBox
             x:Name="ComboBox_DayTime"
             Grid.Column="1"
-            ItemsSource="{Binding ClickText.Value.DayTimes}"
+            ItemsSource="{Binding ClickText.DayTimes}"
             SelectedIndex="0" />
           <Button
             Grid.Column="2"
-            Command="{Binding ClickText.Value.DayTime.AddCommand}"
+            Command="{Binding ClickText.DayTime.AddCommand}"
             CommandParameter="{Binding SelectedItem, ElementName=ComboBox_DayTime}"
             Content="+" />
           <Button
             Grid.Column="3"
-            Command="{Binding ClickText.Value.DayTime.RemoveCommand}"
+            Command="{Binding ClickText.DayTime.RemoveCommand}"
             CommandParameter="{Binding SelectedItem, ElementName=ComboBox_DayTime}"
             Content="-" />
         </Grid>
         <ListBox Grid.Row="6" Grid.ColumnSpan="2">
           <ListBoxItem
-            DataContext="{Binding ClickText.Value.Like}"
+            DataContext="{Binding ClickText.Like}"
             Tag="{ll:Str 好感度范围}"
             Template="{StaticResource ListBoxItem_RangeData}" />
           <ListBoxItem
-            DataContext="{Binding ClickText.Value.Health}"
+            DataContext="{Binding ClickText.Health}"
             Tag="{ll:Str 健康度范围}"
             Template="{StaticResource ListBoxItem_RangeData}" />
           <ListBoxItem
-            DataContext="{Binding ClickText.Value.Level}"
+            DataContext="{Binding ClickText.Level}"
             Tag="{ll:Str 等级范围}"
             Template="{StaticResource ListBoxItem_RangeData}" />
           <ListBoxItem
-            DataContext="{Binding ClickText.Value.Money}"
+            DataContext="{Binding ClickText.Money}"
             Tag="{ll:Str 金钱范围}"
             Template="{StaticResource ListBoxItem_RangeData}" />
           <ListBoxItem
-            DataContext="{Binding ClickText.Value.Food}"
+            DataContext="{Binding ClickText.Food}"
             Tag="{ll:Str 食物范围}"
             Template="{StaticResource ListBoxItem_RangeData}" />
           <ListBoxItem
-            DataContext="{Binding ClickText.Value.Drink}"
+            DataContext="{Binding ClickText.Drink}"
             Tag="{ll:Str 口渴范围}"
             Template="{StaticResource ListBoxItem_RangeData}" />
           <ListBoxItem
-            DataContext="{Binding ClickText.Value.Feel}"
+            DataContext="{Binding ClickText.Feel}"
             Tag="{ll:Str 心情范围}"
             Template="{StaticResource ListBoxItem_RangeData}" />
           <ListBoxItem
-            DataContext="{Binding ClickText.Value.Strength}"
+            DataContext="{Binding ClickText.Strength}"
             Tag="{ll:Str 体力范围}"
             Template="{StaticResource ListBoxItem_RangeData}" />
         </ListBox>

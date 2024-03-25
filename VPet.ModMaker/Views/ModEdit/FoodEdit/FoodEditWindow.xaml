@@ -30,7 +30,7 @@
           x:Name="Image_FoodImage"
           Width="250"
           Height="250"
-          Source="{Binding Food.Value.Image.Value}"
+          Source="{Binding Food.Image}"
           Stretch="Uniform">
           <Image.ContextMenu>
             <ContextMenu>
@@ -44,7 +44,7 @@
           Command="{Binding AddImageCommand}"
           Content="{ll:Str 添加图片}"
           Style="{DynamicResource Button_HiddenOnTagNull}"
-          Tag="{Binding Food.Value.Image.Value}" />
+          Tag="{Binding Food.Image}" />
       </Grid>
       <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
         <Grid>
@@ -63,33 +63,33 @@
           <TextBox
             Grid.Column="1"
             pu:TextBoxHelper.Watermark="Id"
-            Text="{Binding Food.Value.Id.Value, UpdateSourceTrigger=PropertyChanged}" />
+            Text="{Binding Food.Id, UpdateSourceTrigger=PropertyChanged}" />
           <Label Grid.Row="1" Content="{ll:Str 食物类型}" />
           <ComboBox
             x:Name="ComboBox_FoodType"
             Grid.Row="1"
             Grid.Column="1"
-            ItemsSource="{Binding Food.Value.FoodTypes}"
-            SelectedItem="{Binding Food.Value.Type.Value}" />
+            ItemsSource="{Binding Food.FoodTypes}"
+            SelectedItem="{Binding Food.Type}" />
           <Label Grid.Row="2" Content="{ll:Str 动画名称}" />
           <TextBox
             Grid.Row="2"
             Grid.Column="1"
             pu:TextBoxHelper.Watermark="{ll:Str 绑定的动画名称(非必要)}"
-            Text="{Binding Food.Value.Graph.Value, UpdateSourceTrigger=PropertyChanged}" />
+            Text="{Binding Food.Graph, UpdateSourceTrigger=PropertyChanged}" />
           <Label Grid.Row="3" Content="{ll:Str 食物名称}" />
           <TextBox
             Grid.Row="3"
             Grid.Column="1"
             pu:TextBoxHelper.Watermark="{ll:Str 食物名称}"
-            Text="{Binding Food.Value.CurrentI18nData.Value.Name.Value, UpdateSourceTrigger=PropertyChanged}" />
+            Text="{Binding Food.CurrentI18nData.Name, UpdateSourceTrigger=PropertyChanged}" />
           <Label Grid.Row="4" Content="{ll:Str 食物描述}" />
           <TextBox
             Grid.Row="4"
             Grid.Column="1"
             pu:TextBoxHelper.Watermark="{ll:Str 食物描述}"
             Style="{StaticResource TextBox_Wrap}"
-            Text="{Binding Food.Value.CurrentI18nData.Value.Description.Value, UpdateSourceTrigger=PropertyChanged}" />
+            Text="{Binding Food.CurrentI18nData.Description, UpdateSourceTrigger=PropertyChanged}" />
         </Grid>
       </ScrollViewer>
     </Grid>
@@ -122,42 +122,42 @@
           <pu:NumberInput
             x:Name="NumberInput_StrengthFood"
             Grid.Column="1"
-            Value="{Binding Food.Value.StrengthFood.Value, Mode=TwoWay}" />
+            Value="{Binding Food.StrengthFood, Mode=TwoWay}" />
           <Label Grid.Row="2" Content="{ll:Str 口渴值}" />
           <pu:NumberInput
             Grid.Row="2"
             Grid.Column="1"
-            Value="{Binding Food.Value.StrengthDrink.Value, Mode=TwoWay}" />
+            Value="{Binding Food.StrengthDrink, Mode=TwoWay}" />
           <Label Grid.Row="3" Content="{ll:Str 健康值}" />
           <pu:NumberInput
             Grid.Row="3"
             Grid.Column="1"
-            Value="{Binding Food.Value.Health.Value, Mode=TwoWay}" />
+            Value="{Binding Food.Health, Mode=TwoWay}" />
           <Label Grid.Row="4" Content="{ll:Str 体力值}" />
           <pu:NumberInput
             Grid.Row="4"
             Grid.Column="1"
-            Value="{Binding Food.Value.Strength.Value, Mode=TwoWay}" />
+            Value="{Binding Food.Strength, Mode=TwoWay}" />
           <Label Grid.Row="5" Content="{ll:Str 心情值}" />
           <pu:NumberInput
             Grid.Row="5"
             Grid.Column="1"
-            Value="{Binding Food.Value.Feeling.Value, Mode=TwoWay}" />
+            Value="{Binding Food.Feeling, Mode=TwoWay}" />
           <Label Grid.Row="6" Content="{ll:Str 好感值}" />
           <pu:NumberInput
             Grid.Row="6"
             Grid.Column="1"
-            Value="{Binding Food.Value.Likability.Value, Mode=TwoWay}" />
+            Value="{Binding Food.Likability, Mode=TwoWay}" />
           <Label Grid.Row="7" Content="{ll:Str 经验值}" />
           <pu:NumberInput
             Grid.Row="7"
             Grid.Column="1"
-            Value="{Binding Food.Value.Exp.Value, Mode=TwoWay}" />
+            Value="{Binding Food.Exp, Mode=TwoWay}" />
           <Label Grid.Row="8" Content="{ll:Str 价格}" />
           <pu:NumberInput
             Grid.Row="8"
             Grid.Column="1"
-            Value="{Binding Food.Value.Price.Value, Mode=TwoWay}" />
+            Value="{Binding Food.Price, Mode=TwoWay}" />
           <Label Grid.Row="9" Content="{ll:Str 参考价格}" />
           <Grid Grid.Row="9" Grid.Column="1">
             <Grid.ColumnDefinitions>
@@ -165,11 +165,11 @@
               <ColumnDefinition Width="Auto" />
               <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
-            <TextBlock Style="{DynamicResource TextBlock_LeftCenter}" Text="{Binding Food.Value.ReferencePrice.Value}" />
+            <TextBlock Style="{DynamicResource TextBlock_LeftCenter}" Text="{Binding Food.ReferencePrice}" />
             <Button
               Grid.Column="1"
               Command="{Binding SetReferencePriceCommand}"
-              CommandParameter="{Binding Food.Value.ReferencePrice.Value}"
+              CommandParameter="{Binding Food.ReferencePrice}"
               Content="{ll:Str 设置}"
               Style="{DynamicResource ThemedButtonStyle}" />
             <pu:Switch
@@ -177,7 +177,7 @@
               BoxHeight="16"
               BoxWidth="30"
               Content="{ll:Str 自动设置}"
-              IsChecked="{Binding ModInfo.AutoSetFoodPrice.Value}" />
+              IsChecked="{Binding ModInfo.AutoSetFoodPrice}" />
           </Grid>
         </Grid>
       </ScrollViewer>

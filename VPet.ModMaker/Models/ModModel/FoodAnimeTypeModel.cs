@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -14,7 +15,7 @@ using static VPet_Simulator.Core.IGameSave;
 
 namespace VPet.ModMaker.Models.ModModel;
 
-public class FoodAnimeTypeModel
+public class FoodAnimeTypeModel : ObservableObjectX<FoodAnimeModel>
 {
     /// <summary>
     /// 动作类型
@@ -37,15 +38,30 @@ public class FoodAnimeTypeModel
     /// </summary>
     public const string BackLayName = "back_lay";
 
-    /// <summary>
-    /// Id
-    /// </summary>
-    public ObservableValue<string> Id { get; } = new();
+    #region Id
+    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+    private string _id;
+
+    public string Id
+    {
+        get => _id;
+        set => SetProperty(ref _id, value);
+    }
+    #endregion
+
+    #region Name
+    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+    private string _name;
 
     /// <summary>
     /// 名称
     /// </summary>
-    public ObservableValue<string> Name { get; } = new();
+    public string Name
+    {
+        get => _name;
+        set => SetProperty(ref _name, value);
+    }
+    #endregion
 
     /// <summary>
     /// 开心动画
@@ -68,11 +84,11 @@ public class FoodAnimeTypeModel
     public ObservableCollection<FoodAnimeModel> IllAnimes { get; } = new();
 
     public FoodAnimeTypeModel()
-    {
-        Name.ValueChanged += (_, _) =>
-        {
-            Id.Value = $"{GraphType}_{Name.Value}";
-        };
+    { //TODO
+        //Name.ValueChanged += (_, _) =>
+        //{
+        //    Id.Value = $"{GraphType}_{Name.Value}";
+        //};
     }
 
     public void Close()
@@ -98,7 +114,7 @@ public class FoodAnimeTypeModel
     public FoodAnimeTypeModel(string path)
         : this()
     {
-        Name.Value = Path.GetFileName(path);
+        Name = Path.GetFileName(path);
         var infoFiles = Directory.EnumerateFiles(
             path,
             ModMakerInfo.InfoFile,
@@ -108,15 +124,15 @@ public class FoodAnimeTypeModel
             throw new Exception("信息文件不存在".Translate());
         foreach (var file in infoFiles)
         {
-            ParseInfoFile(Path.GetDirectoryName(file), file);
+            ParseInfoFile(Path.GetDirectoryName(file)!, file);
         }
     }
 
     public FoodAnimeTypeModel(FoodAnimeTypeModel model)
         : this()
     {
-        Id.Value = model.Id.Value;
-        Name.Value = model.Name.Value;
+        Id = model.Id;
+        Name = model.Name;
         foreach (var anime in model.HappyAnimes)
             HappyAnimes.Add(anime.Copy());
         foreach (var anime in model.NomalAnimes)
@@ -253,7 +269,7 @@ public class FoodAnimeTypeModel
     /// <param name="path">路径</param>
     public void Save(string path)
     {
-        var animePath = Path.Combine(path, Name.Value);
+        var animePath = Path.Combine(path, Name);
         if (
             Directory.Exists(animePath)
             && HappyAnimes.Count == 0
@@ -293,8 +309,8 @@ public class FoodAnimeTypeModel
             var indexPath = Path.Combine(modeAnimePath, anime.Index.ToString());
             Directory.CreateDirectory(indexPath);
             var infoFile = Path.Combine(indexPath, ModMakerInfo.InfoFile);
-            var frontLayName = $"{Name.Value.ToLower()}_{FrontLayName}_{anime.Index}";
-            var backLayName = $"{Name.Value.ToLower()}_{BackLayName}_{anime.Index}";
+            var frontLayName = $"{Name.ToLower()}_{FrontLayName}_{anime.Index}";
+            var backLayName = $"{Name.ToLower()}_{BackLayName}_{anime.Index}";
             SaveInfoFile(infoFile, frontLayName, backLayName, anime.Value, mode);
             SaveImages(anime.Value, indexPath);
         }
@@ -315,19 +331,19 @@ public class FoodAnimeTypeModel
         Directory.CreateDirectory(backLayPath);
         foreach (var frontImage in anime.FrontImages.EnumerateIndex())
         {
-            frontImage.Value.Image.Value.SaveToPng(
+            frontImage.Value.Image.SaveToPng(
                 Path.Combine(
                     frontLayPath,
-                    $"{anime.Id.Value}_{frontImage.Index:000}_{frontImage.Value.Duration.Value}.png"
+                    $"{anime.Id}_{frontImage.Index:000}_{frontImage.Value.Duration}.png"
                 )
             );
         }
         foreach (var backImage in anime.BackImages.EnumerateIndex())
         {
-            backImage.Value.Image.Value.SaveToPng(
+            backImage.Value.Image.SaveToPng(
                 Path.Combine(
                     backLayPath,
-                    $"{anime.Id.Value}_{backImage.Index:000}_{backImage.Value.Duration.Value}.png"
+                    $"{anime.Id}_{backImage.Index:000}_{backImage.Value.Duration}.png"
                 )
             );
         }
@@ -356,10 +372,10 @@ public class FoodAnimeTypeModel
                 new Sub("graph", nameof(GraphInfo.GraphType.Common))
             },
         };
-        var line = new Line(nameof(FoodAnimation), Name.Value.ToLower())
+        var line = new Line(nameof(FoodAnimation), Name.ToLower())
         {
             new Sub("mode", mode.ToString()),
-            new Sub("graph", Name.Value)
+            new Sub("graph", Name)
         };
         foreach (var foodLocation in anime.FoodLocations.EnumerateIndex())
         {

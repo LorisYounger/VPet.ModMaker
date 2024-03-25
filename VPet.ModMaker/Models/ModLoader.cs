@@ -129,9 +129,9 @@ public class ModLoader
             foreach (var sub in line)
             {
                 if (sub.Name == Name)
-                    i18nData.Name.Value = sub.Info;
+                    i18nData.Name = sub.Info;
                 else if (sub.Name == Intro)
-                    i18nData.Description.Value = sub.Info;
+                    i18nData.Description = sub.Info;
             }
             I18nDatas.Add(line.Info, i18nData);
         }

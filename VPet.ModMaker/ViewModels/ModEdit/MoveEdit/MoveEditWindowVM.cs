@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -11,16 +12,53 @@ using VPet.ModMaker.Models;
 
 namespace VPet.ModMaker.ViewModels.ModEdit.MoveEdit;
 
-public class MoveEditWindowVM
+public class MoveEditWindowVM : ObservableObjectX<MoveEditWindowVM>
 {
     #region Value
     public PetModel CurrentPet { get; set; }
     public MoveModel OldMove { get; set; }
-    public ObservableValue<MoveModel> Move { get; } = new(new());
+
+    #region Move
+    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+    private MoveModel _move = new();
+
+    public MoveModel Move
+    {
+        get => _move;
+        set => SetProperty(ref _move, value);
+    }
     #endregion
-    public ObservableValue<double> BorderLength { get; } = new(250);
-    public ObservableValue<double> LengthRatio { get; } = new(250.0 / 500.0);
-    public ObservableValue<BitmapImage> Image { get; } = new();
+    #endregion
+    #region BorderLength
+    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+    private double _borderLength = 250;
+
+    public double BorderLength
+    {
+        get => _borderLength;
+        set => SetProperty(ref _borderLength, value);
+    }
+    #endregion
+    #region LengthRatio
+    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+    private double _lengthRatio = 250 / 500;
+
+    public double LengthRatio
+    {
+        get => _lengthRatio;
+        set => SetProperty(ref _lengthRatio, value);
+    }
+    #endregion
+    #region Image
+    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+    private BitmapImage _image;
+
+    public BitmapImage Image
+    {
+        get => _image;
+        set => SetProperty(ref _image, value);
+    }
+    #endregion
     #region Command
     public ObservableCommand AddImageCommand { get; } = new();
     public ObservableCommand ChangeImageCommand { get; } = new();
@@ -29,7 +67,8 @@ public class MoveEditWindowVM
     {
         AddImageCommand.ExecuteCommand += AddImage;
         ChangeImageCommand.ExecuteCommand += ChangeImage;
-        Image.ValueChanged += Image_ValueChanged;
+        //TODO
+        //Image.ValueChanged += Image_ValueChanged;
     }
 
     private void Image_ValueChanged(
@@ -42,7 +81,7 @@ public class MoveEditWindowVM
 
     public void Close()
     {
-        Image.Value?.StreamSource?.Close();
+        Image?.StreamSource?.Close();
     }
 
     private void AddImage()
@@ -55,7 +94,7 @@ public class MoveEditWindowVM
             };
         if (openFileDialog.ShowDialog() is true)
         {
-            Image.Value = NativeUtils.LoadImageToMemoryStream(openFileDialog.FileName);
+            Image = NativeUtils.LoadImageToMemoryStream(openFileDialog.FileName);
         }
     }
 
@@ -69,8 +108,8 @@ public class MoveEditWindowVM
             };
         if (openFileDialog.ShowDialog() is true)
         {
-            Image.Value?.StreamSource?.Close();
-            Image.Value = NativeUtils.LoadImageToMemoryStream(openFileDialog.FileName);
+            Image?.StreamSource?.Close();
+            Image = NativeUtils.LoadImageToMemoryStream(openFileDialog.FileName);
         }
     }
 }

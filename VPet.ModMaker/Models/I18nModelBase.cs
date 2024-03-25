@@ -1,9 +1,9 @@
-﻿using HKW.HKWUtils.Observable;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using HKW.HKWUtils.Observable;
 
 namespace VPet.ModMaker.Models;
 
@@ -11,20 +11,20 @@ namespace VPet.ModMaker.Models;
 /// I18n模型
 /// </summary>
 /// <typeparam name="T">类型</typeparam>
-public class I18nModelBase<T> : ObservableClass<I18nModelBase<T>>
+public class I18nModelBase<T> : ObservableObjectX<I18nModelBase<T>>
     where T : class, new()
 {
     /// <summary>
     /// 当前I18n数据
     /// </summary>
-
-    private T _CurrentI18nData = new();
+    #region CurrentI18nData
+    private T _currentI18nData = new();
     public T CurrentI18nData
     {
-        get => _CurrentI18nData;
-        set => SetProperty(ref _CurrentI18nData, value);
+        get => _currentI18nData;
+        set => SetProperty(ref _currentI18nData, value);
     }
-
+    #endregion
     /// <summary>
     /// 所有I18n数据
     /// </summary>
@@ -32,7 +32,8 @@ public class I18nModelBase<T> : ObservableClass<I18nModelBase<T>>
 
     public I18nModelBase()
     {
-        I18nHelper.Current.CultureName.ValueChanged += CultureChanged;
+        //TODO
+        //I18nHelper.Current.CultureName.ValueChanged += CultureChanged;
         I18nHelper.Current.AddCulture += AddCulture;
         I18nHelper.Current.RemoveCulture += RemoveCulture;
         I18nHelper.Current.ReplaceCulture += ReplaceCulture;
@@ -40,7 +41,7 @@ public class I18nModelBase<T> : ObservableClass<I18nModelBase<T>>
             return;
         foreach (var item in I18nHelper.Current.CultureNames)
             I18nDatas.Add(item, new());
-        CurrentI18nData = I18nDatas[I18nHelper.Current.CultureName.Value];
+        CurrentI18nData = I18nDatas[I18nHelper.Current.CultureName];
     }
 
     /// <summary>

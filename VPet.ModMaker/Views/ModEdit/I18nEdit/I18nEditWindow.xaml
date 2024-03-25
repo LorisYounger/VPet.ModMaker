@@ -27,13 +27,13 @@
       </Grid.ColumnDefinitions>
       <TextBox
         pu:TextBoxHelper.Watermark="{ll:Str 搜索}"
-        IsEnabled="{Binding SearchTarget.Value, Converter={StaticResource NullToFalseConverter}}"
+        IsEnabled="{Binding SearchTarget, Converter={StaticResource NullToFalseConverter}}"
         Style="{DynamicResource StandardTextBoxStyle}"
-        Text="{Binding Search.Value, UpdateSourceTrigger=PropertyChanged}" />
+        Text="{Binding Search, UpdateSourceTrigger=PropertyChanged}" />
       <ComboBox
         Grid.Column="1"
         ItemsSource="{Binding SearchTargets}"
-        SelectedItem="{Binding SearchTarget.Value}"
+        SelectedItem="{Binding SearchTarget}"
         Style="{DynamicResource StandardComboBoxStyle}" />
     </Grid>
     <DataGrid
@@ -44,7 +44,7 @@
       CanUserAddRows="False"
       CanUserDeleteRows="False"
       CanUserReorderColumns="False"
-      ItemsSource="{Binding ShowI18nDatas.Value}"
+      ItemsSource="{Binding ShowI18nDatas}"
       ScrollViewer.IsDeferredScrollingEnabled="True"
       VirtualizingStackPanel.VirtualizationMode="Recycling">
       <DataGrid.Columns>
@@ -52,12 +52,12 @@
           Width="300"
           MinWidth="200"
           MaxWidth="500"
-          Binding="{Binding Id.Value}"
+          Binding="{Binding Id}"
           CanUserSort="True"
           ElementStyle="{StaticResource TextBlock_Wrap}"
           Header="Id"
           IsReadOnly="True"
-          SortMemberPath="Id.Value" />
+          SortMemberPath="Id" />
       </DataGrid.Columns>
     </DataGrid>
   </Grid>

@@ -1,11 +1,12 @@
-﻿using HKW.HKWUtils.Observable;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Serialization;
+using HKW.HKWUtils.Observable;
 using VPet_Simulator.Windows.Interface;
 
 namespace VPet.ModMaker.Models;
@@ -33,48 +34,85 @@ public class LowTextModel : I18nModel<I18nLowTextModel>
     public static ObservableCollection<LowText.StrengthType> StrengthTypes { get; } =
         new(Enum.GetValues(typeof(LowText.StrengthType)).Cast<LowText.StrengthType>());
 
+    #region Id
+    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+    private string _id = string.Empty;
+
     /// <summary>
     /// Id
     /// </summary>
-    public ObservableValue<string> Id { get; } = new();
+    public string Id
+    {
+        get => _id;
+        set => SetProperty(ref _id, value);
+    }
+    #endregion
+
+    #region Mode
+    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+    private LowText.ModeType _mode;
 
     /// <summary>
     /// 状态
     /// </summary>
-    public ObservableValue<LowText.ModeType> Mode { get; } = new();
+    public LowText.ModeType Mode
+    {
+        get => _mode;
+        set => SetProperty(ref _mode, value);
+    }
+    #endregion
+
+    #region Strength
+    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+    private LowText.StrengthType _strength;
 
     /// <summary>
     /// 体力
     /// </summary>
-    public ObservableValue<LowText.StrengthType> Strength { get; } = new();
+    public LowText.StrengthType Strength
+    {
+        get => _strength;
+        set => SetProperty(ref _strength, value);
+    }
+    #endregion
+
+    #region Like
+    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+    private LowText.LikeType _like;
 
     /// <summary>
     /// 好感度
     /// </summary>
-    public ObservableValue<LowText.LikeType> Like { get; } = new();
+
+    public LowText.LikeType Like
+    {
+        get => _like;
+        set => SetProperty(ref _like, value);
+    }
+    #endregion
 
     public LowTextModel() { }
 
     public LowTextModel(LowTextModel lowText)
         : this()
     {
-        Id.Value = lowText.Id.Value;
-        Mode.Value = lowText.Mode.Value;
-        Strength.Value = lowText.Strength.Value;
-        Like.Value = lowText.Like.Value;
+        Id = lowText.Id;
+        Mode = lowText.Mode;
+        Strength = lowText.Strength;
+        Like = lowText.Like;
 
         foreach (var item in lowText.I18nDatas)
             I18nDatas[item.Key] = item.Value.Copy();
-        CurrentI18nData.Value = I18nDatas[I18nHelper.Current.CultureName.Value];
+        CurrentI18nData = I18nDatas[I18nHelper.Current.CultureName];
     }
 
     public LowTextModel(LowText lowText)
         : this()
     {
-        Id.Value = lowText.Text;
-        Mode.Value = lowText.Mode;
-        Strength.Value = lowText.Strength;
-        Like.Value = lowText.Like;
+        Id = lowText.Text;
+        Mode = lowText.Mode;
+        Strength = lowText.Strength;
+        Like = lowText.Like;
     }
 
     public void Close() { }
@@ -83,22 +121,31 @@ public class LowTextModel : I18nModel<I18nLowTextModel>
     {
         return new()
         {
-            Text = Id.Value,
-            Mode = Mode.Value,
-            Strength = Strength.Value,
-            Like = Like.Value,
+            Text = Id,
+            Mode = Mode,
+            Strength = Strength,
+            Like = Like,
         };
     }
 }
 
-public class I18nLowTextModel
+public class I18nLowTextModel : ObservableObjectX<I18nLowTextModel>
 {
-    public ObservableValue<string> Text { get; } = new();
+    #region Text
+    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+    private string _text = string.Empty;
+
+    public string Text
+    {
+        get => _text;
+        set => SetProperty(ref _text, value);
+    }
+    #endregion
 
     public I18nLowTextModel Copy()
     {
         var result = new I18nLowTextModel();
-        result.Text.Value = Text.Value;
+        result.Text = Text;
         return result;
     }
 }

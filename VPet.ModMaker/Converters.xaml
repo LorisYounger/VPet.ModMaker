@@ -1,18 +1,17 @@
 ﻿<ResourceDictionary
   xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
   xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-  xmlns:c="clr-namespace:VPet.ModMaker.Converters">
-  <c:MarginConverter x:Key="MarginConverter" />
-  <c:RatioMarginConverter x:Key="RatioMarginConverter" />
-  <c:CalculatorConverter x:Key="CalculatorConverter" />
-  <c:StringFormatConverter x:Key="StringFormatConverter" />
-  <c:BrushToMediaColorConverter x:Key="BrushToMediaColorConverter" />
-  <c:MaxConverter x:Key="MaxConverter" />
-  <c:FalseToHiddenConverter x:Key="FalseToHiddenConverter" />
-  <c:FalseToCollapsedConverter x:Key="FalseToCollapsedConverter" />
-  <c:EqualsConverter x:Key="EqualsConverter" />
-  <c:NotEqualsConverter x:Key="NotEqualsConverter" />
-  <c:NullToFalseConverter x:Key="NullToFalseConverter" />
-  <c:AllTrueToCollapsedConverter x:Key="AllTrueToCollapsedConverter" />
-  <c:BoolInverter x:Key="BoolInverter" />
+  xmlns:c="https://hkw.com/wpf">
+  <c:MarginMultiConverter x:Key="MarginConverter" />
+  <c:MarginMultiConverter x:Key="RatioMarginConverter" HasRatio="True" />
+  <c:CalculatorMultiConverter x:Key="CalculatorConverter" />
+  <c:StringFormatMultiConverter x:Key="StringFormatConverter" />
+  <c:SolidColorBrushToMediaColorConverter x:Key="BrushToMediaColorConverter" />
+  <!--<c:MaxConverter x:Key="MaxConverter" />-->
+  <c:BoolToVisibilityConverter x:Key="FalseToCollapsedConverter" />
+  <c:EqualsMultiConverter x:Key="EqualsConverter" />
+  <c:EqualsMultiConverter x:Key="NotEqualsConverter" IsInverted="True" />
+  <c:NullToBoolConverter x:Key="NullToFalseConverter" />
+  <c:AllBoolToVisibilityMultiConverter x:Key="AllTrueToCollapsedConverter" />
+  <c:BoolInverteConverter x:Key="BoolInverter" />
 </ResourceDictionary>

@@ -1,6 +1,4 @@
-﻿using LinePutScript.Localization.WPF;
-using Microsoft.Win32;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -13,6 +11,8 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using LinePutScript.Localization.WPF;
+using Microsoft.Win32;
 using VPet.ModMaker.Models;
 using VPet.ModMaker.ViewModels.ModEdit.FoodEdit;
 using VPet_Simulator.Windows.Interface;
@@ -51,19 +51,19 @@ public partial class FoodEditWindow : Window
 
     private void Button_Yes_Click(object sender, RoutedEventArgs e)
     {
-        if (string.IsNullOrWhiteSpace(ViewModel.Food.Value.Id.Value))
+        if (string.IsNullOrWhiteSpace(ViewModel.Food.Id))
         {
             MessageBox.Show("Id不可为空".Translate(), "", MessageBoxButton.OK, MessageBoxImage.Warning);
             return;
         }
-        if (ViewModel.Food.Value.Image.Value is null)
+        if (ViewModel.Food.Image is null)
         {
             MessageBox.Show("图像不可为空".Translate(), "", MessageBoxButton.OK, MessageBoxImage.Warning);
             return;
         }
         if (
-            ViewModel.OldFood?.Id.Value != ViewModel.Food.Value.Id.Value
-            && ModInfoModel.Current.Foods.Any(i => i.Id == ViewModel.Food.Value.Id)
+            ViewModel.OldFood?.Id != ViewModel.Food.Id
+            && ModInfoModel.Current.Foods.Any(i => i.Id == ViewModel.Food.Id)
         )
         {
             MessageBox.Show("此Id已存在", "", MessageBoxButton.OK, MessageBoxImage.Warning);

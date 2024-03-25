@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
 using System.Text;
@@ -14,13 +15,23 @@ using VPet_Simulator.Windows.Interface;
 
 namespace VPet.ModMaker.ViewModels.ModEdit.FoodEdit;
 
-public class FoodEditWindowVM
+public class FoodEditWindowVM : ObservableObjectX<FoodEditWindowVM>
 {
     public static ModInfoModel ModInfo => ModInfoModel.Current;
     public static I18nHelper I18nData => I18nHelper.Current;
     #region Value
     public FoodModel OldFood { get; set; }
-    public ObservableValue<FoodModel> Food { get; } = new(new());
+
+    #region Food
+    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+    private FoodModel _food;
+
+    public FoodModel Food
+    {
+        get => _food;
+        set => SetProperty(ref _food, value);
+    }
+    #endregion
     #endregion
 
     #region Command
@@ -34,7 +45,8 @@ public class FoodEditWindowVM
         AddImageCommand.ExecuteCommand += AddImage;
         ChangeImageCommand.ExecuteCommand += ChangeImage;
         SetReferencePriceCommand.ExecuteCommand += SetReferencePriceToPrice;
-        Food.Value.ReferencePrice.ValueChanged += ReferencePrice_ValueChanged;
+        //TODO
+        //Food.Value.ReferencePrice.ValueChanged += ReferencePrice_ValueChanged;
     }
 
     private void ReferencePrice_ValueChanged(
@@ -42,7 +54,7 @@ public class FoodEditWindowVM
         ValueChangedEventArgs<double> e
     )
     {
-        if (ModInfo.AutoSetFoodPrice.Value)
+        if (ModInfo.AutoSetFoodPrice)
         {
             SetReferencePriceToPrice(e.NewValue);
         }
@@ -50,12 +62,12 @@ public class FoodEditWindowVM
 
     private void SetReferencePriceToPrice(double value)
     {
-        Food.Value.Price.Value = value;
+        Food.Price = value;
     }
 
     public void Close()
     {
-        Food.Value.Close();
+        Food.Close();
     }
 
     private void AddImage()
@@ -68,7 +80,7 @@ public class FoodEditWindowVM
             };
         if (openFileDialog.ShowDialog() is true)
         {
-            Food.Value.Image.Value = NativeUtils.LoadImageToMemoryStream(openFileDialog.FileName);
+            Food.Image = NativeUtils.LoadImageToMemoryStream(openFileDialog.FileName);
         }
     }
 
@@ -82,8 +94,8 @@ public class FoodEditWindowVM
             };
         if (openFileDialog.ShowDialog() is true)
         {
-            Food.Value.Image.Value?.StreamSource?.Close();
-            Food.Value.Image.Value = NativeUtils.LoadImageToMemoryStream(openFileDialog.FileName);
+            Food.Image?.StreamSource?.Close();
+            Food.Image = NativeUtils.LoadImageToMemoryStream(openFileDialog.FileName);
         }
     }
 }

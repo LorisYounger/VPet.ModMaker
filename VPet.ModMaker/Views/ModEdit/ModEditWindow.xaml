@@ -46,7 +46,7 @@
           x:Name="Image_ModImage"
           Width="256"
           Height="256"
-          Source="{Binding ModInfo.Value.Image.Value}"
+          Source="{Binding ModInfo.Image}"
           Stretch="Uniform">
           <Image.ContextMenu>
             <ContextMenu>
@@ -67,7 +67,7 @@
             <Style BasedOn="{StaticResource ThemedButtonStyle}" TargetType="Button">
               <Setter Property="Visibility" Value="Hidden" />
               <Style.Triggers>
-                <DataTrigger Binding="{Binding ModInfo.Value.Image.Value}" Value="{x:Null}">
+                <DataTrigger Binding="{Binding ModInfo.Image}" Value="{x:Null}">
                   <Setter Property="Visibility" Value="Visible" />
                 </DataTrigger>
               </Style.Triggers>
@@ -92,34 +92,34 @@
             <TextBox
               Grid.Column="1"
               pu:TextBoxHelper.Watermark="Id"
-              Text="{Binding ModInfo.Value.Id.Value, UpdateSourceTrigger=PropertyChanged}" />
+              Text="{Binding ModInfo.Id, UpdateSourceTrigger=PropertyChanged}" />
             <Label Grid.Row="1" Content="{ll:Str 作者}" />
             <TextBox
               x:Name="TextBox_Author"
               Grid.Row="1"
               Grid.Column="1"
               pu:TextBoxHelper.Watermark="{ll:Str 作者}"
-              Text="{Binding ModInfo.Value.Author.Value, UpdateSourceTrigger=PropertyChanged}" />
+              Text="{Binding ModInfo.Author, UpdateSourceTrigger=PropertyChanged}" />
             <Label Grid.Row="2" Content="{ll:Str 游戏版本}" />
             <TextBox
               x:Name="TextBox_GameVersion"
               Grid.Row="2"
               Grid.Column="1"
               pu:TextBoxHelper.Watermark="{ll:Str 游戏版本}"
-              Text="{Binding ModInfo.Value.GameVersion.Value, UpdateSourceTrigger=PropertyChanged}" />
+              Text="{Binding ModInfo.GameVersion, UpdateSourceTrigger=PropertyChanged}" />
             <Label Grid.Row="3" Content="{ll:Str 模组版本}" />
             <TextBox
               x:Name="TextBox_ModVersion"
               Grid.Row="3"
               Grid.Column="1"
               pu:TextBoxHelper.Watermark="{ll:Str 模组版本}"
-              Text="{Binding ModInfo.Value.ModVersion.Value, UpdateSourceTrigger=PropertyChanged}" />
+              Text="{Binding ModInfo.ModVersion, UpdateSourceTrigger=PropertyChanged}" />
             <Label Grid.Row="4" Content="{ll:Str 模组名称}" />
             <TextBox
               Grid.Row="4"
               Grid.Column="1"
               pu:TextBoxHelper.Watermark="{ll:Str 模组名称}"
-              Text="{Binding ModInfo.Value.CurrentI18nData.Value.Name.Value, UpdateSourceTrigger=PropertyChanged}" />
+              Text="{Binding ModInfo.CurrentI18nData.Name, UpdateSourceTrigger=PropertyChanged}" />
             <Label Grid.Row="5" Content="{ll:Str 模组介绍}" />
             <TextBox
               x:Name="TextBox_Description"
@@ -129,7 +129,7 @@
               VerticalContentAlignment="Top"
               d:Text="AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
               pu:TextBoxHelper.Watermark="{ll:Str 模组介绍}"
-              Text="{Binding ModInfo.Value.CurrentI18nData.Value.Description.Value, UpdateSourceTrigger=PropertyChanged}"
+              Text="{Binding ModInfo.CurrentI18nData.Description, UpdateSourceTrigger=PropertyChanged}"
               TextWrapping="Wrap" />
           </Grid>
         </ScrollViewer>
@@ -140,7 +140,7 @@
             <TabItem.Header>
               <MultiBinding Converter="{StaticResource StringFormatConverter}" ConverterParameter="{}{0} ({1})">
                 <Binding Path="Tag" RelativeSource="{RelativeSource Mode=Self}" />
-                <Binding Path="ModInfo.Value.Foods.Count" />
+                <Binding Path="ModInfo.Foods.Count" />
               </MultiBinding>
             </TabItem.Header>
             <Frame Content="{Binding ModEditWindow.FoodPage}" />
@@ -149,7 +149,7 @@
             <TabItem.Header>
               <MultiBinding Converter="{StaticResource StringFormatConverter}" ConverterParameter="{}{0} ({1})">
                 <Binding Path="Tag" RelativeSource="{RelativeSource Mode=Self}" />
-                <Binding Path="ModInfo.Value.ClickTexts.Count" />
+                <Binding Path="ModInfo.ClickTexts.Count" />
               </MultiBinding>
             </TabItem.Header>
             <Frame Content="{Binding ModEditWindow.ClickTextPage}" />
@@ -158,7 +158,7 @@
             <TabItem.Header>
               <MultiBinding Converter="{StaticResource StringFormatConverter}" ConverterParameter="{}{0} ({1})">
                 <Binding Path="Tag" RelativeSource="{RelativeSource Mode=Self}" />
-                <Binding Path="ModInfo.Value.LowTexts.Count" />
+                <Binding Path="ModInfo.LowTexts.Count" />
               </MultiBinding>
             </TabItem.Header>
             <Frame Content="{Binding ModEditWindow.LowTextPage}" />
@@ -167,7 +167,7 @@
             <TabItem.Header>
               <MultiBinding Converter="{StaticResource StringFormatConverter}" ConverterParameter="{}{0} ({1})">
                 <Binding Path="Tag" RelativeSource="{RelativeSource Mode=Self}" />
-                <Binding Path="ModInfo.Value.SelectTexts.Count" />
+                <Binding Path="ModInfo.SelectTexts.Count" />
               </MultiBinding>
             </TabItem.Header>
             <Frame Content="{Binding ModEditWindow.SelectTextPage}" />
@@ -176,7 +176,7 @@
             <TabItem.Header>
               <MultiBinding Converter="{StaticResource StringFormatConverter}" ConverterParameter="{}{0} ({1})">
                 <Binding Path="Tag" RelativeSource="{RelativeSource Mode=Self}" />
-                <Binding Path="ModInfo.Value.PetDisplayedCount.Value" />
+                <Binding Path="ModInfo.PetDisplayedCount" />
               </MultiBinding>
             </TabItem.Header>
             <Frame Content="{Binding ModEditWindow.PetPage}" />
@@ -185,7 +185,7 @@
             <TabItem.Header>
               <MultiBinding Converter="{StaticResource StringFormatConverter}" ConverterParameter="{}{0} ({1})">
                 <Binding Path="Tag" RelativeSource="{RelativeSource Mode=Self}" />
-                <Binding Path="ModEditWindow.WorkPage.ViewModel.CurrentPet.Value.Works.Count" />
+                <Binding Path="ModEditWindow.WorkPage.ViewModel.CurrentPet.Works.Count" />
               </MultiBinding>
             </TabItem.Header>
             <Frame Content="{Binding ModEditWindow.WorkPage}" />
@@ -194,7 +194,7 @@
             <TabItem.Header>
               <MultiBinding Converter="{StaticResource StringFormatConverter}" ConverterParameter="{}{0} ({1})">
                 <Binding Path="Tag" RelativeSource="{RelativeSource Mode=Self}" />
-                <Binding Path="ModEditWindow.MovePage.ViewModel.CurrentPet.Value.Moves.Count" />
+                <Binding Path="ModEditWindow.MovePage.ViewModel.CurrentPet.Moves.Count" />
               </MultiBinding>
             </TabItem.Header>
             <Frame Content="{Binding ModEditWindow.MovePage}" />
@@ -203,7 +203,7 @@
             <TabItem.Header>
               <MultiBinding Converter="{StaticResource StringFormatConverter}" ConverterParameter="{}{0} ({1})">
                 <Binding Path="Tag" RelativeSource="{RelativeSource Mode=Self}" />
-                <Binding Path="ModEditWindow.AnimePage.ViewModel.CurrentPet.Value.AnimeCount" />
+                <Binding Path="ModEditWindow.AnimePage.ViewModel.CurrentPet.AnimeCount" />
               </MultiBinding>
             </TabItem.Header>
             <Frame Content="{Binding ModEditWindow.AnimePage}" />
@@ -281,7 +281,7 @@
         d:ItemsSource="{d:SampleData ItemCount=5}"
         ItemsSource="{Binding I18nData.CultureNames}"
         ScrollViewer.VerticalScrollBarVisibility="Auto"
-        SelectedItem="{Binding I18nData.CultureName.Value}">
+        SelectedItem="{Binding I18nData.CultureName}">
         <ListBox.ItemContainerStyle>
           <Style BasedOn="{StaticResource {x:Type ListBoxItem}}" TargetType="ListBoxItem">
             <Setter Property="Tag" Value="{Binding DataContext, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}}" />

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -18,7 +19,7 @@ using static VPet_Simulator.Core.IGameSave;
 
 namespace VPet.ModMaker.ViewModels.ModEdit.AnimeEdit;
 
-public class AnimeEditWindowVM
+public class AnimeEditWindowVM : ObservableObjectX<AnimeEditWindowVM>
 {
     /// <summary>
     /// 当前宠物
@@ -35,35 +36,81 @@ public class AnimeEditWindowVM
     /// </summary>
     public ObservableValue<AnimeTypeModel> Anime { get; } = new(new());
 
+    #region CurrentImageModel
+    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+    private ImageModel _currentImageModel;
+
     /// <summary>
     /// 当前图像模型
     /// </summary>
-    public ObservableValue<ImageModel> CurrentImageModel { get; } = new();
+    public ImageModel CurrentImageModel
+    {
+        get => _currentImageModel;
+        set => SetProperty(ref _currentImageModel, value);
+    }
+    #endregion
+
+    #region CurrentAnimeModel
+    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+    private AnimeModel _currentAnimeModel;
 
     /// <summary>
     /// 当前动画模型
     /// </summary>
-    public ObservableValue<AnimeModel> CurrentAnimeModel { get; } = new();
+
+    public AnimeModel CurrentAnimeModel
+    {
+        get => _currentAnimeModel;
+        set => SetProperty(ref _currentAnimeModel, value);
+    }
+    #endregion
 
     /// <summary>
     /// 当前模式
     /// </summary>
     public ModeType CurrentMode { get; set; }
 
+    #region Loop
+    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+    private bool _loop;
+
     /// <summary>
     /// 循环
     /// </summary>
-    public ObservableValue<bool> Loop { get; } = new();
+    public bool Loop
+    {
+        get => _loop;
+        set => SetProperty(ref _loop, value);
+    }
+    #endregion
+
+    #region HasMultiType
+    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+    private bool _hasMultiType;
 
     /// <summary>
     /// 含有多个状态 参见 <see cref="AnimeTypeModel.HasMultiTypeAnimes"/>
     /// </summary>
-    public ObservableValue<bool> HasMultiType { get; } = new(false);
+    public bool HasMultiType
+    {
+        get => _hasMultiType;
+        set => SetProperty(ref _hasMultiType, value);
+    }
+    #endregion
+
+    #region HasAnimeName
+    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+    private bool _hasAnimeName;
 
     /// <summary>
     /// 含有动画名称 参见 <see cref="AnimeTypeModel.HasNameAnimes"/>
     /// </summary>
-    public ObservableValue<bool> HasAnimeName { get; } = new(false);
+    public bool HasAnimeName
+    {
+        get => _hasAnimeName;
+        set => SetProperty(ref _hasAnimeName, value);
+    }
+    #endregion
 
     #region Command
     /// <summary>
@@ -120,8 +167,8 @@ public class AnimeEditWindowVM
     public AnimeEditWindowVM()
     {
         _playerTask = new(Play);
-
-        CurrentAnimeModel.ValueChanged += CurrentAnimeModel_ValueChanged;
+        //TODO
+        //CurrentAnimeModel.ValueChanged += CurrentAnimeModel_ValueChanged;
 
         PlayCommand.ExecuteAsyncCommand += PlayCommand_AsyncExecuteEvent;
         StopCommand.ExecuteCommand += StopCommand_ExecuteEvent;
@@ -146,11 +193,11 @@ public class AnimeEditWindowVM
 
     private void CheckGraphType(AnimeTypeModel model)
     {
-        if (AnimeTypeModel.HasMultiTypeAnimes.Contains(model.GraphType.Value))
-            HasMultiType.Value = true;
+        if (AnimeTypeModel.HasMultiTypeAnimes.Contains(model.GraphType))
+            HasMultiType = true;
 
-        if (AnimeTypeModel.HasNameAnimes.Contains(model.GraphType.Value))
-            HasAnimeName.Value = true;
+        if (AnimeTypeModel.HasNameAnimes.Contains(model.GraphType))
+            HasAnimeName = true;
     }
     #endregion
 
@@ -221,8 +268,8 @@ public class AnimeEditWindowVM
     /// <param name="value">动画模型</param>
     private void RemoveImageCommand_ExecuteEvent(AnimeModel value)
     {
-        CurrentImageModel.Value.Close();
-        value.Images.Remove(CurrentImageModel.Value);
+        CurrentImageModel.Close();
+        value.Images.Remove(CurrentImageModel);
     }
 
     /// <summary>
@@ -248,8 +295,8 @@ public class AnimeEditWindowVM
         }
         if (newImage is null)
             return;
-        CurrentImageModel.Value.Close();
-        CurrentImageModel.Value.Image.Value = newImage;
+        CurrentImageModel.Close();
+        CurrentImageModel.Image = newImage;
     }
 
     /// <summary>
@@ -331,7 +378,7 @@ public class AnimeEditWindowVM
     /// </summary>
     private async Task PlayCommand_AsyncExecuteEvent()
     {
-        if (CurrentAnimeModel.Value is null)
+        if (CurrentAnimeModel is null)
         {
             MessageBox.Show("未选中动画".Translate());
             return;
@@ -349,14 +396,14 @@ public class AnimeEditWindowVM
     {
         do
         {
-            foreach (var model in CurrentAnimeModel.Value.Images)
+            foreach (var model in CurrentAnimeModel.Images)
             {
-                CurrentImageModel.Value = model;
-                Task.Delay(model.Duration.Value).Wait();
+                CurrentImageModel = model;
+                Task.Delay(model.Duration).Wait();
                 if (_playing is false)
                     return;
             }
-        } while (Loop.Value);
+        } while (Loop);
     }
 
     /// <summary>

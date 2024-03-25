@@ -21,17 +21,17 @@ namespace HKW.HKWUtils;
 /// </summary>
 public static class NativeExtensions
 {
-    /// <summary>
-    ///
-    /// </summary>
-    /// <param name="source"></param>
-    /// <param name="value"></param>
-    /// <param name="comparisonType"></param>
-    /// <returns></returns>
-    public static bool Contains(this string source, string value, StringComparison comparisonType)
-    {
-        return source.IndexOf(value, comparisonType) >= 0;
-    }
+    ///// <summary>
+    /////
+    ///// </summary>
+    ///// <param name="source"></param>
+    ///// <param name="value"></param>
+    ///// <param name="comparisonType"></param>
+    ///// <returns></returns>
+    //public static bool Contains(this string source, string value, StringComparison comparisonType)
+    //{
+    //    return source.IndexOf(value, comparisonType) >= 0;
+    //}
 
     //public static string GetSourceFile(this BitmapImage image)
     //{

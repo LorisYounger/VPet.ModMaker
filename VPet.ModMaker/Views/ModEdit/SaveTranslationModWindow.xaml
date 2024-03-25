@@ -35,8 +35,8 @@
           <CheckBox
             d:Content="zh-CN"
             d:IsChecked="True"
-            Content="{Binding CultureName.Value}"
-            IsChecked="{Binding IsChecked.Value}" />
+            Content="{Binding CultureName}"
+            IsChecked="{Binding IsChecked}" />
         </DataTemplate>
       </ListBox.ItemTemplate>
     </ListBox>

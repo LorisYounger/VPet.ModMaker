@@ -21,7 +21,7 @@
     <TextBox
       pu:TextBoxHelper.Watermark="{ll:Str 搜索Id}"
       Style="{DynamicResource StandardTextBoxStyle}"
-      Text="{Binding Search.Value, UpdateSourceTrigger=PropertyChanged}" />
+      Text="{Binding Search, UpdateSourceTrigger=PropertyChanged}" />
     <DataGrid
       Grid.Row="1"
       d:ItemsSource="{d:SampleData ItemCount=5}"
@@ -29,7 +29,7 @@
       AutoGenerateColumns="False"
       CanUserAddRows="False"
       GridLinesVisibility="Horizontal"
-      ItemsSource="{Binding ShowFoods.Value}"
+      ItemsSource="{Binding ShowFoods}"
       MouseDoubleClick="DataGrid_MouseDoubleClick"
       RowDetailsVisibilityMode="Visible"
       RowHeight="64"
@@ -44,12 +44,12 @@
       </DataGrid.RowStyle>
       <DataGrid.Columns>
         <DataGridTextColumn
-          Binding="{Binding Id.Value}"
+          Binding="{Binding Id}"
           CanUserSort="True"
           ElementStyle="{DynamicResource TextBlock_LeftCenter}"
           Header="Id"
           IsReadOnly="True"
-          SortMemberPath="Id.Value" />
+          SortMemberPath="Id" />
         <DataGridTemplateColumn Header="{ll:Str 食物图片}" IsReadOnly="True">
           <DataGridTemplateColumn.CellTemplate>
             <DataTemplate>
@@ -58,7 +58,7 @@
                 Height="64"
                 HorizontalAlignment="Center"
                 VerticalAlignment="Center"
-                Source="{Binding Image.Value, IsAsync=True}"
+                Source="{Binding Image, IsAsync=True}"
                 Stretch="Uniform">
                 <Image.ToolTip>
                   <Image
@@ -66,7 +66,7 @@
                     Height="256"
                     HorizontalAlignment="Center"
                     VerticalAlignment="Center"
-                    Source="{Binding Image.Value, IsAsync=True}"
+                    Source="{Binding Image, IsAsync=True}"
                     Stretch="Uniform" />
                 </Image.ToolTip>
               </Image>
@@ -74,90 +74,90 @@
           </DataGridTemplateColumn.CellTemplate>
         </DataGridTemplateColumn>
         <DataGridTextColumn
-          Binding="{Binding CurrentI18nData.Value.Name.Value}"
+          Binding="{Binding CurrentI18nData.Name}"
           CanUserSort="True"
           ElementStyle="{DynamicResource TextBlock_LeftCenter}"
           Header="{ll:Str 食物名称}"
           IsReadOnly="True"
-          SortMemberPath="CurrentI18nData.Value.Name.Value" />
+          SortMemberPath="CurrentI18nData.Name" />
         <DataGridTextColumn
-          Binding="{Binding Type.Value}"
+          Binding="{Binding Type}"
           CanUserSort="True"
           ElementStyle="{DynamicResource TextBlock_LeftCenter}"
           Header="{ll:Str 食物类型}"
           IsReadOnly="True"
-          SortMemberPath="Type.Value" />
+          SortMemberPath="Type" />
         <DataGridTextColumn
-          Binding="{Binding Graph.Value}"
+          Binding="{Binding Graph}"
           CanUserSort="True"
           ElementStyle="{DynamicResource TextBlock_LeftCenter}"
           Header="{ll:Str 指定动画}"
           IsReadOnly="True"
-          SortMemberPath="Type.Value" />
+          SortMemberPath="Type" />
         <DataGridTextColumn
-          Binding="{Binding StrengthFood.Value}"
+          Binding="{Binding StrengthFood}"
           CanUserSort="True"
           ElementStyle="{DynamicResource TextBlock_LeftCenter}"
           Header="{ll:Str 饱腹值}"
           IsReadOnly="True"
-          SortMemberPath="StrengthFood.Value" />
+          SortMemberPath="StrengthFood" />
         <DataGridTextColumn
-          Binding="{Binding StrengthDrink.Value}"
+          Binding="{Binding StrengthDrink}"
           CanUserSort="True"
           ElementStyle="{DynamicResource TextBlock_LeftCenter}"
           Header="{ll:Str 口渴值}"
           IsReadOnly="True"
-          SortMemberPath="StrengthDrink.Value" />
+          SortMemberPath="StrengthDrink" />
         <DataGridTextColumn
-          Binding="{Binding Health.Value}"
+          Binding="{Binding Health}"
           CanUserSort="True"
           ElementStyle="{DynamicResource TextBlock_LeftCenter}"
           Header="{ll:Str 健康值}"
           IsReadOnly="True"
-          SortMemberPath="Health.Value" />
+          SortMemberPath="Health" />
         <DataGridTextColumn
-          Binding="{Binding Strength.Value}"
+          Binding="{Binding Strength}"
           CanUserSort="True"
           ElementStyle="{DynamicResource TextBlock_LeftCenter}"
           Header="{ll:Str 体力值}"
           IsReadOnly="True"
-          SortMemberPath="Strength.Value" />
+          SortMemberPath="Strength" />
         <DataGridTextColumn
-          Binding="{Binding Feeling.Value}"
+          Binding="{Binding Feeling}"
           CanUserSort="True"
           ElementStyle="{DynamicResource TextBlock_LeftCenter}"
           Header="{ll:Str 心情值}"
           IsReadOnly="True"
-          SortMemberPath="Feeling.Value" />
+          SortMemberPath="Feeling" />
         <DataGridTextColumn
-          Binding="{Binding Likability.Value}"
+          Binding="{Binding Likability}"
           CanUserSort="True"
           ElementStyle="{DynamicResource TextBlock_LeftCenter}"
           Header="{ll:Str 好感值}"
           IsReadOnly="True"
-          SortMemberPath="Likability.Value" />
+          SortMemberPath="Likability" />
         <DataGridTextColumn
-          Binding="{Binding Exp.Value}"
+          Binding="{Binding Exp}"
           CanUserSort="True"
           ElementStyle="{DynamicResource TextBlock_LeftCenter}"
           Header="{ll:Str 经验值}"
           IsReadOnly="True"
-          SortMemberPath="Exp.Value" />
+          SortMemberPath="Exp" />
         <DataGridTextColumn
-          Binding="{Binding Price.Value}"
+          Binding="{Binding Price}"
           CanUserSort="True"
           ElementStyle="{DynamicResource TextBlock_LeftCenter}"
           Header="{ll:Str 价格}"
           IsReadOnly="True"
-          SortMemberPath="Price.Value" />
+          SortMemberPath="Price" />
         <DataGridTextColumn
           MaxWidth="300"
-          Binding="{Binding CurrentI18nData.Value.Description.Value}"
+          Binding="{Binding CurrentI18nData.Description}"
           CanUserSort="True"
           ElementStyle="{DynamicResource TextBlock_Wrap}"
           Header="{ll:Str 描述}"
           IsReadOnly="True"
-          SortMemberPath="CurrentI18nData.Value.Description.Value" />
+          SortMemberPath="CurrentI18nData.Description" />
       </DataGrid.Columns>
     </DataGrid>
     <Button
