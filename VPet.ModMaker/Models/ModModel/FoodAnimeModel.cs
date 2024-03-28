@@ -41,7 +41,7 @@ public class FoodAnimeModel : ObservableObjectX<FoodAnimeModel>
     /// <summary>
     /// 食物定位列表
     /// </summary>
-    public ObservableCollection<FoodLocationModel> FoodLocations { get; } = new();
+    public ObservableCollection<FoodAnimeLocationModel> FoodLocations { get; } = new();
 
     public FoodAnimeModel() { }
 
@@ -52,7 +52,7 @@ public class FoodAnimeModel : ObservableObjectX<FoodAnimeModel>
         {
             //var index = int.Parse(item.Name.Substring(1));
             var infos = item.Info.Split(',');
-            var foodLocationInfo = new FoodLocationModel();
+            var foodLocationInfo = new FoodAnimeLocationModel();
             foodLocationInfo.Duration = int.Parse(infos[0]);
             if (infos.Length > 1)
             {

@@ -450,9 +450,9 @@ public class ModInfoModel : I18nModel<I18nModInfoModel>
         {
             if (food.I18nDatas.TryGetValue(key, out var data) is false)
                 continue;
-            if (i18nData.TryGetValue(food.Id, out var name))
+            if (i18nData.TryGetValue(food.ID, out var name))
                 data.Name = name;
-            if (i18nData.TryGetValue(food.DescriptionId, out var description))
+            if (i18nData.TryGetValue(food.DescriptionID, out var description))
                 data.Description = description;
         }
     }
@@ -463,7 +463,7 @@ public class ModInfoModel : I18nModel<I18nModInfoModel>
         {
             if (lowText.I18nDatas.TryGetValue(key, out var data) is false)
                 continue;
-            if (i18nData.TryGetValue(lowText.Id, out var text))
+            if (i18nData.TryGetValue(lowText.ID, out var text))
                 data.Text = text;
         }
     }
@@ -474,7 +474,7 @@ public class ModInfoModel : I18nModel<I18nModInfoModel>
         {
             if (clickText.I18nDatas.TryGetValue(key, out var data) is false)
                 continue;
-            if (i18nData.TryGetValue(clickText.Id, out var text))
+            if (i18nData.TryGetValue(clickText.ID, out var text))
                 data.Text = text;
         }
     }
@@ -485,9 +485,9 @@ public class ModInfoModel : I18nModel<I18nModInfoModel>
         {
             if (selectText.I18nDatas.TryGetValue(key, out var data) is false)
                 continue;
-            if (i18nData.TryGetValue(selectText.Id, out var text))
+            if (i18nData.TryGetValue(selectText.ID, out var text))
                 data.Text = text;
-            if (i18nData.TryGetValue(selectText.ChooseId, out var choose))
+            if (i18nData.TryGetValue(selectText.ChooseID, out var choose))
                 data.Choose = choose;
         }
     }
@@ -519,7 +519,7 @@ public class ModInfoModel : I18nModel<I18nModInfoModel>
         foreach (var food in Foods)
             food.RefreshId();
         foreach (var selectText in SelectTexts)
-            selectText.RefreshId();
+            selectText.RefreshID();
         foreach (var pet in Pets)
             pet.RefreshId();
     }
@@ -635,9 +635,9 @@ public class ModInfoModel : I18nModel<I18nModInfoModel>
             lps.Add(LPSConvert.SerializeObjectToLine<Line>(food.ToFood(), "food"));
             foreach (var cultureName in I18nHelper.Current.CultureNames)
             {
-                SaveI18nDatas[cultureName].TryAdd(food.Id, food.I18nDatas[cultureName].Name);
+                SaveI18nDatas[cultureName].TryAdd(food.ID, food.I18nDatas[cultureName].Name);
                 SaveI18nDatas[cultureName]
-                    .TryAdd(food.DescriptionId, food.I18nDatas[cultureName].Description);
+                    .TryAdd(food.DescriptionID, food.I18nDatas[cultureName].Description);
             }
         }
         File.WriteAllText(foodFile, lps.ToString());
@@ -679,9 +679,9 @@ public class ModInfoModel : I18nModel<I18nModInfoModel>
             lps.Add(LPSConvert.SerializeObjectToLine<Line>(text.ToSelectText(), "SelectText"));
             foreach (var cultureName in I18nHelper.Current.CultureNames)
             {
-                SaveI18nDatas[cultureName].TryAdd(text.Id, text.I18nDatas[cultureName].Text);
+                SaveI18nDatas[cultureName].TryAdd(text.ID, text.I18nDatas[cultureName].Text);
                 SaveI18nDatas[cultureName]
-                    .TryAdd(text.ChooseId, text.I18nDatas[cultureName].Choose);
+                    .TryAdd(text.ChooseID, text.I18nDatas[cultureName].Choose);
             }
         }
         File.WriteAllText(textFile, lps.ToString());
@@ -703,7 +703,7 @@ public class ModInfoModel : I18nModel<I18nModInfoModel>
             lps.Add(LPSConvert.SerializeObjectToLine<Line>(text.ToLowText(), "lowfoodtext"));
             foreach (var cultureName in I18nHelper.Current.CultureNames)
             {
-                SaveI18nDatas[cultureName].TryAdd(text.Id, text.I18nDatas[cultureName].Text);
+                SaveI18nDatas[cultureName].TryAdd(text.ID, text.I18nDatas[cultureName].Text);
             }
         }
         File.WriteAllText(textFile, lps.ToString());
@@ -725,7 +725,7 @@ public class ModInfoModel : I18nModel<I18nModInfoModel>
             lps.Add(LPSConvert.SerializeObjectToLine<Line>(text.ToClickText(), "clicktext"));
             foreach (var cultureName in I18nHelper.Current.CultureNames)
             {
-                SaveI18nDatas[cultureName].TryAdd(text.Id, text.I18nDatas[cultureName].Text);
+                SaveI18nDatas[cultureName].TryAdd(text.ID, text.I18nDatas[cultureName].Text);
             }
         }
         File.WriteAllText(textFile, lps.ToString());
@@ -768,7 +768,7 @@ public class ModInfoModel : I18nModel<I18nModInfoModel>
             Directory.CreateDirectory(foodPath);
             foreach (var food in Foods)
             {
-                food.Image.SaveToPng(Path.Combine(foodPath, food.Id));
+                food.Image.SaveToPng(Path.Combine(foodPath, food.ID));
             }
         }
     }

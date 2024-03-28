@@ -31,17 +31,11 @@ public partial class FoodEditWindow : Window
     public FoodEditWindow()
     {
         InitializeComponent();
-        DataContext = new FoodEditWindowVM();
-        Closed += (s, e) =>
+        this.SetDataContext<FoodEditWindowVM>(() =>
         {
             if (IsCancel)
                 ViewModel.Close();
-            try
-            {
-                DataContext = null;
-            }
-            catch { }
-        };
+        });
     }
 
     private void Button_Cancel_Click(object sender, RoutedEventArgs e)
@@ -51,9 +45,9 @@ public partial class FoodEditWindow : Window
 
     private void Button_Yes_Click(object sender, RoutedEventArgs e)
     {
-        if (string.IsNullOrWhiteSpace(ViewModel.Food.Id))
+        if (string.IsNullOrWhiteSpace(ViewModel.Food.ID))
         {
-            MessageBox.Show("Id不可为空".Translate(), "", MessageBoxButton.OK, MessageBoxImage.Warning);
+            MessageBox.Show("ID不可为空".Translate(), "", MessageBoxButton.OK, MessageBoxImage.Warning);
             return;
         }
         if (ViewModel.Food.Image is null)
@@ -62,11 +56,11 @@ public partial class FoodEditWindow : Window
             return;
         }
         if (
-            ViewModel.OldFood?.Id != ViewModel.Food.Id
-            && ModInfoModel.Current.Foods.Any(i => i.Id == ViewModel.Food.Id)
+            ViewModel.OldFood?.ID != ViewModel.Food.ID
+            && ModInfoModel.Current.Foods.Any(i => i.ID == ViewModel.Food.ID)
         )
         {
-            MessageBox.Show("此Id已存在", "", MessageBoxButton.OK, MessageBoxImage.Warning);
+            MessageBox.Show("此ID已存在", "", MessageBoxButton.OK, MessageBoxImage.Warning);
             return;
         }
         IsCancel = false;

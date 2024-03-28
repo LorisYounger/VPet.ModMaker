@@ -28,15 +28,7 @@ public partial class ClickTextEditWindow : Window
     public ClickTextEditWindow()
     {
         InitializeComponent();
-        DataContext = new ClickTextEditWindowVM();
-        Closed += (s, e) =>
-        {
-            try
-            {
-                DataContext = null;
-            }
-            catch { }
-        };
+        this.SetDataContext<ClickTextEditWindowVM>();
     }
 
     private void Button_Cancel_Click(object sender, RoutedEventArgs e)
@@ -46,17 +38,17 @@ public partial class ClickTextEditWindow : Window
 
     private void Button_Yes_Click(object sender, RoutedEventArgs e)
     {
-        if (string.IsNullOrEmpty(ViewModel.ClickText.Id))
+        if (string.IsNullOrEmpty(ViewModel.ClickText.ID))
         {
-            MessageBox.Show("Id不可为空".Translate(), "", MessageBoxButton.OK, MessageBoxImage.Warning);
+            MessageBox.Show("ID不可为空".Translate(), "", MessageBoxButton.OK, MessageBoxImage.Warning);
             return;
         }
         if (
-            ViewModel.OldClickText?.Id != ViewModel.ClickText.Id
-            && ModInfoModel.Current.ClickTexts.Any(i => i.Id == ViewModel.ClickText.Id)
+            ViewModel.OldClickText?.ID != ViewModel.ClickText.ID
+            && ModInfoModel.Current.ClickTexts.Any(i => i.ID == ViewModel.ClickText.ID)
         )
         {
-            MessageBox.Show("此Id已存在".Translate(), "", MessageBoxButton.OK, MessageBoxImage.Warning);
+            MessageBox.Show("此ID已存在".Translate(), "", MessageBoxButton.OK, MessageBoxImage.Warning);
             return;
         }
         if (string.IsNullOrEmpty(ViewModel.ClickText.CurrentI18nData.Text))

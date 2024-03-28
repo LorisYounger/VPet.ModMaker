@@ -17,19 +17,43 @@ namespace VPet.ModMaker.ViewModels.ModEdit.FoodEdit;
 
 public class FoodEditWindowVM : ObservableObjectX<FoodEditWindowVM>
 {
+    public FoodEditWindowVM()
+    {
+        AddImageCommand.ExecuteCommand += AddImageCommand_ExecuteCommand;
+        ChangeImageCommand.ExecuteCommand += ChangeImageCommand_ExecuteCommand;
+        SetReferencePriceCommand.ExecuteCommand += SetReferencePriceCommand_ExecuteCommand;
+    }
+
     public static ModInfoModel ModInfo => ModInfoModel.Current;
     public static I18nHelper I18nData => I18nHelper.Current;
-    #region Value
-    public FoodModel OldFood { get; set; }
+
+    #region Property
+    public FoodModel? OldFood { get; set; }
 
     #region Food
     [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-    private FoodModel _food;
+    private FoodModel _food = new();
 
     public FoodModel Food
     {
         get => _food;
-        set => SetProperty(ref _food, value);
+        set
+        {
+            if (_food is not null)
+                _food.PropertyChangedX -= Food_PropertyChangedX;
+            if (SetProperty(ref _food!, value) is false)
+                return;
+            Food.PropertyChangedX += Food_PropertyChangedX;
+        }
+    }
+
+    private void Food_PropertyChangedX(I18nModel<I18nFoodModel> sender, PropertyChangedXEventArgs e)
+    {
+        if (e.PropertyName == nameof(FoodModel.ReferencePrice))
+        {
+            if (ModInfo.AutoSetFoodPrice)
+                SetReferencePriceCommand_ExecuteCommand((double)e.NewValue!);
+        }
     }
     #endregion
     #endregion
@@ -40,27 +64,7 @@ public class FoodEditWindowVM : ObservableObjectX<FoodEditWindowVM>
     public ObservableCommand<double> SetReferencePriceCommand { get; } = new();
     #endregion
 
-    public FoodEditWindowVM()
-    {
-        AddImageCommand.ExecuteCommand += AddImage;
-        ChangeImageCommand.ExecuteCommand += ChangeImage;
-        SetReferencePriceCommand.ExecuteCommand += SetReferencePriceToPrice;
-        //TODO
-        //Food.Value.ReferencePrice.ValueChanged += ReferencePrice_ValueChanged;
-    }
-
-    private void ReferencePrice_ValueChanged(
-        ObservableValue<double> sender,
-        ValueChangedEventArgs<double> e
-    )
-    {
-        if (ModInfo.AutoSetFoodPrice)
-        {
-            SetReferencePriceToPrice(e.NewValue);
-        }
-    }
-
-    private void SetReferencePriceToPrice(double value)
+    private void SetReferencePriceCommand_ExecuteCommand(double value)
     {
         Food.Price = value;
     }
@@ -70,28 +74,26 @@ public class FoodEditWindowVM : ObservableObjectX<FoodEditWindowVM>
         Food.Close();
     }
 
-    private void AddImage()
+    private void AddImageCommand_ExecuteCommand()
     {
-        OpenFileDialog openFileDialog =
-            new()
-            {
-                Title = "选择图片".Translate(),
-                Filter = $"图片|*.jpg;*.jpeg;*.png;*.bmp".Translate()
-            };
+        var openFileDialog = new OpenFileDialog()
+        {
+            Title = "选择图片".Translate(),
+            Filter = $"图片|*.jpg;*.jpeg;*.png;*.bmp".Translate()
+        };
         if (openFileDialog.ShowDialog() is true)
         {
             Food.Image = NativeUtils.LoadImageToMemoryStream(openFileDialog.FileName);
         }
     }
 
-    private void ChangeImage()
+    private void ChangeImageCommand_ExecuteCommand()
     {
-        OpenFileDialog openFileDialog =
-            new()
-            {
-                Title = "选择图片".Translate(),
-                Filter = $"图片|*.jpg;*.jpeg;*.png;*.bmp".Translate()
-            };
+        var openFileDialog = new OpenFileDialog()
+        {
+            Title = "选择图片".Translate(),
+            Filter = $"图片|*.jpg;*.jpeg;*.png;*.bmp".Translate()
+        };
         if (openFileDialog.ShowDialog() is true)
         {
             Food.Image?.StreamSource?.Close();

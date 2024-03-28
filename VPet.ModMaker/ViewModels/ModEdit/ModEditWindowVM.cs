@@ -24,6 +24,22 @@ namespace VPet.ModMaker.ViewModels.ModEdit;
 
 public class ModEditWindowVM : ObservableObjectX<ModEditWindowVM>
 {
+    public ModEditWindowVM(ModEditWindow window)
+    {
+        I18nEditWindow.Initialize();
+        ModEditWindow = window;
+        ChangeImageCommand.ExecuteCommand += ChangeImageCommand_ExecuteCommand;
+        AddCultureCommand.ExecuteCommand += AddCultureCommand_ExecuteCommand;
+        EditCultureCommand.ExecuteCommand += EditCultureCommand_ExecuteCommand;
+        RemoveCultureCommand.ExecuteCommand += RemoveCultureCommand_ExecuteCommand;
+        EditI18nCommand.ExecuteCommand += EditI18nCommand_ExecuteCommand;
+        SetMainCultureCommand.ExecuteCommand += SetMainCultureCommand_ExecuteCommand;
+
+        SaveCommand.ExecuteCommand += SaveCommand_ExecuteCommand;
+        SaveToCommand.ExecuteCommand += SaveToCommand_ExecuteCommand;
+        SaveAsTranslationModCommand.ExecuteCommand += SaveAsTranslationModCommand_ExecuteCommand;
+    }
+
     public ModEditWindow ModEditWindow { get; }
 
     #region Value
@@ -44,7 +60,7 @@ public class ModEditWindowVM : ObservableObjectX<ModEditWindowVM>
     /// <summary>
     /// I18n数据
     /// </summary>
-    public I18nHelper I18nData => I18nHelper.Current;
+    public static I18nHelper I18nData => I18nHelper.Current;
     #endregion
 
     #region Command
@@ -95,23 +111,7 @@ public class ModEditWindowVM : ObservableObjectX<ModEditWindowVM>
     public ObservableCommand SaveAsTranslationModCommand { get; } = new();
     #endregion
 
-    public ModEditWindowVM(ModEditWindow window)
-    {
-        new I18nEditWindow();
-        ModEditWindow = window;
-        ChangeImageCommand.ExecuteCommand += ChangeImage;
-        AddCultureCommand.ExecuteCommand += AddCulture;
-        EditCultureCommand.ExecuteCommand += EditCulture;
-        RemoveCultureCommand.ExecuteCommand += RemoveCulture;
-        EditI18nCommand.ExecuteCommand += EditI18n;
-        SetMainCultureCommand.ExecuteCommand += SetMainCulture;
-
-        SaveCommand.ExecuteCommand += Save;
-        SaveToCommand.ExecuteCommand += SaveTo;
-        SaveAsTranslationModCommand.ExecuteCommand += SaveAsTranslationMod;
-    }
-
-    private void SaveAsTranslationMod()
+    private void SaveAsTranslationModCommand_ExecuteCommand()
     {
         if (ValidationData(ModInfo) is false)
             return;
@@ -119,7 +119,7 @@ public class ModEditWindowVM : ObservableObjectX<ModEditWindowVM>
         window.ShowDialog();
     }
 
-    private void EditI18n()
+    private void EditI18nCommand_ExecuteCommand()
     {
         I18nEditWindow.Current.Visibility = Visibility.Visible;
         I18nEditWindow.Current.Activate();
@@ -137,7 +137,7 @@ public class ModEditWindowVM : ObservableObjectX<ModEditWindowVM>
     /// <summary>
     /// 改变图片
     /// </summary>
-    private void ChangeImage()
+    private void ChangeImageCommand_ExecuteCommand()
     {
         OpenFileDialog openFileDialog =
             new()
@@ -156,7 +156,7 @@ public class ModEditWindowVM : ObservableObjectX<ModEditWindowVM>
     /// <summary>
     /// 添加文化
     /// </summary>
-    public void AddCulture()
+    public void AddCultureCommand_ExecuteCommand()
     {
         var window = new AddCultureWindow();
         window.ShowDialog();
@@ -171,7 +171,7 @@ public class ModEditWindowVM : ObservableObjectX<ModEditWindowVM>
     /// 编辑文化
     /// </summary>
     /// <param name="oldCulture">旧文化</param>
-    private void EditCulture(string oldCulture)
+    private void EditCultureCommand_ExecuteCommand(string oldCulture)
     {
         var window = new AddCultureWindow();
         window.ViewModel.Culture = oldCulture.Translate();
@@ -186,7 +186,7 @@ public class ModEditWindowVM : ObservableObjectX<ModEditWindowVM>
     /// 删除文化
     /// </summary>
     /// <param name="oldCulture">旧文化</param>
-    private void RemoveCulture(string oldCulture)
+    private void RemoveCultureCommand_ExecuteCommand(string oldCulture)
     {
         if (
             MessageBox.Show(
@@ -199,7 +199,7 @@ public class ModEditWindowVM : ObservableObjectX<ModEditWindowVM>
         I18nHelper.Current.CultureNames.Remove(oldCulture);
     }
 
-    public void SetMainCulture(string culture)
+    public void SetMainCultureCommand_ExecuteCommand(string culture)
     {
         if (
             MessageBox.Show(
@@ -214,17 +214,17 @@ public class ModEditWindowVM : ObservableObjectX<ModEditWindowVM>
         ModInfo.I18nDatas[culture].Description = ModInfo.DescriptionId;
         foreach (var food in ModInfo.Foods)
         {
-            food.I18nDatas[culture].Name = food.Id;
-            food.I18nDatas[culture].Description = food.DescriptionId;
+            food.I18nDatas[culture].Name = food.ID;
+            food.I18nDatas[culture].Description = food.DescriptionID;
         }
         foreach (var text in ModInfo.LowTexts)
-            text.I18nDatas[culture].Text = text.Id;
+            text.I18nDatas[culture].Text = text.ID;
         foreach (var text in ModInfo.ClickTexts)
-            text.I18nDatas[culture].Text = text.Id;
+            text.I18nDatas[culture].Text = text.ID;
         foreach (var text in ModInfo.SelectTexts)
         {
-            text.I18nDatas[culture].Text = text.Id;
-            text.I18nDatas[culture].Choose = text.ChooseId;
+            text.I18nDatas[culture].Text = text.ID;
+            text.I18nDatas[culture].Choose = text.ChooseID;
         }
         foreach (var pet in ModInfo.Pets)
         {
@@ -241,7 +241,7 @@ public class ModEditWindowVM : ObservableObjectX<ModEditWindowVM>
     /// <summary>
     /// 保存
     /// </summary>
-    private void Save()
+    private void SaveCommand_ExecuteCommand()
     {
         if (ValidationData(ModInfo) is false)
             return;
@@ -261,7 +261,7 @@ public class ModEditWindowVM : ObservableObjectX<ModEditWindowVM>
     /// <summary>
     /// 保存至
     /// </summary>
-    private void SaveTo()
+    private void SaveToCommand_ExecuteCommand()
     {
         if (ValidationData(ModInfo) is false)
             return;

@@ -19,7 +19,7 @@
       <RowDefinition />
     </Grid.RowDefinitions>
     <TextBox
-      pu:TextBoxHelper.Watermark="{ll:Str 搜索Id}"
+      pu:TextBoxHelper.Watermark="{ll:Str 搜索ID}"
       Style="{DynamicResource StandardTextBoxStyle}"
       Text="{Binding Search, UpdateSourceTrigger=PropertyChanged}" />
     <DataGrid
@@ -30,7 +30,7 @@
       AutoGenerateColumns="False"
       CanUserAddRows="False"
       GridLinesVisibility="Horizontal"
-      ItemsSource="{Binding ShowLowTexts}"
+      ItemsSource="{Binding LowTexts.FilteredList}"
       MouseDoubleClick="DataGrid_LowText_MouseDoubleClick"
       RowDetailsVisibilityMode="Visible"
       RowHeight="64"
@@ -46,12 +46,12 @@
       <DataGrid.Columns>
         <DataGridTextColumn
           MaxWidth="200"
-          Binding="{Binding Id}"
+          Binding="{Binding ID}"
           CanUserSort="True"
           ElementStyle="{StaticResource TextBlock_Wrap}"
-          Header="Id"
+          Header="ID"
           IsReadOnly="True"
-          SortMemberPath="Id" />
+          SortMemberPath="ID" />
         <DataGridTextColumn
           MaxWidth="300"
           Binding="{Binding CurrentI18nData.Text}"

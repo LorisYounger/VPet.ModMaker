@@ -15,29 +15,37 @@ namespace VPet.ModMaker.ViewModels.ModEdit.ClickTextEdit;
 
 public class ClickTextPageVM : ObservableObjectX<ClickTextPageVM>
 {
+    public ClickTextPageVM()
+    {
+        ClickTexts = new(ModInfoModel.Current.ClickTexts)
+        {
+            Filter = f => f.ID.Contains(Search, StringComparison.OrdinalIgnoreCase),
+            FilteredList = new()
+        };
+        AddCommand.ExecuteCommand += AddCommand_ExecuteCommand;
+        EditCommand.ExecuteCommand += EditCommand_ExecuteCommand;
+        RemoveCommand.ExecuteCommand += RemoveCommand_ExecuteCommand;
+    }
+
     #region Value
     #region ShowClickTexts
     [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-    private ObservableCollection<ClickTextModel> _showClickTexts;
+    private ObservableFilterList<ClickTextModel, ObservableList<ClickTextModel>> _clickTexts =
+        null!;
 
     /// <summary>
     /// 显示的点击文本
     /// </summary>
-    public ObservableCollection<ClickTextModel> ShowClickTexts
+    public ObservableFilterList<ClickTextModel, ObservableList<ClickTextModel>> ClickTexts
     {
-        get => _showClickTexts;
-        set => SetProperty(ref _showClickTexts, value);
+        get => _clickTexts;
+        set => SetProperty(ref _clickTexts, value);
     }
     #endregion
 
-    /// <summary>
-    /// 点击文本
-    /// </summary>
-    public ObservableCollection<ClickTextModel> ClickTexts => ModInfoModel.Current.ClickTexts;
-
     #region Search
     [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-    private string _search;
+    private string _search = string.Empty;
 
     /// <summary>
     /// 搜索
@@ -45,7 +53,11 @@ public class ClickTextPageVM : ObservableObjectX<ClickTextPageVM>
     public string Search
     {
         get => _search;
-        set => SetProperty(ref _search, value);
+        set
+        {
+            SetProperty(ref _search, value);
+            ClickTexts.Refresh();
+        }
     }
     #endregion
     #endregion
@@ -66,37 +78,10 @@ public class ClickTextPageVM : ObservableObjectX<ClickTextPageVM>
     public ObservableCommand<ClickTextModel> RemoveCommand { get; } = new();
     #endregion
 
-    public ClickTextPageVM()
-    {
-        ShowClickTexts = ClickTexts;
-        //TODO
-        //Search.ValueChanged += Search_ValueChanged;
-        AddCommand.ExecuteCommand += Add;
-        EditCommand.ExecuteCommand += Edit;
-        RemoveCommand.ExecuteCommand += Remove;
-    }
-
-    private void Search_ValueChanged(
-        ObservableValue<string> sender,
-        ValueChangedEventArgs<string> e
-    )
-    {
-        if (string.IsNullOrWhiteSpace(e.NewValue))
-        {
-            ShowClickTexts = ClickTexts;
-        }
-        else
-        {
-            ShowClickTexts = new(
-                ClickTexts.Where(m => m.Id.Contains(e.NewValue, StringComparison.OrdinalIgnoreCase))
-            );
-        }
-    }
-
     /// <summary>
     /// 添加点击文本
     /// </summary>
-    private void Add()
+    private void AddCommand_ExecuteCommand()
     {
         var window = new ClickTextEditWindow();
         var vm = window.ViewModel;
@@ -110,7 +95,7 @@ public class ClickTextPageVM : ObservableObjectX<ClickTextPageVM>
     /// 编辑点击文本
     /// </summary>
     /// <param name="model">模型</param>
-    public void Edit(ClickTextModel model)
+    public void EditCommand_ExecuteCommand(ClickTextModel model)
     {
         var window = new ClickTextEditWindow();
         var vm = window.ViewModel;
@@ -120,26 +105,16 @@ public class ClickTextPageVM : ObservableObjectX<ClickTextPageVM>
         if (window.IsCancel)
             return;
         ClickTexts[ClickTexts.IndexOf(model)] = newLowTest;
-        if (ShowClickTexts.Count != ClickTexts.Count)
-            ShowClickTexts[ShowClickTexts.IndexOf(model)] = newLowTest;
     }
 
     /// <summary>
     /// 删除点击文本
     /// </summary>
     /// <param name="model">模型</param>
-    private void Remove(ClickTextModel model)
+    private void RemoveCommand_ExecuteCommand(ClickTextModel model)
     {
         if (MessageBox.Show("确定删除吗".Translate(), "", MessageBoxButton.YesNo) is MessageBoxResult.No)
             return;
-        if (ShowClickTexts.Count == ClickTexts.Count)
-        {
-            ClickTexts.Remove(model);
-        }
-        else
-        {
-            ShowClickTexts.Remove(model);
-            ClickTexts.Remove(model);
-        }
+        ClickTexts.Remove(model);
     }
 }

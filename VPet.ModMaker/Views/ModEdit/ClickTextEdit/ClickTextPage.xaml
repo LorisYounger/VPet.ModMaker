@@ -29,7 +29,7 @@
       AutoGenerateColumns="False"
       CanUserAddRows="False"
       GridLinesVisibility="Horizontal"
-      ItemsSource="{Binding ShowClickTexts}"
+      ItemsSource="{Binding ClickTexts.FilteredList}"
       MouseDoubleClick="DataGrid_MouseDoubleClick"
       RowDetailsVisibilityMode="Visible"
       RowHeight="64"
@@ -45,12 +45,12 @@
       <DataGrid.Columns>
         <DataGridTextColumn
           MaxWidth="200"
-          Binding="{Binding Id}"
+          Binding="{Binding ID}"
           CanUserSort="True"
           ElementStyle="{StaticResource TextBlock_Wrap}"
-          Header="Id"
+          Header="ID"
           IsReadOnly="True"
-          SortMemberPath="Id" />
+          SortMemberPath="ID" />
         <DataGridTextColumn
           MaxWidth="300"
           Binding="{Binding CurrentI18nData.Text}"

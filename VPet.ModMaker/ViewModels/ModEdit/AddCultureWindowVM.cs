@@ -19,32 +19,50 @@ public class AddCultureWindowVM : ObservableObjectX<AddCultureWindowVM>
     /// </summary>
     #region ShowCultures
     [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-    private ObservableCollection<string> _showCultures;
-
-    public ObservableCollection<string> ShowCultures
-    {
-        get => _showCultures;
-        set => SetProperty(ref _showCultures, value);
-    }
-    #endregion
+    private ObservableFilterList<string, ObservableList<string>> _allCultures = null!;
 
     /// <summary>
     /// 全部文化
     /// </summary>
-    public static ObservableCollection<string> AllCultures { get; set; } =
-        new(LinePutScript.Localization.WPF.LocalizeCore.AvailableCultures);
+    public ObservableFilterList<string, ObservableList<string>> AllCultures
+    {
+        get => _allCultures;
+        set => SetProperty(ref _allCultures, value);
+    }
+    #endregion
 
     /// <summary>
     /// 当前文化
     /// </summary>
     #region Culture
     [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-    private string _culture;
+    private string _culture = string.Empty;
 
     public string Culture
     {
         get => _culture;
-        set => SetProperty(ref _culture, value);
+        set
+        {
+            SetProperty(ref _culture, value);
+            if (string.IsNullOrWhiteSpace(Culture))
+            {
+                CultureFullName = UnknownCulture;
+                return;
+            }
+            CultureInfo info = null!;
+            try
+            {
+                info = CultureInfo.GetCultureInfo(Culture);
+            }
+            catch
+            {
+                CultureFullName = UnknownCulture;
+            }
+            if (info is not null)
+            {
+                CultureFullName = info.GetFullInfo();
+            }
+        }
     }
     #endregion
 
@@ -53,7 +71,7 @@ public class AddCultureWindowVM : ObservableObjectX<AddCultureWindowVM>
     /// </summary>
     #region CultureFullName
     [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-    private string _cultureFullName;
+    private string _cultureFullName = string.Empty;
 
     public string CultureFullName
     {
@@ -67,64 +85,27 @@ public class AddCultureWindowVM : ObservableObjectX<AddCultureWindowVM>
     /// </summary>
     #region Search
     [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-    private string _Search;
+    private string _search = string.Empty;
 
     public string Search
     {
-        get => _Search;
-        set => SetProperty(ref _Search, value);
+        get => _search;
+        set
+        {
+            SetProperty(ref _search, value);
+            AllCultures.Refresh();
+        }
     }
     #endregion
 
-    public static string UnknownCulture = "未知文化".Translate();
+    public static string UnknownCulture => "未知文化".Translate();
 
     public AddCultureWindowVM()
     {
-        //TODO
-        //ShowCultures = AllCultures;
-        //Search.ValueChanged += Search_ValueChanged;
-        //Culture.ValueChanged += Culture_ValueChanged;
-    }
-
-    private void Culture_ValueChanged(
-        ObservableValue<string> sender,
-        ValueChangedEventArgs<string> e
-    )
-    {
-        if (string.IsNullOrWhiteSpace(e.NewValue))
+        AllCultures = new(LocalizeCore.AvailableCultures)
         {
-            CultureFullName = UnknownCulture;
-            return;
-        }
-        CultureInfo info = null!;
-        try
-        {
-            info = CultureInfo.GetCultureInfo(e.NewValue);
-        }
-        catch
-        {
-            CultureFullName = UnknownCulture;
-        }
-        if (info is not null)
-        {
-            CultureFullName = info.GetFullInfo();
-        }
-    }
-
-    private void Search_ValueChanged(
-        ObservableValue<string> sender,
-        ValueChangedEventArgs<string> e
-    )
-    {
-        if (string.IsNullOrWhiteSpace(e.NewValue))
-        {
-            ShowCultures = AllCultures;
-        }
-        else
-        {
-            ShowCultures = new(
-                AllCultures.Where(s => s.Contains(e.NewValue, StringComparison.OrdinalIgnoreCase))
-            );
-        }
+            Filter = c => c.Contains(Search, StringComparison.OrdinalIgnoreCase),
+            FilteredList = new()
+        };
     }
 }

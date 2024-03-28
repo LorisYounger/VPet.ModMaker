@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Frozen;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
@@ -7,9 +8,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Media.Imaging;
+using CommunityToolkit.Mvvm.Collections;
+using CommunityToolkit.Mvvm.ComponentModel;
 using HKW.HKWUtils.Observable;
 using LinePutScript;
 using LinePutScript.Converter;
+using Mapster;
 using VPet_Simulator.Windows.Interface;
 
 namespace VPet.ModMaker.Models;
@@ -19,210 +23,9 @@ namespace VPet.ModMaker.Models;
 /// </summary>
 public class FoodModel : I18nModel<I18nFoodModel>
 {
-    /// <summary>
-    /// 食物类型
-    /// </summary>
-    public static ObservableCollection<Food.FoodType> FoodTypes { get; } =
-        new(Enum.GetValues(typeof(Food.FoodType)).Cast<Food.FoodType>());
-
-    #region Id
-    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-    private string _id = string.Empty;
-
-    /// <summary>
-    /// Id
-    /// </summary>
-    public string Id
-    {
-        get => _id;
-        set => SetProperty(ref _id, value);
-    }
-    #endregion
-
-    #region DescriptionId
-    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-    private string _descriptionId = string.Empty;
-
-    /// <summary>
-    /// 详情Id
-    /// </summary>
-    public string DescriptionId
-    {
-        get => _descriptionId;
-        set => SetProperty(ref _descriptionId, value);
-    }
-    #endregion
-
-    #region Graph
-    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-    private string _graph = string.Empty;
-
-    /// <summary>
-    /// 指定动画
-    /// </summary>
-    public string Graph
-    {
-        get => _graph;
-        set => SetProperty(ref _graph, value);
-    }
-    #endregion
-
-    #region Type
-    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-    private Food.FoodType _type;
-
-    /// <summary>
-    /// 类型
-    /// </summary>
-    public Food.FoodType Type
-    {
-        get => _type;
-        set => SetProperty(ref _type, value);
-    }
-    #endregion
-
-    /// <summary>
-    /// 体力
-    /// </summary>
-    #region Strength
-    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-    private double _Strength;
-
-    public double Strength
-    {
-        get => _Strength;
-        set => SetProperty(ref _Strength, value);
-    }
-    #endregion
-
-    /// <summary>
-    /// 饱食度
-    /// </summary>
-    #region StrengthFood
-    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-    private double _StrengthFood;
-
-    public double StrengthFood
-    {
-        get => _StrengthFood;
-        set => SetProperty(ref _StrengthFood, value);
-    }
-    #endregion
-
-    /// <summary>
-    /// 口渴度
-    /// </summary>
-    #region StrengthDrink
-    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-    private double _StrengthDrink;
-
-    public double StrengthDrink
-    {
-        get => _StrengthDrink;
-        set => SetProperty(ref _StrengthDrink, value);
-    }
-    #endregion
-
-    /// <summary>
-    /// 心情
-    /// </summary>
-    #region Feeling
-    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-    private double _Feeling;
-
-    public double Feeling
-    {
-        get => _Feeling;
-        set => SetProperty(ref _Feeling, value);
-    }
-    #endregion
-
-    /// <summary>
-    /// 健康度
-    /// </summary>
-    #region Health
-    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-    private double _Health;
-
-    public double Health
-    {
-        get => _Health;
-        set => SetProperty(ref _Health, value);
-    }
-    #endregion
-
-    /// <summary>
-    /// 好感度
-    /// </summary>
-    #region Likability
-    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-    private double _Likability;
-
-    public double Likability
-    {
-        get => _Likability;
-        set => SetProperty(ref _Likability, value);
-    }
-    #endregion
-
-    /// <summary>
-    /// 价格
-    /// </summary>
-    #region Price
-    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-    private double _Price;
-
-    public double Price
-    {
-        get => _Price;
-        set => SetProperty(ref _Price, value);
-    }
-    #endregion
-
-    /// <summary>
-    /// 经验
-    /// </summary>
-    #region Exp
-    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-    private int _Exp;
-
-    public int Exp
-    {
-        get => _Exp;
-        set => SetProperty(ref _Exp, value);
-    }
-    #endregion
-
-    /// <summary>
-    /// 图片
-    /// </summary>
-    #region Image
-    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-    private BitmapImage _Image;
-
-    public BitmapImage Image
-    {
-        get => _Image;
-        set => SetProperty(ref _Image, value);
-    }
-    #endregion
-
-    #region ReferencePrice
-    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-    private double _ReferencePrice;
-
-    public double ReferencePrice
-    {
-        get => _ReferencePrice;
-        set => SetProperty(ref _ReferencePrice, value);
-    }
-    #endregion
-
-    private readonly Food _food = new();
-
     public FoodModel()
     {
-        DescriptionId = $"{Id}_{nameof(DescriptionId)}";
+        //DescriptionId = $"{Id}_{nameof(DescriptionId)}";
         //TODO
         //Id.ValueChanged += (s, e) =>
         //{
@@ -241,91 +44,310 @@ public class FoodModel : I18nModel<I18nFoodModel>
         //{
         //    s.Value = Math.Floor(SetValueToFood(_food).RealPrice);
         //};
+        PropertyChangedX += FoodModel_PropertyChangedX;
+    }
+
+    private static FrozenSet<string> _notifyReferencePrice = FrozenSet.ToFrozenSet(
+        [
+            nameof(Strength),
+            nameof(StrengthFood),
+            nameof(StrengthDrink),
+            nameof(Feeling),
+            nameof(Health),
+            nameof(Likability),
+            nameof(Exp)
+        ]
+    );
+
+    private void FoodModel_PropertyChangedX(
+        I18nModel<I18nFoodModel> sender,
+        PropertyChangedXEventArgs e
+    )
+    {
+        if (e.PropertyName == nameof(ID))
+        {
+            DescriptionID = $"{e.NewValue}_{nameof(DescriptionID)}";
+        }
+        else if (_notifyReferencePrice.Contains(e.PropertyName))
+        {
+            this.Adapt(_food);
+            ReferencePrice = Math.Floor(_food.RealPrice);
+        }
     }
 
     public FoodModel(FoodModel model)
         : this()
     {
-        Id = model.Id;
-        DescriptionId = model.DescriptionId;
-        Graph = model.Graph;
-        Type = model.Type;
-        Strength = model.Strength;
-        StrengthFood = model.StrengthFood;
-        StrengthDrink = model.StrengthDrink;
-        Feeling = model.Feeling;
-        Health = model.Health;
-        Likability = model.Likability;
-        Price = model.Price;
-        Exp = model.Exp;
-        Image = model.Image.Copy();
+        model.Adapt(this);
+        Image = model.Image?.CloneStream();
         foreach (var item in model.I18nDatas)
-            I18nDatas[item.Key] = item.Value.Copy();
+            I18nDatas[item.Key] = item.Value.Clone();
         CurrentI18nData = I18nDatas[I18nHelper.Current.CultureName];
     }
 
     public FoodModel(Food food)
         : this()
     {
-        Id = food.Name;
-        DescriptionId = food.Desc;
-        Graph = food.Graph;
-        Type = food.Type;
-        Strength = food.Strength;
-        StrengthDrink = food.StrengthDrink;
-        StrengthFood = food.StrengthFood;
-        Feeling = food.Feeling;
-        Health = food.Health;
-        Likability = food.Likability;
-        Price = food.Price;
-        Exp = food.Exp;
+        food.Adapt(this);
         if (File.Exists(food.Image))
             Image = NativeUtils.LoadImageToMemoryStream(food.Image);
     }
 
+    /// <summary>
+    /// 食物类型
+    /// </summary>
+    public static ObservableCollection<Food.FoodType> FoodTypes { get; } =
+        new(Enum.GetValues(typeof(Food.FoodType)).Cast<Food.FoodType>());
+
+    #region ID
+    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+    private string _id = string.Empty;
+
+    /// <summary>
+    /// ID
+    /// </summary>
+    [AdaptMember(nameof(Food.Name))]
+    public string ID
+    {
+        get => _id;
+        set
+        {
+            if (SetProperty(ref _id, value) is false)
+                return;
+            DescriptionID = $"{ID}_{nameof(DescriptionID)}";
+        }
+    }
+    #endregion
+
+    #region DescriptionID
+    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+    private string _descriptionID = string.Empty;
+
+    /// <summary>
+    /// 详情Id
+    /// </summary>
+    [AdaptMember(nameof(Food.Desc))]
+    public string DescriptionID
+    {
+        get => _descriptionID;
+        set => SetProperty(ref _descriptionID, value);
+    }
+    #endregion
+
+    #region Graph
+    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+    private string _graph = string.Empty;
+
+    /// <summary>
+    /// 指定动画
+    /// </summary>
+    [AdaptMember(nameof(Food.Graph))]
+    public string Graph
+    {
+        get => _graph;
+        set => SetProperty(ref _graph, value);
+    }
+    #endregion
+
+    #region Type
+    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+    private Food.FoodType _type;
+
+    /// <summary>
+    /// 类型
+    /// </summary>
+    [AdaptMember(nameof(Food.Type))]
+    public Food.FoodType Type
+    {
+        get => _type;
+        set => SetProperty(ref _type, value);
+    }
+    #endregion
+
+    #region Strength
+    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+    private double _strength;
+
+    /// <summary>
+    /// 体力
+    /// </summary>
+    [AdaptMember(nameof(Food.Strength))]
+    public double Strength
+    {
+        get => _strength;
+        set => SetProperty(ref _strength, value);
+    }
+    #endregion
+
+    #region StrengthFood
+    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+    private double _strengthFood;
+
+    /// <summary>
+    /// 饱食度
+    /// </summary>
+    [AdaptMember(nameof(Food.StrengthFood))]
+    public double StrengthFood
+    {
+        get => _strengthFood;
+        set => SetProperty(ref _strengthFood, value);
+    }
+    #endregion
+
+    #region StrengthDrink
+    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+    private double _strengthDrink;
+
+    /// <summary>
+    /// 口渴度
+    /// </summary>
+    [AdaptMember(nameof(Food.StrengthDrink))]
+    public double StrengthDrink
+    {
+        get => _strengthDrink;
+        set => SetProperty(ref _strengthDrink, value);
+    }
+    #endregion
+
+    #region Feeling
+    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+    private double _feeling;
+
+    /// <summary>
+    /// 心情
+    /// </summary>
+    [AdaptMember(nameof(Food.Feeling))]
+    public double Feeling
+    {
+        get => _feeling;
+        set => SetProperty(ref _feeling, value);
+    }
+    #endregion
+
+    #region Health
+    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+    private double _health;
+
+    /// <summary>
+    /// 健康度
+    /// </summary>
+    [AdaptMember(nameof(Food.Health))]
+    public double Health
+    {
+        get => _health;
+        set => SetProperty(ref _health, value);
+    }
+    #endregion
+
+    #region Likability
+    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+    private double _likability;
+
+    /// <summary>
+    /// 好感度
+    /// </summary>
+    [AdaptMember(nameof(Food.Likability))]
+    public double Likability
+    {
+        get => _likability;
+        set => SetProperty(ref _likability, value);
+    }
+    #endregion
+
+    #region Price
+    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+    private double _price;
+
+    /// <summary>
+    /// 价格
+    /// </summary>
+    [AdaptMember(nameof(Food.Price))]
+    public double Price
+    {
+        get => _price;
+        set => SetProperty(ref _price, value);
+    }
+    #endregion
+
+    #region Exp
+    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+    private int _exp;
+
+    /// <summary>
+    /// 经验
+    /// </summary>
+    [AdaptMember(nameof(Food.Exp))]
+    public int Exp
+    {
+        get => _exp;
+        set => SetProperty(ref _exp, value);
+    }
+    #endregion
+
+    #region Image
+    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+    private BitmapImage? _image;
+
+    /// <summary>
+    /// 图片
+    /// </summary>
+    [AdaptIgnore]
+    public BitmapImage? Image
+    {
+        get => _image;
+        set => SetProperty(ref _image, value);
+    }
+    #endregion
+
+    #region ReferencePrice
+    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+    private double _ReferencePrice;
+
+    /// <summary>
+    /// 推荐价格
+    /// </summary>
+    [AdaptIgnore]
+    public double ReferencePrice
+    {
+        get => _ReferencePrice;
+        set => SetProperty(ref _ReferencePrice, value);
+    }
+    #endregion
+
+    private readonly Food _food = new();
+
     public Food ToFood()
     {
-        return new Food()
-        {
-            Name = Id,
-            Desc = DescriptionId,
-            Graph = Graph,
-            Type = Type,
-            Strength = Strength,
-            StrengthFood = StrengthFood,
-            StrengthDrink = StrengthDrink,
-            Feeling = Feeling,
-            Health = Health,
-            Likability = Likability,
-            Price = Price,
-            Exp = Exp,
-        };
-    }
-
-    public Food SetValueToFood(Food food)
-    {
-        food.Strength = Strength;
-        food.StrengthFood = StrengthFood;
-        food.StrengthDrink = StrengthDrink;
-        food.Feeling = Feeling;
-        food.Health = Health;
-        food.Likability = Likability;
-        food.Exp = Exp;
-        return food;
+        return this.Adapt<Food>();
+        //return new Food()
+        //{
+        //    Name = ID,
+        //    Desc = DescriptionID,
+        //    Graph = Graph,
+        //    Type = Type,
+        //    Strength = Strength,
+        //    StrengthFood = StrengthFood,
+        //    StrengthDrink = StrengthDrink,
+        //    Feeling = Feeling,
+        //    Health = Health,
+        //    Likability = Likability,
+        //    Price = Price,
+        //    Exp = Exp,
+        //};
     }
 
     public void RefreshId()
     {
-        DescriptionId = $"{Id}_{nameof(DescriptionId)}";
+        DescriptionID = $"{ID}_{nameof(DescriptionID)}";
     }
 
     public void Close()
     {
-        Image.CloseStream();
+        Image?.CloseStream();
     }
 }
 
-public class I18nFoodModel : ObservableObjectX<I18nFoodModel>
+public class I18nFoodModel : ObservableObjectX<I18nFoodModel>, ICloneable<I18nFoodModel>
 {
     #region Name
     [DebuggerBrowsable(DebuggerBrowsableState.Never)]
@@ -337,6 +359,7 @@ public class I18nFoodModel : ObservableObjectX<I18nFoodModel>
         set => SetProperty(ref _name, value);
     }
     #endregion
+
     #region Description
     [DebuggerBrowsable(DebuggerBrowsableState.Never)]
     private string _description = string.Empty;
@@ -348,11 +371,7 @@ public class I18nFoodModel : ObservableObjectX<I18nFoodModel>
     }
     #endregion
 
-    public I18nFoodModel Copy()
-    {
-        var result = new I18nFoodModel();
-        result.Name = Name;
-        result.Description = Description;
-        return result;
-    }
+    public I18nFoodModel Clone() => this.Adapt<I18nFoodModel>();
+
+    object ICloneable.Clone() => Clone();
 }

@@ -19,7 +19,7 @@
       <RowDefinition />
     </Grid.RowDefinitions>
     <TextBox
-      pu:TextBoxHelper.Watermark="{ll:Str 搜索Id}"
+      pu:TextBoxHelper.Watermark="{ll:Str 搜索ID}"
       Style="{DynamicResource StandardTextBoxStyle}"
       Text="{Binding Search, UpdateSourceTrigger=PropertyChanged}" />
     <DataGrid
@@ -29,7 +29,7 @@
       AutoGenerateColumns="False"
       CanUserAddRows="False"
       GridLinesVisibility="Horizontal"
-      ItemsSource="{Binding ShowFoods}"
+      ItemsSource="{Binding Foods.FilteredList}"
       MouseDoubleClick="DataGrid_MouseDoubleClick"
       RowDetailsVisibilityMode="Visible"
       RowHeight="64"
@@ -44,12 +44,12 @@
       </DataGrid.RowStyle>
       <DataGrid.Columns>
         <DataGridTextColumn
-          Binding="{Binding Id}"
+          Binding="{Binding ID}"
           CanUserSort="True"
           ElementStyle="{DynamicResource TextBlock_LeftCenter}"
-          Header="Id"
+          Header="ID"
           IsReadOnly="True"
-          SortMemberPath="Id" />
+          SortMemberPath="ID" />
         <DataGridTemplateColumn Header="{ll:Str 食物图片}" IsReadOnly="True">
           <DataGridTemplateColumn.CellTemplate>
             <DataTemplate>

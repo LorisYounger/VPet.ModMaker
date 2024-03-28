@@ -37,6 +37,6 @@ public partial class LowTextPage : Page
     {
         if (sender is not DataGrid dataGrid || dataGrid.SelectedItem is not LowTextModel lowText)
             return;
-        ViewModel.Edit(lowText);
+        ViewModel.EditCommand_ExecuteCommand(lowText);
     }
 }

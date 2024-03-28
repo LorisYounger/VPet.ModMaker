@@ -26,7 +26,6 @@ public partial class I18nEditWindow : WindowX
 
     public I18nEditWindow()
     {
-        Current = this;
         // 只隐藏, 不关闭
         Closing += (s, e) =>
         {
@@ -47,8 +46,14 @@ public partial class I18nEditWindow : WindowX
         };
         InitializeComponent();
         DataContext = new I18nEditWindowVM();
+        //TODO
         //ViewModel.CultureChanged += ViewModel_CultureChanged;
         //ViewModel.InitializeI18nData(ModInfoModel.Current);
+    }
+
+    public static void Initialize()
+    {
+        Current = new();
     }
 
     private bool _close = false;

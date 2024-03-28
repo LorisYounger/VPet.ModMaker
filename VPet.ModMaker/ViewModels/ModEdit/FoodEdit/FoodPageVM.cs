@@ -17,27 +17,46 @@ namespace VPet.ModMaker.ViewModels.ModEdit.FoodEdit;
 
 public class FoodPageVM : ObservableObjectX<FoodPageVM>
 {
-    #region Value
-    #region ShowFoods
-    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-    private ObservableCollection<FoodModel> _showFoods;
-
-    public ObservableCollection<FoodModel> ShowFoods
+    public FoodPageVM()
     {
-        get => _showFoods;
-        set => SetProperty(ref _showFoods, value);
+        Foods = new(ModInfoModel.Current.Foods)
+        {
+            Filter = f => f.ID.Contains(Search, StringComparison.OrdinalIgnoreCase),
+            FilteredList = new()
+        };
+
+        AddCommand.ExecuteCommand += AddCommand_ExecuteCommand;
+        EditCommand.ExecuteCommand += EditCommand_ExecuteCommand;
+        RemoveCommand.ExecuteCommand += RemoveCommand_ExecuteCommand;
+    }
+
+    #region Property
+
+    #region Foods
+    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+    private ObservableFilterList<FoodModel, ObservableList<FoodModel>> _foods = null!;
+
+    public ObservableFilterList<FoodModel, ObservableList<FoodModel>> Foods
+    {
+        get => _foods;
+        set => SetProperty(ref _foods, value);
     }
     #endregion
-    public ObservableCollection<FoodModel> Foods => ModInfoModel.Current.Foods;
 
     #region Search
     [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-    private string _search;
+    private string _search = string.Empty;
 
     public string Search
     {
         get => _search;
-        set => SetProperty(ref _search, value);
+        set
+        {
+            if (SetProperty(ref _search, value))
+            {
+                Foods.Refresh();
+            }
+        }
     }
     #endregion
     #endregion
@@ -46,37 +65,8 @@ public class FoodPageVM : ObservableObjectX<FoodPageVM>
     public ObservableCommand<FoodModel> EditCommand { get; } = new();
     public ObservableCommand<FoodModel> RemoveCommand { get; } = new();
     #endregion
-    public FoodPageVM()
-    {
-        ShowFoods = Foods;
-        //TODO
-        //Search.ValueChanged += Search_ValueChanged;
 
-        AddCommand.ExecuteCommand += Add;
-        EditCommand.ExecuteCommand += Edit;
-        RemoveCommand.ExecuteCommand += Remove;
-    }
-
-    private void Search_ValueChanged(
-        ObservableValue<string> sender,
-        ValueChangedEventArgs<string> e
-    )
-    {
-        if (string.IsNullOrWhiteSpace(e.NewValue))
-        {
-            ShowFoods = Foods;
-        }
-        else
-        {
-            ShowFoods = new(
-                Foods.Where(m => m.Id.Contains(e.NewValue, StringComparison.OrdinalIgnoreCase))
-            );
-        }
-    }
-
-    public void Close() { }
-
-    private void Add()
+    private void AddCommand_ExecuteCommand()
     {
         var window = new FoodEditWindow();
         var vm = window.ViewModel;
@@ -86,7 +76,7 @@ public class FoodPageVM : ObservableObjectX<FoodPageVM>
         Foods.Add(vm.Food);
     }
 
-    public void Edit(FoodModel food)
+    public void EditCommand_ExecuteCommand(FoodModel food)
     {
         var window = new FoodEditWindow();
         var vm = window.ViewModel;
@@ -96,23 +86,13 @@ public class FoodPageVM : ObservableObjectX<FoodPageVM>
         if (window.IsCancel)
             return;
         Foods[Foods.IndexOf(food)] = newFood;
-        if (ShowFoods.Count != Foods.Count)
-            ShowFoods[ShowFoods.IndexOf(food)] = newFood;
         food.Close();
     }
 
-    private void Remove(FoodModel food)
+    private void RemoveCommand_ExecuteCommand(FoodModel food)
     {
         if (MessageBox.Show("确定删除吗".Translate(), "", MessageBoxButton.YesNo) is MessageBoxResult.No)
             return;
-        if (ShowFoods.Count == Foods.Count)
-        {
-            Foods.Remove(food);
-        }
-        else
-        {
-            ShowFoods.Remove(food);
-            Foods.Remove(food);
-        }
+        Foods.Remove(food);
     }
 }

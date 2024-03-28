@@ -37,12 +37,12 @@
           <RowDefinition Height="Auto" />
           <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
-        <Label Content="Id" />
+        <Label Content="ID" />
         <TextBox
           Grid.Column="1"
-          pu:TextBoxHelper.Watermark="Id"
+          pu:TextBoxHelper.Watermark="ID"
           Style="{StaticResource TextBox_Wrap}"
-          Text="{Binding SelectText.Id, UpdateSourceTrigger=PropertyChanged}"
+          Text="{Binding SelectText.ID, UpdateSourceTrigger=PropertyChanged}"
           TextWrapping="Wrap" />
         <Label Grid.Row="1" Content="{ll:Str 选项名}" />
         <TextBox
@@ -101,7 +101,7 @@
             <ColumnDefinition Width="Auto" />
             <ColumnDefinition Width="Auto" />
           </Grid.ColumnDefinitions>
-          <TextBlock Text="{Binding SelectText.Mode.Value}" />
+          <TextBlock Style="{DynamicResource TextBlock_LeftCenter}" Text="{Binding SelectText.Mode.Value}" />
           <ComboBox
             x:Name="ComboBox_Mode"
             Grid.Column="1"

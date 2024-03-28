@@ -51,7 +51,7 @@ public class ImageModel : ObservableObjectX<ImageModel>
 
     public ImageModel Copy()
     {
-        var model = new ImageModel(Image.Copy(), Duration);
+        var model = new ImageModel(Image.CloneStream(), Duration);
         return model;
     }
 

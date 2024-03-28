@@ -40,14 +40,14 @@
             Grid.Column="1"
             Margin="10,0,0,0"
             VerticalAlignment="Center"
-            Text="{Binding CultureFullName.Value}" />
+            Text="{Binding CultureFullName}" />
         </Grid>
         <TextBox
           x:Name="TextBox_Lang"
           Grid.Row="1"
           pu:TextBoxHelper.Watermark="{ll:Str 文化名称}"
           Style="{DynamicResource StandardTextBoxStyle}"
-          Text="{Binding Culture.Value, UpdateSourceTrigger=PropertyChanged}" />
+          Text="{Binding Culture, UpdateSourceTrigger=PropertyChanged}" />
         <TextBlock Grid.Row="2">
           <Hyperlink Click="Hyperlink_Click">
             <TextBlock Text="{ll:Str 详情请参阅 Windows 支持的语言/区域名称列表中的“语言标记”列}" />
@@ -84,11 +84,11 @@
       <TextBox
         pu:TextBoxHelper.Watermark="{ll:Str 搜索}"
         Style="{DynamicResource StandardTextBoxStyle}"
-        Text="{Binding Search.Value, UpdateSourceTrigger=PropertyChanged}" />
+        Text="{Binding Search, UpdateSourceTrigger=PropertyChanged}" />
       <ListBox
         Grid.Row="1"
-        ItemsSource="{Binding ShowCultures.Value}"
-        SelectedItem="{Binding Culture.Value}" />
+        ItemsSource="{Binding AllCultures.FilteredList}"
+        SelectedItem="{Binding Culture}" />
     </Grid>
   </Grid>
 </pu:WindowX>

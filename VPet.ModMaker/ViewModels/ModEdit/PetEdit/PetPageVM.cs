@@ -16,29 +16,45 @@ namespace VPet.ModMaker.ViewModels.ModEdit.PetEdit;
 
 public class PetPageVM : ObservableObjectX<PetPageVM>
 {
+    public PetPageVM()
+    {
+        Pets = new(ModInfoModel.Current.Pets)
+        {
+            Filter = f => f.ID.Contains(Search, StringComparison.OrdinalIgnoreCase),
+            FilteredList = new()
+        };
+
+        AddCommand.ExecuteCommand += Add;
+        EditCommand.ExecuteCommand += Edit;
+        RemoveCommand.ExecuteCommand += Remove;
+    }
+
     public static ModInfoModel ModInfo => ModInfoModel.Current;
 
-    #region Value
+    #region Property
     #region ShowPets
     [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-    private ObservableCollection<PetModel> _showPets;
+    private ObservableFilterList<PetModel, ObservableList<PetModel>> _pets = null!;
 
-    public ObservableCollection<PetModel> ShowPets
+    public ObservableFilterList<PetModel, ObservableList<PetModel>> Pets
     {
-        get => _showPets;
-        set => SetProperty(ref _showPets, value);
+        get => _pets;
+        set => SetProperty(ref _pets, value);
     }
     #endregion
-    public ObservableCollection<PetModel> Pets => ModInfoModel.Current.Pets;
 
     #region Search
     [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-    private string _search;
+    private string _search = string.Empty;
 
     public string Search
     {
         get => _search;
-        set => SetProperty(ref _search, value);
+        set
+        {
+            SetProperty(ref _search, value);
+            Pets.Refresh();
+        }
     }
     #endregion
     #endregion
@@ -47,33 +63,6 @@ public class PetPageVM : ObservableObjectX<PetPageVM>
     public ObservableCommand<PetModel> EditCommand { get; } = new();
     public ObservableCommand<PetModel> RemoveCommand { get; } = new();
     #endregion
-    public PetPageVM()
-    {
-        //TODO
-        //ShowPets = Pets;
-        //Search.ValueChanged += Search_ValueChanged;
-
-        AddCommand.ExecuteCommand += Add;
-        EditCommand.ExecuteCommand += Edit;
-        RemoveCommand.ExecuteCommand += Remove;
-    }
-
-    private void Search_ValueChanged(
-        ObservableValue<string> sender,
-        ValueChangedEventArgs<string> e
-    )
-    {
-        if (string.IsNullOrWhiteSpace(e.NewValue))
-        {
-            ShowPets = Pets;
-        }
-        else
-        {
-            ShowPets = new(
-                Pets.Where(m => m.ID.Contains(e.NewValue, StringComparison.OrdinalIgnoreCase))
-            );
-        }
-    }
 
     public void Close() { }
 
@@ -114,8 +103,6 @@ public class PetPageVM : ObservableObjectX<PetPageVM>
         {
             Pets[Pets.IndexOf(model)] = newPet;
         }
-        if (ShowPets.Count != Pets.Count)
-            ShowPets[ShowPets.IndexOf(model)] = newPet;
         model.Close();
     }
 
@@ -128,14 +115,6 @@ public class PetPageVM : ObservableObjectX<PetPageVM>
         }
         if (MessageBox.Show("确定删除吗".Translate(), "", MessageBoxButton.YesNo) is MessageBoxResult.No)
             return;
-        if (ShowPets.Count == Pets.Count)
-        {
-            Pets.Remove(model);
-        }
-        else
-        {
-            ShowPets.Remove(model);
-            Pets.Remove(model);
-        }
+        Pets.Remove(model);
     }
 }

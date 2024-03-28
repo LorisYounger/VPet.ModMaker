@@ -24,7 +24,7 @@
         <ColumnDefinition Width="Auto" />
       </Grid.ColumnDefinitions>
       <TextBox
-        pu:TextBoxHelper.Watermark="{ll:Str 搜索Id}"
+        pu:TextBoxHelper.Watermark="{ll:Str 搜索ID}"
         Style="{DynamicResource StandardTextBoxStyle}"
         Text="{Binding Search, UpdateSourceTrigger=PropertyChanged}" />
       <pu:Switch
@@ -39,7 +39,7 @@
       AutoGenerateColumns="False"
       CanUserAddRows="False"
       GridLinesVisibility="Horizontal"
-      ItemsSource="{Binding ShowPets}"
+      ItemsSource="{Binding Pets.FilteredList}"
       MouseDoubleClick="DataGrid_MouseDoubleClick"
       RowDetailsVisibilityMode="Visible"
       RowHeight="64"
@@ -66,13 +66,13 @@
       <DataGrid.Columns>
         <DataGridTemplateColumn
           CanUserSort="True"
-          Header="Id"
+          Header="ID"
           IsReadOnly="True"
-          SortMemberPath="Id">
+          SortMemberPath="ID">
           <DataGridTemplateColumn.CellTemplate>
             <DataTemplate>
               <StackPanel Orientation="Horizontal">
-                <TextBlock Style="{DynamicResource TextBlock_LeftCenter}" Text="{Binding Id}" />
+                <TextBlock Style="{DynamicResource TextBlock_LeftCenter}" Text="{Binding ID}" />
                 <TextBlock
                   Style="{DynamicResource TextBlock_LeftCenter}"
                   Text="{ll:Str {} (来自本体)}"

@@ -9,9 +9,9 @@ using HKW.HKWUtils.Observable;
 namespace VPet.ModMaker.Models.ModModel;
 
 /// <summary>
-/// 食物图像模型
+/// 食物图像位置模型
 /// </summary>
-public class FoodLocationModel : ObservableObjectX<FoodLocationModel>
+public class FoodAnimeLocationModel : ObservableObjectX<FoodAnimeLocationModel>
 {
     #region Duration
     [DebuggerBrowsable(DebuggerBrowsableState.Never)]
@@ -60,7 +60,7 @@ public class FoodLocationModel : ObservableObjectX<FoodLocationModel>
     }
     #endregion
 
-    public FoodLocationModel()
+    public FoodAnimeLocationModel()
     {
         Rect.PropertyChangedX += (s, e) =>
         {
@@ -68,9 +68,9 @@ public class FoodLocationModel : ObservableObjectX<FoodLocationModel>
         };
     }
 
-    public FoodLocationModel Copy()
+    public FoodAnimeLocationModel Copy()
     {
-        var model = new FoodLocationModel();
+        var model = new FoodAnimeLocationModel();
         model.Duration = Duration;
         model.Rect = new(Rect.X, Rect.Y, Rect.Width, Rect.Height);
         model.Rotate = Rotate;

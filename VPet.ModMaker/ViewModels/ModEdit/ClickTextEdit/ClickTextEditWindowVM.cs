@@ -13,13 +13,13 @@ namespace VPet.ModMaker.ViewModels.ModEdit.ClickTextEdit;
 
 public class ClickTextEditWindowVM : ObservableObjectX<ClickTextEditWindowVM>
 {
-    public I18nHelper I18nData => I18nHelper.Current;
+    public static I18nHelper I18nData => I18nHelper.Current;
 
     #region Value
     /// <summary>
     /// 旧点击文本
     /// </summary>
-    public ClickTextModel OldClickText { get; set; }
+    public ClickTextModel? OldClickText { get; set; }
 
     #region ClickText
     [DebuggerBrowsable(DebuggerBrowsableState.Never)]

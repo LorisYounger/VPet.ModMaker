@@ -46,14 +46,14 @@ public partial class SelectTextEditWindow : Window
 
     private void Button_Yes_Click(object sender, RoutedEventArgs e)
     {
-        if (string.IsNullOrWhiteSpace(ViewModel.SelectText.Id))
+        if (string.IsNullOrWhiteSpace(ViewModel.SelectText.ID))
         {
             MessageBox.Show("Id不可为空".Translate(), "", MessageBoxButton.OK, MessageBoxImage.Warning);
             return;
         }
         if (
-            ViewModel.OldSelectText?.Id != ViewModel.SelectText.Id
-            && ModInfoModel.Current.SelectTexts.Any(i => i.Id == ViewModel.SelectText.Id)
+            ViewModel.OldSelectText?.ID != ViewModel.SelectText.ID
+            && ModInfoModel.Current.SelectTexts.Any(i => i.ID == ViewModel.SelectText.ID)
         )
         {
             MessageBox.Show("此Id已存在".Translate(), "", MessageBoxButton.OK, MessageBoxImage.Warning);

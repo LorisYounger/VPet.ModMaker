@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Frozen;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
@@ -6,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using HKW.HKWUtils.Observable;
+using Mapster;
 using VPet.ModMaker.Models;
 using VPet_Simulator.Windows.Interface;
 
@@ -16,10 +18,53 @@ namespace VPet.ModMaker.Models;
 /// </summary>
 public class SelectTextModel : I18nModel<I18nSelectTextModel>
 {
+    public SelectTextModel() { }
+
+    public SelectTextModel(SelectTextModel model)
+        : this()
+    {
+        //model.Adapt(this);
+        //Like.Min = -100;
+        ID = model.ID;
+        Mode.Value = model.Mode.Value;
+        Tags = model.Tags;
+        ToTags = model.ToTags;
+        Like = model.Like.Clone();
+        Health = model.Health.Clone();
+        Level = model.Level.Clone();
+        Money = model.Money.Clone();
+        Food = model.Food.Clone();
+        Drink = model.Drink.Clone();
+        Feel = model.Feel.Clone();
+        Strength = model.Strength.Clone();
+
+        foreach (var item in model.I18nDatas)
+            I18nDatas[item.Key] = item.Value.Clone();
+        CurrentI18nData = I18nDatas[I18nHelper.Current.CultureName];
+    }
+
+    public SelectTextModel(SelectText text)
+        : this()
+    {
+        ID = text.Text;
+        ChooseID = text.Choose ?? string.Empty;
+        Mode.Value = text.Mode;
+        Tags = text.Tags is null ? string.Empty : string.Join(", ", text.Tags);
+        ToTags = text.ToTags is null ? string.Empty : string.Join(", ", text.ToTags);
+        Like = new(text.LikeMin, text.LikeMax);
+        Health = new(text.HealthMin, text.HealthMax);
+        Level = new(text.LevelMin, text.LevelMax);
+        Money = new(text.MoneyMin, text.MoneyMax);
+        Food = new(text.FoodMin, text.FoodMax);
+        Drink = new(text.DrinkMin, text.DrinkMax);
+        Feel = new(text.FeelMin, text.FeelMax);
+        Strength = new(text.StrengthMin, text.StrengthMax);
+    }
+
     /// <summary>
     /// 模式类型
     /// </summary>
-    public static ObservableCollection<ClickText.ModeType> ModeTypes => ClickTextModel.ModeTypes;
+    public static FrozenSet<ClickText.ModeType> ModeTypes => ClickTextModel.ModeTypes;
 
     #region Tags
     [DebuggerBrowsable(DebuggerBrowsableState.Never)]
@@ -49,17 +94,21 @@ public class SelectTextModel : I18nModel<I18nSelectTextModel>
     }
     #endregion
 
-    #region Id
+    #region ID
     [DebuggerBrowsable(DebuggerBrowsableState.Never)]
     private string _id = string.Empty;
 
     /// <summary>
-    /// Id
+    /// ID
     /// </summary>
-    public string Id
+    public string ID
     {
         get => _id;
-        set => SetProperty(ref _id, value);
+        set
+        {
+            SetProperty(ref _id, value);
+            RefreshID();
+        }
     }
     #endregion
 
@@ -71,7 +120,7 @@ public class SelectTextModel : I18nModel<I18nSelectTextModel>
     /// 选择Id
     /// </summary>
 
-    public string ChooseId
+    public string ChooseID
     {
         get => _chooseId;
         set => SetProperty(ref _chooseId, value);
@@ -129,68 +178,19 @@ public class SelectTextModel : I18nModel<I18nSelectTextModel>
     /// </summary>
     public ObservableRange<double> Strength { get; } = new(0, int.MaxValue);
 
-    public SelectTextModel()
+    public void RefreshID()
     {
-        ChooseId = $"{Id}_{nameof(ChooseId)}";
-        //TODO
-        //Id.ValueChanged += (s, e) =>
-        //{
-        //    ChooseId.Value = $"{e.NewValue}_{nameof(ChooseId)}";
-        //};
+        ChooseID = $"{ID}_{nameof(ChooseID)}";
     }
 
-    public SelectTextModel(SelectTextModel model)
-        : this()
-    {
-        Id = model.Id;
-        Mode.Value = model.Mode.Value;
-        Tags = model.Tags;
-        ToTags = model.ToTags;
-        Like = model.Like.Clone();
-        Health = model.Health.Clone();
-        Level = model.Level.Clone();
-        Money = model.Money.Clone();
-        Food = model.Food.Clone();
-        Drink = model.Drink.Clone();
-        Feel = model.Feel.Clone();
-        Strength = model.Strength.Clone();
-
-        foreach (var item in model.I18nDatas)
-            I18nDatas[item.Key] = item.Value.Copy();
-        CurrentI18nData = I18nDatas[I18nHelper.Current.CultureName];
-    }
-
-    public SelectTextModel(SelectText text)
-        : this()
-    {
-        Id = text.Text;
-        ChooseId = text.Choose ?? string.Empty;
-        Mode.Value = text.Mode;
-        Tags = text.Tags is null ? string.Empty : string.Join(", ", text.Tags);
-        ToTags = text.ToTags is null ? string.Empty : string.Join(", ", text.ToTags);
-        Like = new(text.LikeMin, text.LikeMax);
-        Health = new(text.HealthMin, text.HealthMax);
-        Level = new(text.LevelMin, text.LevelMax);
-        Money = new(text.MoneyMin, text.MoneyMax);
-        Food = new(text.FoodMin, text.FoodMax);
-        Drink = new(text.DrinkMin, text.DrinkMax);
-        Feel = new(text.FeelMin, text.FeelMax);
-        Strength = new(text.StrengthMin, text.StrengthMax);
-    }
-
-    public void RefreshId()
-    {
-        ChooseId = $"{Id}_{nameof(ChooseId)}";
-    }
-
-    private static readonly char[] rs_splitChar = { ',', ' ' };
+    private static readonly char[] rs_splitChar = [',', ' '];
 
     public SelectText ToSelectText()
     {
         return new()
         {
-            Text = Id,
-            Choose = ChooseId,
+            Text = ID,
+            Choose = ChooseID,
             Mode = Mode.Value,
             Tags = new(Tags.Split(rs_splitChar, StringSplitOptions.RemoveEmptyEntries)),
             ToTags = new(ToTags.Split(rs_splitChar, StringSplitOptions.RemoveEmptyEntries)),
@@ -214,7 +214,9 @@ public class SelectTextModel : I18nModel<I18nSelectTextModel>
     }
 }
 
-public class I18nSelectTextModel : ObservableObjectX<I18nSelectTextModel>
+public class I18nSelectTextModel
+    : ObservableObjectX<I18nSelectTextModel>,
+        ICloneable<I18nSelectTextModel>
 {
     #region Choose
     [DebuggerBrowsable(DebuggerBrowsableState.Never)]
@@ -237,11 +239,10 @@ public class I18nSelectTextModel : ObservableObjectX<I18nSelectTextModel>
     }
     #endregion
 
-    public I18nSelectTextModel Copy()
+    public I18nSelectTextModel Clone()
     {
-        var result = new I18nSelectTextModel();
-        result.Text = Text;
-        result.Choose = Choose;
-        return result;
+        return this.Adapt<I18nSelectTextModel>();
     }
+
+    object ICloneable.Clone() => Clone();
 }

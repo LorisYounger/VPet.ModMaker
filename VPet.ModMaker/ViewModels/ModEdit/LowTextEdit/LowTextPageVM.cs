@@ -12,33 +12,48 @@ using HKW.HKWUtils.Observable;
 using LinePutScript.Localization.WPF;
 using VPet.ModMaker.Models;
 using VPet.ModMaker.Views.ModEdit.LowTextEdit;
-using Expression = System.Linq.Expressions.Expression;
 
 namespace VPet.ModMaker.ViewModels.ModEdit.LowTextEdit;
 
 public class LowTextPageVM : ObservableObjectX<LowTextPageVM>
 {
-    #region Value
-    #region ShowLowTexts
-    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-    private ObservableCollection<LowTextModel> _showLowTexts;
-
-    public ObservableCollection<LowTextModel> ShowLowTexts
+    public LowTextPageVM()
     {
-        get => _showLowTexts;
-        set => SetProperty(ref _showLowTexts, value);
+        LowTexts = new(ModInfoModel.Current.LowTexts)
+        {
+            Filter = f => f.ID.Contains(Search, StringComparison.OrdinalIgnoreCase),
+            FilteredList = new()
+        };
+
+        AddCommand.ExecuteCommand += AddCommand_ExecuteCommand;
+        EditCommand.ExecuteCommand += EditCommand_ExecuteCommand;
+        RemoveCommand.ExecuteCommand += RemoveCommand_ExecuteCommand;
+    }
+
+    #region Property
+    #region LowTexts
+    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+    private ObservableFilterList<LowTextModel, ObservableList<LowTextModel>> _lowTexts = null!;
+
+    public ObservableFilterList<LowTextModel, ObservableList<LowTextModel>> LowTexts
+    {
+        get => _lowTexts;
+        set => SetProperty(ref _lowTexts, value);
     }
     #endregion
-    public ObservableCollection<LowTextModel> LowTexts => ModInfoModel.Current.LowTexts;
 
     #region Search
     [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-    private string _search;
+    private string _search = string.Empty;
 
     public string Search
     {
         get => _search;
-        set => SetProperty(ref _search, value);
+        set
+        {
+            SetProperty(ref _search, value);
+            LowTexts.Refresh();
+        }
     }
     #endregion
     #endregion
@@ -48,33 +63,7 @@ public class LowTextPageVM : ObservableObjectX<LowTextPageVM>
     public ObservableCommand<LowTextModel> RemoveCommand { get; } = new();
     #endregion
 
-    public LowTextPageVM()
-    {
-        ShowLowTexts = LowTexts;
-        //Search.ValueChanged += Search_ValueChanged;//TODO
-        AddCommand.ExecuteCommand += Add;
-        EditCommand.ExecuteCommand += Edit;
-        RemoveCommand.ExecuteCommand += Remove;
-    }
-
-    private void Search_ValueChanged(
-        ObservableValue<string> sender,
-        ValueChangedEventArgs<string> e
-    )
-    {
-        if (string.IsNullOrWhiteSpace(e.NewValue))
-        {
-            ShowLowTexts = LowTexts;
-        }
-        else
-        {
-            ShowLowTexts = new(
-                LowTexts.Where(m => m.Id.Contains(e.NewValue, StringComparison.OrdinalIgnoreCase))
-            );
-        }
-    }
-
-    private void Add()
+    private void AddCommand_ExecuteCommand()
     {
         var window = new LowTextEditWindow();
         var vm = window.ViewModel;
@@ -84,7 +73,7 @@ public class LowTextPageVM : ObservableObjectX<LowTextPageVM>
         LowTexts.Add(vm.LowText);
     }
 
-    public void Edit(LowTextModel model)
+    public void EditCommand_ExecuteCommand(LowTextModel model)
     {
         var window = new LowTextEditWindow();
         var vm = window.ViewModel;
@@ -94,22 +83,12 @@ public class LowTextPageVM : ObservableObjectX<LowTextPageVM>
         if (window.IsCancel)
             return;
         LowTexts[LowTexts.IndexOf(model)] = newLowTest;
-        if (ShowLowTexts.Count != LowTexts.Count)
-            ShowLowTexts[ShowLowTexts.IndexOf(model)] = newLowTest;
     }
 
-    private void Remove(LowTextModel model)
+    private void RemoveCommand_ExecuteCommand(LowTextModel model)
     {
         if (MessageBox.Show("确定删除吗".Translate(), "", MessageBoxButton.YesNo) is MessageBoxResult.No)
             return;
-        if (ShowLowTexts.Count == LowTexts.Count)
-        {
-            LowTexts.Remove(model);
-        }
-        else
-        {
-            ShowLowTexts.Remove(model);
-            LowTexts.Remove(model);
-        }
+        LowTexts.Remove(model);
     }
 }

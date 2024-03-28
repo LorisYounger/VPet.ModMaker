@@ -99,12 +99,12 @@ public class FoodAnimeEditWindowVM : ObservableObjectX<FoodAnimeEditWindowVM>
 
     #region CurrentFoodLocationModel
     [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-    private FoodLocationModel _currentFoodLocationModel;
+    private FoodAnimeLocationModel _currentFoodLocationModel;
 
     /// <summary>
     /// 当前食物定位模型
     /// </summary>
-    public FoodLocationModel CurrentFoodLocationModel
+    public FoodAnimeLocationModel CurrentFoodLocationModel
     {
         get => _currentFoodLocationModel;
         set => SetProperty(ref _currentFoodLocationModel, value);

@@ -11,9 +11,9 @@ namespace VPet.ModMaker.ViewModels.ModEdit.SelectTextEdit;
 
 public class SelectTextEditWindowVM : ObservableObjectX<SelectTextEditWindowVM>
 {
-    public I18nHelper I18nData => I18nHelper.Current;
+    public static I18nHelper I18nData => I18nHelper.Current;
     #region Value
-    public SelectTextModel OldSelectText { get; set; }
+    public SelectTextModel? OldSelectText { get; set; }
 
     #region SelectText
     [DebuggerBrowsable(DebuggerBrowsableState.Never)]

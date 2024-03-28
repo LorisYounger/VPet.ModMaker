@@ -1,8 +1,4 @@
-﻿using LinePutScript.Localization.WPF;
-using Microsoft.Win32;
-using Panuon.WPF;
-using Panuon.WPF.UI;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
@@ -20,6 +16,10 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using LinePutScript.Localization.WPF;
+using Microsoft.Win32;
+using Panuon.WPF;
+using Panuon.WPF.UI;
 using VPet.ModMaker.Models;
 using VPet.ModMaker.ViewModels.ModEdit;
 using VPet.ModMaker.Views.ModEdit.AnimeEdit;
@@ -40,14 +40,14 @@ namespace VPet.ModMaker.Views.ModEdit;
 public partial class ModEditWindow : WindowX
 {
     public ModEditWindowVM ViewModel => (ModEditWindowVM)DataContext;
-    public FoodPage FoodPage { get; }
-    public LowTextPage LowTextPage { get; }
-    public ClickTextPage ClickTextPage { get; }
-    public SelectTextPage SelectTextPage { get; }
-    public PetPage PetPage { get; }
-    public WorkPage WorkPage { get; }
-    public MovePage MovePage { get; }
-    public AnimePage AnimePage { get; }
+    public FoodPage FoodPage { get; } = null!;
+    public LowTextPage LowTextPage { get; } = null!;
+    public ClickTextPage ClickTextPage { get; } = null!;
+    public SelectTextPage SelectTextPage { get; } = null!;
+    public PetPage PetPage { get; } = null!;
+    public WorkPage WorkPage { get; } = null!;
+    public MovePage MovePage { get; } = null!;
+    public AnimePage AnimePage { get; } = null!;
 
     public ModEditWindow()
     {
@@ -60,9 +60,10 @@ public partial class ModEditWindow : WindowX
         ClickTextPage = new();
         SelectTextPage = new();
         PetPage = new();
-        WorkPage = new();
-        MovePage = new();
-        AnimePage = new();
+        //TODO
+        //WorkPage = new();
+        //MovePage = new();
+        //AnimePage = new();
     }
 
     /// <summary>
@@ -77,7 +78,7 @@ public partial class ModEditWindow : WindowX
                 is not MessageBoxResult.Yes
             )
                 return;
-            ViewModel.AddCulture();
+            ViewModel.AddCultureCommand_ExecuteCommand();
             if (
                 I18nHelper.Current.CultureNames.Count == 0
                 || MessageBox.Show(
@@ -88,11 +89,11 @@ public partial class ModEditWindow : WindowX
                     is not MessageBoxResult.Yes
             )
                 return;
-            ViewModel.SetMainCulture(I18nHelper.Current.CultureNames.First());
+            ViewModel.SetMainCultureCommand_ExecuteCommand(I18nHelper.Current.CultureNames.First());
         }
     }
 
-    private void ModEditWindow_Closing(object sender, CancelEventArgs e)
+    private void ModEditWindow_Closing(object? sender, CancelEventArgs e)
     {
         if (
             MessageBox.Show("确认退出吗?".Translate(), "", MessageBoxButton.YesNo) is MessageBoxResult.No
@@ -100,7 +101,7 @@ public partial class ModEditWindow : WindowX
             e.Cancel = true;
     }
 
-    private void ModEditWindow_Closed(object sender, EventArgs e)
+    private void ModEditWindow_Closed(object? sender, EventArgs e)
     {
         ViewModel?.Close();
         try

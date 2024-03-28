@@ -353,11 +353,11 @@
           <RowDefinition Height="Auto" />
           <RowDefinition />
         </Grid.RowDefinitions>
-        <Label Content="Id" />
+        <Label Content="ID" />
         <TextBox
           Grid.Column="1"
-          pu:TextBoxHelper.Watermark="Id"
-          Text="{Binding Pet.Id, UpdateSourceTrigger=PropertyChanged}" />
+          pu:TextBoxHelper.Watermark="ID"
+          Text="{Binding Pet.ID, UpdateSourceTrigger=PropertyChanged}" />
         <!--<Label Grid.Row="1" Content="{ll:Str 名称}" />
         <TextBox
           Grid.Row="1"

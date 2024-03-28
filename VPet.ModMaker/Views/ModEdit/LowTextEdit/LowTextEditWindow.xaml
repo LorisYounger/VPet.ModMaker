@@ -33,12 +33,12 @@
           <ColumnDefinition Width="Auto" />
           <ColumnDefinition />
         </Grid.ColumnDefinitions>
-        <Label Content="Id" />
+        <Label Content="ID" />
         <TextBox
           Grid.Column="1"
-          pu:TextBoxHelper.Watermark="Id"
+          pu:TextBoxHelper.Watermark="ID"
           Style="{StaticResource TextBox_Wrap}"
-          Text="{Binding LowText.Id, UpdateSourceTrigger=PropertyChanged}" />
+          Text="{Binding LowText.ID, UpdateSourceTrigger=PropertyChanged}" />
       </Grid>
       <TextBox
         Grid.Row="1"

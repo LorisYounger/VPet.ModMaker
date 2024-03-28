@@ -13,13 +13,13 @@ namespace VPet.ModMaker.ViewModels.ModEdit.LowTextEdit;
 
 public class LowTextEditWindowVM : ObservableObjectX<LowTextEditWindowVM>
 {
-    public I18nHelper I18nData => I18nHelper.Current;
+    public static I18nHelper I18nData => I18nHelper.Current;
     #region Value
-    public LowTextModel OldLowText { get; set; }
+    public LowTextModel? OldLowText { get; set; }
 
     #region LowText
     [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-    private LowTextModel _lowText;
+    private LowTextModel _lowText = new();
 
     public LowTextModel LowText
     {

@@ -29,15 +29,7 @@ public partial class LowTextEditWindow : Window
     public LowTextEditWindow()
     {
         InitializeComponent();
-        DataContext = new LowTextEditWindowVM();
-        Closed += (s, e) =>
-        {
-            try
-            {
-                DataContext = null;
-            }
-            catch { }
-        };
+        this.SetDataContext<LowTextEditWindowVM>();
     }
 
     private void Button_Cancel_Click(object sender, RoutedEventArgs e)
@@ -47,17 +39,17 @@ public partial class LowTextEditWindow : Window
 
     private void Button_Yes_Click(object sender, RoutedEventArgs e)
     {
-        if (string.IsNullOrEmpty(ViewModel.LowText.Id))
+        if (string.IsNullOrEmpty(ViewModel.LowText.ID))
         {
-            MessageBox.Show("Id不可为空".Translate(), "", MessageBoxButton.OK, MessageBoxImage.Warning);
+            MessageBox.Show("ID不可为空".Translate(), "", MessageBoxButton.OK, MessageBoxImage.Warning);
             return;
         }
         if (
-            ViewModel.OldLowText?.Id != ViewModel.LowText.Id
-            && ModInfoModel.Current.LowTexts.Any(i => i.Id == ViewModel.LowText.Id)
+            ViewModel.OldLowText?.ID != ViewModel.LowText.ID
+            && ModInfoModel.Current.LowTexts.Any(i => i.ID == ViewModel.LowText.ID)
         )
         {
-            MessageBox.Show("此Id已存在".Translate(), "", MessageBoxButton.OK, MessageBoxImage.Warning);
+            MessageBox.Show("此ID已存在".Translate(), "", MessageBoxButton.OK, MessageBoxImage.Warning);
             return;
         }
         if (string.IsNullOrEmpty(ViewModel.LowText.CurrentI18nData.Text))

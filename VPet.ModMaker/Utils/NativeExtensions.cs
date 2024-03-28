@@ -54,7 +54,7 @@ public static class NativeExtensions
     /// </summary>
     /// <param name="image">图像</param>
     /// <returns>复制的图像</returns>
-    public static BitmapImage Copy(this BitmapImage image)
+    public static BitmapImage CloneStream(this BitmapImage image)
     {
         if (image is null)
             return null;
@@ -64,10 +64,11 @@ public static class NativeExtensions
         newImage.DecodePixelHeight = image.DecodePixelHeight;
         try
         {
-            using var bitmap = new Bitmap(image.StreamSource);
             var ms = new MemoryStream();
-            bitmap.Save(ms, ImageFormat.Png);
+            var position = image.StreamSource.Position;
+            image.StreamSource.Seek(0, SeekOrigin.Begin);
             image.StreamSource.CopyTo(ms);
+            image.StreamSource.Seek(position, SeekOrigin.Begin);
             newImage.StreamSource = ms;
         }
         finally
@@ -270,7 +271,7 @@ public static class NativeExtensions
             yield return new(index++, item);
     }
 
-    public static void SetDataContext<T>(this Window window)
+    public static void SetDataContext<T>(this Window window, Action? closedAction = null)
         where T : new()
     {
         window.DataContext = new T();
@@ -278,6 +279,7 @@ public static class NativeExtensions
         {
             try
             {
+                closedAction?.Invoke();
                 window.DataContext = null;
             }
             catch { }

@@ -62,8 +62,8 @@
           <Label Content="Id" />
           <TextBox
             Grid.Column="1"
-            pu:TextBoxHelper.Watermark="Id"
-            Text="{Binding Food.Id, UpdateSourceTrigger=PropertyChanged}" />
+            pu:TextBoxHelper.Watermark="ID"
+            Text="{Binding Food.ID, UpdateSourceTrigger=PropertyChanged}" />
           <Label Grid.Row="1" Content="{ll:Str 食物类型}" />
           <ComboBox
             x:Name="ComboBox_FoodType"

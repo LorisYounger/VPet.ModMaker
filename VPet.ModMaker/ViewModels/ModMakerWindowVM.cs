@@ -88,7 +88,7 @@ public class ModMakerWindowVM : ObservableObjectX<ModMakerWindowVM>
         LoadHistories();
         ModMakerWindow = window;
         //TODO
-        //ShowHistories.Value = Histories;
+        ShowHistories = Histories;
         CreateNewModCommand.ExecuteCommand += CreateNewMod;
         LoadModFromFileCommand.ExecuteCommand += LoadModFromFile;
         ClearHistoriesCommand.ExecuteCommand += ClearHistories;
@@ -124,7 +124,8 @@ public class ModMakerWindowVM : ObservableObjectX<ModMakerWindowVM>
         var lps = new LPS(File.ReadAllText(ModMakerInfo.HistoryFile));
         foreach (var line in lps)
         {
-            var history = LPSConvert.DeserializeObject<ModMakeHistory>(line);
+            if (LPSConvert.DeserializeObject<ModMakeHistory>(line) is not ModMakeHistory history)
+                continue;
             if (Histories.All(h => h.InfoFile != history.InfoFile))
                 Histories.Add(history);
         }

@@ -34,6 +34,6 @@ public partial class ClickTextPage : Page
     {
         if (sender is not DataGrid dataGrid || dataGrid.SelectedItem is not ClickTextModel model)
             return;
-        ViewModel.Edit(model);
+        ViewModel.EditCommand_ExecuteCommand(model);
     }
 }

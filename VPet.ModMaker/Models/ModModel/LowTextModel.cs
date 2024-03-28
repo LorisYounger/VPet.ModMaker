@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Frozen;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
@@ -7,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Serialization;
 using HKW.HKWUtils.Observable;
+using Mapster;
 using VPet_Simulator.Windows.Interface;
 
 namespace VPet.ModMaker.Models;
@@ -16,32 +18,51 @@ namespace VPet.ModMaker.Models;
 /// </summary>
 public class LowTextModel : I18nModel<I18nLowTextModel>
 {
+    public LowTextModel() { }
+
+    public LowTextModel(LowTextModel lowText)
+        : this()
+    {
+        lowText.Adapt(this);
+
+        foreach (var item in lowText.I18nDatas)
+            I18nDatas[item.Key] = item.Value.Clone();
+        CurrentI18nData = I18nDatas[I18nHelper.Current.CultureName];
+    }
+
+    public LowTextModel(LowText lowText)
+        : this()
+    {
+        lowText.Adapt(this);
+    }
+
     /// <summary>
     /// 状态类型
     /// </summary>
-    public static ObservableCollection<LowText.ModeType> ModeTypes { get; } =
-        new(Enum.GetValues(typeof(LowText.ModeType)).Cast<LowText.ModeType>());
+    public static FrozenSet<LowText.ModeType> ModeTypes { get; } =
+        Enum.GetValues<LowText.ModeType>().ToFrozenSet();
 
     /// <summary>
     /// 好感度类型
     /// </summary>
-    public static ObservableCollection<LowText.LikeType> LikeTypes { get; } =
-        new(Enum.GetValues(typeof(LowText.LikeType)).Cast<LowText.LikeType>());
+    public static FrozenSet<LowText.LikeType> LikeTypes { get; } =
+        Enum.GetValues<LowText.LikeType>().ToFrozenSet();
 
     /// <summary>
     /// 体力类型
     /// </summary>
-    public static ObservableCollection<LowText.StrengthType> StrengthTypes { get; } =
-        new(Enum.GetValues(typeof(LowText.StrengthType)).Cast<LowText.StrengthType>());
+    public static FrozenSet<LowText.StrengthType> StrengthTypes { get; } =
+        Enum.GetValues<LowText.StrengthType>().ToFrozenSet();
 
-    #region Id
+    #region ID
     [DebuggerBrowsable(DebuggerBrowsableState.Never)]
     private string _id = string.Empty;
 
     /// <summary>
-    /// Id
+    /// ID
     /// </summary>
-    public string Id
+    [AdaptMember(nameof(LowText.Text))]
+    public string ID
     {
         get => _id;
         set => SetProperty(ref _id, value);
@@ -55,6 +76,7 @@ public class LowTextModel : I18nModel<I18nLowTextModel>
     /// <summary>
     /// 状态
     /// </summary>
+    [AdaptMember(nameof(LowText.Mode))]
     public LowText.ModeType Mode
     {
         get => _mode;
@@ -69,6 +91,7 @@ public class LowTextModel : I18nModel<I18nLowTextModel>
     /// <summary>
     /// 体力
     /// </summary>
+    [AdaptMember(nameof(LowText.Strength))]
     public LowText.StrengthType Strength
     {
         get => _strength;
@@ -83,7 +106,7 @@ public class LowTextModel : I18nModel<I18nLowTextModel>
     /// <summary>
     /// 好感度
     /// </summary>
-
+    [AdaptMember(nameof(LowText.Like))]
     public LowText.LikeType Like
     {
         get => _like;
@@ -91,45 +114,13 @@ public class LowTextModel : I18nModel<I18nLowTextModel>
     }
     #endregion
 
-    public LowTextModel() { }
-
-    public LowTextModel(LowTextModel lowText)
-        : this()
-    {
-        Id = lowText.Id;
-        Mode = lowText.Mode;
-        Strength = lowText.Strength;
-        Like = lowText.Like;
-
-        foreach (var item in lowText.I18nDatas)
-            I18nDatas[item.Key] = item.Value.Copy();
-        CurrentI18nData = I18nDatas[I18nHelper.Current.CultureName];
-    }
-
-    public LowTextModel(LowText lowText)
-        : this()
-    {
-        Id = lowText.Text;
-        Mode = lowText.Mode;
-        Strength = lowText.Strength;
-        Like = lowText.Like;
-    }
-
-    public void Close() { }
-
     public LowText ToLowText()
     {
-        return new()
-        {
-            Text = Id,
-            Mode = Mode,
-            Strength = Strength,
-            Like = Like,
-        };
+        return this.Adapt<LowText>();
     }
 }
 
-public class I18nLowTextModel : ObservableObjectX<I18nLowTextModel>
+public class I18nLowTextModel : ObservableObjectX<I18nLowTextModel>, ICloneable<I18nLowTextModel>
 {
     #region Text
     [DebuggerBrowsable(DebuggerBrowsableState.Never)]
@@ -142,10 +133,10 @@ public class I18nLowTextModel : ObservableObjectX<I18nLowTextModel>
     }
     #endregion
 
-    public I18nLowTextModel Copy()
+    public I18nLowTextModel Clone()
     {
-        var result = new I18nLowTextModel();
-        result.Text = Text;
-        return result;
+        return this.Adapt<I18nLowTextModel>();
     }
+
+    object ICloneable.Clone() => Clone();
 }
