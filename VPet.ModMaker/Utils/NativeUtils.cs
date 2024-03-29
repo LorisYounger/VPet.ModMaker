@@ -82,4 +82,28 @@ public static class NativeUtils
         }
         return bitmapImage;
     }
+
+    /// <summary>
+    /// 打开文件
+    /// </summary>
+    /// <param name="filePath">文件路径</param>
+    public static void OpenLink(string filePath)
+    {
+        System
+            .Diagnostics.Process.Start(
+                new System.Diagnostics.ProcessStartInfo(filePath) { UseShellExecute = true }
+            )
+            ?.Close();
+    }
+
+    /// <summary>
+    /// 从资源管理器打开文件
+    /// </summary>
+    /// <param name="filePath">文件路径</param>
+    public static void OpenFileInExplorer(string filePath)
+    {
+        System
+            .Diagnostics.Process.Start("Explorer", $"/select,{Path.GetFullPath(filePath)}")
+            ?.Close();
+    }
 }

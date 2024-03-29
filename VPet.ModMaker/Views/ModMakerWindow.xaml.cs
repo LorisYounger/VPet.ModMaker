@@ -72,6 +72,6 @@ public partial class ModMakerWindow : WindowX
 
     private void Hyperlink_Click(object? sender, RoutedEventArgs e)
     {
-        Process.Start(new ProcessStartInfo("https://github.com/LorisYounger/VPet.ModMaker/wiki"));
+        NativeUtils.OpenLink("https://github.com/LorisYounger/VPet.ModMaker/wiki");
     }
 }
