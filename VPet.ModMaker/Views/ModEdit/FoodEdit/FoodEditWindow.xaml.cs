@@ -38,12 +38,12 @@ public partial class FoodEditWindow : Window
         });
     }
 
-    private void Button_Cancel_Click(object sender, RoutedEventArgs e)
+    private void Button_Cancel_Click(object? sender, RoutedEventArgs e)
     {
         Close();
     }
 
-    private void Button_Yes_Click(object sender, RoutedEventArgs e)
+    private void Button_Yes_Click(object? sender, RoutedEventArgs e)
     {
         if (string.IsNullOrWhiteSpace(ViewModel.Food.ID))
         {

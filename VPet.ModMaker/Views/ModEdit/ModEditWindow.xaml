@@ -92,7 +92,7 @@
             <TextBox
               Grid.Column="1"
               pu:TextBoxHelper.Watermark="ID"
-              Text="{Binding ModInfo.Id, UpdateSourceTrigger=PropertyChanged}" />
+              Text="{Binding ModInfo.ID, UpdateSourceTrigger=PropertyChanged}" />
             <Label Grid.Row="1" Content="{ll:Str 作者}" />
             <TextBox
               x:Name="TextBox_Author"
@@ -311,6 +311,7 @@
         <Button
           Command="{Binding EditI18nCommand}"
           Content="{ll:Str 编辑多语言内容}"
+          IsEnabled="False"
           Style="{DynamicResource ThemedButtonStyle}" />
         <Button
           Command="{Binding SaveCommand}"
@@ -320,9 +321,11 @@
           Command="{Binding SaveToCommand}"
           Content="{ll:Str 保存至}"
           Style="{DynamicResource ThemedButtonStyle}" />
+        <!--  TODO  -->
         <Button
           Command="{Binding SaveAsTranslationModCommand}"
           Content="{ll:Str 保存为翻译模组}"
+          IsEnabled="False"
           Style="{DynamicResource ThemedButtonStyle}" />
         <!--<Menu
           x:Name="Button_SaveAs"

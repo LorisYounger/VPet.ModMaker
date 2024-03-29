@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
@@ -21,24 +22,70 @@ namespace VPet.ModMaker.ViewModels.ModEdit.AnimeEdit;
 
 public class AnimeEditWindowVM : ObservableObjectX<AnimeEditWindowVM>
 {
+    public AnimeEditWindowVM()
+    {
+        _playerTask = new(Play);
+        PropertyChangedX += AnimeEditWindowVM_PropertyChangedX;
+
+        PlayCommand.ExecuteAsyncCommand += PlayCommand_ExecuteAsyncCommand;
+        StopCommand.ExecuteCommand += StopCommand_ExecuteCommand;
+        AddAnimeCommand.ExecuteCommand += AddAnimeCommand_ExecuteCommand;
+        RemoveAnimeCommand.ExecuteCommand += RemoveAnimeCommand_ExecuteCommand;
+        AddImageCommand.ExecuteCommand += AddImageCommand_ExecuteCommand;
+        RemoveImageCommand.ExecuteCommand += RemoveImageCommand_ExecuteCommand;
+        ChangeImageCommand.ExecuteCommand += ChangeImageCommand_ExecuteCommand;
+        ClearImageCommand.ExecuteCommand += ClearImageCommand_ExecuteCommand;
+    }
+
+    private void AnimeEditWindowVM_PropertyChangedX(
+        AnimeEditWindowVM sender,
+        PropertyChangedXEventArgs e
+    )
+    {
+        if (e.PropertyName == nameof(CurrentAnimeModel))
+        {
+            var newModel = e.NewValue as AnimeModel;
+            var oldModel = e.OldValue as AnimeModel;
+            StopCommand_ExecuteCommand();
+            if (oldModel is not null)
+                oldModel.Images.CollectionChanged -= Images_CollectionChanged;
+            if (newModel is not null)
+                newModel.Images.CollectionChanged += Images_CollectionChanged;
+        }
+    }
+
     /// <summary>
     /// 当前宠物
     /// </summary>
-    public PetModel CurrentPet { get; set; }
+    public PetModel CurrentPet { get; set; } = null!;
 
     /// <summary>
     /// 旧动画
     /// </summary>
-    public AnimeTypeModel OldAnime { get; set; }
+    public AnimeTypeModel? OldAnime { get; set; }
+
+    #region Anime
+    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+    private AnimeTypeModel _anime = new();
 
     /// <summary>
     /// 动画
     /// </summary>
-    public ObservableValue<AnimeTypeModel> Anime { get; } = new(new());
+    public AnimeTypeModel Anime
+    {
+        get => _anime;
+        set
+        {
+            if (SetProperty(ref _anime, value) is false)
+                return;
+            CheckGraphType(Anime);
+        }
+    }
+    #endregion
 
     #region CurrentImageModel
     [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-    private ImageModel _currentImageModel;
+    private ImageModel _currentImageModel = null!;
 
     /// <summary>
     /// 当前图像模型
@@ -52,7 +99,7 @@ public class AnimeEditWindowVM : ObservableObjectX<AnimeEditWindowVM>
 
     #region CurrentAnimeModel
     [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-    private AnimeModel _currentAnimeModel;
+    private AnimeModel _currentAnimeModel = null!;
 
     /// <summary>
     /// 当前动画模型
@@ -164,32 +211,7 @@ public class AnimeEditWindowVM : ObservableObjectX<AnimeEditWindowVM>
     /// </summary>
     private Task _playerTask;
 
-    public AnimeEditWindowVM()
-    {
-        _playerTask = new(Play);
-        //TODO
-        //CurrentAnimeModel.ValueChanged += CurrentAnimeModel_ValueChanged;
-
-        PlayCommand.ExecuteAsyncCommand += PlayCommand_AsyncExecuteEvent;
-        StopCommand.ExecuteCommand += StopCommand_ExecuteEvent;
-        AddAnimeCommand.ExecuteCommand += AddAnimeCommand_ExecuteEvent;
-        RemoveAnimeCommand.ExecuteCommand += RemoveAnimeCommand_ExecuteEvent;
-        AddImageCommand.ExecuteCommand += AddImageCommand_ExecuteEvent;
-        RemoveImageCommand.ExecuteCommand += RemoveImageCommand_ExecuteEvent;
-        ChangeImageCommand.ExecuteCommand += ChangeImageCommand_ExecuteEvent;
-        ClearImageCommand.ExecuteCommand += ClearImageCommand_ExecuteEvent;
-
-        Anime.ValueChanged += Anime_ValueChanged;
-    }
-
     #region LoadAnime
-    private void Anime_ValueChanged(
-        ObservableValue<AnimeTypeModel> sender,
-        ValueChangedEventArgs<AnimeTypeModel> e
-    )
-    {
-        CheckGraphType(e.NewValue);
-    }
 
     private void CheckGraphType(AnimeTypeModel model)
     {
@@ -206,16 +228,16 @@ public class AnimeEditWindowVM : ObservableObjectX<AnimeEditWindowVM>
     /// 添加动画
     /// </summary>
     /// <param name="value">动画模型</param>
-    private void AddAnimeCommand_ExecuteEvent()
+    private void AddAnimeCommand_ExecuteCommand()
     {
         if (CurrentMode is ModeType.Happy)
-            Anime.Value.HappyAnimes.Add(new());
+            Anime.HappyAnimes.Add(new());
         else if (CurrentMode is ModeType.Nomal)
-            Anime.Value.NomalAnimes.Add(new());
+            Anime.NomalAnimes.Add(new());
         else if (CurrentMode is ModeType.PoorCondition)
-            Anime.Value.PoorConditionAnimes.Add(new());
+            Anime.PoorConditionAnimes.Add(new());
         else if (CurrentMode is ModeType.Ill)
-            Anime.Value.IllAnimes.Add(new());
+            Anime.IllAnimes.Add(new());
     }
 
     /// <summary>
@@ -223,20 +245,20 @@ public class AnimeEditWindowVM : ObservableObjectX<AnimeEditWindowVM>
     /// </summary>
     /// <param name="value">动画模型</param>
 
-    private void RemoveAnimeCommand_ExecuteEvent(AnimeModel value)
+    private void RemoveAnimeCommand_ExecuteCommand(AnimeModel value)
     {
         if (
             MessageBox.Show("确定删除吗".Translate(), "", MessageBoxButton.YesNo) is MessageBoxResult.Yes
         )
         {
             if (CurrentMode is ModeType.Happy)
-                Anime.Value.HappyAnimes.Remove(value);
+                Anime.HappyAnimes.Remove(value);
             else if (CurrentMode is ModeType.Nomal)
-                Anime.Value.NomalAnimes.Remove(value);
+                Anime.NomalAnimes.Remove(value);
             else if (CurrentMode is ModeType.PoorCondition)
-                Anime.Value.PoorConditionAnimes.Remove(value);
+                Anime.PoorConditionAnimes.Remove(value);
             else if (CurrentMode is ModeType.Ill)
-                Anime.Value.IllAnimes.Remove(value);
+                Anime.IllAnimes.Remove(value);
             value.Close();
         }
     }
@@ -248,7 +270,7 @@ public class AnimeEditWindowVM : ObservableObjectX<AnimeEditWindowVM>
     /// 添加图片
     /// </summary>
     /// <param name="value">动画模型</param>
-    private void AddImageCommand_ExecuteEvent(AnimeModel value)
+    private void AddImageCommand_ExecuteCommand(AnimeModel value)
     {
         OpenFileDialog openFileDialog =
             new()
@@ -266,7 +288,7 @@ public class AnimeEditWindowVM : ObservableObjectX<AnimeEditWindowVM>
     /// 删除图片
     /// </summary>
     /// <param name="value">动画模型</param>
-    private void RemoveImageCommand_ExecuteEvent(AnimeModel value)
+    private void RemoveImageCommand_ExecuteCommand(AnimeModel value)
     {
         CurrentImageModel.Close();
         value.Images.Remove(CurrentImageModel);
@@ -277,7 +299,7 @@ public class AnimeEditWindowVM : ObservableObjectX<AnimeEditWindowVM>
     /// </summary>
     /// <param name="value"></param>
     /// <exception cref="NotImplementedException"></exception>
-    private void ChangeImageCommand_ExecuteEvent(AnimeModel value)
+    private void ChangeImageCommand_ExecuteCommand(AnimeModel value)
     {
         OpenFileDialog openFileDialog =
             new() { Title = "选择图片".Translate(), Filter = $"图片|*.png".Translate() };
@@ -303,7 +325,7 @@ public class AnimeEditWindowVM : ObservableObjectX<AnimeEditWindowVM>
     /// 清空图片
     /// </summary>
     /// <param name="value">动画模型</param>
-    private void ClearImageCommand_ExecuteEvent(AnimeModel value)
+    private void ClearImageCommand_ExecuteCommand(AnimeModel value)
     {
         if (
             MessageBox.Show("确定清空吗".Translate(), "", MessageBoxButton.YesNo) is MessageBoxResult.Yes
@@ -319,7 +341,7 @@ public class AnimeEditWindowVM : ObservableObjectX<AnimeEditWindowVM>
     /// </summary>
     /// <param name="images">动画</param>
     /// <param name="paths">路径</param>
-    public void AddImages(ObservableCollection<ImageModel> images, IEnumerable<string> paths)
+    public void AddImages(ObservableList<ImageModel> images, IEnumerable<string> paths)
     {
         try
         {
@@ -348,27 +370,16 @@ public class AnimeEditWindowVM : ObservableObjectX<AnimeEditWindowVM>
     }
     #endregion
     #region Player
-    private void CurrentAnimeModel_ValueChanged(
-        ObservableValue<AnimeModel> sender,
-        ValueChangedEventArgs<AnimeModel> e
-    )
-    {
-        StopCommand_ExecuteEvent();
-        if (e.OldValue is not null)
-            e.OldValue.Images.CollectionChanged -= Images_CollectionChanged;
-        if (e.NewValue is not null)
-            e.NewValue.Images.CollectionChanged += Images_CollectionChanged;
-    }
 
-    private void Images_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
+    private void Images_CollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
     {
-        StopCommand_ExecuteEvent();
+        StopCommand_ExecuteCommand();
     }
 
     /// <summary>
     /// 停止播放
     /// </summary>
-    private void StopCommand_ExecuteEvent()
+    private void StopCommand_ExecuteCommand()
     {
         _playing = false;
     }
@@ -376,7 +387,7 @@ public class AnimeEditWindowVM : ObservableObjectX<AnimeEditWindowVM>
     /// <summary>
     /// 开始播放
     /// </summary>
-    private async Task PlayCommand_AsyncExecuteEvent()
+    private async Task PlayCommand_ExecuteAsyncCommand()
     {
         if (CurrentAnimeModel is null)
         {
@@ -385,7 +396,7 @@ public class AnimeEditWindowVM : ObservableObjectX<AnimeEditWindowVM>
         }
         _playing = true;
         _playerTask.Start();
-        await Task.WhenAll(_playerTask);
+        await _playerTask;
         Reset();
     }
 

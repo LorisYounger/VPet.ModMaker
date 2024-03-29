@@ -33,7 +33,7 @@ public partial class FoodPage : Page
         DataContext = new FoodPageVM();
     }
 
-    private void DataGrid_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+    private void DataGrid_MouseDoubleClick(object? sender, MouseButtonEventArgs e)
     {
         if (sender is not DataGrid dataGrid || dataGrid.SelectedItem is not FoodModel model)
             return;

@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using HKW.HKWUtils.Extensions;
 using HKW.HKWUtils.Observable;
 using LinePutScript.Localization.WPF;
 using VPet.ModMaker.Models;
@@ -15,27 +17,50 @@ namespace VPet.ModMaker.ViewModels.ModEdit.MoveEdit;
 
 public class MovePageVM : ObservableObjectX<MovePageVM>
 {
+    public MovePageVM()
+    {
+        Moves = new()
+        {
+            Filter = f => f.Graph.Contains(Search, StringComparison.OrdinalIgnoreCase),
+            FilteredList = new()
+        };
+        PropertyChanged += MovePageVM_PropertyChanged;
+
+        AddCommand.ExecuteCommand += AddCommand_ExecuteCommand;
+        EditCommand.ExecuteCommand += EditCommand_ExecuteCommand;
+        RemoveCommand.ExecuteCommand += RemoveCommand_ExecuteCommand;
+    }
+
     public static ModInfoModel ModInfo => ModInfoModel.Current;
 
-    #region Value
+    #region Property
     #region ShowMoves
     [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-    private ObservableCollection<MoveModel> _showMoves;
+    private ObservableFilterList<MoveModel, ObservableList<MoveModel>> _moves;
 
-    public ObservableCollection<MoveModel> ShowMoves
+    public ObservableFilterList<MoveModel, ObservableList<MoveModel>> Moves
     {
-        get => _showMoves;
-        set => SetProperty(ref _showMoves, value);
+        get => _moves;
+        set => SetProperty(ref _moves, value);
     }
     #endregion
-    public ObservableCollection<MoveModel> Moves => CurrentPet.Value.Moves;
 
-    public ObservableCollection<PetModel> Pets => ModInfoModel.Current.Pets;
-    public ObservableValue<PetModel> CurrentPet { get; } = new(new());
+    public static ObservableList<PetModel> Pets => ModInfoModel.Current.Pets;
+
+    #region CurrentPet
+    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+    private PetModel _currentPet;
+
+    public PetModel CurrentPet
+    {
+        get => _currentPet;
+        set => SetProperty(ref _currentPet, value);
+    }
+    #endregion
 
     #region Search
     [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-    private string _search;
+    private string _search = string.Empty;
 
     public string Search
     {
@@ -49,83 +74,49 @@ public class MovePageVM : ObservableObjectX<MovePageVM>
     public ObservableCommand<MoveModel> EditCommand { get; } = new();
     public ObservableCommand<MoveModel> RemoveCommand { get; } = new();
     #endregion
-    public MovePageVM()
+    private void MovePageVM_PropertyChanged(object? sender, PropertyChangedEventArgs e)
     {
-        ShowMoves = Moves;
-        CurrentPet.ValueChanged += CurrentPet_ValueChanged;
-        //TODO
-        //Search.ValueChanged += Search_ValueChanged;
-
-        AddCommand.ExecuteCommand += Add;
-        EditCommand.ExecuteCommand += Edit;
-        RemoveCommand.ExecuteCommand += Remove;
-    }
-
-    private void CurrentPet_ValueChanged(
-        ObservableValue<PetModel> sender,
-        ValueChangedEventArgs<PetModel> e
-    )
-    {
-        //ShowMoves.Value = e.NewValue.Moves;
-    }
-
-    private void Search_ValueChanged(
-        ObservableValue<string> sender,
-        ValueChangedEventArgs<string> e
-    )
-    {
-        if (string.IsNullOrWhiteSpace(e.NewValue))
+        if (e.PropertyName == nameof(CurrentPet))
         {
-            ShowMoves = Moves;
+            Moves.Clear();
+            Moves.AddRange(CurrentPet.Moves);
         }
-        else
+        else if (e.PropertyName == nameof(Search))
         {
-            ShowMoves = new(
-                Moves.Where(m => m.Graph.Contains(e.NewValue, StringComparison.OrdinalIgnoreCase))
-            );
+            Moves.Refresh();
         }
     }
 
     public void Close() { }
 
-    private void Add()
+    private void AddCommand_ExecuteCommand()
     {
         var window = new MoveEditWindow();
         var vm = window.ViewModel;
-        vm.CurrentPet = CurrentPet.Value;
+        vm.CurrentPet = CurrentPet;
         window.ShowDialog();
         if (window.IsCancel)
             return;
         Moves.Add(vm.Move);
     }
 
-    public void Edit(MoveModel model)
+    public void EditCommand_ExecuteCommand(MoveModel model)
     {
         var window = new MoveEditWindow();
         var vm = window.ViewModel;
-        vm.CurrentPet = CurrentPet.Value;
+        vm.CurrentPet = CurrentPet;
         vm.OldMove = model;
         var newMove = vm.Move = new(model);
         window.ShowDialog();
         if (window.IsCancel)
             return;
         Moves[Moves.IndexOf(model)] = newMove;
-        if (ShowMoves.Count != Moves.Count)
-            ShowMoves[ShowMoves.IndexOf(model)] = newMove;
     }
 
-    private void Remove(MoveModel model)
+    private void RemoveCommand_ExecuteCommand(MoveModel model)
     {
         if (MessageBox.Show("确定删除吗".Translate(), "", MessageBoxButton.YesNo) is MessageBoxResult.No)
             return;
-        if (ShowMoves.Count == Moves.Count)
-        {
-            Moves.Remove(model);
-        }
-        else
-        {
-            ShowMoves.Remove(model);
-            Moves.Remove(model);
-        }
+        Moves.Remove(model);
     }
 }

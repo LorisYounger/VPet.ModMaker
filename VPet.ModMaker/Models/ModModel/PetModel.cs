@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
@@ -13,6 +14,7 @@ using HKW.HKWUtils.Observable;
 using LinePutScript;
 using LinePutScript.Converter;
 using LinePutScript.Localization.WPF;
+using Mapster;
 using VPet.ModMaker.Models.ModModel;
 using VPet_Simulator.Core;
 
@@ -23,189 +25,38 @@ namespace VPet.ModMaker.Models;
 /// </summary>
 public class PetModel : I18nModel<I18nPetInfoModel>
 {
-    public static PetModel Default { get; } = new();
-
-    #region FromMain
-    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-    private bool _fromMain;
-
-    /// <summary>
-    /// 来自本体
-    /// </summary>
-    public bool FromMain
-    {
-        get => _fromMain;
-        set => SetProperty(ref _fromMain, value);
-    }
-    #endregion
-
-    #region Id
-    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-    private string _id;
-
-    /// <summary>
-    /// Id
-    /// </summary>
-    public string ID
-    {
-        get => _id;
-        set => SetProperty(ref _id, value);
-    }
-    #endregion
-    #region PetNameId
-    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-    private string _petNameId;
-
-    /// <summary>
-    /// 名称Id
-    /// </summary>
-    public string PetNameId
-    {
-        get => _petNameId;
-        set => SetProperty(ref _petNameId, value);
-    }
-    #endregion
-
-    #region DescriptionId
-    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-    private string _descriptionId;
-
-    /// <summary>
-    /// 描述Id
-    /// </summary>
-    public string DescriptionId
-    {
-        get => _descriptionId;
-        set => SetProperty(ref _descriptionId, value);
-    }
-    #endregion
-
-    #region TouchHeadRect
-    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-    private ObservableRectangleLocation<double> _touchHeadRect = new(159, 16, 189, 178);
-
-    /// <summary>
-    /// 头部点击区域
-    /// </summary>
-    public ObservableRectangleLocation<double> TouchHeadRect
-    {
-        get => _touchHeadRect;
-        set => SetProperty(ref _touchHeadRect, value);
-    }
-    #endregion
-
-    #region TouchBodyRect
-    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-    private ObservableRectangleLocation<double> _touchBodyRect = new(166, 206, 163, 136);
-
-    /// <summary>
-    /// 身体区域
-    /// </summary>
-    public ObservableRectangleLocation<double> TouchBodyRect
-    {
-        get => _touchBodyRect;
-        set => SetProperty(ref _touchBodyRect, value);
-    }
-    #endregion
-
-    /// <summary>
-    /// 提起区域
-    /// </summary>
-    #region TouchRaisedRect
-    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-    private ObservableMultiStateRect _touchRaisedRect =
-        new(
-            new(0, 50, 500, 200),
-            new(0, 50, 500, 200),
-            new(0, 50, 500, 200),
-            new(0, 200, 500, 300)
-        );
-
-    public ObservableMultiStateRect TouchRaisedRect
-    {
-        get => _touchRaisedRect;
-        set => SetProperty(ref _touchRaisedRect, value);
-    }
-    #endregion
-
-    #region RaisePoint
-    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-    private ObservableMultiStatePoint _raisePoint =
-        new(new(290, 128), new(290, 128), new(290, 128), new(225, 115));
-
-    /// <summary>
-    /// 提起定位
-    /// </summary>
-    public ObservableMultiStatePoint RaisePoint
-    {
-        get => _raisePoint;
-        set => SetProperty(ref _raisePoint, value);
-    }
-    #endregion
-
-    /// <summary>
-    /// 工作
-    /// </summary>
-    public ObservableCollection<WorkModel> Works { get; } = new();
-
-    /// <summary>
-    /// 移动
-    /// </summary>
-    public ObservableCollection<MoveModel> Moves { get; } = new();
-
-    /// <summary>
-    /// 动画
-    /// </summary>
-    public ObservableCollection<AnimeTypeModel> Animes { get; } = new();
-
-    /// <summary>
-    ///食物动画
-    /// </summary>
-    public ObservableCollection<FoodAnimeTypeModel> FoodAnimes { get; } = new();
-
-    #region AnimeCount
-    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-    private int _AnimeCount;
-
-    public int AnimeCount
-    {
-        get => _AnimeCount;
-        set => SetProperty(ref _AnimeCount, value);
-    }
-    #endregion
-
     public PetModel()
     {
-        PetNameId = $"{ID}_{nameof(PetNameId)}";
-        DescriptionId = $"{ID}_{nameof(DescriptionId)}";
-        //TODO
-        //ID.ValueChanged += (s, e) =>
-        //{
-        //    PetNameId = $"{e.NewValue}_{nameof(PetNameId)}";
-        //    DescriptionId = $"{e.NewValue}_{nameof(DescriptionId)}";
-        //};
-        //AnimeCount.AddNotifySender(Animes);
-        //AnimeCount.AddNotifySender(FoodAnimes);
-        //AnimeCount.SenderPropertyChanged += (s, _) =>
-        //{
-        //    s.Value = Animes.Count + FoodAnimes.Count;
-        //};
+        PropertyChanged += PetModel_PropertyChanged;
+        Animes.PropertyChanged += Animes_PropertyChanged;
+        FoodAnimes.PropertyChanged += FoodAnimes_PropertyChanged;
+    }
+
+    private void PetModel_PropertyChanged(object? sender, PropertyChangedEventArgs e)
+    {
+        if (e.PropertyName == nameof(ID))
+        {
+            PetNameID = $"{ID}_{nameof(PetNameID)}";
+            DescriptionID = $"{ID}_{nameof(DescriptionID)}";
+        }
     }
 
     public PetModel(PetModel model)
         : this()
     {
         ID = model.ID;
-        PetNameId = model.PetNameId;
-        TouchHeadRect = model.TouchHeadRect.Clone();
-        TouchBodyRect = model.TouchBodyRect.Clone();
-        TouchRaisedRect = model.TouchRaisedRect.Copy();
-        RaisePoint = model.RaisePoint.Copy();
+        PetNameID = model.PetNameID;
+        DescriptionID = model.DescriptionID;
+        Tags = model.Tags;
+        TouchHeadRectangleLocation = model.TouchHeadRectangleLocation.Clone();
+        TouchBodyRectangleLocation = model.TouchBodyRectangleLocation.Clone();
+        TouchRaisedRectangleLocation = model.TouchRaisedRectangleLocation.Clone();
+        RaisePoint = model.RaisePoint.Clone();
         foreach (var work in model.Works)
             Works.Add(work);
 
         foreach (var item in model.I18nDatas)
-            I18nDatas[item.Key] = item.Value.Copy();
+            I18nDatas[item.Key] = item.Value.Clone();
         CurrentI18nData = I18nDatas[I18nHelper.Current.CultureName];
     }
 
@@ -213,42 +64,43 @@ public class PetModel : I18nModel<I18nPetInfoModel>
         : this()
     {
         ID = loader.Name;
-        PetNameId = loader.PetName;
-        DescriptionId = loader.Intor;
+        PetNameID = loader.PetName;
+        DescriptionID = loader.Intor;
+        Tags = loader.Config.Data["tag"].Info;
 
-        TouchHeadRect = new(
+        TouchHeadRectangleLocation = new(
             loader.Config.TouchHeadLocate.X,
             loader.Config.TouchHeadLocate.Y,
             loader.Config.TouchHeadSize.Width,
             loader.Config.TouchHeadSize.Height
         );
 
-        TouchBodyRect = new(
+        TouchBodyRectangleLocation = new(
             loader.Config.TouchBodyLocate.X,
             loader.Config.TouchBodyLocate.Y,
             loader.Config.TouchBodySize.Width,
             loader.Config.TouchBodySize.Height
         );
 
-        TouchRaisedRect.Happy = new(
+        TouchRaisedRectangleLocation.Happy = new(
             loader.Config.TouchRaisedLocate[0].X,
             loader.Config.TouchRaisedLocate[0].Y,
             loader.Config.TouchRaisedSize[0].Width,
             loader.Config.TouchRaisedSize[0].Height
         );
-        TouchRaisedRect.Nomal = new(
+        TouchRaisedRectangleLocation.Nomal = new(
             loader.Config.TouchRaisedLocate[1].X,
             loader.Config.TouchRaisedLocate[1].Y,
             loader.Config.TouchRaisedSize[1].Width,
             loader.Config.TouchRaisedSize[1].Height
         );
-        TouchRaisedRect.PoorCondition = new(
+        TouchRaisedRectangleLocation.PoorCondition = new(
             loader.Config.TouchRaisedLocate[2].X,
             loader.Config.TouchRaisedLocate[2].Y,
             loader.Config.TouchRaisedSize[2].Width,
             loader.Config.TouchRaisedSize[2].Height
         );
-        TouchRaisedRect.Ill = new(
+        TouchRaisedRectangleLocation.Ill = new(
             loader.Config.TouchRaisedLocate[3].X,
             loader.Config.TouchRaisedLocate[3].Y,
             loader.Config.TouchRaisedSize[3].Width,
@@ -272,10 +124,191 @@ public class PetModel : I18nModel<I18nPetInfoModel>
             Moves.Add(new(move));
     }
 
-    public void RefreshId()
+    public static PetModel Current { get; } = new();
+
+    #region FromMain
+    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+    private bool _fromMain;
+
+    /// <summary>
+    /// 来自本体
+    /// </summary>
+    public bool FromMain
     {
-        PetNameId = $"{ID}_{nameof(PetNameId)}";
-        DescriptionId = $"{ID}_{nameof(DescriptionId)}";
+        get => _fromMain;
+        set => SetProperty(ref _fromMain, value);
+    }
+    #endregion
+
+    #region ID
+    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+    private string _id = string.Empty;
+
+    /// <summary>
+    /// Id
+    /// </summary>
+    public string ID
+    {
+        get => _id;
+        set
+        {
+            SetProperty(ref _id, value);
+            RefreshID();
+        }
+    }
+    #endregion
+    #region PetNameId
+    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+    private string _petNameID = string.Empty;
+
+    /// <summary>
+    /// 名称Id
+    /// </summary>
+    public string PetNameID
+    {
+        get => _petNameID;
+        set => SetProperty(ref _petNameID, value);
+    }
+    #endregion
+
+    #region DescriptionId
+    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+    private string _descriptionID = string.Empty;
+
+    /// <summary>
+    /// 描述Id
+    /// </summary>
+    public string DescriptionID
+    {
+        get => _descriptionID;
+        set => SetProperty(ref _descriptionID, value);
+    }
+    #endregion
+
+    #region Tags
+    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+    private string _tags = string.Empty;
+
+    /// <summary>
+    /// 标签
+    /// </summary>
+    public string Tags
+    {
+        get => _tags;
+        set => SetProperty(ref _tags, value);
+    }
+    #endregion
+
+
+    #region TouchHeadRect
+    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+    private ObservableRectangleLocation<double> _touchHeadRectangleLocation =
+        new(159, 16, 189, 178);
+
+    /// <summary>
+    /// 头部点击区域
+    /// </summary>
+    public ObservableRectangleLocation<double> TouchHeadRectangleLocation
+    {
+        get => _touchHeadRectangleLocation;
+        set => SetProperty(ref _touchHeadRectangleLocation, value);
+    }
+    #endregion
+
+    #region TouchBodyRect
+    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+    private ObservableRectangleLocation<double> _touchBodyRectangleLocation =
+        new(166, 206, 163, 136);
+
+    /// <summary>
+    /// 身体区域
+    /// </summary>
+    public ObservableRectangleLocation<double> TouchBodyRectangleLocation
+    {
+        get => _touchBodyRectangleLocation;
+        set => SetProperty(ref _touchBodyRectangleLocation, value);
+    }
+    #endregion
+
+    /// <summary>
+    /// 提起区域
+    /// </summary>
+    #region TouchRaisedRect
+    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+    private ObservableMultiStateRectangleLocation _touchRaisedRectangleLocation =
+        new(
+            new(0, 50, 500, 200),
+            new(0, 50, 500, 200),
+            new(0, 50, 500, 200),
+            new(0, 200, 500, 300)
+        );
+
+    public ObservableMultiStateRectangleLocation TouchRaisedRectangleLocation
+    {
+        get => _touchRaisedRectangleLocation;
+        set => SetProperty(ref _touchRaisedRectangleLocation, value);
+    }
+    #endregion
+
+    #region RaisePoint
+    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+    private ObservableMultiStatePoint _raisePoint =
+        new(new(290, 128), new(290, 128), new(290, 128), new(225, 115));
+
+    /// <summary>
+    /// 提起定位
+    /// </summary>
+    public ObservableMultiStatePoint RaisePoint
+    {
+        get => _raisePoint;
+        set => SetProperty(ref _raisePoint, value);
+    }
+    #endregion
+
+    /// <summary>
+    /// 工作
+    /// </summary>
+    public ObservableList<WorkModel> Works { get; } = new();
+
+    /// <summary>
+    /// 移动
+    /// </summary>
+    public ObservableList<MoveModel> Moves { get; } = new();
+
+    /// <summary>
+    /// 动画
+    /// </summary>
+    public ObservableList<AnimeTypeModel> Animes { get; } = new();
+
+    /// <summary>
+    ///食物动画
+    /// </summary>
+    public ObservableList<FoodAnimeTypeModel> FoodAnimes { get; } = new();
+
+    #region AnimeCount
+    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+    private int _animeCount;
+
+    public int AnimeCount
+    {
+        get => _animeCount;
+        set => SetProperty(ref _animeCount, value);
+    }
+    #endregion
+    private void FoodAnimes_PropertyChanged(object? sender, PropertyChangedEventArgs e)
+    {
+        AnimeCount = Animes.Count + FoodAnimes.Count;
+    }
+
+    private void Animes_PropertyChanged(object? sender, PropertyChangedEventArgs e)
+    {
+        AnimeCount = Animes.Count + FoodAnimes.Count;
+    }
+
+    public void RefreshID()
+    {
+        PetNameID = $"{ID}_{nameof(PetNameID)}";
+        DescriptionID = $"{ID}_{nameof(DescriptionID)}";
     }
 
     public void Close()
@@ -316,10 +349,10 @@ public class PetModel : I18nModel<I18nPetInfoModel>
             ModInfoModel.SaveI18nDatas[cultureName].TryAdd(ID, I18nDatas[cultureName].Name);
             ModInfoModel
                 .SaveI18nDatas[cultureName]
-                .TryAdd(PetNameId, I18nDatas[cultureName].PetName);
+                .TryAdd(PetNameID, I18nDatas[cultureName].PetName);
             ModInfoModel
                 .SaveI18nDatas[cultureName]
-                .TryAdd(DescriptionId, I18nDatas[cultureName].Description);
+                .TryAdd(DescriptionID, I18nDatas[cultureName].Description);
         }
         var petFile = Path.Combine(path, $"{ID}.lps");
         if (File.Exists(petFile) is false)
@@ -351,7 +384,6 @@ public class PetModel : I18nModel<I18nPetInfoModel>
     /// 保存移动信息
     /// </summary>
     /// <param name="lps"></param>
-    /// <param name="pet"></param>
     void SaveMoveInfo(LPS lps)
     {
         foreach (var move in Moves)
@@ -364,7 +396,6 @@ public class PetModel : I18nModel<I18nPetInfoModel>
     /// 保存工作信息
     /// </summary>
     /// <param name="lps"></param>
-    /// <param name="pet"></param>
     void SaveWorksInfo(LPS lps)
     {
         foreach (var work in Works)
@@ -374,7 +405,7 @@ public class PetModel : I18nModel<I18nPetInfoModel>
             {
                 ModInfoModel
                     .SaveI18nDatas[cultureName]
-                    .TryAdd(work.Id, work.I18nDatas[cultureName].Name);
+                    .TryAdd(work.ID, work.I18nDatas[cultureName].Name);
             }
         }
     }
@@ -405,16 +436,22 @@ public class PetModel : I18nModel<I18nPetInfoModel>
     {
         SavePetBasicInfo(lps);
         // 如果值不为默认并且不与本体值相同, 则保存
-        if (TouchHeadRect != Default.TouchHeadRect && TouchHeadRect != mainPet.TouchHeadRect)
+        if (
+            TouchHeadRectangleLocation != Current.TouchHeadRectangleLocation
+            && TouchHeadRectangleLocation != mainPet.TouchHeadRectangleLocation
+        )
             SavePetTouchHeadInfo(lps);
-        if (TouchBodyRect != Default.TouchBodyRect && TouchBodyRect != mainPet.TouchBodyRect)
+        if (
+            TouchBodyRectangleLocation != Current.TouchBodyRectangleLocation
+            && TouchBodyRectangleLocation != mainPet.TouchBodyRectangleLocation
+        )
             SavePetTouchBodyInfo(lps);
         if (
-            TouchRaisedRect != Default.TouchRaisedRect
-            && TouchRaisedRect != mainPet.TouchRaisedRect
+            TouchRaisedRectangleLocation != Current.TouchRaisedRectangleLocation
+            && TouchRaisedRectangleLocation != mainPet.TouchRaisedRectangleLocation
         )
             SavePetTouchRaisedInfo(lps);
-        if (RaisePoint != Default.RaisePoint && RaisePoint != mainPet.RaisePoint)
+        if (RaisePoint != Current.RaisePoint && RaisePoint != mainPet.RaisePoint)
             SavePetRaisePointInfo(lps);
     }
 
@@ -423,11 +460,12 @@ public class PetModel : I18nModel<I18nPetInfoModel>
         lps.Add(
             new Line("pet", ID)
             {
-                new Sub("intor", DescriptionId),
+                new Sub("intor", DescriptionID),
                 new Sub("path", ID),
-                new Sub("petname", PetNameId)
+                new Sub("petname", PetNameID)
             }
         );
+        lps.Add(new Line("tag", Tags));
     }
 
     private void SavePetTouchHeadInfo(LPS lps)
@@ -435,10 +473,10 @@ public class PetModel : I18nModel<I18nPetInfoModel>
         lps.Add(
             new Line("touchhead")
             {
-                new Sub("px", TouchHeadRect.X),
-                new Sub("py", TouchHeadRect.Y),
-                new Sub("sw", TouchHeadRect.Width),
-                new Sub("sh", TouchHeadRect.Height),
+                new Sub("px", TouchHeadRectangleLocation.X),
+                new Sub("py", TouchHeadRectangleLocation.Y),
+                new Sub("sw", TouchHeadRectangleLocation.Width),
+                new Sub("sh", TouchHeadRectangleLocation.Height),
             }
         );
     }
@@ -448,10 +486,10 @@ public class PetModel : I18nModel<I18nPetInfoModel>
         lps.Add(
             new Line("touchbody")
             {
-                new Sub("px", TouchBodyRect.X),
-                new Sub("py", TouchBodyRect.Y),
-                new Sub("sw", TouchBodyRect.Width),
-                new Sub("sh", TouchBodyRect.Height),
+                new Sub("px", TouchBodyRectangleLocation.X),
+                new Sub("py", TouchBodyRectangleLocation.Y),
+                new Sub("sw", TouchBodyRectangleLocation.Width),
+                new Sub("sh", TouchBodyRectangleLocation.Height),
             }
         );
     }
@@ -461,25 +499,25 @@ public class PetModel : I18nModel<I18nPetInfoModel>
         lps.Add(
             new Line("touchraised")
             {
-                new Sub("happy_px", TouchRaisedRect.Happy.X),
-                new Sub("happy_py", TouchRaisedRect.Happy.Y),
-                new Sub("happy_sw", TouchRaisedRect.Happy.Width),
-                new Sub("happy_sh", TouchRaisedRect.Happy.Height),
+                new Sub("happy_px", TouchRaisedRectangleLocation.Happy.X),
+                new Sub("happy_py", TouchRaisedRectangleLocation.Happy.Y),
+                new Sub("happy_sw", TouchRaisedRectangleLocation.Happy.Width),
+                new Sub("happy_sh", TouchRaisedRectangleLocation.Happy.Height),
                 //
-                new Sub("nomal_px", TouchRaisedRect.Nomal.X),
-                new Sub("nomal_py", TouchRaisedRect.Nomal.Y),
-                new Sub("nomal_sw", TouchRaisedRect.Nomal.Width),
-                new Sub("nomal_sh", TouchRaisedRect.Nomal.Height),
+                new Sub("nomal_px", TouchRaisedRectangleLocation.Nomal.X),
+                new Sub("nomal_py", TouchRaisedRectangleLocation.Nomal.Y),
+                new Sub("nomal_sw", TouchRaisedRectangleLocation.Nomal.Width),
+                new Sub("nomal_sh", TouchRaisedRectangleLocation.Nomal.Height),
                 //
-                new Sub("poorcondition_px", TouchRaisedRect.PoorCondition.X),
-                new Sub("poorcondition_py", TouchRaisedRect.PoorCondition.Y),
-                new Sub("poorcondition_sw", TouchRaisedRect.PoorCondition.Width),
-                new Sub("poorcondition_sh", TouchRaisedRect.PoorCondition.Height),
+                new Sub("poorcondition_px", TouchRaisedRectangleLocation.PoorCondition.X),
+                new Sub("poorcondition_py", TouchRaisedRectangleLocation.PoorCondition.Y),
+                new Sub("poorcondition_sw", TouchRaisedRectangleLocation.PoorCondition.Width),
+                new Sub("poorcondition_sh", TouchRaisedRectangleLocation.PoorCondition.Height),
                 //
-                new Sub("ill_px", TouchRaisedRect.Ill.X),
-                new Sub("ill_py", TouchRaisedRect.Ill.Y),
-                new Sub("ill_sw", TouchRaisedRect.Ill.Width),
-                new Sub("ill_sh", TouchRaisedRect.Ill.Height),
+                new Sub("ill_px", TouchRaisedRectangleLocation.Ill.X),
+                new Sub("ill_py", TouchRaisedRectangleLocation.Ill.Y),
+                new Sub("ill_sw", TouchRaisedRectangleLocation.Ill.Width),
+                new Sub("ill_sh", TouchRaisedRectangleLocation.Ill.Height),
             }
         );
     }
@@ -507,7 +545,7 @@ public class PetModel : I18nModel<I18nPetInfoModel>
     #endregion
 }
 
-public class I18nPetInfoModel : ObservableObjectX<I18nPetInfoModel>
+public class I18nPetInfoModel : ObservableObjectX<I18nPetInfoModel>, ICloneable<I18nPetInfoModel>
 {
     #region Name
     [DebuggerBrowsable(DebuggerBrowsableState.Never)]
@@ -540,7 +578,7 @@ public class I18nPetInfoModel : ObservableObjectX<I18nPetInfoModel>
     }
     #endregion
 
-    public I18nPetInfoModel Copy()
+    public I18nPetInfoModel Clone()
     {
         var result = new I18nPetInfoModel();
         result.Name = Name;
@@ -548,15 +586,18 @@ public class I18nPetInfoModel : ObservableObjectX<I18nPetInfoModel>
         result.Description = Description;
         return result;
     }
+
+    object ICloneable.Clone() => Clone();
 }
 
-public class ObservableMultiStateRect
-    : ObservableObjectX<ObservableMultiStateRect>,
-        IEquatable<ObservableMultiStateRect>
+public class ObservableMultiStateRectangleLocation
+    : ObservableObjectX<ObservableMultiStateRectangleLocation>,
+        IEquatable<ObservableMultiStateRectangleLocation>,
+        ICloneable<ObservableMultiStateRectangleLocation>
 {
     #region Happy
     [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-    private ObservableRectangleLocation<double> _happy;
+    private ObservableRectangleLocation<double> _happy = null!;
     public ObservableRectangleLocation<double> Happy
     {
         get => _happy;
@@ -565,9 +606,9 @@ public class ObservableMultiStateRect
     #endregion
 
     #region Nomal
-    private ObservableRectangleLocation<double> _nomal;
-
     [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+    private ObservableRectangleLocation<double> _nomal = null!;
+
     public ObservableRectangleLocation<double> Nomal
     {
         get => _nomal;
@@ -577,7 +618,7 @@ public class ObservableMultiStateRect
 
     #region PoorCondition
     [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-    private ObservableRectangleLocation<double> _poorCondition;
+    private ObservableRectangleLocation<double> _poorCondition = null!;
     public ObservableRectangleLocation<double> PoorCondition
     {
         get => _poorCondition;
@@ -587,7 +628,7 @@ public class ObservableMultiStateRect
 
     #region Ill
     [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-    private ObservableRectangleLocation<double> _ill;
+    private ObservableRectangleLocation<double> _ill = null!;
     public ObservableRectangleLocation<double> Ill
     {
         get => _ill;
@@ -595,7 +636,7 @@ public class ObservableMultiStateRect
     }
     #endregion
 
-    public ObservableMultiStateRect()
+    public ObservableMultiStateRectangleLocation()
     {
         Happy = new();
         Nomal = new();
@@ -603,7 +644,7 @@ public class ObservableMultiStateRect
         Ill = new();
     }
 
-    public ObservableMultiStateRect(
+    public ObservableMultiStateRectangleLocation(
         ObservableRectangleLocation<double> happy,
         ObservableRectangleLocation<double> nomal,
         ObservableRectangleLocation<double> poorCondition,
@@ -616,7 +657,7 @@ public class ObservableMultiStateRect
         Ill = ill;
     }
 
-    public ObservableMultiStateRect Copy()
+    public ObservableMultiStateRectangleLocation Clone()
     {
         return new()
         {
@@ -626,6 +667,8 @@ public class ObservableMultiStateRect
             Ill = Ill.Clone(),
         };
     }
+
+    object ICloneable.Clone() => Clone();
 
     #region Other
 
@@ -638,36 +681,32 @@ public class ObservableMultiStateRect
     /// <inheritdoc/>
     public override bool Equals(object? obj)
     {
-        return obj is ObservableMultiStateRect temp
-            && EqualityComparer<ObservableRectangleLocation<double>>.Default.Equals(
-                Happy,
-                temp.Happy
-            )
-            && EqualityComparer<ObservableRectangleLocation<double>>.Default.Equals(
-                Nomal,
-                temp.Nomal
-            )
-            && EqualityComparer<ObservableRectangleLocation<double>>.Default.Equals(
-                PoorCondition,
-                temp.PoorCondition
-            )
-            && EqualityComparer<ObservableRectangleLocation<double>>.Default.Equals(Ill, temp.Ill);
+        return Equals(obj as ObservableMultiStateRectangleLocation);
     }
 
     /// <inheritdoc/>
-    public bool Equals(ObservableMultiStateRect? other)
+    public bool Equals(ObservableMultiStateRectangleLocation? other)
     {
-        return Equals(obj: other);
+        return Happy.Equals(other?.Happy)
+            && Nomal.Equals(other?.Nomal)
+            && PoorCondition.Equals(other?.PoorCondition)
+            && Ill.Equals(other?.Ill);
     }
 
     /// <inheritdoc/>
-    public static bool operator ==(ObservableMultiStateRect a, ObservableMultiStateRect b)
+    public static bool operator ==(
+        ObservableMultiStateRectangleLocation a,
+        ObservableMultiStateRectangleLocation b
+    )
     {
         return Equals(a, b);
     }
 
     /// <inheritdoc/>
-    public static bool operator !=(ObservableMultiStateRect a, ObservableMultiStateRect b)
+    public static bool operator !=(
+        ObservableMultiStateRectangleLocation a,
+        ObservableMultiStateRectangleLocation b
+    )
     {
         return Equals(a, b) is not true;
     }
@@ -677,11 +716,12 @@ public class ObservableMultiStateRect
 
 public class ObservableMultiStatePoint
     : ObservableObjectX<ObservableMultiStatePoint>,
-        IEquatable<ObservableMultiStatePoint>
+        IEquatable<ObservableMultiStatePoint>,
+        ICloneable<ObservableMultiStatePoint>
 {
     #region Happy
     [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-    private ObservablePoint<double> _happy;
+    private ObservablePoint<double> _happy = null!;
     public ObservablePoint<double> Happy
     {
         get => _happy;
@@ -691,7 +731,7 @@ public class ObservableMultiStatePoint
 
     #region Nomal
     [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-    private ObservablePoint<double> _nomal;
+    private ObservablePoint<double> _nomal = null!;
     public ObservablePoint<double> Nomal
     {
         get => _nomal;
@@ -701,7 +741,7 @@ public class ObservableMultiStatePoint
 
     #region PoorCondition
     [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-    private ObservablePoint<double> _poorCondition;
+    private ObservablePoint<double> _poorCondition = null!;
     public ObservablePoint<double> PoorCondition
     {
         get => _poorCondition;
@@ -711,7 +751,7 @@ public class ObservableMultiStatePoint
 
     #region Ill
     [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-    private ObservablePoint<double> _ill;
+    private ObservablePoint<double> _ill = null!;
     public ObservablePoint<double> Ill
     {
         get => _ill;
@@ -739,7 +779,7 @@ public class ObservableMultiStatePoint
         Ill = ill;
     }
 
-    public ObservableMultiStatePoint Copy()
+    public ObservableMultiStatePoint Clone()
     {
         return new()
         {
@@ -749,6 +789,8 @@ public class ObservableMultiStatePoint
             Ill = Ill.Clone(),
         };
     }
+
+    object ICloneable.Clone() => Clone();
 
     #region Other
 
@@ -761,20 +803,16 @@ public class ObservableMultiStatePoint
     /// <inheritdoc/>
     public override bool Equals(object? obj)
     {
-        return obj is ObservableMultiStatePoint temp
-            && EqualityComparer<ObservablePoint<double>>.Default.Equals(Happy, temp.Happy)
-            && EqualityComparer<ObservablePoint<double>>.Default.Equals(Nomal, temp.Nomal)
-            && EqualityComparer<ObservablePoint<double>>.Default.Equals(
-                PoorCondition,
-                temp.PoorCondition
-            )
-            && EqualityComparer<ObservablePoint<double>>.Default.Equals(Ill, temp.Ill);
+        return Equals(obj as ObservableMultiStatePoint);
     }
 
     /// <inheritdoc/>
     public bool Equals(ObservableMultiStatePoint? other)
     {
-        return Equals(obj: other);
+        return Happy.Equals(other?.Happy)
+            && Nomal.Equals(other?.Nomal)
+            && PoorCondition.Equals(other?.PoorCondition)
+            && Ill.Equals(other?.Ill);
     }
 
     /// <inheritdoc/>

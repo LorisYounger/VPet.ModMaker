@@ -30,10 +30,10 @@ public partial class WorkPage : Page
         DataContext = new WorkPageVM();
     }
 
-    private void DataGrid_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+    private void DataGrid_MouseDoubleClick(object? sender, MouseButtonEventArgs e)
     {
         if (sender is not DataGrid dataGrid || dataGrid.SelectedItem is not WorkModel model)
             return;
-        ViewModel.Edit(model);
+        ViewModel.EditCommand_ExecuteCommand(model);
     }
 }

@@ -35,16 +35,16 @@ public class I18nEditWindowVM : ObservableObjectX<I18nEditWindowVM> { }
 //    /// <summary>
 //    /// 全部I18n数据
 //    /// </summary>
-//    public ObservableCollection<I18nData> I18nDatas { get; } = new();
+//    public ObservableList<I18nData> I18nDatas { get; } = new();
 
 //    /// <summary>
 //    /// 显示的I18n数据
 //    /// </summary>
 //    #region ShowI18nDatas
 //    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-//    private ObservableCollection<I18nData> _showI18nDatas;
+//    private ObservableList<I18nData> _showI18nDatas;
 
-//    public ObservableCollection<I18nData> ShowI18nDatas
+//    public ObservableList<I18nData> ShowI18nDatas
 //    {
 //        get => _showI18nDatas;
 //        set => SetProperty(ref _showI18nDatas, value);
@@ -54,7 +54,7 @@ public class I18nEditWindowVM : ObservableObjectX<I18nEditWindowVM> { }
 //    /// <summary>
 //    /// 搜索目标列表
 //    /// </summary>
-//    public ObservableCollection<string> SearchTargets { get; } = new() { nameof(ModInfoModel.Id) };
+//    public ObservableList<string> SearchTargets { get; } = new() { nameof(ModInfoModel.Id) };
 
 //    /// <summary>
 //    /// 搜索目标
@@ -117,7 +117,7 @@ public class I18nEditWindowVM : ObservableObjectX<I18nEditWindowVM> { }
 //    /// </summary>
 //    /// <param name="sender"></param>
 //    /// <param name="e"></param>
-//    private void CultureNames_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
+//    private void CultureNames_CollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
 //    {
 //        if (e.Action is NotifyCollectionChangedAction.Add)
 //        {

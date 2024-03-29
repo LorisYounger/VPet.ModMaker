@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Frozen;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
@@ -15,20 +16,65 @@ namespace VPet.ModMaker.Models;
 /// </summary>
 public class MoveModel : ObservableObjectX<MoveModel>
 {
+    public MoveModel() { }
+
+    public MoveModel(MoveModel model)
+        : this()
+    {
+        //Id.EnumValue = model.Id.EnumValue;
+        Graph = model.Graph;
+        Distance = model.Distance;
+        Interval = model.Interval;
+        CheckLeft = model.CheckLeft;
+        CheckRight = model.CheckRight;
+        CheckTop = model.CheckTop;
+        CheckBottom = model.CheckBottom;
+        SpeedX = model.SpeedX;
+        SpeedY = model.SpeedY;
+        LocateLength = model.LocateLength;
+        TriggerLeft = model.TriggerLeft;
+        TriggerRight = model.TriggerRight;
+        TriggerTop = model.TriggerTop;
+        TriggerBottom = model.TriggerBottom;
+        LocateType.Value = model.LocateType.Value;
+        TriggerType.Value = model.TriggerType.Value;
+        ModeType.Value = model.ModeType.Value;
+    }
+
+    public MoveModel(GraphHelper.Move move)
+        : this()
+    {
+        //Id.EnumValue = move.Id.EnumValue;
+        Graph = move.Graph;
+        Distance = move.Distance;
+        Interval = move.Interval;
+        CheckLeft = move.CheckLeft;
+        CheckRight = move.CheckRight;
+        CheckTop = move.CheckTop;
+        CheckBottom = move.CheckBottom;
+        SpeedX = move.SpeedX;
+        SpeedY = move.SpeedY;
+        LocateLength = move.LocateLength;
+        TriggerLeft = move.TriggerLeft;
+        TriggerRight = move.TriggerRight;
+        TriggerTop = move.TriggerTop;
+        TriggerBottom = move.TriggerBottom;
+        LocateType.Value = move.LocateType;
+        TriggerType.Value = move.TriggerType;
+        ModeType.Value = move.Mode;
+    }
+
     /// <summary>
     /// 移动类型
     /// </summary>
-    public static ObservableCollection<GraphHelper.Move.DirectionType> DirectionTypes { get; } =
-        new(
-            Enum.GetValues(typeof(GraphHelper.Move.DirectionType))
-                .Cast<GraphHelper.Move.DirectionType>()
-        );
+    public static FrozenSet<GraphHelper.Move.DirectionType> DirectionTypes { get; } =
+        Enum.GetValues<GraphHelper.Move.DirectionType>().ToFrozenSet();
 
     /// <summary>
     /// 模式类型
     /// </summary>
-    public static ObservableCollection<GraphHelper.Move.ModeType> ModeTypes { get; } =
-        new(Enum.GetValues(typeof(GraphHelper.Move.ModeType)).Cast<GraphHelper.Move.ModeType>());
+    public static FrozenSet<GraphHelper.Move.ModeType> ModeTypes { get; } =
+        Enum.GetValues<GraphHelper.Move.ModeType>().ToFrozenSet();
 
     //#region Id
     //[DebuggerBrowsable(DebuggerBrowsableState.Never)]
@@ -38,7 +84,7 @@ public class MoveModel : ObservableObjectX<MoveModel>
     //#endregion
     #region Graph
     [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-    private string _graph;
+    private string _graph = string.Empty;
 
     /// <summary>
     /// 指定动画
@@ -254,54 +300,6 @@ public class MoveModel : ObservableObjectX<MoveModel>
                 | GraphHelper.Move.ModeType.PoorCondition
                 | GraphHelper.Move.ModeType.Ill
         );
-
-    public MoveModel() { }
-
-    public MoveModel(MoveModel model)
-        : this()
-    {
-        //Id.EnumValue = model.Id.EnumValue;
-        Graph = model.Graph;
-        Distance = model.Distance;
-        Interval = model.Interval;
-        CheckLeft = model.CheckLeft;
-        CheckRight = model.CheckRight;
-        CheckTop = model.CheckTop;
-        CheckBottom = model.CheckBottom;
-        SpeedX = model.SpeedX;
-        SpeedY = model.SpeedY;
-        LocateLength = model.LocateLength;
-        TriggerLeft = model.TriggerLeft;
-        TriggerRight = model.TriggerRight;
-        TriggerTop = model.TriggerTop;
-        TriggerBottom = model.TriggerBottom;
-        LocateType.Value = model.LocateType.Value;
-        TriggerType.Value = model.TriggerType.Value;
-        ModeType.Value = model.ModeType.Value;
-    }
-
-    public MoveModel(GraphHelper.Move move)
-        : this()
-    {
-        //Id.EnumValue = move.Id.EnumValue;
-        Graph = move.Graph;
-        Distance = move.Distance;
-        Interval = move.Interval;
-        CheckLeft = move.CheckLeft;
-        CheckRight = move.CheckRight;
-        CheckTop = move.CheckTop;
-        CheckBottom = move.CheckBottom;
-        SpeedX = move.SpeedX;
-        SpeedY = move.SpeedY;
-        LocateLength = move.LocateLength;
-        TriggerLeft = move.TriggerLeft;
-        TriggerRight = move.TriggerRight;
-        TriggerTop = move.TriggerTop;
-        TriggerBottom = move.TriggerBottom;
-        LocateType.Value = move.LocateType;
-        TriggerType.Value = move.TriggerType;
-        ModeType.Value = move.Mode;
-    }
 
     public GraphHelper.Move ToMove()
     {

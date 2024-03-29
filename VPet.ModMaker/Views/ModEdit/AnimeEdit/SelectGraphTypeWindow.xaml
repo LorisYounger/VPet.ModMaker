@@ -7,6 +7,7 @@
   xmlns:local="clr-namespace:VPet.ModMaker.Views.ModEdit.AnimeEdit"
   xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
   xmlns:pu="https://opensource.panuon.com/wpf-ui"
+  xmlns:vm="clr-namespace:VPet.ModMaker.ViewModels.ModEdit.AnimeEdit"
   Title="SelectGraphTypeWindow"
   Width="500"
   Height="300"
@@ -15,7 +16,7 @@
     <ResourceDictionary Source="/VPet-Simulator.Windows.Interface;component/ResourceStyle.xaml" />
   </Window.Resources>
   <d:Window.DataContext>
-    <local:SelectGraphTypeWindow />
+    <vm:SelectGraphTypeWindowVM />
   </d:Window.DataContext>
   <Grid>
     <Grid.RowDefinitions>
@@ -38,19 +39,19 @@
       <Label Content="{ll:Str 动画类型}" />
       <ComboBox
         Grid.Column="1"
-        ItemsSource="{Binding GraphTypes.Value}"
-        SelectedItem="{Binding GraphType.Value}"
+        ItemsSource="{Binding GraphTypes}"
+        SelectedItem="{Binding GraphType}"
         Style="{DynamicResource StandardComboBoxStyle}" />
       <Label
         Grid.Row="1"
         Content="{ll:Str 动画名称}"
-        Visibility="{Binding HasNameAnime.Value, Converter={StaticResource FalseToCollapsedConverter}}" />
+        Visibility="{Binding HasNameAnime, Converter={StaticResource FalseToCollapsedConverter}}" />
       <TextBox
         Grid.Row="1"
         Grid.Column="1"
         Style="{DynamicResource StandardTextBoxStyle}"
-        Text="{Binding AnimeName.Value, UpdateSourceTrigger=PropertyChanged}"
-        Visibility="{Binding HasNameAnime.Value, Converter={StaticResource FalseToCollapsedConverter}}" />
+        Text="{Binding AnimeName, UpdateSourceTrigger=PropertyChanged}"
+        Visibility="{Binding HasNameAnime, Converter={StaticResource FalseToCollapsedConverter}}" />
     </Grid>
     <Grid Grid.Row="2">
       <Grid.ColumnDefinitions>

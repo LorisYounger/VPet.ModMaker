@@ -13,42 +13,14 @@ using static VPet_Simulator.Core.IGameSave;
 
 namespace VPet.ModMaker.Models.ModModel;
 
-public class FoodAnimeModel : ObservableObjectX<FoodAnimeModel>
+public class FoodAnimeModel : ObservableObjectX<FoodAnimeModel>, ICloneable<FoodAnimeModel>
 {
-    #region Id
-    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-    private string _Id;
-
-    public string Id
-    {
-        get => _Id;
-        set => SetProperty(ref _Id, value);
-    }
-    #endregion
-
-    public ObservableValue<ModeType> Mode { get; }
-
-    /// <summary>
-    /// 后图像列表
-    /// </summary>
-    public ObservableCollection<ImageModel> BackImages { get; set; } = new();
-
-    /// <summary>
-    /// 前图像列表
-    /// </summary>
-    public ObservableCollection<ImageModel> FrontImages { get; set; } = new();
-
-    /// <summary>
-    /// 食物定位列表
-    /// </summary>
-    public ObservableCollection<FoodAnimeLocationModel> FoodLocations { get; } = new();
-
     public FoodAnimeModel() { }
 
     public FoodAnimeModel(ILine line)
         : this()
     {
-        foreach (var item in line.Where(i => i.Name.StartsWith("a")))
+        foreach (var item in line.Where(i => i.Name.StartsWith('a')))
         {
             //var index = int.Parse(item.Name.Substring(1));
             var infos = item.Info.Split(',');
@@ -56,7 +28,7 @@ public class FoodAnimeModel : ObservableObjectX<FoodAnimeModel>
             foodLocationInfo.Duration = int.Parse(infos[0]);
             if (infos.Length > 1)
             {
-                foodLocationInfo.Rect = new(
+                foodLocationInfo.RectangleLocation = new(
                     double.Parse(infos[1]),
                     double.Parse(infos[2]),
                     double.Parse(infos[3]),
@@ -71,22 +43,52 @@ public class FoodAnimeModel : ObservableObjectX<FoodAnimeModel>
         }
     }
 
+    #region ID
+    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+    private string _id;
+
+    public string ID
+    {
+        get => _id;
+        set => SetProperty(ref _id, value);
+    }
+    #endregion
+
+    public ObservableValue<ModeType> Mode { get; }
+
+    /// <summary>
+    /// 后图像列表
+    /// </summary>
+    public ObservableList<ImageModel> BackImages { get; set; } = new();
+
+    /// <summary>
+    /// 前图像列表
+    /// </summary>
+    public ObservableList<ImageModel> FrontImages { get; set; } = new();
+
+    /// <summary>
+    /// 食物定位列表
+    /// </summary>
+    public ObservableList<FoodAnimeLocationModel> FoodLocations { get; } = new();
+
     /// <summary>
     /// 复制
     /// </summary>
     /// <returns></returns>
-    public FoodAnimeModel Copy()
+    public FoodAnimeModel Clone()
     {
         var model = new FoodAnimeModel();
-        model.Id = Id;
+        model.ID = ID;
         foreach (var image in FrontImages)
-            model.FrontImages.Add(image.Copy());
+            model.FrontImages.Add(image.Clone());
         foreach (var image in BackImages)
-            model.BackImages.Add(image.Copy());
+            model.BackImages.Add(image.Clone());
         foreach (var foodLocation in FoodLocations)
-            model.FoodLocations.Add(foodLocation.Copy());
+            model.FoodLocations.Add(foodLocation.Clone());
         return model;
     }
+
+    object ICloneable.Clone() => Clone();
 
     /// <summary>
     /// 关闭所有图像流

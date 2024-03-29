@@ -20,7 +20,7 @@ public partial class I18nEditWindow : WindowX
 {
     public bool IsCancel { get; private set; } = true;
 
-    public static I18nEditWindow Current { get; private set; }
+    public static I18nEditWindow Current { get; private set; } = null!;
 
     public I18nEditWindowVM ViewModel => (I18nEditWindowVM)DataContext;
 
@@ -64,7 +64,7 @@ public partial class I18nEditWindow : WindowX
         Close();
     }
 
-    private void ViewModel_CultureChanged(object sender, string newCulture)
+    private void ViewModel_CultureChanged(object? sender, string newCulture)
     {
         var oldCulture = sender as string;
         if (string.IsNullOrEmpty(oldCulture))

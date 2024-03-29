@@ -15,17 +15,25 @@ namespace VPet.ModMaker.ViewModels.ModEdit.PetEdit;
 
 public class PetEditWindowVM : ObservableObjectX<PetEditWindowVM>
 {
-    public I18nHelper I18nData => I18nHelper.Current;
-    public PetModel OldPet { get; set; }
+    public PetEditWindowVM()
+    {
+        AddImageCommand.ExecuteCommand += AddImageCommand_ExecuteCommand;
+        ChangeImageCommand.ExecuteCommand += ChangeImageCommand_ExecuteCommand;
+        //Image.ValueChanged += Image_ValueChanged;
+    }
+
+    #region Property
+    public static I18nHelper I18nData => I18nHelper.Current;
+    public PetModel? OldPet { get; set; }
 
     #region Pet
     [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-    private PetModel _Pet;
+    private PetModel _pet = new();
 
     public PetModel Pet
     {
-        get => _Pet;
-        set => SetProperty(ref _Pet, value);
+        get => _pet;
+        set => SetProperty(ref _pet, value);
     }
     #endregion
 
@@ -41,7 +49,7 @@ public class PetEditWindowVM : ObservableObjectX<PetEditWindowVM>
     #endregion
     #region LengthRatio
     [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-    private double _lengthRatio = 250 / 500;
+    private double _lengthRatio = 0.5;
 
     public double LengthRatio
     {
@@ -51,26 +59,20 @@ public class PetEditWindowVM : ObservableObjectX<PetEditWindowVM>
     #endregion
     #region Image
     [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-    private BitmapImage _image;
+    private BitmapImage? _image;
 
-    public BitmapImage Image
+    public BitmapImage? Image
     {
         get => _image;
         set => SetProperty(ref _image, value);
     }
     #endregion
+    #endregion
+
     #region Command
     public ObservableCommand AddImageCommand { get; } = new();
     public ObservableCommand ChangeImageCommand { get; } = new();
     #endregion
-    public PetEditWindowVM()
-    {
-        AddImageCommand.ExecuteCommand += AddImage;
-        ChangeImageCommand.ExecuteCommand += ChangeImage;
-        //TODO
-        //Image.ValueChanged += Image_ValueChanged;
-    }
-
     private void Image_ValueChanged(
         ObservableValue<BitmapImage> sender,
         ValueChangedEventArgs<BitmapImage> e
@@ -84,28 +86,26 @@ public class PetEditWindowVM : ObservableObjectX<PetEditWindowVM>
         Image?.CloseStream();
     }
 
-    private void AddImage()
+    private void AddImageCommand_ExecuteCommand()
     {
-        OpenFileDialog openFileDialog =
-            new()
-            {
-                Title = "选择图片".Translate(),
-                Filter = $"图片|*.jpg;*.jpeg;*.png;*.bmp".Translate()
-            };
+        var openFileDialog = new OpenFileDialog()
+        {
+            Title = "选择图片".Translate(),
+            Filter = $"图片|*.jpg;*.jpeg;*.png;*.bmp".Translate()
+        };
         if (openFileDialog.ShowDialog() is true)
         {
             Image = NativeUtils.LoadImageToMemoryStream(openFileDialog.FileName);
         }
     }
 
-    private void ChangeImage()
+    private void ChangeImageCommand_ExecuteCommand()
     {
-        OpenFileDialog openFileDialog =
-            new()
-            {
-                Title = "选择图片".Translate(),
-                Filter = $"图片|*.jpg;*.jpeg;*.png;*.bmp".Translate()
-            };
+        var openFileDialog = new OpenFileDialog()
+        {
+            Title = "选择图片".Translate(),
+            Filter = $"图片|*.jpg;*.jpeg;*.png;*.bmp".Translate()
+        };
         if (openFileDialog.ShowDialog() is true)
         {
             Image?.StreamSource?.Close();

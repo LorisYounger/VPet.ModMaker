@@ -27,7 +27,7 @@
 	</ItemGroup>
 	<ItemGroup>
 		<PackageReference Include="CommunityToolkit.Mvvm" Version="8.2.2" />
-		<PackageReference Include="HKW.Utils" Version="1.2.4" />
+		<PackageReference Include="HKW.Utils" Version="1.2.5" />
 		<PackageReference Include="HKW.WPF" Version="1.0.3" />
 		<PackageReference Include="Mapster" Version="7.4.0" />
 	</ItemGroup>

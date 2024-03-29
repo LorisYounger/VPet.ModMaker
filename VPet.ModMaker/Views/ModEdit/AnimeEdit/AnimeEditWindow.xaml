@@ -68,9 +68,9 @@
             </TextBlock>
             <TextBox
               Grid.Column="1"
-              pu:TextBoxHelper.Watermark="{ll:Str 动画Id(非必要)}"
-              Text="{Binding Id, UpdateSourceTrigger=PropertyChanged}" />
-            <!--  pu:TextBoxHelper.Watermark="{ll:Str 动画Id(非必要)}"  -->
+              pu:TextBoxHelper.Watermark="{ll:Str 动画ID(非必要)}"
+              Text="{Binding ID, UpdateSourceTrigger=PropertyChanged}" />
+            <!--  pu:TextBoxHelper.Watermark="{ll:Str 动画ID(非必要)}"  -->
             <ComboBox
               Grid.Column="2"
               Margin="10,0,0,0"

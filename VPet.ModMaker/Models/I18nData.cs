@@ -32,5 +32,5 @@ public class I18nData : ObservableObjectX<I18nData>
     /// <summary>
     /// 基于 <see cref="I18nHelper.Current.CultureNames"/> 的索引的数据列表
     /// </summary>
-    public ObservableCollection<ObservableValue<string>> Datas { get; } = new();
+    public ObservableList<ObservableValue<string>> Datas { get; } = new();
 }

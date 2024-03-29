@@ -285,6 +285,24 @@ public static class NativeExtensions
             catch { }
         };
     }
+
+    public static void SetDataContext(
+        this Window window,
+        object viewModel,
+        Action? closedAction = null
+    )
+    {
+        window.DataContext = viewModel;
+        window.Closed += (s, e) =>
+        {
+            try
+            {
+                closedAction?.Invoke();
+                window.DataContext = null;
+            }
+            catch { }
+        };
+    }
 }
 
 /// <summary>

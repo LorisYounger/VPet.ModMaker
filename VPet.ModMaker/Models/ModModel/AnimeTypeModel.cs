@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Collections.Frozen;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
@@ -16,64 +18,94 @@ namespace VPet.ModMaker.Models.ModModel;
 
 public class AnimeTypeModel : ObservableObjectX<AnimeTypeModel>
 {
+    public AnimeTypeModel()
+    {
+        PropertyChanged += AnimeTypeModel_PropertyChanged;
+    }
+
+    private void AnimeTypeModel_PropertyChanged(object? sender, PropertyChangedEventArgs e)
+    {
+        if (e.PropertyName == nameof(Name))
+        {
+            ID = $"{GraphType}_{Name}";
+        }
+    }
+
+    public AnimeTypeModel(AnimeTypeModel model)
+        : this()
+    {
+        ID = model.ID;
+        Name = model.Name;
+        GraphType = model.GraphType;
+        foreach (var anime in model.HappyAnimes)
+            HappyAnimes.Add(anime.Clone());
+        foreach (var anime in model.NomalAnimes)
+            NomalAnimes.Add(anime.Clone());
+        foreach (var anime in model.PoorConditionAnimes)
+            PoorConditionAnimes.Add(anime.Clone());
+        foreach (var anime in model.IllAnimes)
+            IllAnimes.Add(anime.Clone());
+    }
+
     /// <summary>
     /// 动作类型
     /// </summary>
-    public static ObservableCollection<GraphInfo.GraphType> GraphTypes { get; } =
-        new(Enum.GetValues<GraphInfo.GraphType>());
+    public static FrozenSet<GraphInfo.GraphType> GraphTypes { get; } =
+        Enum.GetValues<GraphInfo.GraphType>().ToFrozenSet();
 
     /// <summary>
     /// 动画类型
     /// </summary>
-    public static ObservableCollection<GraphInfo.AnimatType> AnimatTypes { get; } =
-        new(Enum.GetValues(typeof(GraphInfo.AnimatType)).Cast<GraphInfo.AnimatType>());
+    public static FrozenSet<GraphInfo.AnimatType> AnimatTypes { get; } =
+        Enum.GetValues<GraphInfo.AnimatType>().ToFrozenSet();
 
     /// <summary>
     /// 模式类型
     /// </summary>
-    public static ObservableCollection<ModeType> ModeTypes { get; } =
-        new(Enum.GetValues(typeof(ModeType)).Cast<ModeType>());
+    public static FrozenSet<ModeType> ModeTypes { get; } = Enum.GetValues<ModeType>().ToFrozenSet();
 
     /// <summary>
     /// 含有名称的动作列表
     /// </summary>
-    public static HashSet<GraphInfo.GraphType> HasNameAnimes { get; } =
-        new()
-        {
-            GraphInfo.GraphType.Common,
-            GraphInfo.GraphType.Work,
-            GraphInfo.GraphType.Idel,
-            GraphInfo.GraphType.Move,
-            GraphInfo.GraphType.Say
-        };
+    public static FrozenSet<GraphInfo.GraphType> HasNameAnimes { get; } =
+        FrozenSet.ToFrozenSet(
+            [
+                GraphInfo.GraphType.Common,
+                GraphInfo.GraphType.Work,
+                GraphInfo.GraphType.Idel,
+                GraphInfo.GraphType.Move,
+                GraphInfo.GraphType.Say
+            ]
+        );
 
     /// <summary>
     /// 含有不同动画类型的动作列表
     /// </summary>
-    public static HashSet<GraphInfo.GraphType> HasMultiTypeAnimes { get; } =
-        new()
-        {
-            GraphInfo.GraphType.Touch_Head,
-            GraphInfo.GraphType.Touch_Body,
-            GraphInfo.GraphType.Sleep,
-            GraphInfo.GraphType.Raised_Static,
-            GraphInfo.GraphType.StateONE,
-            GraphInfo.GraphType.StateTWO,
-            GraphInfo.GraphType.Common,
-            GraphInfo.GraphType.Work,
-            GraphInfo.GraphType.Idel,
-            GraphInfo.GraphType.Move,
-            GraphInfo.GraphType.Say
-        };
+    public static FrozenSet<GraphInfo.GraphType> HasMultiTypeAnimes { get; } =
+        FrozenSet.ToFrozenSet(
+            [
+                GraphInfo.GraphType.Touch_Head,
+                GraphInfo.GraphType.Touch_Body,
+                GraphInfo.GraphType.Sleep,
+                GraphInfo.GraphType.Raised_Static,
+                GraphInfo.GraphType.StateONE,
+                GraphInfo.GraphType.StateTWO,
+                GraphInfo.GraphType.Common,
+                GraphInfo.GraphType.Work,
+                GraphInfo.GraphType.Idel,
+                GraphInfo.GraphType.Move,
+                GraphInfo.GraphType.Say
+            ]
+        );
 
-    #region Id
+    #region ID
     [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-    private string _id;
+    private string _id = string.Empty;
 
     /// <summary>
     /// Id
     /// </summary>
-    public string Id
+    public string ID
     {
         get => _id;
         set => SetProperty(ref _id, value);
@@ -82,7 +114,7 @@ public class AnimeTypeModel : ObservableObjectX<AnimeTypeModel>
 
     #region Name
     [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-    private string _name;
+    private string _name = string.Empty;
 
     /// <summary>
     /// 名称
@@ -96,61 +128,37 @@ public class AnimeTypeModel : ObservableObjectX<AnimeTypeModel>
 
     #region GraphType
     [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-    private GraphInfo.GraphType _GraphType;
+    private GraphInfo.GraphType _graphType;
 
     /// <summary>
     /// 动作类型
     /// </summary>
     public GraphInfo.GraphType GraphType
     {
-        get => _GraphType;
-        set => SetProperty(ref _GraphType, value);
+        get => _graphType;
+        set => SetProperty(ref _graphType, value);
     }
     #endregion
 
     /// <summary>
     /// 开心动画
     /// </summary>
-    public ObservableCollection<AnimeModel> HappyAnimes { get; } = new();
+    public ObservableList<AnimeModel> HappyAnimes { get; } = new();
 
     /// <summary>
     /// 普通动画 (默认)
     /// </summary>
-    public ObservableCollection<AnimeModel> NomalAnimes { get; } = new();
+    public ObservableList<AnimeModel> NomalAnimes { get; } = new();
 
     /// <summary>
     /// 低状态动画
     /// </summary>
-    public ObservableCollection<AnimeModel> PoorConditionAnimes { get; } = new();
+    public ObservableList<AnimeModel> PoorConditionAnimes { get; } = new();
 
     /// <summary>
     /// 生病动画
     /// </summary>
-    public ObservableCollection<AnimeModel> IllAnimes { get; } = new();
-
-    public AnimeTypeModel()
-    { //TODO
-        //Name.ValueChanged += (_, _) =>
-        //{
-        //    Id.Value = $"{GraphType.Value}_{Name.Value}";
-        //};
-    }
-
-    public AnimeTypeModel(AnimeTypeModel model)
-        : this()
-    {
-        Id = model.Id;
-        Name = model.Name;
-        GraphType = model.GraphType;
-        foreach (var anime in model.HappyAnimes)
-            HappyAnimes.Add(anime.Copy());
-        foreach (var anime in model.NomalAnimes)
-            NomalAnimes.Add(anime.Copy());
-        foreach (var anime in model.PoorConditionAnimes)
-            PoorConditionAnimes.Add(anime.Copy());
-        foreach (var anime in model.IllAnimes)
-            IllAnimes.Add(anime.Copy());
-    }
+    public ObservableList<AnimeModel> IllAnimes { get; } = new();
 
     /// <summary>
     /// 创建动画类型模型
@@ -196,9 +204,9 @@ public class AnimeTypeModel : ObservableObjectX<AnimeTypeModel>
         Name = Path.GetFileName(path);
         // 为带有名字的类型设置Id
         if (graphType.IsHasNameAnime())
-            Id = $"{graphType}_{Name}";
+            ID = $"{graphType}_{Name}";
         else
-            Id = graphType.ToString();
+            ID = graphType.ToString();
         GraphType = graphType;
         if (
             graphType
@@ -389,7 +397,7 @@ public class AnimeTypeModel : ObservableObjectX<AnimeTypeModel>
     /// <param name="path">路径</param>
     /// <param name="animatType">动画类型</param>
     private static void AddAnime(
-        ObservableCollection<AnimeModel> collection,
+        ObservableList<AnimeModel> collection,
         string path,
         GraphInfo.AnimatType animatType = AnimatType.Single
     )
@@ -572,7 +580,7 @@ public class AnimeTypeModel : ObservableObjectX<AnimeTypeModel>
             SaveAnimes(modePath, animeTypeModel.IllAnimes);
         }
 
-        static void SaveAnimes(string animePath, ObservableCollection<AnimeModel> animes)
+        static void SaveAnimes(string animePath, ObservableList<AnimeModel> animes)
         {
             Directory.CreateDirectory(animePath);
             var countA = 0;
@@ -632,7 +640,7 @@ public class AnimeTypeModel : ObservableObjectX<AnimeTypeModel>
             var modePath = Path.Combine(animePath, nameof(ModeType.Ill));
             SaveAnimes(modePath, animeType.IllAnimes);
         }
-        static void SaveAnimes(string animePath, ObservableCollection<AnimeModel> animes)
+        static void SaveAnimes(string animePath, ObservableList<AnimeModel> animes)
         {
             Directory.CreateDirectory(animePath);
             foreach (var anime in animes.EnumerateIndex())
@@ -651,7 +659,7 @@ public class AnimeTypeModel : ObservableObjectX<AnimeTypeModel>
         foreach (var image in model.Images.EnumerateIndex())
         {
             image.Value.Image.SaveToPng(
-                Path.Combine(imagesPath, $"{model.Id}_{image.Index:000}_{image.Value.Duration}.png")
+                Path.Combine(imagesPath, $"{model.ID}_{image.Index:000}_{image.Value.Duration}.png")
             );
         }
     }

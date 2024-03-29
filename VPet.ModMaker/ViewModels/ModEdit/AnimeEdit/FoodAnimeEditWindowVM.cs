@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using System.Threading.Tasks;
@@ -20,6 +21,62 @@ namespace VPet.ModMaker.ViewModels.ModEdit.AnimeEdit;
 
 public class FoodAnimeEditWindowVM : ObservableObjectX<FoodAnimeEditWindowVM>
 {
+    public FoodAnimeEditWindowVM()
+    {
+        _frontPlayerTask = new(FrontPlay);
+        _backPlayerTask = new(BackPlay);
+        _foodPlayerTask = new(FoodPlay);
+        PropertyChangedX += FoodAnimeEditWindowVM_PropertyChangedX;
+        ;
+
+        PlayCommand.ExecuteAsyncCommand += PlayCommand_AsyncExecuteEvent;
+        StopCommand.ExecuteCommand += StopCommand_ExecuteEvent;
+        ReplaceFoodImageCommand.ExecuteCommand += ChangeFoodImageCommand_ExecuteEvent;
+        ResetFoodImageCommand.ExecuteCommand += ResetFoodImageCommand_ExecuteEvent;
+
+        AddAnimeCommand.ExecuteCommand += AddAnimeCommand_ExecuteEvent;
+        RemoveAnimeCommand.ExecuteCommand += RemoveAnimeCommand_ExecuteEvent;
+
+        AddFrontImageCommand.ExecuteCommand += AddFrontImageCommand_ExecuteEvent;
+        RemoveFrontImageCommand.ExecuteCommand += RemoveFrontImageCommand_ExecuteEvent;
+        ClearFrontImageCommand.ExecuteCommand += ClearFrontImageCommand_ExecuteEvent;
+        ChangeFrontImageCommand.ExecuteCommand += ChangeFrontImageCommand_ExecuteEvent;
+
+        AddBackImageCommand.ExecuteCommand += AddBackImageCommand_ExecuteEvent;
+        RemoveBackImageCommand.ExecuteCommand += RemoveBackImageCommand_ExecuteEvent;
+        ClearBackImageCommand.ExecuteCommand += ClearBackImageCommand_ExecuteEvent;
+        ChangeBackImageCommand.ExecuteCommand += ChangeBackImageCommand_ExecuteEvent;
+
+        AddFoodLocationCommand.ExecuteCommand += AddeFoodLocationCommand_ExecuteEvent;
+        RemoveFoodLocationCommand.ExecuteCommand += RemoveFoodLocationCommand_ExecuteEvent;
+        ClearFoodLocationCommand.ExecuteCommand += ClearFoodLocationCommand_ExecuteEvent;
+    }
+
+    private void FoodAnimeEditWindowVM_PropertyChangedX(
+        FoodAnimeEditWindowVM sender,
+        PropertyChangedXEventArgs e
+    )
+    {
+        if (e.PropertyName == nameof(CurrentAnimeModel))
+        {
+            var newModel = e.NewValue as FoodAnimeModel;
+            var oldModel = e.OldValue as FoodAnimeModel;
+            StopCommand_ExecuteEvent();
+            if (oldModel is not null)
+            {
+                oldModel.FrontImages.CollectionChanged -= Images_CollectionChanged;
+                oldModel.BackImages.CollectionChanged -= Images_CollectionChanged;
+                oldModel.FoodLocations.CollectionChanged -= Images_CollectionChanged;
+            }
+            if (newModel is not null)
+            {
+                newModel.FrontImages.CollectionChanged += Images_CollectionChanged;
+                newModel.BackImages.CollectionChanged += Images_CollectionChanged;
+                newModel.FoodLocations.CollectionChanged += Images_CollectionChanged;
+            }
+        }
+    }
+
     /// <summary>
     /// 当前宠物
     /// </summary>
@@ -67,7 +124,16 @@ public class FoodAnimeEditWindowVM : ObservableObjectX<FoodAnimeEditWindowVM>
     /// <summary>
     /// 动画
     /// </summary>
-    public ObservableValue<FoodAnimeTypeModel> Anime { get; } = new(new());
+    #region Anime
+    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+    private FoodAnimeTypeModel _anime = new();
+
+    public FoodAnimeTypeModel Anime
+    {
+        get => _anime;
+        set => SetProperty(ref _anime, value);
+    }
+    #endregion
 
     #region CurrentFrontImageModel
     [DebuggerBrowsable(DebuggerBrowsableState.Never)]
@@ -284,37 +350,6 @@ public class FoodAnimeEditWindowVM : ObservableObjectX<FoodAnimeEditWindowVM>
     /// </summary>
     private Task _foodPlayerTask;
 
-    public FoodAnimeEditWindowVM()
-    {
-        _frontPlayerTask = new(FrontPlay);
-        _backPlayerTask = new(BackPlay);
-        _foodPlayerTask = new(FoodPlay);
-        //TODO
-        //CurrentAnimeModel.ValueChanged += CurrentAnimeModel_ValueChanged;
-
-        PlayCommand.ExecuteAsyncCommand += PlayCommand_AsyncExecuteEvent;
-        StopCommand.ExecuteCommand += StopCommand_ExecuteEvent;
-        ReplaceFoodImageCommand.ExecuteCommand += ChangeFoodImageCommand_ExecuteEvent;
-        ResetFoodImageCommand.ExecuteCommand += ResetFoodImageCommand_ExecuteEvent;
-
-        AddAnimeCommand.ExecuteCommand += AddAnimeCommand_ExecuteEvent;
-        RemoveAnimeCommand.ExecuteCommand += RemoveAnimeCommand_ExecuteEvent;
-
-        AddFrontImageCommand.ExecuteCommand += AddFrontImageCommand_ExecuteEvent;
-        RemoveFrontImageCommand.ExecuteCommand += RemoveFrontImageCommand_ExecuteEvent;
-        ClearFrontImageCommand.ExecuteCommand += ClearFrontImageCommand_ExecuteEvent;
-        ChangeFrontImageCommand.ExecuteCommand += ChangeFrontImageCommand_ExecuteEvent;
-
-        AddBackImageCommand.ExecuteCommand += AddBackImageCommand_ExecuteEvent;
-        RemoveBackImageCommand.ExecuteCommand += RemoveBackImageCommand_ExecuteEvent;
-        ClearBackImageCommand.ExecuteCommand += ClearBackImageCommand_ExecuteEvent;
-        ChangeBackImageCommand.ExecuteCommand += ChangeBackImageCommand_ExecuteEvent;
-
-        AddFoodLocationCommand.ExecuteCommand += AddeFoodLocationCommand_ExecuteEvent;
-        RemoveFoodLocationCommand.ExecuteCommand += RemoveFoodLocationCommand_ExecuteEvent;
-        ClearFoodLocationCommand.ExecuteCommand += ClearFoodLocationCommand_ExecuteEvent;
-    }
-
     private void ResetFoodImageCommand_ExecuteEvent()
     {
         if (FoodImage != DefaultFoodImage)
@@ -353,13 +388,13 @@ public class FoodAnimeEditWindowVM : ObservableObjectX<FoodAnimeEditWindowVM>
     private void AddAnimeCommand_ExecuteEvent()
     {
         if (CurrentMode is ModeType.Happy)
-            Anime.Value.HappyAnimes.Add(new());
+            Anime.HappyAnimes.Add(new());
         else if (CurrentMode is ModeType.Nomal)
-            Anime.Value.NomalAnimes.Add(new());
+            Anime.NomalAnimes.Add(new());
         else if (CurrentMode is ModeType.PoorCondition)
-            Anime.Value.PoorConditionAnimes.Add(new());
+            Anime.PoorConditionAnimes.Add(new());
         else if (CurrentMode is ModeType.Ill)
-            Anime.Value.IllAnimes.Add(new());
+            Anime.IllAnimes.Add(new());
     }
 
     /// <summary>
@@ -374,13 +409,13 @@ public class FoodAnimeEditWindowVM : ObservableObjectX<FoodAnimeEditWindowVM>
         )
         {
             if (CurrentMode is ModeType.Happy)
-                Anime.Value.HappyAnimes.Remove(value);
+                Anime.HappyAnimes.Remove(value);
             else if (CurrentMode is ModeType.Nomal)
-                Anime.Value.NomalAnimes.Remove(value);
+                Anime.NomalAnimes.Remove(value);
             else if (CurrentMode is ModeType.PoorCondition)
-                Anime.Value.PoorConditionAnimes.Remove(value);
+                Anime.PoorConditionAnimes.Remove(value);
             else if (CurrentMode is ModeType.Ill)
-                Anime.Value.IllAnimes.Remove(value);
+                Anime.IllAnimes.Remove(value);
             value.Close();
         }
     }
@@ -540,7 +575,7 @@ public class FoodAnimeEditWindowVM : ObservableObjectX<FoodAnimeEditWindowVM>
     /// </summary>
     /// <param name="images">动画</param>
     /// <param name="paths">路径</param>
-    public void AddImages(ObservableCollection<ImageModel> images, IEnumerable<string> paths)
+    public void AddImages(ObservableList<ImageModel> images, IEnumerable<string> paths)
     {
         try
         {
@@ -591,27 +626,8 @@ public class FoodAnimeEditWindowVM : ObservableObjectX<FoodAnimeEditWindowVM>
     }
     #endregion
     #region FrontPlayer
-    private void CurrentAnimeModel_ValueChanged(
-        ObservableValue<FoodAnimeModel> sender,
-        ValueChangedEventArgs<FoodAnimeModel> e
-    )
-    {
-        StopCommand_ExecuteEvent();
-        if (e.OldValue is not null)
-        {
-            e.OldValue.FrontImages.CollectionChanged -= Images_CollectionChanged;
-            e.OldValue.BackImages.CollectionChanged -= Images_CollectionChanged;
-            e.OldValue.FoodLocations.CollectionChanged -= Images_CollectionChanged;
-        }
-        if (e.NewValue is not null)
-        {
-            e.NewValue.FrontImages.CollectionChanged += Images_CollectionChanged;
-            e.NewValue.BackImages.CollectionChanged += Images_CollectionChanged;
-            e.NewValue.FoodLocations.CollectionChanged += Images_CollectionChanged;
-        }
-    }
 
-    private void Images_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
+    private void Images_CollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
     {
         StopCommand_ExecuteEvent();
     }

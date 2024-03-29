@@ -12,23 +12,23 @@ namespace VPet.ModMaker.Models;
 /// <summary>
 /// 模组制作历史
 /// </summary>
-public class ModMakeHistory
+public class ModMakeHistory : IEquatable<ModMakeHistory>
 {
     /// <summary>
     /// 图片
     /// </summary>
-    public BitmapImage Image { get; set; }
+    public BitmapImage? Image { get; set; }
 
     /// <summary>
     /// Id
     /// </summary>
     [Line(ignoreCase: true)]
-    public string Id { get; set; }
+    public string ID { get; set; } = string.Empty;
 
     /// <summary>
     /// 路径
     /// </summary>
-    private string _path;
+    private string _path = string.Empty;
 
     /// <summary>
     /// 资源路径
@@ -56,4 +56,20 @@ public class ModMakeHistory
     /// </summary>
     [Line(ignoreCase: true)]
     public DateTime LastTime { get; set; } = DateTime.Now;
+
+    public bool Equals(ModMakeHistory? other)
+    {
+        return SourcePath.Equals(other?.SourcePath);
+    }
+
+    /// <inheritdoc/>
+    public override bool Equals(object? obj)
+    {
+        return Equals(obj as ModMakeHistory);
+    }
+
+    public override int GetHashCode()
+    {
+        return SourcePath.GetHashCode();
+    }
 }

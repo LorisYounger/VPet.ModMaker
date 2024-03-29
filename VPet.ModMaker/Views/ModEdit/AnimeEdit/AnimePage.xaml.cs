@@ -30,10 +30,10 @@ public partial class AnimePage : Page
 
     public AnimePageVM ViewModel => (AnimePageVM)DataContext;
 
-    private void DataGrid_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+    private void DataGrid_MouseDoubleClick(object? sender, MouseButtonEventArgs e)
     {
         if (sender is not DataGrid dataGrid || dataGrid.SelectedItem is null)
             return;
-        ViewModel.Edit(dataGrid.SelectedItem);
+        ViewModel.EditCommand_ExecuteCommand(dataGrid.SelectedItem);
     }
 }

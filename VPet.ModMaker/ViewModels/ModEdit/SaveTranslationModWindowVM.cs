@@ -29,7 +29,7 @@ public class SaveTranslationModWindowVM : ObservableObjectX<SaveTranslationModWi
     }
     #endregion
 
-    public ObservableCollection<CheckCultureModel> CheckCultures { get; } = [];
+    public ObservableList<CheckCultureModel> CheckCultures { get; } = [];
     #endregion
 
     #region Command

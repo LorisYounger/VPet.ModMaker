@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Collections.Frozen;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
@@ -8,6 +10,8 @@ using System.Threading.Tasks;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using HKW.HKWUtils.Observable;
+using Mapster;
+using VPet_Simulator.Windows.Interface;
 
 namespace VPet.ModMaker.Models;
 
@@ -16,23 +20,105 @@ namespace VPet.ModMaker.Models;
 /// </summary>
 public class WorkModel : I18nModel<I18nWorkModel>
 {
+    public WorkModel()
+    {
+        PropertyChanged += WorkModel_PropertyChanged;
+    }
+
+    private static readonly FrozenSet<string> _notifyIsOverLoad = FrozenSet.ToFrozenSet(
+        [
+            nameof(WorkType),
+            nameof(MoneyBase),
+            nameof(StrengthFood),
+            nameof(StrengthDrink),
+            nameof(Feeling),
+            nameof(Feeling),
+            nameof(LevelLimit),
+            nameof(FinishBonus)
+        ]
+    );
+
+    private void WorkModel_PropertyChanged(object? sender, PropertyChangedEventArgs e)
+    {
+        if (e.PropertyName is not null && _notifyIsOverLoad.Contains(e.PropertyName))
+        {
+            IsOverLoad = VPet_Simulator.Windows.Interface.ExtensionFunction.IsOverLoad(ToWork());
+        }
+    }
+
+    public WorkModel(WorkModel model)
+        : this()
+    {
+        WorkType = model.WorkType;
+        ID = model.ID;
+        Graph = model.Graph;
+        //MoneyLevel = model.MoneyLevel;
+        MoneyBase = model.MoneyBase;
+        StrengthFood = model.StrengthFood;
+        StrengthDrink = model.StrengthDrink;
+        Feeling = model.Feeling;
+        LevelLimit = model.LevelLimit;
+        Time = model.Time;
+        FinishBonus = model.FinishBonus;
+
+        BorderBrush = model.BorderBrush;
+        Background = model.Background;
+        ButtonBackground = model.ButtonBackground;
+        ButtonForeground = model.ButtonForeground;
+        Foreground = model.Foreground;
+        Left = model.Left;
+        Top = model.Top;
+        Width = model.Width;
+
+        //Image = model.Image?.CloneStream();
+        foreach (var item in model.I18nDatas)
+            I18nDatas[item.Key] = item.Value.Clone();
+        CurrentI18nData = I18nDatas[I18nHelper.Current.CultureName];
+    }
+
+    public WorkModel(VPet_Simulator.Core.GraphHelper.Work work)
+        : this()
+    {
+        WorkType = work.Type;
+        ID = work.Name;
+        Graph = work.Graph;
+        //MoneyLevel = work.MoneyLevel;
+        MoneyBase = work.MoneyBase;
+        StrengthFood = work.StrengthFood;
+        StrengthDrink = work.StrengthDrink;
+        Feeling = work.Feeling;
+        LevelLimit = work.LevelLimit;
+        Time = work.Time;
+        FinishBonus = work.FinishBonus;
+
+        BorderBrush = new((Color)ColorConverter.ConvertFromString("#FF" + work.BorderBrush));
+        Background = new((Color)ColorConverter.ConvertFromString("#FF" + work.Background));
+        Foreground = new((Color)ColorConverter.ConvertFromString("#FF" + work.Foreground));
+        ButtonBackground = new(
+            (Color)ColorConverter.ConvertFromString("#AA" + work.ButtonBackground)
+        );
+        ButtonForeground = new(
+            (Color)ColorConverter.ConvertFromString("#FF" + work.ButtonForeground)
+        );
+        Left = work.Left;
+        Top = work.Top;
+        Width = work.Width;
+    }
+
     /// <summary>
     /// 工作类型
     /// </summary>
-    public static ObservableCollection<VPet_Simulator.Core.GraphHelper.Work.WorkType> WorkTypes { get; } =
-        new(
-            Enum.GetValues(typeof(VPet_Simulator.Core.GraphHelper.Work.WorkType))
-                .Cast<VPet_Simulator.Core.GraphHelper.Work.WorkType>()
-        );
+    public static FrozenSet<VPet_Simulator.Core.GraphHelper.Work.WorkType> WorkTypes { get; } =
+        Enum.GetValues<VPet_Simulator.Core.GraphHelper.Work.WorkType>().ToFrozenSet();
 
     #region Id
     [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-    private string _id;
+    private string _id = string.Empty;
 
     /// <summary>
     /// Id
     /// </summary>
-    public string Id
+    public string ID
     {
         get => _id;
         set => SetProperty(ref _id, value);
@@ -41,12 +127,11 @@ public class WorkModel : I18nModel<I18nWorkModel>
 
     #region Graph
     [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-    private string _graph;
+    private string _graph = string.Empty;
 
     /// <summary>
     /// 指定动画
     /// </summary>
-
     public string Graph
     {
         get => _graph;
@@ -180,19 +265,19 @@ public class WorkModel : I18nModel<I18nWorkModel>
     }
     #endregion
 
-    #region Image
-    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-    private BitmapImage _image;
+    //#region Image
+    //[DebuggerBrowsable(DebuggerBrowsableState.Never)]
+    //private BitmapImage? _image;
 
-    /// <summary>
-    /// 图片
-    /// </summary>
-    public BitmapImage Image
-    {
-        get => _image;
-        set => SetProperty(ref _image, value);
-    }
-    #endregion
+    ///// <summary>
+    ///// 图片
+    ///// </summary>
+    //public BitmapImage? Image
+    //{
+    //    get => _image;
+    //    set => SetProperty(ref _image, value);
+    //}
+    //#endregion
 
     #region WorkType
     [DebuggerBrowsable(DebuggerBrowsableState.Never)]
@@ -224,13 +309,13 @@ public class WorkModel : I18nModel<I18nWorkModel>
     }
     #endregion
 
-    /// <summary>
-    /// 背景色
-    /// </summary>
     #region Background
     [DebuggerBrowsable(DebuggerBrowsableState.Never)]
     private SolidColorBrush _background = new((Color)ColorConverter.ConvertFromString("#FF81D4FA"));
 
+    /// <summary>
+    /// 背景色
+    /// </summary>
     public SolidColorBrush Background
     {
         get => _background;
@@ -238,13 +323,13 @@ public class WorkModel : I18nModel<I18nWorkModel>
     }
     #endregion
 
-    /// <summary>
-    /// 前景色
-    /// </summary>
     #region Foreground
     [DebuggerBrowsable(DebuggerBrowsableState.Never)]
     private SolidColorBrush _foreground = new((Color)ColorConverter.ConvertFromString("#FF0286C6"));
 
+    /// <summary>
+    /// 前景色
+    /// </summary>
     public SolidColorBrush Foreground
     {
         get => _foreground;
@@ -252,14 +337,14 @@ public class WorkModel : I18nModel<I18nWorkModel>
     }
     #endregion
 
-    /// <summary>
-    /// 按钮背景色
-    /// </summary>
     #region ButtonBackground
     [DebuggerBrowsable(DebuggerBrowsableState.Never)]
     private SolidColorBrush _buttonBackground =
         new((Color)ColorConverter.ConvertFromString("#AA0286C6"));
 
+    /// <summary>
+    /// 按钮背景色
+    /// </summary>
     public SolidColorBrush ButtonBackground
     {
         get => _buttonBackground;
@@ -267,135 +352,67 @@ public class WorkModel : I18nModel<I18nWorkModel>
     }
     #endregion
 
+    #region ButtonForeground
+    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+    private SolidColorBrush _buttonForeground =
+        new((Color)ColorConverter.ConvertFromString("#FFFFFFFF"));
+
     /// <summary>
     /// 按钮前景色
     /// </summary>
-    #region ButtonForeground
-    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-    private SolidColorBrush _buttonForeground;
-
     public SolidColorBrush ButtonForeground
     {
         get => _buttonForeground;
         set => SetProperty(ref _buttonForeground, value);
     }
     #endregion
+    #region Left
+    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+    private double _left;
+
     /// <summary>
     /// X位置
     /// </summary>
-    #region Left
-    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-    private double _Left;
-
     public double Left
     {
-        get => _Left;
-        set => SetProperty(ref _Left, value);
+        get => _left;
+        set => SetProperty(ref _left, value);
     }
     #endregion
+
+    #region Top
+    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+    private double _top;
 
     /// <summary>
     /// Y位置
     /// </summary>
-    #region Top
-    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-    private double _Top;
-
     public double Top
     {
-        get => _Top;
-        set => SetProperty(ref _Top, value);
+        get => _top;
+        set => SetProperty(ref _top, value);
     }
     #endregion
+
+    #region Width
+    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+    private double _width;
 
     /// <summary>
     /// 宽度
     /// </summary>
-    #region Width
-    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-    private double _Width;
-
     public double Width
     {
-        get => _Width;
-        set => SetProperty(ref _Width, value);
+        get => _width;
+        set => SetProperty(ref _width, value);
     }
     #endregion
 
-    public WorkModel()
-    { //TODO
-        //IsOverLoad.AddNotifySender(
-        //    WorkType,
-        //    MoneyBase,
-        //    //MoneyLevel,
-        //    StrengthFood,
-        //    StrengthDrink,
-        //    Feeling,
-        //    LevelLimit,
-        //    FinishBonus
-        //);
-        //IsOverLoad.SenderPropertyChanged += (s, _) =>
-        //{
-        //    s.Value = VPet_Simulator.Windows.Interface.ExtensionFunction.IsOverLoad(ToWork());
-        //};
-    }
-
-    public WorkModel(WorkModel model)
-        : this()
+    public void FixOverLoad()
     {
-        WorkType = model.WorkType;
-        Id = model.Id;
-        Graph = model.Graph;
-        //MoneyLevel = model.MoneyLevel;
-        MoneyBase = model.MoneyBase;
-        StrengthFood = model.StrengthFood;
-        StrengthDrink = model.StrengthDrink;
-        Feeling = model.Feeling;
-        LevelLimit = model.LevelLimit;
-        Time = model.Time;
-        FinishBonus = model.FinishBonus;
-
-        BorderBrush = model.BorderBrush;
-        Background = model.Background;
-        ButtonBackground = model.ButtonBackground;
-        ButtonForeground = model.ButtonForeground;
-        Foreground = model.Foreground;
-        Left = model.Left;
-        Top = model.Top;
-        Width = model.Width;
-
-        foreach (var item in model.I18nDatas)
-            I18nDatas[item.Key] = item.Value.Copy();
-        CurrentI18nData = I18nDatas[I18nHelper.Current.CultureName];
-    }
-
-    public WorkModel(VPet_Simulator.Core.GraphHelper.Work work)
-        : this()
-    {
-        WorkType = work.Type;
-        Id = work.Name;
-        Graph = work.Graph;
-        //MoneyLevel = work.MoneyLevel;
-        MoneyBase = work.MoneyBase;
-        StrengthFood = work.StrengthFood;
-        StrengthDrink = work.StrengthDrink;
-        Feeling = work.Feeling;
-        LevelLimit = work.LevelLimit;
-        Time = work.Time;
-        FinishBonus = work.FinishBonus;
-
-        BorderBrush = new((Color)ColorConverter.ConvertFromString("#FF" + work.BorderBrush));
-        Background = new((Color)ColorConverter.ConvertFromString("#FF" + work.Background));
-        Foreground = new((Color)ColorConverter.ConvertFromString("#FF" + work.Foreground));
-        ButtonBackground = new(
-            (Color)ColorConverter.ConvertFromString("#AA" + work.ButtonBackground)
-        );
-        ButtonForeground = new(
-            (Color)ColorConverter.ConvertFromString("#FF" + work.ButtonForeground)
-        );
-        Left = work.Left;
-        Top = work.Top;
-        Width = work.Width;
+        var work = ToWork();
+        work.FixOverLoad();
+        work.Adapt(this);
     }
 
     public VPet_Simulator.Core.GraphHelper.Work ToWork()
@@ -403,7 +420,7 @@ public class WorkModel : I18nModel<I18nWorkModel>
         return new()
         {
             Type = WorkType,
-            Name = Id,
+            Name = ID,
             Graph = Graph,
             //MoneyLevel = MoneyLevel,
             MoneyBase = MoneyBase,
@@ -428,15 +445,15 @@ public class WorkModel : I18nModel<I18nWorkModel>
 
     public void Close()
     {
-        Image.CloseStream();
+        //Image?.CloseStream();
     }
 }
 
-public class I18nWorkModel : ObservableObjectX<I18nWorkModel>
+public class I18nWorkModel : ObservableObjectX<I18nWorkModel>, ICloneable<I18nWorkModel>
 {
     #region Name
     [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-    private string _name;
+    private string _name = string.Empty;
 
     public string Name
     {
@@ -445,10 +462,12 @@ public class I18nWorkModel : ObservableObjectX<I18nWorkModel>
     }
     #endregion
 
-    public I18nWorkModel Copy()
+    public I18nWorkModel Clone()
     {
         var result = new I18nWorkModel();
         result.Name = Name;
         return result;
     }
+
+    object ICloneable.Clone() => Clone();
 }

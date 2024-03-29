@@ -17,7 +17,7 @@ public class ModMaker : MainPlugin
     //public ILine Set;
     public override string PluginName => "ModMaker";
 
-    public ModMakerWindow Maker;
+    public ModMakerWindow Maker = null!;
 
     public ModMaker(IMainWindow mainwin)
         : base(mainwin) { }
@@ -61,8 +61,8 @@ public class ModMaker : MainPlugin
         }
     }
 
-    private void Maker_Closed(object sender, EventArgs e)
+    private void Maker_Closed(object? sender, EventArgs e)
     {
-        Maker = null;
+        Maker = null!;
     }
 }

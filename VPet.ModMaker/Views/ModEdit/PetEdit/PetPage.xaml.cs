@@ -30,10 +30,10 @@ public partial class PetPage : Page
         DataContext = new PetPageVM();
     }
 
-    private void DataGrid_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+    private void DataGrid_MouseDoubleClick(object? sender, MouseButtonEventArgs e)
     {
         if (sender is not DataGrid dataGrid || dataGrid.SelectedItem is not PetModel model)
             return;
-        ViewModel.Edit(model);
+        ViewModel.EditCommand_ExecuteCommand(model);
     }
 }

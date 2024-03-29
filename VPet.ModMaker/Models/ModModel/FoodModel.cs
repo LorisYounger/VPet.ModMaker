@@ -25,25 +25,6 @@ public class FoodModel : I18nModel<I18nFoodModel>
 {
     public FoodModel()
     {
-        //DescriptionId = $"{Id}_{nameof(DescriptionId)}";
-        //TODO
-        //Id.ValueChanged += (s, e) =>
-        //{
-        //    DescriptionId.Value = $"{e.NewValue}_{nameof(DescriptionId)}";
-        //};
-        //ReferencePrice.AddNotifySender(
-        //    Strength,
-        //    StrengthFood,
-        //    StrengthDrink,
-        //    Feeling,
-        //    Health,
-        //    Likability,
-        //    Exp
-        //);
-        //ReferencePrice.SenderPropertyChanged += (s, _) =>
-        //{
-        //    s.Value = Math.Floor(SetValueToFood(_food).RealPrice);
-        //};
         PropertyChangedX += FoodModel_PropertyChangedX;
     }
 
@@ -64,11 +45,7 @@ public class FoodModel : I18nModel<I18nFoodModel>
         PropertyChangedXEventArgs e
     )
     {
-        if (e.PropertyName == nameof(ID))
-        {
-            DescriptionID = $"{e.NewValue}_{nameof(DescriptionID)}";
-        }
-        else if (_notifyReferencePrice.Contains(e.PropertyName))
+        if (e.PropertyName is not null && _notifyReferencePrice.Contains(e.PropertyName))
         {
             this.Adapt(_food);
             ReferencePrice = Math.Floor(_food.RealPrice);
@@ -96,7 +73,7 @@ public class FoodModel : I18nModel<I18nFoodModel>
     /// <summary>
     /// 食物类型
     /// </summary>
-    public static ObservableCollection<Food.FoodType> FoodTypes { get; } =
+    public static ObservableList<Food.FoodType> FoodTypes { get; } =
         new(Enum.GetValues(typeof(Food.FoodType)).Cast<Food.FoodType>());
 
     #region ID

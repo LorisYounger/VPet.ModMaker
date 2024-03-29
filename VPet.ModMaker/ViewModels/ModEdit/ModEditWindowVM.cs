@@ -26,7 +26,8 @@ public class ModEditWindowVM : ObservableObjectX<ModEditWindowVM>
 {
     public ModEditWindowVM(ModEditWindow window)
     {
-        I18nEditWindow.Initialize();
+        //TODO
+        //I18nEditWindow.Initialize();
         ModEditWindow = window;
         ChangeImageCommand.ExecuteCommand += ChangeImageCommand_ExecuteCommand;
         AddCultureCommand.ExecuteCommand += AddCultureCommand_ExecuteCommand;
@@ -210,8 +211,8 @@ public class ModEditWindowVM : ObservableObjectX<ModEditWindowVM>
             is not MessageBoxResult.Yes
         )
             return;
-        ModInfo.I18nDatas[culture].Name = ModInfo.Id;
-        ModInfo.I18nDatas[culture].Description = ModInfo.DescriptionId;
+        ModInfo.I18nDatas[culture].Name = ModInfo.ID;
+        ModInfo.I18nDatas[culture].Description = ModInfo.DescriptionID;
         foreach (var food in ModInfo.Foods)
         {
             food.I18nDatas[culture].Name = food.ID;
@@ -229,10 +230,10 @@ public class ModEditWindowVM : ObservableObjectX<ModEditWindowVM>
         foreach (var pet in ModInfo.Pets)
         {
             pet.I18nDatas[culture].Name = pet.ID;
-            pet.I18nDatas[culture].PetName = pet.PetNameId;
-            pet.I18nDatas[culture].Description = pet.DescriptionId;
+            pet.I18nDatas[culture].PetName = pet.PetNameID;
+            pet.I18nDatas[culture].Description = pet.DescriptionID;
             foreach (var work in pet.Works)
-                work.I18nDatas[culture].Name = work.Id;
+                work.I18nDatas[culture].Name = work.ID;
         }
     }
     #endregion
@@ -311,7 +312,7 @@ public class ModEditWindowVM : ObservableObjectX<ModEditWindowVM>
             );
             return false;
         }
-        if (string.IsNullOrWhiteSpace(model.Id))
+        if (string.IsNullOrWhiteSpace(model.ID))
         {
             MessageBox.Show("Id不可为空".Translate(), "", MessageBoxButton.OK, MessageBoxImage.Warning);
             return false;

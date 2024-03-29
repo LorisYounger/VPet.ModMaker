@@ -24,9 +24,9 @@ public class PetPageVM : ObservableObjectX<PetPageVM>
             FilteredList = new()
         };
 
-        AddCommand.ExecuteCommand += Add;
-        EditCommand.ExecuteCommand += Edit;
-        RemoveCommand.ExecuteCommand += Remove;
+        AddCommand.ExecuteCommand += AddCommand_ExecuteCommand;
+        EditCommand.ExecuteCommand += EditCommand_ExecuteCommand;
+        RemoveCommand.ExecuteCommand += RemoveCommand_ExecuteCommand;
     }
 
     public static ModInfoModel ModInfo => ModInfoModel.Current;
@@ -66,7 +66,7 @@ public class PetPageVM : ObservableObjectX<PetPageVM>
 
     public void Close() { }
 
-    private void Add()
+    private void AddCommand_ExecuteCommand()
     {
         var window = new PetEditWindow();
         var vm = window.ViewModel;
@@ -76,7 +76,7 @@ public class PetPageVM : ObservableObjectX<PetPageVM>
         Pets.Add(vm.Pet);
     }
 
-    public void Edit(PetModel model)
+    public void EditCommand_ExecuteCommand(PetModel model)
     {
         if (model.FromMain)
         {
@@ -106,7 +106,7 @@ public class PetPageVM : ObservableObjectX<PetPageVM>
         model.Close();
     }
 
-    private void Remove(PetModel model)
+    private void RemoveCommand_ExecuteCommand(PetModel model)
     {
         if (model.FromMain)
         {

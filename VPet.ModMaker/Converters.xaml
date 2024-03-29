@@ -12,6 +12,9 @@
   <c:EqualsMultiConverter x:Key="EqualsConverter" />
   <c:EqualsMultiConverter x:Key="NotEqualsConverter" IsInverted="True" />
   <c:NullToBoolConverter x:Key="NullToFalseConverter" />
-  <c:AllBoolToVisibilityMultiConverter x:Key="AllTrueToCollapsedConverter" />
+  <c:AllBoolToVisibilityMultiConverter
+    x:Key="AllTrueToCollapsedConverter"
+    FalseValue="Visible"
+    TrueValue="Collapsed" />
   <c:BoolInverteConverter x:Key="BoolInverter" />
 </ResourceDictionary>

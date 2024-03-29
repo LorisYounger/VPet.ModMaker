@@ -11,8 +11,12 @@ namespace VPet.ModMaker.Models.ModModel;
 /// <summary>
 /// 食物图像位置模型
 /// </summary>
-public class FoodAnimeLocationModel : ObservableObjectX<FoodAnimeLocationModel>
+public class FoodAnimeLocationModel
+    : ObservableObjectX<FoodAnimeLocationModel>,
+        ICloneable<FoodAnimeLocationModel>
 {
+    public FoodAnimeLocationModel() { }
+
     #region Duration
     [DebuggerBrowsable(DebuggerBrowsableState.Never)]
     private int _duration;
@@ -30,7 +34,7 @@ public class FoodAnimeLocationModel : ObservableObjectX<FoodAnimeLocationModel>
     /// <summary>
     /// 范围
     /// </summary>
-    public ObservableRectangleLocation<double> Rect { get; set; } = new();
+    public ObservableRectangleLocation<double> RectangleLocation { get; set; } = new();
 
     /// <summary>
     /// 旋转角度
@@ -59,27 +63,27 @@ public class FoodAnimeLocationModel : ObservableObjectX<FoodAnimeLocationModel>
         set => SetProperty(ref _opacity, value);
     }
     #endregion
-
-    public FoodAnimeLocationModel()
+    public FoodAnimeLocationModel Clone()
     {
-        Rect.PropertyChangedX += (s, e) =>
+        var model = new FoodAnimeLocationModel
         {
-            Rect.Height = (int)e.NewValue;
+            Duration = Duration,
+            RectangleLocation = new(
+                RectangleLocation.X,
+                RectangleLocation.Y,
+                RectangleLocation.Width,
+                RectangleLocation.Width
+            ),
+            Rotate = Rotate,
+            Opacity = Opacity
         };
-    }
-
-    public FoodAnimeLocationModel Copy()
-    {
-        var model = new FoodAnimeLocationModel();
-        model.Duration = Duration;
-        model.Rect = new(Rect.X, Rect.Y, Rect.Width, Rect.Height);
-        model.Rotate = Rotate;
-        model.Opacity = Opacity;
         return model;
     }
 
+    object ICloneable.Clone() => Clone();
+
     public override string ToString()
     {
-        return $"{Duration}, {Rect.X}, {Rect.Y}, {Rect.Width}, {Rotate}, {Opacity}";
+        return $"{Duration}, {RectangleLocation.X}, {RectangleLocation.Y}, {RectangleLocation.Width}, {Rotate}, {Opacity}";
     }
 }

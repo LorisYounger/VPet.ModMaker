@@ -30,10 +30,10 @@ public partial class MovePage : Page
 
     public MovePageVM ViewModel => (MovePageVM)DataContext;
 
-    private void DataGrid_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+    private void DataGrid_MouseDoubleClick(object? sender, MouseButtonEventArgs e)
     {
         if (sender is not DataGrid dataGrid || dataGrid.SelectedItem is not MoveModel model)
             return;
-        ViewModel.Edit(model);
+        ViewModel.EditCommand_ExecuteCommand(model);
     }
 }

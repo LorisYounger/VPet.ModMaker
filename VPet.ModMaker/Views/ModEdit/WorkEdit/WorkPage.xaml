@@ -26,7 +26,7 @@
         <ColumnDefinition />
         <ColumnDefinition Width="Auto" />
       </Grid.ColumnDefinitions>
-      <TextBox pu:TextBoxHelper.Watermark="{ll:Str 搜索Id}" Text="{Binding Search, UpdateSourceTrigger=PropertyChanged}">
+      <TextBox pu:TextBoxHelper.Watermark="{ll:Str 搜索ID}" Text="{Binding Search, UpdateSourceTrigger=PropertyChanged}">
         <TextBox.Style>
           <Style BasedOn="{StaticResource StandardTextBoxStyle}" TargetType="TextBox">
             <Setter Property="IsEnabled" Value="True" />
@@ -65,7 +65,7 @@
         <ComboBox.ItemTemplate>
           <DataTemplate>
             <StackPanel Orientation="Horizontal">
-              <TextBlock Text="{Binding Id}" />
+              <TextBlock Text="{Binding ID}" />
               <TextBlock Text="{ll:Str {} (来自本体)}" Visibility="{Binding FromMain, Converter={StaticResource FalseToCollapsedConverter}}" />
             </StackPanel>
           </DataTemplate>
@@ -89,7 +89,7 @@
         AutoGenerateColumns="False"
         CanUserAddRows="False"
         GridLinesVisibility="Horizontal"
-        ItemsSource="{Binding ShowWorks}"
+        ItemsSource="{Binding Works.FilteredList}"
         MouseDoubleClick="DataGrid_MouseDoubleClick"
         RowDetailsVisibilityMode="Visible"
         RowHeight="64"
@@ -104,12 +104,12 @@
         </DataGrid.RowStyle>
         <DataGrid.Columns>
           <DataGridTextColumn
-            Binding="{Binding Id}"
+            Binding="{Binding ID}"
             CanUserSort="True"
             ElementStyle="{DynamicResource TextBlock_LeftCenter}"
-            Header="Id"
+            Header="ID"
             IsReadOnly="True"
-            SortMemberPath="Id" />
+            SortMemberPath="ID" />
           <DataGridTextColumn
             Binding="{Binding CurrentI18nData.Name}"
             CanUserSort="True"

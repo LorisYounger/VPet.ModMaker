@@ -28,27 +28,20 @@ public partial class WorkEditWindow : Window
     public WorkEditWindow()
     {
         InitializeComponent();
-        DataContext = new WorkEditWindowVM();
-        Closed += (s, e) =>
-        {
+        this.SetDataContext<WorkEditWindowVM>(() => {
             //TODO
             //ViewModel.Close();
-            try
-            {
-                DataContext = null;
-            }
-            catch { }
-        };
+        });
     }
 
-    private void Button_Cancel_Click(object sender, RoutedEventArgs e)
+    private void Button_Cancel_Click(object? sender, RoutedEventArgs e)
     {
         Close();
     }
 
-    private void Button_Yes_Click(object sender, RoutedEventArgs e)
+    private void Button_Yes_Click(object? sender, RoutedEventArgs e)
     {
-        if (string.IsNullOrEmpty(ViewModel.Work.Id))
+        if (string.IsNullOrEmpty(ViewModel.Work.ID))
         {
             MessageBox.Show("Id不可为空".Translate(), "", MessageBoxButton.OK, MessageBoxImage.Warning);
             return;
@@ -64,8 +57,8 @@ public partial class WorkEditWindow : Window
             return;
         }
         if (
-            ViewModel.OldWork?.Id != ViewModel.Work.Id
-            && ViewModel.CurrentPet.Works.Any(i => i.Id == ViewModel.Work.Id)
+            ViewModel.OldWork?.ID != ViewModel.Work.ID
+            && ViewModel.CurrentPet.Works.Any(i => i.ID == ViewModel.Work.ID)
         )
         {
             MessageBox.Show("此Id已存在".Translate(), "", MessageBoxButton.OK, MessageBoxImage.Warning);

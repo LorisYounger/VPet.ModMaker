@@ -39,6 +39,7 @@ namespace VPet.ModMaker.Views.ModEdit;
 /// </summary>
 public partial class ModEditWindow : WindowX
 {
+    public static ModEditWindow Current { get; private set; } = null!;
     public ModEditWindowVM ViewModel => (ModEditWindowVM)DataContext;
     public FoodPage FoodPage { get; } = null!;
     public LowTextPage LowTextPage { get; } = null!;
@@ -51,6 +52,7 @@ public partial class ModEditWindow : WindowX
 
     public ModEditWindow()
     {
+        Current = this;
         InitializeComponent();
         DataContext = new ModEditWindowVM(this);
         Closing += ModEditWindow_Closing;
@@ -60,10 +62,9 @@ public partial class ModEditWindow : WindowX
         ClickTextPage = new();
         SelectTextPage = new();
         PetPage = new();
-        //TODO
-        //WorkPage = new();
-        //MovePage = new();
-        //AnimePage = new();
+        WorkPage = new();
+        MovePage = new();
+        AnimePage = new();
     }
 
     /// <summary>

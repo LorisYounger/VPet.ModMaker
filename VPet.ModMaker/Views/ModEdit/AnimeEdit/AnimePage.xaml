@@ -23,7 +23,7 @@
         <ColumnDefinition />
         <ColumnDefinition Width="Auto" />
       </Grid.ColumnDefinitions>
-      <TextBox pu:TextBoxHelper.Watermark="{ll:Str 搜索Id}" Text="{Binding Search, UpdateSourceTrigger=PropertyChanged}">
+      <TextBox pu:TextBoxHelper.Watermark="{ll:Str 搜索ID}" Text="{Binding Search, UpdateSourceTrigger=PropertyChanged}">
         <TextBox.Style>
           <Style BasedOn="{StaticResource StandardTextBoxStyle}" TargetType="TextBox">
             <Setter Property="IsEnabled" Value="True" />
@@ -61,7 +61,7 @@
         <ComboBox.ItemTemplate>
           <DataTemplate>
             <StackPanel Orientation="Horizontal">
-              <TextBlock Text="{Binding Id}" />
+              <TextBlock Text="{Binding ID}" />
               <TextBlock Text="{ll:Str {} (来自本体)}" Visibility="{Binding FromMain, Converter={StaticResource FalseToCollapsedConverter}}" />
             </StackPanel>
           </DataTemplate>
@@ -85,7 +85,7 @@
         AutoGenerateColumns="False"
         CanUserAddRows="False"
         GridLinesVisibility="Horizontal"
-        ItemsSource="{Binding ShowAnimes}"
+        ItemsSource="{Binding AllAnimes.FilteredList}"
         MouseDoubleClick="DataGrid_MouseDoubleClick"
         RowDetailsVisibilityMode="Visible"
         RowHeight="50"
@@ -100,40 +100,40 @@
         </DataGrid.RowStyle>
         <DataGrid.Columns>
           <DataGridTextColumn
-            Binding="{Binding Id}"
+            Binding="{Binding ID}"
             CanUserSort="True"
             ElementStyle="{DynamicResource TextBlock_LeftCenter}"
             Header="{ll:Str 动画类型}"
             IsReadOnly="True"
-            SortMemberPath="Id" />
+            SortMemberPath="ID" />
           <DataGridTextColumn
             Binding="{Binding HappyAnimes.Count}"
             CanUserSort="True"
             ElementStyle="{DynamicResource TextBlock_LeftCenter}"
             Header="{ll:Str 开心状态动画数量}"
             IsReadOnly="True"
-            SortMemberPath="Id" />
+            SortMemberPath="HappyAnimes.Count" />
           <DataGridTextColumn
             Binding="{Binding NomalAnimes.Count}"
             CanUserSort="True"
             ElementStyle="{DynamicResource TextBlock_LeftCenter}"
             Header="{ll:Str 普通状态动画数量}"
             IsReadOnly="True"
-            SortMemberPath="Id" />
+            SortMemberPath="NomalAnimes.Count" />
           <DataGridTextColumn
             Binding="{Binding PoorConditionAnimes.Count}"
             CanUserSort="True"
             ElementStyle="{DynamicResource TextBlock_LeftCenter}"
             Header="{ll:Str 不开心状态动画数量}"
             IsReadOnly="True"
-            SortMemberPath="Id" />
+            SortMemberPath="PoorConditionAnimes.Count" />
           <DataGridTextColumn
             Binding="{Binding IllAnimes.Count}"
             CanUserSort="True"
             ElementStyle="{DynamicResource TextBlock_LeftCenter}"
             Header="{ll:Str 生病状态动画数量}"
             IsReadOnly="True"
-            SortMemberPath="Id" />
+            SortMemberPath="IllAnimes.Count" />
         </DataGrid.Columns>
       </DataGrid>
       <Button

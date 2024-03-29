@@ -17,6 +17,8 @@ namespace VPet.ModMaker.Models.ModModel;
 
 public class FoodAnimeTypeModel : ObservableObjectX<FoodAnimeModel>
 {
+    public FoodAnimeTypeModel() { }
+
     /// <summary>
     /// 动作类型
     /// </summary>
@@ -38,11 +40,11 @@ public class FoodAnimeTypeModel : ObservableObjectX<FoodAnimeModel>
     /// </summary>
     public const string BackLayName = "back_lay";
 
-    #region Id
+    #region ID
     [DebuggerBrowsable(DebuggerBrowsableState.Never)]
     private string _id;
 
-    public string Id
+    public string ID
     {
         get => _id;
         set => SetProperty(ref _id, value);
@@ -59,37 +61,34 @@ public class FoodAnimeTypeModel : ObservableObjectX<FoodAnimeModel>
     public string Name
     {
         get => _name;
-        set => SetProperty(ref _name, value);
+        set
+        {
+            if (SetProperty(ref _name, value) is false)
+                return;
+            ID = $"{GraphType}_{Name}";
+        }
     }
     #endregion
 
     /// <summary>
     /// 开心动画
     /// </summary>
-    public ObservableCollection<FoodAnimeModel> HappyAnimes { get; } = new();
+    public ObservableList<FoodAnimeModel> HappyAnimes { get; } = new();
 
     /// <summary>
     /// 普通动画 (默认)
     /// </summary>
-    public ObservableCollection<FoodAnimeModel> NomalAnimes { get; } = new();
+    public ObservableList<FoodAnimeModel> NomalAnimes { get; } = new();
 
     /// <summary>
     /// 低状态动画
     /// </summary>
-    public ObservableCollection<FoodAnimeModel> PoorConditionAnimes { get; } = new();
+    public ObservableList<FoodAnimeModel> PoorConditionAnimes { get; } = new();
 
     /// <summary>
     /// 生病动画
     /// </summary>
-    public ObservableCollection<FoodAnimeModel> IllAnimes { get; } = new();
-
-    public FoodAnimeTypeModel()
-    { //TODO
-        //Name.ValueChanged += (_, _) =>
-        //{
-        //    Id.Value = $"{GraphType}_{Name.Value}";
-        //};
-    }
+    public ObservableList<FoodAnimeModel> IllAnimes { get; } = new();
 
     public void Close()
     {
@@ -131,16 +130,16 @@ public class FoodAnimeTypeModel : ObservableObjectX<FoodAnimeModel>
     public FoodAnimeTypeModel(FoodAnimeTypeModel model)
         : this()
     {
-        Id = model.Id;
+        ID = model.ID;
         Name = model.Name;
         foreach (var anime in model.HappyAnimes)
-            HappyAnimes.Add(anime.Copy());
+            HappyAnimes.Add(anime.Clone());
         foreach (var anime in model.NomalAnimes)
-            NomalAnimes.Add(anime.Copy());
+            NomalAnimes.Add(anime.Clone());
         foreach (var anime in model.PoorConditionAnimes)
-            PoorConditionAnimes.Add(anime.Copy());
+            PoorConditionAnimes.Add(anime.Clone());
         foreach (var anime in model.IllAnimes)
-            IllAnimes.Add(anime.Copy());
+            IllAnimes.Add(anime.Clone());
     }
 
     /// <summary>
@@ -217,7 +216,7 @@ public class FoodAnimeTypeModel : ObservableObjectX<FoodAnimeModel>
     public void AddModeAnime(
         string path,
         ModeType mode,
-        ObservableCollection<FoodAnimeModel> foodAnimes,
+        ObservableList<FoodAnimeModel> foodAnimes,
         ILine line,
         List<PNGAnimeInfo> pngAnimeInfos
     )
@@ -250,7 +249,7 @@ public class FoodAnimeTypeModel : ObservableObjectX<FoodAnimeModel>
         }
         foodAnimes.Add(anime);
 
-        static ObservableCollection<ImageModel> GetImages(string path, PNGAnimeInfo pngAnimeInfo)
+        static ObservableList<ImageModel> GetImages(string path, PNGAnimeInfo pngAnimeInfo)
         {
             return new(
                 Directory
@@ -299,7 +298,7 @@ public class FoodAnimeTypeModel : ObservableObjectX<FoodAnimeModel>
     /// <param name="mode">模式</param>
     private void SaveAnimeInfo(
         string animePath,
-        ObservableCollection<FoodAnimeModel> animes,
+        ObservableList<FoodAnimeModel> animes,
         ModeType mode
     )
     {
@@ -334,7 +333,7 @@ public class FoodAnimeTypeModel : ObservableObjectX<FoodAnimeModel>
             frontImage.Value.Image.SaveToPng(
                 Path.Combine(
                     frontLayPath,
-                    $"{anime.Id}_{frontImage.Index:000}_{frontImage.Value.Duration}.png"
+                    $"{anime.ID}_{frontImage.Index:000}_{frontImage.Value.Duration}.png"
                 )
             );
         }
@@ -343,7 +342,7 @@ public class FoodAnimeTypeModel : ObservableObjectX<FoodAnimeModel>
             backImage.Value.Image.SaveToPng(
                 Path.Combine(
                     backLayPath,
-                    $"{anime.Id}_{backImage.Index:000}_{backImage.Value.Duration}.png"
+                    $"{anime.ID}_{backImage.Index:000}_{backImage.Value.Duration}.png"
                 )
             );
         }

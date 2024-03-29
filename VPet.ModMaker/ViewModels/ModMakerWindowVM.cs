@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
@@ -8,6 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
+using HKW.HKWUtils.Extensions;
 using HKW.HKWUtils.Observable;
 using LinePutScript;
 using LinePutScript.Converter;
@@ -23,43 +25,63 @@ namespace VPet.ModMaker.ViewModels;
 
 public class ModMakerWindowVM : ObservableObjectX<ModMakerWindowVM>
 {
-    #region Value
-    public ModMakerWindow ModMakerWindow { get; }
+    public ModMakerWindowVM(ModMakerWindow window)
+    {
+        Histories = new()
+        {
+            Filter = f => f.ID.Contains(Search, StringComparison.OrdinalIgnoreCase),
+            FilteredList = new()
+        };
+        LoadHistories();
+        ModMakerWindow = window;
+        PropertyChanged += ModMakerWindowVM_PropertyChanged;
+        CreateNewModCommand.ExecuteCommand += CreateNewModCommand_ExecuteCommand;
+        LoadModFromFileCommand.ExecuteCommand += LoadModFromFileCommand_ExecuteCommand;
+        ClearHistoriesCommand.ExecuteCommand += ClearHistoriesCommand_ExecuteCommand;
+        RemoveHistoryCommand.ExecuteCommand += RemoveHistoryCommand_ExecuteCommand;
+    }
 
-    public ModEditWindow ModEditWindow { get; private set; }
+    private void ModMakerWindowVM_PropertyChanged(object? sender, PropertyChangedEventArgs e)
+    {
+        if (e.PropertyName == nameof(Search))
+        {
+            Histories.Refresh();
+        }
+    }
+
+    #region Property
+    public ModMakerWindow ModMakerWindow { get; } = null!;
+
+    public ModEditWindow ModEditWindow { get; private set; } = null!;
 
     /// <summary>
     /// 历史搜索文本
     /// </summary>
     #region HistoriesSearchText
     [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-    private string _historiesSearchText;
+    private string _search = string.Empty;
 
-    public string HistoriesSearchText
+    public string Search
     {
-        get => _historiesSearchText;
-        set => SetProperty(ref _historiesSearchText, value);
-    }
-    #endregion
-
-    /// <summary>
-    /// 显示的历史
-    /// </summary>
-    #region ShowHistories
-    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-    private ObservableCollection<ModMakeHistory> _showHistories;
-
-    public ObservableCollection<ModMakeHistory> ShowHistories
-    {
-        get => _showHistories;
-        set => SetProperty(ref _showHistories, value);
+        get => _search;
+        set => SetProperty(ref _search, value);
     }
     #endregion
 
     /// <summary>
     /// 历史
     /// </summary>
-    public ObservableCollection<ModMakeHistory> Histories { get; set; } = new();
+    #region Histories
+    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+    private ObservableFilterList<ModMakeHistory, ObservableList<ModMakeHistory>> _histories = null!;
+
+    public ObservableFilterList<ModMakeHistory, ObservableList<ModMakeHistory>> Histories
+    {
+        get => _histories;
+        set => SetProperty(ref _histories, value);
+    }
+    #endregion
+
     #endregion
     #region Command
     /// <summary>
@@ -83,32 +105,8 @@ public class ModMakerWindowVM : ObservableObjectX<ModMakerWindowVM>
     public ObservableCommand<ModMakeHistory> RemoveHistoryCommand { get; } = new();
     #endregion
 
-    public ModMakerWindowVM(ModMakerWindow window)
-    {
-        LoadHistories();
-        ModMakerWindow = window;
-        //TODO
-        ShowHistories = Histories;
-        CreateNewModCommand.ExecuteCommand += CreateNewMod;
-        LoadModFromFileCommand.ExecuteCommand += LoadModFromFile;
-        ClearHistoriesCommand.ExecuteCommand += ClearHistories;
-        RemoveHistoryCommand.ExecuteCommand += RemoveHistory;
-        //HistoriesSearchText.ValueChanged += HistoriesSearchText_ValueChanged;
-    }
-
-    private void HistoriesSearchText_ValueChanged(
-        ObservableValue<string> sender,
-        ValueChangedEventArgs<string> e
-    )
-    {
-        if (string.IsNullOrEmpty(e.NewValue))
-            ShowHistories = Histories;
-        else
-            ShowHistories = new(Histories.Where(i => i.Id.Contains(e.NewValue)));
-    }
-
     #region History
-    private void RemoveHistory(ModMakeHistory value)
+    private void RemoveHistoryCommand_ExecuteCommand(ModMakeHistory value)
     {
         Histories.Remove(value);
         SaveHistories();
@@ -122,14 +120,14 @@ public class ModMakerWindowVM : ObservableObjectX<ModMakerWindowVM>
         if (File.Exists(ModMakerInfo.HistoryFile) is false)
             return;
         var lps = new LPS(File.ReadAllText(ModMakerInfo.HistoryFile));
+        var set = new HashSet<ModMakeHistory>();
         foreach (var line in lps)
         {
             if (LPSConvert.DeserializeObject<ModMakeHistory>(line) is not ModMakeHistory history)
                 continue;
-            if (Histories.All(h => h.InfoFile != history.InfoFile))
-                Histories.Add(history);
+            set.Add(history);
         }
-        Histories = new(Histories.OrderByDescending(h => h.LastTime));
+        Histories.AddRange(set.OrderByDescending(h => h.LastTime));
     }
 
     /// <summary>
@@ -158,7 +156,7 @@ public class ModMakerWindowVM : ObservableObjectX<ModMakerWindowVM>
             is ModMakeHistory history
         )
         {
-            history.Id = modInfo.Id;
+            history.ID = modInfo.ID;
             history.SourcePath = modInfo.SourcePath;
             history.LastTime = DateTime.Now;
         }
@@ -167,7 +165,7 @@ public class ModMakerWindowVM : ObservableObjectX<ModMakerWindowVM>
             Histories.Add(
                 new()
                 {
-                    Id = modInfo.Id,
+                    ID = modInfo.ID,
                     SourcePath = modInfo.SourcePath,
                     LastTime = DateTime.Now,
                 }
@@ -175,14 +173,14 @@ public class ModMakerWindowVM : ObservableObjectX<ModMakerWindowVM>
         }
     }
 
-    private void ClearHistories()
+    private void ClearHistoriesCommand_ExecuteCommand()
     {
         if (
             MessageBox.Show("确定要清空吗?".Translate(), "", MessageBoxButton.YesNo)
             is not MessageBoxResult.Yes
         )
             return;
-        ShowHistories.Clear();
+        Histories.Clear();
         Histories.Clear();
         File.WriteAllText(ModMakerInfo.HistoryFile, string.Empty);
     }
@@ -192,7 +190,7 @@ public class ModMakerWindowVM : ObservableObjectX<ModMakerWindowVM>
     /// <summary>
     /// 创建新模组
     /// </summary>
-    public void CreateNewMod()
+    public void CreateNewModCommand_ExecuteCommand()
     {
         ModInfoModel.Current = new();
         ShowEditWindow();
@@ -241,18 +239,17 @@ public class ModMakerWindowVM : ObservableObjectX<ModMakerWindowVM>
     /// <summary>
     /// 从文件载入模组
     /// </summary>
-    public void LoadModFromFile()
+    public void LoadModFromFileCommand_ExecuteCommand()
     {
-        OpenFileDialog openFileDialog =
-            new()
-            {
-                Title = "模组信息文件".Translate(),
-                Filter = $"LPS文件|*.lps;".Translate(),
-                FileName = "info.lps"
-            };
+        var openFileDialog = new OpenFileDialog()
+        {
+            Title = "模组信息文件".Translate(),
+            Filter = $"LPS文件|*.lps;".Translate(),
+            FileName = "info.lps"
+        };
         if (openFileDialog.ShowDialog() is true)
         {
-            LoadMod(Path.GetDirectoryName(openFileDialog.FileName));
+            LoadMod(Path.GetDirectoryName(openFileDialog.FileName)!);
         }
     }
 
@@ -279,19 +276,40 @@ public class ModMakerWindowVM : ObservableObjectX<ModMakerWindowVM>
         {
             var modInfo = new ModInfoModel(loader);
             EditMod(modInfo);
+            // 更新模组
+            if (ModUpdataHelper.CanUpdata(modInfo))
+            {
+                pendingHandler.Hide();
+                if (
+                    MessageBox.Show(
+                        ModEditWindow.Current,
+                        "是否更新模组\n当前版本: {0}\n最新版本: {1}".Translate(
+                            modInfo.ModVersion,
+                            ModUpdataHelper.LastVersion
+                        ),
+                        "更新模组".Translate(),
+                        MessageBoxButton.YesNo
+                    ) is MessageBoxResult.Yes
+                )
+                {
+                    if (ModUpdataHelper.Updata(modInfo))
+                        MessageBox.Show("更新完成, 请手动保存".Translate());
+                }
+            }
             pendingHandler.Close();
         }
         catch (Exception ex)
         {
             pendingHandler.Close();
             ModEditWindow?.Close();
-            ModEditWindow = null;
+            ModEditWindow = null!;
             ModInfoModel.Current?.Close();
             I18nHelper.Current = new();
             I18nEditWindow.Current?.Close(true);
             ModMakerWindow.Show();
             ModMakerWindow.Activate();
             MessageBox.Show(ModMakerWindow, "模组载入失败:\n{0}".Translate(ex));
+            GC.Collect();
         }
     }
     #endregion

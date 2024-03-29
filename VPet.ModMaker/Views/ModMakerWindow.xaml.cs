@@ -41,7 +41,7 @@ public partial class ModMakerWindow : WindowX
         //new AnimeEditWindow().Show();
     }
 
-    private void ModMakerWindow_Closed(object sender, EventArgs e)
+    private void ModMakerWindow_Closed(object? sender, EventArgs e)
     {
         // 当模组载入错误时, 会产生野窗口, 需要手动关闭
         foreach (var item in Application.Current.Windows)
@@ -51,7 +51,7 @@ public partial class ModMakerWindow : WindowX
         }
     }
 
-    private void ListBoxItem_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+    private void ListBoxItem_MouseDoubleClick(object? sender, MouseButtonEventArgs e)
     {
         if (sender is not ListBoxItem item)
             return;
@@ -65,13 +65,12 @@ public partial class ModMakerWindow : WindowX
             )
             {
                 ViewModel.Histories.Remove(history);
-                ViewModel.ShowHistories.Remove(history);
             }
         }
         ViewModel.LoadMod(history.SourcePath);
     }
 
-    private void Hyperlink_Click(object sender, RoutedEventArgs e)
+    private void Hyperlink_Click(object? sender, RoutedEventArgs e)
     {
         Process.Start(new ProcessStartInfo("https://github.com/LorisYounger/VPet.ModMaker/wiki"));
     }

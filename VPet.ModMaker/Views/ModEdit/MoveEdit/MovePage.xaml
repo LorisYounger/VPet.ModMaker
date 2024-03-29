@@ -61,7 +61,7 @@
         <ComboBox.ItemTemplate>
           <DataTemplate>
             <StackPanel Orientation="Horizontal">
-              <TextBlock Text="{Binding Id}" />
+              <TextBlock Text="{Binding ID}" />
               <TextBlock Text="{ll:Str {} (来自本体)}" Visibility="{Binding FromMain, Converter={StaticResource FalseToCollapsedConverter}}" />
             </StackPanel>
           </DataTemplate>
@@ -85,7 +85,7 @@
         AutoGenerateColumns="False"
         CanUserAddRows="False"
         GridLinesVisibility="Horizontal"
-        ItemsSource="{Binding ShowMoves}"
+        ItemsSource="{Binding Moves.FilteredList}"
         MouseDoubleClick="DataGrid_MouseDoubleClick"
         RowDetailsVisibilityMode="Visible"
         RowHeight="50"
@@ -107,26 +107,26 @@
             IsReadOnly="True"
             SortMemberPath="Graph" />
           <DataGridTextColumn
-            Binding="{Binding LocateType.EnumValue}"
+            Binding="{Binding LocateType.Value}"
             CanUserSort="True"
             ElementStyle="{DynamicResource TextBlock_LeftCenter}"
             Header="{ll:Str 定位类型}"
             IsReadOnly="True"
-            SortMemberPath="LocateType.EnumValue" />
+            SortMemberPath="LocateType.Value" />
           <DataGridTextColumn
-            Binding="{Binding TriggerType.EnumValue}"
+            Binding="{Binding TriggerType.Value}"
             CanUserSort="True"
             ElementStyle="{DynamicResource TextBlock_LeftCenter}"
             Header="{ll:Str 触发类型}"
             IsReadOnly="True"
-            SortMemberPath="TriggerType.EnumValue" />
+            SortMemberPath="TriggerType.Value" />
           <DataGridTextColumn
-            Binding="{Binding ModeType.EnumValue}"
+            Binding="{Binding ModeType.Value}"
             CanUserSort="True"
             ElementStyle="{DynamicResource TextBlock_LeftCenter}"
             Header="{ll:Str 状态类型}"
             IsReadOnly="True"
-            SortMemberPath="ModeType.EnumValue" />
+            SortMemberPath="ModeType.Value" />
           <DataGridTextColumn
             Binding="{Binding Distance}"
             CanUserSort="True"

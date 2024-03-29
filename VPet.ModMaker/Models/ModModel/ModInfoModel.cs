@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
@@ -26,6 +27,29 @@ namespace VPet.ModMaker.Models;
 /// </summary>
 public class ModInfoModel : I18nModel<I18nModInfoModel>
 {
+    public ModInfoModel()
+    {
+        PropertyChanged += ModInfoModel_PropertyChanged;
+        Pets.CollectionChanged += Pets_CollectionChanged;
+    }
+
+    private void ModInfoModel_PropertyChanged(object? sender, PropertyChangedEventArgs e)
+    {
+        if (e.PropertyName == nameof(ID))
+        {
+            DescriptionID = $"{ID}_{nameof(DescriptionID)}";
+        }
+        else if (e.PropertyName == nameof(ShowMainPet))
+        {
+            Pets_CollectionChanged(null, null!);
+        }
+    }
+
+    /// <summary>
+    /// 当前
+    /// </summary>
+    public static ModInfoModel Current { get; set; } = new();
+
     #region AutoSetFoodPrice
     [DebuggerBrowsable(DebuggerBrowsableState.Never)]
     private bool _autoSetFoodPrice;
@@ -65,33 +89,28 @@ public class ModInfoModel : I18nModel<I18nModInfoModel>
     /// </summary>
     public ulong ItemID { get; }
 
-    /// <summary>
-    /// 当前
-    /// </summary>
-    public static ModInfoModel Current { get; set; } = new();
-
-    #region Id
+    #region ID
     [DebuggerBrowsable(DebuggerBrowsableState.Never)]
     private string _id = string.Empty;
 
     /// <summary>
     /// Id
     /// </summary>
-    public string Id
+    public string ID
     {
         get => _id;
         set => SetProperty(ref _id, value);
     }
     #endregion
 
-    #region DescriptionId
+    #region DescriptionID
     [DebuggerBrowsable(DebuggerBrowsableState.Never)]
     private string _descriptionId = string.Empty;
 
     /// <summary>
     /// 描述Id
     /// </summary>
-    public string DescriptionId
+    public string DescriptionID
     {
         get => _descriptionId;
         set => SetProperty(ref _descriptionId, value);
@@ -145,9 +164,9 @@ public class ModInfoModel : I18nModel<I18nModInfoModel>
     /// </summary>
     #region Image
     [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-    private BitmapImage _image;
+    private BitmapImage? _image;
 
-    public BitmapImage Image
+    public BitmapImage? Image
     {
         get => _image;
         set => SetProperty(ref _image, value);
@@ -174,27 +193,27 @@ public class ModInfoModel : I18nModel<I18nModInfoModel>
     /// <summary>
     /// 食物
     /// </summary>
-    public ObservableCollection<FoodModel> Foods { get; } = new();
+    public ObservableList<FoodModel> Foods { get; } = new();
 
     /// <summary>
     /// 点击文本
     /// </summary>
-    public ObservableCollection<ClickTextModel> ClickTexts { get; } = new();
+    public ObservableList<ClickTextModel> ClickTexts { get; } = new();
 
     /// <summary>
     /// 低状态文本
     /// </summary>
-    public ObservableCollection<LowTextModel> LowTexts { get; } = new();
+    public ObservableList<LowTextModel> LowTexts { get; } = new();
 
     /// <summary>
     /// 选择文本
     /// </summary>
-    public ObservableCollection<SelectTextModel> SelectTexts { get; } = new();
+    public ObservableList<SelectTextModel> SelectTexts { get; } = new();
 
     /// <summary>
     /// 宠物
     /// </summary>
-    public ObservableCollection<PetModel> Pets { get; } = new();
+    public ObservableList<PetModel> Pets { get; } = new();
 
     /// <summary>
     /// 宠物实际数量
@@ -220,27 +239,8 @@ public class ModInfoModel : I18nModel<I18nModInfoModel>
     /// </summary>
     public static Dictionary<string, Dictionary<string, string>> SaveI18nDatas { get; } = new();
     #endregion
-    public ModInfoModel()
-    {
-        DescriptionId = $"{Id}_{nameof(DescriptionId)}";
-        //TODO
-        //Id.ValueChanged += (o, n) =>
-        //{
-        //    DescriptionId.Value = $"{n}_{nameof(DescriptionId)}";
-        //};
-        //Pets.CollectionChanged += Pets_CollectionChanged;
-        //ShowMainPet.ValueChanged += ShowMainPet_ValueChanged;
-    }
 
-    private void ShowMainPet_ValueChanged(
-        ObservableValue<bool> sender,
-        ValueChangedEventArgs<bool> e
-    )
-    {
-        Pets_CollectionChanged(null, null);
-    }
-
-    private void Pets_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
+    private void Pets_CollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
     {
         if (ShowMainPet)
             PetDisplayedCount = Pets.Count;
@@ -252,8 +252,8 @@ public class ModInfoModel : I18nModel<I18nModInfoModel>
         : this()
     {
         SourcePath = loader.ModPath.FullName;
-        Id = loader.Name;
-        DescriptionId = loader.Intro;
+        ID = loader.Name;
+        DescriptionID = loader.Intro;
         Author = loader.Author;
         GameVersion = loader.GameVer;
         ModVersion = loader.Ver;
@@ -280,22 +280,25 @@ public class ModInfoModel : I18nModel<I18nModInfoModel>
             {
                 // 若宠物的值为默认值并且本体同名宠物不为默认值, 则把本体宠物的值作为模组宠物的默认值
                 if (
-                    petModel.TouchHeadRect == PetModel.Default.TouchHeadRect
-                    && petModel.TouchHeadRect != mainPet.TouchHeadRect
+                    petModel.TouchHeadRectangleLocation
+                        == PetModel.Current.TouchHeadRectangleLocation
+                    && petModel.TouchHeadRectangleLocation != mainPet.TouchHeadRectangleLocation
                 )
-                    petModel.TouchHeadRect = mainPet.TouchHeadRect;
+                    petModel.TouchHeadRectangleLocation = mainPet.TouchHeadRectangleLocation;
                 if (
-                    petModel.TouchBodyRect == PetModel.Default.TouchBodyRect
-                    && petModel.TouchBodyRect != mainPet.TouchBodyRect
+                    petModel.TouchBodyRectangleLocation
+                        == PetModel.Current.TouchBodyRectangleLocation
+                    && petModel.TouchBodyRectangleLocation != mainPet.TouchBodyRectangleLocation
                 )
-                    petModel.TouchBodyRect = mainPet.TouchBodyRect;
+                    petModel.TouchBodyRectangleLocation = mainPet.TouchBodyRectangleLocation;
                 if (
-                    petModel.TouchRaisedRect == PetModel.Default.TouchRaisedRect
-                    && petModel.TouchRaisedRect != mainPet.TouchRaisedRect
+                    petModel.TouchRaisedRectangleLocation
+                        == PetModel.Current.TouchRaisedRectangleLocation
+                    && petModel.TouchRaisedRectangleLocation != mainPet.TouchRaisedRectangleLocation
                 )
-                    petModel.TouchRaisedRect = mainPet.TouchRaisedRect;
+                    petModel.TouchRaisedRectangleLocation = mainPet.TouchRaisedRectangleLocation;
                 if (
-                    petModel.RaisePoint == PetModel.Default.RaisePoint
+                    petModel.RaisePoint == PetModel.Current.RaisePoint
                     && petModel.RaisePoint != mainPet.RaisePoint
                 )
                     petModel.RaisePoint = mainPet.RaisePoint;
@@ -328,7 +331,7 @@ public class ModInfoModel : I18nModel<I18nModInfoModel>
 
     public void RefreshId()
     {
-        DescriptionId = $"{Id}_{nameof(DescriptionId)}";
+        DescriptionID = $"{ID}_{nameof(DescriptionID)}";
     }
 
     #region Load
@@ -500,15 +503,15 @@ public class ModInfoModel : I18nModel<I18nModInfoModel>
                 continue;
             if (i18nData.TryGetValue(pet.ID, out var name))
                 data.Name = name;
-            if (i18nData.TryGetValue(pet.PetNameId, out var petName))
+            if (i18nData.TryGetValue(pet.PetNameID, out var petName))
                 data.PetName = petName;
-            if (i18nData.TryGetValue(pet.DescriptionId, out var description))
+            if (i18nData.TryGetValue(pet.DescriptionID, out var description))
                 data.Description = description;
             foreach (var work in pet.Works)
             {
                 if (work.I18nDatas.TryGetValue(key, out var workData) is false)
                     continue;
-                if (i18nData.TryGetValue(work.Id, out var workName))
+                if (i18nData.TryGetValue(work.ID, out var workName))
                     workData.Name = workName;
             }
         }
@@ -521,7 +524,7 @@ public class ModInfoModel : I18nModel<I18nModInfoModel>
         foreach (var selectText in SelectTexts)
             selectText.RefreshID();
         foreach (var pet in Pets)
-            pet.RefreshId();
+            pet.RefreshID();
     }
     #endregion
     #region Save
@@ -567,13 +570,13 @@ public class ModInfoModel : I18nModel<I18nModInfoModel>
 
         var lps = new LPS()
         {
-            new Line("vupmod", Id)
+            new Line("vupmod", ID)
             {
                 new Sub("author", Author),
                 new Sub("gamever", GameVersion),
                 new Sub("ver", ModVersion)
             },
-            new Line("intro", DescriptionId),
+            new Line("intro", DescriptionID),
             new Line("authorid", AuthorID.ToString()),
             new Line("itemid", ItemID.ToString()),
             new Line("cachedate", DateTime.Now.Date.ToString("s"))
@@ -583,8 +586,8 @@ public class ModInfoModel : I18nModel<I18nModInfoModel>
             lps.Add(
                 new Line("lang", cultureName)
                 {
-                    new Sub(Id, I18nDatas[cultureName].Name),
-                    new Sub(DescriptionId, I18nDatas[cultureName].Description),
+                    new Sub(ID, I18nDatas[cultureName].Name),
+                    new Sub(DescriptionID, I18nDatas[cultureName].Description),
                 }
             );
         }
@@ -768,7 +771,7 @@ public class ModInfoModel : I18nModel<I18nModInfoModel>
             Directory.CreateDirectory(foodPath);
             foreach (var food in Foods)
             {
-                food.Image.SaveToPng(Path.Combine(foodPath, food.ID));
+                food.Image?.SaveToPng(Path.Combine(foodPath, food.ID));
             }
         }
     }
@@ -778,12 +781,12 @@ public class ModInfoModel : I18nModel<I18nModInfoModel>
     /// </summary>
     public void Close()
     {
-        Image.CloseStream();
+        Image?.CloseStream();
         foreach (var food in Foods)
             food.Close();
         foreach (var pet in Pets)
             pet.Close();
-        Current = null;
+        Current = null!;
     }
 
     public void SaveTranslationMod(string path, IEnumerable<string> cultures)

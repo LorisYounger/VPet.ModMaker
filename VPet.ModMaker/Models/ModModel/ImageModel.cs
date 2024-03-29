@@ -13,11 +13,17 @@ namespace VPet.ModMaker.Models.ModModel;
 /// <summary>
 /// 图像模型
 /// </summary>
-public class ImageModel : ObservableObjectX<ImageModel>
+public class ImageModel : ObservableObjectX<ImageModel>, ICloneable<ImageModel>
 {
+    public ImageModel(BitmapImage image, int duration = 100)
+    {
+        Image = image;
+        Duration = duration;
+    }
+
     #region Image
     [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-    private BitmapImage _image;
+    private BitmapImage _image = null!;
 
     /// <summary>
     /// 图像
@@ -42,18 +48,13 @@ public class ImageModel : ObservableObjectX<ImageModel>
         set => SetProperty(ref _duration, value);
     }
     #endregion
-
-    public ImageModel(BitmapImage image, int duration = 100)
-    {
-        Image = image;
-        Duration = duration;
-    }
-
-    public ImageModel Copy()
+    public ImageModel Clone()
     {
         var model = new ImageModel(Image.CloneStream(), Duration);
         return model;
     }
+
+    object ICloneable.Clone() => Clone();
 
     public void Close()
     {

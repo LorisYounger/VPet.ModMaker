@@ -39,12 +39,12 @@ public partial class AddCultureWindow : WindowX
         TextBox_Lang.Dispatcher.InvokeAsync(TextBox_Lang.SelectAll);
     }
 
-    private void Button_Cancel_Click(object sender, RoutedEventArgs e)
+    private void Button_Cancel_Click(object? sender, RoutedEventArgs e)
     {
         Close();
     }
 
-    private void Button_Yes_Click(object sender, RoutedEventArgs e)
+    private void Button_Yes_Click(object? sender, RoutedEventArgs e)
     {
         if (string.IsNullOrWhiteSpace(ViewModel.Culture))
         {
@@ -60,7 +60,7 @@ public partial class AddCultureWindow : WindowX
         Close();
     }
 
-    private void Hyperlink_Click(object sender, RoutedEventArgs e)
+    private void Hyperlink_Click(object? sender, RoutedEventArgs e)
     {
         Process.Start(
             new ProcessStartInfo(

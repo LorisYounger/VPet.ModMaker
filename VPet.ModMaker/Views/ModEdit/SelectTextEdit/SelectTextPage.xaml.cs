@@ -30,7 +30,7 @@ public partial class SelectTextPage : Page
         DataContext = new SelectTextPageVM();
     }
 
-    private void DataGrid_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+    private void DataGrid_MouseDoubleClick(object? sender, MouseButtonEventArgs e)
     {
         if (sender is not DataGrid dataGrid || dataGrid.SelectedItem is not SelectTextModel model)
             return;

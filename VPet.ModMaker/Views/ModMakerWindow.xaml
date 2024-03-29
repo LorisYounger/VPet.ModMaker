@@ -37,7 +37,7 @@
         <TextBox
           pu:TextBoxHelper.Watermark="{ll:Str 最近的内容}"
           Style="{DynamicResource StandardTextBoxStyle}"
-          Text="{Binding HistoriesSearchText}" />
+          Text="{Binding Search}" />
         <Button
           Grid.Column="1"
           Command="{Binding ClearHistoriesCommand}"
@@ -47,7 +47,7 @@
       <ListBox
         Grid.Row="2"
         d:ItemsSource="{d:SampleData ItemCount=5}"
-        ItemsSource="{Binding ShowHistories}"
+        ItemsSource="{Binding Histories.FilteredList}"
         Style="{DynamicResource SideMenuListBoxStyle}">
         <ListBox.ItemContainerStyle>
           <Style BasedOn="{StaticResource {x:Type ListBoxItem}}" TargetType="ListBoxItem">
@@ -82,7 +82,7 @@
                       <TextBlock
                         d:Text="{ll:Str Mod名称}"
                         FontWeight="Bold"
-                        Text="{Binding Id}"
+                        Text="{Binding ID}"
                         TextWrapping="Wrap" />
                       <TextBlock
                         HorizontalAlignment="Right"

@@ -33,7 +33,7 @@ public partial class LowTextPage : Page
         DataContext = new LowTextPageVM();
     }
 
-    private void DataGrid_LowText_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+    private void DataGrid_LowText_MouseDoubleClick(object? sender, MouseButtonEventArgs e)
     {
         if (sender is not DataGrid dataGrid || dataGrid.SelectedItem is not LowTextModel lowText)
             return;

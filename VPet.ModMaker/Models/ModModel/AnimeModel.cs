@@ -10,16 +10,34 @@ namespace VPet.ModMaker.Models.ModModel;
 /// <summary>
 /// 动画模型
 /// </summary>
-public class AnimeModel : ObservableObjectX<AnimeModel>
+public class AnimeModel : ObservableObjectX<AnimeModel>, ICloneable<AnimeModel>
 {
-    #region Id
+    public AnimeModel() { }
+
+    public AnimeModel(string imagesPath)
+        : this()
+    {
+        foreach (var file in Directory.EnumerateFiles(imagesPath))
+        {
+            var info = Path.GetFileNameWithoutExtension(file).Split(NativeUtils.Separator);
+            ID = info[0];
+            var duration = info.Last();
+            var imageModel = new ImageModel(
+                NativeUtils.LoadImageToMemoryStream(file),
+                int.Parse(duration)
+            );
+            Images.Add(imageModel);
+        }
+    }
+
+    #region ID
     [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-    private string _id;
+    private string _id = string.Empty;
 
     /// <summary>
     /// Id
     /// </summary>
-    public string Id
+    public string ID
     {
         get => _id;
         set => SetProperty(ref _id, value);
@@ -43,39 +61,23 @@ public class AnimeModel : ObservableObjectX<AnimeModel>
     /// <summary>
     /// 图像列表
     /// </summary>
-    public ObservableCollection<ImageModel> Images { get; } = new();
-
-    public AnimeModel() { }
-
-    public AnimeModel(string imagesPath)
-        : this()
-    {
-        foreach (var file in Directory.EnumerateFiles(imagesPath))
-        {
-            var info = Path.GetFileNameWithoutExtension(file).Split(NativeUtils.Separator);
-            Id = info[0];
-            var duration = info.Last();
-            var imageModel = new ImageModel(
-                NativeUtils.LoadImageToMemoryStream(file),
-                int.Parse(duration)
-            );
-            Images.Add(imageModel);
-        }
-    }
+    public ObservableList<ImageModel> Images { get; } = new();
 
     /// <summary>
     /// 复制
     /// </summary>
     /// <returns></returns>
-    public AnimeModel Copy()
+    public AnimeModel Clone()
     {
         var model = new AnimeModel();
-        model.Id = Id;
+        model.ID = ID;
         model.AnimeType = AnimeType;
         foreach (var image in Images)
-            model.Images.Add(image.Copy());
+            model.Images.Add(image.Clone());
         return model;
     }
+
+    object ICloneable.Clone() => Clone();
 
     /// <summary>
     /// 关闭所有图像流

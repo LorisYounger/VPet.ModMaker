@@ -14,9 +14,16 @@ namespace VPet.ModMaker.ViewModels.ModEdit.MoveEdit;
 
 public class MoveEditWindowVM : ObservableObjectX<MoveEditWindowVM>
 {
-    #region Value
-    public PetModel CurrentPet { get; set; }
-    public MoveModel OldMove { get; set; }
+    public MoveEditWindowVM()
+    {
+        AddImageCommand.ExecuteCommand += AddImageCommand_ExecuteCommand;
+        ChangeImageCommand.ExecuteCommand += ChangeImageCommand_ExecuteCommand;
+        //Image.ValueChanged += Image_ValueChanged;
+    }
+
+    #region Property
+    public PetModel CurrentPet { get; set; } = null!;
+    public MoveModel? OldMove { get; set; }
 
     #region Move
     [DebuggerBrowsable(DebuggerBrowsableState.Never)]
@@ -51,9 +58,9 @@ public class MoveEditWindowVM : ObservableObjectX<MoveEditWindowVM>
     #endregion
     #region Image
     [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-    private BitmapImage _image;
+    private BitmapImage? _image;
 
-    public BitmapImage Image
+    public BitmapImage? Image
     {
         get => _image;
         set => SetProperty(ref _image, value);
@@ -63,13 +70,6 @@ public class MoveEditWindowVM : ObservableObjectX<MoveEditWindowVM>
     public ObservableCommand AddImageCommand { get; } = new();
     public ObservableCommand ChangeImageCommand { get; } = new();
     #endregion
-    public MoveEditWindowVM()
-    {
-        AddImageCommand.ExecuteCommand += AddImage;
-        ChangeImageCommand.ExecuteCommand += ChangeImage;
-        //TODO
-        //Image.ValueChanged += Image_ValueChanged;
-    }
 
     private void Image_ValueChanged(
         ObservableValue<BitmapImage> sender,
@@ -84,28 +84,26 @@ public class MoveEditWindowVM : ObservableObjectX<MoveEditWindowVM>
         Image?.StreamSource?.Close();
     }
 
-    private void AddImage()
+    private void AddImageCommand_ExecuteCommand()
     {
-        OpenFileDialog openFileDialog =
-            new()
-            {
-                Title = "选择图片".Translate(),
-                Filter = $"图片|*.jpg;*.jpeg;*.png;*.bmp".Translate()
-            };
+        var openFileDialog = new OpenFileDialog()
+        {
+            Title = "选择图片".Translate(),
+            Filter = $"图片|*.jpg;*.jpeg;*.png;*.bmp".Translate()
+        };
         if (openFileDialog.ShowDialog() is true)
         {
             Image = NativeUtils.LoadImageToMemoryStream(openFileDialog.FileName);
         }
     }
 
-    private void ChangeImage()
+    private void ChangeImageCommand_ExecuteCommand()
     {
-        OpenFileDialog openFileDialog =
-            new()
-            {
-                Title = "选择图片".Translate(),
-                Filter = $"图片|*.jpg;*.jpeg;*.png;*.bmp".Translate()
-            };
+        var openFileDialog = new OpenFileDialog()
+        {
+            Title = "选择图片".Translate(),
+            Filter = $"图片|*.jpg;*.jpeg;*.png;*.bmp".Translate()
+        };
         if (openFileDialog.ShowDialog() is true)
         {
             Image?.StreamSource?.Close();

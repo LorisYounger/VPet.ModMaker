@@ -119,7 +119,6 @@ public class SelectTextModel : I18nModel<I18nSelectTextModel>
     /// <summary>
     /// 选择Id
     /// </summary>
-
     public string ChooseID
     {
         get => _chooseId;

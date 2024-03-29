@@ -44,18 +44,18 @@ public partial class FoodAnimeEditWindow : Window
 
     public bool IsCancel { get; private set; } = true;
 
-    private void Button_Cancel_Click(object sender, RoutedEventArgs e)
+    private void Button_Cancel_Click(object? sender, RoutedEventArgs e)
     {
         Close();
     }
 
-    private void Button_Yes_Click(object sender, RoutedEventArgs e)
+    private void Button_Yes_Click(object? sender, RoutedEventArgs e)
     {
         IsCancel = false;
         Close();
     }
 
-    private void TabControl_SelectionChanged(object sender, SelectionChangedEventArgs e)
+    private void TabControl_SelectionChanged(object? sender, SelectionChangedEventArgs e)
     {
         if (ViewModel is null)
             return;
@@ -75,7 +75,7 @@ public partial class FoodAnimeEditWindow : Window
         }
     }
 
-    private void ListBox_PreviewMouseWheel(object sender, MouseWheelEventArgs e)
+    private void ListBox_PreviewMouseWheel(object? sender, MouseWheelEventArgs e)
     {
         var eventArg = new MouseWheelEventArgs(e.MouseDevice, e.Timestamp, e.Delta)
         {
@@ -89,7 +89,7 @@ public partial class FoodAnimeEditWindow : Window
 
     private object _dropSender;
 
-    private void ListBox_PreviewMouseMove(object sender, MouseEventArgs e)
+    private void ListBox_PreviewMouseMove(object? sender, MouseEventArgs e)
     {
         if (sender is not ListBox listBox)
             return;
@@ -107,7 +107,7 @@ public partial class FoodAnimeEditWindow : Window
         DragDrop.DoDragDrop(listBox, dataObj, DragDropEffects.Move);
     }
 
-    private void ListBox_Drop(object sender, DragEventArgs e)
+    private void ListBox_Drop(object? sender, DragEventArgs e)
     {
         if (sender is not ListBox listBox)
             return;
@@ -156,7 +156,7 @@ public partial class FoodAnimeEditWindow : Window
         list[targetIndex] = temp;
     }
 
-    private void ListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+    private void ListBox_SelectionChanged(object? sender, SelectionChangedEventArgs e)
     {
         if (sender is not ListBox listBox)
             return;
@@ -166,7 +166,7 @@ public partial class FoodAnimeEditWindow : Window
         e.Handled = true;
     }
 
-    private void ListBox_Animes_SelectionChanged(object sender, SelectionChangedEventArgs e)
+    private void ListBox_Animes_SelectionChanged(object? sender, SelectionChangedEventArgs e)
     {
         e.Handled = true;
     }

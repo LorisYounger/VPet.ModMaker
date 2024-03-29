@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using HKW.HKWUtils.Extensions;
 using HKW.HKWUtils.Observable;
 using LinePutScript.Localization.WPF;
 using VPet.ModMaker.Models;
@@ -15,22 +17,34 @@ namespace VPet.ModMaker.ViewModels.ModEdit.WorkEdit;
 
 public class WorkPageVM : ObservableObjectX<WorkPageVM>
 {
+    public WorkPageVM()
+    {
+        Works = new()
+        {
+            Filter = f => f.ID.Contains(Search, StringComparison.OrdinalIgnoreCase),
+            FilteredList = new()
+        };
+        PropertyChanged += WorkPageVM_PropertyChanged;
+        AddCommand.ExecuteCommand += AddCommand_ExecuteCommand;
+        EditCommand.ExecuteCommand += EditCommand_ExecuteCommand;
+        RemoveCommand.ExecuteCommand += RemoveCommand_ExecuteCommand;
+    }
+
     public static ModInfoModel ModInfo => ModInfoModel.Current;
 
-    #region Value
-    #region ShowWorks
+    #region Property
+    #region Works
     [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-    private ObservableCollection<WorkModel> _showWorks;
+    private ObservableFilterList<WorkModel, ObservableList<WorkModel>> _works;
 
-    public ObservableCollection<WorkModel> ShowWorks
+    public ObservableFilterList<WorkModel, ObservableList<WorkModel>> Works
     {
-        get => _showWorks;
-        set => SetProperty(ref _showWorks, value);
+        get => _works;
+        set => SetProperty(ref _works, value);
     }
     #endregion
-    public ObservableCollection<WorkModel> Works => CurrentPet.Works;
 
-    public ObservableCollection<PetModel> Pets => ModInfoModel.Current.Pets;
+    public static ObservableList<PetModel> Pets => ModInfoModel.Current.Pets;
 
     #region CurrentPet
     [DebuggerBrowsable(DebuggerBrowsableState.Never)]
@@ -45,7 +59,7 @@ public class WorkPageVM : ObservableObjectX<WorkPageVM>
 
     #region Search
     [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-    private string _search;
+    private string _search = string.Empty;
 
     public string Search
     {
@@ -59,44 +73,20 @@ public class WorkPageVM : ObservableObjectX<WorkPageVM>
     public ObservableCommand<WorkModel> EditCommand { get; } = new();
     public ObservableCommand<WorkModel> RemoveCommand { get; } = new();
     #endregion
-    public WorkPageVM()
+    private void WorkPageVM_PropertyChanged(object? sender, PropertyChangedEventArgs e)
     {
-        ShowWorks = Works;
-        //TODO
-        //CurrentPet.ValueChanged += CurrentPet_ValueChanged;
-        //Search.ValueChanged += Search_ValueChanged;
-
-        AddCommand.ExecuteCommand += Add;
-        EditCommand.ExecuteCommand += Edit;
-        RemoveCommand.ExecuteCommand += Remove;
-    }
-
-    private void CurrentPet_ValueChanged(
-        ObservableValue<PetModel> sender,
-        ValueChangedEventArgs<PetModel> e
-    )
-    {
-        ShowWorks = e.NewValue.Works;
-    }
-
-    private void Search_ValueChanged(
-        ObservableValue<string> sender,
-        ValueChangedEventArgs<string> e
-    )
-    {
-        if (string.IsNullOrWhiteSpace(e.NewValue))
+        if (e.PropertyName == nameof(CurrentPet))
         {
-            ShowWorks = Works;
+            Works.Clear();
+            Works.AddRange(CurrentPet.Works);
         }
-        else
+        else if (e.PropertyName == nameof(Search))
         {
-            ShowWorks = new(
-                Works.Where(m => m.Id.Contains(e.NewValue, StringComparison.OrdinalIgnoreCase))
-            );
+            Works.Refresh();
         }
     }
 
-    private void Add()
+    private void AddCommand_ExecuteCommand()
     {
         var window = new WorkEditWindow();
         var vm = window.ViewModel;
@@ -107,7 +97,7 @@ public class WorkPageVM : ObservableObjectX<WorkPageVM>
         Works.Add(vm.Work);
     }
 
-    public void Edit(WorkModel model)
+    public void EditCommand_ExecuteCommand(WorkModel model)
     {
         var window = new WorkEditWindow();
         var vm = window.ViewModel;
@@ -118,22 +108,14 @@ public class WorkPageVM : ObservableObjectX<WorkPageVM>
         if (window.IsCancel)
             return;
         Works[Works.IndexOf(model)] = newWork;
-        if (ShowWorks.Count != Works.Count)
-            ShowWorks[ShowWorks.IndexOf(model)] = newWork;
+        model.Close();
     }
 
-    private void Remove(WorkModel model)
+    private void RemoveCommand_ExecuteCommand(WorkModel model)
     {
         if (MessageBox.Show("确定删除吗".Translate(), "", MessageBoxButton.YesNo) is MessageBoxResult.No)
             return;
-        if (ShowWorks.Count == Works.Count)
-        {
-            Works.Remove(model);
-        }
-        else
-        {
-            ShowWorks.Remove(model);
-            Works.Remove(model);
-        }
+        Works.Remove(model);
+        model.Close();
     }
 }
