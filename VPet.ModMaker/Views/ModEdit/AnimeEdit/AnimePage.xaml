@@ -38,6 +38,7 @@
       <ComboBox
         x:Name="ComboBox_Pet"
         Grid.Column="1"
+        MinWidth="100"
         pu:ComboBoxHelper.Watermark="{ll:Str 选择宠物}"
         ItemsSource="{Binding Pets}"
         SelectedItem="{Binding CurrentPet}"

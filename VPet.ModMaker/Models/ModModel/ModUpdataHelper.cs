@@ -57,7 +57,11 @@ public static class ModUpdataHelper
             {
                 MessageBox.Show(
                     ModEditWindow.Current,
-                    "模组更新失败\n当前版本: {0}\n目标版本: {1}\n{2}".Translate(mod.ModVersion, action.Key, ex)
+                    "模组更新失败\n当前支持的游戏版本: {0}\n目标支持的游戏版本: {1}\n{2}".Translate(
+                        mod.ModVersion,
+                        action.Key,
+                        ex
+                    )
                 );
                 return false;
             }
@@ -68,11 +72,11 @@ public static class ModUpdataHelper
     public static SortedDictionary<int, Action<ModInfoModel>> UpdataAction { get; } =
         new()
         {
-            [11000] = (ModInfoModel m) =>
+            [11000] = (m) =>
             {
-                // 修改宠物默认ID
                 foreach (var pet in m.Pets)
                 {
+                    // 修改宠物默认ID
                     if (pet.ID == "默认虚拟桌宠")
                         pet.ID = "vup";
                     foreach (var work in pet.Works)

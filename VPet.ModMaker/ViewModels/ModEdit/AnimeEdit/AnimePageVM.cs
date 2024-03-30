@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using HKW.HKWUtils.Extensions;
 using HKW.HKWUtils.Observable;
 using LinePutScript.Localization.WPF;
 using Panuon.WPF.UI;
@@ -37,8 +38,12 @@ public class AnimePageVM : ObservableObjectX<AnimePageVM>
             },
             FilteredList = new()
         };
-        CurrentPet = Pets.First();
         PropertyChangedX += AnimePageVM_PropertyChangedX;
+        if (Pets.HasValue())
+            CurrentPet = Pets.FirstOrDefault(
+                m => m.FromMain is false && m.AnimeCount > 0,
+                Pets.First()
+            );
 
         AddCommand.ExecuteCommand += AddCommand_ExecuteCommand;
         EditCommand.ExecuteCommand += EditCommand_ExecuteCommand;

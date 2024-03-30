@@ -24,8 +24,12 @@ public class MovePageVM : ObservableObjectX<MovePageVM>
             Filter = f => f.Graph.Contains(Search, StringComparison.OrdinalIgnoreCase),
             FilteredList = new()
         };
-        CurrentPet = Pets.First();
         PropertyChanged += MovePageVM_PropertyChanged;
+        if (Pets.HasValue())
+            CurrentPet = Pets.FirstOrDefault(
+                m => m.FromMain is false && m.Moves.HasValue(),
+                Pets.First()
+            );
         AddCommand.ExecuteCommand += AddCommand_ExecuteCommand;
         EditCommand.ExecuteCommand += EditCommand_ExecuteCommand;
         RemoveCommand.ExecuteCommand += RemoveCommand_ExecuteCommand;

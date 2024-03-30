@@ -48,13 +48,23 @@ public class ModInfoModel : I18nModel<I18nModInfoModel>
         var imagePath = Path.Combine(loader.ModPath.FullName, "icon.png");
         if (File.Exists(imagePath))
             Image = NativeUtils.LoadImageToMemoryStream(imagePath);
-        foreach (var food in loader.Foods)
+        foreach (var food in loader.Foods.Where(m => string.IsNullOrWhiteSpace(m.Name) is false))
             Foods.Add(new(food));
-        foreach (var clickText in loader.ClickTexts)
+        foreach (
+            var clickText in loader.ClickTexts.Where(m =>
+                string.IsNullOrWhiteSpace(m.Text) is false
+            )
+        )
             ClickTexts.Add(new(clickText));
-        foreach (var lowText in loader.LowTexts)
+        foreach (
+            var lowText in loader.LowTexts.Where(m => string.IsNullOrWhiteSpace(m.Text) is false)
+        )
             LowTexts.Add(new(lowText));
-        foreach (var selectText in loader.SelectTexts)
+        foreach (
+            var selectText in loader.SelectTexts.Where(m =>
+                string.IsNullOrWhiteSpace(m.Text) is false
+            )
+        )
             SelectTexts.Add(new(selectText));
 
         // 载入模组宠物

@@ -24,8 +24,12 @@ public class WorkPageVM : ObservableObjectX<WorkPageVM>
             Filter = f => f.ID.Contains(Search, StringComparison.OrdinalIgnoreCase),
             FilteredList = new()
         };
-        CurrentPet = Pets.First();
         PropertyChanged += WorkPageVM_PropertyChanged;
+        if (Pets.HasValue())
+            CurrentPet = Pets.FirstOrDefault(
+                m => m.FromMain is false && m.Works.HasValue(),
+                Pets.First()
+            );
         AddCommand.ExecuteCommand += AddCommand_ExecuteCommand;
         EditCommand.ExecuteCommand += EditCommand_ExecuteCommand;
         RemoveCommand.ExecuteCommand += RemoveCommand_ExecuteCommand;
