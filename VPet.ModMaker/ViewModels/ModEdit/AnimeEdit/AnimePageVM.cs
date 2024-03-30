@@ -37,6 +37,7 @@ public class AnimePageVM : ObservableObjectX<AnimePageVM>
             },
             FilteredList = new()
         };
+        CurrentPet = Pets.First();
         PropertyChangedX += AnimePageVM_PropertyChangedX;
 
         AddCommand.ExecuteCommand += AddCommand_ExecuteCommand;

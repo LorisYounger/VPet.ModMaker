@@ -13,9 +13,48 @@ namespace VPet.ModMaker.ViewModels.ModEdit.I18nEdit;
 
 public class I18nEditWindowVM : ObservableObjectX<I18nEditWindowVM> { }
 //{
+//    public I18nEditWindowVM()
+//    {
+//        I18nDatas = new()
+//        {
+//            Filter = (d) =>
+//            {
+//                if (SearchTarget == nameof(ModInfoModel.ID))
+//                {
+//                    return d.ID.Contains(Search, StringComparison.OrdinalIgnoreCase);
+//                }
+//                else
+//                {
+//                    var cultureIndex = I18nHelper.Current.CultureNames.IndexOf(SearchTarget);
+
+//                    return d.Datas[cultureIndex]
+//                        .Value.Contains(Search, StringComparison.OrdinalIgnoreCase);
+//                }
+//            },
+//            FilteredList = new()
+//        };
+//        SearchTarget = nameof(ModInfoModel.ID);
+//        PropertyChanged += I18nEditWindowVM_PropertyChanged;
+//    }
+
+//    private void I18nEditWindowVM_PropertyChanged(
+//        object? sender,
+//        System.ComponentModel.PropertyChangedEventArgs e
+//    )
+//    {
+//        if (e.PropertyName == nameof(Search))
+//        {
+//            I18nDatas.Refresh();
+//        }
+//        else if (e.PropertyName == nameof(SearchTarget))
+//        {
+//            I18nDatas.Refresh();
+//        }
+//    }
+
 //    #region Search
 //    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-//    private string _search;
+//    private string _search = string.Empty;
 
 //    /// <summary>
 //    /// 搜索
@@ -28,33 +67,28 @@ public class I18nEditWindowVM : ObservableObjectX<I18nEditWindowVM> { }
 //    #endregion
 
 //    /// <summary>
-//    /// 全部I18n数据 (Id, I18nData)
+//    /// 全部I18n数据 (ID, I18nData)
 //    /// </summary>
 //    public Dictionary<string, I18nData> AllI18nDatas { get; } = new();
 
 //    /// <summary>
-//    /// 全部I18n数据
-//    /// </summary>
-//    public ObservableList<I18nData> I18nDatas { get; } = new();
-
-//    /// <summary>
-//    /// 显示的I18n数据
+//    /// 全部的I18n数据
 //    /// </summary>
 //    #region ShowI18nDatas
 //    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-//    private ObservableList<I18nData> _showI18nDatas;
+//    private ObservableFilterList<I18nData, ObservableList<I18nData>> _i18nDatas;
 
-//    public ObservableList<I18nData> ShowI18nDatas
+//    public ObservableFilterList<I18nData, ObservableList<I18nData>> I18nDatas
 //    {
-//        get => _showI18nDatas;
-//        set => SetProperty(ref _showI18nDatas, value);
+//        get => _i18nDatas;
+//        set => SetProperty(ref _i18nDatas, value);
 //    }
 //    #endregion
 
 //    /// <summary>
 //    /// 搜索目标列表
 //    /// </summary>
-//    public ObservableList<string> SearchTargets { get; } = new() { nameof(ModInfoModel.Id) };
+//    public ObservableList<string> SearchTargets { get; } = new() { nameof(ModInfoModel.ID) };
 
 //    /// <summary>
 //    /// 搜索目标
@@ -69,48 +103,6 @@ public class I18nEditWindowVM : ObservableObjectX<I18nEditWindowVM> { }
 //        set => SetProperty(ref _searchTarget, value);
 //    }
 //    #endregion
-
-//    public I18nEditWindowVM()
-//    {
-//        //Search.ValueChanged += Search_ValueChanged;// TODO
-//        ShowI18nDatas = I18nDatas;
-//        SearchTarget = nameof(ModInfoModel.Id);
-//    }
-
-//    /// <summary>
-//    /// 搜索改变事件
-//    /// </summary>
-//    /// <param name="oldValue"></param>
-//    /// <param name="newValue"></param>
-//    private void Search_ValueChanged(
-//        ObservableValue<string> sender,
-//        ValueChangedEventArgs<string> e
-//    )
-//    {
-//        if (string.IsNullOrWhiteSpace(e.NewValue))
-//        {
-//            ShowI18nDatas = I18nDatas;
-//        }
-//        else if (SearchTarget == nameof(ModInfoModel.Id))
-//        {
-//            ShowI18nDatas = new(
-//                I18nDatas.Where(m =>
-//                    m.Id?.Contains(e.NewValue, StringComparison.OrdinalIgnoreCase) is true
-//                )
-//            );
-//        }
-//        else
-//        {
-//            var cultureIndex = I18nHelper.Current.CultureNames.IndexOf(SearchTarget);
-//            ShowI18nDatas = new(
-//                I18nDatas.Where(m =>
-//                    m.Datas[cultureIndex]
-//                        .Value?.Contains(e.NewValue, StringComparison.OrdinalIgnoreCase)
-//                        is true
-//                )
-//            );
-//        }
-//    }
 
 //    /// <summary>
 //    /// 文化列表改变事件
@@ -139,7 +131,7 @@ public class I18nEditWindowVM : ObservableObjectX<I18nEditWindowVM> { }
 //                data.Value.Datas.RemoveAt(e.OldStartingIndex);
 //            }
 //            if (SearchTarget is null)
-//                SearchTarget = nameof(ModInfoModel.Id);
+//                SearchTarget = nameof(ModInfoModel.ID);
 //        }
 //        else if (e.Action is NotifyCollectionChangedAction.Replace)
 //        {
@@ -187,29 +179,29 @@ public class I18nEditWindowVM : ObservableObjectX<I18nEditWindowVM> { }
 //    {
 //        foreach (var food in model.Foods)
 //        {
-//            AddData(food.Id, food, (m) => m.Name);
-//            AddData(food.DescriptionId, food, (m) => m.Description);
+//            AddData(food.ID, food, (m) => m.Name);
+//            AddData(food.DescriptionID, food, (m) => m.Description);
 //        }
 //        model.Foods.CollectionChanged += (s, e) =>
 //        {
 //            if (e.Action is NotifyCollectionChangedAction.Add)
 //            {
 //                var newModel = (FoodModel)e.NewItems[0];
-//                AddData(newModel.Id, newModel, (m) => m.Name);
-//                AddData(newModel.DescriptionId, newModel, (m) => m.Description);
+//                AddData(newModel.ID, newModel, (m) => m.Name);
+//                AddData(newModel.DescriptionID, newModel, (m) => m.Description);
 //            }
 //            else if (e.Action is NotifyCollectionChangedAction.Remove)
 //            {
 //                var oldModel = (FoodModel)e.OldItems[0];
-//                RemoveData(oldModel.Id, oldModel, (m) => m.Name);
-//                RemoveData(oldModel.DescriptionId, oldModel, (m) => m.Description);
+//                RemoveData(oldModel.ID, oldModel, (m) => m.Name);
+//                RemoveData(oldModel.DescriptionID, oldModel, (m) => m.Description);
 //            }
 //            else if (e.Action is NotifyCollectionChangedAction.Replace)
 //            {
 //                var newModel = (FoodModel)e.NewItems[0];
 //                var oldModel = (FoodModel)e.OldItems[0];
-//                ReplaceData(newModel.Id, newModel, (m) => m.Name);
-//                ReplaceData(newModel.DescriptionId, newModel, (m) => m.Description);
+//                ReplaceData(newModel.ID, newModel, (m) => m.Name);
+//                ReplaceData(newModel.DescriptionID, newModel, (m) => m.Description);
 //            }
 //        };
 //    }
@@ -222,25 +214,25 @@ public class I18nEditWindowVM : ObservableObjectX<I18nEditWindowVM> { }
 //    {
 //        foreach (var text in model.ClickTexts)
 //        {
-//            AddData(text.Id, text, (m) => m.Text);
+//            AddData(text.ID, text, (m) => m.Text);
 //        }
 //        model.ClickTexts.CollectionChanged += (s, e) =>
 //        {
 //            if (e.Action is NotifyCollectionChangedAction.Add)
 //            {
 //                var newModel = (ClickTextModel)e.NewItems[0];
-//                AddData(newModel.Id, newModel, (m) => m.Text);
+//                AddData(newModel.ID, newModel, (m) => m.Text);
 //            }
 //            else if (e.Action is NotifyCollectionChangedAction.Remove)
 //            {
 //                var oldModel = (ClickTextModel)e.OldItems[0];
-//                RemoveData(oldModel.Id, oldModel, (m) => m.Text);
+//                RemoveData(oldModel.ID, oldModel, (m) => m.Text);
 //            }
 //            else if (e.Action is NotifyCollectionChangedAction.Replace)
 //            {
 //                var newModel = (ClickTextModel)e.NewItems[0];
 //                var oldModel = (ClickTextModel)e.OldItems[0];
-//                ReplaceData(newModel.Id, newModel, (m) => m.Text);
+//                ReplaceData(newModel.ID, newModel, (m) => m.Text);
 //            }
 //        };
 //    }
@@ -253,25 +245,25 @@ public class I18nEditWindowVM : ObservableObjectX<I18nEditWindowVM> { }
 //    {
 //        foreach (var text in model.LowTexts)
 //        {
-//            AddData(text.Id, text, (m) => m.Text);
+//            AddData(text.ID, text, (m) => m.Text);
 //        }
 //        model.LowTexts.CollectionChanged += (s, e) =>
 //        {
 //            if (e.Action is NotifyCollectionChangedAction.Add)
 //            {
 //                var newModel = (LowTextModel)e.NewItems[0];
-//                AddData(newModel.Id, newModel, (m) => m.Text);
+//                AddData(newModel.ID, newModel, (m) => m.Text);
 //            }
 //            else if (e.Action is NotifyCollectionChangedAction.Remove)
 //            {
 //                var oldModel = (LowTextModel)e.OldItems[0];
-//                RemoveData(oldModel.Id, oldModel, (m) => m.Text);
+//                RemoveData(oldModel.ID, oldModel, (m) => m.Text);
 //            }
 //            else if (e.Action is NotifyCollectionChangedAction.Replace)
 //            {
 //                var newModel = (LowTextModel)e.NewItems[0];
 //                var oldModel = (LowTextModel)e.OldItems[0];
-//                ReplaceData(newModel.Id, newModel, (m) => m.Text);
+//                ReplaceData(newModel.ID, newModel, (m) => m.Text);
 //            }
 //        };
 //    }
@@ -284,7 +276,7 @@ public class I18nEditWindowVM : ObservableObjectX<I18nEditWindowVM> { }
 //    {
 //        foreach (var text in model.SelectTexts)
 //        {
-//            AddData(text.Id, text, (m) => m.Text);
+//            AddData(text.ID, text, (m) => m.Text);
 //            AddData(text.ChooseId, text, (m) => m.Choose);
 //        }
 //        model.SelectTexts.CollectionChanged += (s, e) =>
@@ -292,20 +284,20 @@ public class I18nEditWindowVM : ObservableObjectX<I18nEditWindowVM> { }
 //            if (e.Action is NotifyCollectionChangedAction.Add)
 //            {
 //                var newModel = (SelectTextModel)e.NewItems[0];
-//                AddData(newModel.Id, newModel, (m) => m.Text);
+//                AddData(newModel.ID, newModel, (m) => m.Text);
 //                AddData(newModel.ChooseId, newModel, (m) => m.Choose);
 //            }
 //            else if (e.Action is NotifyCollectionChangedAction.Remove)
 //            {
 //                var oldModel = (SelectTextModel)e.OldItems[0];
-//                RemoveData(oldModel.Id, oldModel, (m) => m.Text);
+//                RemoveData(oldModel.ID, oldModel, (m) => m.Text);
 //                RemoveData(oldModel.ChooseId, oldModel, (m) => m.Choose);
 //            }
 //            else if (e.Action is NotifyCollectionChangedAction.Replace)
 //            {
 //                var newModel = (SelectTextModel)e.NewItems[0];
 //                var oldModel = (SelectTextModel)e.OldItems[0];
-//                ReplaceData(newModel.Id, newModel, (m) => m.Text);
+//                ReplaceData(newModel.ID, newModel, (m) => m.Text);
 //                ReplaceData(newModel.ChooseId, newModel, (m) => m.Choose);
 //            }
 //        };
@@ -323,9 +315,9 @@ public class I18nEditWindowVM : ObservableObjectX<I18nEditWindowVM> { }
 //                continue;
 //            AddData(pet.ID, pet, (m) => m.Name);
 //            AddData(pet.PetNameId, pet, (m) => m.PetName);
-//            AddData(pet.DescriptionId, pet, (m) => m.Description);
+//            AddData(pet.DescriptionID, pet, (m) => m.Description);
 //            foreach (var work in pet.Works)
-//                AddData(work.Id, work, (m) => m.Name);
+//                AddData(work.ID, work, (m) => m.Name);
 //        }
 //        model.Pets.CollectionChanged += (s, e) =>
 //        {
@@ -333,9 +325,9 @@ public class I18nEditWindowVM : ObservableObjectX<I18nEditWindowVM> { }
 //            {
 //                var newModel = (PetModel)e.NewItems[0];
 //                AddData(newModel.ID, newModel, (m) => m.Name);
-//                AddData(newModel.DescriptionId, newModel, (m) => m.Description);
+//                AddData(newModel.DescriptionID, newModel, (m) => m.Description);
 //                foreach (var work in newModel.Works)
-//                    AddData(work.Id, work, (m) => m.Name);
+//                    AddData(work.ID, work, (m) => m.Name);
 //            }
 //            else if (e.Action is NotifyCollectionChangedAction.Remove)
 //            {
@@ -343,18 +335,18 @@ public class I18nEditWindowVM : ObservableObjectX<I18nEditWindowVM> { }
 //                if (oldModel.FromMain.Value)
 //                    return;
 //                RemoveData(oldModel.ID, oldModel, (m) => m.Name);
-//                RemoveData(oldModel.DescriptionId, oldModel, (m) => m.Description);
+//                RemoveData(oldModel.DescriptionID, oldModel, (m) => m.Description);
 //                foreach (var work in oldModel.Works)
-//                    RemoveData(work.Id, work, (m) => m.Name);
+//                    RemoveData(work.ID, work, (m) => m.Name);
 //            }
 //            else if (e.Action is NotifyCollectionChangedAction.Replace)
 //            {
 //                var newModel = (PetModel)e.NewItems[0];
 //                var oldModel = (PetModel)e.OldItems[0];
 //                ReplaceData(newModel.ID, newModel, (m) => m.Name);
-//                ReplaceData(newModel.DescriptionId, newModel, (m) => m.Description);
+//                ReplaceData(newModel.DescriptionID, newModel, (m) => m.Description);
 //                foreach (var work in newModel.Works)
-//                    ReplaceData(work.Id, work, (m) => m.Name);
+//                    ReplaceData(work.ID, work, (m) => m.Name);
 //            }
 //        };
 //    }
@@ -368,14 +360,10 @@ public class I18nEditWindowVM : ObservableObjectX<I18nEditWindowVM> { }
 //    /// <param name="id"></param>
 //    /// <param name="i18nModel"></param>
 //    /// <param name="i18nValue"></param>
-//    private void AddData<T>(
-//        ObservableValue<string> id,
-//        I18nModel<T> i18nModel,
-//        Func<T, ObservableValue<string>> i18nValue
-//    )
-//        where T : class, new()
+//    private void AddData<T>(I18nModel<T> i18nModel, string id)
+//        where T : I18nModel<T>, new()
 //    {
-//        if (AllI18nDatas.TryGetValue(id.Value, out var outData))
+//        if (AllI18nDatas.TryGetValue(id, out var outData))
 //        {
 //            foreach (var culture in I18nHelper.Current.CultureNames.EnumerateIndex())
 //            {
@@ -391,7 +379,7 @@ public class I18nEditWindowVM : ObservableObjectX<I18nEditWindowVM> { }
 //        else
 //        {
 //            var data = new I18nData();
-//            data.Id = id.Value;
+//            data.ID = id.Value;
 //            foreach (var culture in I18nHelper.Current.CultureNames)
 //                data.Datas.Add(i18nValue(i18nModel.I18nDatas[culture]));
 //            I18nDatas.Add(data);
@@ -408,7 +396,7 @@ public class I18nEditWindowVM : ObservableObjectX<I18nEditWindowVM> { }
 //    private void IdChange(ObservableValue<string> sender, ValueChangedEventArgs<string> e)
 //    {
 //        var sourceData = AllI18nDatas[e.OldValue];
-//        //sourceData.Id.Group?.Remove(sourceData.Id); //TODO
+//        //sourceData.ID.Group?.Remove(sourceData.ID); //TODO
 //        if (AllI18nDatas.TryGetValue(e.OldValue, out var outData))
 //        {
 //            foreach (var culture in I18nHelper.Current.CultureNames.EnumerateIndex())
@@ -422,7 +410,7 @@ public class I18nEditWindowVM : ObservableObjectX<I18nEditWindowVM> { }
 //        }
 //        else
 //        {
-//            sourceData.Id = e.NewValue;
+//            sourceData.ID = e.NewValue;
 //            AllI18nDatas.Remove(e.OldValue);
 //            AllI18nDatas.Add(e.NewValue, sourceData);
 //        }

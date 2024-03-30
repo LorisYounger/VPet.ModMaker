@@ -11,6 +11,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Media.Imaging;
 using HKW.HKWUtils;
+using HKW.HKWUtils.Extensions;
 using HKW.HKWUtils.Observable;
 using LinePutScript;
 using LinePutScript.Converter;
@@ -31,6 +32,88 @@ public class ModInfoModel : I18nModel<I18nModInfoModel>
     {
         PropertyChanged += ModInfoModel_PropertyChanged;
         Pets.CollectionChanged += Pets_CollectionChanged;
+    }
+
+    public ModInfoModel(ModLoader loader)
+        : this()
+    {
+        SourcePath = loader.ModPath.FullName;
+        ID = loader.Name;
+        DescriptionID = loader.Intro;
+        Author = loader.Author;
+        GameVersion = loader.GameVer;
+        ModVersion = loader.Ver;
+        ItemID = loader.ItemID;
+        AuthorID = loader.AuthorID;
+        var imagePath = Path.Combine(loader.ModPath.FullName, "icon.png");
+        if (File.Exists(imagePath))
+            Image = NativeUtils.LoadImageToMemoryStream(imagePath);
+        foreach (var food in loader.Foods)
+            Foods.Add(new(food));
+        foreach (var clickText in loader.ClickTexts)
+            ClickTexts.Add(new(clickText));
+        foreach (var lowText in loader.LowTexts)
+            LowTexts.Add(new(lowText));
+        foreach (var selectText in loader.SelectTexts)
+            SelectTexts.Add(new(selectText));
+
+        // 载入模组宠物
+        foreach (var pet in loader.Pets)
+        {
+            var petModel = new PetModel(pet);
+            // 如果检测到本体存在同名宠物
+            if (ModMakerInfo.MainPets.TryGetValue(petModel.ID, out var mainPet))
+            {
+                // 若宠物的值为默认值并且本体同名宠物不为默认值, 则把本体宠物的值作为模组宠物的默认值
+                if (
+                    petModel.TouchHeadRectangleLocation
+                        == PetModel.Current.TouchHeadRectangleLocation
+                    && petModel.TouchHeadRectangleLocation != mainPet.TouchHeadRectangleLocation
+                )
+                    petModel.TouchHeadRectangleLocation = mainPet.TouchHeadRectangleLocation;
+                if (
+                    petModel.TouchBodyRectangleLocation
+                        == PetModel.Current.TouchBodyRectangleLocation
+                    && petModel.TouchBodyRectangleLocation != mainPet.TouchBodyRectangleLocation
+                )
+                    petModel.TouchBodyRectangleLocation = mainPet.TouchBodyRectangleLocation;
+                if (
+                    petModel.TouchRaisedRectangleLocation
+                        == PetModel.Current.TouchRaisedRectangleLocation
+                    && petModel.TouchRaisedRectangleLocation != mainPet.TouchRaisedRectangleLocation
+                )
+                    petModel.TouchRaisedRectangleLocation = mainPet.TouchRaisedRectangleLocation;
+                if (
+                    petModel.RaisePoint == PetModel.Current.RaisePoint
+                    && petModel.RaisePoint != mainPet.RaisePoint
+                )
+                    petModel.RaisePoint = mainPet.RaisePoint;
+            }
+            Pets.Add(petModel);
+            foreach (var p in pet.path)
+                LoadAnime(petModel, p);
+        }
+
+        //loader.Pets.First().Name = "TestMainPet";
+        //Pets.Insert(0, new(loader.Pets.First(), true));
+
+        // 插入本体宠物
+        foreach (var pet in ModMakerInfo.MainPets)
+        {
+            // 确保Id不重复
+            if (Pets.All(i => i.ID != pet.Key))
+                Pets.Insert(0, pet.Value);
+        }
+
+        // 载入本地化
+        foreach (var lang in loader.I18nDatas)
+            I18nDatas.Add(lang.Key, lang.Value);
+        OtherI18nDatas = loader.OtherI18nDatas;
+
+        LoadI18nDatas();
+        RefreshAllId();
+        if (I18nHelper.Current.CultureNames.HasValue())
+            RefreshID();
     }
 
     private void ModInfoModel_PropertyChanged(object? sender, PropertyChangedEventArgs e)
@@ -248,88 +331,7 @@ public class ModInfoModel : I18nModel<I18nModInfoModel>
             PetDisplayedCount = Pets.Count - Pets.Count(m => m.FromMain);
     }
 
-    public ModInfoModel(ModLoader loader)
-        : this()
-    {
-        SourcePath = loader.ModPath.FullName;
-        ID = loader.Name;
-        DescriptionID = loader.Intro;
-        Author = loader.Author;
-        GameVersion = loader.GameVer;
-        ModVersion = loader.Ver;
-        ItemID = loader.ItemID;
-        AuthorID = loader.AuthorID;
-        var imagePath = Path.Combine(loader.ModPath.FullName, "icon.png");
-        if (File.Exists(imagePath))
-            Image = NativeUtils.LoadImageToMemoryStream(imagePath);
-        foreach (var food in loader.Foods)
-            Foods.Add(new(food));
-        foreach (var clickText in loader.ClickTexts)
-            ClickTexts.Add(new(clickText));
-        foreach (var lowText in loader.LowTexts)
-            LowTexts.Add(new(lowText));
-        foreach (var selectText in loader.SelectTexts)
-            SelectTexts.Add(new(selectText));
-
-        // 载入模组宠物
-        foreach (var pet in loader.Pets)
-        {
-            var petModel = new PetModel(pet);
-            // 如果检测到本体存在同名宠物
-            if (ModMakerInfo.MainPets.TryGetValue(petModel.ID, out var mainPet))
-            {
-                // 若宠物的值为默认值并且本体同名宠物不为默认值, 则把本体宠物的值作为模组宠物的默认值
-                if (
-                    petModel.TouchHeadRectangleLocation
-                        == PetModel.Current.TouchHeadRectangleLocation
-                    && petModel.TouchHeadRectangleLocation != mainPet.TouchHeadRectangleLocation
-                )
-                    petModel.TouchHeadRectangleLocation = mainPet.TouchHeadRectangleLocation;
-                if (
-                    petModel.TouchBodyRectangleLocation
-                        == PetModel.Current.TouchBodyRectangleLocation
-                    && petModel.TouchBodyRectangleLocation != mainPet.TouchBodyRectangleLocation
-                )
-                    petModel.TouchBodyRectangleLocation = mainPet.TouchBodyRectangleLocation;
-                if (
-                    petModel.TouchRaisedRectangleLocation
-                        == PetModel.Current.TouchRaisedRectangleLocation
-                    && petModel.TouchRaisedRectangleLocation != mainPet.TouchRaisedRectangleLocation
-                )
-                    petModel.TouchRaisedRectangleLocation = mainPet.TouchRaisedRectangleLocation;
-                if (
-                    petModel.RaisePoint == PetModel.Current.RaisePoint
-                    && petModel.RaisePoint != mainPet.RaisePoint
-                )
-                    petModel.RaisePoint = mainPet.RaisePoint;
-            }
-            Pets.Add(petModel);
-            foreach (var p in pet.path)
-                LoadAnime(petModel, p);
-        }
-
-        //loader.Pets.First().Name = "TestMainPet";
-        //Pets.Insert(0, new(loader.Pets.First(), true));
-
-        // 插入本体宠物
-        foreach (var pet in ModMakerInfo.MainPets)
-        {
-            // 确保Id不重复
-            if (Pets.All(i => i.ID != pet.Key))
-                Pets.Insert(0, pet.Value);
-        }
-
-        // 载入本地化
-        foreach (var lang in loader.I18nDatas)
-            I18nDatas.Add(lang.Key, lang.Value);
-        OtherI18nDatas = loader.OtherI18nDatas;
-
-        LoadI18nDatas();
-        RefreshAllId();
-        RefreshId();
-    }
-
-    public void RefreshId()
+    public void RefreshID()
     {
         DescriptionID = $"{ID}_{nameof(DescriptionID)}";
     }

@@ -31,7 +31,7 @@ namespace VPet.ModMaker.Views;
 public partial class ModMakerWindow : WindowX
 {
     public ModMakerWindowVM ViewModel => (ModMakerWindowVM)DataContext;
-    public Models.ModMaker ModMaker { get; internal set; }
+    public Models.ModMaker ModMaker { get; internal set; } = null!;
 
     public ModMakerWindow()
     {
@@ -65,6 +65,8 @@ public partial class ModMakerWindow : WindowX
             )
             {
                 ViewModel.Histories.Remove(history);
+                ViewModel.SaveHistories();
+                return;
             }
         }
         ViewModel.LoadMod(history.SourcePath);

@@ -133,7 +133,7 @@ public class ModMakerWindowVM : ObservableObjectX<ModMakerWindowVM>
     /// <summary>
     /// 保存历史
     /// </summary>
-    private void SaveHistories()
+    public void SaveHistories()
     {
         Directory.CreateDirectory(nameof(ModMaker));
         if (File.Exists(ModMakerInfo.HistoryFile) is false)
@@ -260,7 +260,7 @@ public class ModMakerWindowVM : ObservableObjectX<ModMakerWindowVM>
     public void LoadMod(string path)
     {
         ModLoader? loader = null;
-        var pendingHandler = PendingBox.Show("载入中".Translate());
+        var pendingHandler = PendingBox.Show(ModMakerWindow, "载入中".Translate());
         try
         {
             loader = new ModLoader(new(path));
@@ -275,11 +275,11 @@ public class ModMakerWindowVM : ObservableObjectX<ModMakerWindowVM>
         try
         {
             var modInfo = new ModInfoModel(loader);
+            pendingHandler.Hide();
             EditMod(modInfo);
             // 更新模组
             if (ModUpdataHelper.CanUpdata(modInfo))
             {
-                pendingHandler.Hide();
                 if (
                     MessageBox.Show(
                         ModEditWindow.Current,
@@ -293,7 +293,7 @@ public class ModMakerWindowVM : ObservableObjectX<ModMakerWindowVM>
                 )
                 {
                     if (ModUpdataHelper.Updata(modInfo))
-                        MessageBox.Show("更新完成, 请手动保存".Translate());
+                        MessageBox.Show(ModEditWindow.Current, "更新完成, 请手动保存".Translate());
                 }
             }
             pendingHandler.Close();

@@ -301,7 +301,7 @@ public class WorkModel : I18nModel<I18nWorkModel>
     /// <summary>
     /// 边框颜色
     /// </summary>
-
+    [AdaptIgnore]
     public SolidColorBrush BorderBrush
     {
         get => _borderBrush;
@@ -316,6 +316,7 @@ public class WorkModel : I18nModel<I18nWorkModel>
     /// <summary>
     /// 背景色
     /// </summary>
+    [AdaptIgnore]
     public SolidColorBrush Background
     {
         get => _background;
@@ -330,6 +331,7 @@ public class WorkModel : I18nModel<I18nWorkModel>
     /// <summary>
     /// 前景色
     /// </summary>
+    [AdaptIgnore]
     public SolidColorBrush Foreground
     {
         get => _foreground;
@@ -345,6 +347,7 @@ public class WorkModel : I18nModel<I18nWorkModel>
     /// <summary>
     /// 按钮背景色
     /// </summary>
+    [AdaptIgnore]
     public SolidColorBrush ButtonBackground
     {
         get => _buttonBackground;
@@ -360,6 +363,7 @@ public class WorkModel : I18nModel<I18nWorkModel>
     /// <summary>
     /// 按钮前景色
     /// </summary>
+    [AdaptIgnore]
     public SolidColorBrush ButtonForeground
     {
         get => _buttonForeground;

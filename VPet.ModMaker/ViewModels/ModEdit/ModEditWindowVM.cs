@@ -204,7 +204,8 @@ public class ModEditWindowVM : ObservableObjectX<ModEditWindowVM>
     {
         if (
             MessageBox.Show(
-                "!!!注意!!!\n此操作会将所有Id设为当前文化的翻译内容,仅适用于初次设置多文化的模组\n确定要继续吗?".Translate(),
+                ModEditWindow,
+                "!!!注意!!!\n此操作会将所有ID设为当前文化的翻译内容,仅适用于初次设置多文化的模组\n确定要继续吗?".Translate(),
                 "",
                 MessageBoxButton.YesNo
             )
@@ -305,6 +306,7 @@ public class ModEditWindowVM : ObservableObjectX<ModEditWindowVM>
         if (I18nHelper.Current.CultureNames.Count == 0)
         {
             MessageBox.Show(
+                ModEditWindow,
                 "未添加任何语言".Translate(),
                 "",
                 MessageBoxButton.OK,
@@ -314,12 +316,24 @@ public class ModEditWindowVM : ObservableObjectX<ModEditWindowVM>
         }
         if (string.IsNullOrWhiteSpace(model.ID))
         {
-            MessageBox.Show("Id不可为空".Translate(), "", MessageBoxButton.OK, MessageBoxImage.Warning);
+            MessageBox.Show(
+                ModEditWindow,
+                "ID不可为空".Translate(),
+                "",
+                MessageBoxButton.OK,
+                MessageBoxImage.Warning
+            );
             return false;
         }
         if (string.IsNullOrWhiteSpace(model.Author))
         {
-            MessageBox.Show("作者不可为空".Translate(), "", MessageBoxButton.OK, MessageBoxImage.Warning);
+            MessageBox.Show(
+                ModEditWindow,
+                "作者不可为空".Translate(),
+                "",
+                MessageBoxButton.OK,
+                MessageBoxImage.Warning
+            );
             return false;
         }
         return true;

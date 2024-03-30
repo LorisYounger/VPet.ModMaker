@@ -15,14 +15,14 @@ namespace VPet.ModMaker.Models;
 [DebuggerDisplay("{ID}, Count = {Datas.Count}")]
 public class I18nData : ObservableObjectX<I18nData>
 {
-    /// <summary>
-    /// Id
-    /// </summary>
-    #region Id
+    #region ID
     [DebuggerBrowsable(DebuggerBrowsableState.Never)]
     private string _id = string.Empty;
 
-    public string Id
+    /// <summary>
+    /// ID
+    /// </summary>
+    public string ID
     {
         get => _id;
         set => SetProperty(ref _id, value);
@@ -32,5 +32,5 @@ public class I18nData : ObservableObjectX<I18nData>
     /// <summary>
     /// 基于 <see cref="I18nHelper.Current.CultureNames"/> 的索引的数据列表
     /// </summary>
-    public ObservableList<ObservableValue<string>> Datas { get; } = new();
+    //public ObservableList<Func<I18nModel<>>> Datas { get; } = new();
 }

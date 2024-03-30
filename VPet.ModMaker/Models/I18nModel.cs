@@ -15,7 +15,7 @@ namespace VPet.ModMaker.Models;
 /// </summary>
 /// <typeparam name="T">类型</typeparam>
 public class I18nModel<T> : ObservableObjectX<I18nModel<T>>
-    where T : class, new()
+    where T : ObservableObjectX<T>, new()
 {
     /// <summary>
     /// 当前I18n数据
