@@ -15,7 +15,7 @@ using VPet.ModMaker.Views.ModEdit.FoodEdit;
 
 namespace VPet.ModMaker.ViewModels.ModEdit.FoodEdit;
 
-public class FoodPageVM : ObservableObjectX<FoodPageVM>
+public class FoodPageVM : ObservableObjectX
 {
     public FoodPageVM()
     {

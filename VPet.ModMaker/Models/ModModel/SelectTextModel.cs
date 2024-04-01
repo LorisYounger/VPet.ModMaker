@@ -213,9 +213,7 @@ public class SelectTextModel : I18nModel<I18nSelectTextModel>
     }
 }
 
-public class I18nSelectTextModel
-    : ObservableObjectX<I18nSelectTextModel>,
-        ICloneable<I18nSelectTextModel>
+public class I18nSelectTextModel : ObservableObjectX, ICloneable<I18nSelectTextModel>
 {
     #region Choose
     [DebuggerBrowsable(DebuggerBrowsableState.Never)]

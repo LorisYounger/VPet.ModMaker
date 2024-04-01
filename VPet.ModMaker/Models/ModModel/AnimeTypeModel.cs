@@ -16,7 +16,7 @@ using static VPet_Simulator.Core.IGameSave;
 
 namespace VPet.ModMaker.Models.ModModel;
 
-public class AnimeTypeModel : ObservableObjectX<AnimeTypeModel>
+public class AnimeTypeModel : ObservableObjectX
 {
     public AnimeTypeModel()
     {

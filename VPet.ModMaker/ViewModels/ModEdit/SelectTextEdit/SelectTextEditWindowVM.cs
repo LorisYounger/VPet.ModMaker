@@ -9,7 +9,7 @@ using VPet.ModMaker.Models;
 
 namespace VPet.ModMaker.ViewModels.ModEdit.SelectTextEdit;
 
-public class SelectTextEditWindowVM : ObservableObjectX<SelectTextEditWindowVM>
+public class SelectTextEditWindowVM : ObservableObjectX
 {
     public static I18nHelper I18nData => I18nHelper.Current;
     #region Value

@@ -11,7 +11,7 @@ using VPet.ModMaker.Models;
 
 namespace VPet.ModMaker.ViewModels.ModEdit.I18nEdit;
 
-public class I18nEditWindowVM : ObservableObjectX<I18nEditWindowVM> { }
+public class I18nEditWindowVM : ObservableObjectX { }
 //{
 //    public I18nEditWindowVM()
 //    {

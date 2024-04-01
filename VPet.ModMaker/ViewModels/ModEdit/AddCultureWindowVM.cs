@@ -12,7 +12,7 @@ using VPet.ModMaker.Models;
 
 namespace VPet.ModMaker.ViewModels.ModEdit;
 
-public class AddCultureWindowVM : ObservableObjectX<AddCultureWindowVM>
+public class AddCultureWindowVM : ObservableObjectX
 {
     /// <summary>
     /// 显示的文化

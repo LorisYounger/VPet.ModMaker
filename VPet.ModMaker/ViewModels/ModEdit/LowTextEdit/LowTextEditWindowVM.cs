@@ -11,7 +11,7 @@ using VPet_Simulator.Windows.Interface;
 
 namespace VPet.ModMaker.ViewModels.ModEdit.LowTextEdit;
 
-public class LowTextEditWindowVM : ObservableObjectX<LowTextEditWindowVM>
+public class LowTextEditWindowVM : ObservableObjectX
 {
     public static I18nHelper I18nData => I18nHelper.Current;
     #region Value

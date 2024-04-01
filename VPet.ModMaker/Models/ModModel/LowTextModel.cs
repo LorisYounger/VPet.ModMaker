@@ -120,7 +120,7 @@ public class LowTextModel : I18nModel<I18nLowTextModel>
     }
 }
 
-public class I18nLowTextModel : ObservableObjectX<I18nLowTextModel>, ICloneable<I18nLowTextModel>
+public class I18nLowTextModel : ObservableObjectX, ICloneable<I18nLowTextModel>
 {
     #region Text
     [DebuggerBrowsable(DebuggerBrowsableState.Never)]

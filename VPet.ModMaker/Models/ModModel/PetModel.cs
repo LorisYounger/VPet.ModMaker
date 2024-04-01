@@ -545,7 +545,7 @@ public class PetModel : I18nModel<I18nPetInfoModel>
     #endregion
 }
 
-public class I18nPetInfoModel : ObservableObjectX<I18nPetInfoModel>, ICloneable<I18nPetInfoModel>
+public class I18nPetInfoModel : ObservableObjectX, ICloneable<I18nPetInfoModel>
 {
     #region Name
     [DebuggerBrowsable(DebuggerBrowsableState.Never)]
@@ -591,7 +591,7 @@ public class I18nPetInfoModel : ObservableObjectX<I18nPetInfoModel>, ICloneable<
 }
 
 public class ObservableMultiStateRectangleLocation
-    : ObservableObjectX<ObservableMultiStateRectangleLocation>,
+    : ObservableObjectX,
         IEquatable<ObservableMultiStateRectangleLocation>,
         ICloneable<ObservableMultiStateRectangleLocation>
 {
@@ -715,7 +715,7 @@ public class ObservableMultiStateRectangleLocation
 }
 
 public class ObservableMultiStatePoint
-    : ObservableObjectX<ObservableMultiStatePoint>,
+    : ObservableObjectX,
         IEquatable<ObservableMultiStatePoint>,
         ICloneable<ObservableMultiStatePoint>
 {

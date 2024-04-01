@@ -10,7 +10,7 @@ namespace VPet.ModMaker.Models.ModModel;
 /// <summary>
 /// 动画模型
 /// </summary>
-public class AnimeModel : ObservableObjectX<AnimeModel>, ICloneable<AnimeModel>
+public class AnimeModel : ObservableObjectX, ICloneable<AnimeModel>
 {
     public AnimeModel() { }
 

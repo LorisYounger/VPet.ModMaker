@@ -15,7 +15,7 @@ using VPet.ModMaker.Views.ModEdit.LowTextEdit;
 
 namespace VPet.ModMaker.ViewModels.ModEdit.LowTextEdit;
 
-public class LowTextPageVM : ObservableObjectX<LowTextPageVM>
+public class LowTextPageVM : ObservableObjectX
 {
     public LowTextPageVM()
     {

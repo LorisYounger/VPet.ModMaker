@@ -13,7 +13,7 @@ using VPet.ModMaker.Views.ModEdit.ClickTextEdit;
 
 namespace VPet.ModMaker.ViewModels.ModEdit.ClickTextEdit;
 
-public class ClickTextPageVM : ObservableObjectX<ClickTextPageVM>
+public class ClickTextPageVM : ObservableObjectX
 {
     public ClickTextPageVM()
     {

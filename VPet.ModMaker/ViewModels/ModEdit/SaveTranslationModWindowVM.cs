@@ -15,7 +15,7 @@ using VPet.ModMaker.Models;
 
 namespace VPet.ModMaker.ViewModels.ModEdit;
 
-public class SaveTranslationModWindowVM : ObservableObjectX<SaveTranslationModWindowVM>
+public class SaveTranslationModWindowVM : ObservableObjectX
 {
     #region Value
     #region CheckAll
@@ -112,7 +112,7 @@ public class SaveTranslationModWindowVM : ObservableObjectX<SaveTranslationModWi
     }
 }
 
-public class CheckCultureModel : ObservableObjectX<CheckCultureModel>
+public class CheckCultureModel : ObservableObjectX
 {
     #region IsChecked
     [DebuggerBrowsable(DebuggerBrowsableState.Never)]

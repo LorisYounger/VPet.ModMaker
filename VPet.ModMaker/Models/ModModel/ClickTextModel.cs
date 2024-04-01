@@ -215,9 +215,7 @@ public class ClickTextModel : I18nModel<I18nClickTextModel>
     public ObservableRange<double> Strength { get; } = new(0, int.MaxValue);
 }
 
-public class I18nClickTextModel
-    : ObservableObjectX<I18nClickTextModel>,
-        ICloneable<I18nClickTextModel>
+public class I18nClickTextModel : ObservableObjectX, ICloneable<I18nClickTextModel>
 {
     #region Text
     [DebuggerBrowsable(DebuggerBrowsableState.Never)]

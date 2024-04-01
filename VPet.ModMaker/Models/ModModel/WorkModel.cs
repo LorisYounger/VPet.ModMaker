@@ -453,7 +453,7 @@ public class WorkModel : I18nModel<I18nWorkModel>
     }
 }
 
-public class I18nWorkModel : ObservableObjectX<I18nWorkModel>, ICloneable<I18nWorkModel>
+public class I18nWorkModel : ObservableObjectX, ICloneable<I18nWorkModel>
 {
     #region Name
     [DebuggerBrowsable(DebuggerBrowsableState.Never)]

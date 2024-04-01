@@ -15,7 +15,7 @@ using VPet.ModMaker.Views.ModEdit.MoveEdit;
 
 namespace VPet.ModMaker.ViewModels.ModEdit.MoveEdit;
 
-public class MovePageVM : ObservableObjectX<MovePageVM>
+public class MovePageVM : ObservableObjectX
 {
     public MovePageVM()
     {

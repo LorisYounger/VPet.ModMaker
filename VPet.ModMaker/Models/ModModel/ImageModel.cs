@@ -13,7 +13,7 @@ namespace VPet.ModMaker.Models.ModModel;
 /// <summary>
 /// 图像模型
 /// </summary>
-public class ImageModel : ObservableObjectX<ImageModel>, ICloneable<ImageModel>
+public class ImageModel : ObservableObjectX, ICloneable<ImageModel>
 {
     public ImageModel(BitmapImage image, int duration = 100)
     {

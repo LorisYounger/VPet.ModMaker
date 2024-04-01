@@ -14,7 +14,7 @@ namespace VPet.ModMaker.Models;
 /// I18n数据
 /// </summary>
 [DebuggerDisplay("{ID}, Count = {Datas.Count}")]
-public class I18nData : ObservableObjectX<I18nData>
+public class I18nData : ObservableObjectX
 {
     #region ID
     [DebuggerBrowsable(DebuggerBrowsableState.Never)]

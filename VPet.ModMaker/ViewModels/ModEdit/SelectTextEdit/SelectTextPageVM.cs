@@ -14,7 +14,7 @@ using VPet_Simulator.Windows.Interface;
 
 namespace VPet.ModMaker.ViewModels.ModEdit.SelectTextEdit;
 
-public class SelectTextPageVM : ObservableObjectX<SelectTextPageVM>
+public class SelectTextPageVM : ObservableObjectX
 {
     public SelectTextPageVM()
     {

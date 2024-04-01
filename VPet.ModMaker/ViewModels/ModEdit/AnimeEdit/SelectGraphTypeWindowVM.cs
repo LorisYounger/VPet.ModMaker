@@ -12,7 +12,7 @@ using VPet_Simulator.Core;
 
 namespace VPet.ModMaker.ViewModels.ModEdit.AnimeEdit;
 
-public class SelectGraphTypeWindowVM : ObservableObjectX<SelectGraphTypeWindowVM>
+public class SelectGraphTypeWindowVM : ObservableObjectX
 {
     public SelectGraphTypeWindowVM()
     {

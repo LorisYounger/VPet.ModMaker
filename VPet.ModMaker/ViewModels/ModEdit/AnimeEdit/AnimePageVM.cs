@@ -17,7 +17,7 @@ using VPet.ModMaker.Views.ModEdit.AnimeEdit;
 
 namespace VPet.ModMaker.ViewModels.ModEdit.AnimeEdit;
 
-public class AnimePageVM : ObservableObjectX<AnimePageVM>
+public class AnimePageVM : ObservableObjectX
 {
     public AnimePageVM()
     {
@@ -50,7 +50,7 @@ public class AnimePageVM : ObservableObjectX<AnimePageVM>
         RemoveCommand.ExecuteCommand += RemoveCommand_ExecuteCommand;
     }
 
-    private void AnimePageVM_PropertyChangedX(AnimePageVM sender, PropertyChangedXEventArgs e)
+    private void AnimePageVM_PropertyChangedX(object? sender, PropertyChangedXEventArgs e)
     {
         if (e.PropertyName == nameof(CurrentPet))
         {

@@ -11,9 +11,7 @@ namespace VPet.ModMaker.Models.ModModel;
 /// <summary>
 /// 食物图像位置模型
 /// </summary>
-public class FoodAnimeLocationModel
-    : ObservableObjectX<FoodAnimeLocationModel>,
-        ICloneable<FoodAnimeLocationModel>
+public class FoodAnimeLocationModel : ObservableObjectX, ICloneable<FoodAnimeLocationModel>
 {
     public FoodAnimeLocationModel() { }
 

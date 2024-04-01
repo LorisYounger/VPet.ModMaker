@@ -13,7 +13,7 @@ using static VPet_Simulator.Core.IGameSave;
 
 namespace VPet.ModMaker.Models.ModModel;
 
-public class FoodAnimeModel : ObservableObjectX<FoodAnimeModel>, ICloneable<FoodAnimeModel>
+public class FoodAnimeModel : ObservableObjectX, ICloneable<FoodAnimeModel>
 {
     public FoodAnimeModel() { }
 

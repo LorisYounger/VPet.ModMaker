@@ -15,7 +15,7 @@ using VPet.ModMaker.Views.ModEdit.WorkEdit;
 
 namespace VPet.ModMaker.ViewModels.ModEdit.WorkEdit;
 
-public class WorkPageVM : ObservableObjectX<WorkPageVM>
+public class WorkPageVM : ObservableObjectX
 {
     public WorkPageVM()
     {

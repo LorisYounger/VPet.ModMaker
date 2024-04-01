@@ -14,7 +14,7 @@ using VPet.ModMaker.Views.ModEdit.PetEdit;
 
 namespace VPet.ModMaker.ViewModels.ModEdit.PetEdit;
 
-public class PetPageVM : ObservableObjectX<PetPageVM>
+public class PetPageVM : ObservableObjectX
 {
     public PetPageVM()
     {

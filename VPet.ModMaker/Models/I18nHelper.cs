@@ -14,7 +14,7 @@ namespace VPet.ModMaker.Models;
 /// <summary>
 /// I18n助手
 /// </summary>
-public class I18nHelper : ObservableObjectX<I18nHelper>
+public class I18nHelper : ObservableObjectX
 {
     /// <summary>
     /// 当前数据

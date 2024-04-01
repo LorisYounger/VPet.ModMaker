@@ -14,7 +14,7 @@ namespace VPet.ModMaker.Models;
 /// <summary>
 /// 移动模型
 /// </summary>
-public class MoveModel : ObservableObjectX<MoveModel>
+public class MoveModel : ObservableObjectX
 {
     public MoveModel() { }
 

@@ -828,7 +828,7 @@ public class ModInfoModel : I18nModel<I18nModInfoModel>
     }
 }
 
-public class I18nModInfoModel : ObservableObjectX<I18nModInfoModel>
+public class I18nModInfoModel : ObservableObjectX
 {
     #region Name
     [DebuggerBrowsable(DebuggerBrowsableState.Never)]

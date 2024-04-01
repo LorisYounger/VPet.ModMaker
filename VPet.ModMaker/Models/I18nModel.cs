@@ -14,8 +14,8 @@ namespace VPet.ModMaker.Models;
 /// I18n模型
 /// </summary>
 /// <typeparam name="T">类型</typeparam>
-public class I18nModel<T> : ObservableObjectX<I18nModel<T>>
-    where T : ObservableObjectX<T>, new()
+public class I18nModel<T> : ObservableObjectX
+    where T : ObservableObjectX, new()
 {
     /// <summary>
     /// 当前I18n数据
@@ -84,7 +84,7 @@ public class I18nModel<T> : ObservableObjectX<I18nModel<T>>
     /// </summary>
     /// <param name="sender"></param>
     /// <param name="e"></param>
-    private void Current_PropertyChangedX(I18nHelper sender, PropertyChangedXEventArgs e)
+    private void Current_PropertyChangedX(object? sender, PropertyChangedXEventArgs e)
     {
         if (e.PropertyName == nameof(I18nHelper.CultureName))
         {

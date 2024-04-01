@@ -15,7 +15,7 @@ using static VPet_Simulator.Core.IGameSave;
 
 namespace VPet.ModMaker.Models.ModModel;
 
-public class FoodAnimeTypeModel : ObservableObjectX<FoodAnimeModel>
+public class FoodAnimeTypeModel : ObservableObjectX
 {
     public FoodAnimeTypeModel() { }
 

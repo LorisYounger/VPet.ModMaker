@@ -12,7 +12,7 @@ using VPet.ModMaker.Models;
 
 namespace VPet.ModMaker.ViewModels.ModEdit.MoveEdit;
 
-public class MoveEditWindowVM : ObservableObjectX<MoveEditWindowVM>
+public class MoveEditWindowVM : ObservableObjectX
 {
     public MoveEditWindowVM()
     {

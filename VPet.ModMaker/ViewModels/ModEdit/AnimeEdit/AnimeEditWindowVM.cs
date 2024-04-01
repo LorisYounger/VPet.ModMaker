@@ -20,7 +20,7 @@ using static VPet_Simulator.Core.IGameSave;
 
 namespace VPet.ModMaker.ViewModels.ModEdit.AnimeEdit;
 
-public class AnimeEditWindowVM : ObservableObjectX<AnimeEditWindowVM>
+public class AnimeEditWindowVM : ObservableObjectX
 {
     public AnimeEditWindowVM()
     {
@@ -37,10 +37,7 @@ public class AnimeEditWindowVM : ObservableObjectX<AnimeEditWindowVM>
         ClearImageCommand.ExecuteCommand += ClearImageCommand_ExecuteCommand;
     }
 
-    private void AnimeEditWindowVM_PropertyChangedX(
-        AnimeEditWindowVM sender,
-        PropertyChangedXEventArgs e
-    )
+    private void AnimeEditWindowVM_PropertyChangedX(object? sender, PropertyChangedXEventArgs e)
     {
         if (e.PropertyName == nameof(CurrentAnimeModel))
         {

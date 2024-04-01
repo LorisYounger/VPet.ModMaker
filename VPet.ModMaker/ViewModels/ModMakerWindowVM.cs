@@ -23,7 +23,7 @@ using VPet.ModMaker.Views.ModEdit.I18nEdit;
 
 namespace VPet.ModMaker.ViewModels;
 
-public class ModMakerWindowVM : ObservableObjectX<ModMakerWindowVM>
+public class ModMakerWindowVM : ObservableObjectX
 {
     public ModMakerWindowVM(ModMakerWindow window)
     {

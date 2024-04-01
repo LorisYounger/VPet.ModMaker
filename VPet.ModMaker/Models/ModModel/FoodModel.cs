@@ -40,10 +40,7 @@ public class FoodModel : I18nModel<I18nFoodModel>
         ]
     );
 
-    private void FoodModel_PropertyChangedX(
-        I18nModel<I18nFoodModel> sender,
-        PropertyChangedXEventArgs e
-    )
+    private void FoodModel_PropertyChangedX(object? sender, PropertyChangedXEventArgs e)
     {
         if (e.PropertyName is not null && _notifyReferencePrice.Contains(e.PropertyName))
         {
@@ -324,7 +321,7 @@ public class FoodModel : I18nModel<I18nFoodModel>
     }
 }
 
-public class I18nFoodModel : ObservableObjectX<I18nFoodModel>, ICloneable<I18nFoodModel>
+public class I18nFoodModel : ObservableObjectX, ICloneable<I18nFoodModel>
 {
     #region Name
     [DebuggerBrowsable(DebuggerBrowsableState.Never)]

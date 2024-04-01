@@ -13,7 +13,7 @@ using VPet.ModMaker.Models;
 
 namespace VPet.ModMaker.ViewModels.ModEdit.PetEdit;
 
-public class PetEditWindowVM : ObservableObjectX<PetEditWindowVM>
+public class PetEditWindowVM : ObservableObjectX
 {
     public PetEditWindowVM()
     {

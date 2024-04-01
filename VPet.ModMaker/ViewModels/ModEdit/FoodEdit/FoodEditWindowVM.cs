@@ -15,7 +15,7 @@ using VPet_Simulator.Windows.Interface;
 
 namespace VPet.ModMaker.ViewModels.ModEdit.FoodEdit;
 
-public class FoodEditWindowVM : ObservableObjectX<FoodEditWindowVM>
+public class FoodEditWindowVM : ObservableObjectX
 {
     public FoodEditWindowVM()
     {
@@ -47,7 +47,7 @@ public class FoodEditWindowVM : ObservableObjectX<FoodEditWindowVM>
         }
     }
 
-    private void Food_PropertyChangedX(I18nModel<I18nFoodModel> sender, PropertyChangedXEventArgs e)
+    private void Food_PropertyChangedX(object? sender, PropertyChangedXEventArgs e)
     {
         if (e.PropertyName == nameof(FoodModel.ReferencePrice))
         {

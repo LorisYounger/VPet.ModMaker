@@ -19,7 +19,7 @@ using static VPet_Simulator.Core.IGameSave;
 
 namespace VPet.ModMaker.ViewModels.ModEdit.AnimeEdit;
 
-public class FoodAnimeEditWindowVM : ObservableObjectX<FoodAnimeEditWindowVM>
+public class FoodAnimeEditWindowVM : ObservableObjectX
 {
     public FoodAnimeEditWindowVM()
     {
@@ -52,10 +52,7 @@ public class FoodAnimeEditWindowVM : ObservableObjectX<FoodAnimeEditWindowVM>
         ClearFoodLocationCommand.ExecuteCommand += ClearFoodLocationCommand_ExecuteEvent;
     }
 
-    private void FoodAnimeEditWindowVM_PropertyChangedX(
-        FoodAnimeEditWindowVM sender,
-        PropertyChangedXEventArgs e
-    )
+    private void FoodAnimeEditWindowVM_PropertyChangedX(object? sender, PropertyChangedXEventArgs e)
     {
         if (e.PropertyName == nameof(CurrentAnimeModel))
         {

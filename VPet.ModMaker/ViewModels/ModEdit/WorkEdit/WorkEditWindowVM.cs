@@ -16,7 +16,7 @@ using VPet_Simulator.Windows.Interface;
 
 namespace VPet.ModMaker.ViewModels.ModEdit.WorkEdit;
 
-public class WorkEditWindowVM : ObservableObjectX<WorkEditWindowVM>
+public class WorkEditWindowVM : ObservableObjectX
 {
     public WorkEditWindowVM()
     {
@@ -27,10 +27,7 @@ public class WorkEditWindowVM : ObservableObjectX<WorkEditWindowVM>
         FixOverLoadCommand.ExecuteCommand += FixOverLoadCommand_ExecuteCommand;
     }
 
-    private void WorkEditWindowVM_PropertyChangedX(
-        WorkEditWindowVM sender,
-        PropertyChangedXEventArgs e
-    )
+    private void WorkEditWindowVM_PropertyChangedX(object? sender, PropertyChangedXEventArgs e)
     {
         if (e.PropertyName == nameof(Work))
         {

@@ -11,7 +11,7 @@ using VPet_Simulator.Windows.Interface;
 
 namespace VPet.ModMaker.ViewModels.ModEdit.ClickTextEdit;
 
-public class ClickTextEditWindowVM : ObservableObjectX<ClickTextEditWindowVM>
+public class ClickTextEditWindowVM : ObservableObjectX
 {
     public static I18nHelper I18nData => I18nHelper.Current;
 
