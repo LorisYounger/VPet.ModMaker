@@ -125,6 +125,7 @@ public class ModMakerWindowVM : ObservableObjectX<ModMakerWindowVM>
         {
             if (LPSConvert.DeserializeObject<ModMakeHistory>(line) is not ModMakeHistory history)
                 continue;
+            history.ID ??= string.Empty;
             set.Add(history);
         }
         Histories.AddRange(set.OrderByDescending(h => h.LastTime));
@@ -181,8 +182,8 @@ public class ModMakerWindowVM : ObservableObjectX<ModMakerWindowVM>
         )
             return;
         Histories.Clear();
-        Histories.Clear();
-        File.WriteAllText(ModMakerInfo.HistoryFile, string.Empty);
+        if (File.Exists(ModMakerInfo.HistoryFile))
+            File.WriteAllText(ModMakerInfo.HistoryFile, string.Empty);
     }
     #endregion
 

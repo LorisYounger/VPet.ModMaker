@@ -32,7 +32,7 @@ public class FoodAnimeLocationModel
     #endregion
 
     /// <summary>
-    /// 范围
+    /// 矩形位置
     /// </summary>
     public ObservableRectangleLocation<double> RectangleLocation { get; set; } = new();
 
@@ -55,7 +55,7 @@ public class FoodAnimeLocationModel
     /// </summary>
     #region Opacity
     [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-    private double _opacity;
+    private double _opacity = 1.0;
 
     public double Opacity
     {

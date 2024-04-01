@@ -26,9 +26,9 @@ public class I18nEditWindowVM : ObservableObjectX<I18nEditWindowVM> { }
 //                else
 //                {
 //                    var cultureIndex = I18nHelper.Current.CultureNames.IndexOf(SearchTarget);
-
-//                    return d.Datas[cultureIndex]
-//                        .Value.Contains(Search, StringComparison.OrdinalIgnoreCase);
+//                    throw new();
+//                    //return d.Datas[cultureIndex]()
+//                    //    .Contains(Search, StringComparison.OrdinalIgnoreCase);
 //                }
 //            },
 //            FilteredList = new()
@@ -360,8 +360,8 @@ public class I18nEditWindowVM : ObservableObjectX<I18nEditWindowVM> { }
 //    /// <param name="id"></param>
 //    /// <param name="i18nModel"></param>
 //    /// <param name="i18nValue"></param>
-//    private void AddData<T>(I18nModel<T> i18nModel, string id)
-//        where T : I18nModel<T>, new()
+//    private void AddData<T>(string id, Func<T,string> getValue)
+//        where T : , new()
 //    {
 //        if (AllI18nDatas.TryGetValue(id, out var outData))
 //        {

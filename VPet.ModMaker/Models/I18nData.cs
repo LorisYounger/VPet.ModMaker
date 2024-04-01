@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
@@ -32,5 +33,5 @@ public class I18nData : ObservableObjectX<I18nData>
     /// <summary>
     /// 基于 <see cref="I18nHelper.Current.CultureNames"/> 的索引的数据列表
     /// </summary>
-    //public ObservableList<Func<I18nModel<>>> Datas { get; } = new();
+    public ObservableList<Func<INotifyPropertyChanged, string>> Datas { get; } = new();
 }

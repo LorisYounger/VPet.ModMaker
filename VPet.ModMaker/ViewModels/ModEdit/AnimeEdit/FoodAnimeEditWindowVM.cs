@@ -26,8 +26,8 @@ public class FoodAnimeEditWindowVM : ObservableObjectX<FoodAnimeEditWindowVM>
         _frontPlayerTask = new(FrontPlay);
         _backPlayerTask = new(BackPlay);
         _foodPlayerTask = new(FoodPlay);
+        FoodImage = DefaultFoodImage;
         PropertyChangedX += FoodAnimeEditWindowVM_PropertyChangedX;
-        ;
 
         PlayCommand.ExecuteAsyncCommand += PlayCommand_AsyncExecuteEvent;
         StopCommand.ExecuteCommand += StopCommand_ExecuteEvent;
@@ -104,7 +104,7 @@ public class FoodAnimeEditWindowVM : ObservableObjectX<FoodAnimeEditWindowVM>
 
     #region LengthRatio
     [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-    private double _lengthRatio;
+    private double _lengthRatio = 0.5;
 
     /// <summary>
     /// 比例
@@ -119,7 +119,7 @@ public class FoodAnimeEditWindowVM : ObservableObjectX<FoodAnimeEditWindowVM>
     /// <summary>
     /// 旧动画
     /// </summary>
-    public FoodAnimeTypeModel OldAnime { get; set; }
+    public FoodAnimeTypeModel? OldAnime { get; set; }
 
     /// <summary>
     /// 动画
@@ -612,7 +612,7 @@ public class FoodAnimeEditWindowVM : ObservableObjectX<FoodAnimeEditWindowVM>
     private void RemoveFoodLocationCommand_ExecuteEvent(FoodAnimeModel value)
     {
         value.FoodLocations.Remove(CurrentFoodLocationModel);
-        CurrentFoodLocationModel = null;
+        CurrentFoodLocationModel = null!;
     }
 
     private void ClearFoodLocationCommand_ExecuteEvent(FoodAnimeModel value)

@@ -340,6 +340,9 @@
                       <pu:NumberInput
                         Grid.Row="2"
                         Grid.Column="1"
+                        Interval="0.1"
+                        Maximum="1"
+                        Minimum="0"
                         Value="{Binding Opacity}" />
                       <Label
                         Grid.Row="3"
@@ -348,7 +351,7 @@
                       <pu:NumberInput
                         Grid.Row="3"
                         Grid.Column="1"
-                        Value="{Binding Rect.Width}" />
+                        Value="{Binding RectangleLocation.Width}" />
                       <Grid Grid.Row="4" Grid.ColumnSpan="2">
                         <Grid.ColumnDefinitions>
                           <ColumnDefinition />
@@ -360,7 +363,7 @@
                             <ColumnDefinition />
                           </Grid.ColumnDefinitions>
                           <Label Content="X:" />
-                          <pu:NumberInput Grid.Column="1" Value="{Binding Rect.X}" />
+                          <pu:NumberInput Grid.Column="1" Value="{Binding RectangleLocation.X}" />
                         </Grid>
                         <Grid Grid.Column="1">
                           <Grid.ColumnDefinitions>
@@ -368,7 +371,7 @@
                             <ColumnDefinition />
                           </Grid.ColumnDefinitions>
                           <Label Content="Y:" />
-                          <pu:NumberInput Grid.Column="1" Value="{Binding Rect.Y}" />
+                          <pu:NumberInput Grid.Column="1" Value="{Binding RectangleLocation.Y}" />
                         </Grid>
                       </Grid>
                     </Grid>
@@ -432,7 +435,7 @@
               <Setter Property="Width">
                 <Setter.Value>
                   <MultiBinding Converter="{StaticResource CalculatorConverter}" ConverterParameter="*">
-                    <Binding Path="CurrentFoodLocationModel.Rect.Width" />
+                    <Binding Path="CurrentFoodLocationModel.RectangleLocation.Width" />
                     <Binding Path="LengthRatio" />
                   </MultiBinding>
                 </Setter.Value>
@@ -441,8 +444,8 @@
                 <Setter.Value>
                   <MultiBinding Converter="{StaticResource RatioMarginConverter}">
                     <Binding Path="LengthRatio" />
-                    <Binding Path="CurrentFoodLocationModel.Rect.X" />
-                    <Binding Path="CurrentFoodLocationModel.Rect.Y" />
+                    <Binding Path="CurrentFoodLocationModel.RectangleLocation.X" />
+                    <Binding Path="CurrentFoodLocationModel.RectangleLocation.Y" />
                   </MultiBinding>
                 </Setter.Value>
               </Setter>
@@ -480,7 +483,7 @@
                     <Setter Property="Width">
                       <Setter.Value>
                         <MultiBinding Converter="{StaticResource CalculatorConverter}" ConverterParameter="*">
-                          <Binding Path="CurrentFoodLocationModel.Rect.Width" />
+                          <Binding Path="CurrentFoodLocationModel.RectangleLocation.Width" />
                           <Binding Source="1" />
                         </MultiBinding>
                       </Setter.Value>
@@ -489,8 +492,8 @@
                       <Setter.Value>
                         <MultiBinding Converter="{StaticResource RatioMarginConverter}">
                           <Binding Source="1" />
-                          <Binding Path="CurrentFoodLocationModel.Rect.X" />
-                          <Binding Path="CurrentFoodLocationModel.Rect.Y" />
+                          <Binding Path="CurrentFoodLocationModel.RectangleLocation.X" />
+                          <Binding Path="CurrentFoodLocationModel.RectangleLocation.Y" />
                         </MultiBinding>
                       </Setter.Value>
                     </Setter>
