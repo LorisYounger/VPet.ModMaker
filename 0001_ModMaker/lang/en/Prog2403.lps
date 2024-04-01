@@ -1,0 +1,10 @@
+搜索ID#Search ID:|
+是否更新模组\n当前版本: {0}\n最新版本: {1}#Whether to update the module\nCurrent version: {0}\nLatest version: {1}:|
+更新模组#Update Module:|
+更新完成, 请手动保存#Update complete, please save manually:|
+当前文化#Current Culture:|
+标签, 用英文逗号分隔#Tags, separated by English comma:|
+修复超模#Fix Supermodel:|
+需要将文化 {0} 设为主要文化吗?#Need to set culture {0} as the main culture?|
+!!!注意!!!\n此操作会将所有ID设为当前文化的翻译内容,仅适用于初次设置多文化的模组\n确定要继续吗?#!!!Attention!!!\nThis operation will set all IDs to the translation content of the current culture, only applicable to the first setting of multi-culture module\nAre you sure you want to continue?|
+确认退出吗?#Are you sure you want to exit?|

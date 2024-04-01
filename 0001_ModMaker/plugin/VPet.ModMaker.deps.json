@@ -1,0 +1,296 @@
+{
+  "runtimeTarget": {
+    "name": ".NETCoreApp,Version=v8.0",
+    "signature": ""
+  },
+  "compilationOptions": {},
+  "targets": {
+    ".NETCoreApp,Version=v8.0": {
+      "VPet.ModMaker/1.0.0": {
+        "dependencies": {
+          "CommunityToolkit.Mvvm": "8.2.2",
+          "HKW.Utils": "1.2.5",
+          "HKW.WPF": "1.0.3",
+          "LinePutScript": "1.11.6",
+          "LinePutScript.Localization.WPF": "1.0.6",
+          "Mapster": "7.4.0",
+          "Microsoft.CSharp": "4.7.0",
+          "Ookii.Dialogs.Wpf": "5.0.1",
+          "Panuon.WPF": "1.1.0",
+          "Panuon.WPF.UI": "1.2.1.1",
+          "VPet-Simulator.Core": "1.1.0.1",
+          "VPet-Simulator.Windows.Interface": "1.1.0.1"
+        },
+        "runtime": {
+          "VPet.ModMaker.dll": {}
+        }
+      },
+      "CommunityToolkit.Mvvm/8.2.2": {
+        "runtime": {
+          "lib/net6.0/CommunityToolkit.Mvvm.dll": {
+            "assemblyVersion": "8.2.0.0",
+            "fileVersion": "8.2.2.1"
+          }
+        }
+      },
+      "HKW.Utils/1.2.5": {
+        "runtime": {
+          "lib/net8.0/HKW.Utils.dll": {
+            "assemblyVersion": "1.2.5.0",
+            "fileVersion": "1.2.5.0"
+          }
+        }
+      },
+      "HKW.WPF/1.0.3": {
+        "dependencies": {
+          "CommunityToolkit.Mvvm": "8.2.2",
+          "HKW.Utils": "1.2.5",
+          "Microsoft.Extensions.DependencyInjection": "8.0.0",
+          "Microsoft.Xaml.Behaviors.Wpf": "1.1.77"
+        },
+        "runtime": {
+          "lib/net8.0-windows7.0/HKW.WPF.dll": {
+            "assemblyVersion": "1.0.3.0",
+            "fileVersion": "1.0.3.0"
+          }
+        }
+      },
+      "LinePutScript/1.11.6": {
+        "runtime": {
+          "lib/net8.0/LinePutScript.dll": {
+            "assemblyVersion": "1.0.0.0",
+            "fileVersion": "1.0.0.0"
+          }
+        }
+      },
+      "LinePutScript.Localization.WPF/1.0.6": {
+        "dependencies": {
+          "LinePutScript": "1.11.6"
+        },
+        "runtime": {
+          "lib/net6.0/LinePutScript.Localization.WPF.dll": {
+            "assemblyVersion": "1.0.0.0",
+            "fileVersion": "1.0.0.0"
+          }
+        }
+      },
+      "Mapster/7.4.0": {
+        "dependencies": {
+          "Mapster.Core": "1.2.1"
+        },
+        "runtime": {
+          "lib/net7.0/Mapster.dll": {
+            "assemblyVersion": "7.4.0.0",
+            "fileVersion": "7.4.0.0"
+          }
+        }
+      },
+      "Mapster.Core/1.2.1": {
+        "runtime": {
+          "lib/net7.0/Mapster.Core.dll": {
+            "assemblyVersion": "1.2.1.0",
+            "fileVersion": "1.2.1.0"
+          }
+        }
+      },
+      "Microsoft.CSharp/4.7.0": {},
+      "Microsoft.Extensions.DependencyInjection/8.0.0": {
+        "dependencies": {
+          "Microsoft.Extensions.DependencyInjection.Abstractions": "8.0.0"
+        },
+        "runtime": {
+          "lib/net8.0/Microsoft.Extensions.DependencyInjection.dll": {
+            "assemblyVersion": "8.0.0.0",
+            "fileVersion": "8.0.23.53103"
+          }
+        }
+      },
+      "Microsoft.Extensions.DependencyInjection.Abstractions/8.0.0": {
+        "runtime": {
+          "lib/net8.0/Microsoft.Extensions.DependencyInjection.Abstractions.dll": {
+            "assemblyVersion": "8.0.0.0",
+            "fileVersion": "8.0.23.53103"
+          }
+        }
+      },
+      "Microsoft.Xaml.Behaviors.Wpf/1.1.77": {
+        "runtime": {
+          "lib/net6.0-windows7.0/Microsoft.Xaml.Behaviors.dll": {
+            "assemblyVersion": "1.1.0.0",
+            "fileVersion": "1.1.77.27830"
+          }
+        }
+      },
+      "Ookii.Dialogs.Wpf/5.0.1": {
+        "runtime": {
+          "lib/net6.0-windows7.0/Ookii.Dialogs.Wpf.dll": {
+            "assemblyVersion": "5.0.0.0",
+            "fileVersion": "5.0.1.0"
+          }
+        }
+      },
+      "Panuon.WPF/1.1.0": {
+        "runtime": {
+          "lib/net8.0-windows/Panuon.WPF.dll": {
+            "assemblyVersion": "1.1.0.0",
+            "fileVersion": "1.1.0.0"
+          }
+        }
+      },
+      "Panuon.WPF.UI/1.2.1.1": {
+        "dependencies": {
+          "Panuon.WPF": "1.1.0"
+        },
+        "runtime": {
+          "lib/net8.0-windows/Panuon.WPF.UI.dll": {
+            "assemblyVersion": "1.2.1.1",
+            "fileVersion": "1.2.1.1"
+          }
+        }
+      },
+      "VPet-Simulator.Core/1.1.0.1": {
+        "dependencies": {
+          "LinePutScript": "1.11.6",
+          "LinePutScript.Localization.WPF": "1.0.6",
+          "Panuon.WPF.UI": "1.2.1.1"
+        },
+        "runtime": {
+          "lib/net8.0/VPet-Simulator.Core.dll": {
+            "assemblyVersion": "1.0.0.0",
+            "fileVersion": "1.0.0.0"
+          }
+        }
+      },
+      "VPet-Simulator.Windows.Interface/1.1.0.1": {
+        "dependencies": {
+          "VPet-Simulator.Core": "1.1.0.1"
+        },
+        "runtime": {
+          "lib/net8.0/VPet-Simulator.Windows.Interface.dll": {
+            "assemblyVersion": "1.0.0.0",
+            "fileVersion": "1.0.0.0"
+          }
+        }
+      }
+    }
+  },
+  "libraries": {
+    "VPet.ModMaker/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "CommunityToolkit.Mvvm/8.2.2": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-r0g0k9tGYdrnz8R7T3x5UiokDffeevzK/2P/9SBL6fqLgN8B157MIi/bVUWI1KAz6ZorZrK9AdABCWUeXZZsvA==",
+      "path": "communitytoolkit.mvvm/8.2.2",
+      "hashPath": "communitytoolkit.mvvm.8.2.2.nupkg.sha512"
+    },
+    "HKW.Utils/1.2.5": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-e+ncF7AXZXby0ZM4KcBdpHpNrWs+84EKCpqlXzOTejvB7JMny96TGEwfrjKl41Ulo9hKPb7goD6qzDKLNRJRyQ==",
+      "path": "hkw.utils/1.2.5",
+      "hashPath": "hkw.utils.1.2.5.nupkg.sha512"
+    },
+    "HKW.WPF/1.0.3": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-lqBUhwFrdiJDIGba+YUjAu7TIU9iYy7TOg5j659bobAU7Fq9416bYZoMoX1s3pMOpMg04/QagSPtJoTRxJ56ew==",
+      "path": "hkw.wpf/1.0.3",
+      "hashPath": "hkw.wpf.1.0.3.nupkg.sha512"
+    },
+    "LinePutScript/1.11.6": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-2m1AsVxPKKK6Ey/mFt0yEGdrS2LjDX0hKZrKK4LzxNRXePmyWrkiRCUXJK5mSNNZw0OENRAn58jdX9+00jFL+A==",
+      "path": "lineputscript/1.11.6",
+      "hashPath": "lineputscript.1.11.6.nupkg.sha512"
+    },
+    "LinePutScript.Localization.WPF/1.0.6": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-jCS0dDlCtz4FnyvQKPnfanOknF2ftQlDklTmSXi5NH8fi7Rj9QLY9TnufpopTX3DFDF08t72MF8YdjjYAfxDrA==",
+      "path": "lineputscript.localization.wpf/1.0.6",
+      "hashPath": "lineputscript.localization.wpf.1.0.6.nupkg.sha512"
+    },
+    "Mapster/7.4.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-RYGoDqvS4WTKIq0HDyPBBVIj6N0mluOCXQ1Vk95JKseMHEsbCXSEGKSlP95oL+s42IXAXbqvHj7p0YaRBUcfqg==",
+      "path": "mapster/7.4.0",
+      "hashPath": "mapster.7.4.0.nupkg.sha512"
+    },
+    "Mapster.Core/1.2.1": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-11lokmfliBEMMmjeqxFGNpqGXq6tN96zFqpBmfYeahr4Ybk63oDmeJmOflsATjobYkX248g5Y62oQ2NNnZaeww==",
+      "path": "mapster.core/1.2.1",
+      "hashPath": "mapster.core.1.2.1.nupkg.sha512"
+    },
+    "Microsoft.CSharp/4.7.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-pTj+D3uJWyN3My70i2Hqo+OXixq3Os2D1nJ2x92FFo6sk8fYS1m1WLNTs0Dc1uPaViH0YvEEwvzddQ7y4rhXmA==",
+      "path": "microsoft.csharp/4.7.0",
+      "hashPath": "microsoft.csharp.4.7.0.nupkg.sha512"
+    },
+    "Microsoft.Extensions.DependencyInjection/8.0.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-V8S3bsm50ig6JSyrbcJJ8bW2b9QLGouz+G1miK3UTaOWmMtFwNNNzUf4AleyDWUmTrWMLNnFSLEQtxmxgNQnNQ==",
+      "path": "microsoft.extensions.dependencyinjection/8.0.0",
+      "hashPath": "microsoft.extensions.dependencyinjection.8.0.0.nupkg.sha512"
+    },
+    "Microsoft.Extensions.DependencyInjection.Abstractions/8.0.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-cjWrLkJXK0rs4zofsK4bSdg+jhDLTaxrkXu4gS6Y7MAlCvRyNNgwY/lJi5RDlQOnSZweHqoyvgvbdvQsRIW+hg==",
+      "path": "microsoft.extensions.dependencyinjection.abstractions/8.0.0",
+      "hashPath": "microsoft.extensions.dependencyinjection.abstractions.8.0.0.nupkg.sha512"
+    },
+    "Microsoft.Xaml.Behaviors.Wpf/1.1.77": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-MCu674ZETgU18EbxfwIlRpUPJ02YbZenLsMCXTkpeA7KUBpXfFaOUDlEO+7UWu5AFnUoydg+aQENJkuaZPheMQ==",
+      "path": "microsoft.xaml.behaviors.wpf/1.1.77",
+      "hashPath": "microsoft.xaml.behaviors.wpf.1.1.77.nupkg.sha512"
+    },
+    "Ookii.Dialogs.Wpf/5.0.1": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-iZNnZwqTpK0cfR0vkotncP1c025/PHlIdzc7iEKBYwhVv1V0zXp9/RT/O0kMhsmlwXqRxxbE4pdhfinbJXtjPg==",
+      "path": "ookii.dialogs.wpf/5.0.1",
+      "hashPath": "ookii.dialogs.wpf.5.0.1.nupkg.sha512"
+    },
+    "Panuon.WPF/1.1.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-NmA0O5qDwVmc1mh97XNL6HBuD0mqeZhbq0uW+R9pZ0AlP0DuR/0bZP/xvDYXfeHx7p8ww4/ZwHK/LRdyCcip+A==",
+      "path": "panuon.wpf/1.1.0",
+      "hashPath": "panuon.wpf.1.1.0.nupkg.sha512"
+    },
+    "Panuon.WPF.UI/1.2.1.1": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-mrydQnc8xlfKuBZ0FWW3opOvPEALhMRI/pF5rFrv6V9JzhdKKEo5nR4/b2k6q/CIgIae1UIYAOCDFsWdp4eYmg==",
+      "path": "panuon.wpf.ui/1.2.1.1",
+      "hashPath": "panuon.wpf.ui.1.2.1.1.nupkg.sha512"
+    },
+    "VPet-Simulator.Core/1.1.0.1": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-YjMEat/O4cVjJlHarKOPr9wzF182wo28x3l26OboCDju+qtQgdk2KP8b4gZX4lvj9ZojgR+hGEmaawPZjpsiig==",
+      "path": "vpet-simulator.core/1.1.0.1",
+      "hashPath": "vpet-simulator.core.1.1.0.1.nupkg.sha512"
+    },
+    "VPet-Simulator.Windows.Interface/1.1.0.1": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-FHvSIX4L5RoOP2Gl8QuE/THUCsa1SISA8FxdklxOF0WeR/bg7KjTZSd9aSGdAosVkNisUckPhEf0T9j/g9zP+w==",
+      "path": "vpet-simulator.windows.interface/1.1.0.1",
+      "hashPath": "vpet-simulator.windows.interface.1.1.0.1.nupkg.sha512"
+    }
+  }
+}
