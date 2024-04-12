@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Diagnostics;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -26,10 +27,11 @@ namespace VPet.ModMaker.Models;
 /// <summary>
 /// 模组信息模型
 /// </summary>
-public class ModInfoModel : I18nModel<I18nModInfoModel>
+public class ModInfoModel : ObservableObjectX
 {
     public ModInfoModel()
     {
+        Current = this;
         PropertyChanged += ModInfoModel_PropertyChanged;
         Pets.CollectionChanged += Pets_CollectionChanged;
     }
@@ -104,25 +106,22 @@ public class ModInfoModel : I18nModel<I18nModInfoModel>
                 LoadAnime(petModel, p);
         }
 
-        //loader.Pets.First().Name = "TestMainPet";
-        //Pets.Insert(0, new(loader.Pets.First(), true));
-
         // 插入本体宠物
         foreach (var pet in ModMakerInfo.MainPets)
         {
-            // 确保Id不重复
+            // 确保ID不重复
             if (Pets.All(i => i.ID != pet.Key))
                 Pets.Insert(0, pet.Value);
         }
 
-        // 载入本地化
-        foreach (var lang in loader.I18nDatas)
-            I18nDatas.Add(lang.Key, lang.Value);
-        OtherI18nDatas = loader.OtherI18nDatas;
+        // 载入本地化模组信息
+        //foreach (var lang in loader.I18nDatas)
+        //    I18nDatas.Add(lang.Key, lang.Value);
+        //OtherI18nDatas = loader.I18nDatas;
 
-        LoadI18nDatas();
-        RefreshAllId();
-        if (I18nHelper.Current.CultureNames.HasValue())
+        LoadI18nDatas(loader);
+        RefreshAllID();
+        if (I18nResource.CultureDatas.HasValue())
             RefreshID();
     }
 
@@ -142,6 +141,21 @@ public class ModInfoModel : I18nModel<I18nModInfoModel>
     /// 当前
     /// </summary>
     public static ModInfoModel Current { get; set; } = new();
+
+    public I18nResource<string, string> I18nResource { get; } = new();
+
+    #region I18nData
+    public string Name
+    {
+        get => I18nResource.GetCurrentCultureDataOrDefault(ID, string.Empty);
+        set => I18nResource.SetCurrentCultureData(ID, value);
+    }
+    public string Description
+    {
+        get => I18nResource.GetCurrentCultureDataOrDefault(DescriptionID, string.Empty);
+        set => I18nResource.SetCurrentCultureData(DescriptionID, value);
+    }
+    #endregion
 
     #region AutoSetFoodPrice
     [DebuggerBrowsable(DebuggerBrowsableState.Never)]
@@ -173,12 +187,12 @@ public class ModInfoModel : I18nModel<I18nModInfoModel>
 
     #region ModInfo
     /// <summary>
-    /// 作者Id
+    /// 作者ID
     /// </summary>
     public long AuthorID { get; }
 
     /// <summary>
-    /// 项目Id
+    /// 项目ID
     /// </summary>
     public ulong ItemID { get; }
 
@@ -187,7 +201,7 @@ public class ModInfoModel : I18nModel<I18nModInfoModel>
     private string _id = string.Empty;
 
     /// <summary>
-    /// Id
+    /// ID
     /// </summary>
     public string ID
     {
@@ -198,15 +212,15 @@ public class ModInfoModel : I18nModel<I18nModInfoModel>
 
     #region DescriptionID
     [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-    private string _descriptionId = string.Empty;
+    private string _descriptionID = string.Empty;
 
     /// <summary>
-    /// 描述Id
+    /// 描述ID
     /// </summary>
     public string DescriptionID
     {
-        get => _descriptionId;
-        set => SetProperty(ref _descriptionId, value);
+        get => _descriptionID;
+        set => SetProperty(ref _descriptionID, value);
     }
     #endregion
 
@@ -322,15 +336,6 @@ public class ModInfoModel : I18nModel<I18nModInfoModel>
     }
     #endregion
 
-    /// <summary>
-    /// 其它I18n数据
-    /// </summary>
-    public Dictionary<string, Dictionary<string, string>> OtherI18nDatas { get; } = new();
-
-    /// <summary>
-    /// 需要保存的I18n数据
-    /// </summary>
-    public static Dictionary<string, Dictionary<string, string>> SaveI18nDatas { get; } = new();
     #endregion
 
     private void Pets_CollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
@@ -439,100 +444,121 @@ public class ModInfoModel : I18nModel<I18nModInfoModel>
     /// <summary>
     /// 加载本地化数据
     /// </summary>
-    private void LoadI18nDatas()
+    private void LoadI18nDatas(ModLoader modLoader)
     {
-        foreach (var lang in I18nDatas.Keys.Union(OtherI18nDatas.Keys))
-        {
-            if (I18nHelper.Current.CultureNames.Contains(lang) is false)
-                I18nHelper.Current.CultureNames.Add(lang);
-        }
-        if (I18nHelper.Current.CultureNames.Count == 0)
+        if (modLoader.I18nDatas.HasValue() is false)
             return;
-        I18nHelper.Current.CultureName = I18nHelper.Current.CultureNames.First();
-        foreach (var i18nData in OtherI18nDatas)
+        foreach (var cultureDatas in modLoader.I18nDatas)
         {
-            LoadFoodI18nData(i18nData.Key, i18nData.Value);
-            LoadLowTextI18nData(i18nData.Key, i18nData.Value);
-            LoadClickTextI18nData(i18nData.Key, i18nData.Value);
-            LoadSelectTextI18nData(i18nData.Key, i18nData.Value);
-            LoadPetI18nData(i18nData.Key, i18nData.Value);
+            var culture = CultureInfo.GetCultureInfo(cultureDatas.Key);
+            I18nResource.AddCulture(culture);
+            foreach (var data in cultureDatas.Value)
+                I18nResource.AddCultureData(culture, data.Key, data.Value);
         }
+        if (I18nResource.SetCurrentCulture(CultureInfo.CurrentCulture) is false)
+            I18nResource.SetCurrentCulture(I18nResource.CultureDatas.First().Key);
+        I18nResource.I18nObjectInfos.Add(
+            new(
+                this,
+                OnPropertyChanged,
+                [
+                    (nameof(ID), ID, nameof(Name), true),
+                    (nameof(DescriptionID), DescriptionID, nameof(Description), true)
+                ]
+            )
+        );
+        //foreach (var lang in I18nDatas.Keys.Union(OtherI18nDatas.Keys))
+        //{
+        //    if (I18nHelper.Current.CultureNames.Contains(lang) is false)
+        //        I18nHelper.Current.CultureNames.Add(lang);
+        //}
+        //if (I18nHelper.Current.CultureNames.Count == 0)
+        //    return;
+        //I18nHelper.Current.CultureName = I18nHelper.Current.CultureNames.First();
+        //foreach (var i18nData in OtherI18nDatas)
+        //{
+        //    LoadFoodI18nData(i18nData.Key, i18nData.Value);
+        //    LoadLowTextI18nData(i18nData.Key, i18nData.Value);
+        //    LoadClickTextI18nData(i18nData.Key, i18nData.Value);
+        //    LoadSelectTextI18nData(i18nData.Key, i18nData.Value);
+        //    LoadPetI18nData(i18nData.Key, i18nData.Value);
+        //}
     }
 
-    private void LoadFoodI18nData(string key, Dictionary<string, string> i18nData)
+    //private void LoadFoodI18nData(string key, Dictionary<string, string> i18nData)
+    //{
+    //    foreach (var food in Foods)
+    //    {
+    //        if (food.I18nDatas.TryGetValue(key, out var data) is false)
+    //            continue;
+    //        if (i18nData.TryGetValue(food.ID, out var name))
+    //            data.Name = name;
+    //        if (i18nData.TryGetValue(food.DescriptionID, out var description))
+    //            data.Description = description;
+    //    }
+    //}
+
+    //private void LoadLowTextI18nData(string key, Dictionary<string, string> i18nData)
+    //{
+    //    foreach (var lowText in LowTexts)
+    //    {
+    //        if (lowText.I18nDatas.TryGetValue(key, out var data) is false)
+    //            continue;
+    //        if (i18nData.TryGetValue(lowText.ID, out var text))
+    //            data.Text = text;
+    //    }
+    //}
+
+    //private void LoadClickTextI18nData(string key, Dictionary<string, string> i18nData)
+    //{
+    //    foreach (var clickText in ClickTexts)
+    //    {
+    //        if (clickText.I18nDatas.TryGetValue(key, out var data) is false)
+    //            continue;
+    //        if (i18nData.TryGetValue(clickText.ID, out var text))
+    //            data.Text = text;
+    //    }
+    //}
+
+    //private void LoadSelectTextI18nData(string key, Dictionary<string, string> i18nData)
+    //{
+    //    foreach (var selectText in SelectTexts)
+    //    {
+    //        if (selectText.I18nDatas.TryGetValue(key, out var data) is false)
+    //            continue;
+    //        if (i18nData.TryGetValue(selectText.ID, out var text))
+    //            data.Text = text;
+    //        if (i18nData.TryGetValue(selectText.ChooseID, out var choose))
+    //            data.Choose = choose;
+    //    }
+    //}
+
+    //private void LoadPetI18nData(string key, Dictionary<string, string> i18nData)
+    //{
+    //    foreach (var pet in Pets)
+    //    {
+    //        if (pet.I18nDatas.TryGetValue(key, out var data) is false)
+    //            continue;
+    //        if (i18nData.TryGetValue(pet.ID, out var name))
+    //            data.Name = name;
+    //        if (i18nData.TryGetValue(pet.PetNameID, out var petName))
+    //            data.PetName = petName;
+    //        if (i18nData.TryGetValue(pet.DescriptionID, out var description))
+    //            data.Description = description;
+    //        foreach (var work in pet.Works)
+    //        {
+    //            if (work.I18nDatas.TryGetValue(key, out var workData) is false)
+    //                continue;
+    //            if (i18nData.TryGetValue(work.ID, out var workName))
+    //                workData.Name = workName;
+    //        }
+    //    }
+    //}
+
+    private void RefreshAllID()
     {
         foreach (var food in Foods)
-        {
-            if (food.I18nDatas.TryGetValue(key, out var data) is false)
-                continue;
-            if (i18nData.TryGetValue(food.ID, out var name))
-                data.Name = name;
-            if (i18nData.TryGetValue(food.DescriptionID, out var description))
-                data.Description = description;
-        }
-    }
-
-    private void LoadLowTextI18nData(string key, Dictionary<string, string> i18nData)
-    {
-        foreach (var lowText in LowTexts)
-        {
-            if (lowText.I18nDatas.TryGetValue(key, out var data) is false)
-                continue;
-            if (i18nData.TryGetValue(lowText.ID, out var text))
-                data.Text = text;
-        }
-    }
-
-    private void LoadClickTextI18nData(string key, Dictionary<string, string> i18nData)
-    {
-        foreach (var clickText in ClickTexts)
-        {
-            if (clickText.I18nDatas.TryGetValue(key, out var data) is false)
-                continue;
-            if (i18nData.TryGetValue(clickText.ID, out var text))
-                data.Text = text;
-        }
-    }
-
-    private void LoadSelectTextI18nData(string key, Dictionary<string, string> i18nData)
-    {
-        foreach (var selectText in SelectTexts)
-        {
-            if (selectText.I18nDatas.TryGetValue(key, out var data) is false)
-                continue;
-            if (i18nData.TryGetValue(selectText.ID, out var text))
-                data.Text = text;
-            if (i18nData.TryGetValue(selectText.ChooseID, out var choose))
-                data.Choose = choose;
-        }
-    }
-
-    private void LoadPetI18nData(string key, Dictionary<string, string> i18nData)
-    {
-        foreach (var pet in Pets)
-        {
-            if (pet.I18nDatas.TryGetValue(key, out var data) is false)
-                continue;
-            if (i18nData.TryGetValue(pet.ID, out var name))
-                data.Name = name;
-            if (i18nData.TryGetValue(pet.PetNameID, out var petName))
-                data.PetName = petName;
-            if (i18nData.TryGetValue(pet.DescriptionID, out var description))
-                data.Description = description;
-            foreach (var work in pet.Works)
-            {
-                if (work.I18nDatas.TryGetValue(key, out var workData) is false)
-                    continue;
-                if (i18nData.TryGetValue(work.ID, out var workName))
-                    workData.Name = workName;
-            }
-        }
-    }
-
-    private void RefreshAllId()
-    {
-        foreach (var food in Foods)
-            food.RefreshId();
+            food.RefreshID();
         foreach (var selectText in SelectTexts)
             selectText.RefreshID();
         foreach (var pet in Pets)
@@ -554,7 +580,6 @@ public class ModInfoModel : I18nModel<I18nModInfoModel>
     /// <param name="path">路径</param>
     public void SaveTo(string path)
     {
-        SaveI18nDatas.Clear();
         // 保存模型信息
         SaveModInfo(path);
         // 保存模组数据
@@ -563,7 +588,6 @@ public class ModInfoModel : I18nModel<I18nModInfoModel>
         SaveText(path);
         SaveI18nData(path);
         SaveImage(path);
-        SaveI18nDatas.Clear();
     }
 
     /// <summary>
@@ -575,10 +599,6 @@ public class ModInfoModel : I18nModel<I18nModInfoModel>
         var modInfoFile = Path.Combine(path, ModMakerInfo.InfoFile);
         if (File.Exists(modInfoFile) is false)
             File.Create(modInfoFile).Close();
-
-        SaveI18nDatas.Clear();
-        foreach (var cultureName in I18nHelper.Current.CultureNames)
-            SaveI18nDatas.Add(cultureName, new());
 
         var lps = new LPS()
         {
@@ -593,13 +613,23 @@ public class ModInfoModel : I18nModel<I18nModInfoModel>
             new Line("itemid", ItemID.ToString()),
             new Line("cachedate", DateTime.Now.Date.ToString("s"))
         };
-        foreach (var cultureName in I18nHelper.Current.CultureNames)
+        foreach (var cultureData in Current.I18nResource.CultureDatas)
         {
             lps.Add(
-                new Line("lang", cultureName)
+                new Line("cultureDatas", cultureData.Key.Name)
                 {
-                    new Sub(ID, I18nDatas[cultureName].Name),
-                    new Sub(DescriptionID, I18nDatas[cultureName].Description),
+                    new Sub(
+                        ID,
+                        I18nResource.GetCultureDataOrDefault(cultureData.Key.Name, ID, string.Empty)
+                    ),
+                    new Sub(
+                        DescriptionID,
+                        I18nResource.GetCultureDataOrDefault(
+                            cultureData.Key.Name,
+                            DescriptionID,
+                            string.Empty
+                        )
+                    ),
                 }
             );
         }
@@ -646,15 +676,7 @@ public class ModInfoModel : I18nModel<I18nModInfoModel>
             File.Create(foodFile).Close();
         var lps = new LPS();
         foreach (var food in Foods)
-        {
             lps.Add(LPSConvert.SerializeObjectToLine<Line>(food.ToFood(), "food"));
-            foreach (var cultureName in I18nHelper.Current.CultureNames)
-            {
-                SaveI18nDatas[cultureName].TryAdd(food.ID, food.I18nDatas[cultureName].Name);
-                SaveI18nDatas[cultureName]
-                    .TryAdd(food.DescriptionID, food.I18nDatas[cultureName].Description);
-            }
-        }
         File.WriteAllText(foodFile, lps.ToString());
     }
 
@@ -690,15 +712,7 @@ public class ModInfoModel : I18nModel<I18nModInfoModel>
         File.Create(textFile).Close();
         var lps = new LPS();
         foreach (var text in SelectTexts)
-        {
             lps.Add(LPSConvert.SerializeObjectToLine<Line>(text.ToSelectText(), "SelectText"));
-            foreach (var cultureName in I18nHelper.Current.CultureNames)
-            {
-                SaveI18nDatas[cultureName].TryAdd(text.ID, text.I18nDatas[cultureName].Text);
-                SaveI18nDatas[cultureName]
-                    .TryAdd(text.ChooseID, text.I18nDatas[cultureName].Choose);
-            }
-        }
         File.WriteAllText(textFile, lps.ToString());
     }
 
@@ -714,13 +728,7 @@ public class ModInfoModel : I18nModel<I18nModInfoModel>
         File.Create(textFile).Close();
         var lps = new LPS();
         foreach (var text in LowTexts)
-        {
             lps.Add(LPSConvert.SerializeObjectToLine<Line>(text.ToLowText(), "lowfoodtext"));
-            foreach (var cultureName in I18nHelper.Current.CultureNames)
-            {
-                SaveI18nDatas[cultureName].TryAdd(text.ID, text.I18nDatas[cultureName].Text);
-            }
-        }
         File.WriteAllText(textFile, lps.ToString());
     }
 
@@ -736,32 +744,26 @@ public class ModInfoModel : I18nModel<I18nModInfoModel>
         File.Create(textFile).Close();
         var lps = new LPS();
         foreach (var text in ClickTexts)
-        {
             lps.Add(LPSConvert.SerializeObjectToLine<Line>(text.ToClickText(), "clicktext"));
-            foreach (var cultureName in I18nHelper.Current.CultureNames)
-            {
-                SaveI18nDatas[cultureName].TryAdd(text.ID, text.I18nDatas[cultureName].Text);
-            }
-        }
         File.WriteAllText(textFile, lps.ToString());
     }
     #endregion
     /// <summary>
-    /// 保存I18n数据
+    /// 保存I18n资源
     /// </summary>
     /// <param name="path">路径</param>
     private void SaveI18nData(string path)
     {
         var langPath = Path.Combine(path, "lang");
         Directory.CreateDirectory(langPath);
-        foreach (var cultureName in I18nHelper.Current.CultureNames)
+        foreach (var cultureData in I18nResource.CultureDatas)
         {
-            var culturePath = Path.Combine(langPath, cultureName);
+            var culturePath = Path.Combine(langPath, cultureData.Key.Name);
             Directory.CreateDirectory(culturePath);
-            var cultureFile = Path.Combine(culturePath, $"{cultureName}.lps");
+            var cultureFile = Path.Combine(culturePath, $"{cultureData.Key.Name}.lps");
             File.Create(cultureFile).Close();
             var lps = new LPS();
-            foreach (var data in SaveI18nDatas[cultureName])
+            foreach (var data in cultureData.Value)
                 lps.Add(new Line(data.Key, data.Value));
             File.WriteAllText(cultureFile, lps.ToString());
         }
@@ -806,7 +808,7 @@ public class ModInfoModel : I18nModel<I18nModInfoModel>
         // 保存模型信息
         SaveModInfo(path);
         // 保存文化数据
-        var langPath = Path.Combine(path, "lang");
+        var langPath = Path.Combine(path, "cultureDatas");
         Directory.CreateDirectory(langPath);
         foreach (var cultureName in cultures)
         {
@@ -828,26 +830,26 @@ public class ModInfoModel : I18nModel<I18nModInfoModel>
     }
 }
 
-public class I18nModInfoModel : ObservableObjectX
-{
-    #region Name
-    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-    private string _name = string.Empty;
+//public class I18nModInfoModel : ObservableObjectX
+//{
+//    #region Name
+//    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+//    private string _name = string.Empty;
 
-    public string Name
-    {
-        get => _name;
-        set => SetProperty(ref _name, value);
-    }
-    #endregion
-    #region Description
-    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-    private string _description = string.Empty;
+//    public string Name
+//    {
+//        get => _name;
+//        set => SetProperty(ref _name, value);
+//    }
+//    #endregion
+//    #region Description
+//    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+//    private string _description = string.Empty;
 
-    public string Description
-    {
-        get => _description;
-        set => SetProperty(ref _description, value);
-    }
-    #endregion
-}
+//    public string Description
+//    {
+//        get => _description;
+//        set => SetProperty(ref _description, value);
+//    }
+//    #endregion
+//}

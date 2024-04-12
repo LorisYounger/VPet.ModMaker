@@ -230,7 +230,6 @@ public class ModMakerWindowVM : ObservableObjectX
                 SaveHistories();
             }
             ModInfoModel.Current?.Close();
-            I18nHelper.Current = new();
             ModMakerWindow.Show();
             ModMakerWindow.Activate();
             GC.Collect();
@@ -305,7 +304,6 @@ public class ModMakerWindowVM : ObservableObjectX
             ModEditWindow?.Close();
             ModEditWindow = null!;
             ModInfoModel.Current?.Close();
-            I18nHelper.Current = new();
             I18nEditWindow.Current?.Close(true);
             ModMakerWindow.Show();
             ModMakerWindow.Activate();

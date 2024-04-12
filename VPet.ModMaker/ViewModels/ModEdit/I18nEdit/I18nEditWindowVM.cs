@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using HKW.HKWUtils.Observable;
+using Mapster;
 using VPet.ModMaker.Models;
 
 namespace VPet.ModMaker.ViewModels.ModEdit.I18nEdit;
@@ -67,12 +68,12 @@ public class I18nEditWindowVM : ObservableObjectX { }
 //    #endregion
 
 //    /// <summary>
-//    /// 全部I18n数据 (ID, I18nData)
+//    /// 全部I18n资源 (ID, I18nData)
 //    /// </summary>
 //    public Dictionary<string, I18nData> AllI18nDatas { get; } = new();
 
 //    /// <summary>
-//    /// 全部的I18n数据
+//    /// 全部的I18n资源
 //    /// </summary>
 //    #region ShowI18nDatas
 //    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
@@ -144,7 +145,7 @@ public class I18nEditWindowVM : ObservableObjectX { }
 
 //    #region LoadData
 //    /// <summary>
-//    /// 初始化I18n数据
+//    /// 初始化I18n资源
 //    /// </summary>
 //    /// <param name="model"></param>
 //    public void InitializeI18nData(ModInfoModel model)
@@ -360,11 +361,19 @@ public class I18nEditWindowVM : ObservableObjectX { }
 //    /// <param name="id"></param>
 //    /// <param name="i18nModel"></param>
 //    /// <param name="i18nValue"></param>
-//    private void AddData<T>(string id, Func<T,string> getValue)
-//        where T : , new()
+//    private void AddData<TViewModel, TI18nModel>(
+//        TViewModel viewModel,
+//        Func<TViewModel, string> getID,
+//        Action<TViewModel, string> setID,
+//        Func<TI18nModel, string> getI18nData,
+//        Action<TI18nModel, string> setI18nData
+//    )
+//        where TViewModel : I18nModel<TI18nModel>
+//        where TI18nModel : ObservableObjectX, new()
 //    {
-//        if (AllI18nDatas.TryGetValue(id, out var outData))
+//        if (AllI18nDatas.TryGetValue(getID(viewModel), out var outData))
 //        {
+//            AdaptMemberAttribute
 //            foreach (var culture in I18nHelper.Current.CultureNames.EnumerateIndex())
 //            {
 //                if (outData.Datas[culture.Index].Group is null)
@@ -379,7 +388,7 @@ public class I18nEditWindowVM : ObservableObjectX { }
 //        else
 //        {
 //            var data = new I18nData();
-//            data.ID = id.Value;
+//            data.ID = getID(viewModel);
 //            foreach (var culture in I18nHelper.Current.CultureNames)
 //                data.Datas.Add(i18nValue(i18nModel.I18nDatas[culture]));
 //            I18nDatas.Add(data);
@@ -417,7 +426,7 @@ public class I18nEditWindowVM : ObservableObjectX { }
 //    }
 
 //    /// <summary>
-//    /// 删除I18n数据
+//    /// 删除I18n资源
 //    /// </summary>
 //    /// <typeparam name="T"></typeparam>
 //    /// <param name="id"></param>
@@ -452,7 +461,7 @@ public class I18nEditWindowVM : ObservableObjectX { }
 //    }
 
 //    /// <summary>
-//    /// 替换I18n数据
+//    /// 替换I18n资源
 //    /// </summary>
 //    /// <typeparam name="T"></typeparam>
 //    /// <param name="id"></param>

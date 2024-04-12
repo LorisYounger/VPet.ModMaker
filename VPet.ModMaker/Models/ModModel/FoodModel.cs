@@ -21,11 +21,21 @@ namespace VPet.ModMaker.Models;
 /// <summary>
 /// 食物模型
 /// </summary>
-public class FoodModel : I18nModel<I18nFoodModel>
+public class FoodModel : ObservableObjectX
 {
     public FoodModel()
     {
         PropertyChangedX += FoodModel_PropertyChangedX;
+        ModInfoModel.Current.I18nResource.I18nObjectInfos.Add(
+            new(
+                this,
+                OnPropertyChanged,
+                [
+                    (nameof(ID), ID, nameof(Name), true),
+                    (nameof(DescriptionID), DescriptionID, nameof(Description), true)
+                ]
+            )
+        );
     }
 
     private static FrozenSet<string> _notifyReferencePrice = FrozenSet.ToFrozenSet(
@@ -54,9 +64,6 @@ public class FoodModel : I18nModel<I18nFoodModel>
     {
         model.Adapt(this);
         Image = model.Image?.CloneStream();
-        foreach (var item in model.I18nDatas)
-            I18nDatas[item.Key] = item.Value.Clone();
-        CurrentI18nData = I18nDatas[I18nHelper.Current.CultureName];
     }
 
     public FoodModel(Food food)
@@ -105,6 +112,26 @@ public class FoodModel : I18nModel<I18nFoodModel>
     {
         get => _descriptionID;
         set => SetProperty(ref _descriptionID, value);
+    }
+    #endregion
+
+    #region I18nData
+    [AdaptIgnore]
+    public string Name
+    {
+        get => ModInfoModel.Current.I18nResource.GetCurrentCultureDataOrDefault(ID, string.Empty);
+        set => ModInfoModel.Current.I18nResource.SetCurrentCultureData(ID, value);
+    }
+
+    [AdaptIgnore]
+    public string Description
+    {
+        get =>
+            ModInfoModel.Current.I18nResource.GetCurrentCultureDataOrDefault(
+                DescriptionID,
+                string.Empty
+            );
+        set => ModInfoModel.Current.I18nResource.SetCurrentCultureData(DescriptionID, value);
     }
     #endregion
 
@@ -310,7 +337,7 @@ public class FoodModel : I18nModel<I18nFoodModel>
         //};
     }
 
-    public void RefreshId()
+    public void RefreshID()
     {
         DescriptionID = $"{ID}_{nameof(DescriptionID)}";
     }
@@ -318,34 +345,10 @@ public class FoodModel : I18nModel<I18nFoodModel>
     public void Close()
     {
         Image?.CloseStream();
+        var item = ModInfoModel.Current.I18nResource.I18nObjectInfos.FirstOrDefault(i =>
+            i.Source == this
+        );
+        if (item is not null)
+            ModInfoModel.Current.I18nResource.I18nObjectInfos.Remove(item);
     }
-}
-
-public class I18nFoodModel : ObservableObjectX, ICloneable<I18nFoodModel>
-{
-    #region Name
-    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-    private string _name = string.Empty;
-
-    public string Name
-    {
-        get => _name;
-        set => SetProperty(ref _name, value);
-    }
-    #endregion
-
-    #region Description
-    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-    private string _description = string.Empty;
-
-    public string Description
-    {
-        get => _description;
-        set => SetProperty(ref _description, value);
-    }
-    #endregion
-
-    public I18nFoodModel Clone() => this.Adapt<I18nFoodModel>();
-
-    object ICloneable.Clone() => Clone();
 }

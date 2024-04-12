@@ -45,7 +45,7 @@
         d:Text="这是一个测试文本,这是一个测试文本,这是一个测试文本,这是一个测试文本,这是一个测试文本,这是一个测试文本,这是一个测试文本,"
         pu:TextBoxHelper.Watermark="{ll:Str 文本}"
         Style="{StaticResource TextBox_Wrap}"
-        Text="{Binding LowText.CurrentI18nData.Text, UpdateSourceTrigger=PropertyChanged}" />
+        Text="{Binding LowText.Text, UpdateSourceTrigger=PropertyChanged}" />
     </Grid>
     <Grid Grid.Column="1">
       <Grid.RowDefinitions>

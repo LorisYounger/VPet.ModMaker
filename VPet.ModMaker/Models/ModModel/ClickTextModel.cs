@@ -17,9 +17,14 @@ namespace VPet.ModMaker.Models;
 /// <summary>
 /// 点击文本模型
 /// </summary>
-public class ClickTextModel : I18nModel<I18nClickTextModel>
+public class ClickTextModel : ObservableObjectX
 {
-    public ClickTextModel() { }
+    public ClickTextModel()
+    {
+        ModInfoModel.Current.I18nResource.I18nObjectInfos.Add(
+            new(this, OnPropertyChanged, [(nameof(ID), ID, nameof(Text), true)])
+        );
+    }
 
     public ClickTextModel(ClickTextModel clickText)
         : this()
@@ -37,9 +42,6 @@ public class ClickTextModel : I18nModel<I18nClickTextModel>
         Drink = clickText.Drink.Clone();
         Feel = clickText.Feel.Clone();
         Strength = clickText.Strength.Clone();
-        foreach (var item in clickText.I18nDatas)
-            I18nDatas[item.Key] = item.Value.Clone();
-        CurrentI18nData = I18nDatas[I18nHelper.Current.CultureName];
     }
 
     public ClickTextModel(ClickText clickText)
@@ -118,6 +120,15 @@ public class ClickTextModel : I18nModel<I18nClickTextModel>
     {
         get => _id;
         set => SetProperty(ref _id, value);
+    }
+    #endregion
+
+    #region I18nData
+    [AdaptIgnore]
+    public string Text
+    {
+        get => ModInfoModel.Current.I18nResource.GetCurrentCultureDataOrDefault(ID, string.Empty);
+        set => ModInfoModel.Current.I18nResource.SetCurrentCultureData(ID, value);
     }
     #endregion
 

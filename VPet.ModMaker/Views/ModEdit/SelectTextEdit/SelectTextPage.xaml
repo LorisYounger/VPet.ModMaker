@@ -53,20 +53,20 @@
           SortMemberPath="ID" />
         <DataGridTextColumn
           MaxWidth="300"
-          Binding="{Binding CurrentI18nData.Text}"
+          Binding="{Binding Text}"
           CanUserSort="True"
           ElementStyle="{StaticResource TextBlock_Wrap}"
           Header="{ll:Str 文本}"
           IsReadOnly="True"
-          SortMemberPath="CurrentI18nData.Text" />
+          SortMemberPath="Text" />
         <DataGridTextColumn
           MaxWidth="200"
-          Binding="{Binding CurrentI18nData.Choose}"
+          Binding="{Binding Choose}"
           CanUserSort="True"
           ElementStyle="{DynamicResource TextBlock_LeftCenter}"
           Header="{ll:Str 选择名}"
           IsReadOnly="True"
-          SortMemberPath="CurrentI18nData.Choose" />
+          SortMemberPath="Choose" />
         <DataGridTextColumn
           MaxWidth="200"
           Binding="{Binding Tags}"

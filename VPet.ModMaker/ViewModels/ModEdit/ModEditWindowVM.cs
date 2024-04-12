@@ -11,6 +11,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Media.Imaging;
+using HKW.HKWUtils.Extensions;
 using HKW.HKWUtils.Observable;
 using LinePutScript.Localization.WPF;
 using Microsoft.Win32;
@@ -59,9 +60,9 @@ public class ModEditWindowVM : ObservableObjectX
     #endregion
 
     /// <summary>
-    /// I18n数据
+    /// I18n资源
     /// </summary>
-    public static I18nHelper I18nData => I18nHelper.Current;
+    public I18nResource<string, string> I18nResource => ModInfo.I18nResource;
     #endregion
 
     #region Command
@@ -163,9 +164,8 @@ public class ModEditWindowVM : ObservableObjectX
         window.ShowDialog();
         if (window.IsCancel)
             return;
-        I18nHelper.Current.CultureNames.Add(window.ViewModel.Culture);
-        if (I18nHelper.Current.CultureNames.Count == 1)
-            I18nHelper.Current.CultureName = window.ViewModel.Culture;
+        ModInfoModel.Current.I18nResource.AddCulture(window.ViewModel.Culture);
+        ModInfoModel.Current.I18nResource.SetCurrentCulture(window.ViewModel.Culture);
     }
 
     /// <summary>
@@ -179,8 +179,7 @@ public class ModEditWindowVM : ObservableObjectX
         window.ShowDialog();
         if (window.IsCancel)
             return;
-        I18nHelper.Current.CultureNames[I18nHelper.Current.CultureNames.IndexOf(oldCulture)] =
-            window.ViewModel.Culture;
+        ModInfoModel.Current.I18nResource.ReplaceCulture(oldCulture, window.ViewModel.Culture);
     }
 
     /// <summary>
@@ -197,7 +196,7 @@ public class ModEditWindowVM : ObservableObjectX
             ) is MessageBoxResult.No
         )
             return;
-        I18nHelper.Current.CultureNames.Remove(oldCulture);
+        ModInfoModel.Current.I18nResource.RemoveCulture(oldCulture);
     }
 
     public void SetMainCultureCommand_ExecuteCommand(string culture)
@@ -212,30 +211,31 @@ public class ModEditWindowVM : ObservableObjectX
             is not MessageBoxResult.Yes
         )
             return;
-        ModInfo.I18nDatas[culture].Name = ModInfo.ID;
-        ModInfo.I18nDatas[culture].Description = ModInfo.DescriptionID;
-        foreach (var food in ModInfo.Foods)
-        {
-            food.I18nDatas[culture].Name = food.ID;
-            food.I18nDatas[culture].Description = food.DescriptionID;
-        }
-        foreach (var text in ModInfo.LowTexts)
-            text.I18nDatas[culture].Text = text.ID;
-        foreach (var text in ModInfo.ClickTexts)
-            text.I18nDatas[culture].Text = text.ID;
-        foreach (var text in ModInfo.SelectTexts)
-        {
-            text.I18nDatas[culture].Text = text.ID;
-            text.I18nDatas[culture].Choose = text.ChooseID;
-        }
-        foreach (var pet in ModInfo.Pets)
-        {
-            pet.I18nDatas[culture].Name = pet.ID;
-            pet.I18nDatas[culture].PetName = pet.PetNameID;
-            pet.I18nDatas[culture].Description = pet.DescriptionID;
-            foreach (var work in pet.Works)
-                work.I18nDatas[culture].Name = work.ID;
-        }
+        // TODO
+        //ModInfo.I18nDatas[culture].Name = ModInfo.ID;
+        //ModInfo.I18nDatas[culture].Description = ModInfo.DescriptionID;
+        //foreach (var food in ModInfo.Foods)
+        //{
+        //    food.I18nDatas[culture].Name = food.ID;
+        //    food.I18nDatas[culture].Description = food.DescriptionID;
+        //}
+        //foreach (var text in ModInfo.LowTexts)
+        //    text.I18nDatas[culture].Text = text.ID;
+        //foreach (var text in ModInfo.ClickTexts)
+        //    text.I18nDatas[culture].Text = text.ID;
+        //foreach (var text in ModInfo.SelectTexts)
+        //{
+        //    text.I18nDatas[culture].Text = text.ID;
+        //    text.I18nDatas[culture].Choose = text.ChooseID;
+        //}
+        //foreach (var pet in ModInfo.Pets)
+        //{
+        //    pet.I18nDatas[culture].Name = pet.ID;
+        //    pet.I18nDatas[culture].PetName = pet.PetNameID;
+        //    pet.I18nDatas[culture].Description = pet.DescriptionID;
+        //    foreach (var work in pet.Works)
+        //        work.I18nDatas[culture].Name = work.ID;
+        //}
     }
     #endregion
 
@@ -303,7 +303,7 @@ public class ModEditWindowVM : ObservableObjectX
     /// <returns>成功为 <see langword="true"/> 失败为 <see langword="false"/></returns>
     private bool ValidationData(ModInfoModel model)
     {
-        if (I18nHelper.Current.CultureNames.Count == 0)
+        if (ModInfoModel.Current.I18nResource.CultureDatas.HasValue() is false)
         {
             MessageBox.Show(
                 ModEditWindow,

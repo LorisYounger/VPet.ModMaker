@@ -92,8 +92,10 @@ public class WorkEditWindowVM : ObservableObjectX
         }
     }
 
-    public static ModInfoModel ModInfo => ModInfoModel.Current;
-    public static I18nHelper I18nData => I18nHelper.Current;
+    /// <summary>
+    /// I18n资源
+    /// </summary>
+    public static I18nResource<string, string> I18nResource => ModInfoModel.Current.I18nResource;
     #region Property
     public PetModel CurrentPet { get; set; } = null!;
     public WorkModel? OldWork { get; set; }

@@ -16,18 +16,19 @@ namespace VPet.ModMaker.Models;
 /// <summary>
 /// 低状态文本
 /// </summary>
-public class LowTextModel : I18nModel<I18nLowTextModel>
+public class LowTextModel : ObservableObjectX
 {
-    public LowTextModel() { }
+    public LowTextModel()
+    {
+        ModInfoModel.Current.I18nResource.I18nObjectInfos.Add(
+            new(this, OnPropertyChanged, [(nameof(ID), ID, nameof(Text), true)])
+        );
+    }
 
     public LowTextModel(LowTextModel lowText)
         : this()
     {
         lowText.Adapt(this);
-
-        foreach (var item in lowText.I18nDatas)
-            I18nDatas[item.Key] = item.Value.Clone();
-        CurrentI18nData = I18nDatas[I18nHelper.Current.CultureName];
     }
 
     public LowTextModel(LowText lowText)
@@ -66,6 +67,15 @@ public class LowTextModel : I18nModel<I18nLowTextModel>
     {
         get => _id;
         set => SetProperty(ref _id, value);
+    }
+    #endregion
+
+    #region I18nData
+    [AdaptIgnore]
+    public string Text
+    {
+        get => ModInfoModel.Current.I18nResource.GetCurrentCultureDataOrDefault(ID, string.Empty);
+        set => ModInfoModel.Current.I18nResource.SetCurrentCultureData(ID, value);
     }
     #endregion
 
@@ -118,25 +128,4 @@ public class LowTextModel : I18nModel<I18nLowTextModel>
     {
         return this.Adapt<LowText>();
     }
-}
-
-public class I18nLowTextModel : ObservableObjectX, ICloneable<I18nLowTextModel>
-{
-    #region Text
-    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-    private string _text = string.Empty;
-
-    public string Text
-    {
-        get => _text;
-        set => SetProperty(ref _text, value);
-    }
-    #endregion
-
-    public I18nLowTextModel Clone()
-    {
-        return this.Adapt<I18nLowTextModel>();
-    }
-
-    object ICloneable.Clone() => Clone();
 }

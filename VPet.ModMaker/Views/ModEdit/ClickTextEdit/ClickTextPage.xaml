@@ -19,7 +19,7 @@
       <RowDefinition />
     </Grid.RowDefinitions>
     <TextBox
-      pu:TextBoxHelper.Watermark="{ll:Str 搜索Id}"
+      pu:TextBoxHelper.Watermark="{ll:Str 搜索ID}"
       Style="{DynamicResource StandardTextBoxStyle}"
       Text="{Binding Search, UpdateSourceTrigger=PropertyChanged}" />
     <DataGrid
@@ -53,12 +53,12 @@
           SortMemberPath="ID" />
         <DataGridTextColumn
           MaxWidth="300"
-          Binding="{Binding CurrentI18nData.Text}"
+          Binding="{Binding Text}"
           CanUserSort="True"
           ElementStyle="{StaticResource TextBlock_Wrap}"
           Header="{ll:Str 文本}"
           IsReadOnly="True"
-          SortMemberPath="CurrentI18nData.Text" />
+          SortMemberPath="Text" />
         <DataGridTextColumn
           Binding="{Binding Mode.Value}"
           CanUserSort="True"

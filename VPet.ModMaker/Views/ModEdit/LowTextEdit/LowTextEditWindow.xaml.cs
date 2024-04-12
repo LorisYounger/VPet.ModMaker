@@ -39,7 +39,7 @@ public partial class LowTextEditWindow : Window
 
     private void Button_Yes_Click(object? sender, RoutedEventArgs e)
     {
-        if (string.IsNullOrEmpty(ViewModel.LowText.ID))
+        if (string.IsNullOrWhiteSpace(ViewModel.LowText.ID))
         {
             MessageBox.Show("ID不可为空".Translate(), "", MessageBoxButton.OK, MessageBoxImage.Warning);
             return;
@@ -52,7 +52,7 @@ public partial class LowTextEditWindow : Window
             MessageBox.Show("此ID已存在".Translate(), "", MessageBoxButton.OK, MessageBoxImage.Warning);
             return;
         }
-        if (string.IsNullOrEmpty(ViewModel.LowText.CurrentI18nData.Text))
+        if (string.IsNullOrWhiteSpace(ViewModel.LowText.Text))
         {
             MessageBox.Show("文本不可为空".Translate(), "", MessageBoxButton.OK, MessageBoxImage.Warning);
             return;

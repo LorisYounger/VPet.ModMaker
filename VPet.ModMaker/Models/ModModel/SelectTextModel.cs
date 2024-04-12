@@ -16,9 +16,21 @@ namespace VPet.ModMaker.Models;
 /// <summary>
 /// 选择文本模型
 /// </summary>
-public class SelectTextModel : I18nModel<I18nSelectTextModel>
+public class SelectTextModel : ObservableObjectX
 {
-    public SelectTextModel() { }
+    public SelectTextModel()
+    {
+        ModInfoModel.Current.I18nResource.I18nObjectInfos.Add(
+            new(
+                this,
+                OnPropertyChanged,
+                [
+                    (nameof(ID), ID, nameof(Text), true),
+                    (nameof(ChooseID), ChooseID, nameof(Choose), true)
+                ]
+            )
+        );
+    }
 
     public SelectTextModel(SelectTextModel model)
         : this()
@@ -37,10 +49,6 @@ public class SelectTextModel : I18nModel<I18nSelectTextModel>
         Drink = model.Drink.Clone();
         Feel = model.Feel.Clone();
         Strength = model.Strength.Clone();
-
-        foreach (var item in model.I18nDatas)
-            I18nDatas[item.Key] = item.Value.Clone();
-        CurrentI18nData = I18nDatas[I18nHelper.Current.CultureName];
     }
 
     public SelectTextModel(SelectText text)
@@ -123,6 +131,26 @@ public class SelectTextModel : I18nModel<I18nSelectTextModel>
     {
         get => _chooseId;
         set => SetProperty(ref _chooseId, value);
+    }
+    #endregion
+
+    #region I18nData
+    [AdaptIgnore]
+    public string Text
+    {
+        get => ModInfoModel.Current.I18nResource.GetCurrentCultureDataOrDefault(ID, string.Empty);
+        set => ModInfoModel.Current.I18nResource.SetCurrentCultureData(ID, value);
+    }
+
+    [AdaptIgnore]
+    public string Choose
+    {
+        get =>
+            ModInfoModel.Current.I18nResource.GetCurrentCultureDataOrDefault(
+                ChooseID,
+                string.Empty
+            );
+        set => ModInfoModel.Current.I18nResource.SetCurrentCultureData(ChooseID, value);
     }
     #endregion
 
@@ -211,35 +239,4 @@ public class SelectTextModel : I18nModel<I18nSelectTextModel>
             StrengthMax = Strength.Max,
         };
     }
-}
-
-public class I18nSelectTextModel : ObservableObjectX, ICloneable<I18nSelectTextModel>
-{
-    #region Choose
-    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-    private string _choose = string.Empty;
-
-    public string Choose
-    {
-        get => _choose;
-        set => SetProperty(ref _choose, value);
-    }
-    #endregion
-    #region Text
-    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-    private string _text = string.Empty;
-
-    public string Text
-    {
-        get => _text;
-        set => SetProperty(ref _text, value);
-    }
-    #endregion
-
-    public I18nSelectTextModel Clone()
-    {
-        return this.Adapt<I18nSelectTextModel>();
-    }
-
-    object ICloneable.Clone() => Clone();
 }

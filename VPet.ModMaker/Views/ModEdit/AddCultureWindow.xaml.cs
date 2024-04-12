@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -51,7 +52,11 @@ public partial class AddCultureWindow : WindowX
             MessageBox.Show("文化不可为空".Translate(), "", MessageBoxButton.OK, MessageBoxImage.Warning);
             return;
         }
-        if (I18nHelper.Current.CultureNames.Contains(ViewModel.Culture))
+        if (
+            ModInfoModel.Current.I18nResource.CultureDatas.ContainsKey(
+                CultureInfo.GetCultureInfo(ViewModel.Culture)
+            )
+        )
         {
             MessageBox.Show("此文化已存在".Translate(), "", MessageBoxButton.OK, MessageBoxImage.Warning);
             return;
@@ -62,10 +67,8 @@ public partial class AddCultureWindow : WindowX
 
     private void Hyperlink_Click(object? sender, RoutedEventArgs e)
     {
-        Process.Start(
-            new ProcessStartInfo(
-                "https://learn.microsoft.com/en-us/openspecs/windows_protocols/ms-lcid/a9eac961-e77d-41a6-90a5-ce1a8b0cdb9c"
-            )
+        NativeUtils.OpenLink(
+            "https://learn.microsoft.com/en-us/openspecs/windows_protocols/ms-lcid/a9eac961-e77d-41a6-90a5-ce1a8b0cdb9c"
         );
     }
 }

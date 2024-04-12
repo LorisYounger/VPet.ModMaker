@@ -16,6 +16,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using HKW.HKWUtils.Extensions;
 using LinePutScript.Localization.WPF;
 using Microsoft.Win32;
 using Panuon.WPF;
@@ -72,7 +73,7 @@ public partial class ModEditWindow : WindowX
     /// </summary>
     public void InitializeData()
     {
-        if (I18nHelper.Current.CultureNames.Count == 0)
+        if (ModInfoModel.Current.I18nResource.CultureDatas.HasValue() is false)
         {
             if (
                 MessageBox.Show("未添加任何文化,确定要添加文化吗?".Translate(), "", MessageBoxButton.YesNo)
@@ -81,16 +82,20 @@ public partial class ModEditWindow : WindowX
                 return;
             ViewModel.AddCultureCommand_ExecuteCommand();
             if (
-                I18nHelper.Current.CultureNames.Count == 0
+                ModInfoModel.Current.I18nResource.CultureDatas.HasValue() is false
                 || MessageBox.Show(
-                    "需要将文化 {0} 设为主要文化吗?".Translate(I18nHelper.Current.CultureNames.First()),
+                    "需要将文化 {0} 设为主要文化吗?".Translate(
+                        ModInfoModel.Current.I18nResource.CultureDatas.First().Key.Name
+                    ),
                     "",
                     MessageBoxButton.YesNo
                 )
                     is not MessageBoxResult.Yes
             )
                 return;
-            ViewModel.SetMainCultureCommand_ExecuteCommand(I18nHelper.Current.CultureNames.First());
+            ViewModel.SetMainCultureCommand_ExecuteCommand(
+                ModInfoModel.Current.I18nResource.CultureDatas.First().Key.Name
+            );
         }
     }
 

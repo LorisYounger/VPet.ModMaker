@@ -23,13 +23,24 @@ namespace VPet.ModMaker.Models;
 /// <summary>
 /// 宠物模型
 /// </summary>
-public class PetModel : I18nModel<I18nPetInfoModel>
+public class PetModel : ObservableObjectX
 {
     public PetModel()
     {
         PropertyChanged += PetModel_PropertyChanged;
         Animes.PropertyChanged += Animes_PropertyChanged;
         FoodAnimes.PropertyChanged += FoodAnimes_PropertyChanged;
+        ModInfoModel.Current.I18nResource.I18nObjectInfos.Add(
+            new(
+                this,
+                OnPropertyChanged,
+                [
+                    (nameof(ID), ID, nameof(Name), true),
+                    (nameof(PetNameID), PetNameID, nameof(Name), true),
+                    (nameof(DescriptionID), DescriptionID, nameof(Description), true)
+                ]
+            )
+        );
     }
 
     private void PetModel_PropertyChanged(object? sender, PropertyChangedEventArgs e)
@@ -54,10 +65,6 @@ public class PetModel : I18nModel<I18nPetInfoModel>
         RaisePoint = model.RaisePoint.Clone();
         foreach (var work in model.Works)
             Works.Add(work);
-
-        foreach (var item in model.I18nDatas)
-            I18nDatas[item.Key] = item.Value.Clone();
-        CurrentI18nData = I18nDatas[I18nHelper.Current.CultureName];
     }
 
     public PetModel(PetLoader loader, bool fromMain = false)
@@ -182,6 +189,37 @@ public class PetModel : I18nModel<I18nPetInfoModel>
     {
         get => _descriptionID;
         set => SetProperty(ref _descriptionID, value);
+    }
+    #endregion
+
+    #region I18nData
+    [AdaptIgnore]
+    public string Name
+    {
+        get => ModInfoModel.Current.I18nResource.GetCurrentCultureDataOrDefault(ID, string.Empty);
+        set => ModInfoModel.Current.I18nResource.SetCurrentCultureData(ID, value);
+    }
+
+    [AdaptIgnore]
+    public string PetName
+    {
+        get =>
+            ModInfoModel.Current.I18nResource.GetCurrentCultureDataOrDefault(
+                PetNameID,
+                string.Empty
+            );
+        set => ModInfoModel.Current.I18nResource.SetCurrentCultureData(PetNameID, value);
+    }
+
+    [AdaptIgnore]
+    public string Description
+    {
+        get =>
+            ModInfoModel.Current.I18nResource.GetCurrentCultureDataOrDefault(
+                DescriptionID,
+                string.Empty
+            );
+        set => ModInfoModel.Current.I18nResource.SetCurrentCultureData(DescriptionID, value);
     }
     #endregion
 
@@ -344,16 +382,17 @@ public class PetModel : I18nModel<I18nPetInfoModel>
     /// <param name="path">路径</param>
     public void Save(string path)
     {
-        foreach (var cultureName in I18nHelper.Current.CultureNames)
-        {
-            ModInfoModel.SaveI18nDatas[cultureName].TryAdd(ID, I18nDatas[cultureName].Name);
-            ModInfoModel
-                .SaveI18nDatas[cultureName]
-                .TryAdd(PetNameID, I18nDatas[cultureName].PetName);
-            ModInfoModel
-                .SaveI18nDatas[cultureName]
-                .TryAdd(DescriptionID, I18nDatas[cultureName].Description);
-        }
+        // TODO
+        //foreach (var cultureName in I18nHelper.Current.CultureNames)
+        //{
+        //    ModInfoModel.SaveI18nDatas[cultureName].TryAdd(ID, I18nDatas[cultureName].Name);
+        //    ModInfoModel
+        //        .SaveI18nDatas[cultureName]
+        //        .TryAdd(PetNameID, I18nDatas[cultureName].PetName);
+        //    ModInfoModel
+        //        .SaveI18nDatas[cultureName]
+        //        .TryAdd(DescriptionID, I18nDatas[cultureName].Description);
+        //}
         var petFile = Path.Combine(path, $"{ID}.lps");
         if (File.Exists(petFile) is false)
             File.Create(petFile).Close();
@@ -400,13 +439,14 @@ public class PetModel : I18nModel<I18nPetInfoModel>
     {
         foreach (var work in Works)
         {
-            lps.Add(LPSConvert.SerializeObjectToLine<Line>(work.ToWork(), "work"));
-            foreach (var cultureName in I18nHelper.Current.CultureNames)
-            {
-                ModInfoModel
-                    .SaveI18nDatas[cultureName]
-                    .TryAdd(work.ID, work.I18nDatas[cultureName].Name);
-            }
+            //TODO
+            //lps.Add(LPSConvert.SerializeObjectToLine<Line>(work.ToWork(), "work"));
+            //foreach (var cultureName in I18nHelper.Current.CultureNames)
+            //{
+            //    ModInfoModel
+            //        .SaveI18nDatas[cultureName]
+            //        .TryAdd(work.ID, work.I18nDatas[cultureName].Name);
+            //}
         }
     }
 
@@ -543,51 +583,6 @@ public class PetModel : I18nModel<I18nPetInfoModel>
     }
     #endregion
     #endregion
-}
-
-public class I18nPetInfoModel : ObservableObjectX, ICloneable<I18nPetInfoModel>
-{
-    #region Name
-    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-    private string _name = string.Empty;
-
-    public string Name
-    {
-        get => _name;
-        set => SetProperty(ref _name, value);
-    }
-    #endregion
-    #region PetName
-    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-    private string _petName = string.Empty;
-
-    public string PetName
-    {
-        get => _petName;
-        set => SetProperty(ref _petName, value);
-    }
-    #endregion
-    #region Description
-    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-    private string _description = string.Empty;
-
-    public string Description
-    {
-        get => _description;
-        set => SetProperty(ref _description, value);
-    }
-    #endregion
-
-    public I18nPetInfoModel Clone()
-    {
-        var result = new I18nPetInfoModel();
-        result.Name = Name;
-        result.PetName = PetName;
-        result.Description = Description;
-        return result;
-    }
-
-    object ICloneable.Clone() => Clone();
 }
 
 public class ObservableMultiStateRectangleLocation

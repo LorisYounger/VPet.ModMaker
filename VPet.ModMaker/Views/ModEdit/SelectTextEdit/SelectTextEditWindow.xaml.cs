@@ -48,7 +48,7 @@ public partial class SelectTextEditWindow : Window
     {
         if (string.IsNullOrWhiteSpace(ViewModel.SelectText.ID))
         {
-            MessageBox.Show("Id不可为空".Translate(), "", MessageBoxButton.OK, MessageBoxImage.Warning);
+            MessageBox.Show("ID不可为空".Translate(), "", MessageBoxButton.OK, MessageBoxImage.Warning);
             return;
         }
         if (
@@ -56,10 +56,10 @@ public partial class SelectTextEditWindow : Window
             && ModInfoModel.Current.SelectTexts.Any(i => i.ID == ViewModel.SelectText.ID)
         )
         {
-            MessageBox.Show("此Id已存在".Translate(), "", MessageBoxButton.OK, MessageBoxImage.Warning);
+            MessageBox.Show("此ID已存在".Translate(), "", MessageBoxButton.OK, MessageBoxImage.Warning);
             return;
         }
-        if (string.IsNullOrWhiteSpace(ViewModel.SelectText.CurrentI18nData.Choose))
+        if (string.IsNullOrWhiteSpace(ViewModel.SelectText.Choose))
         {
             MessageBox.Show(
                 "选项名不可为空".Translate(),
@@ -69,7 +69,7 @@ public partial class SelectTextEditWindow : Window
             );
             return;
         }
-        if (string.IsNullOrWhiteSpace(ViewModel.SelectText.CurrentI18nData.Text))
+        if (string.IsNullOrWhiteSpace(ViewModel.SelectText.Text))
         {
             MessageBox.Show("文本不可为空".Translate(), "", MessageBoxButton.OK, MessageBoxImage.Warning);
             return;

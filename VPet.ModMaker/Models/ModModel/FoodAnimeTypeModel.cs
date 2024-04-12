@@ -7,6 +7,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using HKW.HKWUtils.Extensions;
 using HKW.HKWUtils.Observable;
 using LinePutScript;
 using LinePutScript.Localization.WPF;
@@ -271,10 +272,10 @@ public class FoodAnimeTypeModel : ObservableObjectX
         var animePath = Path.Combine(path, Name);
         if (
             Directory.Exists(animePath)
-            && HappyAnimes.Count == 0
-            && NomalAnimes.Count == 0
-            && PoorConditionAnimes.Count == 0
-            && IllAnimes.Count == 0
+            && HappyAnimes.HasValue() is false
+            && NomalAnimes.HasValue() is false
+            && PoorConditionAnimes.HasValue() is false
+            && IllAnimes.HasValue() is false
         )
         {
             Directory.Delete(animePath, true);
@@ -303,15 +304,15 @@ public class FoodAnimeTypeModel : ObservableObjectX
     )
     {
         var modeAnimePath = Path.Combine(animePath, mode.ToString());
-        foreach (var anime in animes.EnumerateIndex())
+        foreach ((var index, var anime) in animes.EnumerateIndex())
         {
-            var indexPath = Path.Combine(modeAnimePath, anime.Index.ToString());
+            var indexPath = Path.Combine(modeAnimePath, index.ToString());
             Directory.CreateDirectory(indexPath);
             var infoFile = Path.Combine(indexPath, ModMakerInfo.InfoFile);
-            var frontLayName = $"{Name.ToLower()}_{FrontLayName}_{anime.Index}";
-            var backLayName = $"{Name.ToLower()}_{BackLayName}_{anime.Index}";
-            SaveInfoFile(infoFile, frontLayName, backLayName, anime.Value, mode);
-            SaveImages(anime.Value, indexPath);
+            var frontLayName = $"{Name.ToLower()}_{FrontLayName}_{index}";
+            var backLayName = $"{Name.ToLower()}_{BackLayName}_{index}";
+            SaveInfoFile(infoFile, frontLayName, backLayName, anime, mode);
+            SaveImages(anime, indexPath);
         }
     }
 
@@ -328,22 +329,16 @@ public class FoodAnimeTypeModel : ObservableObjectX
         var backLayPath = Path.Combine(indexPath, BackLayName);
         Directory.CreateDirectory(frontLayPath);
         Directory.CreateDirectory(backLayPath);
-        foreach (var frontImage in anime.FrontImages.EnumerateIndex())
+        foreach ((var index, var frontImage) in anime.FrontImages.EnumerateIndex())
         {
-            frontImage.Value.Image.SaveToPng(
-                Path.Combine(
-                    frontLayPath,
-                    $"{anime.ID}_{frontImage.Index:000}_{frontImage.Value.Duration}.png"
-                )
+            frontImage.Image.SaveToPng(
+                Path.Combine(frontLayPath, $"{anime.ID}_{index:000}_{frontImage.Duration}.png")
             );
         }
-        foreach (var backImage in anime.BackImages.EnumerateIndex())
+        foreach ((var index, var backImage) in anime.BackImages.EnumerateIndex())
         {
-            backImage.Value.Image.SaveToPng(
-                Path.Combine(
-                    backLayPath,
-                    $"{anime.ID}_{backImage.Index:000}_{backImage.Value.Duration}.png"
-                )
+            backImage.Image.SaveToPng(
+                Path.Combine(backLayPath, $"{anime.ID}_{backImage:000}_{backImage.Duration}.png")
             );
         }
     }
@@ -376,10 +371,10 @@ public class FoodAnimeTypeModel : ObservableObjectX
             new Sub("mode", mode.ToString()),
             new Sub("graph", Name)
         };
-        foreach (var foodLocation in anime.FoodLocations.EnumerateIndex())
+        foreach ((var index, var foodLocation) in anime.FoodLocations.EnumerateIndex())
         {
-            var sub = new Sub($"a{foodLocation.Index}");
-            sub.info = foodLocation.Value.ToString();
+            var sub = new Sub($"a{index}");
+            sub.info = foodLocation.ToString();
             line.Add(sub);
         }
         line.Add(new Sub(FrontLayName, frontLayName));

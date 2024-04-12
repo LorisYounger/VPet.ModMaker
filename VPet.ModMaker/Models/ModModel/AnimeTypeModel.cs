@@ -9,6 +9,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Media.Imaging;
+using HKW.HKWUtils.Extensions;
 using HKW.HKWUtils.Observable;
 using VPet_Simulator.Core;
 using static VPet_Simulator.Core.GraphInfo;
@@ -103,7 +104,7 @@ public class AnimeTypeModel : ObservableObjectX
     private string _id = string.Empty;
 
     /// <summary>
-    /// Id
+    /// ID
     /// </summary>
     public string ID
     {
@@ -202,7 +203,7 @@ public class AnimeTypeModel : ObservableObjectX
     public AnimeTypeModel(GraphInfo.GraphType graphType, string path)
     {
         Name = Path.GetFileName(path);
-        // 为带有名字的类型设置Id
+        // 为带有名字的类型设置ID
         if (graphType.IsHasNameAnime())
             ID = $"{graphType}_{Name}";
         else
@@ -643,8 +644,8 @@ public class AnimeTypeModel : ObservableObjectX
         static void SaveAnimes(string animePath, ObservableList<AnimeModel> animes)
         {
             Directory.CreateDirectory(animePath);
-            foreach (var anime in animes.EnumerateIndex())
-                SaveImages(Path.Combine(animePath, anime.Index.ToString()), anime.Value);
+            foreach ((var index, var anime) in animes.EnumerateIndex())
+                SaveImages(Path.Combine(animePath, index.ToString()), anime);
         }
     }
 
@@ -656,10 +657,10 @@ public class AnimeTypeModel : ObservableObjectX
     static void SaveImages(string imagesPath, AnimeModel model)
     {
         Directory.CreateDirectory(imagesPath);
-        foreach (var image in model.Images.EnumerateIndex())
+        foreach ((var index, var image) in model.Images.EnumerateIndex())
         {
-            image.Value.Image.SaveToPng(
-                Path.Combine(imagesPath, $"{model.ID}_{image.Index:000}_{image.Value.Duration}.png")
+            image.Image.SaveToPng(
+                Path.Combine(imagesPath, $"{model.ID}_{index:000}_{image.Duration}.png")
             );
         }
     }

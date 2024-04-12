@@ -198,7 +198,7 @@
           <RowDefinition Height="Auto" />
           <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
-        <!--<Label Content="{ll:Str 动画Id}" />
+        <!--<Label Content="{ll:Str 动画ID}" />
         <TextBox Grid.Column="1" />-->
         <Label Content="{ll:Str 动画类型}" />
         <TextBlock Grid.Column="1" Text="{Binding Anime.GraphType}" />

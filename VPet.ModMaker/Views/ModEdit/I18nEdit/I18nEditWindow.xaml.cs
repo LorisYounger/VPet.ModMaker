@@ -6,6 +6,7 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
+using HKW.HKWUtils.Extensions;
 using HKW.HKWUtils.Observable;
 using Panuon.WPF.UI;
 using VPet.ModMaker.Models;
@@ -89,10 +90,7 @@ public partial class I18nEditWindow : WindowX
     /// <param name="culture"></param>
     public void AddCulture(string culture)
     {
-        var dataPath = string.Format(
-            ValueBindingFormat,
-            I18nHelper.Current.CultureNames.IndexOf(culture)
-        );
+        var dataPath = string.Format(ValueBindingFormat, culture);
         // 文化数据列
         var column = new DataGridTextColumn()
         {
@@ -118,8 +116,7 @@ public partial class I18nEditWindow : WindowX
         _dataGridI18nColumns.Remove(culture);
         foreach (var columnData in _dataGridI18nColumns)
         {
-            var index = I18nHelper.Current.CultureNames.IndexOf(columnData.Key);
-            var dataPath = string.Format(ValueBindingFormat, index);
+            var dataPath = string.Format(ValueBindingFormat, culture);
             columnData.Value.Binding = new Binding(dataPath) { Mode = BindingMode.TwoWay };
             columnData.Value.SortMemberPath = dataPath;
         }

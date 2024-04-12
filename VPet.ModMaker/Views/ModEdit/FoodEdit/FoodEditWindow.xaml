@@ -59,7 +59,7 @@
             <RowDefinition Height="Auto" />
             <RowDefinition />
           </Grid.RowDefinitions>
-          <Label Content="Id" />
+          <Label Content="ID" />
           <TextBox
             Grid.Column="1"
             pu:TextBoxHelper.Watermark="ID"
@@ -82,14 +82,14 @@
             Grid.Row="3"
             Grid.Column="1"
             pu:TextBoxHelper.Watermark="{ll:Str 食物名称}"
-            Text="{Binding Food.CurrentI18nData.Name, UpdateSourceTrigger=PropertyChanged}" />
+            Text="{Binding Food.Name, UpdateSourceTrigger=PropertyChanged}" />
           <Label Grid.Row="4" Content="{ll:Str 食物描述}" />
           <TextBox
             Grid.Row="4"
             Grid.Column="1"
             pu:TextBoxHelper.Watermark="{ll:Str 食物描述}"
             Style="{StaticResource TextBox_Wrap}"
-            Text="{Binding Food.CurrentI18nData.Description, UpdateSourceTrigger=PropertyChanged}" />
+            Text="{Binding Food.Description, UpdateSourceTrigger=PropertyChanged}" />
         </Grid>
       </ScrollViewer>
     </Grid>

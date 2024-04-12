@@ -49,15 +49,15 @@ public partial class PetEditWindow : Window
     {
         if (string.IsNullOrWhiteSpace(ViewModel.Pet.ID))
         {
-            MessageBox.Show("Id不可为空".Translate(), "", MessageBoxButton.OK, MessageBoxImage.Warning);
+            MessageBox.Show("ID不可为空".Translate(), "", MessageBoxButton.OK, MessageBoxImage.Warning);
             return;
         }
-        if (string.IsNullOrWhiteSpace(ViewModel.Pet.CurrentI18nData.Name))
+        if (string.IsNullOrWhiteSpace(ViewModel.Pet.Name))
         {
             MessageBox.Show("名称不可为空".Translate(), "", MessageBoxButton.OK, MessageBoxImage.Warning);
             return;
         }
-        if (string.IsNullOrWhiteSpace(ViewModel.Pet.CurrentI18nData.PetName))
+        if (string.IsNullOrWhiteSpace(ViewModel.Pet.PetName))
         {
             MessageBox.Show(
                 "宠物名称不可为空".Translate(),
@@ -72,7 +72,7 @@ public partial class PetEditWindow : Window
             && ModInfoModel.Current.Pets.Any(i => i.ID == ViewModel.Pet.ID)
         )
         {
-            MessageBox.Show("此Id已存在", "", MessageBoxButton.OK, MessageBoxImage.Warning);
+            MessageBox.Show("此ID已存在", "", MessageBoxButton.OK, MessageBoxImage.Warning);
             return;
         }
         IsCancel = false;

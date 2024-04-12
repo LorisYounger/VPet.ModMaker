@@ -35,7 +35,7 @@ public class AnimeModel : ObservableObjectX, ICloneable<AnimeModel>
     private string _id = string.Empty;
 
     /// <summary>
-    /// Id
+    /// ID
     /// </summary>
     public string ID
     {

@@ -14,6 +14,8 @@ namespace VPet.ModMaker.Models;
 /// </summary>
 public class ModMakeHistory : IEquatable<ModMakeHistory>
 {
+    public ModMakeHistory() { }
+
     /// <summary>
     /// 图片
     /// </summary>
@@ -28,7 +30,7 @@ public class ModMakeHistory : IEquatable<ModMakeHistory>
     /// <summary>
     /// 路径
     /// </summary>
-    private string _path = string.Empty;
+    private string _sourcePath = string.Empty;
 
     /// <summary>
     /// 资源路径
@@ -36,11 +38,13 @@ public class ModMakeHistory : IEquatable<ModMakeHistory>
     [Line(ignoreCase: true)]
     public string SourcePath
     {
-        get => _path;
+        get => _sourcePath;
         set
         {
-            _path = value;
-            var imagePath = Path.Combine(_path, "icon.png");
+            if (string.IsNullOrWhiteSpace(_sourcePath) is false)
+                Image?.CloseStream();
+            _sourcePath = value;
+            var imagePath = Path.Combine(_sourcePath, "icon.png");
             if (File.Exists(imagePath))
                 Image = NativeUtils.LoadImageToMemoryStream(imagePath);
         }

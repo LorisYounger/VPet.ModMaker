@@ -76,7 +76,7 @@
       <TextBox
         Grid.Row="3"
         Grid.Column="1"
-        Text="{Binding Pet.CurrentI18nData.Description}" />-->
+        Text="{Binding Pet.Description}" />-->
       </Grid>
     </Grid>
     <Grid Grid.Column="1">

@@ -38,7 +38,7 @@ public partial class ClickTextEditWindow : Window
 
     private void Button_Yes_Click(object? sender, RoutedEventArgs e)
     {
-        if (string.IsNullOrEmpty(ViewModel.ClickText.ID))
+        if (string.IsNullOrWhiteSpace(ViewModel.ClickText.ID))
         {
             MessageBox.Show("ID不可为空".Translate(), "", MessageBoxButton.OK, MessageBoxImage.Warning);
             return;
@@ -51,7 +51,7 @@ public partial class ClickTextEditWindow : Window
             MessageBox.Show("此ID已存在".Translate(), "", MessageBoxButton.OK, MessageBoxImage.Warning);
             return;
         }
-        if (string.IsNullOrEmpty(ViewModel.ClickText.CurrentI18nData.Text))
+        if (string.IsNullOrWhiteSpace(ViewModel.ClickText.Text))
         {
             MessageBox.Show("文本不可为空".Translate(), "", MessageBoxButton.OK, MessageBoxImage.Warning);
             return;

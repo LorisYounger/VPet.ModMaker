@@ -132,7 +132,7 @@
         <TextBox
           Grid.Row="1"
           Grid.Column="1"
-          Text="{Binding Work.CurrentI18nData.Name}" />
+          Text="{Binding Work.Name}" />
         <Label Grid.Row="2" Content="{ll:Str 类型}" />
         <ComboBox
           Grid.Row="2"
@@ -163,7 +163,7 @@
         <TextBox
           Grid.Row="3"
           Grid.Column="1"
-          Text="{Binding Pet.CurrentI18nData.Description}" />-->
+          Text="{Binding Pet.Description}" />-->
       </Grid>
     </Grid>
     <Grid Grid.Column="1">

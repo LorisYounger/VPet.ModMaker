@@ -50,7 +50,7 @@
           Grid.Column="1"
           pu:TextBoxHelper.Watermark="{ll:Str 显示在选项列表中的名称}"
           Style="{StaticResource TextBox_Wrap}"
-          Text="{Binding SelectText.CurrentI18nData.Choose, UpdateSourceTrigger=PropertyChanged}"
+          Text="{Binding SelectText.Choose, UpdateSourceTrigger=PropertyChanged}"
           TextWrapping="Wrap" />
       </Grid>
       <TextBox
@@ -59,7 +59,7 @@
         d:Text="这是一个测试文本,这是一个测试文本,这是一个测试文本,这是一个测试文本,这是一个测试文本,这是一个测试文本,这是一个测试文本,"
         pu:TextBoxHelper.Watermark="{ll:Str 文本}"
         Style="{StaticResource TextBox_Wrap}"
-        Text="{Binding SelectText.CurrentI18nData.Text, UpdateSourceTrigger=PropertyChanged}" />
+        Text="{Binding SelectText.Text, UpdateSourceTrigger=PropertyChanged}" />
     </Grid>
     <Grid Grid.Column="1">
       <Grid.RowDefinitions>

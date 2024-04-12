@@ -45,7 +45,7 @@
         Style="{DynamicResource StandardComboBoxStyle}">
         <ComboBox.ItemContainerStyle>
           <Style BasedOn="{StaticResource {x:Type ComboBoxItem}}" TargetType="ComboBoxItem">
-            <Setter Property="ToolTip" Value="{Binding CurrentI18nData.Name}" />
+            <Setter Property="ToolTip" Value="{Binding Name}" />
             <Setter Property="Visibility">
               <Setter.Value>
                 <MultiBinding Converter="{StaticResource AllTrueToCollapsedConverter}">

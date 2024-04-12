@@ -94,14 +94,14 @@ public class ModLoader
     public List<SelectText> SelectTexts { get; } = new();
 
     /// <summary>
-    /// I18n数据
+    /// I18n资源
     /// </summary>
-    public Dictionary<string, I18nModInfoModel> I18nDatas { get; } = new();
+    //public Dictionary<string, I18nModInfoModel> I18nDatas { get; } = new();
 
     /// <summary>
-    /// 其它I18n数据
+    /// I18n资源
     /// </summary>
-    public Dictionary<string, Dictionary<string, string>> OtherI18nDatas { get; } = new();
+    public Dictionary<string, Dictionary<string, string>> I18nDatas { get; } = new();
 
     public ModLoader(DirectoryInfo path)
     {
@@ -125,15 +125,15 @@ public class ModLoader
         //MOD未加载时支持翻译
         foreach (var line in modlps.FindAllLine("lang"))
         {
-            var i18nData = new I18nModInfoModel();
+            if (I18nDatas.TryGetValue(line.Info, out var datas) is false)
+                datas = I18nDatas[line.Info] = new();
             foreach (var sub in line)
             {
                 if (sub.Name == Name)
-                    i18nData.Name = sub.Info;
+                    datas[Name] = sub.Info;
                 else if (sub.Name == Intro)
-                    i18nData.Description = sub.Info;
+                    datas[Intro] = sub.Info;
             }
-            I18nDatas.Add(line.Info, i18nData);
         }
         DirectoryInfo? langDirectory = null;
         foreach (DirectoryInfo di in path.EnumerateDirectories())
@@ -236,17 +236,14 @@ public class ModLoader
         }
         if (langDirectory is null)
             return;
-        foreach (DirectoryInfo dis in langDirectory.EnumerateDirectories())
+        foreach (var dis in langDirectory.EnumerateDirectories())
         {
-            OtherI18nDatas.Add(dis.Name, new());
+            I18nDatas.TryAdd(dis.Name, new());
             foreach (FileInfo fi in dis.EnumerateFiles("*.lps"))
             {
                 var lps = new LPS(File.ReadAllText(fi.FullName));
                 foreach (var item in lps)
-                {
-                    if (OtherI18nDatas[dis.Name].ContainsKey(item.Name) is false)
-                        OtherI18nDatas[dis.Name].TryAdd(item.Name, item.Info);
-                }
+                    I18nDatas[dis.Name].TryAdd(item.Name, item.Info);
             }
         }
     }

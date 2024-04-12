@@ -18,11 +18,14 @@ namespace VPet.ModMaker.Models;
 /// <summary>
 /// 工作模型
 /// </summary>
-public class WorkModel : I18nModel<I18nWorkModel>
+public class WorkModel : ObservableObjectX
 {
     public WorkModel()
     {
         PropertyChanged += WorkModel_PropertyChanged;
+        ModInfoModel.Current.I18nResource.I18nObjectInfos.Add(
+            new(this, OnPropertyChanged, [(nameof(ID), ID, nameof(Name), true)])
+        );
     }
 
     private static readonly FrozenSet<string> _notifyIsOverLoad = FrozenSet.ToFrozenSet(
@@ -71,9 +74,6 @@ public class WorkModel : I18nModel<I18nWorkModel>
         Width = model.Width;
 
         //Image = model.Image?.CloneStream();
-        foreach (var item in model.I18nDatas)
-            I18nDatas[item.Key] = item.Value.Clone();
-        CurrentI18nData = I18nDatas[I18nHelper.Current.CultureName];
     }
 
     public WorkModel(VPet_Simulator.Core.GraphHelper.Work work)
@@ -111,17 +111,26 @@ public class WorkModel : I18nModel<I18nWorkModel>
     public static FrozenSet<VPet_Simulator.Core.GraphHelper.Work.WorkType> WorkTypes { get; } =
         Enum.GetValues<VPet_Simulator.Core.GraphHelper.Work.WorkType>().ToFrozenSet();
 
-    #region Id
+    #region ID
     [DebuggerBrowsable(DebuggerBrowsableState.Never)]
     private string _id = string.Empty;
 
     /// <summary>
-    /// Id
+    /// ID
     /// </summary>
     public string ID
     {
         get => _id;
         set => SetProperty(ref _id, value);
+    }
+    #endregion
+
+    #region I18nData
+    [AdaptIgnore]
+    public string Name
+    {
+        get => ModInfoModel.Current.I18nResource.GetCurrentCultureDataOrDefault(ID, string.Empty);
+        set => ModInfoModel.Current.I18nResource.SetCurrentCultureData(ID, value);
     }
     #endregion
 
@@ -450,28 +459,10 @@ public class WorkModel : I18nModel<I18nWorkModel>
     public void Close()
     {
         //Image?.CloseStream();
+        var item = ModInfoModel.Current.I18nResource.I18nObjectInfos.FirstOrDefault(i =>
+            i.Source == this
+        );
+        if (item is not null)
+            ModInfoModel.Current.I18nResource.I18nObjectInfos.Remove(item);
     }
-}
-
-public class I18nWorkModel : ObservableObjectX, ICloneable<I18nWorkModel>
-{
-    #region Name
-    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-    private string _name = string.Empty;
-
-    public string Name
-    {
-        get => _name;
-        set => SetProperty(ref _name, value);
-    }
-    #endregion
-
-    public I18nWorkModel Clone()
-    {
-        var result = new I18nWorkModel();
-        result.Name = Name;
-        return result;
-    }
-
-    object ICloneable.Clone() => Clone();
 }
