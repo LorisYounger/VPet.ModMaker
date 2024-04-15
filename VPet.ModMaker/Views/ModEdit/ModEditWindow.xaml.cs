@@ -26,6 +26,7 @@ using VPet.ModMaker.ViewModels.ModEdit;
 using VPet.ModMaker.Views.ModEdit.AnimeEdit;
 using VPet.ModMaker.Views.ModEdit.ClickTextEdit;
 using VPet.ModMaker.Views.ModEdit.FoodEdit;
+using VPet.ModMaker.Views.ModEdit.I18nEdit;
 using VPet.ModMaker.Views.ModEdit.LowTextEdit;
 using VPet.ModMaker.Views.ModEdit.MoveEdit;
 using VPet.ModMaker.Views.ModEdit.PetEdit;
@@ -50,6 +51,7 @@ public partial class ModEditWindow : WindowX
     public WorkPage WorkPage { get; } = null!;
     public MovePage MovePage { get; } = null!;
     public AnimePage AnimePage { get; } = null!;
+    public I18nEditWindow I18nEditWindow { get; } = null!;
 
     public ModEditWindow()
     {
@@ -66,6 +68,7 @@ public partial class ModEditWindow : WindowX
         WorkPage = new();
         MovePage = new();
         AnimePage = new();
+        I18nEditWindow = new();
     }
 
     /// <summary>
@@ -85,7 +88,7 @@ public partial class ModEditWindow : WindowX
                 ModInfoModel.Current.I18nResource.CultureDatas.HasValue() is false
                 || MessageBox.Show(
                     "需要将文化 {0} 设为主要文化吗?".Translate(
-                        ModInfoModel.Current.I18nResource.CultureDatas.First().Key.Name
+                        ModInfoModel.Current.I18nResource.Cultures.First().Name
                     ),
                     "",
                     MessageBoxButton.YesNo
@@ -94,7 +97,7 @@ public partial class ModEditWindow : WindowX
             )
                 return;
             ViewModel.SetMainCultureCommand_ExecuteCommand(
-                ModInfoModel.Current.I18nResource.CultureDatas.First().Key.Name
+                ModInfoModel.Current.I18nResource.Cultures.First().Name
             );
         }
     }
@@ -121,6 +124,7 @@ public partial class ModEditWindow : WindowX
             WorkPage.DataContext = null;
             MovePage.DataContext = null;
             AnimePage.DataContext = null;
+            I18nEditWindow.CloseX();
         }
         catch { }
     }

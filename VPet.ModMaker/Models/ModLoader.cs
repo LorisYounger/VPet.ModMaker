@@ -238,7 +238,7 @@ public class ModLoader
             return;
         foreach (var dis in langDirectory.EnumerateDirectories())
         {
-            I18nDatas.TryAdd(dis.Name, new());
+            I18nDatas.TryAdd(dis.Name, []);
             foreach (FileInfo fi in dis.EnumerateFiles("*.lps"))
             {
                 var lps = new LPS(File.ReadAllText(fi.FullName));

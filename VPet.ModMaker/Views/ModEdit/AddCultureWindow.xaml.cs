@@ -53,7 +53,7 @@ public partial class AddCultureWindow : WindowX
             return;
         }
         if (
-            ModInfoModel.Current.I18nResource.CultureDatas.ContainsKey(
+            ModInfoModel.Current.I18nResource.Cultures.Contains(
                 CultureInfo.GetCultureInfo(ViewModel.Culture)
             )
         )
@@ -65,10 +65,30 @@ public partial class AddCultureWindow : WindowX
         Close();
     }
 
+    public const string CultureLink =
+        "https://learn.microsoft.com/en-us/openspecs/windows_protocols/ms-lcid/a9eac961-e77d-41a6-90a5-ce1a8b0cdb9c";
+
     private void Hyperlink_Click(object? sender, RoutedEventArgs e)
     {
-        NativeUtils.OpenLink(
-            "https://learn.microsoft.com/en-us/openspecs/windows_protocols/ms-lcid/a9eac961-e77d-41a6-90a5-ce1a8b0cdb9c"
-        );
+        try
+        {
+            NativeUtils.OpenLink(CultureLink);
+        }
+        catch
+        {
+            if (
+                MessageBoxX.Show(
+                    this,
+                    "无法正确打开链接,需要复制自行访问吗",
+                    "",
+                    MessageBoxButton.YesNo,
+                    MessageBoxIcon.Warning
+                )
+                is not MessageBoxResult.Yes
+            )
+                return;
+            Clipboard.SetText(CultureLink);
+            MessageBoxX.Show(this, "已复制到剪贴板".Translate());
+        }
     }
 }

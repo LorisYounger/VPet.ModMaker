@@ -74,7 +74,7 @@ public class LowTextModel : ObservableObjectX
     [AdaptIgnore]
     public string Text
     {
-        get => ModInfoModel.Current.I18nResource.GetCurrentCultureDataOrDefault(ID, string.Empty);
+        get => ModInfoModel.Current.I18nResource.GetCurrentCultureDataOrDefault(ID);
         set => ModInfoModel.Current.I18nResource.SetCurrentCultureData(ID, value);
     }
     #endregion

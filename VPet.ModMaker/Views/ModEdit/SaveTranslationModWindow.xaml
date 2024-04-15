@@ -35,7 +35,7 @@
           <CheckBox
             d:Content="zh-CN"
             d:IsChecked="True"
-            Content="{Binding CultureName}"
+            Content="{Binding Culture}"
             IsChecked="{Binding IsChecked}" />
         </DataTemplate>
       </ListBox.ItemTemplate>
@@ -48,7 +48,7 @@
       <CheckBox
         Margin="5,0,5,0"
         Content="{ll:Str 全选}"
-        IsChecked="{Binding CheckAll.Value}"
+        IsChecked="{Binding CheckAll}"
         IsThreeState="True" />
       <Button
         Grid.Column="1"

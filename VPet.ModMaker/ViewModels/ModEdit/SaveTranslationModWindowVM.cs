@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Diagnostics;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -38,22 +39,20 @@ public class SaveTranslationModWindowVM : ObservableObjectX
 
     public SaveTranslationModWindowVM()
     {
-        //TODO
-        //foreach (var culture in I18nHelper.Current.CultureNames)
-        //{
-        //    var model = new CheckCultureModel();
-        //    model.CultureName.Value = culture;
-        //    CheckCultures.Add(model);
-        //    CheckAll.AddNotifySender(model.IsChecked);
-        //}
-        //CheckAll.ValueChanged += CheckAll_ValueChanged;
-        //CheckAll.SenderPropertyChanged += CheckAll_SenderPropertyChanged;
-        //SaveCommand.ExecuteCommand += Save;
+        foreach (var culture in ModInfoModel.Current.I18nResource.Cultures)
+        {
+            var model = new CheckCultureModel(culture);
+            model.Culture = culture;
+            model.PropertyChangedX += Model_PropertyChangedX;
+            CheckCultures.Add(model);
+        }
+        PropertyChangedX += SaveTranslationModWindowVM_PropertyChangedX;
+        SaveCommand.ExecuteCommand += Save;
     }
 
-    private void CheckAll_ValueChanged(
-        ObservableValue<bool?> sender,
-        ValueChangedEventArgs<bool?> e
+    private void SaveTranslationModWindowVM_PropertyChangedX(
+        object? sender,
+        PropertyChangedXEventArgs e
     )
     {
         if (e.NewValue is null)
@@ -65,25 +64,21 @@ public class SaveTranslationModWindowVM : ObservableObjectX
             return;
         }
         foreach (var model in CheckCultures)
-            model.IsChecked = e.NewValue.Value;
+            model.IsChecked = e.NewValue is true;
     }
 
-    private void CheckAll_SenderPropertyChanged(
-        ObservableValue<bool?> source,
-        INotifyPropertyChanged sender
-    )
+    private void Model_PropertyChangedX(object? sender, PropertyChangedXEventArgs e)
     {
         var count = 0;
         foreach (var model in CheckCultures)
             if (model.IsChecked)
                 count += 1;
-
         if (count == CheckCultures.Count)
-            source.Value = true;
+            CheckAll = true;
         else if (count == 0)
-            source.Value = false;
+            CheckAll = false;
         else
-            source.Value = null;
+            CheckAll = null;
     }
 
     public void Save()
@@ -100,8 +95,8 @@ public class SaveTranslationModWindowVM : ObservableObjectX
         try
         {
             ModInfoModel.Current.SaveTranslationMod(
-                Path.GetDirectoryName(saveFileDialog.FileName),
-                CheckCultures.Where(m => m.IsChecked).Select(m => m.CultureName)
+                Path.GetDirectoryName(saveFileDialog.FileName)!,
+                CheckCultures.Where(m => m.IsChecked).Select(m => m.Culture)
             );
             MessageBox.Show("保存成功".Translate());
         }
@@ -114,6 +109,12 @@ public class SaveTranslationModWindowVM : ObservableObjectX
 
 public class CheckCultureModel : ObservableObjectX
 {
+    public CheckCultureModel(CultureInfo culture)
+    {
+        _culture = culture;
+        Culture = culture;
+    }
+
     #region IsChecked
     [DebuggerBrowsable(DebuggerBrowsableState.Never)]
     private bool _isChecked;
@@ -126,12 +127,13 @@ public class CheckCultureModel : ObservableObjectX
     #endregion
     #region CultureName
     [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-    private string _cultureName = string.Empty;
+    private CultureInfo _culture;
 
-    public string CultureName
+    public CultureInfo Culture
     {
-        get => _cultureName;
-        set => SetProperty(ref _cultureName, value);
+        get => _culture;
+        set => SetProperty(ref _culture, value);
     }
+
     #endregion
 }

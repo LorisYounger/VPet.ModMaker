@@ -196,7 +196,7 @@ public class PetModel : ObservableObjectX
     [AdaptIgnore]
     public string Name
     {
-        get => ModInfoModel.Current.I18nResource.GetCurrentCultureDataOrDefault(ID, string.Empty);
+        get => ModInfoModel.Current.I18nResource.GetCurrentCultureDataOrDefault(ID);
         set => ModInfoModel.Current.I18nResource.SetCurrentCultureData(ID, value);
     }
 

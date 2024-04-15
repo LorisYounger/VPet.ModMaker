@@ -279,7 +279,7 @@
         x:Name="ListBox_Cultures"
         Grid.Row="1"
         d:ItemsSource="{d:SampleData ItemCount=5}"
-        ItemsSource="{Binding I18nResource.CultureDatas.ObservableKeys}"
+        ItemsSource="{Binding I18nResource.Cultures}"
         ScrollViewer.VerticalScrollBarVisibility="Auto"
         SelectedItem="{Binding I18nResource.CurrentCulture}">
         <ListBox.ItemContainerStyle>
@@ -311,7 +311,6 @@
         <Button
           Command="{Binding EditI18nCommand}"
           Content="{ll:Str 编辑多语言内容}"
-          IsEnabled="False"
           Style="{DynamicResource ThemedButtonStyle}" />
         <Button
           Command="{Binding SaveCommand}"
@@ -325,17 +324,7 @@
         <Button
           Command="{Binding SaveAsTranslationModCommand}"
           Content="{ll:Str 保存为翻译模组}"
-          IsEnabled="False"
           Style="{DynamicResource ThemedButtonStyle}" />
-        <!--<Menu
-          x:Name="Button_SaveAs"
-          HorizontalContentAlignment="Stretch"
-          pu:MenuHelper.TopLevelItemsHorizontalContentAlignment="Stretch"
-          Style="{DynamicResource Menu_Style}">
-          <MenuItem Header="{ll:Str 保存为}">
-            <MenuItem Command="{Binding SaveAsCommand}" />
-          </MenuItem>
-        </Menu>-->
       </StackPanel>
     </Grid>
   </Grid>

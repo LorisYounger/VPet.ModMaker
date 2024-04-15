@@ -123,6 +123,7 @@ public class ModInfoModel : ObservableObjectX
         RefreshAllID();
         if (I18nResource.CultureDatas.HasValue())
             RefreshID();
+        I18nResource.FillDefaultValue();
     }
 
     private void ModInfoModel_PropertyChanged(object? sender, PropertyChangedEventArgs e)
@@ -142,17 +143,18 @@ public class ModInfoModel : ObservableObjectX
     /// </summary>
     public static ModInfoModel Current { get; set; } = new();
 
-    public I18nResource<string, string> I18nResource { get; } = new();
+    public I18nResource<string, string> I18nResource { get; } =
+        new() { FillDefaultValueForNewCulture = true, DefaultValue = string.Empty };
 
     #region I18nData
     public string Name
     {
-        get => I18nResource.GetCurrentCultureDataOrDefault(ID, string.Empty);
+        get => I18nResource.GetCurrentCultureDataOrDefault(ID);
         set => I18nResource.SetCurrentCultureData(ID, value);
     }
     public string Description
     {
-        get => I18nResource.GetCurrentCultureDataOrDefault(DescriptionID, string.Empty);
+        get => I18nResource.GetCurrentCultureDataOrDefault(DescriptionID);
         set => I18nResource.SetCurrentCultureData(DescriptionID, value);
     }
     #endregion
@@ -448,15 +450,16 @@ public class ModInfoModel : ObservableObjectX
     {
         if (modLoader.I18nDatas.HasValue() is false)
             return;
+
         foreach (var cultureDatas in modLoader.I18nDatas)
         {
             var culture = CultureInfo.GetCultureInfo(cultureDatas.Key);
             I18nResource.AddCulture(culture);
             foreach (var data in cultureDatas.Value)
-                I18nResource.AddCultureData(culture, data.Key, data.Value);
+                I18nResource.SetCultureData(culture, data.Key, data.Value);
         }
         if (I18nResource.SetCurrentCulture(CultureInfo.CurrentCulture) is false)
-            I18nResource.SetCurrentCulture(I18nResource.CultureDatas.First().Key);
+            I18nResource.SetCurrentCulture(I18nResource.Cultures.First());
         I18nResource.I18nObjectInfos.Add(
             new(
                 this,
@@ -613,22 +616,15 @@ public class ModInfoModel : ObservableObjectX
             new Line("itemid", ItemID.ToString()),
             new Line("cachedate", DateTime.Now.Date.ToString("s"))
         };
-        foreach (var cultureData in Current.I18nResource.CultureDatas)
+        foreach (var culture in Current.I18nResource.Cultures)
         {
             lps.Add(
-                new Line("cultureDatas", cultureData.Key.Name)
+                new Line("cultureDatas", culture.Name)
                 {
-                    new Sub(
-                        ID,
-                        I18nResource.GetCultureDataOrDefault(cultureData.Key.Name, ID, string.Empty)
-                    ),
+                    new Sub(ID, I18nResource.GetCultureDataOrDefault(culture, ID, string.Empty)),
                     new Sub(
                         DescriptionID,
-                        I18nResource.GetCultureDataOrDefault(
-                            cultureData.Key.Name,
-                            DescriptionID,
-                            string.Empty
-                        )
+                        I18nResource.GetCultureDataOrDefault(culture, DescriptionID, string.Empty)
                     ),
                 }
             );
@@ -756,15 +752,18 @@ public class ModInfoModel : ObservableObjectX
     {
         var langPath = Path.Combine(path, "lang");
         Directory.CreateDirectory(langPath);
-        foreach (var cultureData in I18nResource.CultureDatas)
+        foreach (var culture in I18nResource.Cultures)
         {
-            var culturePath = Path.Combine(langPath, cultureData.Key.Name);
+            var culturePath = Path.Combine(langPath, culture.Name);
             Directory.CreateDirectory(culturePath);
-            var cultureFile = Path.Combine(culturePath, $"{cultureData.Key.Name}.lps");
+            var cultureFile = Path.Combine(culturePath, $"{culture.Name}.lps");
             File.Create(cultureFile).Close();
             var lps = new LPS();
-            foreach (var data in cultureData.Value)
-                lps.Add(new Line(data.Key, data.Value));
+            foreach (var datas in I18nResource.CultureDatas)
+            {
+                if (I18nResource.TryGetCultureData(culture, datas.Key, out var data))
+                    lps.Add(new Line(datas.Key, data));
+            }
             File.WriteAllText(cultureFile, lps.ToString());
         }
     }
@@ -803,53 +802,23 @@ public class ModInfoModel : ObservableObjectX
         Current = null!;
     }
 
-    public void SaveTranslationMod(string path, IEnumerable<string> cultures)
+    public void SaveTranslationMod(string path, IEnumerable<CultureInfo> cultures)
     {
         // 保存模型信息
         SaveModInfo(path);
         // 保存文化数据
-        var langPath = Path.Combine(path, "cultureDatas");
+        var langPath = Path.Combine(path, "lang");
         Directory.CreateDirectory(langPath);
-        foreach (var cultureName in cultures)
+        foreach (var culture in cultures)
         {
-            var culturePath = Path.Combine(langPath, cultureName);
+            var culturePath = Path.Combine(langPath, culture.Name);
             Directory.CreateDirectory(culturePath);
-            var cultureFile = Path.Combine(culturePath, $"{cultureName}.lps");
+            var cultureFile = Path.Combine(culturePath, $"{culture}.lps");
             File.Create(cultureFile).Close();
             var lps = new LPS();
-            //TODO
-            //foreach (var data in I18nEditWindow.Current.ViewModel.AllI18nDatas)
-            //    lps.Add(
-            //        new Line(
-            //            data.Key,
-            //            data.Value.Datas[I18nHelper.Current.CultureNames.IndexOf(cultureName)].Value
-            //        )
-            //    );
+            foreach (var data in I18nResource.CultureDatas.Values)
+                lps.Add(new Line(data.Key, data[culture]));
             File.WriteAllText(cultureFile, lps.ToString());
         }
     }
 }
-
-//public class I18nModInfoModel : ObservableObjectX
-//{
-//    #region Name
-//    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-//    private string _name = string.Empty;
-
-//    public string Name
-//    {
-//        get => _name;
-//        set => SetProperty(ref _name, value);
-//    }
-//    #endregion
-//    #region Description
-//    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-//    private string _description = string.Empty;
-
-//    public string Description
-//    {
-//        get => _description;
-//        set => SetProperty(ref _description, value);
-//    }
-//    #endregion
-//}

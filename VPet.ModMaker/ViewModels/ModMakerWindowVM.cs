@@ -304,9 +304,7 @@ public class ModMakerWindowVM : ObservableObjectX
             ModEditWindow?.Close();
             ModEditWindow = null!;
             ModInfoModel.Current?.Close();
-            I18nEditWindow.Current?.Close(true);
-            ModMakerWindow.Show();
-            ModMakerWindow.Activate();
+            ModMakerWindow.ShowOrActivate();
             MessageBox.Show(ModMakerWindow, "模组载入失败:\n{0}".Translate(ex));
             GC.Collect();
         }

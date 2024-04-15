@@ -46,7 +46,7 @@
   </ControlTemplate>
   <ControlTemplate x:Key="ListBox_ShowLangs" TargetType="ListBox">
     <ListBox
-      ItemsSource="{Binding I18nResource.CultureDatas.ObservableKeys}"
+      ItemsSource="{Binding I18nResource.Cultures}"
       ScrollViewer.VerticalScrollBarVisibility="Auto"
       SelectedItem="{Binding I18nResource.CurrentCulture}">
       <ListBox.ItemContainerStyle>

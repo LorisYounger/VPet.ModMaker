@@ -27,8 +27,6 @@ public class ModEditWindowVM : ObservableObjectX
 {
     public ModEditWindowVM(ModEditWindow window)
     {
-        //TODO
-        //I18nEditWindow.Initialize();
         ModEditWindow = window;
         ChangeImageCommand.ExecuteCommand += ChangeImageCommand_ExecuteCommand;
         AddCultureCommand.ExecuteCommand += AddCultureCommand_ExecuteCommand;
@@ -123,8 +121,7 @@ public class ModEditWindowVM : ObservableObjectX
 
     private void EditI18nCommand_ExecuteCommand()
     {
-        I18nEditWindow.Current.Visibility = Visibility.Visible;
-        I18nEditWindow.Current.Activate();
+        ModEditWindow.I18nEditWindow.ShowOrActivate();
     }
 
     /// <summary>
@@ -133,7 +130,6 @@ public class ModEditWindowVM : ObservableObjectX
     public void Close()
     {
         ModInfo.Image?.StreamSource?.Close();
-        I18nEditWindow.Current?.Close(true);
     }
 
     /// <summary>

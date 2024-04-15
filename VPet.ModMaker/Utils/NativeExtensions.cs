@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Imaging;
@@ -116,27 +117,6 @@ public static class NativeExtensions
         stream.CopyTo(fs);
         // 恢复位置
         stream.Seek(position, SeekOrigin.Begin);
-    }
-
-    /// <summary>
-    /// 尝试添加
-    /// </summary>
-    /// <typeparam name="TKey">键类型</typeparam>
-    /// <typeparam name="TValue"></typeparam>
-    /// <param name="dictionary"></param>
-    /// <param name="key">键</param>
-    /// <param name="value">值</param>
-    /// <returns>成功为 <see langword="true"/> 失败为 <see langword="false"/></returns>
-    public static bool TryAdd<TKey, TValue>(
-        this IDictionary<TKey, TValue> dictionary,
-        TKey key,
-        TValue value
-    )
-    {
-        if (dictionary.ContainsKey(key))
-            return false;
-        dictionary.Add(key, value);
-        return true;
     }
 
     /// <summary>
@@ -290,4 +270,65 @@ public static class NativeExtensions
             catch { }
         };
     }
+
+    private static Dictionary<Window, WindowCloseState> _windowCloseStates = new();
+
+    /// <summary>
+    /// 设置关闭状态
+    /// </summary>
+    /// <param name="window"></param>
+    /// <param name="state">关闭状态</param>
+    public static void SetCloseState(this Window window, WindowCloseState state)
+    {
+        window.Closing -= WindowCloseState_Closing;
+        window.Closing += WindowCloseState_Closing;
+        _windowCloseStates[window] = state;
+    }
+
+    /// <summary>
+    /// 强制关闭
+    /// </summary>
+    /// <param name="window"></param>
+    public static void CloseX(this Window? window)
+    {
+        if (window is null)
+            return;
+        _windowCloseStates.Remove(window);
+        window.Closing -= WindowCloseState_Closing;
+        window.Close();
+    }
+
+    /// <summary>
+    /// 显示或者聚焦
+    /// </summary>
+    /// <param name="window"></param>
+    public static void ShowOrActivate(this Window? window)
+    {
+        if (window is null)
+            return;
+        if (window.IsVisible is false)
+            window.Show();
+        window.Activate();
+    }
+
+    private static void WindowCloseState_Closing(object sender, CancelEventArgs e)
+    {
+        if (sender is not Window window)
+            return;
+        if (_windowCloseStates.TryGetValue(window, out var state) is false)
+            return;
+        if (state is WindowCloseState.Close)
+            return;
+        e.Cancel = true;
+        window.Visibility =
+            state is WindowCloseState.Hidden ? Visibility.Hidden : Visibility.Collapsed;
+        return;
+    }
+}
+
+public enum WindowCloseState
+{
+    Close,
+    Hidden,
+    Collapsed
 }
