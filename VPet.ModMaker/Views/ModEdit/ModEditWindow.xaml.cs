@@ -76,7 +76,7 @@ public partial class ModEditWindow : WindowX
     /// </summary>
     public void InitializeData()
     {
-        if (ModInfoModel.Current.I18nResource.CultureDatas.HasValue() is false)
+        if (ModInfoModel.Current.I18nResource.Cultures.HasValue() is false)
         {
             if (
                 MessageBox.Show("未添加任何文化,确定要添加文化吗?".Translate(), "", MessageBoxButton.YesNo)
@@ -84,8 +84,10 @@ public partial class ModEditWindow : WindowX
             )
                 return;
             ViewModel.AddCultureCommand_ExecuteCommand();
+            if (string.IsNullOrWhiteSpace(ViewModel.ModInfo.ID))
+                return;
             if (
-                ModInfoModel.Current.I18nResource.CultureDatas.HasValue() is false
+                ModInfoModel.Current.I18nResource.Cultures.HasValue() is false
                 || MessageBox.Show(
                     "需要将文化 {0} 设为主要文化吗?".Translate(
                         ModInfoModel.Current.I18nResource.Cultures.First().Name

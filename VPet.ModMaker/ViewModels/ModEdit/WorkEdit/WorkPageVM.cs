@@ -24,7 +24,8 @@ public class WorkPageVM : ObservableObjectX
             Filter = f => f.ID.Contains(Search, StringComparison.OrdinalIgnoreCase),
             FilteredList = new()
         };
-        PropertyChanged += WorkPageVM_PropertyChanged;
+        PropertyChangedX += WorkPageVM_PropertyChangedX;
+
         if (Pets.HasValue())
             CurrentPet = Pets.FirstOrDefault(
                 m => m.FromMain is false && m.Works.HasValue(),
@@ -40,7 +41,7 @@ public class WorkPageVM : ObservableObjectX
     #region Property
     #region Works
     [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-    private ObservableFilterList<WorkModel, ObservableList<WorkModel>> _works;
+    private ObservableFilterList<WorkModel, ObservableList<WorkModel>> _works = null!;
 
     public ObservableFilterList<WorkModel, ObservableList<WorkModel>> Works
     {
@@ -53,7 +54,7 @@ public class WorkPageVM : ObservableObjectX
 
     #region CurrentPet
     [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-    private PetModel _currentPet;
+    private PetModel _currentPet = null!;
 
     public PetModel CurrentPet
     {
@@ -78,12 +79,18 @@ public class WorkPageVM : ObservableObjectX
     public ObservableCommand<WorkModel> EditCommand { get; } = new();
     public ObservableCommand<WorkModel> RemoveCommand { get; } = new();
     #endregion
-    private void WorkPageVM_PropertyChanged(object? sender, PropertyChangedEventArgs e)
+
+    private void WorkPageVM_PropertyChangedX(object? sender, PropertyChangedXEventArgs e)
     {
         if (e.PropertyName == nameof(CurrentPet))
         {
             Works.Clear();
+            if (e.OldValue is PetModel pet)
+                Works.BindingList(pet.Works, true);
+            if (e.NewValue is null)
+                return;
             Works.AddRange(CurrentPet.Works);
+            Works.BindingList(CurrentPet.Works);
         }
         else if (e.PropertyName == nameof(Search))
         {
@@ -108,11 +115,21 @@ public class WorkPageVM : ObservableObjectX
         var vm = window.ViewModel;
         vm.CurrentPet = CurrentPet;
         vm.OldWork = model;
-        var newWork = vm.Work = new(model);
+        var newModel = vm.Work = new(model)
+        {
+            I18nResource = ModInfoModel.Current.TempI18nResource
+        };
+        model.I18nResource.CopyDataTo(newModel.I18nResource, model.ID, true);
         window.ShowDialog();
         if (window.IsCancel)
+        {
+            newModel.I18nResource.ClearCultureData();
+            newModel.Close();
             return;
-        Works[Works.IndexOf(model)] = newWork;
+        }
+        newModel.I18nResource.CopyDataTo(ModInfoModel.Current.I18nResource, true);
+        newModel.I18nResource = ModInfoModel.Current.I18nResource;
+        Works[Works.IndexOf(model)] = newModel;
         model.Close();
     }
 

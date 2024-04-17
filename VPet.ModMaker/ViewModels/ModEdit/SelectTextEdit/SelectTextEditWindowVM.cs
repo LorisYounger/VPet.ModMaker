@@ -20,7 +20,8 @@ public class SelectTextEditWindowVM : ObservableObjectX
 
     #region SelectText
     [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-    private SelectTextModel _selectText = new();
+    private SelectTextModel _selectText =
+        new() { I18nResource = ModInfoModel.Current.I18nResource };
 
     public SelectTextModel SelectText
     {

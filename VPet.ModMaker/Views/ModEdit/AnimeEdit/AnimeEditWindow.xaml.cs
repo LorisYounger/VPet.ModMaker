@@ -27,8 +27,8 @@ public partial class AnimeEditWindow : Window
 {
     public AnimeEditWindow()
     {
-        DataContext = new AnimeEditWindowVM();
         InitializeComponent();
+        DataContext = new AnimeEditWindowVM();
         Closed += (s, e) =>
         {
             try
@@ -77,12 +77,12 @@ public partial class AnimeEditWindow : Window
             RoutedEvent = MouseWheelEvent,
             Source = sender
         };
-        var parent = ((Control)sender).Parent as UIElement;
+        var parent = ((Control)sender!).Parent as UIElement;
         parent.RaiseEvent(eventArg);
         e.Handled = true;
     }
 
-    private object _dropSender;
+    private object _dropSender = null!;
 
     private void ListBox_PreviewMouseMove(object? sender, MouseEventArgs e)
     {

@@ -27,8 +27,8 @@ public partial class PetEditWindow : Window
 
     public PetEditWindow()
     {
-        DataContext = new PetEditWindowVM();
         InitializeComponent();
+        DataContext = new PetEditWindowVM();
         Closed += (s, e) =>
         {
             ViewModel.Close();

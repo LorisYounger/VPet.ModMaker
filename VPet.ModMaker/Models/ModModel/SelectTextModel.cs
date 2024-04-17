@@ -18,19 +18,7 @@ namespace VPet.ModMaker.Models;
 /// </summary>
 public class SelectTextModel : ObservableObjectX
 {
-    public SelectTextModel()
-    {
-        ModInfoModel.Current.I18nResource.I18nObjectInfos.Add(
-            new(
-                this,
-                OnPropertyChanged,
-                [
-                    (nameof(ID), ID, nameof(Text), true),
-                    (nameof(ChooseID), ChooseID, nameof(Choose), true)
-                ]
-            )
-        );
-    }
+    public SelectTextModel() { }
 
     public SelectTextModel(SelectTextModel model)
         : this()
@@ -120,37 +108,64 @@ public class SelectTextModel : ObservableObjectX
     }
     #endregion
 
-    #region ChooseId
+    #region ChooseID
     [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-    private string _chooseId = string.Empty;
+    private string _chooseID = string.Empty;
 
     /// <summary>
     /// 选择Id
     /// </summary>
     public string ChooseID
     {
-        get => _chooseId;
-        set => SetProperty(ref _chooseId, value);
+        get => _chooseID;
+        set => SetProperty(ref _chooseID, value);
     }
     #endregion
 
     #region I18nData
     [AdaptIgnore]
+    private I18nResource<string, string> _i18nResource = null!;
+
+    [AdaptIgnore]
+    public required I18nResource<string, string> I18nResource
+    {
+        get => _i18nResource;
+        set
+        {
+            if (_i18nResource is not null)
+                I18nResource.I18nObjectInfos.Remove(this);
+            _i18nResource = value;
+            InitializeI18nResource();
+        }
+    }
+
+    public void InitializeI18nResource()
+    {
+        I18nResource.I18nObjectInfos.Add(
+            this,
+            new(
+                this,
+                OnPropertyChanged,
+                [
+                    (nameof(ID), ID, nameof(Text), true),
+                    (nameof(ChooseID), ChooseID, nameof(Choose), true)
+                ]
+            )
+        );
+    }
+
+    [AdaptIgnore]
     public string Text
     {
-        get => ModInfoModel.Current.I18nResource.GetCurrentCultureDataOrDefault(ID);
-        set => ModInfoModel.Current.I18nResource.SetCurrentCultureData(ID, value);
+        get => I18nResource.GetCurrentCultureDataOrDefault(ID);
+        set => I18nResource.SetCurrentCultureData(ID, value);
     }
 
     [AdaptIgnore]
     public string Choose
     {
-        get =>
-            ModInfoModel.Current.I18nResource.GetCurrentCultureDataOrDefault(
-                ChooseID,
-                string.Empty
-            );
-        set => ModInfoModel.Current.I18nResource.SetCurrentCultureData(ChooseID, value);
+        get => I18nResource.GetCurrentCultureDataOrDefault(ChooseID, string.Empty);
+        set => I18nResource.SetCurrentCultureData(ChooseID, value);
     }
     #endregion
 
@@ -238,5 +253,10 @@ public class SelectTextModel : ObservableObjectX
             StrengthMin = Strength.Min,
             StrengthMax = Strength.Max,
         };
+    }
+
+    public void Close()
+    {
+        I18nResource.I18nObjectInfos.Remove(this);
     }
 }

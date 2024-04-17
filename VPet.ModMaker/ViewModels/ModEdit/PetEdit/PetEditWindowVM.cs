@@ -31,7 +31,7 @@ public class PetEditWindowVM : ObservableObjectX
 
     #region Pet
     [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-    private PetModel _pet = new();
+    private PetModel _pet = new() { I18nResource = ModInfoModel.Current.I18nResource };
 
     public PetModel Pet
     {

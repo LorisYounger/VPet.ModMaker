@@ -23,15 +23,26 @@ public class I18nEditWindowVM : ObservableObjectX
         SearchTarget = SearchTargets.First();
         PropertyChanged += I18nEditWindowVM_PropertyChanged;
 
-        ModInfoModel.Current.I18nResource.Cultures.SetChanged -= Cultures_SetChanged;
-        ModInfoModel.Current.I18nResource.Cultures.SetChanged += Cultures_SetChanged;
+        I18nResource.Cultures.SetChanged -= Cultures_SetChanged;
+        I18nResource.Cultures.SetChanged += Cultures_SetChanged;
+
+        I18nResource.CultureDatas.DictionaryChanged -= CultureDatas_DictionaryChanged;
+        I18nResource.CultureDatas.DictionaryChanged += CultureDatas_DictionaryChanged;
 
         I18nDatas = new() { Filter = DataFilter, FilteredList = [] };
-        foreach (var data in ModInfoModel.Current.I18nResource.CultureDatas.Values)
+        foreach (var data in I18nResource.CultureDatas.Values)
+        {
             I18nDatas.Add(data);
-        foreach (var culture in ModInfoModel.Current.I18nResource.Cultures)
+            data.DictionaryChanged += Data_DictionaryChanged;
+        }
+        foreach (var culture in I18nResource.Cultures)
             SearchTargets.Add(culture.Name);
     }
+
+    public I18nResource<string, string> I18nResource { get; set; } =
+        ModInfoModel.Current.I18nResource;
+
+    public bool CellEdit { get; set; } = false;
 
     #region Search
     [DebuggerBrowsable(DebuggerBrowsableState.Never)]
@@ -97,7 +108,7 @@ public class I18nEditWindowVM : ObservableObjectX
 
     private void Cultures_SetChanged(
         IObservableSet<CultureInfo> sender,
-        NotifySetChangedEventArgs<CultureInfo> e
+        NotifySetChangeEventArgs<CultureInfo> e
     )
     {
         if (e.Action is SetChangeAction.Add)
@@ -122,6 +133,46 @@ public class I18nEditWindowVM : ObservableObjectX
         }
     }
 
+    private void CultureDatas_DictionaryChanged(
+        IObservableDictionary<string, ObservableCultureDataDictionary<string, string>> sender,
+        NotifyDictionaryChangeEventArgs<string, ObservableCultureDataDictionary<string, string>> e
+    )
+    {
+        if (e.Action is DictionaryChangeAction.Add)
+        {
+            if (e.TryGetNewPair(out var newPair) is false)
+                return;
+            I18nDatas.Add(newPair.Value);
+            newPair.Value.DictionaryChanged -= Data_DictionaryChanged;
+            newPair.Value.DictionaryChanged += Data_DictionaryChanged;
+        }
+        else if (e.Action is DictionaryChangeAction.Remove)
+        {
+            if (e.TryGetOldPair(out var oldPair) is false)
+                return;
+            I18nDatas.Remove(oldPair.Value);
+            oldPair.Value.DictionaryChanged -= Data_DictionaryChanged;
+        }
+        else if (e.Action is DictionaryChangeAction.Replace)
+        {
+            if (e.TryGetNewPair(out var newPair) is false)
+                return;
+            if (e.TryGetOldPair(out var oldPair) is false)
+                return;
+            if (I18nDatas.TryFind(0, i => i.Key == newPair.Key, out var itemInfo) is false)
+                return;
+            I18nDatas.RemoveAt(itemInfo.Index);
+            I18nDatas.Insert(itemInfo.Index, newPair.Value);
+            oldPair.Value.DictionaryChanged -= Data_DictionaryChanged;
+            newPair.Value.DictionaryChanged -= Data_DictionaryChanged;
+            newPair.Value.DictionaryChanged += Data_DictionaryChanged;
+        }
+        else if (e.Action is DictionaryChangeAction.Clear)
+        {
+            I18nDatas.Clear();
+        }
+    }
+
     private void I18nEditWindowVM_PropertyChanged(object? sender, PropertyChangedEventArgs e)
     {
         if (e.PropertyName == nameof(Search))
@@ -131,6 +182,29 @@ public class I18nEditWindowVM : ObservableObjectX
         else if (e.PropertyName == nameof(SearchTarget))
         {
             I18nDatas.Refresh();
+        }
+    }
+
+    private void Data_DictionaryChanged(
+        IObservableDictionary<CultureInfo, string> sender,
+        NotifyDictionaryChangeEventArgs<CultureInfo, string> e
+    )
+    {
+        if (sender is not ObservableCultureDataDictionary<string, string> cultureDatas)
+            return;
+        // 刷新修改后的数据
+        if (e.Action is DictionaryChangeAction.Replace)
+        {
+            if (CellEdit)
+            {
+                // 防止在编辑单元格时重复响应
+                CellEdit = false;
+                return;
+            }
+            if (I18nDatas.TryFind(0, i => i.Key == cultureDatas.Key, out var itemInfo) is false)
+                return;
+            I18nDatas.RemoveAt(itemInfo.Index);
+            I18nDatas.Insert(itemInfo.Index, cultureDatas);
         }
     }
 
@@ -145,10 +219,10 @@ public class I18nEditWindowVM : ObservableObjectX
         CultureChanged?.Invoke(culture, string.Empty);
     }
 
-    private void ReplaceCulture(string oldCulture, string newCulture)
-    {
-        CultureChanged?.Invoke(oldCulture, newCulture);
-    }
+    //private void ReplaceCulture(string oldCulture, string newCulture)
+    //{
+    //    CultureChanged?.Invoke(oldCulture, newCulture);
+    //}
 
     public event CultureChangedEventHandler? CultureChanged;
     #endregion

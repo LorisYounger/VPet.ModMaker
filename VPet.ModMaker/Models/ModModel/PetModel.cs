@@ -30,17 +30,6 @@ public class PetModel : ObservableObjectX
         PropertyChanged += PetModel_PropertyChanged;
         Animes.PropertyChanged += Animes_PropertyChanged;
         FoodAnimes.PropertyChanged += FoodAnimes_PropertyChanged;
-        ModInfoModel.Current.I18nResource.I18nObjectInfos.Add(
-            new(
-                this,
-                OnPropertyChanged,
-                [
-                    (nameof(ID), ID, nameof(Name), true),
-                    (nameof(PetNameID), PetNameID, nameof(Name), true),
-                    (nameof(DescriptionID), DescriptionID, nameof(Description), true)
-                ]
-            )
-        );
     }
 
     private void PetModel_PropertyChanged(object? sender, PropertyChangedEventArgs e)
@@ -126,12 +115,12 @@ public class PetModel : ObservableObjectX
             return;
 
         foreach (var work in loader.Config.Works)
-            Works.Add(new(work));
+            Works.Add(new(work) { I18nResource = ModInfoModel.Current.I18nResource });
         foreach (var move in loader.Config.Moves)
             Moves.Add(new(move));
     }
 
-    public static PetModel Current { get; } = new();
+    public static PetModel Current { get; } = null!;
 
     #region FromMain
     [DebuggerBrowsable(DebuggerBrowsableState.Never)]
@@ -164,7 +153,7 @@ public class PetModel : ObservableObjectX
         }
     }
     #endregion
-    #region PetNameId
+    #region PetNameID
     [DebuggerBrowsable(DebuggerBrowsableState.Never)]
     private string _petNameID = string.Empty;
 
@@ -178,7 +167,7 @@ public class PetModel : ObservableObjectX
     }
     #endregion
 
-    #region DescriptionId
+    #region DescriptionID
     [DebuggerBrowsable(DebuggerBrowsableState.Never)]
     private string _descriptionID = string.Empty;
 
@@ -194,32 +183,56 @@ public class PetModel : ObservableObjectX
 
     #region I18nData
     [AdaptIgnore]
+    private I18nResource<string, string> _i18nResource = null!;
+
+    [AdaptIgnore]
+    public required I18nResource<string, string> I18nResource
+    {
+        get => _i18nResource;
+        set
+        {
+            if (_i18nResource is not null)
+                I18nResource.I18nObjectInfos.Remove(this);
+            _i18nResource = value;
+            InitializeI18nResource();
+        }
+    }
+
+    public void InitializeI18nResource()
+    {
+        I18nResource.I18nObjectInfos.Add(
+            this,
+            new(
+                this,
+                OnPropertyChanged,
+                [
+                    (nameof(ID), ID, nameof(Name), true),
+                    (nameof(PetNameID), PetNameID, nameof(PetName), true),
+                    (nameof(DescriptionID), DescriptionID, nameof(Description), true)
+                ]
+            )
+        );
+    }
+
+    [AdaptIgnore]
     public string Name
     {
-        get => ModInfoModel.Current.I18nResource.GetCurrentCultureDataOrDefault(ID);
-        set => ModInfoModel.Current.I18nResource.SetCurrentCultureData(ID, value);
+        get => I18nResource.GetCurrentCultureDataOrDefault(ID);
+        set => I18nResource.SetCurrentCultureData(ID, value);
     }
 
     [AdaptIgnore]
     public string PetName
     {
-        get =>
-            ModInfoModel.Current.I18nResource.GetCurrentCultureDataOrDefault(
-                PetNameID,
-                string.Empty
-            );
-        set => ModInfoModel.Current.I18nResource.SetCurrentCultureData(PetNameID, value);
+        get => I18nResource.GetCurrentCultureDataOrDefault(PetNameID);
+        set => I18nResource.SetCurrentCultureData(PetNameID, value);
     }
 
     [AdaptIgnore]
     public string Description
     {
-        get =>
-            ModInfoModel.Current.I18nResource.GetCurrentCultureDataOrDefault(
-                DescriptionID,
-                string.Empty
-            );
-        set => ModInfoModel.Current.I18nResource.SetCurrentCultureData(DescriptionID, value);
+        get => I18nResource.GetCurrentCultureDataOrDefault(DescriptionID);
+        set => I18nResource.SetCurrentCultureData(DescriptionID, value);
     }
     #endregion
 
@@ -357,6 +370,11 @@ public class PetModel : ObservableObjectX
             anime.Close();
     }
 
+    public void CloseI18nResource()
+    {
+        I18nResource.I18nObjectInfos.Remove(this);
+    }
+
     #region Save
 
     /// <summary>
@@ -382,17 +400,6 @@ public class PetModel : ObservableObjectX
     /// <param name="path">路径</param>
     public void Save(string path)
     {
-        // TODO
-        //foreach (var cultureName in I18nHelper.Current.CultureNames)
-        //{
-        //    ModInfoModel.SaveI18nDatas[cultureName].TryAdd(ID, I18nDatas[cultureName].Name);
-        //    ModInfoModel
-        //        .SaveI18nDatas[cultureName]
-        //        .TryAdd(PetNameID, I18nDatas[cultureName].PetName);
-        //    ModInfoModel
-        //        .SaveI18nDatas[cultureName]
-        //        .TryAdd(DescriptionID, I18nDatas[cultureName].Description);
-        //}
         var petFile = Path.Combine(path, $"{ID}.lps");
         if (File.Exists(petFile) is false)
             File.Create(petFile).Close();
@@ -439,14 +446,7 @@ public class PetModel : ObservableObjectX
     {
         foreach (var work in Works)
         {
-            //TODO
-            //lps.Add(LPSConvert.SerializeObjectToLine<Line>(work.ToWork(), "work"));
-            //foreach (var cultureName in I18nHelper.Current.CultureNames)
-            //{
-            //    ModInfoModel
-            //        .SaveI18nDatas[cultureName]
-            //        .TryAdd(work.ID, work.I18nDatas[cultureName].Name);
-            //}
+            lps.Add(LPSConvert.SerializeObjectToLine<Line>(work.ToWork(), "work"));
         }
     }
 
@@ -505,7 +505,8 @@ public class PetModel : ObservableObjectX
                 new Sub("petname", PetNameID)
             }
         );
-        lps.Add(new Line("tag", Tags));
+        if (string.IsNullOrWhiteSpace(Tags) is false)
+            lps.Add(new Line("tag", Tags));
     }
 
     private void SavePetTouchHeadInfo(LPS lps)

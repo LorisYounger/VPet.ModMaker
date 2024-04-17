@@ -79,7 +79,7 @@ public partial class AddCultureWindow : WindowX
             if (
                 MessageBoxX.Show(
                     this,
-                    "无法正确打开链接,需要复制自行访问吗",
+                    "无法打开链接,需要复制自行访问吗",
                     "",
                     MessageBoxButton.YesNo,
                     MessageBoxIcon.Warning

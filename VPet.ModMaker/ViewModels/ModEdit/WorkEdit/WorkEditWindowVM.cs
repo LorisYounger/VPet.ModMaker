@@ -102,7 +102,7 @@ public class WorkEditWindowVM : ObservableObjectX
 
     #region Work
     [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-    private WorkModel _work = new();
+    private WorkModel _work = new() { I18nResource = ModInfoModel.Current.I18nResource };
 
     public WorkModel Work
     {

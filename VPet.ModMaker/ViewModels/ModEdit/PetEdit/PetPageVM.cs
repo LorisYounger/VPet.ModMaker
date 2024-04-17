@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using HKW.HKWUtils.Extensions;
 using HKW.HKWUtils.Observable;
 using LinePutScript.Localization.WPF;
 using VPet.ModMaker.Models;
@@ -23,6 +24,7 @@ public class PetPageVM : ObservableObjectX
             Filter = f => f.ID.Contains(Search, StringComparison.OrdinalIgnoreCase),
             FilteredList = new()
         };
+        Pets.BindingList(ModInfoModel.Current.Pets);
 
         AddCommand.ExecuteCommand += AddCommand_ExecuteCommand;
         EditCommand.ExecuteCommand += EditCommand_ExecuteCommand;
@@ -89,21 +91,32 @@ public class PetPageVM : ObservableObjectX
         var window = new PetEditWindow();
         var vm = window.ViewModel;
         vm.OldPet = model;
-        var newPet = vm.Pet = new(model);
+        var newModel = vm.Pet = new(model) { I18nResource = ModInfoModel.Current.TempI18nResource };
+        model.I18nResource.CopyDataTo(
+            newModel.I18nResource,
+            [model.ID, model.PetNameID, model.DescriptionID],
+            true
+        );
         window.ShowDialog();
         if (window.IsCancel)
+        {
+            newModel.I18nResource.ClearCultureData();
+            newModel.CloseI18nResource();
             return;
+        }
+        newModel.I18nResource.CopyDataTo(ModInfoModel.Current.I18nResource, true);
+        newModel.I18nResource = ModInfoModel.Current.I18nResource;
         if (model.FromMain)
         {
             var index = Pets.IndexOf(model);
             Pets.Remove(model);
-            Pets.Insert(index, newPet);
+            Pets.Insert(index, newModel);
         }
         else
         {
-            Pets[Pets.IndexOf(model)] = newPet;
+            Pets[Pets.IndexOf(model)] = newModel;
         }
-        model.Close();
+        model.CloseI18nResource();
     }
 
     private void RemoveCommand_ExecuteCommand(PetModel model)
@@ -116,5 +129,6 @@ public class PetPageVM : ObservableObjectX
         if (MessageBox.Show("确定删除吗".Translate(), "", MessageBoxButton.YesNo) is MessageBoxResult.No)
             return;
         Pets.Remove(model);
+        model.CloseI18nResource();
     }
 }

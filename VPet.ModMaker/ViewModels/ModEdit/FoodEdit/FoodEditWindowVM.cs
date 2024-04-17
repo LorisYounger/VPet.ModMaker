@@ -36,7 +36,7 @@ public class FoodEditWindowVM : ObservableObjectX
 
     #region Food
     [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-    private FoodModel _food = new();
+    private FoodModel _food = new() { I18nResource = ModInfoModel.Current.I18nResource };
 
     public FoodModel Food
     {

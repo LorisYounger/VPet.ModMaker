@@ -28,8 +28,8 @@ public partial class FoodAnimeEditWindow : Window
 {
     public FoodAnimeEditWindow()
     {
-        DataContext = new FoodAnimeEditWindowVM();
         InitializeComponent();
+        DataContext = new FoodAnimeEditWindowVM();
         Closed += (s, e) =>
         {
             try

@@ -87,8 +87,6 @@ public partial class I18nEditWindow : WindowX
     /// <param name="newCultureName"></param>
     public void ReplaceCulture(string oldCultureName, string newCultureName)
     {
-        //if (_dataGridI18nColumns.ContainsKey(newCultureName))
-        //    throw new();
         var column = _dataGridI18nColumns[oldCultureName];
         column.Header = newCultureName;
         _dataGridI18nColumns.Remove(oldCultureName);
@@ -111,4 +109,9 @@ public partial class I18nEditWindow : WindowX
     }
 
     #endregion
+
+    private void DataGrid_Datas_CellEditEnding(object sender, DataGridCellEditEndingEventArgs e)
+    {
+        ViewModel.CellEdit = true;
+    }
 }

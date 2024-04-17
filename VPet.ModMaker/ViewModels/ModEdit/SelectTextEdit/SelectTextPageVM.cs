@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using HKW.HKWUtils.Extensions;
 using HKW.HKWUtils.Observable;
 using LinePutScript.Localization.WPF;
 using VPet.ModMaker.Models;
@@ -23,6 +24,8 @@ public class SelectTextPageVM : ObservableObjectX
             Filter = f => f.ID.Contains(Search, StringComparison.OrdinalIgnoreCase),
             FilteredList = new()
         };
+        SelectTexts.BindingList(ModInfoModel.Current.SelectTexts);
+
         AddCommand.ExecuteCommand += AddCommand_ExecuteCommand;
         EditCommand.ExecuteCommand += EditCommand_ExecuteCommand;
         RemoveCommand.ExecuteCommand += RemoveCommand_ExecuteCommand;
@@ -77,11 +80,22 @@ public class SelectTextPageVM : ObservableObjectX
         var window = new SelectTextEditWindow();
         var vm = window.ViewModel;
         vm.OldSelectText = model;
-        var newSelectText = vm.SelectText = new(model);
+        var newModel = vm.SelectText = new(model)
+        {
+            I18nResource = ModInfoModel.Current.I18nResource
+        };
+        model.I18nResource.CopyDataTo(newModel.I18nResource, [model.ID, model.ChooseID], true);
         window.ShowDialog();
         if (window.IsCancel)
+        {
+            newModel.I18nResource.ClearCultureData();
+            newModel.Close();
             return;
-        SelectTexts[SelectTexts.IndexOf(model)] = newSelectText;
+        }
+        newModel.I18nResource.CopyDataTo(ModInfoModel.Current.I18nResource, true);
+        newModel.I18nResource = ModInfoModel.Current.I18nResource;
+        SelectTexts[SelectTexts.IndexOf(model)] = newModel;
+        model.Close();
     }
 
     private void RemoveCommand_ExecuteCommand(SelectTextModel model)
@@ -89,5 +103,6 @@ public class SelectTextPageVM : ObservableObjectX
         if (MessageBox.Show("确定删除吗".Translate(), "", MessageBoxButton.YesNo) is MessageBoxResult.No)
             return;
         SelectTexts.Remove(model);
+        model.Close();
     }
 }

@@ -26,7 +26,7 @@ public class ClickTextEditWindowVM : ObservableObjectX
 
     #region ClickText
     [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-    private ClickTextModel _clickText = new();
+    private ClickTextModel _clickText = new() { I18nResource = ModInfoModel.Current.I18nResource };
 
     /// <summary>
     /// 点击文本

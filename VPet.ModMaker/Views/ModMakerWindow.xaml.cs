@@ -84,7 +84,7 @@ public partial class ModMakerWindow : WindowX
             if (
                 MessageBoxX.Show(
                     this,
-                    "无法正确打开链接,需要复制自行访问吗".Translate(),
+                    "无法打开链接,需要复制自行访问吗".Translate(),
                     "",
                     MessageBoxButton.YesNo,
                     MessageBoxIcon.Warning

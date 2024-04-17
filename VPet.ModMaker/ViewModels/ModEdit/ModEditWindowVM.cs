@@ -160,8 +160,8 @@ public class ModEditWindowVM : ObservableObjectX
         window.ShowDialog();
         if (window.IsCancel)
             return;
-        ModInfoModel.Current.I18nResource.AddCulture(window.ViewModel.Culture);
-        ModInfoModel.Current.I18nResource.SetCurrentCulture(window.ViewModel.Culture);
+        I18nResource.AddCulture(window.ViewModel.Culture);
+        I18nResource.SetCurrentCulture(window.ViewModel.Culture);
     }
 
     /// <summary>
@@ -175,7 +175,7 @@ public class ModEditWindowVM : ObservableObjectX
         window.ShowDialog();
         if (window.IsCancel)
             return;
-        ModInfoModel.Current.I18nResource.ReplaceCulture(oldCulture, window.ViewModel.Culture);
+        I18nResource.ReplaceCulture(oldCulture, window.ViewModel.Culture);
     }
 
     /// <summary>
@@ -192,7 +192,7 @@ public class ModEditWindowVM : ObservableObjectX
             ) is MessageBoxResult.No
         )
             return;
-        ModInfoModel.Current.I18nResource.RemoveCulture(oldCulture);
+        I18nResource.RemoveCulture(oldCulture);
     }
 
     public void SetMainCultureCommand_ExecuteCommand(string culture)
@@ -207,31 +207,11 @@ public class ModEditWindowVM : ObservableObjectX
             is not MessageBoxResult.Yes
         )
             return;
-        // TODO
-        //ModInfo.I18nDatas[culture].Name = ModInfo.ID;
-        //ModInfo.I18nDatas[culture].Description = ModInfo.DescriptionID;
-        //foreach (var food in ModInfo.Foods)
-        //{
-        //    food.I18nDatas[culture].Name = food.ID;
-        //    food.I18nDatas[culture].Description = food.DescriptionID;
-        //}
-        //foreach (var text in ModInfo.LowTexts)
-        //    text.I18nDatas[culture].Text = text.ID;
-        //foreach (var text in ModInfo.ClickTexts)
-        //    text.I18nDatas[culture].Text = text.ID;
-        //foreach (var text in ModInfo.SelectTexts)
-        //{
-        //    text.I18nDatas[culture].Text = text.ID;
-        //    text.I18nDatas[culture].Choose = text.ChooseID;
-        //}
-        //foreach (var pet in ModInfo.Pets)
-        //{
-        //    pet.I18nDatas[culture].Name = pet.ID;
-        //    pet.I18nDatas[culture].PetName = pet.PetNameID;
-        //    pet.I18nDatas[culture].Description = pet.DescriptionID;
-        //    foreach (var work in pet.Works)
-        //        work.I18nDatas[culture].Name = work.ID;
-        //}
+        foreach (var datas in I18nResource.CultureDatas)
+        {
+            I18nResource.SetCurrentCultureData(datas.Key, datas.Key);
+        }
+        ModInfo.RefreshAllID();
     }
     #endregion
 
@@ -299,7 +279,7 @@ public class ModEditWindowVM : ObservableObjectX
     /// <returns>成功为 <see langword="true"/> 失败为 <see langword="false"/></returns>
     private bool ValidationData(ModInfoModel model)
     {
-        if (ModInfoModel.Current.I18nResource.CultureDatas.HasValue() is false)
+        if (I18nResource.CultureDatas.HasValue() is false)
         {
             MessageBox.Show(
                 ModEditWindow,

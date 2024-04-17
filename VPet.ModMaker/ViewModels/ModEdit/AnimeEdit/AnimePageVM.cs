@@ -142,6 +142,8 @@ public class AnimePageVM : ObservableObjectX
     private void InitializeAllAnimes()
     {
         AllAnimes.Clear();
+        if (CurrentPet is null)
+            return;
         foreach (var item in Animes)
             AllAnimes.Add(item);
         foreach (var item in FoodAnimes)

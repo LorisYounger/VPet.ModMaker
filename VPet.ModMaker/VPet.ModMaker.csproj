@@ -11,10 +11,22 @@
 		<UseWPF>true</UseWPF>
 		<LangVersion>preview</LangVersion>
 		<ImplicitUsings>enable</ImplicitUsings>
+		<Configurations>Debug;Release;Test</Configurations>
 	</PropertyGroup>
-
 	<ItemGroup>
 		<EmbeddedResource Include="Resources\food.png" />
+	</ItemGroup>
+	<ItemGroup Condition="'$(Configuration)'=='Test'">
+	  <Reference Include="HKW.Utils">
+	    <HintPath>..\..\HKW.Utils\HKW.Utils\bin\Debug\net8.0\HKW.Utils.dll</HintPath>
+	  </Reference>
+	  <Reference Include="HKW.WPF">
+	    <HintPath>..\..\HKW.WPF\HKW.WPF\bin\Debug\net8.0-windows\HKW.WPF.dll</HintPath>
+	  </Reference>
+	</ItemGroup>
+	<ItemGroup Condition="'$(Configuration)'!='Test'">
+		<PackageReference Include="HKW.WPF" Version="1.0.6" />
+		<PackageReference Include="HKW.Utils" Version="1.2.21" />
 	</ItemGroup>
 	<ItemGroup>
 		<PackageReference Include="VPet-Simulator.Core" Version="1.1.0.4" />
@@ -28,8 +40,6 @@
 	</ItemGroup>
 	<ItemGroup>
 		<PackageReference Include="CommunityToolkit.Mvvm" Version="8.2.2" />
-		<PackageReference Include="HKW.Utils" Version="1.2.19" />
-		<PackageReference Include="HKW.WPF" Version="1.0.5" />
 		<PackageReference Include="Mapster" Version="7.4.0" />
 	</ItemGroup>
 </Project>

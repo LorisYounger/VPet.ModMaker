@@ -27,7 +27,7 @@ public static class ModUpdataHelper
     /// <returns>可以升级为 <see langword="true"/> 不可以为 <see langword="false"/></returns>
     public static bool CanUpdata(ModInfoModel mod)
     {
-        if (mod.ModVersion >= LastVersion)
+        if (mod.GameVersion >= LastVersion)
             return false;
         return true;
     }
@@ -44,7 +44,7 @@ public static class ModUpdataHelper
             return false;
         foreach (var action in UpdataAction)
         {
-            if (mod.ModVersion >= action.Key)
+            if (mod.GameVersion >= action.Key)
                 continue;
             try
             {

@@ -22,7 +22,7 @@ public class LowTextEditWindowVM : ObservableObjectX
 
     #region LowText
     [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-    private LowTextModel _lowText = new();
+    private LowTextModel _lowText = new() { I18nResource = ModInfoModel.Current.I18nResource };
 
     public LowTextModel LowText
     {

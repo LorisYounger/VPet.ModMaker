@@ -36,7 +36,7 @@ public static class ModMakerInfo
     /// <summary>
     /// 本体的宠物
     /// <para>
-    /// (PetId, PetModel)
+    /// (PetID, PetModel)
     /// </para>
     /// </summary>
     public static Dictionary<string, PetModel> MainPets { get; } = new();

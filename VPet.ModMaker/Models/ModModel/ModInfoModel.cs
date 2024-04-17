@@ -34,6 +34,19 @@ public class ModInfoModel : ObservableObjectX
         Current = this;
         PropertyChanged += ModInfoModel_PropertyChanged;
         Pets.CollectionChanged += Pets_CollectionChanged;
+        I18nResource.PropertyChanged += I18nResource_PropertyChanged;
+        I18nResource.Cultures.SetChanged += Cultures_SetChanged;
+        I18nResource.I18nObjectInfos.Add(
+            this,
+            new(
+                this,
+                OnPropertyChanged,
+                [
+                    (nameof(ID), ID, nameof(Name), true),
+                    (nameof(DescriptionID), DescriptionID, nameof(Description), true)
+                ]
+            )
+        );
     }
 
     public ModInfoModel(ModLoader loader)
@@ -51,28 +64,28 @@ public class ModInfoModel : ObservableObjectX
         if (File.Exists(imagePath))
             Image = NativeUtils.LoadImageToMemoryStream(imagePath);
         foreach (var food in loader.Foods.Where(m => string.IsNullOrWhiteSpace(m.Name) is false))
-            Foods.Add(new(food));
+            Foods.Add(new(food) { I18nResource = I18nResource });
         foreach (
             var clickText in loader.ClickTexts.Where(m =>
                 string.IsNullOrWhiteSpace(m.Text) is false
             )
         )
-            ClickTexts.Add(new(clickText));
+            ClickTexts.Add(new(clickText) { I18nResource = I18nResource });
         foreach (
             var lowText in loader.LowTexts.Where(m => string.IsNullOrWhiteSpace(m.Text) is false)
         )
-            LowTexts.Add(new(lowText));
+            LowTexts.Add(new(lowText) { I18nResource = I18nResource });
         foreach (
             var selectText in loader.SelectTexts.Where(m =>
                 string.IsNullOrWhiteSpace(m.Text) is false
             )
         )
-            SelectTexts.Add(new(selectText));
+            SelectTexts.Add(new(selectText) { I18nResource = I18nResource });
 
         // 载入模组宠物
         foreach (var pet in loader.Pets)
         {
-            var petModel = new PetModel(pet);
+            var petModel = new PetModel(pet) { I18nResource = I18nResource };
             // 如果检测到本体存在同名宠物
             if (ModMakerInfo.MainPets.TryGetValue(petModel.ID, out var mainPet))
             {
@@ -113,12 +126,8 @@ public class ModInfoModel : ObservableObjectX
             if (Pets.All(i => i.ID != pet.Key))
                 Pets.Insert(0, pet.Value);
         }
-
-        // 载入本地化模组信息
-        //foreach (var lang in loader.I18nDatas)
-        //    I18nDatas.Add(lang.Key, lang.Value);
-        //OtherI18nDatas = loader.I18nDatas;
-
+        if (loader.I18nDatas.HasValue() is false)
+            return;
         LoadI18nDatas(loader);
         RefreshAllID();
         if (I18nResource.CultureDatas.HasValue())
@@ -143,7 +152,16 @@ public class ModInfoModel : ObservableObjectX
     /// </summary>
     public static ModInfoModel Current { get; set; } = new();
 
+    /// <summary>
+    /// I18n资源
+    /// </summary>
     public I18nResource<string, string> I18nResource { get; } =
+        new() { FillDefaultValueForNewCulture = true, DefaultValue = string.Empty };
+
+    /// <summary>
+    /// 临时I18n资源, 用于新建的项目
+    /// </summary>
+    public I18nResource<string, string> TempI18nResource { get; } =
         new() { FillDefaultValueForNewCulture = true, DefaultValue = string.Empty };
 
     #region I18nData
@@ -339,6 +357,41 @@ public class ModInfoModel : ObservableObjectX
     #endregion
 
     #endregion
+    private void I18nResource_PropertyChanged(object? sender, PropertyChangedEventArgs e)
+    {
+        if (e.PropertyName == nameof(I18nResource.CurrentCulture))
+        {
+            TempI18nResource.CurrentCulture = I18nResource.CurrentCulture;
+        }
+    }
+
+    private void Cultures_SetChanged(
+        IObservableSet<CultureInfo> sender,
+        NotifySetChangeEventArgs<CultureInfo> e
+    )
+    {
+        if (e.Action is SetChangeAction.Clear)
+        {
+            TempI18nResource.ClearCulture();
+        }
+        else
+        {
+            if (e.OldItems is not null)
+            {
+                foreach (var item in e.OldItems)
+                {
+                    TempI18nResource.RemoveCulture(item);
+                }
+            }
+            if (e.NewItems is not null)
+            {
+                foreach (var item in e.NewItems)
+                {
+                    TempI18nResource.AddCulture(item);
+                }
+            }
+        }
+    }
 
     private void Pets_CollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
     {
@@ -448,9 +501,6 @@ public class ModInfoModel : ObservableObjectX
     /// </summary>
     private void LoadI18nDatas(ModLoader modLoader)
     {
-        if (modLoader.I18nDatas.HasValue() is false)
-            return;
-
         foreach (var cultureDatas in modLoader.I18nDatas)
         {
             var culture = CultureInfo.GetCultureInfo(cultureDatas.Key);
@@ -460,106 +510,11 @@ public class ModInfoModel : ObservableObjectX
         }
         if (I18nResource.SetCurrentCulture(CultureInfo.CurrentCulture) is false)
             I18nResource.SetCurrentCulture(I18nResource.Cultures.First());
-        I18nResource.I18nObjectInfos.Add(
-            new(
-                this,
-                OnPropertyChanged,
-                [
-                    (nameof(ID), ID, nameof(Name), true),
-                    (nameof(DescriptionID), DescriptionID, nameof(Description), true)
-                ]
-            )
-        );
-        //foreach (var lang in I18nDatas.Keys.Union(OtherI18nDatas.Keys))
-        //{
-        //    if (I18nHelper.Current.CultureNames.Contains(lang) is false)
-        //        I18nHelper.Current.CultureNames.Add(lang);
-        //}
-        //if (I18nHelper.Current.CultureNames.Count == 0)
-        //    return;
-        //I18nHelper.Current.CultureName = I18nHelper.Current.CultureNames.First();
-        //foreach (var i18nData in OtherI18nDatas)
-        //{
-        //    LoadFoodI18nData(i18nData.Key, i18nData.Value);
-        //    LoadLowTextI18nData(i18nData.Key, i18nData.Value);
-        //    LoadClickTextI18nData(i18nData.Key, i18nData.Value);
-        //    LoadSelectTextI18nData(i18nData.Key, i18nData.Value);
-        //    LoadPetI18nData(i18nData.Key, i18nData.Value);
-        //}
     }
 
-    //private void LoadFoodI18nData(string key, Dictionary<string, string> i18nData)
-    //{
-    //    foreach (var food in Foods)
-    //    {
-    //        if (food.I18nDatas.TryGetValue(key, out var data) is false)
-    //            continue;
-    //        if (i18nData.TryGetValue(food.ID, out var name))
-    //            data.Name = name;
-    //        if (i18nData.TryGetValue(food.DescriptionID, out var description))
-    //            data.Description = description;
-    //    }
-    //}
-
-    //private void LoadLowTextI18nData(string key, Dictionary<string, string> i18nData)
-    //{
-    //    foreach (var lowText in LowTexts)
-    //    {
-    //        if (lowText.I18nDatas.TryGetValue(key, out var data) is false)
-    //            continue;
-    //        if (i18nData.TryGetValue(lowText.ID, out var text))
-    //            data.Text = text;
-    //    }
-    //}
-
-    //private void LoadClickTextI18nData(string key, Dictionary<string, string> i18nData)
-    //{
-    //    foreach (var clickText in ClickTexts)
-    //    {
-    //        if (clickText.I18nDatas.TryGetValue(key, out var data) is false)
-    //            continue;
-    //        if (i18nData.TryGetValue(clickText.ID, out var text))
-    //            data.Text = text;
-    //    }
-    //}
-
-    //private void LoadSelectTextI18nData(string key, Dictionary<string, string> i18nData)
-    //{
-    //    foreach (var selectText in SelectTexts)
-    //    {
-    //        if (selectText.I18nDatas.TryGetValue(key, out var data) is false)
-    //            continue;
-    //        if (i18nData.TryGetValue(selectText.ID, out var text))
-    //            data.Text = text;
-    //        if (i18nData.TryGetValue(selectText.ChooseID, out var choose))
-    //            data.Choose = choose;
-    //    }
-    //}
-
-    //private void LoadPetI18nData(string key, Dictionary<string, string> i18nData)
-    //{
-    //    foreach (var pet in Pets)
-    //    {
-    //        if (pet.I18nDatas.TryGetValue(key, out var data) is false)
-    //            continue;
-    //        if (i18nData.TryGetValue(pet.ID, out var name))
-    //            data.Name = name;
-    //        if (i18nData.TryGetValue(pet.PetNameID, out var petName))
-    //            data.PetName = petName;
-    //        if (i18nData.TryGetValue(pet.DescriptionID, out var description))
-    //            data.Description = description;
-    //        foreach (var work in pet.Works)
-    //        {
-    //            if (work.I18nDatas.TryGetValue(key, out var workData) is false)
-    //                continue;
-    //            if (i18nData.TryGetValue(work.ID, out var workName))
-    //                workData.Name = workName;
-    //        }
-    //    }
-    //}
-
-    private void RefreshAllID()
+    public void RefreshAllID()
     {
+        RefreshID();
         foreach (var food in Foods)
             food.RefreshID();
         foreach (var selectText in SelectTexts)

@@ -23,9 +23,6 @@ public class WorkModel : ObservableObjectX
     public WorkModel()
     {
         PropertyChanged += WorkModel_PropertyChanged;
-        ModInfoModel.Current.I18nResource.I18nObjectInfos.Add(
-            new(this, OnPropertyChanged, [(nameof(ID), ID, nameof(Name), true)])
-        );
     }
 
     private static readonly FrozenSet<string> _notifyIsOverLoad = FrozenSet.ToFrozenSet(
@@ -127,10 +124,34 @@ public class WorkModel : ObservableObjectX
 
     #region I18nData
     [AdaptIgnore]
+    private I18nResource<string, string> _i18nResource = null!;
+
+    [AdaptIgnore]
+    public required I18nResource<string, string> I18nResource
+    {
+        get => _i18nResource;
+        set
+        {
+            if (_i18nResource is not null)
+                I18nResource.I18nObjectInfos.Remove(this);
+            _i18nResource = value;
+            InitializeI18nResource();
+        }
+    }
+
+    public void InitializeI18nResource()
+    {
+        I18nResource.I18nObjectInfos.Add(
+            this,
+            new(this, OnPropertyChanged, [(nameof(ID), ID, nameof(Name), true),])
+        );
+    }
+
+    [AdaptIgnore]
     public string Name
     {
-        get => ModInfoModel.Current.I18nResource.GetCurrentCultureDataOrDefault(ID);
-        set => ModInfoModel.Current.I18nResource.SetCurrentCultureData(ID, value);
+        get => I18nResource.GetCurrentCultureDataOrDefault(ID);
+        set => I18nResource.SetCurrentCultureData(ID, value);
     }
     #endregion
 
@@ -459,10 +480,6 @@ public class WorkModel : ObservableObjectX
     public void Close()
     {
         //Image?.CloseStream();
-        var item = ModInfoModel.Current.I18nResource.I18nObjectInfos.FirstOrDefault(i =>
-            i.Source == this
-        );
-        if (item is not null)
-            ModInfoModel.Current.I18nResource.I18nObjectInfos.Remove(item);
+        I18nResource.I18nObjectInfos.Remove(this);
     }
 }

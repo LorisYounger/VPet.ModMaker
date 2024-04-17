@@ -28,10 +28,7 @@ public partial class WorkEditWindow : Window
     public WorkEditWindow()
     {
         InitializeComponent();
-        this.SetDataContext<WorkEditWindowVM>(() => {
-            //TODO
-            //ViewModel.Close();
-        });
+        this.SetDataContext<WorkEditWindowVM>();
     }
 
     private void Button_Cancel_Click(object? sender, RoutedEventArgs e)
@@ -41,15 +38,15 @@ public partial class WorkEditWindow : Window
 
     private void Button_Yes_Click(object? sender, RoutedEventArgs e)
     {
-        if (string.IsNullOrEmpty(ViewModel.Work.ID))
+        if (string.IsNullOrWhiteSpace(ViewModel.Work.ID))
         {
-            MessageBox.Show("Id不可为空".Translate(), "", MessageBoxButton.OK, MessageBoxImage.Warning);
+            MessageBox.Show("ID不可为空".Translate(), "", MessageBoxButton.OK, MessageBoxImage.Warning);
             return;
         }
-        if (string.IsNullOrEmpty(ViewModel.Work.Graph))
+        if (string.IsNullOrWhiteSpace(ViewModel.Work.Graph))
         {
             MessageBox.Show(
-                "指定动画Id不可为空".Translate(),
+                "指定动画ID不可为空".Translate(),
                 "",
                 MessageBoxButton.OK,
                 MessageBoxImage.Warning
@@ -61,7 +58,7 @@ public partial class WorkEditWindow : Window
             && ViewModel.CurrentPet.Works.Any(i => i.ID == ViewModel.Work.ID)
         )
         {
-            MessageBox.Show("此Id已存在".Translate(), "", MessageBoxButton.OK, MessageBoxImage.Warning);
+            MessageBox.Show("此ID已存在".Translate(), "", MessageBoxButton.OK, MessageBoxImage.Warning);
             return;
         }
         IsCancel = false;

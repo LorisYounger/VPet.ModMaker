@@ -24,7 +24,9 @@ public class MovePageVM : ObservableObjectX
             Filter = f => f.Graph.Contains(Search, StringComparison.OrdinalIgnoreCase),
             FilteredList = new()
         };
-        PropertyChanged += MovePageVM_PropertyChanged;
+
+        PropertyChangedX += MovePageVM_PropertyChangedX;
+        ;
         if (Pets.HasValue())
             CurrentPet = Pets.FirstOrDefault(
                 m => m.FromMain is false && m.Moves.HasValue(),
@@ -78,12 +80,18 @@ public class MovePageVM : ObservableObjectX
     public ObservableCommand<MoveModel> EditCommand { get; } = new();
     public ObservableCommand<MoveModel> RemoveCommand { get; } = new();
     #endregion
-    private void MovePageVM_PropertyChanged(object? sender, PropertyChangedEventArgs e)
+
+    private void MovePageVM_PropertyChangedX(object? sender, PropertyChangedXEventArgs e)
     {
         if (e.PropertyName == nameof(CurrentPet))
         {
             Moves.Clear();
+            if (e.OldValue is PetModel pet)
+                Moves.BindingList(pet.Moves, true);
+            if (e.NewValue is null)
+                return;
             Moves.AddRange(CurrentPet.Moves);
+            Moves.BindingList(CurrentPet.Moves);
         }
         else if (e.PropertyName == nameof(Search))
         {

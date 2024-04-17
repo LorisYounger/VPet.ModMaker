@@ -8,6 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using HKW.HKWUtils.Extensions;
 using HKW.HKWUtils.Observable;
 using LinePutScript.Localization.WPF;
 using VPet.ModMaker.Models;
@@ -24,6 +25,7 @@ public class FoodPageVM : ObservableObjectX
             Filter = f => f.ID.Contains(Search, StringComparison.OrdinalIgnoreCase),
             FilteredList = new()
         };
+        Foods.BindingList(ModInfoModel.Current.Foods);
 
         AddCommand.ExecuteCommand += AddCommand_ExecuteCommand;
         EditCommand.ExecuteCommand += EditCommand_ExecuteCommand;
@@ -76,23 +78,34 @@ public class FoodPageVM : ObservableObjectX
         Foods.Add(vm.Food);
     }
 
-    public void EditCommand_ExecuteCommand(FoodModel food)
+    public void EditCommand_ExecuteCommand(FoodModel model)
     {
         var window = new FoodEditWindow();
         var vm = window.ViewModel;
-        vm.OldFood = food;
-        var newFood = vm.Food = new(food);
+        vm.OldFood = model;
+        var newModel = vm.Food = new(model)
+        {
+            I18nResource = ModInfoModel.Current.TempI18nResource
+        };
+        model.I18nResource.CopyDataTo(newModel.I18nResource, [model.ID, model.DescriptionID], true);
         window.ShowDialog();
         if (window.IsCancel)
+        {
+            newModel.I18nResource.ClearCultureData();
+            newModel.Close();
             return;
-        Foods[Foods.IndexOf(food)] = newFood;
-        food.Close();
+        }
+        newModel.I18nResource.CopyDataTo(ModInfoModel.Current.I18nResource, true);
+        newModel.I18nResource = ModInfoModel.Current.I18nResource;
+        Foods[Foods.IndexOf(model)] = newModel;
+        model.Close();
     }
 
-    private void RemoveCommand_ExecuteCommand(FoodModel food)
+    private void RemoveCommand_ExecuteCommand(FoodModel model)
     {
         if (MessageBox.Show("确定删除吗".Translate(), "", MessageBoxButton.YesNo) is MessageBoxResult.No)
             return;
-        Foods.Remove(food);
+        Foods.Remove(model);
+        model.Close();
     }
 }

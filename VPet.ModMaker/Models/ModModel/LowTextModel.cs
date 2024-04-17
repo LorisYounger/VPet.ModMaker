@@ -18,12 +18,7 @@ namespace VPet.ModMaker.Models;
 /// </summary>
 public class LowTextModel : ObservableObjectX
 {
-    public LowTextModel()
-    {
-        ModInfoModel.Current.I18nResource.I18nObjectInfos.Add(
-            new(this, OnPropertyChanged, [(nameof(ID), ID, nameof(Text), true)])
-        );
-    }
+    public LowTextModel() { }
 
     public LowTextModel(LowTextModel lowText)
         : this()
@@ -56,6 +51,7 @@ public class LowTextModel : ObservableObjectX
         Enum.GetValues<LowText.StrengthType>().ToFrozenSet();
 
     #region ID
+
     [DebuggerBrowsable(DebuggerBrowsableState.Never)]
     private string _id = string.Empty;
 
@@ -72,10 +68,34 @@ public class LowTextModel : ObservableObjectX
 
     #region I18nData
     [AdaptIgnore]
+    private I18nResource<string, string> _i18nResource = null!;
+
+    [AdaptIgnore]
+    public required I18nResource<string, string> I18nResource
+    {
+        get => _i18nResource;
+        set
+        {
+            if (_i18nResource is not null)
+                I18nResource.I18nObjectInfos.Remove(this);
+            _i18nResource = value;
+            InitializeI18nResource();
+        }
+    }
+
+    public void InitializeI18nResource()
+    {
+        I18nResource.I18nObjectInfos.Add(
+            this,
+            new(this, OnPropertyChanged, [(nameof(ID), ID, nameof(Text), true)])
+        );
+    }
+
+    [AdaptIgnore]
     public string Text
     {
-        get => ModInfoModel.Current.I18nResource.GetCurrentCultureDataOrDefault(ID);
-        set => ModInfoModel.Current.I18nResource.SetCurrentCultureData(ID, value);
+        get => I18nResource.GetCurrentCultureDataOrDefault(ID);
+        set => I18nResource.SetCurrentCultureData(ID, value);
     }
     #endregion
 
@@ -127,5 +147,10 @@ public class LowTextModel : ObservableObjectX
     public LowText ToLowText()
     {
         return this.Adapt<LowText>();
+    }
+
+    public void Close()
+    {
+        I18nResource.I18nObjectInfos.Remove(this);
     }
 }

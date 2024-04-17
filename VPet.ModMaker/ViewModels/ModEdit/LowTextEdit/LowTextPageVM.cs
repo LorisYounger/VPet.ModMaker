@@ -8,6 +8,7 @@ using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using HKW.HKWUtils.Extensions;
 using HKW.HKWUtils.Observable;
 using LinePutScript.Localization.WPF;
 using VPet.ModMaker.Models;
@@ -24,6 +25,7 @@ public class LowTextPageVM : ObservableObjectX
             Filter = f => f.ID.Contains(Search, StringComparison.OrdinalIgnoreCase),
             FilteredList = new()
         };
+        LowTexts.BindingList(ModInfoModel.Current.LowTexts);
 
         AddCommand.ExecuteCommand += AddCommand_ExecuteCommand;
         EditCommand.ExecuteCommand += EditCommand_ExecuteCommand;
@@ -78,11 +80,22 @@ public class LowTextPageVM : ObservableObjectX
         var window = new LowTextEditWindow();
         var vm = window.ViewModel;
         vm.OldLowText = model;
-        var newLowTest = vm.LowText = new(model);
+        var newModel = vm.LowText = new(model)
+        {
+            I18nResource = ModInfoModel.Current.TempI18nResource
+        };
+        model.I18nResource.CopyDataTo(newModel.I18nResource, model.ID, true);
         window.ShowDialog();
         if (window.IsCancel)
+        {
+            newModel.I18nResource.ClearCultureData();
+            newModel.Close();
             return;
-        LowTexts[LowTexts.IndexOf(model)] = newLowTest;
+        }
+        newModel.I18nResource.CopyDataTo(ModInfoModel.Current.I18nResource, true);
+        newModel.I18nResource = ModInfoModel.Current.I18nResource;
+        LowTexts[LowTexts.IndexOf(model)] = newModel;
+        model.Close();
     }
 
     private void RemoveCommand_ExecuteCommand(LowTextModel model)
@@ -90,5 +103,6 @@ public class LowTextPageVM : ObservableObjectX
         if (MessageBox.Show("确定删除吗".Translate(), "", MessageBoxButton.YesNo) is MessageBoxResult.No)
             return;
         LowTexts.Remove(model);
+        model.Close();
     }
 }

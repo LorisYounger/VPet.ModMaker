@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using HKW.HKWUtils.Extensions;
 using HKW.HKWUtils.Observable;
 using LinePutScript.Localization.WPF;
 using VPet.ModMaker.Models;
@@ -22,6 +23,7 @@ public class ClickTextPageVM : ObservableObjectX
             Filter = f => f.ID.Contains(Search, StringComparison.OrdinalIgnoreCase),
             FilteredList = new()
         };
+        ClickTexts.BindingList(ModInfoModel.Current.ClickTexts);
         AddCommand.ExecuteCommand += AddCommand_ExecuteCommand;
         EditCommand.ExecuteCommand += EditCommand_ExecuteCommand;
         RemoveCommand.ExecuteCommand += RemoveCommand_ExecuteCommand;
@@ -100,11 +102,22 @@ public class ClickTextPageVM : ObservableObjectX
         var window = new ClickTextEditWindow();
         var vm = window.ViewModel;
         vm.OldClickText = model;
-        var newLowTest = vm.ClickText = new(model);
+        var newModel = vm.ClickText = new(model)
+        {
+            I18nResource = ModInfoModel.Current.TempI18nResource
+        };
+        model.I18nResource.CopyDataTo(newModel.I18nResource, model.ID, true);
         window.ShowDialog();
         if (window.IsCancel)
+        {
+            newModel.I18nResource.ClearCultureData();
+            newModel.Close();
             return;
-        ClickTexts[ClickTexts.IndexOf(model)] = newLowTest;
+        }
+        newModel.I18nResource.CopyDataTo(ModInfoModel.Current.I18nResource, true);
+        newModel.I18nResource = ModInfoModel.Current.I18nResource;
+        ClickTexts[ClickTexts.IndexOf(model)] = newModel;
+        model.Close();
     }
 
     /// <summary>
@@ -116,5 +129,6 @@ public class ClickTextPageVM : ObservableObjectX
         if (MessageBox.Show("确定删除吗".Translate(), "", MessageBoxButton.YesNo) is MessageBoxResult.No)
             return;
         ClickTexts.Remove(model);
+        model.Close();
     }
 }

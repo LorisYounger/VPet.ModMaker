@@ -43,6 +43,7 @@
       CanUserAddRows="False"
       CanUserDeleteRows="False"
       CanUserReorderColumns="False"
+      CellEditEnding="DataGrid_Datas_CellEditEnding"
       ItemsSource="{Binding I18nDatas.FilteredList}"
       ScrollViewer.IsDeferredScrollingEnabled="True"
       VirtualizingStackPanel.VirtualizationMode="Recycling">
