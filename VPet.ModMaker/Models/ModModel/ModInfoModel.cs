@@ -92,24 +92,24 @@ public class ModInfoModel : ObservableObjectX
                 // 若宠物的值为默认值并且本体同名宠物不为默认值, 则把本体宠物的值作为模组宠物的默认值
                 if (
                     petModel.TouchHeadRectangleLocation
-                        == PetModel.Current.TouchHeadRectangleLocation
+                        == PetModel.Default.TouchHeadRectangleLocation
                     && petModel.TouchHeadRectangleLocation != mainPet.TouchHeadRectangleLocation
                 )
                     petModel.TouchHeadRectangleLocation = mainPet.TouchHeadRectangleLocation;
                 if (
                     petModel.TouchBodyRectangleLocation
-                        == PetModel.Current.TouchBodyRectangleLocation
+                        == PetModel.Default.TouchBodyRectangleLocation
                     && petModel.TouchBodyRectangleLocation != mainPet.TouchBodyRectangleLocation
                 )
                     petModel.TouchBodyRectangleLocation = mainPet.TouchBodyRectangleLocation;
                 if (
                     petModel.TouchRaisedRectangleLocation
-                        == PetModel.Current.TouchRaisedRectangleLocation
+                        == PetModel.Default.TouchRaisedRectangleLocation
                     && petModel.TouchRaisedRectangleLocation != mainPet.TouchRaisedRectangleLocation
                 )
                     petModel.TouchRaisedRectangleLocation = mainPet.TouchRaisedRectangleLocation;
                 if (
-                    petModel.RaisePoint == PetModel.Current.RaisePoint
+                    petModel.RaisePoint == PetModel.Default.RaisePoint
                     && petModel.RaisePoint != mainPet.RaisePoint
                 )
                     petModel.RaisePoint = mainPet.RaisePoint;

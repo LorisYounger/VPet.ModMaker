@@ -120,7 +120,7 @@ public class PetModel : ObservableObjectX
             Moves.Add(new(move));
     }
 
-    public static PetModel Current { get; } = null!;
+    public static PetModel Default { get; } = new() { I18nResource = new() };
 
     #region FromMain
     [DebuggerBrowsable(DebuggerBrowsableState.Never)]
@@ -477,21 +477,21 @@ public class PetModel : ObservableObjectX
         SavePetBasicInfo(lps);
         // 如果值不为默认并且不与本体值相同, 则保存
         if (
-            TouchHeadRectangleLocation != Current.TouchHeadRectangleLocation
+            TouchHeadRectangleLocation != Default.TouchHeadRectangleLocation
             && TouchHeadRectangleLocation != mainPet.TouchHeadRectangleLocation
         )
             SavePetTouchHeadInfo(lps);
         if (
-            TouchBodyRectangleLocation != Current.TouchBodyRectangleLocation
+            TouchBodyRectangleLocation != Default.TouchBodyRectangleLocation
             && TouchBodyRectangleLocation != mainPet.TouchBodyRectangleLocation
         )
             SavePetTouchBodyInfo(lps);
         if (
-            TouchRaisedRectangleLocation != Current.TouchRaisedRectangleLocation
+            TouchRaisedRectangleLocation != Default.TouchRaisedRectangleLocation
             && TouchRaisedRectangleLocation != mainPet.TouchRaisedRectangleLocation
         )
             SavePetTouchRaisedInfo(lps);
-        if (RaisePoint != Current.RaisePoint && RaisePoint != mainPet.RaisePoint)
+        if (RaisePoint != Default.RaisePoint && RaisePoint != mainPet.RaisePoint)
             SavePetRaisePointInfo(lps);
     }
 
