@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using HKW.HKWUtils.Extensions;
 using HKW.HKWUtils.Observable;
 using LinePutScript;
 using VPet_Simulator.Core;
@@ -22,7 +23,6 @@ public class FoodAnimeModel : ObservableObjectX, ICloneable<FoodAnimeModel>
     {
         foreach (var item in line.Where(i => i.Name.StartsWith('a')))
         {
-            //var index = int.Parse(item.Name.Substring(1));
             var infos = item.Info.Split(',');
             var foodLocationInfo = new FoodAnimeLocationModel();
             foodLocationInfo.Duration = int.Parse(infos[0]);
@@ -70,6 +70,20 @@ public class FoodAnimeModel : ObservableObjectX, ICloneable<FoodAnimeModel>
     /// 食物定位列表
     /// </summary>
     public ObservableList<FoodAnimeLocationModel> FoodLocations { get; } = new();
+
+    public void LoadAnime()
+    {
+        if (BackImages.FirstOrDefault()?.Image is null)
+        {
+            foreach (var image in BackImages)
+                image.LoadImage();
+        }
+        if (FrontImages.FirstOrDefault()?.Image is null)
+        {
+            foreach (var image in FrontImages)
+                image.LoadImage();
+        }
+    }
 
     /// <summary>
     /// 复制

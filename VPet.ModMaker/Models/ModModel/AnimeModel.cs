@@ -2,6 +2,7 @@
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using HKW.HKWUtils.Extensions;
 using HKW.HKWUtils.Observable;
 using VPet_Simulator.Core;
 
@@ -22,10 +23,9 @@ public class AnimeModel : ObservableObjectX, ICloneable<AnimeModel>
             var info = Path.GetFileNameWithoutExtension(file).Split(NativeUtils.Separator);
             ID = info[0];
             var duration = info.Last();
-            var imageModel = new ImageModel(
-                NativeUtils.LoadImageToMemoryStream(file),
-                int.Parse(duration)
-            );
+            if (int.TryParse(duration, out var result) is false)
+                result = 100;
+            var imageModel = new ImageModel(file, result);
             Images.Add(imageModel);
         }
     }
@@ -62,6 +62,14 @@ public class AnimeModel : ObservableObjectX, ICloneable<AnimeModel>
     /// 图像列表
     /// </summary>
     public ObservableList<ImageModel> Images { get; } = new();
+
+    public void LoadAnime()
+    {
+        if (Images.HasValue() is false || Images.First().Image is not null)
+            return;
+        foreach (var image in Images)
+            image.LoadImage();
+    }
 
     /// <summary>
     /// 复制

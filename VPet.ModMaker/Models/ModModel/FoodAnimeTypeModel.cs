@@ -43,7 +43,7 @@ public class FoodAnimeTypeModel : ObservableObjectX
 
     #region ID
     [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-    private string _id;
+    private string _id = string.Empty;
 
     public string ID
     {
@@ -54,7 +54,7 @@ public class FoodAnimeTypeModel : ObservableObjectX
 
     #region Name
     [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-    private string _name;
+    private string _name = string.Empty;
 
     /// <summary>
     /// 名称
@@ -90,6 +90,18 @@ public class FoodAnimeTypeModel : ObservableObjectX
     /// 生病动画
     /// </summary>
     public ObservableList<FoodAnimeModel> IllAnimes { get; } = new();
+
+    public void LoadTypeAnime()
+    {
+        foreach (var anime in HappyAnimes)
+            anime.LoadAnime();
+        foreach (var anime in NomalAnimes)
+            anime.LoadAnime();
+        foreach (var anime in PoorConditionAnimes)
+            anime.LoadAnime();
+        foreach (var anime in IllAnimes)
+            anime.LoadAnime();
+    }
 
     public void Close()
     {
@@ -255,9 +267,9 @@ public class FoodAnimeTypeModel : ObservableObjectX
             return new(
                 Directory
                     .EnumerateFiles(Path.Combine(path, pngAnimeInfo.Path))
-                    .Select(i => new ImageModel(
-                        NativeUtils.LoadImageToMemoryStream(i),
-                        int.Parse(Path.GetFileNameWithoutExtension(i).Split('_')[2])
+                    .Select(f => new ImageModel(
+                        f,
+                        int.Parse(Path.GetFileNameWithoutExtension(f).Split('_')[2])
                     ))
             );
         }
@@ -329,17 +341,29 @@ public class FoodAnimeTypeModel : ObservableObjectX
         var backLayPath = Path.Combine(indexPath, BackLayName);
         Directory.CreateDirectory(frontLayPath);
         Directory.CreateDirectory(backLayPath);
-        foreach ((var index, var frontImage) in anime.FrontImages.EnumerateIndex())
+        foreach ((var index, var image) in anime.FrontImages.EnumerateIndex())
         {
-            frontImage.Image.SaveToPng(
-                Path.Combine(frontLayPath, $"{anime.ID}_{index:000}_{frontImage.Duration}.png")
-            );
+            var path = Path.Combine(frontLayPath, $"{anime.ID}_{index:000}_{image.Duration}.png");
+            if (image.Image is not null)
+            {
+                image.Image.SaveToPng(path);
+            }
+            else if (Path.Exists(image.ImageFile))
+            {
+                File.Copy(image.ImageFile, path, true);
+            }
         }
-        foreach ((var index, var backImage) in anime.BackImages.EnumerateIndex())
+        foreach ((var index, var image) in anime.BackImages.EnumerateIndex())
         {
-            backImage.Image.SaveToPng(
-                Path.Combine(backLayPath, $"{anime.ID}_{backImage:000}_{backImage.Duration}.png")
-            );
+            var path = Path.Combine(backLayPath, $"{anime.ID}_{index:000}_{image.Duration}.png");
+            if (image.Image is not null)
+            {
+                image.Image.SaveToPng(path);
+            }
+            else if (Path.Exists(image.ImageFile))
+            {
+                File.Copy(image.ImageFile, path, true);
+            }
         }
     }
 
@@ -384,16 +408,9 @@ public class FoodAnimeTypeModel : ObservableObjectX
     }
 }
 
-public class PNGAnimeInfo
+public class PNGAnimeInfo(string name, string path, IGameSave.ModeType mode)
 {
-    public string Name { get; }
-    public string Path { get; }
-    public ModeType Mode { get; }
-
-    public PNGAnimeInfo(string name, string path, ModeType mode)
-    {
-        Name = name;
-        Path = path;
-        Mode = mode;
-    }
+    public string Name { get; } = name;
+    public string Path { get; } = path;
+    public ModeType Mode { get; } = mode;
 }

@@ -15,11 +15,22 @@ namespace VPet.ModMaker.Models.ModModel;
 /// </summary>
 public class ImageModel : ObservableObjectX, ICloneable<ImageModel>
 {
+    public ImageModel(string imageFile, int duration = 100)
+    {
+        ImageFile = imageFile;
+        Duration = duration;
+    }
+
     public ImageModel(BitmapImage image, int duration = 100)
     {
         Image = image;
         Duration = duration;
     }
+
+    /// <summary>
+    /// 图片路径
+    /// </summary>
+    public string ImageFile { get; set; } = string.Empty;
 
     #region Image
     [DebuggerBrowsable(DebuggerBrowsableState.Never)]
@@ -48,9 +59,18 @@ public class ImageModel : ObservableObjectX, ICloneable<ImageModel>
         set => SetProperty(ref _duration, value);
     }
     #endregion
+
+    public void LoadImage()
+    {
+        Image = NativeUtils.LoadImageToMemoryStream(ImageFile);
+    }
+
     public ImageModel Clone()
     {
-        var model = new ImageModel(Image.CloneStream(), Duration);
+        var model = new ImageModel(
+            Image?.CloneStream() ?? NativeUtils.LoadImageToMemoryStream(ImageFile),
+            Duration
+        );
         return model;
     }
 

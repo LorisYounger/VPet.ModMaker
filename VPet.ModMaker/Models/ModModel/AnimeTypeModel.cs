@@ -180,6 +180,18 @@ public class AnimeTypeModel : ObservableObjectX
         }
     }
 
+    public void LoadTypeAnime()
+    {
+        foreach (var anime in HappyAnimes)
+            anime.LoadAnime();
+        foreach (var anime in NomalAnimes)
+            anime.LoadAnime();
+        foreach (var anime in PoorConditionAnimes)
+            anime.LoadAnime();
+        foreach (var anime in IllAnimes)
+            anime.LoadAnime();
+    }
+
     public void Close()
     {
         foreach (var anime in HappyAnimes)
@@ -194,6 +206,7 @@ public class AnimeTypeModel : ObservableObjectX
 
     public void Clear()
     {
+        Close();
         HappyAnimes.Clear();
         NomalAnimes.Clear();
         PoorConditionAnimes.Clear();
@@ -435,14 +448,14 @@ public class AnimeTypeModel : ObservableObjectX
                 or GraphInfo.GraphType.Shutdown
                 or GraphInfo.GraphType.StartUP
         )
-            SaveDefault(path, this);
+            SaveDefault(path);
         else if (
             GraphType
             is GraphInfo.GraphType.Touch_Head
                 or GraphInfo.GraphType.Touch_Body
                 or GraphInfo.GraphType.Sleep
         )
-            SaveMultiType(path, this);
+            SaveMultiType(path);
         else if (
             GraphType
             is GraphInfo.GraphType.Switch_Up
@@ -450,55 +463,52 @@ public class AnimeTypeModel : ObservableObjectX
                 or GraphInfo.GraphType.Switch_Thirsty
                 or GraphInfo.GraphType.Switch_Hunger
         )
-            SaveSwitch(path, this);
+            SaveSwitch(path);
         else if (
             GraphType is GraphInfo.GraphType.Raised_Dynamic or GraphInfo.GraphType.Raised_Static
         )
-            SaveRaised(path, this);
+            SaveRaised(path);
         else if (GraphType is GraphInfo.GraphType.StateONE or GraphInfo.GraphType.StateTWO)
-            SaveState(path, this);
+            SaveState(path);
         else if (GraphType is GraphInfo.GraphType.Common)
-            SaveCommon(path, this);
+            SaveCommon(path);
         else if (GraphType.IsHasNameAnime())
-            SaveHasNameAnime(path, this);
+            SaveHasNameAnime(path);
     }
 
     /// <summary>
     /// 保存为带有名称的动画样式
     /// </summary>
     /// <param name="path">路径</param>
-    /// <param name="animeTypeModel">动画模型</param>
-    void SaveHasNameAnime(string path, AnimeTypeModel animeTypeModel)
+    void SaveHasNameAnime(string path)
     {
-        var animeTypePath = Path.Combine(path, animeTypeModel.GraphType.ToString());
+        var animeTypePath = Path.Combine(path, GraphType.ToString());
         Directory.CreateDirectory(animeTypePath);
-        var animePath = Path.Combine(animeTypePath, animeTypeModel.Name);
+        var animePath = Path.Combine(animeTypePath, Name);
         Directory.CreateDirectory(animePath);
-        SaveWithModeType(animePath, animeTypeModel);
+        SaveWithModeType(animePath);
     }
 
     /// <summary>
     /// 保存为通用样式
     /// </summary>
     /// <param name="path">路径</param>
-    /// <param name="animeTypeModel">模型</param>
-    void SaveCommon(string path, AnimeTypeModel animeTypeModel)
+    void SaveCommon(string path)
     {
-        var animePath = Path.Combine(path, animeTypeModel.Name);
+        var animePath = Path.Combine(path, Name);
         Directory.CreateDirectory(animePath);
-        SaveWithModeType(animePath, animeTypeModel);
+        SaveWithModeType(animePath);
     }
 
     /// <summary>
     /// 保存为 <see cref="GraphInfo.GraphType.StateONE"/> 或 <see cref="GraphInfo.GraphType.StateTWO"/> 样式
     /// </summary>
     /// <param name="path">路径</param>
-    /// <param name="animeTypeModel">模型</param>
-    void SaveState(string path, AnimeTypeModel animeTypeModel)
+    void SaveState(string path)
     {
         var animePath = Path.Combine(path, "State");
         Directory.CreateDirectory(animePath);
-        SaveMultiType(animePath, animeTypeModel);
+        SaveMultiType(animePath);
     }
 
     /// <summary>
@@ -506,14 +516,14 @@ public class AnimeTypeModel : ObservableObjectX
     /// </summary>
     /// <param name="path">路径</param>
     /// <param name="animeTypeModel">模型</param>
-    void SaveRaised(string path, AnimeTypeModel animeTypeModel)
+    void SaveRaised(string path)
     {
         var animePath = Path.Combine(path, "Raise");
         Directory.CreateDirectory(animePath);
-        if (animeTypeModel.GraphType is GraphInfo.GraphType.Raised_Dynamic)
-            SaveDefault(animePath, animeTypeModel);
-        else if (animeTypeModel.GraphType is GraphInfo.GraphType.Raised_Static)
-            SaveMultiType(animePath, animeTypeModel);
+        if (GraphType is GraphInfo.GraphType.Raised_Dynamic)
+            SaveDefault(animePath);
+        else if (GraphType is GraphInfo.GraphType.Raised_Static)
+            SaveMultiType(animePath);
     }
 
     /// <summary>
@@ -521,12 +531,12 @@ public class AnimeTypeModel : ObservableObjectX
     /// </summary>
     /// <param name="path">路径</param>
     /// <param name="animeTypeModel">模型</param>
-    void SaveSwitch(string path, AnimeTypeModel animeTypeModel)
+    void SaveSwitch(string path)
     {
         var animePath = Path.Combine(path, "Switch");
         Directory.CreateDirectory(animePath);
-        var switchName = animeTypeModel.GraphType.ToString().Split(NativeUtils.Separator).Last();
-        SaveWithAnimeType(Path.Combine(animePath, switchName), animeTypeModel);
+        var switchName = GraphType.ToString().Split(NativeUtils.Separator).Last();
+        SaveWithAnimeType(Path.Combine(animePath, switchName));
     }
 
     /// <summary>
@@ -534,11 +544,11 @@ public class AnimeTypeModel : ObservableObjectX
     /// </summary>
     /// <param name="path"></param>
     /// <param name="animeTypeModel"></param>
-    static void SaveDefault(string path, AnimeTypeModel animeTypeModel)
+    void SaveDefault(string path)
     {
-        var animePath = Path.Combine(path, animeTypeModel.GraphType.ToString());
+        var animePath = Path.Combine(path, GraphType.ToString());
         Directory.CreateDirectory(animePath);
-        SaveWithAnimeType(animePath, animeTypeModel);
+        SaveWithAnimeType(animePath);
     }
 
     /// <summary>
@@ -546,11 +556,11 @@ public class AnimeTypeModel : ObservableObjectX
     /// </summary>
     /// <param name="path"></param>
     /// <param name="animeTypeModel"></param>
-    static void SaveMultiType(string path, AnimeTypeModel animeTypeModel)
+    void SaveMultiType(string path)
     {
-        var animePath = Path.Combine(path, animeTypeModel.GraphType.ToString());
+        var animePath = Path.Combine(path, GraphType.ToString());
         Directory.CreateDirectory(animePath);
-        SaveWithModeType(animePath, animeTypeModel);
+        SaveWithModeType(animePath);
     }
 
     /// <summary>
@@ -558,27 +568,27 @@ public class AnimeTypeModel : ObservableObjectX
     /// </summary>
     /// <param name="path"></param>
     /// <param name="animeTypeModel"></param>
-    static void SaveWithModeType(string path, AnimeTypeModel animeTypeModel)
+    void SaveWithModeType(string path)
     {
-        if (animeTypeModel.HappyAnimes.Count > 0)
+        if (HappyAnimes.Count > 0)
         {
             var modePath = Path.Combine(path, nameof(ModeType.Happy));
-            SaveAnimes(modePath, animeTypeModel.HappyAnimes);
+            SaveAnimes(modePath, HappyAnimes);
         }
-        if (animeTypeModel.NomalAnimes.Count > 0)
+        if (NomalAnimes.Count > 0)
         {
             var modePath = Path.Combine(path, nameof(ModeType.Nomal));
-            SaveAnimes(modePath, animeTypeModel.NomalAnimes);
+            SaveAnimes(modePath, NomalAnimes);
         }
-        if (animeTypeModel.PoorConditionAnimes.Count > 0)
+        if (PoorConditionAnimes.Count > 0)
         {
             var modePath = Path.Combine(path, nameof(ModeType.PoorCondition));
-            SaveAnimes(modePath, animeTypeModel.PoorConditionAnimes);
+            SaveAnimes(modePath, PoorConditionAnimes);
         }
-        if (animeTypeModel.IllAnimes.Count > 0)
+        if (IllAnimes.Count > 0)
         {
             var modePath = Path.Combine(path, nameof(ModeType.Ill));
-            SaveAnimes(modePath, animeTypeModel.IllAnimes);
+            SaveAnimes(modePath, IllAnimes);
         }
 
         static void SaveAnimes(string animePath, ObservableList<AnimeModel> animes)
@@ -619,27 +629,27 @@ public class AnimeTypeModel : ObservableObjectX
     /// </summary>
     /// <param name="animePath"></param>
     /// <param name="animeType"></param>
-    static void SaveWithAnimeType(string animePath, AnimeTypeModel animeType)
+    void SaveWithAnimeType(string animePath)
     {
-        if (animeType.HappyAnimes.Count > 0)
+        if (HappyAnimes.Count > 0)
         {
             var modePath = Path.Combine(animePath, nameof(ModeType.Happy));
-            SaveAnimes(modePath, animeType.HappyAnimes);
+            SaveAnimes(modePath, HappyAnimes);
         }
-        if (animeType.NomalAnimes.Count > 0)
+        if (NomalAnimes.Count > 0)
         {
             var modePath = Path.Combine(animePath, nameof(ModeType.Nomal));
-            SaveAnimes(modePath, animeType.NomalAnimes);
+            SaveAnimes(modePath, NomalAnimes);
         }
-        if (animeType.PoorConditionAnimes.Count > 0)
+        if (PoorConditionAnimes.Count > 0)
         {
             var modePath = Path.Combine(animePath, nameof(ModeType.PoorCondition));
-            SaveAnimes(modePath, animeType.PoorConditionAnimes);
+            SaveAnimes(modePath, PoorConditionAnimes);
         }
-        if (animeType.IllAnimes.Count > 0)
+        if (IllAnimes.Count > 0)
         {
             var modePath = Path.Combine(animePath, nameof(ModeType.Ill));
-            SaveAnimes(modePath, animeType.IllAnimes);
+            SaveAnimes(modePath, IllAnimes);
         }
         static void SaveAnimes(string animePath, ObservableList<AnimeModel> animes)
         {
@@ -659,9 +669,15 @@ public class AnimeTypeModel : ObservableObjectX
         Directory.CreateDirectory(imagesPath);
         foreach ((var index, var image) in model.Images.EnumerateIndex())
         {
-            image.Image.SaveToPng(
-                Path.Combine(imagesPath, $"{model.ID}_{index:000}_{image.Duration}.png")
-            );
+            var path = Path.Combine(imagesPath, $"{model.ID}_{index:000}_{image.Duration}.png");
+            if (image.Image is not null)
+            {
+                image.Image.SaveToPng(path);
+            }
+            else if (Path.Exists(image.ImageFile))
+            {
+                File.Copy(image.ImageFile, path, true);
+            }
         }
     }
     #endregion
