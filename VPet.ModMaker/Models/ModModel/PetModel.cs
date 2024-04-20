@@ -112,10 +112,15 @@ public class PetModel : ObservableObjectX
         RaisePoint.Ill = new(loader.Config.RaisePoint[3].X, loader.Config.RaisePoint[3].Y);
         // 如果这个宠物数据来自本体, 则不载入 Work 和 Move
         if (FromMain = fromMain)
+        {
+            Name = ID.Translate();
+            PetName = PetNameID.Translate();
+            Description = DescriptionID.Translate();
             return;
+        }
 
         foreach (var work in loader.Config.Works)
-            Works.Add(new(work) { I18nResource = ModInfoModel.Current.I18nResource });
+            Works.Add(new(work) { I18nResource = I18nResource! });
         foreach (var move in loader.Config.Moves)
             Moves.Add(new(move));
     }
