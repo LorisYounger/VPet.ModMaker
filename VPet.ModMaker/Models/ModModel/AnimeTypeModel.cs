@@ -515,7 +515,6 @@ public class AnimeTypeModel : ObservableObjectX
     /// 保存为 <see cref="GraphInfo.GraphType.Raised_Dynamic"/> 或 <see cref="GraphInfo.GraphType.Raised_Static"/> 样式
     /// </summary>
     /// <param name="path">路径</param>
-    /// <param name="animeTypeModel">模型</param>
     void SaveRaised(string path)
     {
         var animePath = Path.Combine(path, "Raise");
@@ -530,7 +529,6 @@ public class AnimeTypeModel : ObservableObjectX
     /// 保存为 <see cref="GraphInfo.GraphType.Switch_Up"/> 或 <see cref="GraphInfo.GraphType.Switch_Down"/> 或 <see cref="GraphInfo.GraphType.Switch_Thirsty"/> 或 <see cref="GraphInfo.GraphType.Switch_Hunger"/>
     /// </summary>
     /// <param name="path">路径</param>
-    /// <param name="animeTypeModel">模型</param>
     void SaveSwitch(string path)
     {
         var animePath = Path.Combine(path, "Switch");
@@ -543,7 +541,6 @@ public class AnimeTypeModel : ObservableObjectX
     /// 保存成默认样式
     /// </summary>
     /// <param name="path"></param>
-    /// <param name="animeTypeModel"></param>
     void SaveDefault(string path)
     {
         var animePath = Path.Combine(path, GraphType.ToString());
@@ -555,7 +552,6 @@ public class AnimeTypeModel : ObservableObjectX
     /// 保存成多类型样式
     /// </summary>
     /// <param name="path"></param>
-    /// <param name="animeTypeModel"></param>
     void SaveMultiType(string path)
     {
         var animePath = Path.Combine(path, GraphType.ToString());
@@ -567,7 +563,6 @@ public class AnimeTypeModel : ObservableObjectX
     /// 保存为 Happy/A/0 的路径样式
     /// </summary>
     /// <param name="path"></param>
-    /// <param name="animeTypeModel"></param>
     void SaveWithModeType(string path)
     {
         if (HappyAnimes.Count > 0)
@@ -628,7 +623,6 @@ public class AnimeTypeModel : ObservableObjectX
     /// 保存为 Happy/0 的路径样式
     /// </summary>
     /// <param name="animePath"></param>
-    /// <param name="animeType"></param>
     void SaveWithAnimeType(string animePath)
     {
         if (HappyAnimes.Count > 0)

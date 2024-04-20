@@ -40,9 +40,12 @@ public class ModMaker : MainPlugin
         Application.Current.Resources.MergedDictionaries.Add(ModMakerInfo.NativeStyles);
     }
 
+    public I18nResource<string, string> I18nResource { get; } =
+        new() { FillDefaultValueForNewCulture = true, DefaultValue = string.Empty };
+
     public override void Setting()
     {
-        if (Maker == null)
+        if (Maker is null)
         {
             // 载入ModMaker资源
             Maker = new ModMakerWindow();
@@ -52,7 +55,7 @@ public class ModMaker : MainPlugin
             foreach (var pet in MW.Pets)
                 ModMakerInfo.MainPets.TryAdd(
                     pet.Name,
-                    new(pet, true) { I18nResource = ModInfoModel.Current.I18nResource }
+                    new(pet, true) { I18nResource = I18nResource }
                 );
             //Maker.ModMaker = this;
             Maker.Show();

@@ -31,7 +31,7 @@ public static class ModMakerInfo
     /// <summary>
     /// 游戏版本
     /// </summary>
-    public static int GameVersion { get; set; } = 100;
+    public static int GameVersion { get; set; } = 11000;
 
     /// <summary>
     /// 本体的宠物

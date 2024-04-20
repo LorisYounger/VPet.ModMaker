@@ -13,6 +13,15 @@
 		<ImplicitUsings>enable</ImplicitUsings>
 		<Configurations>Debug;Release;Test</Configurations>
 	</PropertyGroup>
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+	  <DebugType>embedded</DebugType>
+	</PropertyGroup>
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+	  <DebugType>embedded</DebugType>
+	</PropertyGroup>
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Test|AnyCPU'">
+	  <DebugType>embedded</DebugType>
+	</PropertyGroup>
 	<ItemGroup>
 		<EmbeddedResource Include="Resources\food.png" />
 	</ItemGroup>
