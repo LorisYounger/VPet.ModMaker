@@ -38,8 +38,8 @@
 		<PackageReference Include="HKW.Utils" Version="1.2.21" />
 	</ItemGroup>
 	<ItemGroup>
-		<PackageReference Include="VPet-Simulator.Core" Version="1.1.0.12" />
-		<PackageReference Include="VPet-Simulator.Windows.Interface" Version="1.1.0.12" />
+		<PackageReference Include="VPet-Simulator.Core" Version="1.1.0.14-beta" />
+		<PackageReference Include="VPet-Simulator.Windows.Interface" Version="1.1.0.14-beta" />
 		<PackageReference Include="LinePutScript" Version="1.11.6" />
 		<PackageReference Include="LinePutScript.Localization.WPF" Version="1.0.7" />
 		<PackageReference Include="Ookii.Dialogs.Wpf" Version="5.0.1" />

@@ -10,16 +10,16 @@
         "dependencies": {
           "CommunityToolkit.Mvvm": "8.2.2",
           "HKW.Utils": "1.2.21",
-          "HKW.WPF": "1.0.6",
+          "HKW.WPF": "1.0.7",
           "LinePutScript": "1.11.6",
-          "LinePutScript.Localization.WPF": "1.0.6",
+          "LinePutScript.Localization.WPF": "1.0.7",
           "Mapster": "7.4.0",
           "Microsoft.CSharp": "4.7.0",
           "Ookii.Dialogs.Wpf": "5.0.1",
           "Panuon.WPF": "1.1.0",
           "Panuon.WPF.UI": "1.2.1.2",
-          "VPet-Simulator.Core": "1.1.0.4",
-          "VPet-Simulator.Windows.Interface": "1.1.0.5"
+          "VPet-Simulator.Core": "1.1.0.14-beta",
+          "VPet-Simulator.Windows.Interface": "1.1.0.14-beta"
         },
         "runtime": {
           "VPet.ModMaker.dll": {}
@@ -41,7 +41,7 @@
           }
         }
       },
-      "HKW.WPF/1.0.6": {
+      "HKW.WPF/1.0.7": {
         "dependencies": {
           "HKW.Utils": "1.2.21",
           "Microsoft.Extensions.DependencyInjection": "8.0.0",
@@ -49,8 +49,8 @@
         },
         "runtime": {
           "lib/net8.0-windows7.0/HKW.WPF.dll": {
-            "assemblyVersion": "1.0.6.0",
-            "fileVersion": "1.0.6.0"
+            "assemblyVersion": "1.0.7.0",
+            "fileVersion": "1.0.7.0"
           }
         }
       },
@@ -62,7 +62,7 @@
           }
         }
       },
-      "LinePutScript.Localization.WPF/1.0.6": {
+      "LinePutScript.Localization.WPF/1.0.7": {
         "dependencies": {
           "LinePutScript": "1.11.6"
         },
@@ -147,10 +147,10 @@
           }
         }
       },
-      "VPet-Simulator.Core/1.1.0.4": {
+      "VPet-Simulator.Core/1.1.0.14-beta": {
         "dependencies": {
           "LinePutScript": "1.11.6",
-          "LinePutScript.Localization.WPF": "1.0.6",
+          "LinePutScript.Localization.WPF": "1.0.7",
           "Panuon.WPF.UI": "1.2.1.2"
         },
         "runtime": {
@@ -160,9 +160,9 @@
           }
         }
       },
-      "VPet-Simulator.Windows.Interface/1.1.0.5": {
+      "VPet-Simulator.Windows.Interface/1.1.0.14-beta": {
         "dependencies": {
-          "VPet-Simulator.Core": "1.1.0.4"
+          "VPet-Simulator.Core": "1.1.0.14-beta"
         },
         "runtime": {
           "lib/net8.0/VPet-Simulator.Windows.Interface.dll": {
@@ -193,12 +193,12 @@
       "path": "hkw.utils/1.2.21",
       "hashPath": "hkw.utils.1.2.21.nupkg.sha512"
     },
-    "HKW.WPF/1.0.6": {
+    "HKW.WPF/1.0.7": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-9MLdEVoMQSvFOoE05L9/4zKKhYAe/cOZrt3HeRWskiiIlJ4U0o32vnrAa6oiQ++NMDIS+ybRiEWpswShc5wSJw==",
-      "path": "hkw.wpf/1.0.6",
-      "hashPath": "hkw.wpf.1.0.6.nupkg.sha512"
+      "sha512": "sha512-ram4l1C7EllOBVdDCPkplvPYE8Pi7WIF755u6YkbkdidJlsDumRvD7N0faCoDRjIot8ia26DaHYhYfrSE7zH0A==",
+      "path": "hkw.wpf/1.0.7",
+      "hashPath": "hkw.wpf.1.0.7.nupkg.sha512"
     },
     "LinePutScript/1.11.6": {
       "type": "package",
@@ -207,12 +207,12 @@
       "path": "lineputscript/1.11.6",
       "hashPath": "lineputscript.1.11.6.nupkg.sha512"
     },
-    "LinePutScript.Localization.WPF/1.0.6": {
+    "LinePutScript.Localization.WPF/1.0.7": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-jCS0dDlCtz4FnyvQKPnfanOknF2ftQlDklTmSXi5NH8fi7Rj9QLY9TnufpopTX3DFDF08t72MF8YdjjYAfxDrA==",
-      "path": "lineputscript.localization.wpf/1.0.6",
-      "hashPath": "lineputscript.localization.wpf.1.0.6.nupkg.sha512"
+      "sha512": "sha512-n9Hh57jE8pNwzFypx2RUu6hYFMotZ+RDQYvpHwtHojLrFnZ35zJRgTXK3WKtYZHn7Ldm17+Q7NKQnXG1hkSrnQ==",
+      "path": "lineputscript.localization.wpf/1.0.7",
+      "hashPath": "lineputscript.localization.wpf.1.0.7.nupkg.sha512"
     },
     "Mapster/7.4.0": {
       "type": "package",
@@ -277,19 +277,19 @@
       "path": "panuon.wpf.ui/1.2.1.2",
       "hashPath": "panuon.wpf.ui.1.2.1.2.nupkg.sha512"
     },
-    "VPet-Simulator.Core/1.1.0.4": {
+    "VPet-Simulator.Core/1.1.0.14-beta": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-VL2YsybEDA6HOefLT9DNqrURhrromo6jTu5ddGUELWa0JtsBSXgosYLEV1lWLwhMDK6zu4pbkC2xBx+ftL3EfA==",
-      "path": "vpet-simulator.core/1.1.0.4",
-      "hashPath": "vpet-simulator.core.1.1.0.4.nupkg.sha512"
+      "sha512": "sha512-ZT51h8d0ZPSaWkEB9PG8BC7SWWXQcUmTq1kbn6dDL9o2GKYdE9TiDmWF8cCddMBuhtvmEAAbhy3sWEaNCOptBg==",
+      "path": "vpet-simulator.core/1.1.0.14-beta",
+      "hashPath": "vpet-simulator.core.1.1.0.14-beta.nupkg.sha512"
     },
-    "VPet-Simulator.Windows.Interface/1.1.0.5": {
+    "VPet-Simulator.Windows.Interface/1.1.0.14-beta": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-eoFHHKYSZEhNMf9eQqslCpTc8HZsSEvWAUgslXnWUDTUcK7dzdUfZeZzzBi5C8sbXf6GN37Zt9i5xHhZgFKSbg==",
-      "path": "vpet-simulator.windows.interface/1.1.0.5",
-      "hashPath": "vpet-simulator.windows.interface.1.1.0.5.nupkg.sha512"
+      "sha512": "sha512-99HtctF8Js2gtzoNgiaFw6NjnIg/8R5IdEPrCLDNk8ZRndZ61nnqwrzQauHLWX/Jce31mEUHxdhhuOWCt5O2AQ==",
+      "path": "vpet-simulator.windows.interface/1.1.0.14-beta",
+      "hashPath": "vpet-simulator.windows.interface.1.1.0.14-beta.nupkg.sha512"
     }
   }
 }
