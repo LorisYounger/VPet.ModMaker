@@ -36,7 +36,7 @@ public class ModInfoModel : ObservableObjectX
         Pets.CollectionChanged += Pets_CollectionChanged;
         I18nResource.PropertyChanged += I18nResource_PropertyChanged;
         I18nResource.Cultures.SetChanged += Cultures_SetChanged;
-        I18nResource.I18nObjectInfos.Add(
+        I18nResource?.I18nObjectInfos.Add(
             this,
             new(
                 this,

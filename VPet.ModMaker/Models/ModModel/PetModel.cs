@@ -212,6 +212,8 @@ public class PetModel : ObservableObjectX
                 ]
             )
         );
+        foreach (var work in Works)
+            work.I18nResource = I18nResource;
         if (FromMain)
         {
             foreach (var cultureName in LocalizeCore.AvailableCultures)

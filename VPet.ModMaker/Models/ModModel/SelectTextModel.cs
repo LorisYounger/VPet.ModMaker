@@ -141,7 +141,7 @@ public class SelectTextModel : ObservableObjectX
 
     public void InitializeI18nResource()
     {
-        I18nResource.I18nObjectInfos.Add(
+        I18nResource?.I18nObjectInfos.Add(
             this,
             new(
                 this,
