@@ -218,26 +218,28 @@ public class PetModel : ObservableObjectX
         {
             foreach (var cultureName in LocalizeCore.AvailableCultures)
             {
+                if (CultureUtils.TryGetCultureInfo(cultureName, out var culture) is false)
+                    continue;
                 if (LocalizeCore.Localizations.TryGetValue(cultureName, out var data) is false)
                     continue;
                 foreach (var line in data)
                 {
                     if (line?.Name == ID)
                     {
-                        I18nResource.AddCultureData(cultureName, ID, line.Info);
+                        I18nResource.AddCultureData(culture, ID, line.Info);
                     }
                     else if (line?.Name == PetNameID)
                     {
-                        I18nResource.AddCultureData(cultureName, PetNameID, line.Info);
+                        I18nResource.AddCultureData(culture, PetNameID, line.Info);
                     }
                     else if (line?.Name == DescriptionID)
                     {
-                        I18nResource.AddCultureData(cultureName, DescriptionID, line.Info);
+                        I18nResource.AddCultureData(culture, DescriptionID, line.Info);
                     }
                 }
-                I18nResource.AddCultureData(cultureName, ID, ID);
-                I18nResource.AddCultureData(cultureName, PetNameID, PetNameID);
-                I18nResource.AddCultureData(cultureName, DescriptionID, DescriptionID);
+                I18nResource.AddCultureData(culture, ID, ID);
+                I18nResource.AddCultureData(culture, PetNameID, PetNameID);
+                I18nResource.AddCultureData(culture, DescriptionID, DescriptionID);
             }
         }
     }
