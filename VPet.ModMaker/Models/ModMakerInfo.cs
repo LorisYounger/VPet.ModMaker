@@ -55,4 +55,19 @@ public static class ModMakerInfo
     {
         return AnimeTypeModel.HasNameAnimes.Contains(graphType);
     }
+
+    static ModMakerInfo()
+    {
+        //#if DEBUG
+        //        MainPets.TryAdd(
+        //            "TestMainPet",
+        //            new()
+        //            {
+        //                ID = "TestMainPet",
+        //                FromMain = true,
+        //                I18nResource = new()
+        //            }
+        //        );
+        //#endif
+    }
 }

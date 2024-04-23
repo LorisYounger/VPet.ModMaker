@@ -30,7 +30,7 @@
       <pu:Switch
         Grid.Column="1"
         Content="{ll:Str 显示本体宠物}"
-        IsChecked="{Binding ModInfo.ShowMainPet}" />
+        IsChecked="{Binding ShowMainPet}" />
     </Grid>
     <DataGrid
       Grid.Row="1"

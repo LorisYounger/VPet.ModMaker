@@ -47,6 +47,12 @@ public class ModInfoModel : ObservableObjectX
                 ]
             )
         );
+        foreach (var pet in ModMakerInfo.MainPets)
+        {
+            // 确保ID不重复
+            if (Pets.All(i => i.ID != pet.Key))
+                Pets.Add(pet.Value);
+        }
     }
 
     public ModInfoModel(ModLoader loader)
@@ -117,14 +123,6 @@ public class ModInfoModel : ObservableObjectX
             Pets.Add(petModel);
             foreach (var p in pet.path)
                 LoadAnime(petModel, p);
-        }
-
-        // 插入本体宠物
-        foreach (var pet in ModMakerInfo.MainPets)
-        {
-            // 确保ID不重复
-            if (Pets.All(i => i.ID != pet.Key))
-                Pets.Insert(0, pet.Value);
         }
         if (loader.I18nDatas.HasValue() is false)
             return;

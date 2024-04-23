@@ -40,7 +40,7 @@ public class ModMaker : MainPlugin
         Application.Current.Resources.MergedDictionaries.Add(ModMakerInfo.NativeStyles);
     }
 
-    public I18nResource<string, string> I18nResource { get; } =
+    public static I18nResource<string, string> I18nResource { get; } =
         new() { FillDefaultValueForNewCulture = true, DefaultValue = string.Empty };
 
     public override void Setting()

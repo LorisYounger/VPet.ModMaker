@@ -48,6 +48,21 @@ public class AnimePageVM : ObservableObjectX
         AddCommand.ExecuteCommand += AddCommand_ExecuteCommand;
         EditCommand.ExecuteCommand += EditCommand_ExecuteCommand;
         RemoveCommand.ExecuteCommand += RemoveCommand_ExecuteCommand;
+        ModInfo.PropertyChangedX += ModInfo_PropertyChangedX;
+    }
+
+    private void ModInfo_PropertyChangedX(object? sender, PropertyChangedXEventArgs e)
+    {
+        if (e.PropertyName == nameof(ModInfoModel.ShowMainPet))
+        {
+            if (e.NewValue is false)
+            {
+                if (CurrentPet.FromMain)
+                {
+                    CurrentPet = null!;
+                }
+            }
+        }
     }
 
     private void AnimePageVM_PropertyChangedX(object? sender, PropertyChangedXEventArgs e)

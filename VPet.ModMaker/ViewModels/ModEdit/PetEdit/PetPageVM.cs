@@ -21,7 +21,12 @@ public class PetPageVM : ObservableObjectX
     {
         Pets = new(ModInfoModel.Current.Pets)
         {
-            Filter = f => f.ID.Contains(Search, StringComparison.OrdinalIgnoreCase),
+            Filter = (f) =>
+            {
+                if (ShowMainPet is false && f.FromMain)
+                    return false;
+                return f.ID.Contains(Search, StringComparison.OrdinalIgnoreCase);
+            },
             FilteredList = new()
         };
         Pets.BindingList(ModInfoModel.Current.Pets);
@@ -59,6 +64,24 @@ public class PetPageVM : ObservableObjectX
         }
     }
     #endregion
+
+
+    #region ShowMainPet
+    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+    private bool _showMainPet;
+
+    public bool ShowMainPet
+    {
+        get => _showMainPet;
+        set
+        {
+            SetProperty(ref _showMainPet, value);
+            ModInfo.ShowMainPet = value;
+            Pets.Refresh();
+        }
+    }
+    #endregion
+
     #endregion
     #region Command
     public ObservableCommand AddCommand { get; } = new();

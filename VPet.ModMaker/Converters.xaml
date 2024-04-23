@@ -5,7 +5,7 @@
   <c:MarginMultiConverter x:Key="MarginConverter" />
   <c:MarginMultiConverter x:Key="RatioMarginConverter" HasRatio="True" />
   <c:CalculatorMultiConverter x:Key="CalculatorConverter" />
-  <c:StringFormatMultiConverter x:Key="StringFormatConverter" />
+  <c:StringFormatMultiConverter x:Key="StringFormatConverter" HiddenUnsetAndNull="True" />
   <c:SolidColorBrushToMediaColorConverter x:Key="BrushToMediaColorConverter" />
   <!--<c:MaxConverter x:Key="MaxConverter" />-->
   <c:BoolToVisibilityConverter x:Key="FalseToCollapsedConverter" />

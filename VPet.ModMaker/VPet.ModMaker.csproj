@@ -14,34 +14,34 @@
 		<Configurations>Debug;Release;Test</Configurations>
 	</PropertyGroup>
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-	  <DebugType>embedded</DebugType>
+		<DebugType>embedded</DebugType>
 	</PropertyGroup>
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-	  <DebugType>embedded</DebugType>
+		<DebugType>embedded</DebugType>
 	</PropertyGroup>
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Test|AnyCPU'">
-	  <DebugType>embedded</DebugType>
+		<DebugType>embedded</DebugType>
 	</PropertyGroup>
 	<ItemGroup>
 		<EmbeddedResource Include="Resources\food.png" />
 	</ItemGroup>
 	<ItemGroup Condition="'$(Configuration)'=='Test'">
-	  <Reference Include="HKW.Utils">
-	    <HintPath>..\..\HKW.Utils\HKW.Utils\bin\Debug\net8.0\HKW.Utils.dll</HintPath>
-	  </Reference>
-	  <Reference Include="HKW.WPF">
-	    <HintPath>..\..\HKW.WPF\HKW.WPF\bin\Debug\net8.0-windows\HKW.WPF.dll</HintPath>
-	  </Reference>
+		<Reference Include="HKW.Utils">
+			<HintPath>..\..\HKW.Utils\HKW.Utils\bin\Debug\net8.0\HKW.Utils.dll</HintPath>
+		</Reference>
+		<Reference Include="HKW.WPF">
+			<HintPath>..\..\HKW.WPF\HKW.WPF\bin\Debug\net8.0-windows\HKW.WPF.dll</HintPath>
+		</Reference>
 	</ItemGroup>
 	<ItemGroup Condition="'$(Configuration)'!='Test'">
-		<PackageReference Include="HKW.WPF" Version="1.0.6" />
+		<PackageReference Include="HKW.WPF" Version="1.0.7" />
 		<PackageReference Include="HKW.Utils" Version="1.2.21" />
 	</ItemGroup>
 	<ItemGroup>
-		<PackageReference Include="VPet-Simulator.Core" Version="1.1.0.4" />
-		<PackageReference Include="VPet-Simulator.Windows.Interface" Version="1.1.0.5" />
+		<PackageReference Include="VPet-Simulator.Core" Version="1.1.0.12" />
+		<PackageReference Include="VPet-Simulator.Windows.Interface" Version="1.1.0.12" />
 		<PackageReference Include="LinePutScript" Version="1.11.6" />
-		<PackageReference Include="LinePutScript.Localization.WPF" Version="1.0.6" />
+		<PackageReference Include="LinePutScript.Localization.WPF" Version="1.0.7" />
 		<PackageReference Include="Ookii.Dialogs.Wpf" Version="5.0.1" />
 		<PackageReference Include="Panuon.WPF" Version="1.1.0" />
 		<PackageReference Include="Panuon.WPF.UI" Version="1.2.1.2" />

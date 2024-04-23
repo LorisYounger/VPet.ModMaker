@@ -112,12 +112,7 @@ public class PetModel : ObservableObjectX
         RaisePoint.Ill = new(loader.Config.RaisePoint[3].X, loader.Config.RaisePoint[3].Y);
         // 如果这个宠物数据来自本体, 则不载入 Work 和 Move
         if (FromMain = fromMain)
-        {
-            Name = ID.Translate();
-            PetName = PetNameID.Translate();
-            Description = DescriptionID.Translate();
             return;
-        }
 
         foreach (var work in loader.Config.Works)
             Works.Add(new(work) { I18nResource = I18nResource! });
@@ -163,7 +158,7 @@ public class PetModel : ObservableObjectX
     private string _petNameID = string.Empty;
 
     /// <summary>
-    /// 名称Id
+    /// 名称ID
     /// </summary>
     public string PetNameID
     {
@@ -177,7 +172,7 @@ public class PetModel : ObservableObjectX
     private string _descriptionID = string.Empty;
 
     /// <summary>
-    /// 描述Id
+    /// 描述ID
     /// </summary>
     public string DescriptionID
     {
@@ -217,6 +212,32 @@ public class PetModel : ObservableObjectX
                 ]
             )
         );
+        if (FromMain)
+        {
+            foreach (var cultureName in LocalizeCore.AvailableCultures)
+            {
+                if (LocalizeCore.Localizations.TryGetValue(cultureName, out var data) is false)
+                    continue;
+                foreach (var line in data)
+                {
+                    if (line?.Name == ID)
+                    {
+                        I18nResource.AddCultureData(cultureName, ID, line.Info);
+                    }
+                    else if (line?.Name == PetNameID)
+                    {
+                        I18nResource.AddCultureData(cultureName, PetNameID, line.Info);
+                    }
+                    else if (line?.Name == DescriptionID)
+                    {
+                        I18nResource.AddCultureData(cultureName, DescriptionID, line.Info);
+                    }
+                }
+                I18nResource.AddCultureData(cultureName, ID, ID);
+                I18nResource.AddCultureData(cultureName, PetNameID, PetNameID);
+                I18nResource.AddCultureData(cultureName, DescriptionID, DescriptionID);
+            }
+        }
     }
 
     [AdaptIgnore]
