@@ -38,13 +38,12 @@ public class ModInfoModel : ObservableObjectX
         I18nResource.Cultures.SetChanged += Cultures_SetChanged;
         I18nResource?.I18nObjectInfos.Add(
             this,
-            new(
-                this,
-                OnPropertyChanged,
+            new I18nObjectInfo<string, string>(this, OnPropertyChanged).AddPropertyInfo(
                 [
-                    (nameof(ID), ID, nameof(Name), true),
-                    (nameof(DescriptionID), DescriptionID, nameof(Description), true)
-                ]
+                    (nameof(ID), ID, nameof(Name)),
+                    (nameof(DescriptionID), DescriptionID, nameof(Description))
+                ],
+                true
             )
         );
         foreach (var pet in ModMakerInfo.MainPets)

@@ -32,7 +32,7 @@ public class FoodAnimeLocationModel : ObservableObjectX, ICloneable<FoodAnimeLoc
     /// <summary>
     /// 矩形位置
     /// </summary>
-    public ObservableRectangleLocation<double> RectangleLocation { get; set; } = new();
+    public ObservableRectangle<double> RectangleLocation { get; set; } = new();
 
     /// <summary>
     /// 旋转角度

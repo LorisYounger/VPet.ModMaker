@@ -35,7 +35,7 @@
 	</ItemGroup>
 	<ItemGroup Condition="'$(Configuration)'!='Test'">
 		<PackageReference Include="HKW.WPF" Version="1.0.7" />
-		<PackageReference Include="HKW.Utils" Version="1.2.21" />
+		<PackageReference Include="HKW.Utils" Version="1.2.22" />
 	</ItemGroup>
 	<ItemGroup>
 		<PackageReference Include="VPet-Simulator.Core" Version="1.1.0.14-beta" />

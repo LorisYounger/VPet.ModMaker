@@ -38,13 +38,13 @@ public class AddCultureWindowVM : ObservableObjectX
     [DebuggerBrowsable(DebuggerBrowsableState.Never)]
     private string _culture = string.Empty;
 
-    public string Culture
+    public string CultureName
     {
         get => _culture;
         set
         {
             SetProperty(ref _culture, value);
-            if (string.IsNullOrWhiteSpace(Culture))
+            if (string.IsNullOrWhiteSpace(CultureName))
             {
                 CultureFullName = UnknownCulture;
                 return;
@@ -52,7 +52,7 @@ public class AddCultureWindowVM : ObservableObjectX
             CultureInfo info = null!;
             try
             {
-                info = CultureInfo.GetCultureInfo(Culture);
+                info = CultureInfo.GetCultureInfo(CultureName);
             }
             catch
             {

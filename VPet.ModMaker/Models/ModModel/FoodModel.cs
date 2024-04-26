@@ -127,13 +127,12 @@ public class FoodModel : ObservableObjectX
     {
         I18nResource?.I18nObjectInfos.Add(
             this,
-            new(
-                this,
-                OnPropertyChanged,
+            new I18nObjectInfo<string, string>(this, OnPropertyChanged).AddPropertyInfo(
                 [
-                    (nameof(ID), ID, nameof(Name), true),
-                    (nameof(DescriptionID), DescriptionID, nameof(Description), true)
-                ]
+                    (nameof(ID), ID, nameof(Name)),
+                    (nameof(DescriptionID), DescriptionID, nameof(Description))
+                ],
+                true
             )
         );
     }
@@ -148,7 +147,7 @@ public class FoodModel : ObservableObjectX
     [AdaptIgnore]
     public string Description
     {
-        get => I18nResource.GetCurrentCultureDataOrDefault(DescriptionID, string.Empty);
+        get => I18nResource.GetCurrentCultureDataOrDefault(DescriptionID);
         set => I18nResource.SetCurrentCultureData(DescriptionID, value);
     }
     #endregion

@@ -160,8 +160,8 @@ public class ModEditWindowVM : ObservableObjectX
         window.ShowDialog();
         if (window.IsCancel)
             return;
-        I18nResource.AddCulture(window.ViewModel.Culture);
-        I18nResource.SetCurrentCulture(window.ViewModel.Culture);
+        I18nResource.AddCulture(window.ViewModel.CultureName);
+        I18nResource.SetCurrentCulture(window.ViewModel.CultureName);
     }
 
     /// <summary>
@@ -171,11 +171,11 @@ public class ModEditWindowVM : ObservableObjectX
     private void EditCultureCommand_ExecuteCommand(string oldCulture)
     {
         var window = new AddCultureWindow();
-        window.ViewModel.Culture = oldCulture.Translate();
+        window.ViewModel.CultureName = oldCulture.Translate();
         window.ShowDialog();
         if (window.IsCancel)
             return;
-        I18nResource.ReplaceCulture(oldCulture, window.ViewModel.Culture);
+        I18nResource.ReplaceCulture(oldCulture, window.ViewModel.CultureName);
     }
 
     /// <summary>

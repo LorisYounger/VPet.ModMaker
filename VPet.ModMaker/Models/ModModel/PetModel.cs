@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Diagnostics;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -202,14 +203,13 @@ public class PetModel : ObservableObjectX
     {
         I18nResource.I18nObjectInfos.Add(
             this,
-            new(
-                this,
-                OnPropertyChanged,
+            new I18nObjectInfo<string, string>(this, OnPropertyChanged).AddPropertyInfo(
                 [
-                    (nameof(ID), ID, nameof(Name), true),
-                    (nameof(PetNameID), PetNameID, nameof(PetName), true),
-                    (nameof(DescriptionID), DescriptionID, nameof(Description), true)
-                ]
+                    (nameof(ID), ID, nameof(Name)),
+                    (nameof(PetNameID), PetNameID, nameof(PetName)),
+                    (nameof(DescriptionID), DescriptionID, nameof(Description))
+                ],
+                true
             )
         );
         foreach (var work in Works)
@@ -283,13 +283,12 @@ public class PetModel : ObservableObjectX
 
     #region TouchHeadRect
     [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-    private ObservableRectangleLocation<double> _touchHeadRectangleLocation =
-        new(159, 16, 189, 178);
+    private ObservableRectangle<double> _touchHeadRectangleLocation = new(159, 16, 189, 178);
 
     /// <summary>
     /// 头部点击区域
     /// </summary>
-    public ObservableRectangleLocation<double> TouchHeadRectangleLocation
+    public ObservableRectangle<double> TouchHeadRectangleLocation
     {
         get => _touchHeadRectangleLocation;
         set => SetProperty(ref _touchHeadRectangleLocation, value);
@@ -298,13 +297,12 @@ public class PetModel : ObservableObjectX
 
     #region TouchBodyRect
     [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-    private ObservableRectangleLocation<double> _touchBodyRectangleLocation =
-        new(166, 206, 163, 136);
+    private ObservableRectangle<double> _touchBodyRectangleLocation = new(166, 206, 163, 136);
 
     /// <summary>
     /// 身体区域
     /// </summary>
-    public ObservableRectangleLocation<double> TouchBodyRectangleLocation
+    public ObservableRectangle<double> TouchBodyRectangleLocation
     {
         get => _touchBodyRectangleLocation;
         set => SetProperty(ref _touchBodyRectangleLocation, value);
@@ -623,8 +621,8 @@ public class ObservableMultiStateRectangleLocation
 {
     #region Happy
     [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-    private ObservableRectangleLocation<double> _happy = null!;
-    public ObservableRectangleLocation<double> Happy
+    private ObservableRectangle<double> _happy = null!;
+    public ObservableRectangle<double> Happy
     {
         get => _happy;
         set => SetProperty(ref _happy, value);
@@ -633,9 +631,9 @@ public class ObservableMultiStateRectangleLocation
 
     #region Nomal
     [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-    private ObservableRectangleLocation<double> _nomal = null!;
+    private ObservableRectangle<double> _nomal = null!;
 
-    public ObservableRectangleLocation<double> Nomal
+    public ObservableRectangle<double> Nomal
     {
         get => _nomal;
         set => SetProperty(ref _nomal, value);
@@ -644,8 +642,8 @@ public class ObservableMultiStateRectangleLocation
 
     #region PoorCondition
     [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-    private ObservableRectangleLocation<double> _poorCondition = null!;
-    public ObservableRectangleLocation<double> PoorCondition
+    private ObservableRectangle<double> _poorCondition = null!;
+    public ObservableRectangle<double> PoorCondition
     {
         get => _poorCondition;
         set => SetProperty(ref _poorCondition, value);
@@ -654,8 +652,8 @@ public class ObservableMultiStateRectangleLocation
 
     #region Ill
     [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-    private ObservableRectangleLocation<double> _ill = null!;
-    public ObservableRectangleLocation<double> Ill
+    private ObservableRectangle<double> _ill = null!;
+    public ObservableRectangle<double> Ill
     {
         get => _ill;
         set => SetProperty(ref _ill, value);
@@ -671,10 +669,10 @@ public class ObservableMultiStateRectangleLocation
     }
 
     public ObservableMultiStateRectangleLocation(
-        ObservableRectangleLocation<double> happy,
-        ObservableRectangleLocation<double> nomal,
-        ObservableRectangleLocation<double> poorCondition,
-        ObservableRectangleLocation<double> ill
+        ObservableRectangle<double> happy,
+        ObservableRectangle<double> nomal,
+        ObservableRectangle<double> poorCondition,
+        ObservableRectangle<double> ill
     )
     {
         Happy = happy;

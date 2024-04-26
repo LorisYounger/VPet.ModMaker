@@ -143,13 +143,9 @@ public class SelectTextModel : ObservableObjectX
     {
         I18nResource?.I18nObjectInfos.Add(
             this,
-            new(
-                this,
-                OnPropertyChanged,
-                [
-                    (nameof(ID), ID, nameof(Text), true),
-                    (nameof(ChooseID), ChooseID, nameof(Choose), true)
-                ]
+            new I18nObjectInfo<string, string>(this, OnPropertyChanged).AddPropertyInfo(
+                [(nameof(ID), ID, nameof(Text)), (nameof(ChooseID), ChooseID, nameof(Choose))],
+                true
             )
         );
     }
@@ -164,7 +160,7 @@ public class SelectTextModel : ObservableObjectX
     [AdaptIgnore]
     public string Choose
     {
-        get => I18nResource.GetCurrentCultureDataOrDefault(ChooseID, string.Empty);
+        get => I18nResource.GetCurrentCultureDataOrDefault(ChooseID);
         set => I18nResource.SetCurrentCultureData(ChooseID, value);
     }
     #endregion

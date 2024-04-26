@@ -47,16 +47,17 @@ public partial class AddCultureWindow : WindowX
 
     private void Button_Yes_Click(object? sender, RoutedEventArgs e)
     {
-        if (string.IsNullOrWhiteSpace(ViewModel.Culture))
+        if (string.IsNullOrWhiteSpace(ViewModel.CultureName))
         {
             MessageBox.Show("文化不可为空".Translate(), "", MessageBoxButton.OK, MessageBoxImage.Warning);
             return;
         }
-        if (
-            ModInfoModel.Current.I18nResource.Cultures.Contains(
-                CultureInfo.GetCultureInfo(ViewModel.Culture)
-            )
-        )
+        if (CultureUtils.TryGetCultureInfo(ViewModel.CultureName, out var culture) is false)
+        {
+            MessageBox.Show("不支持的文化".Translate(), "", MessageBoxButton.OK, MessageBoxImage.Warning);
+            return;
+        }
+        if (ModInfoModel.Current.I18nResource.Cultures.Contains(culture))
         {
             MessageBox.Show("此文化已存在".Translate(), "", MessageBoxButton.OK, MessageBoxImage.Warning);
             return;
