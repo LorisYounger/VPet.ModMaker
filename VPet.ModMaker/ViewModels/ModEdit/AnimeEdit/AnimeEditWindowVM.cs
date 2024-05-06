@@ -75,7 +75,7 @@ public class AnimeEditWindowVM : ObservableObjectX
         {
             if (SetProperty(ref _anime, value) is false)
                 return;
-            CheckGraphType(Anime);
+            CheckGraphType();
         }
     }
     #endregion
@@ -210,12 +210,12 @@ public class AnimeEditWindowVM : ObservableObjectX
 
     #region LoadAnime
 
-    private void CheckGraphType(AnimeTypeModel model)
+    public void CheckGraphType()
     {
-        if (AnimeTypeModel.HasMultiTypeAnimes.Contains(model.GraphType))
+        if (AnimeTypeModel.HasMultiTypeAnimes.Contains(Anime.GraphType))
             HasMultiType = true;
 
-        if (AnimeTypeModel.HasNameAnimes.Contains(model.GraphType))
+        if (AnimeTypeModel.HasNameAnimes.Contains(Anime.GraphType))
             HasAnimeName = true;
     }
     #endregion

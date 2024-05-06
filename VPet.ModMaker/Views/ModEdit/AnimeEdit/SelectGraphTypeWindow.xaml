@@ -11,6 +11,7 @@
   Title="SelectGraphTypeWindow"
   Width="500"
   Height="300"
+  WindowStartupLocation="CenterScreen"
   mc:Ignorable="d">
   <Window.Resources>
     <ResourceDictionary Source="/VPet-Simulator.Windows.Interface;component/ResourceStyle.xaml" />

@@ -43,7 +43,7 @@ public class WorkPageVM : ObservableObjectX
         {
             if (e.NewValue is false)
             {
-                if (CurrentPet.FromMain)
+                if (CurrentPet?.FromMain is false)
                 {
                     CurrentPet = null!;
                 }

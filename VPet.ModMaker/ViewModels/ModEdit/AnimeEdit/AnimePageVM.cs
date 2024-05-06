@@ -57,7 +57,7 @@ public class AnimePageVM : ObservableObjectX
         {
             if (e.NewValue is false)
             {
-                if (CurrentPet.FromMain)
+                if (CurrentPet?.FromMain is true)
                 {
                     CurrentPet = null!;
                 }
@@ -211,7 +211,11 @@ public class AnimePageVM : ObservableObjectX
             var vm = window.ViewModel;
             vm.CurrentPet = CurrentPet;
             vm.Anime.GraphType = graphType;
-            vm.Anime.Name = animeName;
+            if (string.IsNullOrWhiteSpace(animeName))
+                vm.Anime.ID = graphType.ToString();
+            else
+                vm.Anime.Name = animeName;
+            vm.CheckGraphType();
             window.ShowDialog();
             if (window.IsCancel)
                 return;

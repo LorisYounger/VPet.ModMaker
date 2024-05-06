@@ -32,7 +32,7 @@ public partial class SelectGraphTypeWindow : Window
     public SelectGraphTypeWindow()
     {
         InitializeComponent();
-        this.SetDataContext<SelectGraphTypeWindowVM>();
+        DataContext = new SelectGraphTypeWindowVM();
     }
 
     public bool IsCancel { get; private set; } = true;
@@ -44,16 +44,6 @@ public partial class SelectGraphTypeWindow : Window
 
     private void Button_Yes_Click(object? sender, RoutedEventArgs e)
     {
-        //if (string.IsNullOrWhiteSpace(AnimeName.Value))
-        //{
-        //    MessageBox.Show(
-        //        "动画名称不能为空".Translate(),
-        //        "",
-        //        MessageBoxButton.OK,
-        //        MessageBoxImage.Warning
-        //    );
-        //    return;
-        //}
         IsCancel = false;
         Close();
     }
