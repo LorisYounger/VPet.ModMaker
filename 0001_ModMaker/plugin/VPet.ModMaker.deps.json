@@ -9,7 +9,7 @@
       "VPet.ModMaker/1.0.0": {
         "dependencies": {
           "CommunityToolkit.Mvvm": "8.2.2",
-          "HKW.Utils": "1.2.21",
+          "HKW.Utils": "1.2.22",
           "HKW.WPF": "1.0.7",
           "LinePutScript": "1.11.6",
           "LinePutScript.Localization.WPF": "1.0.7",
@@ -33,17 +33,17 @@
           }
         }
       },
-      "HKW.Utils/1.2.21": {
+      "HKW.Utils/1.2.22": {
         "runtime": {
           "lib/net8.0/HKW.Utils.dll": {
-            "assemblyVersion": "1.2.21.0",
-            "fileVersion": "1.2.21.0"
+            "assemblyVersion": "1.2.22.0",
+            "fileVersion": "1.2.22.0"
           }
         }
       },
       "HKW.WPF/1.0.7": {
         "dependencies": {
-          "HKW.Utils": "1.2.21",
+          "HKW.Utils": "1.2.22",
           "Microsoft.Extensions.DependencyInjection": "8.0.0",
           "Microsoft.Xaml.Behaviors.Wpf": "1.1.77"
         },
@@ -186,12 +186,12 @@
       "path": "communitytoolkit.mvvm/8.2.2",
       "hashPath": "communitytoolkit.mvvm.8.2.2.nupkg.sha512"
     },
-    "HKW.Utils/1.2.21": {
+    "HKW.Utils/1.2.22": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-2M/TCITvekGTmaEa2iV9+Og/GFneOmtzm/IN6e5CzVOJ3NAIpAM7fozpYuEeQ8Vv7XGiQWX6kCCSYtSAyT6pOg==",
-      "path": "hkw.utils/1.2.21",
-      "hashPath": "hkw.utils.1.2.21.nupkg.sha512"
+      "sha512": "sha512-tf9f4awOTJ2VHQ/SC8bHrI3d8m8eltxth6RZjHNh9MZtxBeEuXjkFDGgUowxh7HxC2X5Eh67Q+kbwrCEx4a7nw==",
+      "path": "hkw.utils/1.2.22",
+      "hashPath": "hkw.utils.1.2.22.nupkg.sha512"
     },
     "HKW.WPF/1.0.7": {
       "type": "package",
