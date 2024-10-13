@@ -4,13 +4,13 @@
   xmlns:c="https://hkw.com/wpf">
   <c:MarginMultiConverter x:Key="MarginConverter" />
   <c:MarginMultiConverter x:Key="RatioMarginConverter" HasRatio="True" />
-  <c:CalculatorMultiConverter x:Key="CalculatorConverter" />
+  <c:DoubleCalculatorMultiConverter x:Key="CalculatorConverter" />
   <c:StringFormatMultiConverter x:Key="StringFormatConverter" HiddenUnsetAndNull="True" />
   <c:SolidColorBrushToMediaColorConverter x:Key="BrushToMediaColorConverter" />
   <!--<c:MaxConverter x:Key="MaxConverter" />-->
   <c:BoolToVisibilityConverter x:Key="FalseToCollapsedConverter" />
-  <c:EqualsMultiConverter x:Key="EqualsConverter" />
-  <c:EqualsMultiConverter x:Key="NotEqualsConverter" IsInverted="True" />
+  <c:FirstEqualsSecondMultiConverter x:Key="EqualsConverter" />
+  <c:FirstEqualsSecondMultiConverter x:Key="NotEqualsConverter" IsInverted="True" />
   <c:NullToBoolConverter x:Key="NullToFalseConverter" />
   <c:AllBoolToVisibilityMultiConverter
     x:Key="AllTrueToCollapsedConverter"

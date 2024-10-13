@@ -6,6 +6,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using HKW.HKWReactiveUI;
+using HKW.HKWUtils.Collections;
 using HKW.HKWUtils.Extensions;
 using HKW.HKWUtils.Observable;
 using LinePutScript.Localization.WPF;
@@ -15,57 +17,46 @@ using VPet_Simulator.Windows.Interface;
 
 namespace VPet.ModMaker.ViewModels.ModEdit.SelectTextEdit;
 
-public class SelectTextPageVM : ObservableObjectX
+public partial class SelectTextPageVM : ViewModelBase
 {
     public SelectTextPageVM()
     {
-        SelectTexts = new(ModInfoModel.Current.SelectTexts)
-        {
-            Filter = f => f.ID.Contains(Search, StringComparison.OrdinalIgnoreCase),
-            FilteredList = new()
-        };
-        SelectTexts.BindingList(ModInfoModel.Current.SelectTexts);
+        SelectTexts = new(
+            ModInfoModel.Current.SelectTexts,
+            [],
+            f => f.ID.Contains(Search, StringComparison.OrdinalIgnoreCase)
+        );
+        //TODO:
+        //SelectTexts.BindingList(ModInfoModel.Current.SelectTexts);
 
-        AddCommand.ExecuteCommand += AddCommand_ExecuteCommand;
-        EditCommand.ExecuteCommand += EditCommand_ExecuteCommand;
-        RemoveCommand.ExecuteCommand += RemoveCommand_ExecuteCommand;
+        //AddCommand.ExecuteCommand += Add;
+        //EditCommand.ExecuteCommand += Edit;
+        //RemoveCommand.ExecuteCommand += Remove;
     }
 
     #region Property
-    #region SelectTexts
-    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-    private ObservableFilterList<SelectTextModel, ObservableList<SelectTextModel>> _selectTexts =
-        null!;
 
-    public ObservableFilterList<SelectTextModel, ObservableList<SelectTextModel>> SelectTexts
+    public FilterListWrapper<
+        SelectTextModel,
+        ObservableList<SelectTextModel>,
+        ObservableList<SelectTextModel>
+    > SelectTexts { get; set; }
+
+    [ReactiveProperty]
+    public string Search { get; set; } = string.Empty;
+
+    partial void OnSearchChanged(string oldValue, string newValue)
     {
-        get => _selectTexts;
-        set => SetProperty(ref _selectTexts, value);
+        SelectTexts.Refresh();
     }
     #endregion
-
-    #region Search
-    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-    private string _search = string.Empty;
-
-    public string Search
-    {
-        get => _search;
-        set
-        {
-            SetProperty(ref _search, value);
-            SelectTexts.Refresh();
-        }
-    }
-    #endregion
-    #endregion
-    #region Command
-    public ObservableCommand AddCommand { get; } = new();
-    public ObservableCommand<SelectTextModel> EditCommand { get; } = new();
-    public ObservableCommand<SelectTextModel> RemoveCommand { get; } = new();
-    #endregion
-
-    private void AddCommand_ExecuteCommand()
+    //#region Command
+    //public ObservableCommand AddCommand { get; } = new();
+    //public ObservableCommand<SelectTextModel> EditCommand { get; } = new();
+    //public ObservableCommand<SelectTextModel> RemoveCommand { get; } = new();
+    //#endregion
+    [ReactiveCommand]
+    private void Add()
     {
         var window = new SelectTextEditWindow();
         var vm = window.ViewModel;
@@ -75,7 +66,8 @@ public class SelectTextPageVM : ObservableObjectX
         SelectTexts.Add(vm.SelectText);
     }
 
-    public void EditCommand_ExecuteCommand(SelectTextModel model)
+    [ReactiveCommand]
+    public void Edit(SelectTextModel model)
     {
         var window = new SelectTextEditWindow();
         var vm = window.ViewModel;
@@ -98,7 +90,8 @@ public class SelectTextPageVM : ObservableObjectX
         model.Close();
     }
 
-    private void RemoveCommand_ExecuteCommand(SelectTextModel model)
+    [ReactiveCommand]
+    private void Remove(SelectTextModel model)
     {
         if (MessageBox.Show("确定删除吗".Translate(), "", MessageBoxButton.YesNo) is MessageBoxResult.No)
             return;

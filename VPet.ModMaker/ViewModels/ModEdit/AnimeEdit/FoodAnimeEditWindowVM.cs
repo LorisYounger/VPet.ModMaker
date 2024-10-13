@@ -8,6 +8,7 @@ using System.IO;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Media.Imaging;
+using HKW.HKWReactiveUI;
 using HKW.HKWUtils.Observable;
 using LinePutScript.Localization.WPF;
 using Microsoft.Win32;
@@ -19,7 +20,7 @@ using static VPet_Simulator.Core.IGameSave;
 
 namespace VPet.ModMaker.ViewModels.ModEdit.AnimeEdit;
 
-public class FoodAnimeEditWindowVM : ObservableObjectX
+public partial class FoodAnimeEditWindowVM : ViewModelBase
 {
     public FoodAnimeEditWindowVM()
     {
@@ -27,52 +28,52 @@ public class FoodAnimeEditWindowVM : ObservableObjectX
         _backPlayerTask = new(BackPlay);
         _foodPlayerTask = new(FoodPlay);
         FoodImage = DefaultFoodImage;
-        PropertyChangedX += FoodAnimeEditWindowVM_PropertyChangedX;
+        //PropertyChangedX += FoodAnimeEditWindowVM_PropertyChangedX;
 
-        PlayCommand.ExecuteAsyncCommand += PlayCommand_AsyncExecuteEvent;
-        StopCommand.ExecuteCommand += StopCommand_ExecuteEvent;
-        ReplaceFoodImageCommand.ExecuteCommand += ChangeFoodImageCommand_ExecuteEvent;
-        ResetFoodImageCommand.ExecuteCommand += ResetFoodImageCommand_ExecuteEvent;
+        //PlayCommand.ExecuteAsyncCommand += PlayCommand_AsyncExecuteEvent;
+        //StopCommand.ExecuteCommand += StopCommand_ExecuteEvent;
+        //ReplaceFoodImageCommand.ExecuteCommand += ChangeFoodImageCommand_ExecuteEvent;
+        //ResetFoodImageCommand.ExecuteCommand += ResetFoodImageCommand_ExecuteEvent;
 
-        AddAnimeCommand.ExecuteCommand += AddAnimeCommand_ExecuteEvent;
-        RemoveAnimeCommand.ExecuteCommand += RemoveAnimeCommand_ExecuteEvent;
+        //AddAnimeCommand.ExecuteCommand += AddAnimeCommand_ExecuteEvent;
+        //RemoveAnimeCommand.ExecuteCommand += RemoveAnimeCommand_ExecuteEvent;
 
-        AddFrontImageCommand.ExecuteCommand += AddFrontImageCommand_ExecuteEvent;
-        RemoveFrontImageCommand.ExecuteCommand += RemoveFrontImageCommand_ExecuteEvent;
-        ClearFrontImageCommand.ExecuteCommand += ClearFrontImageCommand_ExecuteEvent;
-        ChangeFrontImageCommand.ExecuteCommand += ChangeFrontImageCommand_ExecuteEvent;
+        //AddFrontImageCommand.ExecuteCommand += AddFrontImageCommand_ExecuteEvent;
+        //RemoveFrontImageCommand.ExecuteCommand += RemoveFrontImageCommand_ExecuteEvent;
+        //ClearFrontImageCommand.ExecuteCommand += ClearFrontImageCommand_ExecuteEvent;
+        //ChangeFrontImageCommand.ExecuteCommand += ChangeFrontImageCommand_ExecuteEvent;
 
-        AddBackImageCommand.ExecuteCommand += AddBackImageCommand_ExecuteEvent;
-        RemoveBackImageCommand.ExecuteCommand += RemoveBackImageCommand_ExecuteEvent;
-        ClearBackImageCommand.ExecuteCommand += ClearBackImageCommand_ExecuteEvent;
-        ChangeBackImageCommand.ExecuteCommand += ChangeBackImageCommand_ExecuteEvent;
+        //AddBackImageCommand.ExecuteCommand += AddBackImageCommand_ExecuteEvent;
+        //RemoveBackImageCommand.ExecuteCommand += RemoveBackImageCommand_ExecuteEvent;
+        //ClearBackImageCommand.ExecuteCommand += ClearBackImageCommand_ExecuteEvent;
+        //ChangeBackImageCommand.ExecuteCommand += ChangeBackImageCommand_ExecuteEvent;
 
-        AddFoodLocationCommand.ExecuteCommand += AddeFoodLocationCommand_ExecuteEvent;
-        RemoveFoodLocationCommand.ExecuteCommand += RemoveFoodLocationCommand_ExecuteEvent;
-        ClearFoodLocationCommand.ExecuteCommand += ClearFoodLocationCommand_ExecuteEvent;
+        //AddFoodLocationCommand.ExecuteCommand += AddeFoodLocationCommand_ExecuteEvent;
+        //RemoveFoodLocationCommand.ExecuteCommand += RemoveFoodLocationCommand_ExecuteEvent;
+        //ClearFoodLocationCommand.ExecuteCommand += ClearFoodLocationCommand_ExecuteEvent;
     }
 
-    private void FoodAnimeEditWindowVM_PropertyChangedX(object? sender, PropertyChangedXEventArgs e)
-    {
-        if (e.PropertyName == nameof(CurrentAnimeModel))
-        {
-            var newModel = e.NewValue as FoodAnimeModel;
-            var oldModel = e.OldValue as FoodAnimeModel;
-            StopCommand_ExecuteEvent();
-            if (oldModel is not null)
-            {
-                oldModel.FrontImages.CollectionChanged -= Images_CollectionChanged;
-                oldModel.BackImages.CollectionChanged -= Images_CollectionChanged;
-                oldModel.FoodLocations.CollectionChanged -= Images_CollectionChanged;
-            }
-            if (newModel is not null)
-            {
-                newModel.FrontImages.CollectionChanged += Images_CollectionChanged;
-                newModel.BackImages.CollectionChanged += Images_CollectionChanged;
-                newModel.FoodLocations.CollectionChanged += Images_CollectionChanged;
-            }
-        }
-    }
+    //private void FoodAnimeEditWindowVM_PropertyChangedX(object? sender, PropertyChangedXEventArgs e)
+    //{
+    //    if (e.PropertyName == nameof(CurrentAnimeModel))
+    //    {
+    //        var newModel = e.NewValue as FoodAnimeModel;
+    //        var oldModel = e.OldValue as FoodAnimeModel;
+    //        Stop();
+    //        if (oldModel is not null)
+    //        {
+    //            oldModel.FrontImages.CollectionChanged -= Images_CollectionChanged;
+    //            oldModel.BackImages.CollectionChanged -= Images_CollectionChanged;
+    //            oldModel.FoodLocations.CollectionChanged -= Images_CollectionChanged;
+    //        }
+    //        if (newModel is not null)
+    //        {
+    //            newModel.FrontImages.CollectionChanged += Images_CollectionChanged;
+    //            newModel.BackImages.CollectionChanged += Images_CollectionChanged;
+    //            newModel.FoodLocations.CollectionChanged += Images_CollectionChanged;
+    //        }
+    //    }
+    //}
 
     /// <summary>
     /// 当前宠物
@@ -85,33 +86,17 @@ public class FoodAnimeEditWindowVM : ObservableObjectX
     public static BitmapImage DefaultFoodImage { get; } =
         NativeUtils.LoadImageToMemoryStream(NativeResources.GetStream(NativeResources.FoodImage));
 
-    #region FoodImage
-    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-    private BitmapImage _foodImage;
-
     /// <summary>
     /// 食物图片
     /// </summary>
-    public BitmapImage FoodImage
-    {
-        get => _foodImage;
-        set => SetProperty(ref _foodImage, value);
-    }
-    #endregion
-
-    #region LengthRatio
-    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-    private double _lengthRatio = 0.5;
+    [ReactiveProperty]
+    public BitmapImage FoodImage { get; set; }
 
     /// <summary>
     /// 比例
     /// </summary>
-    public double LengthRatio
-    {
-        get => _lengthRatio;
-        set => SetProperty(ref _lengthRatio, value);
-    }
-    #endregion
+    [ReactiveProperty]
+    public double LengthRatio { get; set; } = 0.5;
 
     /// <summary>
     /// 旧动画
@@ -121,211 +106,166 @@ public class FoodAnimeEditWindowVM : ObservableObjectX
     /// <summary>
     /// 动画
     /// </summary>
-    #region Anime
-    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-    private FoodAnimeTypeModel _anime = new();
-
-    public FoodAnimeTypeModel Anime
-    {
-        get => _anime;
-        set => SetProperty(ref _anime, value);
-    }
-    #endregion
-
-    #region CurrentFrontImageModel
-    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-    private ImageModel _currentFrontImageModel;
+    [ReactiveProperty]
+    public FoodAnimeTypeModel Anime { get; set; } = new();
 
     /// <summary>
     /// 当前顶层图像模型
     /// </summary>
-    public ImageModel CurrentFrontImageModel
-    {
-        get => _currentFrontImageModel;
-        set => SetProperty(ref _currentFrontImageModel, value);
-    }
-    #endregion
-
-    #region CurrentBackImageModel
-    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-    private ImageModel _currentBackImageModel;
+    [ReactiveProperty]
+    public ImageModel CurrentFrontImageModel { get; set; }
 
     /// <summary>
     /// 当前底层图像模型
     /// </summary>
-    public ImageModel CurrentBackImageModel
-    {
-        get => _currentBackImageModel;
-        set => SetProperty(ref _currentBackImageModel, value);
-    }
-    #endregion
-
-    #region CurrentFoodLocationModel
-    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-    private FoodAnimeLocationModel _currentFoodLocationModel;
+    [ReactiveProperty]
+    public ImageModel CurrentBackImageModel { get; set; }
 
     /// <summary>
     /// 当前食物定位模型
     /// </summary>
-    public FoodAnimeLocationModel CurrentFoodLocationModel
-    {
-        get => _currentFoodLocationModel;
-        set => SetProperty(ref _currentFoodLocationModel, value);
-    }
-    #endregion
-
-    #region CurrentAnimeModel
-    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-    private FoodAnimeModel _currentAnimeModel;
+    [ReactiveProperty]
+    public FoodAnimeLocationModel CurrentFoodLocationModel { get; set; }
 
     /// <summary>
     /// 当前动画模型
     /// </summary>
-    public FoodAnimeModel CurrentAnimeModel
+    [ReactiveProperty]
+    public FoodAnimeModel CurrentAnimeModel { get; set; }
+
+    partial void OnCurrentAnimeModelChanged(FoodAnimeModel oldValue, FoodAnimeModel newValue)
     {
-        get => _currentAnimeModel;
-        set => SetProperty(ref _currentAnimeModel, value);
+        Stop();
+        if (oldValue is not null)
+        {
+            oldValue.FrontImages.CollectionChanged -= Images_CollectionChanged;
+            oldValue.BackImages.CollectionChanged -= Images_CollectionChanged;
+            oldValue.FoodLocations.CollectionChanged -= Images_CollectionChanged;
+        }
+        if (newValue is not null)
+        {
+            newValue.FrontImages.CollectionChanged += Images_CollectionChanged;
+            newValue.BackImages.CollectionChanged += Images_CollectionChanged;
+            newValue.FoodLocations.CollectionChanged += Images_CollectionChanged;
+        }
     }
-    #endregion
 
     /// <summary>
     /// 当前模式
     /// </summary>
     public ModeType CurrentMode { get; set; }
 
-    #region Loop
-    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-    private bool _loop;
-
     /// <summary>
     /// 循环
     /// </summary>
-    public bool Loop
-    {
-        get => _loop;
-        set => SetProperty(ref _loop, value);
-    }
-    #endregion
+    [ReactiveProperty]
+    public bool Loop { get; set; }
 
-    #region HasMultiType
-    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-    private bool _hasMultiType;
+    ///// <summary>
+    ///// 含有多个状态
+    ///// </summary>
+    //[ReactiveProperty]
+    //[NotifyPropertyChangeFrom(nameof(Anime))]
+    //public bool HasMultiType => AnimeTypeModel.HasMultiTypeAnimes.Contains(Anime.GraphType);
 
-    /// <summary>
-    /// 含有多个状态 参见 <see cref="AnimeTypeModel.HasMultiTypeAnimes"/>
-    /// </summary>
-    public bool HasMultiType
-    {
-        get => _hasMultiType;
-        set => SetProperty(ref _hasMultiType, value);
-    }
-    #endregion
+    ///// <summary>
+    ///// 含有动画名称
+    ///// </summary>
+    //[ReactiveProperty]
+    //[NotifyPropertyChangeFrom(nameof(Anime))]
+    //public bool HasAnimeName => AnimeTypeModel.HasNameAnimes.Contains(Anime.GraphType);
 
-    #region HasAnimeName
-    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-    private bool _hasAnimeName;
+    //#region Command
+    ///// <summary>
+    ///// 播放命令
+    ///// </summary>
+    //public ObservableCommand PlayCommand { get; } = new();
 
-    /// <summary>
-    /// 含有动画名称 参见 <see cref="AnimeTypeModel.HasNameAnimes"/>
-    /// </summary>
-    public bool HasAnimeName
-    {
-        get => _hasAnimeName;
-        set => SetProperty(ref _hasAnimeName, value);
-    }
-    #endregion
+    ///// <summary>
+    ///// 停止命令
+    ///// </summary>
+    //public ObservableCommand StopCommand { get; } = new();
 
-    #region Command
-    /// <summary>
-    /// 播放命令
-    /// </summary>
-    public ObservableCommand PlayCommand { get; } = new();
+    ///// <summary>
+    ///// 添加动画命令
+    ///// </summary>
+    //public ObservableCommand AddAnimeCommand { get; } = new();
 
-    /// <summary>
-    /// 停止命令
-    /// </summary>
-    public ObservableCommand StopCommand { get; } = new();
+    ///// <summary>
+    ///// 删除动画命令
+    ///// </summary>
+    //public ObservableCommand<FoodAnimeModel> RemoveAnimeCommand { get; } = new();
 
-    /// <summary>
-    /// 添加动画命令
-    /// </summary>
-    public ObservableCommand AddAnimeCommand { get; } = new();
+    //#region FrontImage
+    ///// <summary>
+    ///// 添加顶层图片命令
+    ///// </summary>
+    //public ObservableCommand<FoodAnimeModel> AddFrontImageCommand { get; } = new();
 
-    /// <summary>
-    /// 删除动画命令
-    /// </summary>
-    public ObservableCommand<FoodAnimeModel> RemoveAnimeCommand { get; } = new();
+    ///// <summary>
+    ///// 删除顶层图片命令
+    ///// </summary>
+    //public ObservableCommand<FoodAnimeModel> RemoveFrontImageCommand { get; } = new();
 
-    #region FrontImage
-    /// <summary>
-    /// 添加顶层图片命令
-    /// </summary>
-    public ObservableCommand<FoodAnimeModel> AddFrontImageCommand { get; } = new();
+    ///// <summary>
+    ///// 清除顶层图片命令
+    ///// </summary>
+    //public ObservableCommand<FoodAnimeModel> ClearFrontImageCommand { get; } = new();
 
-    /// <summary>
-    /// 删除顶层图片命令
-    /// </summary>
-    public ObservableCommand<FoodAnimeModel> RemoveFrontImageCommand { get; } = new();
+    ///// <summary>
+    ///// 改变顶层图片命令
+    ///// </summary>
+    //public ObservableCommand<FoodAnimeModel> ChangeFrontImageCommand { get; } = new();
+    //#endregion
 
-    /// <summary>
-    /// 清除顶层图片命令
-    /// </summary>
-    public ObservableCommand<FoodAnimeModel> ClearFrontImageCommand { get; } = new();
+    //#region BackImage
+    ///// <summary>
+    ///// 添加底层图片命令
+    ///// </summary>
+    //public ObservableCommand<FoodAnimeModel> AddBackImageCommand { get; } = new();
 
-    /// <summary>
-    /// 改变顶层图片命令
-    /// </summary>
-    public ObservableCommand<FoodAnimeModel> ChangeFrontImageCommand { get; } = new();
-    #endregion
+    ///// <summary>
+    ///// 删除底层图片命令
+    ///// </summary>
+    //public ObservableCommand<FoodAnimeModel> RemoveBackImageCommand { get; } = new();
 
-    #region BackImage
-    /// <summary>
-    /// 添加底层图片命令
-    /// </summary>
-    public ObservableCommand<FoodAnimeModel> AddBackImageCommand { get; } = new();
+    ///// <summary>
+    ///// 清除底层图片命令
+    ///// </summary>
+    //public ObservableCommand<FoodAnimeModel> ClearBackImageCommand { get; } = new();
 
-    /// <summary>
-    /// 删除底层图片命令
-    /// </summary>
-    public ObservableCommand<FoodAnimeModel> RemoveBackImageCommand { get; } = new();
+    ///// <summary>
+    ///// 改变底层图片命令
+    ///// </summary>
+    //public ObservableCommand<FoodAnimeModel> ChangeBackImageCommand { get; } = new();
+    //#endregion
+    //#region FoodLocation
+    ///// <summary>
+    ///// 添加食物定位命令
+    ///// </summary>
+    //public ObservableCommand<FoodAnimeModel> AddFoodLocationCommand { get; } = new();
 
-    /// <summary>
-    /// 清除底层图片命令
-    /// </summary>
-    public ObservableCommand<FoodAnimeModel> ClearBackImageCommand { get; } = new();
+    ///// <summary>
+    ///// 删除食物定位命令
+    ///// </summary>
+    //public ObservableCommand<FoodAnimeModel> RemoveFoodLocationCommand { get; } = new();
 
-    /// <summary>
-    /// 改变底层图片命令
-    /// </summary>
-    public ObservableCommand<FoodAnimeModel> ChangeBackImageCommand { get; } = new();
-    #endregion
-    #region FoodLocation
-    /// <summary>
-    /// 添加食物定位命令
-    /// </summary>
-    public ObservableCommand<FoodAnimeModel> AddFoodLocationCommand { get; } = new();
+    ///// <summary>
+    ///// 清除食物定位命令
+    ///// </summary>
+    //public ObservableCommand<FoodAnimeModel> ClearFoodLocationCommand { get; } = new();
+    //#endregion
+    ///// <summary>
+    ///// 改变食物图片
+    ///// </summary>
+    //public ObservableCommand ReplaceFoodImageCommand { get; } = new();
 
-    /// <summary>
-    /// 删除食物定位命令
-    /// </summary>
-    public ObservableCommand<FoodAnimeModel> RemoveFoodLocationCommand { get; } = new();
+    ///// <summary>
+    ///// 重置食物图片
+    ///// </summary>
+    //public ObservableCommand ResetFoodImageCommand { get; } = new();
 
-    /// <summary>
-    /// 清除食物定位命令
-    /// </summary>
-    public ObservableCommand<FoodAnimeModel> ClearFoodLocationCommand { get; } = new();
-    #endregion
-    /// <summary>
-    /// 改变食物图片
-    /// </summary>
-    public ObservableCommand ReplaceFoodImageCommand { get; } = new();
-
-    /// <summary>
-    /// 重置食物图片
-    /// </summary>
-    public ObservableCommand ResetFoodImageCommand { get; } = new();
-
-    #endregion
+    //#endregion
 
     /// <summary>
     /// 正在播放
@@ -347,14 +287,18 @@ public class FoodAnimeEditWindowVM : ObservableObjectX
     /// </summary>
     private Task _foodPlayerTask;
 
-    private void ResetFoodImageCommand_ExecuteEvent()
+    #region Command
+
+    [ReactiveCommand]
+    private void ResetFoodImage()
     {
         if (FoodImage != DefaultFoodImage)
             FoodImage.CloseStream();
         FoodImage = DefaultFoodImage;
     }
 
-    private void ChangeFoodImageCommand_ExecuteEvent()
+    [ReactiveCommand]
+    private void ChangeFoodImage()
     {
         OpenFileDialog openFileDialog =
             new() { Title = "选择食物图片".Translate(), Filter = $"图片|*.png".Translate() };
@@ -382,7 +326,8 @@ public class FoodAnimeEditWindowVM : ObservableObjectX
     //}
     //#endregion
     #region AnimeCommand
-    private void AddAnimeCommand_ExecuteEvent()
+    [ReactiveCommand]
+    private void AddAnime()
     {
         if (CurrentMode is ModeType.Happy)
             Anime.HappyAnimes.Add(new());
@@ -398,8 +343,8 @@ public class FoodAnimeEditWindowVM : ObservableObjectX
     /// 删除动画
     /// </summary>
     /// <param name="value">动画模型</param>
-
-    private void RemoveAnimeCommand_ExecuteEvent(FoodAnimeModel value)
+    [ReactiveCommand]
+    private void RemoveAnime(FoodAnimeModel value)
     {
         if (
             MessageBox.Show("确定删除吗".Translate(), "", MessageBoxButton.YesNo) is MessageBoxResult.Yes
@@ -424,7 +369,8 @@ public class FoodAnimeEditWindowVM : ObservableObjectX
     /// 添加顶层图片
     /// </summary>
     /// <param name="value">动画模型</param>
-    private void AddFrontImageCommand_ExecuteEvent(FoodAnimeModel value)
+    [ReactiveCommand]
+    private void AddFrontImage(FoodAnimeModel value)
     {
         OpenFileDialog openFileDialog =
             new()
@@ -443,7 +389,8 @@ public class FoodAnimeEditWindowVM : ObservableObjectX
     /// 删除顶层图片
     /// </summary>
     /// <param name="value">动画模型</param>
-    private void RemoveFrontImageCommand_ExecuteEvent(FoodAnimeModel value)
+    [ReactiveCommand]
+    private void RemoveFrontImage(FoodAnimeModel value)
     {
         CurrentFrontImageModel.Close();
         value.FrontImages.Remove(CurrentFrontImageModel);
@@ -453,7 +400,8 @@ public class FoodAnimeEditWindowVM : ObservableObjectX
     /// 清空顶层图片
     /// </summary>
     /// <param name="value">动画模型</param>
-    private void ClearFrontImageCommand_ExecuteEvent(FoodAnimeModel value)
+    [ReactiveCommand]
+    private void ClearFrontImage(FoodAnimeModel value)
     {
         if (
             MessageBox.Show("确定清空吗".Translate(), "", MessageBoxButton.YesNo) is MessageBoxResult.Yes
@@ -468,9 +416,9 @@ public class FoodAnimeEditWindowVM : ObservableObjectX
     /// <summary>
     /// 替换顶层图片
     /// </summary>
-    /// <param name="value"></param>
-    /// <exception cref="NotImplementedException"></exception>
-    private void ChangeFrontImageCommand_ExecuteEvent(FoodAnimeModel value)
+    /// <param name="value">动画模型</param>
+    [ReactiveCommand]
+    private void ChangeFrontImage(FoodAnimeModel value)
     {
         OpenFileDialog openFileDialog =
             new() { Title = "选择图片".Translate(), Filter = $"图片|*.png".Translate() };
@@ -498,7 +446,8 @@ public class FoodAnimeEditWindowVM : ObservableObjectX
     /// 添加顶层图片
     /// </summary>
     /// <param name="value">动画模型</param>
-    private void AddBackImageCommand_ExecuteEvent(FoodAnimeModel value)
+    [ReactiveCommand]
+    private void AddBackImage(FoodAnimeModel value)
     {
         OpenFileDialog openFileDialog =
             new()
@@ -517,7 +466,8 @@ public class FoodAnimeEditWindowVM : ObservableObjectX
     /// 删除顶层图片
     /// </summary>
     /// <param name="value">动画模型</param>
-    private void RemoveBackImageCommand_ExecuteEvent(FoodAnimeModel value)
+    [ReactiveCommand]
+    private void RemoveBackImage(FoodAnimeModel value)
     {
         CurrentBackImageModel.Close();
         value.BackImages.Remove(CurrentBackImageModel);
@@ -527,7 +477,8 @@ public class FoodAnimeEditWindowVM : ObservableObjectX
     /// 清空顶层图片
     /// </summary>
     /// <param name="value">动画模型</param>
-    private void ClearBackImageCommand_ExecuteEvent(FoodAnimeModel value)
+    [ReactiveCommand]
+    private void ClearBackImage(FoodAnimeModel value)
     {
         if (
             MessageBox.Show("确定清空吗".Translate(), "", MessageBoxButton.YesNo) is MessageBoxResult.Yes
@@ -544,7 +495,8 @@ public class FoodAnimeEditWindowVM : ObservableObjectX
     /// </summary>
     /// <param name="value"></param>
     /// <exception cref="NotImplementedException"></exception>
-    private void ChangeBackImageCommand_ExecuteEvent(FoodAnimeModel value)
+    [ReactiveCommand]
+    private void ChangeBackImage(FoodAnimeModel value)
     {
         OpenFileDialog openFileDialog =
             new() { Title = "选择图片".Translate(), Filter = $"图片|*.png".Translate() };
@@ -601,18 +553,21 @@ public class FoodAnimeEditWindowVM : ObservableObjectX
     }
     #endregion
     #region FoodLocationCommand
-    private void AddeFoodLocationCommand_ExecuteEvent(FoodAnimeModel value)
+    [ReactiveCommand]
+    private void AddeFoodLocation(FoodAnimeModel value)
     {
         value.FoodLocations.Add(new());
     }
 
-    private void RemoveFoodLocationCommand_ExecuteEvent(FoodAnimeModel value)
+    [ReactiveCommand]
+    private void RemoveFoodLocation(FoodAnimeModel value)
     {
         value.FoodLocations.Remove(CurrentFoodLocationModel);
         CurrentFoodLocationModel = null!;
     }
 
-    private void ClearFoodLocationCommand_ExecuteEvent(FoodAnimeModel value)
+    [ReactiveCommand]
+    private void ClearFoodLocation(FoodAnimeModel value)
     {
         if (
             MessageBox.Show("确定清空吗".Translate(), "", MessageBoxButton.YesNo) is MessageBoxResult.Yes
@@ -626,13 +581,14 @@ public class FoodAnimeEditWindowVM : ObservableObjectX
 
     private void Images_CollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
     {
-        StopCommand_ExecuteEvent();
+        Stop();
     }
 
     /// <summary>
     /// 停止播放
     /// </summary>
-    private void StopCommand_ExecuteEvent()
+    [ReactiveCommand]
+    private void Stop()
     {
         _playing = false;
     }
@@ -640,7 +596,8 @@ public class FoodAnimeEditWindowVM : ObservableObjectX
     /// <summary>
     /// 开始播放
     /// </summary>
-    private async Task PlayCommand_AsyncExecuteEvent()
+    [ReactiveCommand]
+    private async Task Play()
     {
         if (CurrentAnimeModel is null)
         {
@@ -712,5 +669,6 @@ public class FoodAnimeEditWindowVM : ObservableObjectX
         _backPlayerTask = new(BackPlay);
         _foodPlayerTask = new(FoodPlay);
     }
+    #endregion
     #endregion
 }

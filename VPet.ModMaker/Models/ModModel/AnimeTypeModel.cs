@@ -9,28 +9,19 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Media.Imaging;
+using HKW.HKWReactiveUI;
 using HKW.HKWUtils.Extensions;
 using HKW.HKWUtils.Observable;
+using VPet.ModMaker.ViewModels;
 using VPet_Simulator.Core;
 using static VPet_Simulator.Core.GraphInfo;
 using static VPet_Simulator.Core.IGameSave;
 
 namespace VPet.ModMaker.Models.ModModel;
 
-public class AnimeTypeModel : ObservableObjectX
+public partial class AnimeTypeModel : ViewModelBase
 {
-    public AnimeTypeModel()
-    {
-        PropertyChanged += AnimeTypeModel_PropertyChanged;
-    }
-
-    private void AnimeTypeModel_PropertyChanged(object? sender, PropertyChangedEventArgs e)
-    {
-        if (e.PropertyName == nameof(Name))
-        {
-            ID = $"{GraphType}_{Name}";
-        }
-    }
+    public AnimeTypeModel() { }
 
     public AnimeTypeModel(AnimeTypeModel model)
         : this()
@@ -99,46 +90,29 @@ public class AnimeTypeModel : ObservableObjectX
             ]
         );
 
-    #region ID
-    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-    private string _id = string.Empty;
-
+    #region Property
     /// <summary>
     /// ID
     /// </summary>
-    public string ID
-    {
-        get => _id;
-        set => SetProperty(ref _id, value);
-    }
-    #endregion
-
-    #region Name
-    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-    private string _name = string.Empty;
+    [ReactiveProperty]
+    public string ID { get; set; } = string.Empty;
 
     /// <summary>
     /// 名称
     /// </summary>
-    public string Name
-    {
-        get => _name;
-        set => SetProperty(ref _name, value);
-    }
-    #endregion
+    [ReactiveProperty]
+    public string Name { get; set; } = string.Empty;
 
-    #region GraphType
-    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-    private GraphInfo.GraphType _graphType;
+    partial void OnNameChanged(string oldValue, string newValue)
+    {
+        ID = $"{GraphType}_{Name}";
+    }
 
     /// <summary>
     /// 动作类型
     /// </summary>
-    public GraphInfo.GraphType GraphType
-    {
-        get => _graphType;
-        set => SetProperty(ref _graphType, value);
-    }
+    [ReactiveProperty]
+    public GraphInfo.GraphType GraphType { get; set; }
     #endregion
 
     /// <summary>

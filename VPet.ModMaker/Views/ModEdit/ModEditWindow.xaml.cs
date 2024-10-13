@@ -83,7 +83,7 @@ public partial class ModEditWindow : WindowX
                 is not MessageBoxResult.Yes
             )
                 return;
-            ViewModel.AddCultureCommand_ExecuteCommand();
+            ViewModel.AddCulture();
             if (string.IsNullOrWhiteSpace(ViewModel.ModInfo.ID))
                 return;
             if (
@@ -98,9 +98,7 @@ public partial class ModEditWindow : WindowX
                     is not MessageBoxResult.Yes
             )
                 return;
-            ViewModel.SetMainCultureCommand_ExecuteCommand(
-                ModInfoModel.Current.I18nResource.Cultures.First().Name
-            );
+            ViewModel.SetMainCulture(ModInfoModel.Current.I18nResource.Cultures.First().Name);
         }
     }
 

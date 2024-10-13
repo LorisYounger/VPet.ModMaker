@@ -6,15 +6,17 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using HKW.HKWReactiveUI;
 using HKW.HKWUtils.Extensions;
 using HKW.HKWUtils.Observable;
 using LinePutScript;
+using VPet.ModMaker.ViewModels;
 using VPet_Simulator.Core;
 using static VPet_Simulator.Core.IGameSave;
 
 namespace VPet.ModMaker.Models.ModModel;
 
-public class FoodAnimeModel : ObservableObjectX, ICloneable<FoodAnimeModel>
+public partial class FoodAnimeModel : ViewModelBase, ICloneable<FoodAnimeModel>
 {
     public FoodAnimeModel() { }
 
@@ -43,16 +45,8 @@ public class FoodAnimeModel : ObservableObjectX, ICloneable<FoodAnimeModel>
         }
     }
 
-    #region ID
-    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-    private string _id;
-
-    public string ID
-    {
-        get => _id;
-        set => SetProperty(ref _id, value);
-    }
-    #endregion
+    [ReactiveProperty]
+    public string ID { get; set; } = string.Empty;
 
     public ObservableValue<ModeType> Mode { get; }
 

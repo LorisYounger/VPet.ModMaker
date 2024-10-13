@@ -7,16 +7,18 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using HKW.HKWReactiveUI;
 using HKW.HKWUtils.Extensions;
 using HKW.HKWUtils.Observable;
 using LinePutScript;
 using LinePutScript.Localization.WPF;
+using VPet.ModMaker.ViewModels;
 using VPet_Simulator.Core;
 using static VPet_Simulator.Core.IGameSave;
 
 namespace VPet.ModMaker.Models.ModModel;
 
-public class FoodAnimeTypeModel : ObservableObjectX
+public partial class FoodAnimeTypeModel : ViewModelBase
 {
     public FoodAnimeTypeModel() { }
 
@@ -41,45 +43,29 @@ public class FoodAnimeTypeModel : ObservableObjectX
     /// </summary>
     public const string BackLayName = "back_lay";
 
-    #region ID
-    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-    private string _id = string.Empty;
-
-    public string ID
-    {
-        get => _id;
-        set => SetProperty(ref _id, value);
-    }
-    #endregion
-
-    #region Name
-    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-    private string _name = string.Empty;
+    [ReactiveProperty]
+    public string ID { get; set; } = string.Empty;
 
     /// <summary>
     /// 名称
     /// </summary>
-    public string Name
+    [ReactiveProperty]
+    public string Name { get; set; } = string.Empty;
+
+    partial void OnNameChanged(string oldValue, string newValue)
     {
-        get => _name;
-        set
-        {
-            if (SetProperty(ref _name, value) is false)
-                return;
-            ID = $"{GraphType}_{Name}";
-        }
+        ID = $"{GraphType}_{Name}";
     }
-    #endregion
 
     /// <summary>
     /// 开心动画
     /// </summary>
-    public ObservableList<FoodAnimeModel> HappyAnimes { get; } = new();
+    public ObservableList<FoodAnimeModel> HappyAnimes { get; } = [];
 
     /// <summary>
     /// 普通动画 (默认)
     /// </summary>
-    public ObservableList<FoodAnimeModel> NomalAnimes { get; } = new();
+    public ObservableList<FoodAnimeModel> NomalAnimes { get; } = [];
 
     /// <summary>
     /// 低状态动画

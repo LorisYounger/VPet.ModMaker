@@ -10,6 +10,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Media.Imaging;
+using HKW.HKWReactiveUI;
 using HKW.HKWUtils;
 using HKW.HKWUtils.Observable;
 using LinePutScript;
@@ -17,6 +18,7 @@ using LinePutScript.Converter;
 using LinePutScript.Localization.WPF;
 using Mapster;
 using VPet.ModMaker.Models.ModModel;
+using VPet.ModMaker.ViewModels;
 using VPet_Simulator.Core;
 
 namespace VPet.ModMaker.Models;
@@ -24,7 +26,7 @@ namespace VPet.ModMaker.Models;
 /// <summary>
 /// 宠物模型
 /// </summary>
-public class PetModel : ObservableObjectX
+public partial class PetModel : ViewModelBase
 {
     public PetModel()
     {
@@ -123,64 +125,27 @@ public class PetModel : ObservableObjectX
 
     public static PetModel Default { get; } = new() { I18nResource = new() };
 
-    #region FromMain
-    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-    private bool _fromMain;
-
     /// <summary>
     /// 来自本体
     /// </summary>
-    public bool FromMain
-    {
-        get => _fromMain;
-        set => SetProperty(ref _fromMain, value);
-    }
-    #endregion
-
-    #region ID
-    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-    private string _id = string.Empty;
+    [ReactiveProperty]
+    public bool FromMain { get; set; }
 
     /// <summary>
     /// Id
     /// </summary>
-    public string ID
-    {
-        get => _id;
-        set
-        {
-            SetProperty(ref _id, value);
-            RefreshID();
-        }
-    }
-    #endregion
-    #region PetNameID
-    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-    private string _petNameID = string.Empty;
+    [ReactiveProperty]
+    public string ID { get; set; } = string.Empty;
 
     /// <summary>
     /// 名称ID
     /// </summary>
-    public string PetNameID
-    {
-        get => _petNameID;
-        set => SetProperty(ref _petNameID, value);
-    }
-    #endregion
-
-    #region DescriptionID
-    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-    private string _descriptionID = string.Empty;
+    public string PetNameID { get; set; } = string.Empty;
 
     /// <summary>
     /// 描述ID
     /// </summary>
-    public string DescriptionID
-    {
-        get => _descriptionID;
-        set => SetProperty(ref _descriptionID, value);
-    }
-    #endregion
+    public string DescriptionID { get; set; } = string.Empty;
 
     #region I18nData
     [AdaptIgnore]
@@ -192,26 +157,28 @@ public class PetModel : ObservableObjectX
         get => _i18nResource;
         set
         {
-            if (_i18nResource is not null)
-                I18nResource.I18nObjectInfos.Remove(this);
-            _i18nResource = value;
-            InitializeI18nResource();
+            //TODO:
+            //if (_i18nResource is not null)
+            //    I18nResource.I18nObjectInfos.Remove(this);
+            //_i18nResource = value;
+            //InitializeI18nResource();
         }
     }
 
     public void InitializeI18nResource()
     {
-        I18nResource.I18nObjectInfos.Add(
-            this,
-            new I18nObjectInfo<string, string>(this, OnPropertyChanged).AddPropertyInfo(
-                [
-                    (nameof(ID), ID, nameof(Name)),
-                    (nameof(PetNameID), PetNameID, nameof(PetName)),
-                    (nameof(DescriptionID), DescriptionID, nameof(Description))
-                ],
-                true
-            )
-        );
+        // TODO:
+        //I18nResource.I18nObjectInfos.Add(
+        //    this,
+        //    new I18nObjectInfo<string, string>(this, OnPropertyChanged).AddPropertyInfo(
+        //        [
+        //            (nameof(ID), ID, nameof(Name)),
+        //            (nameof(PetNameID), PetNameID, nameof(PetName)),
+        //            (nameof(DescriptionID), DescriptionID, nameof(Description))
+        //        ],
+        //        true
+        //    )
+        //);
         foreach (var work in Works)
             work.I18nResource = I18nResource;
         if (FromMain)
@@ -266,55 +233,32 @@ public class PetModel : ObservableObjectX
     }
     #endregion
 
-    #region Tags
-    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-    private string _tags = string.Empty;
 
     /// <summary>
     /// 标签
     /// </summary>
-    public string Tags
-    {
-        get => _tags;
-        set => SetProperty(ref _tags, value);
-    }
-    #endregion
-
-
-    #region TouchHeadRect
-    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-    private ObservableRectangle<double> _touchHeadRectangleLocation = new(159, 16, 189, 178);
+    [ReactiveProperty]
+    public string Tags { get; set; } = string.Empty;
 
     /// <summary>
     /// 头部点击区域
     /// </summary>
-    public ObservableRectangle<double> TouchHeadRectangleLocation
-    {
-        get => _touchHeadRectangleLocation;
-        set => SetProperty(ref _touchHeadRectangleLocation, value);
-    }
-    #endregion
-
-    #region TouchBodyRect
-    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-    private ObservableRectangle<double> _touchBodyRectangleLocation = new(166, 206, 163, 136);
+    [ReactiveProperty]
+    public ObservableRectangle<double> TouchHeadRectangleLocation { get; set; } =
+        new(159, 16, 189, 178);
 
     /// <summary>
     /// 身体区域
     /// </summary>
-    public ObservableRectangle<double> TouchBodyRectangleLocation
-    {
-        get => _touchBodyRectangleLocation;
-        set => SetProperty(ref _touchBodyRectangleLocation, value);
-    }
-    #endregion
+    [ReactiveProperty]
+    public ObservableRectangle<double> TouchBodyRectangleLocation { get; set; } =
+        new(166, 206, 163, 136);
 
     /// <summary>
     /// 提起区域
     /// </summary>
-    #region TouchRaisedRect
-    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-    private ObservableMultiStateRectangleLocation _touchRaisedRectangleLocation =
+    [ReactiveProperty]
+    public ObservableMultiStateRectangleLocation TouchRaisedRectangleLocation { get; set; } =
         new(
             new(0, 50, 500, 200),
             new(0, 50, 500, 200),
@@ -322,58 +266,39 @@ public class PetModel : ObservableObjectX
             new(0, 200, 500, 300)
         );
 
-    public ObservableMultiStateRectangleLocation TouchRaisedRectangleLocation
-    {
-        get => _touchRaisedRectangleLocation;
-        set => SetProperty(ref _touchRaisedRectangleLocation, value);
-    }
-    #endregion
-
-    #region RaisePoint
-    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-    private ObservableMultiStatePoint _raisePoint =
-        new(new(290, 128), new(290, 128), new(290, 128), new(225, 115));
-
     /// <summary>
     /// 提起定位
     /// </summary>
-    public ObservableMultiStatePoint RaisePoint
-    {
-        get => _raisePoint;
-        set => SetProperty(ref _raisePoint, value);
-    }
-    #endregion
+    [ReactiveProperty]
+    public ObservableMultiStatePoint RaisePoint { get; set; } =
+        new(new(290, 128), new(290, 128), new(290, 128), new(225, 115));
 
     /// <summary>
     /// 工作
     /// </summary>
-    public ObservableList<WorkModel> Works { get; } = new();
+    public ObservableList<WorkModel> Works { get; } = [];
 
     /// <summary>
     /// 移动
     /// </summary>
-    public ObservableList<MoveModel> Moves { get; } = new();
+    public ObservableList<MoveModel> Moves { get; } = [];
 
     /// <summary>
     /// 动画
     /// </summary>
-    public ObservableList<AnimeTypeModel> Animes { get; } = new();
+    public ObservableList<AnimeTypeModel> Animes { get; } = [];
 
     /// <summary>
     ///食物动画
     /// </summary>
-    public ObservableList<FoodAnimeTypeModel> FoodAnimes { get; } = new();
+    public ObservableList<FoodAnimeTypeModel> FoodAnimes { get; } = [];
 
-    #region AnimeCount
-    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-    private int _animeCount;
+    /// <summary>
+    /// 动画数量
+    /// </summary>
+    [ReactiveProperty]
+    public int AnimeCount { get; set; }
 
-    public int AnimeCount
-    {
-        get => _animeCount;
-        set => SetProperty(ref _animeCount, value);
-    }
-    #endregion
     private void FoodAnimes_PropertyChanged(object? sender, PropertyChangedEventArgs e)
     {
         AnimeCount = Animes.Count + FoodAnimes.Count;
@@ -386,8 +311,9 @@ public class PetModel : ObservableObjectX
 
     public void RefreshID()
     {
-        PetNameID = $"{ID}_{nameof(PetNameID)}";
-        DescriptionID = $"{ID}_{nameof(DescriptionID)}";
+        // TODO:
+        //PetNameID = $"{ID}_{nameof(PetNameID)}";
+        //DescriptionID = $"{ID}_{nameof(DescriptionID)}";
     }
 
     public void Close()
@@ -400,7 +326,8 @@ public class PetModel : ObservableObjectX
 
     public void CloseI18nResource()
     {
-        I18nResource.I18nObjectInfos.Remove(this);
+        //TODO:
+        //I18nResource.I18nObjectInfos.Remove(this);
     }
 
     #region Save
@@ -614,51 +541,34 @@ public class PetModel : ObservableObjectX
     #endregion
 }
 
-public class ObservableMultiStateRectangleLocation
-    : ObservableObjectX,
+public partial class ObservableMultiStateRectangleLocation
+    : ViewModelBase,
         IEquatable<ObservableMultiStateRectangleLocation>,
         ICloneable<ObservableMultiStateRectangleLocation>
 {
-    #region Happy
-    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-    private ObservableRectangle<double> _happy = null!;
-    public ObservableRectangle<double> Happy
-    {
-        get => _happy;
-        set => SetProperty(ref _happy, value);
-    }
-    #endregion
+    /// <summary>
+    /// 开心时的范围
+    /// </summary>
+    [ReactiveProperty]
+    public ObservableRectangle<double> Happy { get; set; }
 
-    #region Nomal
-    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-    private ObservableRectangle<double> _nomal = null!;
+    /// <summary>
+    /// 普通时的范围
+    /// </summary>
+    [ReactiveProperty]
+    public ObservableRectangle<double> Nomal { get; set; }
 
-    public ObservableRectangle<double> Nomal
-    {
-        get => _nomal;
-        set => SetProperty(ref _nomal, value);
-    }
-    #endregion
+    /// <summary>
+    /// 低状态时的范围
+    /// </summary>
+    [ReactiveProperty]
+    public ObservableRectangle<double> PoorCondition { get; set; }
 
-    #region PoorCondition
-    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-    private ObservableRectangle<double> _poorCondition = null!;
-    public ObservableRectangle<double> PoorCondition
-    {
-        get => _poorCondition;
-        set => SetProperty(ref _poorCondition, value);
-    }
-    #endregion
-
-    #region Ill
-    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-    private ObservableRectangle<double> _ill = null!;
-    public ObservableRectangle<double> Ill
-    {
-        get => _ill;
-        set => SetProperty(ref _ill, value);
-    }
-    #endregion
+    /// <summary>
+    /// 生病时的范围
+    /// </summary>
+    [ReactiveProperty]
+    public ObservableRectangle<double> Ill { get; set; }
 
     public ObservableMultiStateRectangleLocation()
     {
@@ -738,50 +648,35 @@ public class ObservableMultiStateRectangleLocation
     #endregion
 }
 
-public class ObservableMultiStatePoint
-    : ObservableObjectX,
+public partial class ObservableMultiStatePoint
+    : ViewModelBase,
         IEquatable<ObservableMultiStatePoint>,
         ICloneable<ObservableMultiStatePoint>
 {
-    #region Happy
-    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-    private ObservablePoint<double> _happy = null!;
-    public ObservablePoint<double> Happy
-    {
-        get => _happy;
-        set => SetProperty(ref _happy, value);
-    }
-    #endregion
+    /// <summary>
+    /// 开心时的点位
+    /// </summary>
+    [ReactiveProperty]
+    public ObservablePoint<double> Happy { get; set; }
 
-    #region Nomal
-    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-    private ObservablePoint<double> _nomal = null!;
-    public ObservablePoint<double> Nomal
-    {
-        get => _nomal;
-        set => SetProperty(ref _nomal, value);
-    }
-    #endregion
+    /// <summary>
+    /// 普通时的点位
+    /// </summary>
+    [ReactiveProperty]
+    public ObservablePoint<double> Nomal { get; set; }
 
-    #region PoorCondition
-    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-    private ObservablePoint<double> _poorCondition = null!;
-    public ObservablePoint<double> PoorCondition
-    {
-        get => _poorCondition;
-        set => SetProperty(ref _poorCondition, value);
-    }
-    #endregion
+    /// <summary>
+    /// 低状态时的点位
+    /// </summary>
+    [ReactiveProperty]
+    public ObservablePoint<double> PoorCondition { get; set; }
 
-    #region Ill
-    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-    private ObservablePoint<double> _ill = null!;
-    public ObservablePoint<double> Ill
-    {
-        get => _ill;
-        set => SetProperty(ref _ill, value);
-    }
-    #endregion
+    /// <summary>
+    /// 生病时的点位
+    /// </summary>
+    [ReactiveProperty]
+    public ObservablePoint<double> Ill { get; set; }
+
     public ObservableMultiStatePoint()
     {
         Happy = new();

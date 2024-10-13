@@ -7,6 +7,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using HKW.HKWReactiveUI;
+using HKW.HKWUtils.Collections;
 using HKW.HKWUtils.Extensions;
 using HKW.HKWUtils.Observable;
 using LinePutScript.Localization.WPF;
@@ -15,105 +17,80 @@ using VPet.ModMaker.Views.ModEdit.WorkEdit;
 
 namespace VPet.ModMaker.ViewModels.ModEdit.WorkEdit;
 
-public class WorkPageVM : ObservableObjectX
+public partial class WorkPageVM : ViewModelBase
 {
     public WorkPageVM()
     {
-        Works = new()
-        {
-            Filter = f => f.ID.Contains(Search, StringComparison.OrdinalIgnoreCase),
-            FilteredList = new()
-        };
-        PropertyChangedX += WorkPageVM_PropertyChangedX;
+        Works = new([], [], f => f.ID.Contains(Search, StringComparison.OrdinalIgnoreCase));
+        //PropertyChangedX += WorkPageVM_PropertyChangedX;
 
         if (Pets.HasValue())
             CurrentPet = Pets.FirstOrDefault(
                 m => m.FromMain is false && m.Works.HasValue(),
                 Pets.First()
             );
-        AddCommand.ExecuteCommand += AddCommand_ExecuteCommand;
-        EditCommand.ExecuteCommand += EditCommand_ExecuteCommand;
-        RemoveCommand.ExecuteCommand += RemoveCommand_ExecuteCommand;
-        ModInfo.PropertyChangedX += ModInfo_PropertyChangedX;
+        //AddCommand.ExecuteCommand += Add;
+        //EditCommand.ExecuteCommand += Edit;
+        //RemoveCommand.ExecuteCommand += Remove;
+        //ModInfo.PropertyChangedX += ModInfo_PropertyChangedX;
     }
 
-    private void ModInfo_PropertyChangedX(object? sender, PropertyChangedXEventArgs e)
-    {
-        if (e.PropertyName == nameof(ModInfoModel.ShowMainPet))
-        {
-            if (e.NewValue is false)
-            {
-                if (CurrentPet?.FromMain is false)
-                {
-                    CurrentPet = null!;
-                }
-            }
-        }
-    }
+    //private void ModInfo_PropertyChangedX(object? sender, PropertyChangedXEventArgs e)
+    //{
+    //    if (e.PropertyName == nameof(ModInfoModel.ShowMainPet))
+    //    {
+    //        if (e.NewValue is false)
+    //        {
+    //            if (CurrentPet?.FromMain is false)
+    //            {
+    //                CurrentPet = null!;
+    //            }
+    //        }
+    //    }
+    //}
 
     public static ModInfoModel ModInfo => ModInfoModel.Current;
 
     #region Property
-    #region Works
-    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-    private ObservableFilterList<WorkModel, ObservableList<WorkModel>> _works = null!;
 
-    public ObservableFilterList<WorkModel, ObservableList<WorkModel>> Works
-    {
-        get => _works;
-        set => SetProperty(ref _works, value);
-    }
-    #endregion
+    public FilterListWrapper<
+        WorkModel,
+        List<WorkModel>,
+        ObservableList<WorkModel>
+    > Works { get; set; }
 
     public static ObservableList<PetModel> Pets => ModInfoModel.Current.Pets;
 
-    #region CurrentPet
-    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-    private PetModel _currentPet = null!;
+    [ReactiveProperty]
+    public PetModel CurrentPet { get; set; } = null!;
 
-    public PetModel CurrentPet
+    partial void OnCurrentPetChanged(PetModel oldValue, PetModel newValue)
     {
-        get => _currentPet;
-        set => SetProperty(ref _currentPet, value);
-    }
-    #endregion
-
-    #region Search
-    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-    private string _search = string.Empty;
-
-    public string Search
-    {
-        get => _search;
-        set => SetProperty(ref _search, value);
-    }
-    #endregion
-    #endregion
-    #region Command
-    public ObservableCommand AddCommand { get; } = new();
-    public ObservableCommand<WorkModel> EditCommand { get; } = new();
-    public ObservableCommand<WorkModel> RemoveCommand { get; } = new();
-    #endregion
-
-    private void WorkPageVM_PropertyChangedX(object? sender, PropertyChangedXEventArgs e)
-    {
-        if (e.PropertyName == nameof(CurrentPet))
-        {
-            Works.Clear();
-            if (e.OldValue is PetModel pet)
-                Works.BindingList(pet.Works, true);
-            if (e.NewValue is null)
-                return;
-            Works.AddRange(CurrentPet.Works);
-            Works.BindingList(CurrentPet.Works);
-        }
-        else if (e.PropertyName == nameof(Search))
-        {
-            Works.Refresh();
-        }
+        //TODO:
+        Works.Clear();
+        //if (e.OldValue is PetModel pet)
+        //    Works.BindingList(pet.Works, true);
+        //if (e.NewValue is null)
+        //    return;
+        //Works.AddRange(CurrentPet.Works);
+        //Works.BindingList(CurrentPet.Works);
     }
 
-    private void AddCommand_ExecuteCommand()
+    [ReactiveProperty]
+    public string Search { get; set; } = string.Empty;
+
+    partial void OnSearchChanged(string oldValue, string newValue)
+    {
+        Works.Refresh();
+    }
+    #endregion
+    //#region Command
+    //public ObservableCommand AddCommand { get; } = new();
+    //public ObservableCommand<WorkModel> EditCommand { get; } = new();
+    //public ObservableCommand<WorkModel> RemoveCommand { get; } = new();
+    //#endregion
+    [ReactiveCommand]
+    private void Add()
     {
         var window = new WorkEditWindow();
         var vm = window.ViewModel;
@@ -124,7 +101,8 @@ public class WorkPageVM : ObservableObjectX
         Works.Add(vm.Work);
     }
 
-    public void EditCommand_ExecuteCommand(WorkModel model)
+    [ReactiveCommand]
+    public void Edit(WorkModel model)
     {
         var window = new WorkEditWindow();
         var vm = window.ViewModel;
@@ -148,7 +126,8 @@ public class WorkPageVM : ObservableObjectX
         model.Close();
     }
 
-    private void RemoveCommand_ExecuteCommand(WorkModel model)
+    [ReactiveCommand]
+    private void Remove(WorkModel model)
     {
         if (MessageBox.Show("确定删除吗".Translate(), "", MessageBoxButton.YesNo) is MessageBoxResult.No)
             return;

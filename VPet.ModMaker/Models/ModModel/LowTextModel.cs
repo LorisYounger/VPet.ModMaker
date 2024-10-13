@@ -7,8 +7,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Serialization;
+using HKW.HKWReactiveUI;
 using HKW.HKWUtils.Observable;
 using Mapster;
+using VPet.ModMaker.ViewModels;
 using VPet_Simulator.Windows.Interface;
 
 namespace VPet.ModMaker.Models;
@@ -16,7 +18,7 @@ namespace VPet.ModMaker.Models;
 /// <summary>
 /// 低状态文本
 /// </summary>
-public class LowTextModel : ObservableObjectX
+public partial class LowTextModel : ViewModelBase
 {
     public LowTextModel() { }
 
@@ -50,21 +52,12 @@ public class LowTextModel : ObservableObjectX
     public static FrozenSet<LowText.StrengthType> StrengthTypes { get; } =
         Enum.GetValues<LowText.StrengthType>().ToFrozenSet();
 
-    #region ID
-
-    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-    private string _id = string.Empty;
-
     /// <summary>
     /// ID
     /// </summary>
     [AdaptMember(nameof(LowText.Text))]
-    public string ID
-    {
-        get => _id;
-        set => SetProperty(ref _id, value);
-    }
-    #endregion
+    [ReactiveProperty]
+    public string ID { get; set; } = string.Empty;
 
     #region I18nData
     [AdaptIgnore]
@@ -76,24 +69,25 @@ public class LowTextModel : ObservableObjectX
         get => _i18nResource;
         set
         {
-            if (_i18nResource is not null)
-                I18nResource.I18nObjectInfos.Remove(this);
-            _i18nResource = value;
-            InitializeI18nResource();
+            //TODO:
+            //if (_i18nResource is not null)
+            //    I18nResource.I18nObjectInfos.Remove(this);
+            //_i18nResource = value;
+            //InitializeI18nResource();
         }
     }
 
     public void InitializeI18nResource()
     {
-        I18nResource?.I18nObjectInfos.Add(
-            this,
-            new I18nObjectInfo<string, string>(this, OnPropertyChanged).AddPropertyInfo(
-                nameof(ID),
-                ID,
-                nameof(Text),
-                true
-            )
-        );
+        //I18nResource?.I18nObjectInfos.Add(
+        //    this,
+        //    new I18nObjectInfo<string, string>(this, OnPropertyChanged).AddPropertyInfo(
+        //        nameof(ID),
+        //        ID,
+        //        nameof(Text),
+        //        true
+        //    )
+        //);
     }
 
     [AdaptIgnore]
@@ -104,50 +98,27 @@ public class LowTextModel : ObservableObjectX
     }
     #endregion
 
-    #region Mode
-    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-    private LowText.ModeType _mode;
 
     /// <summary>
     /// 状态
     /// </summary>
     [AdaptMember(nameof(LowText.Mode))]
-    public LowText.ModeType Mode
-    {
-        get => _mode;
-        set => SetProperty(ref _mode, value);
-    }
-    #endregion
-
-    #region Strength
-    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-    private LowText.StrengthType _strength;
+    [ReactiveProperty]
+    public LowText.ModeType Mode { get; set; }
 
     /// <summary>
     /// 体力
     /// </summary>
     [AdaptMember(nameof(LowText.Strength))]
-    public LowText.StrengthType Strength
-    {
-        get => _strength;
-        set => SetProperty(ref _strength, value);
-    }
-    #endregion
-
-    #region Like
-    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-    private LowText.LikeType _like;
+    [ReactiveProperty]
+    public LowText.StrengthType Strength { get; set; }
 
     /// <summary>
     /// 好感度
     /// </summary>
     [AdaptMember(nameof(LowText.Like))]
-    public LowText.LikeType Like
-    {
-        get => _like;
-        set => SetProperty(ref _like, value);
-    }
-    #endregion
+    [ReactiveProperty]
+    public LowText.LikeType Like { get; set; }
 
     public LowText ToLowText()
     {
@@ -156,6 +127,7 @@ public class LowTextModel : ObservableObjectX
 
     public void Close()
     {
-        I18nResource.I18nObjectInfos.Remove(this);
+        //TODO:
+        //I18nResource.I18nObjectInfos.Remove(this);
     }
 }

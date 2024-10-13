@@ -4,12 +4,13 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using HKW.HKWReactiveUI;
 using HKW.HKWUtils.Observable;
 using VPet.ModMaker.Models;
 
 namespace VPet.ModMaker.ViewModels.ModEdit.SelectTextEdit;
 
-public class SelectTextEditWindowVM : ObservableObjectX
+public partial class SelectTextEditWindowVM : ViewModelBase
 {
     /// <summary>
     /// I18n资源
@@ -18,16 +19,8 @@ public class SelectTextEditWindowVM : ObservableObjectX
     #region Value
     public SelectTextModel? OldSelectText { get; set; }
 
-    #region SelectText
-    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-    private SelectTextModel _selectText =
+    [ReactiveProperty]
+    public SelectTextModel SelectText { get; set; } =
         new() { I18nResource = ModInfoModel.Current.I18nResource };
-
-    public SelectTextModel SelectText
-    {
-        get => _selectText;
-        set => SetProperty(ref _selectText, value);
-    }
-    #endregion
     #endregion
 }

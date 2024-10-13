@@ -9,6 +9,8 @@ using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using HKW.HKWReactiveUI;
+using HKW.HKWUtils.Collections;
 using HKW.HKWUtils.Extensions;
 using HKW.HKWUtils.Observable;
 using Mapster;
@@ -16,7 +18,7 @@ using VPet.ModMaker.Models;
 
 namespace VPet.ModMaker.ViewModels.ModEdit.I18nEdit;
 
-public class I18nEditWindowVM : ObservableObjectX
+public partial class I18nEditWindowVM : ViewModelBase
 {
     public I18nEditWindowVM()
     {
@@ -29,7 +31,7 @@ public class I18nEditWindowVM : ObservableObjectX
         I18nResource.CultureDatas.DictionaryChanged -= CultureDatas_DictionaryChanged;
         I18nResource.CultureDatas.DictionaryChanged += CultureDatas_DictionaryChanged;
 
-        I18nDatas = new() { Filter = DataFilter, FilteredList = [] };
+        I18nDatas = new([], [], DataFilter);
         foreach (var data in I18nResource.CultureDatas.Values)
         {
             I18nDatas.Add(data);
@@ -44,19 +46,11 @@ public class I18nEditWindowVM : ObservableObjectX
 
     public bool CellEdit { get; set; } = false;
 
-    #region Search
-    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-    private string _search = string.Empty;
-
     /// <summary>
     /// 搜索
     /// </summary>
-    public string Search
-    {
-        get => _search;
-        set => SetProperty(ref _search, value);
-    }
-    #endregion
+    [ReactiveProperty]
+    public string Search { get; set; } = string.Empty;
 
     /// <summary>
     /// 全部I18n资源
@@ -64,8 +58,9 @@ public class I18nEditWindowVM : ObservableObjectX
     /// (ID, (CultureName, Value))
     /// </para>
     /// </summary>
-    public ObservableFilterList<
+    public FilterListWrapper<
         ObservableCultureDataDictionary<string, string>,
+        List<ObservableCultureDataDictionary<string, string>>,
         ObservableList<ObservableCultureDataDictionary<string, string>>
     > I18nDatas { get; } = null!;
 
@@ -77,16 +72,8 @@ public class I18nEditWindowVM : ObservableObjectX
     /// <summary>
     /// 搜索目标
     /// </summary>
-    #region SearchTarget
-    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-    private string _searchTarget = string.Empty;
-
-    public string SearchTarget
-    {
-        get => _searchTarget;
-        set => SetProperty(ref _searchTarget, value);
-    }
-    #endregion
+    [ReactiveProperty]
+    public string SearchTarget { get; set; } = string.Empty;
 
     private bool DataFilter(ObservableCultureDataDictionary<string, string> item)
     {

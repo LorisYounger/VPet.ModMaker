@@ -9,6 +9,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using HKW.HKWReactiveUI;
 using HKW.HKWUtils.Observable;
 using LinePutScript.Localization.WPF;
 using Microsoft.Win32;
@@ -16,26 +17,18 @@ using VPet.ModMaker.Models;
 
 namespace VPet.ModMaker.ViewModels.ModEdit;
 
-public class SaveTranslationModWindowVM : ObservableObjectX
+public partial class SaveTranslationModWindowVM : ViewModelBase
 {
-    #region Value
-    #region CheckAll
-    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-    private bool? _checkAll;
-
-    public bool? CheckAll
-    {
-        get => _checkAll;
-        set => SetProperty(ref _checkAll, value);
-    }
-    #endregion
+    #region Property
+    [ReactiveProperty]
+    public bool? CheckAll { get; set; }
 
     public ObservableList<CheckCultureModel> CheckCultures { get; } = [];
     #endregion
 
-    #region Command
-    public ObservableCommand SaveCommand { get; } = new();
-    #endregion
+    //#region Command
+    //public ObservableCommand SaveCommand { get; } = new();
+    //#endregion
 
     public SaveTranslationModWindowVM()
     {
@@ -43,45 +36,47 @@ public class SaveTranslationModWindowVM : ObservableObjectX
         {
             var model = new CheckCultureModel(culture);
             model.Culture = culture;
-            model.PropertyChangedX += Model_PropertyChangedX;
+            // TODO:使用SelectionGroup
+            //model.PropertyChangedX += Model_PropertyChangedX;
             CheckCultures.Add(model);
         }
-        PropertyChangedX += SaveTranslationModWindowVM_PropertyChangedX;
-        SaveCommand.ExecuteCommand += Save;
+        //PropertyChangedX += SaveTranslationModWindowVM_PropertyChangedX;
+        //SaveCommand.ExecuteCommand += Save;
     }
 
-    private void SaveTranslationModWindowVM_PropertyChangedX(
-        object? sender,
-        PropertyChangedXEventArgs e
-    )
-    {
-        if (e.NewValue is null)
-        {
-            if (CheckCultures.All(m => m.IsChecked))
-                CheckAll = false;
-            else if (CheckCultures.All(m => m.IsChecked is false))
-                CheckAll = true;
-            return;
-        }
-        foreach (var model in CheckCultures)
-            model.IsChecked = e.NewValue is true;
-    }
+    //private void SaveTranslationModWindowVM_PropertyChangedX(
+    //    object? sender,
+    //    PropertyChangedXEventArgs e
+    //)
+    //{
+    //    if (e.NewValue is null)
+    //    {
+    //        if (CheckCultures.All(m => m.IsChecked))
+    //            CheckAll = false;
+    //        else if (CheckCultures.All(m => m.IsChecked is false))
+    //            CheckAll = true;
+    //        return;
+    //    }
+    //    foreach (var model in CheckCultures)
+    //        model.IsChecked = e.NewValue is true;
+    //}
 
-    private void Model_PropertyChangedX(object? sender, PropertyChangedXEventArgs e)
-    {
-        var count = 0;
-        foreach (var model in CheckCultures)
-            if (model.IsChecked)
-                count += 1;
-        if (count == CheckCultures.Count)
-            CheckAll = true;
-        else if (count == 0)
-            CheckAll = false;
-        else
-            CheckAll = null;
-    }
+    //private void Model_PropertyChangedX(object? sender, PropertyChangedXEventArgs e)
+    //{
+    //    var count = 0;
+    //    foreach (var model in CheckCultures)
+    //        if (model.IsChecked)
+    //            count += 1;
+    //    if (count == CheckCultures.Count)
+    //        CheckAll = true;
+    //    else if (count == 0)
+    //        CheckAll = false;
+    //    else
+    //        CheckAll = null;
+    //}
 
-    public void Save()
+    [ReactiveCommand]
+    private void Save()
     {
         SaveFileDialog saveFileDialog =
             new()
@@ -107,33 +102,16 @@ public class SaveTranslationModWindowVM : ObservableObjectX
     }
 }
 
-public class CheckCultureModel : ObservableObjectX
+public partial class CheckCultureModel : ViewModelBase
 {
     public CheckCultureModel(CultureInfo culture)
     {
-        _culture = culture;
         Culture = culture;
     }
 
-    #region IsChecked
-    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-    private bool _isChecked;
+    [ReactiveProperty]
+    public bool IsChecked { get; set; }
 
-    public bool IsChecked
-    {
-        get => _isChecked;
-        set => SetProperty(ref _isChecked, value);
-    }
-    #endregion
-    #region CultureName
-    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-    private CultureInfo _culture;
-
-    public CultureInfo Culture
-    {
-        get => _culture;
-        set => SetProperty(ref _culture, value);
-    }
-
-    #endregion
+    [ReactiveProperty]
+    public CultureInfo Culture { get; set; }
 }

@@ -8,6 +8,8 @@ using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using HKW.HKWReactiveUI;
+using HKW.HKWUtils.Collections;
 using HKW.HKWUtils.Extensions;
 using HKW.HKWUtils.Observable;
 using LinePutScript.Localization.WPF;
@@ -16,56 +18,44 @@ using VPet.ModMaker.Views.ModEdit.LowTextEdit;
 
 namespace VPet.ModMaker.ViewModels.ModEdit.LowTextEdit;
 
-public class LowTextPageVM : ObservableObjectX
+public partial class LowTextPageVM : ViewModelBase
 {
     public LowTextPageVM()
     {
-        LowTexts = new(ModInfoModel.Current.LowTexts)
-        {
-            Filter = f => f.ID.Contains(Search, StringComparison.OrdinalIgnoreCase),
-            FilteredList = new()
-        };
-        LowTexts.BindingList(ModInfoModel.Current.LowTexts);
+        LowTexts = new(
+            ModInfoModel.Current.LowTexts,
+            [],
+            f => f.ID.Contains(Search, StringComparison.OrdinalIgnoreCase)
+        );
+        //TODO:
+        //LowTexts.BindingList(ModInfoModel.Current.LowTexts);
 
-        AddCommand.ExecuteCommand += AddCommand_ExecuteCommand;
-        EditCommand.ExecuteCommand += EditCommand_ExecuteCommand;
-        RemoveCommand.ExecuteCommand += RemoveCommand_ExecuteCommand;
+        //AddCommand.ExecuteCommand += Add;
+        //EditCommand.ExecuteCommand += Edit;
+        //RemoveCommand.ExecuteCommand += Remove;
     }
 
-    #region Property
-    #region LowTexts
-    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-    private ObservableFilterList<LowTextModel, ObservableList<LowTextModel>> _lowTexts = null!;
+    public FilterListWrapper<
+        LowTextModel,
+        ObservableList<LowTextModel>,
+        ObservableList<LowTextModel>
+    > LowTexts { get; set; } = null!;
 
-    public ObservableFilterList<LowTextModel, ObservableList<LowTextModel>> LowTexts
+    [ReactiveProperty]
+    public string Search { get; set; } = string.Empty;
+
+    partial void OnSearchChanged(string oldValue, string newValue)
     {
-        get => _lowTexts;
-        set => SetProperty(ref _lowTexts, value);
+        LowTexts.Refresh();
     }
-    #endregion
 
-    #region Search
-    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-    private string _search = string.Empty;
-
-    public string Search
-    {
-        get => _search;
-        set
-        {
-            SetProperty(ref _search, value);
-            LowTexts.Refresh();
-        }
-    }
-    #endregion
-    #endregion
-    #region Command
-    public ObservableCommand AddCommand { get; } = new();
-    public ObservableCommand<LowTextModel> EditCommand { get; } = new();
-    public ObservableCommand<LowTextModel> RemoveCommand { get; } = new();
-    #endregion
-
-    private void AddCommand_ExecuteCommand()
+    //#region Command
+    //public ObservableCommand AddCommand { get; } = new();
+    //public ObservableCommand<LowTextModel> EditCommand { get; } = new();
+    //public ObservableCommand<LowTextModel> RemoveCommand { get; } = new();
+    //#endregion
+    [ReactiveCommand]
+    private void Add()
     {
         var window = new LowTextEditWindow();
         var vm = window.ViewModel;
@@ -75,7 +65,8 @@ public class LowTextPageVM : ObservableObjectX
         LowTexts.Add(vm.LowText);
     }
 
-    public void EditCommand_ExecuteCommand(LowTextModel model)
+    [ReactiveCommand]
+    public void Edit(LowTextModel model)
     {
         var window = new LowTextEditWindow();
         var vm = window.ViewModel;
@@ -98,7 +89,8 @@ public class LowTextPageVM : ObservableObjectX
         model.Close();
     }
 
-    private void RemoveCommand_ExecuteCommand(LowTextModel model)
+    [ReactiveCommand]
+    private void Remove(LowTextModel model)
     {
         if (MessageBox.Show("确定删除吗".Translate(), "", MessageBoxButton.YesNo) is MessageBoxResult.No)
             return;

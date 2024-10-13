@@ -41,7 +41,7 @@ public class ModMaker : MainPlugin
     }
 
     public static I18nResource<string, string> I18nResource { get; } =
-        new() { FillDefaultValueForNewCulture = true, DefaultValue = string.Empty };
+        new() { FillDefaultValueToNewCulture = true, DefaultValue = string.Empty };
 
     public override void Setting()
     {

@@ -9,6 +9,8 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
+using HKW.HKWReactiveUI;
+using HKW.HKWUtils.Collections;
 using HKW.HKWUtils.Extensions;
 using HKW.HKWUtils.Observable;
 using LinePutScript;
@@ -23,22 +25,14 @@ using VPet.ModMaker.Views.ModEdit.I18nEdit;
 
 namespace VPet.ModMaker.ViewModels;
 
-public class ModMakerWindowVM : ObservableObjectX
+public partial class ModMakerWindowVM : ViewModelBase
 {
     public ModMakerWindowVM(ModMakerWindow window)
     {
-        Histories = new()
-        {
-            Filter = f => f.ID.Contains(Search, StringComparison.OrdinalIgnoreCase),
-            FilteredList = new()
-        };
+        Histories = new([], [], f => f.ID.Contains(Search, StringComparison.OrdinalIgnoreCase));
         LoadHistories();
         ModMakerWindow = window;
         PropertyChanged += ModMakerWindowVM_PropertyChanged;
-        CreateNewModCommand.ExecuteCommand += CreateNewModCommand_ExecuteCommand;
-        LoadModFromFileCommand.ExecuteCommand += LoadModFromFileCommand_ExecuteCommand;
-        ClearHistoriesCommand.ExecuteCommand += ClearHistoriesCommand_ExecuteCommand;
-        RemoveHistoryCommand.ExecuteCommand += RemoveHistoryCommand_ExecuteCommand;
     }
 
     private void ModMakerWindowVM_PropertyChanged(object? sender, PropertyChangedEventArgs e)
@@ -57,56 +51,48 @@ public class ModMakerWindowVM : ObservableObjectX
     /// <summary>
     /// 历史搜索文本
     /// </summary>
-    #region HistoriesSearchText
-    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-    private string _search = string.Empty;
-
-    public string Search
-    {
-        get => _search;
-        set => SetProperty(ref _search, value);
-    }
-    #endregion
+    [ReactiveProperty]
+    public string Search { get; set; } = string.Empty;
 
     /// <summary>
     /// 历史
     /// </summary>
-    #region Histories
-    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-    private ObservableFilterList<ModMakeHistory, ObservableList<ModMakeHistory>> _histories = null!;
-
-    public ObservableFilterList<ModMakeHistory, ObservableList<ModMakeHistory>> Histories
-    {
-        get => _histories;
-        set => SetProperty(ref _histories, value);
-    }
-    #endregion
+    public FilterListWrapper<
+        ModMakeHistory,
+        List<ModMakeHistory>,
+        ObservableList<ModMakeHistory>
+    > Histories { get; set; }
 
     #endregion
-    #region Command
-    /// <summary>
-    /// 创建新模组命令
-    /// </summary>
-    public ObservableCommand CreateNewModCommand { get; } = new();
+    //#region Command
+    ///// <summary>
+    ///// 创建新模组命令
+    ///// </summary>
+    //public ObservableCommand CreateNewModCommand { get; } = new();
 
-    /// <summary>
-    /// 从文件载入模组命令
-    /// </summary>
-    public ObservableCommand LoadModFromFileCommand { get; } = new();
+    ///// <summary>
+    ///// 从文件载入模组命令
+    ///// </summary>
+    //public ObservableCommand LoadModFromFileCommand { get; } = new();
 
-    /// <summary>
-    /// 清除历史命令
-    /// </summary>
-    public ObservableCommand ClearHistoriesCommand { get; } = new();
+    ///// <summary>
+    ///// 清除历史命令
+    ///// </summary>
+    //public ObservableCommand ClearHistoriesCommand { get; } = new();
 
-    /// <summary>
-    /// 删除历史命令
-    /// </summary>
-    public ObservableCommand<ModMakeHistory> RemoveHistoryCommand { get; } = new();
-    #endregion
+    ///// <summary>
+    ///// 删除历史命令
+    ///// </summary>
+    //public ObservableCommand<ModMakeHistory> RemoveHistoryCommand { get; } = new();
+    //#endregion
 
     #region History
-    private void RemoveHistoryCommand_ExecuteCommand(ModMakeHistory value)
+    /// <summary>
+    /// 删除历史
+    /// </summary>
+    /// <param name="value">历史</param>
+    [ReactiveCommand]
+    private void RemoveHistory(ModMakeHistory value)
     {
         Histories.Remove(value);
         SaveHistories();
@@ -174,7 +160,8 @@ public class ModMakerWindowVM : ObservableObjectX
         }
     }
 
-    private void ClearHistoriesCommand_ExecuteCommand()
+    [ReactiveCommand]
+    private void ClearHistories()
     {
         if (
             MessageBox.Show("确定要清空吗?".Translate(), "", MessageBoxButton.YesNo)
@@ -191,7 +178,8 @@ public class ModMakerWindowVM : ObservableObjectX
     /// <summary>
     /// 创建新模组
     /// </summary>
-    public void CreateNewModCommand_ExecuteCommand()
+    [ReactiveCommand]
+    public void CreateNewMod()
     {
         ModInfoModel.Current = new();
         ShowEditWindow();
@@ -239,7 +227,8 @@ public class ModMakerWindowVM : ObservableObjectX
     /// <summary>
     /// 从文件载入模组
     /// </summary>
-    public void LoadModFromFileCommand_ExecuteCommand()
+    [ReactiveCommand]
+    public void LoadModFromFile()
     {
         var openFileDialog = new OpenFileDialog()
         {

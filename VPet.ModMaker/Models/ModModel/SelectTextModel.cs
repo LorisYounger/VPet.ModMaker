@@ -6,9 +6,11 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using HKW.HKWReactiveUI;
 using HKW.HKWUtils.Observable;
 using Mapster;
 using VPet.ModMaker.Models;
+using VPet.ModMaker.ViewModels;
 using VPet_Simulator.Windows.Interface;
 
 namespace VPet.ModMaker.Models;
@@ -16,7 +18,7 @@ namespace VPet.ModMaker.Models;
 /// <summary>
 /// 选择文本模型
 /// </summary>
-public class SelectTextModel : ObservableObjectX
+public partial class SelectTextModel : ViewModelBase
 {
     public SelectTextModel() { }
 
@@ -62,65 +64,29 @@ public class SelectTextModel : ObservableObjectX
     /// </summary>
     public static FrozenSet<ClickText.ModeType> ModeTypes => ClickTextModel.ModeTypes;
 
-    #region Tags
-    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-    private string _tags = string.Empty;
-
     /// <summary>
     /// 标签
     /// </summary>
-    public string Tags
-    {
-        get => _tags;
-        set => SetProperty(ref _tags, value);
-    }
-    #endregion
-
-    #region ToTags
-    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-    private string _toTags = string.Empty;
+    [ReactiveProperty]
+    public string Tags { get; set; } = string.Empty;
 
     /// <summary>
     /// 跳转标签
     /// </summary>
-    public string ToTags
-    {
-        get => _toTags;
-        set => SetProperty(ref _toTags, value);
-    }
-    #endregion
-
-    #region ID
-    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-    private string _id = string.Empty;
+    [ReactiveProperty]
+    public string ToTags { get; set; } = string.Empty;
 
     /// <summary>
     /// ID
     /// </summary>
-    public string ID
-    {
-        get => _id;
-        set
-        {
-            SetProperty(ref _id, value);
-            RefreshID();
-        }
-    }
-    #endregion
-
-    #region ChooseID
-    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-    private string _chooseID = string.Empty;
+    [ReactiveProperty]
+    public string ID { get; set; } = string.Empty;
 
     /// <summary>
     /// 选择Id
     /// </summary>
-    public string ChooseID
-    {
-        get => _chooseID;
-        set => SetProperty(ref _chooseID, value);
-    }
-    #endregion
+    [ReactiveProperty]
+    public string ChooseID { get; set; } = string.Empty;
 
     #region I18nData
     [AdaptIgnore]
@@ -132,22 +98,23 @@ public class SelectTextModel : ObservableObjectX
         get => _i18nResource;
         set
         {
-            if (_i18nResource is not null)
-                I18nResource.I18nObjectInfos.Remove(this);
-            _i18nResource = value;
-            InitializeI18nResource();
+            //TODO:
+            //if (_i18nResource is not null)
+            //    I18nResource.I18nObjectInfos.Remove(this);
+            //_i18nResource = value;
+            //InitializeI18nResource();
         }
     }
 
     public void InitializeI18nResource()
     {
-        I18nResource?.I18nObjectInfos.Add(
-            this,
-            new I18nObjectInfo<string, string>(this, OnPropertyChanged).AddPropertyInfo(
-                [(nameof(ID), ID, nameof(Text)), (nameof(ChooseID), ChooseID, nameof(Choose))],
-                true
-            )
-        );
+        //I18nResource?.I18nObjectInfos.Add(
+        //    this,
+        //    new I18nObjectInfo<string, string>(this, OnPropertyChanged).AddPropertyInfo(
+        //        [(nameof(ID), ID, nameof(Text)), (nameof(ChooseID), ChooseID, nameof(Choose))],
+        //        true
+        //    )
+        //);
     }
 
     [AdaptIgnore]
@@ -168,12 +135,14 @@ public class SelectTextModel : ObservableObjectX
     /// <summary>
     /// 宠物状态
     /// </summary>
-    public ObservableEnumCommand<ClickText.ModeType> Mode { get; } =
+    public ObservableEnum<ClickText.ModeType> Mode { get; } =
         new(
             ClickText.ModeType.Happy
                 | ClickText.ModeType.Nomal
                 | ClickText.ModeType.PoorCondition
-                | ClickText.ModeType.Ill
+                | ClickText.ModeType.Ill,
+            (v, f) => v |= f,
+            (v, f) => v &= f
         );
 
     /// <summary>
@@ -221,7 +190,7 @@ public class SelectTextModel : ObservableObjectX
         ChooseID = $"{ID}_{nameof(ChooseID)}";
     }
 
-    private static readonly char[] rs_splitChar = [',', ' '];
+    private static readonly char[] _splitChars = [',', ' '];
 
     public SelectText ToSelectText()
     {
@@ -230,8 +199,8 @@ public class SelectTextModel : ObservableObjectX
             Text = ID,
             Choose = ChooseID,
             Mode = Mode.Value,
-            Tags = new(Tags.Split(rs_splitChar, StringSplitOptions.RemoveEmptyEntries)),
-            ToTags = new(ToTags.Split(rs_splitChar, StringSplitOptions.RemoveEmptyEntries)),
+            Tags = new(Tags.Split(_splitChars, StringSplitOptions.RemoveEmptyEntries)),
+            ToTags = new(ToTags.Split(_splitChars, StringSplitOptions.RemoveEmptyEntries)),
             LikeMax = Like.Max,
             LikeMin = Like.Min,
             HealthMin = Health.Min,
@@ -253,6 +222,6 @@ public class SelectTextModel : ObservableObjectX
 
     public void Close()
     {
-        I18nResource.I18nObjectInfos.Remove(this);
+        //I18nResource.I18nObjectInfos.Remove(this);
     }
 }

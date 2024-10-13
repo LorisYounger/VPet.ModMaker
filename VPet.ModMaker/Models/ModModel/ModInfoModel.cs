@@ -11,6 +11,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Media.Imaging;
+using HKW.HKWReactiveUI;
 using HKW.HKWUtils;
 using HKW.HKWUtils.Extensions;
 using HKW.HKWUtils.Observable;
@@ -18,6 +19,7 @@ using LinePutScript;
 using LinePutScript.Converter;
 using LinePutScript.Localization.WPF;
 using VPet.ModMaker.Models.ModModel;
+using VPet.ModMaker.ViewModels;
 using VPet.ModMaker.Views.ModEdit.I18nEdit;
 using VPet_Simulator.Core;
 using VPet_Simulator.Windows.Interface;
@@ -27,7 +29,7 @@ namespace VPet.ModMaker.Models;
 /// <summary>
 /// 模组信息模型
 /// </summary>
-public class ModInfoModel : ObservableObjectX
+public partial class ModInfoModel : ViewModelBase
 {
     public ModInfoModel()
     {
@@ -36,16 +38,17 @@ public class ModInfoModel : ObservableObjectX
         Pets.CollectionChanged += Pets_CollectionChanged;
         I18nResource.PropertyChanged += I18nResource_PropertyChanged;
         I18nResource.Cultures.SetChanged += Cultures_SetChanged;
-        I18nResource?.I18nObjectInfos.Add(
-            this,
-            new I18nObjectInfo<string, string>(this, OnPropertyChanged).AddPropertyInfo(
-                [
-                    (nameof(ID), ID, nameof(Name)),
-                    (nameof(DescriptionID), DescriptionID, nameof(Description))
-                ],
-                true
-            )
-        );
+        //TODO:
+        //I18nResource?.I18nObjectInfos.Add(
+        //    this,
+        //    new I18nObjectInfo<string, string>(this, OnPropertyChanged).AddPropertyInfo(
+        //        [
+        //            (nameof(ID), ID, nameof(Name)),
+        //            (nameof(DescriptionID), DescriptionID, nameof(Description))
+        //        ],
+        //        true
+        //    )
+        //);
         foreach (var pet in ModMakerInfo.MainPets)
         {
             // 确保ID不重复
@@ -153,13 +156,13 @@ public class ModInfoModel : ObservableObjectX
     /// I18n资源
     /// </summary>
     public I18nResource<string, string> I18nResource { get; } =
-        new() { FillDefaultValueForNewCulture = true, DefaultValue = string.Empty };
+        new() { FillDefaultValueToNewCulture = true, DefaultValue = string.Empty };
 
     /// <summary>
     /// 临时I18n资源, 用于新建的项目
     /// </summary>
     public I18nResource<string, string> TempI18nResource { get; } =
-        new() { FillDefaultValueForNewCulture = true, DefaultValue = string.Empty };
+        new() { FillDefaultValueToNewCulture = true, DefaultValue = string.Empty };
 
     #region I18nData
     public string Name
@@ -174,33 +177,17 @@ public class ModInfoModel : ObservableObjectX
     }
     #endregion
 
-    #region AutoSetFoodPrice
-    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-    private bool _autoSetFoodPrice;
-
     /// <summary>
     /// 自动设置食物推荐价格
     /// </summary>
-    public bool AutoSetFoodPrice
-    {
-        get => _autoSetFoodPrice;
-        set => SetProperty(ref _autoSetFoodPrice, value);
-    }
-    #endregion
-
-    #region ShowMainPet
-    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-    private bool _showMainPet;
+    [ReactiveProperty]
+    public bool AutoSetFoodPrice { get; set; }
 
     /// <summary>
-    /// 不显示本体宠物
+    /// 显示本体宠物
     /// </summary>
-    public bool ShowMainPet
-    {
-        get => _showMainPet;
-        set => SetProperty(ref _showMainPet, value);
-    }
-    #endregion
+    [ReactiveProperty]
+    public bool ShowMainPet { get; set; }
 
     #region ModInfo
     /// <summary>
@@ -213,103 +200,46 @@ public class ModInfoModel : ObservableObjectX
     /// </summary>
     public ulong ItemID { get; }
 
-    #region ID
-    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-    private string _id = string.Empty;
-
     /// <summary>
     /// ID
     /// </summary>
-    public string ID
-    {
-        get => _id;
-        set => SetProperty(ref _id, value);
-    }
-    #endregion
-
-    #region DescriptionID
-    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-    private string _descriptionID = string.Empty;
+    [ReactiveProperty]
+    public string ID { get; set; } = string.Empty;
 
     /// <summary>
     /// 描述ID
     /// </summary>
-    public string DescriptionID
-    {
-        get => _descriptionID;
-        set => SetProperty(ref _descriptionID, value);
-    }
-    #endregion
+    public string DescriptionID { get; set; } = string.Empty;
 
     /// <summary>
     /// 作者
     /// </summary>
-    #region Author
-    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-    private string _author = string.Empty;
-
-    public string Author
-    {
-        get => _author;
-        set => SetProperty(ref _author, value);
-    }
-    #endregion
+    [ReactiveProperty]
+    public string Author { get; set; } = string.Empty;
 
     /// <summary>
     /// 支持的游戏版本
     /// </summary>
-    #region GameVersion
-    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-    private int _gameVersion;
-
-    public int GameVersion
-    {
-        get => _gameVersion;
-        set => SetProperty(ref _gameVersion, value);
-    }
-    #endregion
+    [ReactiveProperty]
+    public int GameVersion { get; set; }
 
     /// <summary>
     /// 模组版本
     /// </summary>
-    #region ModVersion
-    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-    private int _modVersion;
-
-    public int ModVersion
-    {
-        get => _modVersion;
-        set => SetProperty(ref _modVersion, value);
-    }
-    #endregion
+    [ReactiveProperty]
+    public int ModVersion { get; set; }
 
     /// <summary>
     /// 封面
     /// </summary>
-    #region Image
-    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-    private BitmapImage? _image;
-
-    public BitmapImage? Image
-    {
-        get => _image;
-        set => SetProperty(ref _image, value);
-    }
-    #endregion
+    [ReactiveProperty]
+    public BitmapImage? Image { get; set; }
 
     /// <summary>
     /// 源路径
     /// </summary>
-    #region SourcePath
-    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-    private string _sourcePath = string.Empty;
-
-    public string SourcePath
-    {
-        get => _sourcePath;
-        set => SetProperty(ref _sourcePath, value);
-    }
-    #endregion
+    [ReactiveProperty]
+    public string SourcePath { get; set; } = string.Empty;
 
     #endregion
 
@@ -317,41 +247,33 @@ public class ModInfoModel : ObservableObjectX
     /// <summary>
     /// 食物
     /// </summary>
-    public ObservableList<FoodModel> Foods { get; } = new();
+    public ObservableList<FoodModel> Foods { get; } = [];
 
     /// <summary>
     /// 点击文本
     /// </summary>
-    public ObservableList<ClickTextModel> ClickTexts { get; } = new();
+    public ObservableList<ClickTextModel> ClickTexts { get; } = [];
 
     /// <summary>
     /// 低状态文本
     /// </summary>
-    public ObservableList<LowTextModel> LowTexts { get; } = new();
+    public ObservableList<LowTextModel> LowTexts { get; } = [];
 
     /// <summary>
     /// 选择文本
     /// </summary>
-    public ObservableList<SelectTextModel> SelectTexts { get; } = new();
+    public ObservableList<SelectTextModel> SelectTexts { get; } = [];
 
     /// <summary>
     /// 宠物
     /// </summary>
-    public ObservableList<PetModel> Pets { get; } = new();
+    public ObservableList<PetModel> Pets { get; } = [];
 
     /// <summary>
     /// 宠物实际数量
     /// </summary>
-    #region PetDisplayedCount
-    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-    private int _petDisplayedCount;
-
-    public int PetDisplayedCount
-    {
-        get => _petDisplayedCount;
-        set => SetProperty(ref _petDisplayedCount, value);
-    }
-    #endregion
+    [ReactiveProperty]
+    public int PetDisplayedCount { get; set; }
 
     #endregion
     private void I18nResource_PropertyChanged(object? sender, PropertyChangedEventArgs e)

@@ -37,6 +37,6 @@ public partial class FoodPage : Page
     {
         if (sender is not DataGrid dataGrid || dataGrid.SelectedItem is not FoodModel model)
             return;
-        ViewModel.EditCommand_ExecuteCommand(model);
+        ViewModel.Edit(model);
     }
 }

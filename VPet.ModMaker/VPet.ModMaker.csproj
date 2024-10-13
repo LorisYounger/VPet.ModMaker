@@ -7,7 +7,7 @@
 		<Nullable>enable</Nullable>
 		<UseApplicationTrust>false</UseApplicationTrust>
 		<BootstrapperEnabled>true</BootstrapperEnabled>
-		<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+		<GenerateAssemblyInfo>true</GenerateAssemblyInfo>
 		<UseWPF>true</UseWPF>
 		<LangVersion>preview</LangVersion>
 		<ImplicitUsings>enable</ImplicitUsings>
@@ -25,18 +25,30 @@
 	<ItemGroup>
 		<EmbeddedResource Include="Resources\food.png" />
 	</ItemGroup>
-	<ItemGroup Condition="'$(Configuration)'=='Test'">
-		<Reference Include="HKW.Utils">
-			<HintPath>..\..\HKW.Utils\HKW.Utils\bin\Debug\net8.0\HKW.Utils.dll</HintPath>
-		</Reference>
-		<Reference Include="HKW.WPF">
-			<HintPath>..\..\HKW.WPF\HKW.WPF\bin\Debug\net8.0-windows\HKW.WPF.dll</HintPath>
-		</Reference>
-	</ItemGroup>
-	<ItemGroup Condition="'$(Configuration)'!='Test'">
-		<PackageReference Include="HKW.WPF" Version="1.0.7" />
-		<PackageReference Include="HKW.Utils" Version="1.2.22" />
-	</ItemGroup>
+  <ItemGroup Condition="'$(Configuration)'=='Test'">
+    <Reference Include="HKW.Utils">
+      <HintPath>..\..\HKW.Utils\HKW.Utils\bin\Debug\net8.0\HKW.Utils.dll</HintPath>
+    </Reference>
+    <Reference Include="HKW.WPF">
+      <HintPath>..\..\HKW.WPF\HKW.WPF\bin\Debug\net8.0-windows\HKW.WPF.dll</HintPath>
+    </Reference>
+    <Reference Include="HKW.CommonValueConverters">
+      <HintPath>..\..\HKW.CommonValueConverters\HKW.CommonValueConverters\bin\Debug\net8.0\HKW.CommonValueConverters.dll</HintPath>
+    </Reference>
+    <Reference Include="HKW.MVVMDialogs">
+      <HintPath>..\..\HKW.MVVMDialogs\HKW.MVVMDialogs\bin\Debug\net8.0\HKW.MVVMDialogs.dll</HintPath>
+    </Reference>
+    <Reference Include="HKW.ReactiveUI">
+      <HintPath>..\..\HKW.ReactiveUI\HKW.ReactiveUI\bin\Debug\netstandard2.0\HKW.ReactiveUI.dll</HintPath>
+    </Reference>
+    <Analyzer Include="..\..\HKW.ReactiveUI\HKW.ReactiveUI\bin\Debug\netstandard2.0\HKW.ReactiveUI.dll" />
+    <WeaverFiles Include="..\..\HKW.ReactiveUI\HKW.ReactiveUI.Fody\bin\Debug\netstandard2.0\HKW.ReactiveUI.Fody.dll" />
+  </ItemGroup>
+  <ItemGroup Condition="'$(Configuration)'!='Test'">
+    <PackageReference Include="HKW.WPF" Version="1.0.6" />
+    <PackageReference Include="HKW.Utils" Version="1.2.21" />
+    <PackageReference Include="HKW.ReactiveUI" Version="0.1.2" />
+  </ItemGroup>
 	<ItemGroup>
 		<PackageReference Include="VPet-Simulator.Core" Version="1.1.0.14-beta" />
 		<PackageReference Include="VPet-Simulator.Windows.Interface" Version="1.1.0.14-beta" />
@@ -48,7 +60,14 @@
 		<PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
 	</ItemGroup>
 	<ItemGroup>
-		<PackageReference Include="CommunityToolkit.Mvvm" Version="8.2.2" />
+    <PackageReference Include="ReactiveUI" Version="20.1.63" />
+    <PackageReference Include="ReactiveUI.WPF" Version="20.1.63" />
+    <PackageReference Include="Fody" Version="6.8.2" PrivateAssets="all" />
+    <PackageReference Include="HanumanInstitute.MvvmDialogs" Version="2.1.0" />
+    <PackageReference Include="HanumanInstitute.MvvmDialogs.Wpf" Version="2.1.0" />
+    <PackageReference Include="System.Data.DataSetExtensions" Version="4.5.0" />
+    <PackageReference Include="NLog" Version="5.3.4" />
+    <PackageReference Include="Splat.NLog" Version="15.2.22" />
 		<PackageReference Include="Mapster" Version="7.4.0" />
 	</ItemGroup>
 </Project>

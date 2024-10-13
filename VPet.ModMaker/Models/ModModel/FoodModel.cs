@@ -8,12 +8,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Media.Imaging;
-using CommunityToolkit.Mvvm.Collections;
-using CommunityToolkit.Mvvm.ComponentModel;
+using HKW.HKWReactiveUI;
 using HKW.HKWUtils.Observable;
 using LinePutScript;
 using LinePutScript.Converter;
 using Mapster;
+using VPet.ModMaker.ViewModels;
 using VPet_Simulator.Windows.Interface;
 
 namespace VPet.ModMaker.Models;
@@ -21,11 +21,11 @@ namespace VPet.ModMaker.Models;
 /// <summary>
 /// 食物模型
 /// </summary>
-public class FoodModel : ObservableObjectX
+public partial class FoodModel : ViewModelBase
 {
     public FoodModel()
     {
-        PropertyChangedX += FoodModel_PropertyChangedX;
+        //PropertyChangedX += FoodModel_PropertyChangedX;
     }
 
     private static readonly FrozenSet<string> _notifyReferencePrice = FrozenSet.ToFrozenSet(
@@ -40,14 +40,15 @@ public class FoodModel : ObservableObjectX
         ]
     );
 
-    private void FoodModel_PropertyChangedX(object? sender, PropertyChangedXEventArgs e)
-    {
-        if (e.PropertyName is not null && _notifyReferencePrice.Contains(e.PropertyName))
-        {
-            this.Adapt(_food);
-            ReferencePrice = Math.Floor(_food.RealPrice);
-        }
-    }
+    //TODO:
+    //private void FoodModel_PropertyChangedX(object? sender, PropertyChangedXEventArgs e)
+    //{
+    //    if (e.PropertyName is not null && _notifyReferencePrice.Contains(e.PropertyName))
+    //    {
+    //        this.Adapt(_food);
+    //        ReferencePrice = Math.Floor(_food.RealPrice);
+    //    }
+    //}
 
     public FoodModel(FoodModel model)
         : this()
@@ -70,40 +71,24 @@ public class FoodModel : ObservableObjectX
     public static ObservableList<Food.FoodType> FoodTypes { get; } =
         new(Enum.GetValues(typeof(Food.FoodType)).Cast<Food.FoodType>());
 
-    #region ID
-    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-    private string _id = string.Empty;
-
     /// <summary>
     /// ID
     /// </summary>
     [AdaptMember(nameof(Food.Name))]
-    public string ID
-    {
-        get => _id;
-        set
-        {
-            if (SetProperty(ref _id, value) is false)
-                return;
-            DescriptionID = $"{ID}_{nameof(DescriptionID)}";
-        }
-    }
-    #endregion
+    [ReactiveProperty]
+    public string ID { get; set; } = string.Empty;
 
-    #region DescriptionID
-    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-    private string _descriptionID = string.Empty;
+    partial void OnIDChanged(string oldValue, string newValue)
+    {
+        DescriptionID = $"{ID}_{nameof(DescriptionID)}";
+    }
 
     /// <summary>
     /// 详情Id
     /// </summary>
     [AdaptMember(nameof(Food.Desc))]
-    public string DescriptionID
-    {
-        get => _descriptionID;
-        set => SetProperty(ref _descriptionID, value);
-    }
-    #endregion
+    [ReactiveProperty]
+    public string DescriptionID { get; set; } = string.Empty;
 
     #region I18nData
 
@@ -116,25 +101,27 @@ public class FoodModel : ObservableObjectX
         get => _i18nResource;
         set
         {
-            if (_i18nResource is not null)
-                I18nResource.I18nObjectInfos.Remove(this);
-            _i18nResource = value;
-            InitializeI18nResource();
+            // TODO:
+            //if (_i18nResource is not null)
+            //    I18nResource.I18nObjectInfos.Remove(this);
+            //_i18nResource = value;
+            //InitializeI18nResource();
         }
     }
 
     public void InitializeI18nResource()
     {
-        I18nResource?.I18nObjectInfos.Add(
-            this,
-            new I18nObjectInfo<string, string>(this, OnPropertyChanged).AddPropertyInfo(
-                [
-                    (nameof(ID), ID, nameof(Name)),
-                    (nameof(DescriptionID), DescriptionID, nameof(Description))
-                ],
-                true
-            )
-        );
+        // TODO:
+        //I18nResource?.I18nObjectInfos.Add(
+        //    this,
+        //    new I18nObjectInfo<string, string>(this, OnPropertyChanged).AddPropertyInfo(
+        //        [
+        //            (nameof(ID), ID, nameof(Name)),
+        //            (nameof(DescriptionID), DescriptionID, nameof(Description))
+        //        ],
+        //        true
+        //    )
+        //);
     }
 
     [AdaptIgnore]
@@ -152,185 +139,90 @@ public class FoodModel : ObservableObjectX
     }
     #endregion
 
-    #region Graph
-    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-    private string _graph = string.Empty;
 
     /// <summary>
     /// 指定动画
     /// </summary>
     [AdaptMember(nameof(Food.Graph))]
-    public string Graph
-    {
-        get => _graph;
-        set => SetProperty(ref _graph, value);
-    }
-    #endregion
-
-    #region Type
-    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-    private Food.FoodType _type;
+    [ReactiveProperty]
+    public string Graph { get; set; } = string.Empty;
 
     /// <summary>
     /// 类型
     /// </summary>
     [AdaptMember(nameof(Food.Type))]
-    public Food.FoodType Type
-    {
-        get => _type;
-        set => SetProperty(ref _type, value);
-    }
-    #endregion
-
-    #region Strength
-    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-    private double _strength;
+    [ReactiveProperty]
+    public Food.FoodType Type { get; set; }
 
     /// <summary>
     /// 体力
     /// </summary>
     [AdaptMember(nameof(Food.Strength))]
-    public double Strength
-    {
-        get => _strength;
-        set => SetProperty(ref _strength, value);
-    }
-    #endregion
-
-    #region StrengthFood
-    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-    private double _strengthFood;
+    [ReactiveProperty]
+    public double Strength { get; set; }
 
     /// <summary>
     /// 饱食度
     /// </summary>
     [AdaptMember(nameof(Food.StrengthFood))]
-    public double StrengthFood
-    {
-        get => _strengthFood;
-        set => SetProperty(ref _strengthFood, value);
-    }
-    #endregion
-
-    #region StrengthDrink
-    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-    private double _strengthDrink;
+    [ReactiveProperty]
+    public double StrengthFood { get; set; }
 
     /// <summary>
     /// 口渴度
     /// </summary>
     [AdaptMember(nameof(Food.StrengthDrink))]
-    public double StrengthDrink
-    {
-        get => _strengthDrink;
-        set => SetProperty(ref _strengthDrink, value);
-    }
-    #endregion
-
-    #region Feeling
-    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-    private double _feeling;
+    [ReactiveProperty]
+    public double StrengthDrink { get; set; }
 
     /// <summary>
     /// 心情
     /// </summary>
     [AdaptMember(nameof(Food.Feeling))]
-    public double Feeling
-    {
-        get => _feeling;
-        set => SetProperty(ref _feeling, value);
-    }
-    #endregion
-
-    #region Health
-    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-    private double _health;
+    [ReactiveProperty]
+    public double Feeling { get; set; }
 
     /// <summary>
     /// 健康度
     /// </summary>
     [AdaptMember(nameof(Food.Health))]
-    public double Health
-    {
-        get => _health;
-        set => SetProperty(ref _health, value);
-    }
-    #endregion
-
-    #region Likability
-    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-    private double _likability;
+    [ReactiveProperty]
+    public double Health { get; set; }
 
     /// <summary>
     /// 好感度
     /// </summary>
     [AdaptMember(nameof(Food.Likability))]
-    public double Likability
-    {
-        get => _likability;
-        set => SetProperty(ref _likability, value);
-    }
-    #endregion
-
-    #region Price
-    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-    private double _price;
+    [ReactiveProperty]
+    public double Likability { get; set; }
 
     /// <summary>
     /// 价格
     /// </summary>
     [AdaptMember(nameof(Food.Price))]
-    public double Price
-    {
-        get => _price;
-        set => SetProperty(ref _price, value);
-    }
-    #endregion
-
-    #region Exp
-    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-    private int _exp;
+    [ReactiveProperty]
+    public double Price { get; set; }
 
     /// <summary>
     /// 经验
     /// </summary>
     [AdaptMember(nameof(Food.Exp))]
-    public int Exp
-    {
-        get => _exp;
-        set => SetProperty(ref _exp, value);
-    }
-    #endregion
-
-    #region Image
-    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-    private BitmapImage? _image;
+    [ReactiveProperty]
+    public int Exp { get; set; }
 
     /// <summary>
     /// 图片
     /// </summary>
     [AdaptIgnore]
-    public BitmapImage? Image
-    {
-        get => _image;
-        set => SetProperty(ref _image, value);
-    }
-    #endregion
-
-    #region ReferencePrice
-    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-    private double _ReferencePrice;
+    [ReactiveProperty]
+    public BitmapImage? Image { get; set; }
 
     /// <summary>
     /// 推荐价格
     /// </summary>
     [AdaptIgnore]
-    public double ReferencePrice
-    {
-        get => _ReferencePrice;
-        set => SetProperty(ref _ReferencePrice, value);
-    }
-    #endregion
+    [ReactiveProperty]
+    public double ReferencePrice { get; set; }
 
     private readonly Food _food = new();
 
@@ -362,6 +254,7 @@ public class FoodModel : ObservableObjectX
     public void Close()
     {
         Image?.CloseStream();
-        I18nResource.I18nObjectInfos.Remove(this);
+        //TODO:
+        //I18nResource.I18nObjectInfos.Remove(this);
     }
 }

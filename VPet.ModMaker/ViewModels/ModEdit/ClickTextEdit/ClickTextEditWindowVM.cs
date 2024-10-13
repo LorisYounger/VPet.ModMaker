@@ -5,13 +5,14 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using HKW.HKWReactiveUI;
 using HKW.HKWUtils.Observable;
 using VPet.ModMaker.Models;
 using VPet_Simulator.Windows.Interface;
 
 namespace VPet.ModMaker.ViewModels.ModEdit.ClickTextEdit;
 
-public class ClickTextEditWindowVM : ObservableObjectX
+public partial class ClickTextEditWindowVM : ViewModelBase
 {
     /// <summary>
     /// I18n资源
@@ -24,19 +25,12 @@ public class ClickTextEditWindowVM : ObservableObjectX
     /// </summary>
     public ClickTextModel? OldClickText { get; set; }
 
-    #region ClickText
-    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-    private ClickTextModel _clickText = new() { I18nResource = ModInfoModel.Current.I18nResource };
-
     /// <summary>
     /// 点击文本
     /// </summary>
-    public ClickTextModel ClickText
-    {
-        get => _clickText;
-        set => SetProperty(ref _clickText, value);
-    }
-    #endregion
+    [ReactiveProperty]
+    public ClickTextModel ClickText { get; set; } =
+        new() { I18nResource = ModInfoModel.Current.I18nResource };
     #endregion
     public ClickTextEditWindowVM() { }
 }

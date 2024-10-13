@@ -34,6 +34,6 @@ public partial class PetPage : Page
     {
         if (sender is not DataGrid dataGrid || dataGrid.SelectedItem is not PetModel model)
             return;
-        ViewModel.EditCommand_ExecuteCommand(model);
+        ViewModel.Edit(model);
     }
 }

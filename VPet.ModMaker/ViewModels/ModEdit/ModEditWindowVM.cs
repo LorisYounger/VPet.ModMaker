@@ -11,6 +11,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Media.Imaging;
+using HKW.HKWReactiveUI;
 using HKW.HKWUtils.Extensions;
 using HKW.HKWUtils.Observable;
 using LinePutScript.Localization.WPF;
@@ -23,39 +24,31 @@ using VPet.ModMaker.Views.ModEdit.I18nEdit;
 
 namespace VPet.ModMaker.ViewModels.ModEdit;
 
-public class ModEditWindowVM : ObservableObjectX
+public partial class ModEditWindowVM : ViewModelBase
 {
     public ModEditWindowVM(ModEditWindow window)
     {
         ModEditWindow = window;
-        ChangeImageCommand.ExecuteCommand += ChangeImageCommand_ExecuteCommand;
-        AddCultureCommand.ExecuteCommand += AddCultureCommand_ExecuteCommand;
-        EditCultureCommand.ExecuteCommand += EditCultureCommand_ExecuteCommand;
-        RemoveCultureCommand.ExecuteCommand += RemoveCultureCommand_ExecuteCommand;
-        EditI18nCommand.ExecuteCommand += EditI18nCommand_ExecuteCommand;
-        SetMainCultureCommand.ExecuteCommand += SetMainCultureCommand_ExecuteCommand;
+        //ChangeImageCommand.ExecuteCommand += ChangeImage;
+        //AddCultureCommand.ExecuteCommand += AddCulture;
+        //EditCultureCommand.ExecuteCommand += EditCulture;
+        //RemoveCultureCommand.ExecuteCommand += RemoveCulture;
+        //EditI18nCommand.ExecuteCommand += EditI18n;
+        //SetMainCultureCommand.ExecuteCommand += SetMainCulture;
 
-        SaveCommand.ExecuteCommand += SaveCommand_ExecuteCommand;
-        SaveToCommand.ExecuteCommand += SaveToCommand_ExecuteCommand;
-        SaveAsTranslationModCommand.ExecuteCommand += SaveAsTranslationModCommand_ExecuteCommand;
+        //SaveCommand.ExecuteCommand += Save;
+        //SaveToCommand.ExecuteCommand += SaveTo;
+        //SaveAsTranslationModCommand.ExecuteCommand += SaveAsTranslationMod;
     }
 
     public ModEditWindow ModEditWindow { get; }
 
-    #region Value
+    #region Property
     /// <summary>
     /// 当前模组信息
     /// </summary>
-    #region ModInfo
-    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-    private ModInfoModel _modInfo = ModInfoModel.Current;
-
-    public ModInfoModel ModInfo
-    {
-        get => _modInfo;
-        set => SetProperty(ref _modInfo, value);
-    }
-    #endregion
+    [ReactiveProperty]
+    public ModInfoModel ModInfo { get; set; } = ModInfoModel.Current;
 
     /// <summary>
     /// I18n资源
@@ -63,55 +56,58 @@ public class ModEditWindowVM : ObservableObjectX
     public I18nResource<string, string> I18nResource => ModInfo.I18nResource;
     #endregion
 
-    #region Command
+    //#region Command
 
-    /// <summary>
-    /// 改变图片命令
-    /// </summary>
-    public ObservableCommand ChangeImageCommand { get; } = new();
+    ///// <summary>
+    ///// 改变图片命令
+    ///// </summary>
+    //public ObservableCommand ChangeImageCommand { get; } = new();
 
-    /// <summary>
-    /// 添加文化命令
-    /// </summary>
-    public ObservableCommand AddCultureCommand { get; } = new();
+    ///// <summary>
+    ///// 添加文化命令
+    ///// </summary>
+    //public ObservableCommand AddCultureCommand { get; } = new();
 
-    /// <summary>
-    /// 编辑文化命令
-    /// </summary>
-    public ObservableCommand<string> EditCultureCommand { get; } = new();
+    ///// <summary>
+    ///// 编辑文化命令
+    ///// </summary>
+    //public ObservableCommand<string> EditCultureCommand { get; } = new();
 
-    /// <summary>
-    /// 删除文化命令
-    /// </summary>
-    public ObservableCommand<string> RemoveCultureCommand { get; } = new();
+    ///// <summary>
+    ///// 删除文化命令
+    ///// </summary>
+    //public ObservableCommand<string> RemoveCultureCommand { get; } = new();
 
-    /// <summary>
-    /// 设置主要文化命令
-    /// </summary>
-    public ObservableCommand<string> SetMainCultureCommand { get; } = new();
+    ///// <summary>
+    ///// 设置主要文化命令
+    ///// </summary>
+    //public ObservableCommand<string> SetMainCultureCommand { get; } = new();
 
-    /// <summary>
-    /// 保存命令
-    /// </summary>
-    public ObservableCommand SaveCommand { get; } = new();
+    ///// <summary>
+    ///// 保存命令
+    ///// </summary>
+    //public ObservableCommand SaveCommand { get; } = new();
 
-    /// <summary>
-    /// 保存至命令
-    /// </summary>
-    public ObservableCommand SaveToCommand { get; } = new();
+    ///// <summary>
+    ///// 保存至命令
+    ///// </summary>
+    //public ObservableCommand SaveToCommand { get; } = new();
 
-    /// <summary>
-    /// 编辑多语言内容
-    /// </summary>
-    public ObservableCommand EditI18nCommand { get; } = new();
+    ///// <summary>
+    ///// 编辑多语言内容
+    ///// </summary>
+    //public ObservableCommand EditI18nCommand { get; } = new();
 
+    ///// <summary>
+    ///// 保存为翻译模组
+    ///// </summary>
+    //public ObservableCommand SaveAsTranslationModCommand { get; } = new();
+    //#endregion
     /// <summary>
     /// 保存为翻译模组
     /// </summary>
-    public ObservableCommand SaveAsTranslationModCommand { get; } = new();
-    #endregion
-
-    private void SaveAsTranslationModCommand_ExecuteCommand()
+    [ReactiveCommand]
+    private void SaveAsTranslationMod()
     {
         if (ValidationData(ModInfo) is false)
             return;
@@ -119,7 +115,11 @@ public class ModEditWindowVM : ObservableObjectX
         window.ShowDialog();
     }
 
-    private void EditI18nCommand_ExecuteCommand()
+    /// <summary>
+    /// 编辑I18n数据
+    /// </summary>
+    [ReactiveCommand]
+    private void EditI18n()
     {
         ModEditWindow.I18nEditWindow.ShowOrActivate();
     }
@@ -135,7 +135,8 @@ public class ModEditWindowVM : ObservableObjectX
     /// <summary>
     /// 改变图片
     /// </summary>
-    private void ChangeImageCommand_ExecuteCommand()
+    [ReactiveCommand]
+    private void ChangeImage()
     {
         OpenFileDialog openFileDialog =
             new()
@@ -154,7 +155,8 @@ public class ModEditWindowVM : ObservableObjectX
     /// <summary>
     /// 添加文化
     /// </summary>
-    public void AddCultureCommand_ExecuteCommand()
+    [ReactiveCommand]
+    public void AddCulture()
     {
         var window = new AddCultureWindow();
         window.ShowDialog();
@@ -168,7 +170,8 @@ public class ModEditWindowVM : ObservableObjectX
     /// 编辑文化
     /// </summary>
     /// <param name="oldCulture">旧文化</param>
-    private void EditCultureCommand_ExecuteCommand(string oldCulture)
+    [ReactiveCommand]
+    private void EditCulture(string oldCulture)
     {
         var window = new AddCultureWindow();
         window.ViewModel.CultureName = oldCulture.Translate();
@@ -182,7 +185,8 @@ public class ModEditWindowVM : ObservableObjectX
     /// 删除文化
     /// </summary>
     /// <param name="oldCulture">旧文化</param>
-    private void RemoveCultureCommand_ExecuteCommand(string oldCulture)
+    [ReactiveCommand]
+    private void RemoveCulture(string oldCulture)
     {
         if (
             MessageBox.Show(
@@ -195,7 +199,8 @@ public class ModEditWindowVM : ObservableObjectX
         I18nResource.RemoveCulture(oldCulture);
     }
 
-    public void SetMainCultureCommand_ExecuteCommand(string culture)
+    [ReactiveCommand]
+    public void SetMainCulture(string culture)
     {
         if (
             MessageBox.Show(
@@ -219,7 +224,8 @@ public class ModEditWindowVM : ObservableObjectX
     /// <summary>
     /// 保存
     /// </summary>
-    private void SaveCommand_ExecuteCommand()
+    [ReactiveCommand]
+    private void Save()
     {
         if (ValidationData(ModInfo) is false)
             return;
@@ -239,7 +245,8 @@ public class ModEditWindowVM : ObservableObjectX
     /// <summary>
     /// 保存至
     /// </summary>
-    private void SaveToCommand_ExecuteCommand()
+    [ReactiveCommand]
+    private void SaveTo()
     {
         if (ValidationData(ModInfo) is false)
             return;

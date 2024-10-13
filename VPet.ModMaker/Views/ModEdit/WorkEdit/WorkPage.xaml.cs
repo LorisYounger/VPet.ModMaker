@@ -34,6 +34,6 @@ public partial class WorkPage : Page
     {
         if (sender is not DataGrid dataGrid || dataGrid.SelectedItem is not WorkModel model)
             return;
-        ViewModel.EditCommand_ExecuteCommand(model);
+        ViewModel.Edit(model);
     }
 }

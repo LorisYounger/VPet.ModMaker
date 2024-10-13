@@ -6,7 +6,9 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using HKW.HKWReactiveUI;
 using HKW.HKWUtils.Observable;
+using VPet.ModMaker.ViewModels;
 using VPet_Simulator.Core;
 
 namespace VPet.ModMaker.Models;
@@ -14,7 +16,7 @@ namespace VPet.ModMaker.Models;
 /// <summary>
 /// 移动模型
 /// </summary>
-public class MoveModel : ObservableObjectX
+public partial class MoveModel : ViewModelBase
 {
     public MoveModel() { }
 
@@ -82,223 +84,114 @@ public class MoveModel : ObservableObjectX
 
     //public string Id { get => _Id; set => SetProperty(ref _Id, value); }
     //#endregion
-    #region Graph
-    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-    private string _graph = string.Empty;
 
     /// <summary>
     /// 指定动画
     /// </summary>
-    public string Graph
-    {
-        get => _graph;
-        set => SetProperty(ref _graph, value);
-    }
-    #endregion
-
-    #region Distance
-    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-    private int _distance;
+    [ReactiveProperty]
+    public string Graph { get; set; } = string.Empty;
 
     /// <summary>
     /// 移动距离
     /// </summary>
-    public int Distance
-    {
-        get => _distance;
-        set => SetProperty(ref _distance, value);
-    }
-    #endregion
-
-    #region Interval
-    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-    private int _interval;
+    [ReactiveProperty]
+    public int Distance { get; set; }
 
     /// <summary>
     /// 间隔
     /// </summary>
-    public int Interval
-    {
-        get => _interval;
-        set => SetProperty(ref _interval, value);
-    }
-    #endregion
-
-    #region LocateLength
-    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-    private int _locateLength;
+    [ReactiveProperty]
+    public int Interval { get; set; }
 
     /// <summary>
     /// 定位长度
     /// </summary>
-    public int LocateLength
-    {
-        get => _locateLength;
-        set => SetProperty(ref _locateLength, value);
-    }
-    #endregion
-
-    #region SpeedX
-    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-    private int _speedX;
+    [ReactiveProperty]
+    public int LocateLength { get; set; }
 
     /// <summary>
     /// X速度
     /// </summary>
-    public int SpeedX
-    {
-        get => _speedX;
-        set => SetProperty(ref _speedX, value);
-    }
-    #endregion
-
-    #region SpeedY
-    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-    private int _speedY;
+    [ReactiveProperty]
+    public int SpeedX { get; set; }
 
     /// <summary>
     /// Y速度
     /// </summary>
-    public int SpeedY
-    {
-        get => _speedY;
-        set => SetProperty(ref _speedY, value);
-    }
-    #endregion
-
-    #region CheckLeft
-    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-    private int _checkLeft;
+    [ReactiveProperty]
+    public int SpeedY { get; set; }
 
     /// <summary>
     /// 左侧检测距离
     /// </summary>
-    public int CheckLeft
-    {
-        get => _checkLeft;
-        set => SetProperty(ref _checkLeft, value);
-    }
-    #endregion
-
-    #region CheckRight
-    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-    private int _checkRight;
+    [ReactiveProperty]
+    public int CheckLeft { get; set; }
 
     /// <summary>
     /// 右侧检测距离
     /// </summary>
-    public int CheckRight
-    {
-        get => _checkRight;
-        set => SetProperty(ref _checkRight, value);
-    }
-    #endregion
-
-    #region CheckTop
-    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-    private int _checkTop;
+    [ReactiveProperty]
+    public int CheckRight { get; set; }
 
     /// <summary>
     /// 上方检测距离
     /// </summary>
-    public int CheckTop
-    {
-        get => _checkTop;
-        set => SetProperty(ref _checkTop, value);
-    }
-    #endregion
-
-    #region CheckBottom
-    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-    private int _checkBottom;
+    [ReactiveProperty]
+    public int CheckTop { get; set; }
 
     /// <summary>
     /// 下方检测距离
     /// </summary>
-    public int CheckBottom
-    {
-        get => _checkBottom;
-        set => SetProperty(ref _checkBottom, value);
-    }
-    #endregion
-
-    #region TriggerLeft
-    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-    private int _triggerLeft;
+    [ReactiveProperty]
+    public int CheckBottom { get; set; }
 
     /// <summary>
     /// 左侧触发距离
     /// </summary>
-    public int TriggerLeft
-    {
-        get => _triggerLeft;
-        set => SetProperty(ref _triggerLeft, value);
-    }
-    #endregion
-
-    #region TriggerRight
-    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-    private int _triggerRight;
+    [ReactiveProperty]
+    public int TriggerLeft { get; set; }
 
     /// <summary>
     /// 右侧触发距离
     /// </summary>
-    public int TriggerRight
-    {
-        get => _triggerRight;
-        set => SetProperty(ref _triggerRight, value);
-    }
-    #endregion
-
-    #region TriggerTop
-    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-    private int _triggerTop;
+    [ReactiveProperty]
+    public int TriggerRight { get; set; }
 
     /// <summary>
     /// 上方触发距离
     /// </summary>
-    public int TriggerTop
-    {
-        get => _triggerTop;
-        set => SetProperty(ref _triggerTop, value);
-    }
-    #endregion
-
-    #region TriggerBottom
-    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-    private int _triggerBottom;
+    [ReactiveProperty]
+    public int TriggerTop { get; set; }
 
     /// <summary>
     /// 下方触发距离
     /// </summary>
-    public int TriggerBottom
-    {
-        get => _triggerBottom;
-        set => SetProperty(ref _triggerBottom, value);
-    }
-    #endregion
+    [ReactiveProperty]
+    public int TriggerBottom { get; set; }
 
     /// <summary>
     /// 定位类型
     /// </summary>
-    public ObservableEnumCommand<GraphHelper.Move.DirectionType> LocateType { get; } =
-        new(GraphHelper.Move.DirectionType.None);
+    public ObservableEnum<GraphHelper.Move.DirectionType> LocateType { get; } =
+        new(GraphHelper.Move.DirectionType.None, (v, f) => v |= f, (v, f) => v &= f);
 
     /// <summary>
     /// 触发类型
     /// </summary>
-    public ObservableEnumCommand<GraphHelper.Move.DirectionType> TriggerType { get; } =
-        new(GraphHelper.Move.DirectionType.None);
+    public ObservableEnum<GraphHelper.Move.DirectionType> TriggerType { get; } =
+        new(GraphHelper.Move.DirectionType.None, (v, f) => v |= f, (v, f) => v &= f);
 
     /// <summary>
     /// 模式
     /// </summary>
-    public ObservableEnumCommand<GraphHelper.Move.ModeType> ModeType { get; } =
+    public ObservableEnum<GraphHelper.Move.ModeType> ModeType { get; } =
         new(
             GraphHelper.Move.ModeType.Happy
                 | GraphHelper.Move.ModeType.Nomal
                 | GraphHelper.Move.ModeType.PoorCondition
-                | GraphHelper.Move.ModeType.Ill
+                | GraphHelper.Move.ModeType.Ill,
+            (v, f) => v |= f,
+            (v, f) => v &= f
         );
 
     public GraphHelper.Move ToMove()

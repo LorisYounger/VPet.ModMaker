@@ -6,10 +6,12 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using HKW.HKWReactiveUI;
 using HKW.HKWUtils;
 using HKW.HKWUtils.Observable;
 using LinePutScript.Converter;
 using Mapster;
+using VPet.ModMaker.ViewModels;
 using VPet_Simulator.Windows.Interface;
 
 namespace VPet.ModMaker.Models;
@@ -17,7 +19,7 @@ namespace VPet.ModMaker.Models;
 /// <summary>
 /// 点击文本模型
 /// </summary>
-public class ClickTextModel : ObservableObjectX
+public partial class ClickTextModel : ViewModelBase
 {
     public ClickTextModel() { }
 
@@ -103,20 +105,12 @@ public class ClickTextModel : ObservableObjectX
     public static FrozenSet<VPet_Simulator.Core.Main.WorkingState> WorkingStates { get; } =
         Enum.GetValues<VPet_Simulator.Core.Main.WorkingState>().ToFrozenSet();
 
-    #region ID
-    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-    private string _id = string.Empty;
-
     /// <summary>
     /// ID
     /// </summary>
     [AdaptMember(nameof(ClickText.Text))]
-    public string ID
-    {
-        get => _id;
-        set => SetProperty(ref _id, value);
-    }
-    #endregion
+    [ReactiveProperty]
+    public string ID { get; set; } = string.Empty;
 
     #region I18nData
     [AdaptIgnore]
@@ -128,24 +122,26 @@ public class ClickTextModel : ObservableObjectX
         get => _i18nResource;
         set
         {
-            if (_i18nResource is not null)
-                I18nResource.I18nObjectInfos.Remove(this);
-            _i18nResource = value;
+            //TODO:
+            //if (_i18nResource is not null)
+            //    I18nResource.I18nObjectInfos.Remove(this);
+            //_i18nResource = value;
             InitializeI18nResource();
         }
     }
 
     public void InitializeI18nResource()
     {
-        I18nResource?.I18nObjectInfos.Add(
-            this,
-            new I18nObjectInfo<string, string>(this, OnPropertyChanged).AddPropertyInfo(
-                nameof(ID),
-                ID,
-                nameof(Text),
-                true
-            )
-        );
+        //TODO:
+        //I18nResource?.I18nObjectInfos.Add(
+        //    this,
+        //    new I18nObjectInfo<string, string>(this, OnPropertyChanged).AddPropertyInfo(
+        //        nameof(ID),
+        //        ID,
+        //        nameof(Text),
+        //        true
+        //    )
+        //);
     }
 
     [AdaptIgnore]
@@ -156,57 +152,46 @@ public class ClickTextModel : ObservableObjectX
     }
     #endregion
 
-    #region Working
-    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-    private string _working = string.Empty;
 
     /// <summary>
     /// 指定工作
     /// </summary>
     [AdaptMember(nameof(ClickText.Working))]
-    public string Working
-    {
-        get => _working;
-        set => SetProperty(ref _working, value);
-    }
-    #endregion
+    [ReactiveProperty]
+    public string Working { get; set; } = string.Empty;
 
     /// <summary>
     /// 宠物状态
     /// </summary>
-    public ObservableEnumCommand<ClickText.ModeType> Mode { get; } =
+    public ObservableEnum<ClickText.ModeType> Mode { get; } =
         new(
             ClickText.ModeType.Happy
                 | ClickText.ModeType.Nomal
                 | ClickText.ModeType.PoorCondition
-                | ClickText.ModeType.Ill
+                | ClickText.ModeType.Ill,
+            (v, f) => v |= f,
+            (v, f) => v &= f
         );
-
-    #region WorkingState
-    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-    private VPet_Simulator.Core.Main.WorkingState _workingState;
 
     /// <summary>
     /// 行动状态
     /// </summary>
     [AdaptMember(nameof(ClickText.State))]
-    public VPet_Simulator.Core.Main.WorkingState WorkingState
-    {
-        get => _workingState;
-        set => SetProperty(ref _workingState, value);
-    }
-    #endregion
+    [ReactiveProperty]
+    public VPet_Simulator.Core.Main.WorkingState WorkingState { get; set; }
 
     /// <summary>
     /// 日期区间
     /// </summary>
 
-    public ObservableEnumCommand<ClickText.DayTime> DayTime { get; } =
+    public ObservableEnum<ClickText.DayTime> DayTime { get; } =
         new(
             ClickText.DayTime.Morning
                 | ClickText.DayTime.Afternoon
                 | ClickText.DayTime.Night
-                | ClickText.DayTime.Midnight
+                | ClickText.DayTime.Midnight,
+            (v, f) => v |= f,
+            (v, f) => v &= f
         );
 
     /// <summary>
@@ -251,6 +236,7 @@ public class ClickTextModel : ObservableObjectX
 
     public void Close()
     {
-        I18nResource.I18nObjectInfos.Remove(this);
+        //TODO:
+        //I18nResource.I18nObjectInfos.Remove(this);
     }
 }

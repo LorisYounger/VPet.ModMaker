@@ -1,12 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Media.Imaging;
+using HKW.HKWReactiveUI;
 using HKW.HKWUtils.Observable;
 using LinePutScript.Localization.WPF;
 using Microsoft.Win32;
@@ -15,13 +17,13 @@ using VPet_Simulator.Windows.Interface;
 
 namespace VPet.ModMaker.ViewModels.ModEdit.FoodEdit;
 
-public class FoodEditWindowVM : ObservableObjectX
+public partial class FoodEditWindowVM : ViewModelBase
 {
     public FoodEditWindowVM()
     {
-        AddImageCommand.ExecuteCommand += AddImageCommand_ExecuteCommand;
-        ChangeImageCommand.ExecuteCommand += ChangeImageCommand_ExecuteCommand;
-        SetReferencePriceCommand.ExecuteCommand += SetReferencePriceCommand_ExecuteCommand;
+        //AddImageCommand.ExecuteCommand += AddImage;
+        //ChangeImageCommand.ExecuteCommand += ChangeImage;
+        //SetReferencePriceCommand.ExecuteCommand += SetReferencePrice;
     }
 
     public static ModInfoModel ModInfo => ModInfoModel.Current;
@@ -34,51 +36,49 @@ public class FoodEditWindowVM : ObservableObjectX
     #region Property
     public FoodModel? OldFood { get; set; }
 
-    #region Food
-    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-    private FoodModel _food = new() { I18nResource = ModInfoModel.Current.I18nResource };
+    [ReactiveProperty]
+    public FoodModel Food { get; set; } =
+        new() { I18nResource = ModInfoModel.Current.I18nResource };
 
-    public FoodModel Food
-    {
-        get => _food;
-        set
-        {
-            if (_food is not null)
-                _food.PropertyChangedX -= Food_PropertyChangedX;
-            if (SetProperty(ref _food!, value) is false)
-                return;
-            Food.PropertyChangedX += Food_PropertyChangedX;
-        }
-    }
+    //TODO: 在FoodModel设置推荐价格
+    //partial void OnFoodChanged(FoodModel oldValue, FoodModel newValue)
+    //{
+    //    if (oldValue is not null)
+    //        oldValue.PropertyChanged -= Food_PropertyChangedX;
+    //    if (newValue is not null)
+    //        newValue.PropertyChanged += Food_PropertyChangedX;
+    //}
 
-    private void Food_PropertyChangedX(object? sender, PropertyChangedXEventArgs e)
-    {
-        if (e.PropertyName == nameof(FoodModel.ReferencePrice))
-        {
-            if (ModInfo.AutoSetFoodPrice)
-                SetReferencePriceCommand_ExecuteCommand((double)e.NewValue!);
-        }
-    }
-    #endregion
+    //private void Food_PropertyChangedX(object? sender, PropertyChangedEventArgs e)
+    //{
+    //    if (e.PropertyName == nameof(FoodModel.ReferencePrice))
+    //    {
+    //        if (ModInfo.AutoSetFoodPrice)
+    //            SetReferencePrice((double)e.NewValue!);
+    //    }
+    //}
     #endregion
 
-    #region Command
-    public ObservableCommand AddImageCommand { get; } = new();
-    public ObservableCommand ChangeImageCommand { get; } = new();
-    public ObservableCommand<double> SetReferencePriceCommand { get; } = new();
-    #endregion
-
-    private void SetReferencePriceCommand_ExecuteCommand(double value)
+    //#region Command
+    //public ObservableCommand AddImageCommand { get; } = new();
+    //public ObservableCommand ChangeImageCommand { get; } = new();
+    //public ObservableCommand<double> SetReferencePriceCommand { get; } = new();
+    //#endregion
+    /// <summary>
+    /// 设置推荐价格
+    /// </summary>
+    /// <param name="value"></param>
+    [ReactiveCommand]
+    private void SetReferencePrice(double value)
     {
         Food.Price = value;
     }
 
-    public void Close()
-    {
-        Food.Close();
-    }
-
-    private void AddImageCommand_ExecuteCommand()
+    /// <summary>
+    /// 添加图像
+    /// </summary>
+    [ReactiveCommand]
+    private void AddImage()
     {
         var openFileDialog = new OpenFileDialog()
         {
@@ -91,7 +91,11 @@ public class FoodEditWindowVM : ObservableObjectX
         }
     }
 
-    private void ChangeImageCommand_ExecuteCommand()
+    /// <summary>
+    /// 改变图像
+    /// </summary>
+    [ReactiveCommand]
+    private void ChangeImage()
     {
         var openFileDialog = new OpenFileDialog()
         {
@@ -103,5 +107,10 @@ public class FoodEditWindowVM : ObservableObjectX
             Food.Image?.StreamSource?.Close();
             Food.Image = NativeUtils.LoadImageToMemoryStream(openFileDialog.FileName);
         }
+    }
+
+    public void Close()
+    {
+        Food.Close();
     }
 }

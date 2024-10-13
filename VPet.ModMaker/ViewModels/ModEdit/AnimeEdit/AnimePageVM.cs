@@ -7,6 +7,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using HKW.HKWReactiveUI;
+using HKW.HKWUtils.Collections;
 using HKW.HKWUtils.Extensions;
 using HKW.HKWUtils.Observable;
 using LinePutScript.Localization.WPF;
@@ -17,13 +19,14 @@ using VPet.ModMaker.Views.ModEdit.AnimeEdit;
 
 namespace VPet.ModMaker.ViewModels.ModEdit.AnimeEdit;
 
-public class AnimePageVM : ObservableObjectX
+public partial class AnimePageVM : ViewModelBase
 {
     public AnimePageVM()
     {
-        AllAnimes = new()
-        {
-            Filter = (f) =>
+        AllAnimes = new(
+            [],
+            [],
+            (f) =>
             {
                 if (f is AnimeTypeModel animeModel)
                 {
@@ -35,47 +38,48 @@ public class AnimePageVM : ObservableObjectX
                 }
                 else
                     throw new Exception("???");
-            },
-            FilteredList = new()
-        };
-        PropertyChangedX += AnimePageVM_PropertyChangedX;
+            }
+        );
+        //TODO:
+        //PropertyChangedX += AnimePageVM_PropertyChangedX;
         if (Pets.HasValue())
             CurrentPet = Pets.FirstOrDefault(
                 m => m.FromMain is false && m.AnimeCount > 0,
                 Pets.First()
             );
 
-        AddCommand.ExecuteCommand += AddCommand_ExecuteCommand;
-        EditCommand.ExecuteCommand += EditCommand_ExecuteCommand;
-        RemoveCommand.ExecuteCommand += RemoveCommand_ExecuteCommand;
-        ModInfo.PropertyChangedX += ModInfo_PropertyChangedX;
+        //AddCommand.ExecuteCommand += Add;
+        //EditCommand.ExecuteCommand += Edit;
+        //RemoveCommand.ExecuteCommand += Remove;
+        //TODO:
+        //ModInfo.PropertyChangedX += ModInfo_PropertyChangedX;
     }
 
-    private void ModInfo_PropertyChangedX(object? sender, PropertyChangedXEventArgs e)
-    {
-        if (e.PropertyName == nameof(ModInfoModel.ShowMainPet))
-        {
-            if (e.NewValue is false)
-            {
-                if (CurrentPet?.FromMain is true)
-                {
-                    CurrentPet = null!;
-                }
-            }
-        }
-    }
+    //private void ModInfo_PropertyChangedX(object? sender, PropertyChangedXEventArgs e)
+    //{
+    //    if (e.PropertyName == nameof(ModInfoModel.ShowMainPet))
+    //    {
+    //        if (e.NewValue is false)
+    //        {
+    //            if (CurrentPet?.FromMain is true)
+    //            {
+    //                CurrentPet = null!;
+    //            }
+    //        }
+    //    }
+    //}
 
-    private void AnimePageVM_PropertyChangedX(object? sender, PropertyChangedXEventArgs e)
-    {
-        if (e.PropertyName == nameof(CurrentPet))
-        {
-            InitializeAllAnimes();
-        }
-        else if (e.PropertyName == nameof(Search))
-        {
-            AllAnimes.Refresh();
-        }
-    }
+    //private void AnimePageVM_PropertyChangedX(object? sender, PropertyChangedXEventArgs e)
+    //{
+    //    if (e.PropertyName == nameof(CurrentPet))
+    //    {
+    //        InitializeAllAnimes();
+    //    }
+    //    else if (e.PropertyName == nameof(Search))
+    //    {
+    //        AllAnimes.Refresh();
+    //    }
+    //}
 
     public static ModInfoModel ModInfo => ModInfoModel.Current;
 
@@ -83,16 +87,8 @@ public class AnimePageVM : ObservableObjectX
     /// <summary>
     /// 所有动画
     /// </summary>
-    #region AllAnimes
-    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-    private ObservableFilterList<object, ObservableList<object>> _allAnimes = null!;
 
-    public ObservableFilterList<object, ObservableList<object>> AllAnimes
-    {
-        get => _allAnimes;
-        set => SetProperty(ref _allAnimes, value);
-    }
-    #endregion
+    public FilterListWrapper<object, List<object>, ObservableList<object>> AllAnimes { get; }
 
     /// <summary>
     /// 动画
@@ -109,51 +105,34 @@ public class AnimePageVM : ObservableObjectX
     /// </summary>
     public static ObservableList<PetModel> Pets => ModInfoModel.Current.Pets;
 
-    #region CurrentPEt
-    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-    private PetModel _currentPet = null!;
-
     /// <summary>
     /// 当前宠物
     /// </summary>
-    public PetModel CurrentPet
-    {
-        get => _currentPet;
-        set => SetProperty(ref _currentPet, value);
-    }
-    #endregion
-
-
-    #region Search
-    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-    private string _search = string.Empty;
+    [ReactiveProperty]
+    public PetModel CurrentPet { get; set; }
 
     /// <summary>
     /// 搜索
     /// </summary>
-    public string Search
-    {
-        get => _search;
-        set => SetProperty(ref _search, value);
-    }
+    [ReactiveProperty]
+    public string Search { get; set; } = string.Empty;
     #endregion
-    #endregion
-    #region Command
-    /// <summary>
-    /// 添加命令
-    /// </summary>
-    public ObservableCommand AddCommand { get; } = new();
+    //#region Command
+    ///// <summary>
+    ///// 添加命令
+    ///// </summary>
+    //public ObservableCommand AddCommand { get; } = new();
 
-    /// <summary>
-    /// 编辑命令
-    /// </summary>
-    public ObservableCommand<object> EditCommand { get; } = new();
+    ///// <summary>
+    ///// 编辑命令
+    ///// </summary>
+    //public ObservableCommand<object> EditCommand { get; } = new();
 
-    /// <summary>
-    /// 删除命令
-    /// </summary>
-    public ObservableCommand<object> RemoveCommand { get; } = new();
-    #endregion
+    ///// <summary>
+    ///// 删除命令
+    ///// </summary>
+    //public ObservableCommand<object> RemoveCommand { get; } = new();
+    //#endregion
     private void InitializeAllAnimes()
     {
         AllAnimes.Clear();
@@ -182,7 +161,8 @@ public class AnimePageVM : ObservableObjectX
     /// <summary>
     /// 添加动画
     /// </summary>
-    private void AddCommand_ExecuteCommand()
+    [ReactiveCommand]
+    private void Add()
     {
         var selectGraphTypeWindow = new SelectGraphTypeWindow();
         selectGraphTypeWindow.ViewModel.CurrentPet = CurrentPet;
@@ -215,7 +195,8 @@ public class AnimePageVM : ObservableObjectX
                 vm.Anime.ID = graphType.ToString();
             else
                 vm.Anime.Name = animeName;
-            vm.CheckGraphType();
+            //TODO:
+            //vm.CheckGraphType();
             window.ShowDialog();
             if (window.IsCancel)
                 return;
@@ -227,7 +208,8 @@ public class AnimePageVM : ObservableObjectX
     /// 编辑动画
     /// </summary>
     /// <param name="model">动画类型模型</param>
-    public void EditCommand_ExecuteCommand(object model)
+    [ReactiveCommand]
+    public void Edit(object model)
     {
         var pendingHandler = PendingBox.Show("载入中".Translate());
         if (model is AnimeTypeModel animeTypeModel)
@@ -262,7 +244,8 @@ public class AnimePageVM : ObservableObjectX
     /// 删除动画
     /// </summary>
     /// <param name="model">动画类型模型</param>
-    private void RemoveCommand_ExecuteCommand(object model)
+    [ReactiveCommand]
+    private void Remove(object model)
     {
         if (MessageBox.Show("确定删除吗".Translate(), "", MessageBoxButton.YesNo) is MessageBoxResult.No)
             return;

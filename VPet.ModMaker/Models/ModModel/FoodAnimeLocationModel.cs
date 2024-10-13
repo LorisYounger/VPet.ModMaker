@@ -4,30 +4,24 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using HKW.HKWReactiveUI;
 using HKW.HKWUtils.Observable;
+using VPet.ModMaker.ViewModels;
 
 namespace VPet.ModMaker.Models.ModModel;
 
 /// <summary>
 /// 食物图像位置模型
 /// </summary>
-public class FoodAnimeLocationModel : ObservableObjectX, ICloneable<FoodAnimeLocationModel>
+public partial class FoodAnimeLocationModel : ViewModelBase, ICloneable<FoodAnimeLocationModel>
 {
     public FoodAnimeLocationModel() { }
 
-    #region Duration
-    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-    private int _duration;
-
     /// <summary>
-    /// 持续时间
+    /// 持续时间(ms)
     /// </summary>
-    public int Duration
-    {
-        get => _duration;
-        set => SetProperty(ref _duration, value);
-    }
-    #endregion
+    [ReactiveProperty]
+    public int Duration { get; set; } = 100;
 
     /// <summary>
     /// 矩形位置
@@ -37,30 +31,15 @@ public class FoodAnimeLocationModel : ObservableObjectX, ICloneable<FoodAnimeLoc
     /// <summary>
     /// 旋转角度
     /// </summary>
-    #region Rotate
-    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-    private double _rotate;
-
-    public double Rotate
-    {
-        get => _rotate;
-        set => SetProperty(ref _rotate, value);
-    }
-    #endregion
+    [ReactiveProperty]
+    public double Rotate { get; set; }
 
     /// <summary>
     /// 透明度
     /// </summary>
-    #region Opacity
-    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-    private double _opacity = 1.0;
+    [ReactiveProperty]
+    public double Opacity { get; set; } = 1.0;
 
-    public double Opacity
-    {
-        get => _opacity;
-        set => SetProperty(ref _opacity, value);
-    }
-    #endregion
     public FoodAnimeLocationModel Clone()
     {
         var model = new FoodAnimeLocationModel

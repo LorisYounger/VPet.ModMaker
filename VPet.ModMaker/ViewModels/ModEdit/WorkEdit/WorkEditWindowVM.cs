@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Media.Imaging;
+using HKW.HKWReactiveUI;
 using HKW.HKWUtils.Extensions;
 using HKW.HKWUtils.Observable;
 using LinePutScript.Localization.WPF;
@@ -16,33 +17,41 @@ using VPet_Simulator.Windows.Interface;
 
 namespace VPet.ModMaker.ViewModels.ModEdit.WorkEdit;
 
-public class WorkEditWindowVM : ObservableObjectX
+public partial class WorkEditWindowVM : ViewModelBase
 {
     public WorkEditWindowVM()
     {
-        PropertyChangedX += WorkEditWindowVM_PropertyChangedX;
-        Work.PropertyChanged += NewWork_PropertyChanged;
-        AddImageCommand.ExecuteCommand += AddImageCommand_ExecuteCommand;
-        ChangeImageCommand.ExecuteCommand += ChangeImageCommand_ExecuteCommand;
-        FixOverLoadCommand.ExecuteCommand += FixOverLoadCommand_ExecuteCommand;
+        //PropertyChangedX += WorkEditWindowVM_PropertyChangedX;
+        //Work.PropertyChanged += NewWork_PropertyChanged;
+        //AddImageCommand.ExecuteCommand += AddImage;
+        //ChangeImageCommand.ExecuteCommand += ChangeImage;
+        //FixOverLoadCommand.ExecuteCommand += FixOverLoad;
     }
 
-    private void WorkEditWindowVM_PropertyChangedX(object? sender, PropertyChangedXEventArgs e)
+    /// <summary>
+    /// I18n资源
+    /// </summary>
+    public static I18nResource<string, string> I18nResource => ModInfoModel.Current.I18nResource;
+    #region Property
+    public PetModel CurrentPet { get; set; } = null!;
+    public WorkModel? OldWork { get; set; }
+
+    [ReactiveProperty]
+    public WorkModel Work { get; set; } =
+        new() { I18nResource = ModInfoModel.Current.I18nResource };
+
+    partial void OnWorkChanged(WorkModel oldValue, WorkModel newValue)
     {
-        if (e.PropertyName == nameof(Work))
+        //TODO:
+        if (oldValue is not null)
         {
-            var newWork = e.NewValue as WorkModel;
-            var oldWork = e.OldValue as WorkModel;
-            if (oldWork is not null)
-            {
-                oldWork.PropertyChanged -= NewWork_PropertyChanged;
-            }
-            if (newWork is not null)
-            {
-                newWork.PropertyChanged -= NewWork_PropertyChanged;
-                newWork.PropertyChanged += NewWork_PropertyChanged;
-                SetGraphImage(newWork);
-            }
+            oldValue.PropertyChanged -= NewWork_PropertyChanged;
+        }
+        if (newValue is not null)
+        {
+            newValue.PropertyChanged -= NewWork_PropertyChanged;
+            newValue.PropertyChanged += NewWork_PropertyChanged;
+            SetGraphImage(newValue);
         }
     }
 
@@ -53,6 +62,63 @@ public class WorkEditWindowVM : ObservableObjectX
         if (e.PropertyName == nameof(WorkModel.Graph))
         {
             SetGraphImage(workModel);
+        }
+    }
+
+    [ReactiveProperty]
+    public double BorderLength { get; set; } = 250;
+
+    [ReactiveProperty]
+    public double LengthRatio { get; set; } = 250 / 500;
+
+    /// <summary>
+    /// 图片
+    /// </summary>
+    [ReactiveProperty]
+    public BitmapImage? Image { get; set; }
+    #endregion
+    //#region Command
+    //public ObservableCommand AddImageCommand { get; } = new();
+    //public ObservableCommand ChangeImageCommand { get; } = new();
+
+    //public ObservableCommand FixOverLoadCommand { get; } = new();
+    //#endregion
+
+    /// <summary>
+    /// 修复超模
+    /// </summary>
+    [ReactiveCommand]
+    private void FixOverLoad()
+    {
+        Work.FixOverLoad();
+    }
+
+    [ReactiveCommand]
+    private void AddImage()
+    {
+        var openFileDialog = new OpenFileDialog()
+        {
+            Title = "选择图片".Translate(),
+            Filter = $"图片|*.jpg;*.jpeg;*.png;*.bmp".Translate()
+        };
+        if (openFileDialog.ShowDialog() is true)
+        {
+            Image = NativeUtils.LoadImageToMemoryStream(openFileDialog.FileName);
+        }
+    }
+
+    [ReactiveCommand]
+    private void ChangeImage()
+    {
+        var openFileDialog = new OpenFileDialog()
+        {
+            Title = "选择图片".Translate(),
+            Filter = $"图片|*.jpg;*.jpeg;*.png;*.bmp".Translate()
+        };
+        if (openFileDialog.ShowDialog() is true)
+        {
+            Image?.CloseStream();
+            Image = NativeUtils.LoadImageToMemoryStream(openFileDialog.FileName);
         }
     }
 
@@ -89,96 +155,6 @@ public class WorkEditWindowVM : ObservableObjectX
         else if (anime.IllAnimes.HasValue())
         {
             Image = anime.IllAnimes.Random().Images.Random().Image.CloneStream();
-        }
-    }
-
-    /// <summary>
-    /// I18n资源
-    /// </summary>
-    public static I18nResource<string, string> I18nResource => ModInfoModel.Current.I18nResource;
-    #region Property
-    public PetModel CurrentPet { get; set; } = null!;
-    public WorkModel? OldWork { get; set; }
-
-    #region Work
-    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-    private WorkModel _work = new() { I18nResource = ModInfoModel.Current.I18nResource };
-
-    public WorkModel Work
-    {
-        get => _work;
-        set => SetProperty(ref _work, value);
-    }
-    #endregion
-    #endregion
-    #region BorderLength
-    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-    private double _borderLength = 250;
-
-    public double BorderLength
-    {
-        get => _borderLength;
-        set => SetProperty(ref _borderLength, value);
-    }
-    #endregion
-    #region LengthRatio
-    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-    private double _lengthRatio = 250 / 500;
-
-    public double LengthRatio
-    {
-        get => _lengthRatio;
-        set => SetProperty(ref _lengthRatio, value);
-    }
-    #endregion
-    #region Image
-    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-    private BitmapImage? _image;
-
-    /// <summary>
-    /// 图片
-    /// </summary>
-    public BitmapImage? Image
-    {
-        get => _image;
-        set => SetProperty(ref _image, value);
-    }
-    #endregion
-    #region Command
-    public ObservableCommand AddImageCommand { get; } = new();
-    public ObservableCommand ChangeImageCommand { get; } = new();
-
-    public ObservableCommand FixOverLoadCommand { get; } = new();
-    #endregion
-    private void FixOverLoadCommand_ExecuteCommand()
-    {
-        Work.FixOverLoad();
-    }
-
-    private void AddImageCommand_ExecuteCommand()
-    {
-        var openFileDialog = new OpenFileDialog()
-        {
-            Title = "选择图片".Translate(),
-            Filter = $"图片|*.jpg;*.jpeg;*.png;*.bmp".Translate()
-        };
-        if (openFileDialog.ShowDialog() is true)
-        {
-            Image = NativeUtils.LoadImageToMemoryStream(openFileDialog.FileName);
-        }
-    }
-
-    private void ChangeImageCommand_ExecuteCommand()
-    {
-        var openFileDialog = new OpenFileDialog()
-        {
-            Title = "选择图片".Translate(),
-            Filter = $"图片|*.jpg;*.jpeg;*.png;*.bmp".Translate()
-        };
-        if (openFileDialog.ShowDialog() is true)
-        {
-            Image?.CloseStream();
-            Image = NativeUtils.LoadImageToMemoryStream(openFileDialog.FileName);
         }
     }
 

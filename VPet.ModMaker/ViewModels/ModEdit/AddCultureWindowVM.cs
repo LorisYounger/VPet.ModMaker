@@ -6,106 +6,79 @@ using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using HKW.HKWReactiveUI;
+using HKW.HKWUtils.Collections;
+using HKW.HKWUtils.Extensions;
 using HKW.HKWUtils.Observable;
 using LinePutScript.Localization.WPF;
 using VPet.ModMaker.Models;
 
 namespace VPet.ModMaker.ViewModels.ModEdit;
 
-public class AddCultureWindowVM : ObservableObjectX
+public partial class AddCultureWindowVM : ViewModelBase
 {
-    /// <summary>
-    /// 显示的文化
-    /// </summary>
-    #region ShowCultures
-    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-    private ObservableFilterList<string, ObservableList<string>> _allCultures = null!;
+    public AddCultureWindowVM()
+    {
+        AllCultures = new(
+            LocalizeCore.AvailableCultures,
+            [],
+            c => c.Contains(Search, StringComparison.OrdinalIgnoreCase)
+        );
+    }
 
     /// <summary>
     /// 全部文化
     /// </summary>
-    public ObservableFilterList<string, ObservableList<string>> AllCultures
-    {
-        get => _allCultures;
-        set => SetProperty(ref _allCultures, value);
-    }
-    #endregion
+    public FilterListWrapper<
+        string,
+        IList<string>,
+        ObservableList<string>
+    > AllCultures { get; set; }
 
     /// <summary>
-    /// 当前文化
+    /// 文化名称
     /// </summary>
-    #region Culture
-    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-    private string _culture = string.Empty;
 
-    public string CultureName
-    {
-        get => _culture;
-        set
+    [ReactiveProperty]
+    public string CultureName { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 文化全名
+    /// </summary>
+    [NotifyPropertyChangeFrom(nameof(CultureName))]
+    public string CultureFullName =>
+        this.To(static x =>
         {
-            SetProperty(ref _culture, value);
-            if (string.IsNullOrWhiteSpace(CultureName))
+            if (string.IsNullOrWhiteSpace(x.CultureName))
             {
-                CultureFullName = UnknownCulture;
-                return;
+                return UnknownCulture;
             }
             CultureInfo info = null!;
             try
             {
-                info = CultureInfo.GetCultureInfo(CultureName);
+                info = CultureInfo.GetCultureInfo(x.CultureName);
             }
             catch
             {
-                CultureFullName = UnknownCulture;
+                return UnknownCulture;
             }
             if (info is not null)
             {
-                CultureFullName = info.GetFullInfo();
+                return info.GetFullInfo();
             }
-        }
-    }
-    #endregion
-
-    /// <summary>
-    /// 当前文化全名
-    /// </summary>
-    #region CultureFullName
-    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-    private string _cultureFullName = string.Empty;
-
-    public string CultureFullName
-    {
-        get => _cultureFullName;
-        set => SetProperty(ref _cultureFullName, value);
-    }
-    #endregion
+            return UnknownCulture;
+        });
 
     /// <summary>
     /// 搜索文化
     /// </summary>
-    #region Search
-    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-    private string _search = string.Empty;
+    [ReactiveProperty]
+    public string Search { get; set; } = string.Empty;
 
-    public string Search
+    partial void OnSearchChanged(string oldValue, string newValue)
     {
-        get => _search;
-        set
-        {
-            SetProperty(ref _search, value);
-            AllCultures.Refresh();
-        }
+        AllCultures.Refresh();
     }
-    #endregion
 
     public static string UnknownCulture => "未知文化".Translate();
-
-    public AddCultureWindowVM()
-    {
-        AllCultures = new(LocalizeCore.AvailableCultures)
-        {
-            Filter = c => c.Contains(Search, StringComparison.OrdinalIgnoreCase),
-            FilteredList = new()
-        };
-    }
 }

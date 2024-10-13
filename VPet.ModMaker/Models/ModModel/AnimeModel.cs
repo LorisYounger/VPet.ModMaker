@@ -2,8 +2,11 @@
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using HKW.HKWReactiveUI;
 using HKW.HKWUtils.Extensions;
 using HKW.HKWUtils.Observable;
+using ReactiveUI;
+using VPet.ModMaker.ViewModels;
 using VPet_Simulator.Core;
 
 namespace VPet.ModMaker.Models.ModModel;
@@ -11,7 +14,7 @@ namespace VPet.ModMaker.Models.ModModel;
 /// <summary>
 /// 动画模型
 /// </summary>
-public class AnimeModel : ObservableObjectX, ICloneable<AnimeModel>
+public partial class AnimeModel : ViewModelBase, ICloneable<AnimeModel>
 {
     public AnimeModel() { }
 
@@ -29,38 +32,22 @@ public class AnimeModel : ObservableObjectX, ICloneable<AnimeModel>
         }
     }
 
-    #region ID
-    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-    private string _id = string.Empty;
-
     /// <summary>
     /// ID
     /// </summary>
-    public string ID
-    {
-        get => _id;
-        set => SetProperty(ref _id, value);
-    }
-    #endregion
-
-    #region AnimeType
-    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-    private GraphInfo.AnimatType _animeType;
+    [ReactiveProperty]
+    public string ID { get; set; } = string.Empty;
 
     /// <summary>
     /// 动画类型
     /// </summary>
-    public GraphInfo.AnimatType AnimeType
-    {
-        get => _animeType;
-        set => SetProperty(ref _animeType, value);
-    }
-    #endregion
+    [ReactiveProperty]
+    public GraphInfo.AnimatType AnimeType { get; set; }
 
     /// <summary>
     /// 图像列表
     /// </summary>
-    public ObservableList<ImageModel> Images { get; } = new();
+    public ObservableList<ImageModel> Images { get; } = [];
 
     public void LoadAnime()
     {
@@ -76,9 +63,7 @@ public class AnimeModel : ObservableObjectX, ICloneable<AnimeModel>
     /// <returns></returns>
     public AnimeModel Clone()
     {
-        var model = new AnimeModel();
-        model.ID = ID;
-        model.AnimeType = AnimeType;
+        var model = new AnimeModel { ID = ID, AnimeType = AnimeType };
         foreach (var image in Images)
             model.Images.Add(image.Clone());
         return model;

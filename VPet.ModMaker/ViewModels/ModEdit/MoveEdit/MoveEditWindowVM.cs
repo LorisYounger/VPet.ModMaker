@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Media.Imaging;
+using HKW.HKWReactiveUI;
 using HKW.HKWUtils.Observable;
 using LinePutScript.Localization.WPF;
 using Microsoft.Win32;
@@ -12,64 +13,34 @@ using VPet.ModMaker.Models;
 
 namespace VPet.ModMaker.ViewModels.ModEdit.MoveEdit;
 
-public class MoveEditWindowVM : ObservableObjectX
+public partial class MoveEditWindowVM : ViewModelBase
 {
     public MoveEditWindowVM()
     {
-        AddImageCommand.ExecuteCommand += AddImageCommand_ExecuteCommand;
-        ChangeImageCommand.ExecuteCommand += ChangeImageCommand_ExecuteCommand;
+        //AddImageCommand.ExecuteCommand += AddImage;
+        //ChangeImageCommand.ExecuteCommand += ChangeImage;
         //Image.ValueChanged += Image_ValueChanged;
     }
 
-    #region Property
     public PetModel CurrentPet { get; set; } = null!;
     public MoveModel? OldMove { get; set; }
 
-    #region Move
-    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-    private MoveModel _move = new();
+    [ReactiveProperty]
+    public MoveModel Move { get; set; } = new();
 
-    public MoveModel Move
-    {
-        get => _move;
-        set => SetProperty(ref _move, value);
-    }
-    #endregion
-    #endregion
-    #region BorderLength
-    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-    private double _borderLength = 250;
+    [ReactiveProperty]
+    public double BorderLength { get; set; } = 250;
 
-    public double BorderLength
-    {
-        get => _borderLength;
-        set => SetProperty(ref _borderLength, value);
-    }
-    #endregion
-    #region LengthRatio
-    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-    private double _lengthRatio = 250 / 500;
+    [ReactiveProperty]
+    public double LengthRatio { get; set; } = 250 / 500;
 
-    public double LengthRatio
-    {
-        get => _lengthRatio;
-        set => SetProperty(ref _lengthRatio, value);
-    }
-    #endregion
-    #region Image
-    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-    private BitmapImage? _image;
+    [ReactiveProperty]
+    public BitmapImage? Image { get; set; }
 
-    public BitmapImage? Image
-    {
-        get => _image;
-        set => SetProperty(ref _image, value);
-    }
-    #endregion
-    #region Command
-    public ObservableCommand AddImageCommand { get; } = new();
-    public ObservableCommand ChangeImageCommand { get; } = new();
-    #endregion
+    //#region Command
+    //public ObservableCommand AddImageCommand { get; } = new();
+    //public ObservableCommand ChangeImageCommand { get; } = new();
+    //#endregion
 
     private void Image_ValueChanged(
         ObservableValue<BitmapImage> sender,
@@ -84,7 +55,8 @@ public class MoveEditWindowVM : ObservableObjectX
         Image?.StreamSource?.Close();
     }
 
-    private void AddImageCommand_ExecuteCommand()
+    [ReactiveCommand]
+    private void AddImage()
     {
         var openFileDialog = new OpenFileDialog()
         {
@@ -97,7 +69,8 @@ public class MoveEditWindowVM : ObservableObjectX
         }
     }
 
-    private void ChangeImageCommand_ExecuteCommand()
+    [ReactiveCommand]
+    private void ChangeImage()
     {
         var openFileDialog = new OpenFileDialog()
         {

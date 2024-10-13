@@ -7,6 +7,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using HKW.HKWReactiveUI;
+using HKW.HKWUtils.Collections;
 using HKW.HKWUtils.Extensions;
 using HKW.HKWUtils.Observable;
 using LinePutScript.Localization.WPF;
@@ -15,93 +17,66 @@ using VPet.ModMaker.Views.ModEdit.MoveEdit;
 
 namespace VPet.ModMaker.ViewModels.ModEdit.MoveEdit;
 
-public class MovePageVM : ObservableObjectX
+public partial class MovePageVM : ViewModelBase
 {
     public MovePageVM()
     {
-        Moves = new()
-        {
-            Filter = f => f.Graph.Contains(Search, StringComparison.OrdinalIgnoreCase),
-            FilteredList = new()
-        };
+        Moves = new([], [], f => f.Graph.Contains(Search, StringComparison.OrdinalIgnoreCase));
 
-        PropertyChangedX += MovePageVM_PropertyChangedX;
-        ;
+        //PropertyChangedX += MovePageVM_PropertyChangedX;
         if (Pets.HasValue())
             CurrentPet = Pets.FirstOrDefault(
                 m => m.FromMain is false && m.Moves.HasValue(),
                 Pets.First()
             );
-        AddCommand.ExecuteCommand += AddCommand_ExecuteCommand;
-        EditCommand.ExecuteCommand += EditCommand_ExecuteCommand;
-        RemoveCommand.ExecuteCommand += RemoveCommand_ExecuteCommand;
+        //AddCommand.ExecuteCommand += Add;
+        //EditCommand.ExecuteCommand += Edit;
+        //RemoveCommand.ExecuteCommand += Remove;
     }
 
     public static ModInfoModel ModInfo => ModInfoModel.Current;
 
-    #region Property
-    #region ShowMoves
-    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-    private ObservableFilterList<MoveModel, ObservableList<MoveModel>> _moves;
-
-    public ObservableFilterList<MoveModel, ObservableList<MoveModel>> Moves
-    {
-        get => _moves;
-        set => SetProperty(ref _moves, value);
-    }
-    #endregion
+    public FilterListWrapper<
+        MoveModel,
+        List<MoveModel>,
+        ObservableList<MoveModel>
+    > Moves { get; set; }
 
     public static ObservableList<PetModel> Pets => ModInfoModel.Current.Pets;
 
-    #region CurrentPet
-    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-    private PetModel _currentPet;
+    [ReactiveProperty]
+    public PetModel CurrentPet { get; set; }
 
-    public PetModel CurrentPet
+    partial void OnCurrentPetChanged(PetModel oldValue, PetModel newValue)
     {
-        get => _currentPet;
-        set => SetProperty(ref _currentPet, value);
+        //TODO:
+        //Moves.Clear();
+        //if (oldValue is not null )
+        //    Moves.BindingList(pet.Moves, true);
+        //if (newValue is null)
+        //    return;
+        //Moves.AddRange(CurrentPet.Moves);
+        //Moves.BindingList(CurrentPet.Moves);
     }
-    #endregion
 
-    #region Search
-    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-    private string _search = string.Empty;
+    [ReactiveProperty]
+    public string Search { get; set; } = string.Empty;
 
-    public string Search
+    partial void OnSearchChanged(string oldValue, string newValue)
     {
-        get => _search;
-        set => SetProperty(ref _search, value);
+        Moves.Refresh();
     }
-    #endregion
-    #endregion
-    #region Command
-    public ObservableCommand AddCommand { get; } = new();
-    public ObservableCommand<MoveModel> EditCommand { get; } = new();
-    public ObservableCommand<MoveModel> RemoveCommand { get; } = new();
-    #endregion
 
-    private void MovePageVM_PropertyChangedX(object? sender, PropertyChangedXEventArgs e)
-    {
-        if (e.PropertyName == nameof(CurrentPet))
-        {
-            Moves.Clear();
-            if (e.OldValue is PetModel pet)
-                Moves.BindingList(pet.Moves, true);
-            if (e.NewValue is null)
-                return;
-            Moves.AddRange(CurrentPet.Moves);
-            Moves.BindingList(CurrentPet.Moves);
-        }
-        else if (e.PropertyName == nameof(Search))
-        {
-            Moves.Refresh();
-        }
-    }
+    //#region Command
+    //public ObservableCommand AddCommand { get; } = new();
+    //public ObservableCommand<MoveModel> EditCommand { get; } = new();
+    //public ObservableCommand<MoveModel> RemoveCommand { get; } = new();
+    //#endregion
 
     public void Close() { }
 
-    private void AddCommand_ExecuteCommand()
+    [ReactiveCommand]
+    private void Add()
     {
         var window = new MoveEditWindow();
         var vm = window.ViewModel;
@@ -112,7 +87,8 @@ public class MovePageVM : ObservableObjectX
         Moves.Add(vm.Move);
     }
 
-    public void EditCommand_ExecuteCommand(MoveModel model)
+    [ReactiveCommand]
+    public void Edit(MoveModel model)
     {
         var window = new MoveEditWindow();
         var vm = window.ViewModel;
@@ -125,7 +101,8 @@ public class MovePageVM : ObservableObjectX
         Moves[Moves.IndexOf(model)] = newMove;
     }
 
-    private void RemoveCommand_ExecuteCommand(MoveModel model)
+    [ReactiveCommand]
+    private void Remove(MoveModel model)
     {
         if (MessageBox.Show("确定删除吗".Translate(), "", MessageBoxButton.YesNo) is MessageBoxResult.No)
             return;

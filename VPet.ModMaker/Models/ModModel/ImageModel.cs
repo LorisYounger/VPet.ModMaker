@@ -5,15 +5,17 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Media.Imaging;
+using HKW.HKWReactiveUI;
 using HKW.HKWUtils;
 using HKW.HKWUtils.Observable;
+using VPet.ModMaker.ViewModels;
 
 namespace VPet.ModMaker.Models.ModModel;
 
 /// <summary>
 /// 图像模型
 /// </summary>
-public class ImageModel : ObservableObjectX, ICloneable<ImageModel>
+public partial class ImageModel : ViewModelBase, ICloneable<ImageModel>
 {
     public ImageModel(string imageFile, int duration = 100)
     {
@@ -32,33 +34,17 @@ public class ImageModel : ObservableObjectX, ICloneable<ImageModel>
     /// </summary>
     public string ImageFile { get; set; } = string.Empty;
 
-    #region Image
-    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-    private BitmapImage _image = null!;
-
     /// <summary>
     /// 图像
     /// </summary>
-    public BitmapImage Image
-    {
-        get => _image;
-        set => SetProperty(ref _image, value);
-    }
-    #endregion
-
-    #region Duration
-    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-    private int _duration;
+    [ReactiveProperty]
+    public BitmapImage Image { get; set; } = null!;
 
     /// <summary>
     /// 持续时间
     /// </summary>
-    public int Duration
-    {
-        get => _duration;
-        set => SetProperty(ref _duration, value);
-    }
-    #endregion
+    [ReactiveProperty]
+    public int Duration { get; set; } = 100;
 
     public void LoadImage()
     {

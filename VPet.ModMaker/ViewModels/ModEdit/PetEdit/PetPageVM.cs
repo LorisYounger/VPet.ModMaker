@@ -6,6 +6,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using HKW.HKWReactiveUI;
+using HKW.HKWUtils.Collections;
 using HKW.HKWUtils.Extensions;
 using HKW.HKWUtils.Observable;
 using LinePutScript.Localization.WPF;
@@ -15,83 +17,65 @@ using VPet.ModMaker.Views.ModEdit.PetEdit;
 
 namespace VPet.ModMaker.ViewModels.ModEdit.PetEdit;
 
-public class PetPageVM : ObservableObjectX
+public partial class PetPageVM : ViewModelBase
 {
     public PetPageVM()
     {
-        Pets = new(ModInfoModel.Current.Pets)
-        {
-            Filter = (f) =>
+        Pets = new(
+            ModInfoModel.Current.Pets,
+            [],
+            (f) =>
             {
                 if (ShowMainPet is false && f.FromMain)
                     return false;
                 return f.ID.Contains(Search, StringComparison.OrdinalIgnoreCase);
-            },
-            FilteredList = new()
-        };
-        Pets.BindingList(ModInfoModel.Current.Pets);
+            }
+        );
+        //TODO:
+        //Pets.BindingList(ModInfoModel.Current.Pets);
 
-        AddCommand.ExecuteCommand += AddCommand_ExecuteCommand;
-        EditCommand.ExecuteCommand += EditCommand_ExecuteCommand;
-        RemoveCommand.ExecuteCommand += RemoveCommand_ExecuteCommand;
+        //AddCommand.ExecuteCommand += Add;
+        //EditCommand.ExecuteCommand += Edit;
+        //RemoveCommand.ExecuteCommand += Remove;
     }
 
     public static ModInfoModel ModInfo => ModInfoModel.Current;
 
     #region Property
-    #region ShowPets
-    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-    private ObservableFilterList<PetModel, ObservableList<PetModel>> _pets = null!;
+    public FilterListWrapper<
+        PetModel,
+        ObservableList<PetModel>,
+        ObservableList<PetModel>
+    > Pets { get; set; }
 
-    public ObservableFilterList<PetModel, ObservableList<PetModel>> Pets
+    [ReactiveProperty]
+    public string Search { get; set; } = string.Empty;
+
+    partial void OnSearchChanged(string oldValue, string newValue)
     {
-        get => _pets;
-        set => SetProperty(ref _pets, value);
+        Pets.Refresh();
+    }
+
+    [ReactiveProperty]
+    public bool ShowMainPet { get; set; }
+
+    partial void OnShowMainPetChanged(bool oldValue, bool newValue)
+    {
+        ModInfo.ShowMainPet = newValue;
+        Pets.Refresh();
     }
     #endregion
 
-    #region Search
-    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-    private string _search = string.Empty;
-
-    public string Search
-    {
-        get => _search;
-        set
-        {
-            SetProperty(ref _search, value);
-            Pets.Refresh();
-        }
-    }
-    #endregion
-
-
-    #region ShowMainPet
-    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-    private bool _showMainPet;
-
-    public bool ShowMainPet
-    {
-        get => _showMainPet;
-        set
-        {
-            SetProperty(ref _showMainPet, value);
-            ModInfo.ShowMainPet = value;
-            Pets.Refresh();
-        }
-    }
-    #endregion
-
-    #endregion
-    #region Command
-    public ObservableCommand AddCommand { get; } = new();
-    public ObservableCommand<PetModel> EditCommand { get; } = new();
-    public ObservableCommand<PetModel> RemoveCommand { get; } = new();
-    #endregion
+    //#region Command
+    //public ObservableCommand AddCommand { get; } = new();
+    //public ObservableCommand<PetModel> EditCommand { get; } = new();
+    //public ObservableCommand<PetModel> RemoveCommand { get; } = new();
+    //#endregion
 
     public void Close() { }
 
-    private void AddCommand_ExecuteCommand()
+    [ReactiveCommand]
+    private void Add()
     {
         var window = new PetEditWindow();
         var vm = window.ViewModel;
@@ -101,7 +85,8 @@ public class PetPageVM : ObservableObjectX
         Pets.Add(vm.Pet);
     }
 
-    public void EditCommand_ExecuteCommand(PetModel model)
+    [ReactiveCommand]
+    public void Edit(PetModel model)
     {
         if (model.FromMain)
         {
@@ -142,7 +127,8 @@ public class PetPageVM : ObservableObjectX
         model.CloseI18nResource();
     }
 
-    private void RemoveCommand_ExecuteCommand(PetModel model)
+    [ReactiveCommand]
+    private void Remove(PetModel model)
     {
         if (model.FromMain)
         {
