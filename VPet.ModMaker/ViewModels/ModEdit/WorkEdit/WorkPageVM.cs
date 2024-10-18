@@ -4,14 +4,17 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
+using System.Reactive.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using DynamicData.Binding;
 using HKW.HKWReactiveUI;
 using HKW.HKWUtils.Collections;
 using HKW.HKWUtils.Extensions;
 using HKW.HKWUtils.Observable;
 using LinePutScript.Localization.WPF;
+using ReactiveUI;
 using VPet.ModMaker.Models;
 using VPet.ModMaker.Views.ModEdit.WorkEdit;
 
@@ -22,32 +25,30 @@ public partial class WorkPageVM : ViewModelBase
     public WorkPageVM()
     {
         Works = new([], [], f => f.ID.Contains(Search, StringComparison.OrdinalIgnoreCase));
-        //PropertyChangedX += WorkPageVM_PropertyChangedX;
 
         if (Pets.HasValue())
             CurrentPet = Pets.FirstOrDefault(
                 m => m.FromMain is false && m.Works.HasValue(),
                 Pets.First()
             );
-        //AddCommand.ExecuteCommand += Add;
-        //EditCommand.ExecuteCommand += Edit;
-        //RemoveCommand.ExecuteCommand += Remove;
-        //ModInfo.PropertyChangedX += ModInfo_PropertyChangedX;
-    }
 
-    //private void ModInfo_PropertyChangedX(object? sender, PropertyChangedXEventArgs e)
-    //{
-    //    if (e.PropertyName == nameof(ModInfoModel.ShowMainPet))
-    //    {
-    //        if (e.NewValue is false)
-    //        {
-    //            if (CurrentPet?.FromMain is false)
-    //            {
-    //                CurrentPet = null!;
-    //            }
-    //        }
-    //    }
-    //}
+        ModInfo
+            .WhenValueChanged(x => x.ShowMainPet)
+            .Throttle(TimeSpan.FromSeconds(1), RxApp.TaskpoolScheduler)
+            .DistinctUntilChanged()
+            .ObserveOn(RxApp.MainThreadScheduler)
+            .Subscribe(_ =>
+            {
+                if (CurrentPet?.FromMain is false)
+                    CurrentPet = null!;
+            });
+
+        this.WhenValueChanged(x => x.Search)
+            .Throttle(TimeSpan.FromSeconds(1), RxApp.TaskpoolScheduler)
+            .DistinctUntilChanged()
+            .ObserveOn(RxApp.MainThreadScheduler)
+            .Subscribe(_ => Works.Refresh());
+    }
 
     public static ModInfoModel ModInfo => ModInfoModel.Current;
 
@@ -55,7 +56,7 @@ public partial class WorkPageVM : ViewModelBase
 
     public FilterListWrapper<
         WorkModel,
-        List<WorkModel>,
+        ObservableList<WorkModel>,
         ObservableList<WorkModel>
     > Works { get; set; }
 
@@ -66,29 +67,22 @@ public partial class WorkPageVM : ViewModelBase
 
     partial void OnCurrentPetChanged(PetModel oldValue, PetModel newValue)
     {
-        //TODO:
         Works.Clear();
-        //if (e.OldValue is PetModel pet)
-        //    Works.BindingList(pet.Works, true);
-        //if (e.NewValue is null)
-        //    return;
-        //Works.AddRange(CurrentPet.Works);
-        //Works.BindingList(CurrentPet.Works);
+        if (oldValue is not null)
+            Works.BaseList.BindingList(oldValue.Works, true);
+        if (newValue is null)
+            return;
+        Works.AddRange(CurrentPet.Works);
+        Works.BaseList.BindingList(CurrentPet.Works);
     }
 
     [ReactiveProperty]
     public string Search { get; set; } = string.Empty;
 
-    partial void OnSearchChanged(string oldValue, string newValue)
-    {
-        Works.Refresh();
-    }
     #endregion
-    //#region Command
-    //public ObservableCommand AddCommand { get; } = new();
-    //public ObservableCommand<WorkModel> EditCommand { get; } = new();
-    //public ObservableCommand<WorkModel> RemoveCommand { get; } = new();
-    //#endregion
+    /// <summary>
+    /// 添加
+    /// </summary>
     [ReactiveCommand]
     private void Add()
     {
@@ -101,6 +95,10 @@ public partial class WorkPageVM : ViewModelBase
         Works.Add(vm.Work);
     }
 
+    /// <summary>
+    /// 编辑
+    /// </summary>
+    /// <param name="model">模型</param>
     [ReactiveCommand]
     public void Edit(WorkModel model)
     {
@@ -126,6 +124,10 @@ public partial class WorkPageVM : ViewModelBase
         model.Close();
     }
 
+    /// <summary>
+    /// 删除
+    /// </summary>
+    /// <param name="model">模型</param>
     [ReactiveCommand]
     private void Remove(WorkModel model)
     {

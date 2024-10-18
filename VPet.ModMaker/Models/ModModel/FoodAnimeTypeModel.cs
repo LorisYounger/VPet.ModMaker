@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Frozen;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
@@ -30,8 +31,10 @@ public partial class FoodAnimeTypeModel : ViewModelBase
     /// <summary>
     /// 动画名称
     /// </summary>
-    public static HashSet<string> FoodAnimeNames =
-        new(StringComparer.InvariantCultureIgnoreCase) { "Eat", "Drink", "Gift", };
+    public static FrozenSet<string> FoodAnimeNames = FrozenSet.ToFrozenSet(
+        ["Eat", "Drink", "Gift"],
+        StringComparer.InvariantCultureIgnoreCase
+    );
 
     /// <summary>
     /// 顶层名称

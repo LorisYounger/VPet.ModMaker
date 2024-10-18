@@ -23,9 +23,6 @@ public partial class WorkEditWindowVM : ViewModelBase
     {
         //PropertyChangedX += WorkEditWindowVM_PropertyChangedX;
         //Work.PropertyChanged += NewWork_PropertyChanged;
-        //AddImageCommand.ExecuteCommand += AddImage;
-        //ChangeImageCommand.ExecuteCommand += ChangeImage;
-        //FixOverLoadCommand.ExecuteCommand += FixOverLoad;
     }
 
     /// <summary>
@@ -42,20 +39,19 @@ public partial class WorkEditWindowVM : ViewModelBase
 
     partial void OnWorkChanged(WorkModel oldValue, WorkModel newValue)
     {
-        //TODO:
         if (oldValue is not null)
         {
-            oldValue.PropertyChanged -= NewWork_PropertyChanged;
+            oldValue.PropertyChanged -= Work_PropertyChanged;
         }
         if (newValue is not null)
         {
-            newValue.PropertyChanged -= NewWork_PropertyChanged;
-            newValue.PropertyChanged += NewWork_PropertyChanged;
+            newValue.PropertyChanged -= Work_PropertyChanged;
+            newValue.PropertyChanged += Work_PropertyChanged;
             SetGraphImage(newValue);
         }
     }
 
-    private void NewWork_PropertyChanged(object? sender, PropertyChangedEventArgs e)
+    private void Work_PropertyChanged(object? sender, PropertyChangedEventArgs e)
     {
         if (sender is not WorkModel workModel)
             return;
@@ -77,12 +73,6 @@ public partial class WorkEditWindowVM : ViewModelBase
     [ReactiveProperty]
     public BitmapImage? Image { get; set; }
     #endregion
-    //#region Command
-    //public ObservableCommand AddImageCommand { get; } = new();
-    //public ObservableCommand ChangeImageCommand { get; } = new();
-
-    //public ObservableCommand FixOverLoadCommand { get; } = new();
-    //#endregion
 
     /// <summary>
     /// 修复超模
@@ -93,6 +83,9 @@ public partial class WorkEditWindowVM : ViewModelBase
         Work.FixOverLoad();
     }
 
+    /// <summary>
+    /// 添加图片
+    /// </summary>
     [ReactiveCommand]
     private void AddImage()
     {
@@ -107,6 +100,9 @@ public partial class WorkEditWindowVM : ViewModelBase
         }
     }
 
+    /// <summary>
+    /// 改变图片
+    /// </summary>
     [ReactiveCommand]
     private void ChangeImage()
     {
@@ -122,6 +118,10 @@ public partial class WorkEditWindowVM : ViewModelBase
         }
     }
 
+    /// <summary>
+    /// 设置图片
+    /// </summary>
+    /// <param name="workModel">工作模型</param>
     private void SetGraphImage(WorkModel workModel)
     {
         if (CurrentPet is null)

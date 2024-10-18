@@ -28,57 +28,12 @@ public partial class FoodAnimeEditWindowVM : ViewModelBase
         _backPlayerTask = new(BackPlay);
         _foodPlayerTask = new(FoodPlay);
         FoodImage = DefaultFoodImage;
-        //PropertyChangedX += FoodAnimeEditWindowVM_PropertyChangedX;
-
-        //PlayCommand.ExecuteAsyncCommand += PlayCommand_AsyncExecuteEvent;
-        //StopCommand.ExecuteCommand += StopCommand_ExecuteEvent;
-        //ReplaceFoodImageCommand.ExecuteCommand += ChangeFoodImageCommand_ExecuteEvent;
-        //ResetFoodImageCommand.ExecuteCommand += ResetFoodImageCommand_ExecuteEvent;
-
-        //AddAnimeCommand.ExecuteCommand += AddAnimeCommand_ExecuteEvent;
-        //RemoveAnimeCommand.ExecuteCommand += RemoveAnimeCommand_ExecuteEvent;
-
-        //AddFrontImageCommand.ExecuteCommand += AddFrontImageCommand_ExecuteEvent;
-        //RemoveFrontImageCommand.ExecuteCommand += RemoveFrontImageCommand_ExecuteEvent;
-        //ClearFrontImageCommand.ExecuteCommand += ClearFrontImageCommand_ExecuteEvent;
-        //ChangeFrontImageCommand.ExecuteCommand += ChangeFrontImageCommand_ExecuteEvent;
-
-        //AddBackImageCommand.ExecuteCommand += AddBackImageCommand_ExecuteEvent;
-        //RemoveBackImageCommand.ExecuteCommand += RemoveBackImageCommand_ExecuteEvent;
-        //ClearBackImageCommand.ExecuteCommand += ClearBackImageCommand_ExecuteEvent;
-        //ChangeBackImageCommand.ExecuteCommand += ChangeBackImageCommand_ExecuteEvent;
-
-        //AddFoodLocationCommand.ExecuteCommand += AddeFoodLocationCommand_ExecuteEvent;
-        //RemoveFoodLocationCommand.ExecuteCommand += RemoveFoodLocationCommand_ExecuteEvent;
-        //ClearFoodLocationCommand.ExecuteCommand += ClearFoodLocationCommand_ExecuteEvent;
     }
-
-    //private void FoodAnimeEditWindowVM_PropertyChangedX(object? sender, PropertyChangedXEventArgs e)
-    //{
-    //    if (e.PropertyName == nameof(CurrentAnimeModel))
-    //    {
-    //        var newModel = e.NewValue as FoodAnimeModel;
-    //        var oldModel = e.OldValue as FoodAnimeModel;
-    //        Stop();
-    //        if (oldModel is not null)
-    //        {
-    //            oldModel.FrontImages.CollectionChanged -= Images_CollectionChanged;
-    //            oldModel.BackImages.CollectionChanged -= Images_CollectionChanged;
-    //            oldModel.FoodLocations.CollectionChanged -= Images_CollectionChanged;
-    //        }
-    //        if (newModel is not null)
-    //        {
-    //            newModel.FrontImages.CollectionChanged += Images_CollectionChanged;
-    //            newModel.BackImages.CollectionChanged += Images_CollectionChanged;
-    //            newModel.FoodLocations.CollectionChanged += Images_CollectionChanged;
-    //        }
-    //    }
-    //}
 
     /// <summary>
     /// 当前宠物
     /// </summary>
-    public PetModel CurrentPet { get; set; }
+    public PetModel CurrentPet { get; set; } = null!;
 
     /// <summary>
     /// 默认食物图片
@@ -101,7 +56,7 @@ public partial class FoodAnimeEditWindowVM : ViewModelBase
     /// <summary>
     /// 旧动画
     /// </summary>
-    public FoodAnimeTypeModel? OldAnime { get; set; }
+    public FoodAnimeTypeModel? OldAnime { get; set; } = null!;
 
     /// <summary>
     /// 动画
@@ -113,25 +68,25 @@ public partial class FoodAnimeEditWindowVM : ViewModelBase
     /// 当前顶层图像模型
     /// </summary>
     [ReactiveProperty]
-    public ImageModel CurrentFrontImageModel { get; set; }
+    public ImageModel CurrentFrontImageModel { get; set; } = null!;
 
     /// <summary>
     /// 当前底层图像模型
     /// </summary>
     [ReactiveProperty]
-    public ImageModel CurrentBackImageModel { get; set; }
+    public ImageModel CurrentBackImageModel { get; set; } = null!;
 
     /// <summary>
     /// 当前食物定位模型
     /// </summary>
     [ReactiveProperty]
-    public FoodAnimeLocationModel CurrentFoodLocationModel { get; set; }
+    public FoodAnimeLocationModel CurrentFoodLocationModel { get; set; } = null!;
 
     /// <summary>
     /// 当前动画模型
     /// </summary>
     [ReactiveProperty]
-    public FoodAnimeModel CurrentAnimeModel { get; set; }
+    public FoodAnimeModel CurrentAnimeModel { get; set; } = null!;
 
     partial void OnCurrentAnimeModelChanged(FoodAnimeModel oldValue, FoodAnimeModel newValue)
     {
@@ -167,105 +122,6 @@ public partial class FoodAnimeEditWindowVM : ViewModelBase
     //[ReactiveProperty]
     //[NotifyPropertyChangeFrom(nameof(Anime))]
     //public bool HasMultiType => AnimeTypeModel.HasMultiTypeAnimes.Contains(Anime.GraphType);
-
-    ///// <summary>
-    ///// 含有动画名称
-    ///// </summary>
-    //[ReactiveProperty]
-    //[NotifyPropertyChangeFrom(nameof(Anime))]
-    //public bool HasAnimeName => AnimeTypeModel.HasNameAnimes.Contains(Anime.GraphType);
-
-    //#region Command
-    ///// <summary>
-    ///// 播放命令
-    ///// </summary>
-    //public ObservableCommand PlayCommand { get; } = new();
-
-    ///// <summary>
-    ///// 停止命令
-    ///// </summary>
-    //public ObservableCommand StopCommand { get; } = new();
-
-    ///// <summary>
-    ///// 添加动画命令
-    ///// </summary>
-    //public ObservableCommand AddAnimeCommand { get; } = new();
-
-    ///// <summary>
-    ///// 删除动画命令
-    ///// </summary>
-    //public ObservableCommand<FoodAnimeModel> RemoveAnimeCommand { get; } = new();
-
-    //#region FrontImage
-    ///// <summary>
-    ///// 添加顶层图片命令
-    ///// </summary>
-    //public ObservableCommand<FoodAnimeModel> AddFrontImageCommand { get; } = new();
-
-    ///// <summary>
-    ///// 删除顶层图片命令
-    ///// </summary>
-    //public ObservableCommand<FoodAnimeModel> RemoveFrontImageCommand { get; } = new();
-
-    ///// <summary>
-    ///// 清除顶层图片命令
-    ///// </summary>
-    //public ObservableCommand<FoodAnimeModel> ClearFrontImageCommand { get; } = new();
-
-    ///// <summary>
-    ///// 改变顶层图片命令
-    ///// </summary>
-    //public ObservableCommand<FoodAnimeModel> ChangeFrontImageCommand { get; } = new();
-    //#endregion
-
-    //#region BackImage
-    ///// <summary>
-    ///// 添加底层图片命令
-    ///// </summary>
-    //public ObservableCommand<FoodAnimeModel> AddBackImageCommand { get; } = new();
-
-    ///// <summary>
-    ///// 删除底层图片命令
-    ///// </summary>
-    //public ObservableCommand<FoodAnimeModel> RemoveBackImageCommand { get; } = new();
-
-    ///// <summary>
-    ///// 清除底层图片命令
-    ///// </summary>
-    //public ObservableCommand<FoodAnimeModel> ClearBackImageCommand { get; } = new();
-
-    ///// <summary>
-    ///// 改变底层图片命令
-    ///// </summary>
-    //public ObservableCommand<FoodAnimeModel> ChangeBackImageCommand { get; } = new();
-    //#endregion
-    //#region FoodLocation
-    ///// <summary>
-    ///// 添加食物定位命令
-    ///// </summary>
-    //public ObservableCommand<FoodAnimeModel> AddFoodLocationCommand { get; } = new();
-
-    ///// <summary>
-    ///// 删除食物定位命令
-    ///// </summary>
-    //public ObservableCommand<FoodAnimeModel> RemoveFoodLocationCommand { get; } = new();
-
-    ///// <summary>
-    ///// 清除食物定位命令
-    ///// </summary>
-    //public ObservableCommand<FoodAnimeModel> ClearFoodLocationCommand { get; } = new();
-    //#endregion
-    ///// <summary>
-    ///// 改变食物图片
-    ///// </summary>
-    //public ObservableCommand ReplaceFoodImageCommand { get; } = new();
-
-    ///// <summary>
-    ///// 重置食物图片
-    ///// </summary>
-    //public ObservableCommand ResetFoodImageCommand { get; } = new();
-
-    //#endregion
 
     /// <summary>
     /// 正在播放
@@ -310,21 +166,6 @@ public partial class FoodAnimeEditWindowVM : ViewModelBase
         }
     }
 
-    //#region LoadAnime
-    //private void Anime_ValueChanged(ObservableValue<FoodAnimeTypeModel> sender, ValueChangedEventArgs<FoodAnimeTypeModel> e)
-    //{
-    //    CheckGraphType(newValue);
-    //}
-
-    //private void CheckGraphType(FoodAnimeTypeModel model)
-    //{
-    //    //if (FoodAnimeTypeModel.HasMultiTypeAnimes.Contains(model.GraphType.Value))
-    //    //    HasMultiType.Value = true;
-
-    //    //if (FoodAnimeTypeModel.HasNameAnimes.Contains(model.GraphType.Value))
-    //    //    HasAnimeName.Value = true;
-    //}
-    //#endregion
     #region AnimeCommand
     [ReactiveCommand]
     private void AddAnime()

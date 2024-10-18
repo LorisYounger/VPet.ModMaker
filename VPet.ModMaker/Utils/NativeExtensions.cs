@@ -58,7 +58,7 @@ public static class NativeExtensions
     public static BitmapImage CloneStream(this BitmapImage image)
     {
         if (image is null)
-            return null;
+            return null!;
         BitmapImage newImage = new();
         newImage.BeginInit();
         newImage.DecodePixelWidth = image.DecodePixelWidth;

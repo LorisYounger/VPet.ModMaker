@@ -3,14 +3,17 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Linq;
+using System.Reactive.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using DynamicData.Binding;
 using HKW.HKWReactiveUI;
 using HKW.HKWUtils.Collections;
 using HKW.HKWUtils.Extensions;
 using HKW.HKWUtils.Observable;
 using LinePutScript.Localization.WPF;
+using ReactiveUI;
 using VPet.ModMaker.Models;
 using VPet.ModMaker.Views.ModEdit.ClickTextEdit;
 
@@ -20,22 +23,24 @@ public partial class ClickTextPageVM : ViewModelBase
 {
     public ClickTextPageVM()
     {
-        //ClickTexts = new(ModInfoModel.Current.ClickTexts)
-        //{
-        //    Filter = f => f.ID.Contains(Search, StringComparison.OrdinalIgnoreCase),
-        //    FilteredList = new()
-        //};
         ClickTexts = new(
-            ModInfoModel.Current.ClickTexts,
+            new(ModInfoModel.Current.ClickTexts),
             [],
             f => f.ID.Contains(Search, StringComparison.OrdinalIgnoreCase)
         );
-        //TODO:
-        //ClickTexts.BindingList(ModInfoModel.Current.ClickTexts);
 
-        //AddCommand.ExecuteCommand += Add;
-        //EditCommand.ExecuteCommand += Edit;
-        //RemoveCommand.ExecuteCommand += Remove;
+        ClickTexts
+            .BaseList.WhenValueChanged(x => x.Count)
+            .Throttle(TimeSpan.FromSeconds(1), RxApp.TaskpoolScheduler)
+            .DistinctUntilChanged()
+            .ObserveOn(RxApp.MainThreadScheduler)
+            .Subscribe(_ => ClickTexts.Refresh());
+
+        this.WhenValueChanged(x => x.Search)
+            .Throttle(TimeSpan.FromSeconds(1), RxApp.TaskpoolScheduler)
+            .DistinctUntilChanged()
+            .ObserveOn(RxApp.MainThreadScheduler)
+            .Subscribe(_ => ClickTexts.Refresh());
     }
 
     /// <summary>
@@ -53,30 +58,8 @@ public partial class ClickTextPageVM : ViewModelBase
     [ReactiveProperty]
     public string Search { get; set; } = string.Empty;
 
-    partial void OnSearchChanged(string oldValue, string newValue)
-    {
-        ClickTexts.Refresh();
-    }
-
-    //#region Command
-    ///// <summary>
-    ///// 添加命令
-    ///// </summary>
-    //public ObservableCommand AddCommand { get; } = new();
-
-    ///// <summary>
-    ///// 编辑命令
-    ///// </summary>
-    //public ObservableCommand<ClickTextModel> EditCommand { get; } = new();
-
-    ///// <summary>
-    ///// 删除命令
-    ///// </summary>
-    //public ObservableCommand<ClickTextModel> RemoveCommand { get; } = new();
-    //#endregion
-
     /// <summary>
-    /// 添加点击文本
+    /// 添加
     /// </summary>
     [ReactiveCommand]
     private void Add()
@@ -90,7 +73,7 @@ public partial class ClickTextPageVM : ViewModelBase
     }
 
     /// <summary>
-    /// 编辑点击文本
+    /// 编辑
     /// </summary>
     /// <param name="model">模型</param>
     [ReactiveCommand]
@@ -118,9 +101,10 @@ public partial class ClickTextPageVM : ViewModelBase
     }
 
     /// <summary>
-    /// 删除点击文本
+    /// 删除
     /// </summary>
     /// <param name="model">模型</param>
+    [ReactiveCommand]
     private void Remove(ClickTextModel model)
     {
         if (MessageBox.Show("确定删除吗".Translate(), "", MessageBoxButton.YesNo) is MessageBoxResult.No)

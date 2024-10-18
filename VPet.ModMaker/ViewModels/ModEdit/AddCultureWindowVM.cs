@@ -4,13 +4,16 @@ using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
+using System.Reactive.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using DynamicData.Binding;
 using HKW.HKWReactiveUI;
 using HKW.HKWUtils.Collections;
 using HKW.HKWUtils.Extensions;
 using HKW.HKWUtils.Observable;
 using LinePutScript.Localization.WPF;
+using ReactiveUI;
 using VPet.ModMaker.Models;
 
 namespace VPet.ModMaker.ViewModels.ModEdit;
@@ -20,20 +23,21 @@ public partial class AddCultureWindowVM : ViewModelBase
     public AddCultureWindowVM()
     {
         AllCultures = new(
-            LocalizeCore.AvailableCultures,
+            new(LocalizeCore.AvailableCultures),
             [],
             c => c.Contains(Search, StringComparison.OrdinalIgnoreCase)
         );
+        this.WhenValueChanged(x => x.Search)
+            .Throttle(TimeSpan.FromSeconds(1), RxApp.TaskpoolScheduler)
+            .DistinctUntilChanged()
+            .ObserveOn(RxApp.MainThreadScheduler)
+            .Subscribe(_ => AllCultures.Refresh());
     }
 
     /// <summary>
     /// 全部文化
     /// </summary>
-    public FilterListWrapper<
-        string,
-        IList<string>,
-        ObservableList<string>
-    > AllCultures { get; set; }
+    public FilterListWrapper<string, List<string>, ObservableList<string>> AllCultures { get; set; }
 
     /// <summary>
     /// 文化名称
@@ -74,11 +78,6 @@ public partial class AddCultureWindowVM : ViewModelBase
     /// </summary>
     [ReactiveProperty]
     public string Search { get; set; } = string.Empty;
-
-    partial void OnSearchChanged(string oldValue, string newValue)
-    {
-        AllCultures.Refresh();
-    }
 
     public static string UnknownCulture => "未知文化".Translate();
 }

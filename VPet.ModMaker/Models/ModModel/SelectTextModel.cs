@@ -62,7 +62,7 @@ public partial class SelectTextModel : ViewModelBase
     /// <summary>
     /// 模式类型
     /// </summary>
-    public static FrozenSet<ClickText.ModeType> ModeTypes => ClickTextModel.ModeTypes;
+    public static FrozenSet<ClickText.ModeType> ModeTypes => EnumInfo<ClickText.ModeType>.Values;
 
     /// <summary>
     /// 标签
@@ -82,42 +82,35 @@ public partial class SelectTextModel : ViewModelBase
     [ReactiveProperty]
     public string ID { get; set; } = string.Empty;
 
+    partial void OnIDChanged(string oldValue, string newValue)
+    {
+        RefreshID();
+    }
+
     /// <summary>
     /// 选择Id
     /// </summary>
     [ReactiveProperty]
     public string ChooseID { get; set; } = string.Empty;
 
-    #region I18nData
     [AdaptIgnore]
-    private I18nResource<string, string> _i18nResource = null!;
+    [ReactiveProperty]
+    public required I18nResource<string, string> I18nResource { get; set; }
 
-    [AdaptIgnore]
-    public required I18nResource<string, string> I18nResource
+    partial void OnI18nResourceChanged(
+        I18nResource<string, string> oldValue,
+        I18nResource<string, string> newValue
+    )
     {
-        get => _i18nResource;
-        set
-        {
-            //TODO:
-            //if (_i18nResource is not null)
-            //    I18nResource.I18nObjectInfos.Remove(this);
-            //_i18nResource = value;
-            //InitializeI18nResource();
-        }
+        oldValue?.I18nObjects.Remove(I18nObject);
+        newValue?.I18nObjects?.Add(I18nObject);
     }
 
-    public void InitializeI18nResource()
-    {
-        //I18nResource?.I18nObjectInfos.Add(
-        //    this,
-        //    new I18nObjectInfo<string, string>(this, OnPropertyChanged).AddPropertyInfo(
-        //        [(nameof(ID), ID, nameof(Text)), (nameof(ChooseID), ChooseID, nameof(Choose))],
-        //        true
-        //    )
-        //);
-    }
+    [NotifyPropertyChangeFrom("")]
+    public I18nObject<string, string> I18nObject => new(this);
 
     [AdaptIgnore]
+    [ReactiveI18nProperty("I18nResource", nameof(I18nObject), nameof(ID))]
     public string Text
     {
         get => I18nResource.GetCurrentCultureDataOrDefault(ID);
@@ -125,12 +118,12 @@ public partial class SelectTextModel : ViewModelBase
     }
 
     [AdaptIgnore]
+    [ReactiveI18nProperty("I18nResource", nameof(I18nObject), nameof(ChooseID))]
     public string Choose
     {
         get => I18nResource.GetCurrentCultureDataOrDefault(ChooseID);
         set => I18nResource.SetCurrentCultureData(ChooseID, value);
     }
-    #endregion
 
     /// <summary>
     /// 宠物状态
@@ -140,9 +133,7 @@ public partial class SelectTextModel : ViewModelBase
             ClickText.ModeType.Happy
                 | ClickText.ModeType.Nomal
                 | ClickText.ModeType.PoorCondition
-                | ClickText.ModeType.Ill,
-            (v, f) => v |= f,
-            (v, f) => v &= f
+                | ClickText.ModeType.Ill
         );
 
     /// <summary>
@@ -222,6 +213,6 @@ public partial class SelectTextModel : ViewModelBase
 
     public void Close()
     {
-        //I18nResource.I18nObjectInfos.Remove(this);
+        I18nResource.I18nObjects.Remove(I18nObject);
     }
 }

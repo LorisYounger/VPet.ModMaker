@@ -19,12 +19,7 @@ namespace VPet.ModMaker.ViewModels.ModEdit.FoodEdit;
 
 public partial class FoodEditWindowVM : ViewModelBase
 {
-    public FoodEditWindowVM()
-    {
-        //AddImageCommand.ExecuteCommand += AddImage;
-        //ChangeImageCommand.ExecuteCommand += ChangeImage;
-        //SetReferencePriceCommand.ExecuteCommand += SetReferencePrice;
-    }
+    public FoodEditWindowVM() { }
 
     public static ModInfoModel ModInfo => ModInfoModel.Current;
 
@@ -40,30 +35,24 @@ public partial class FoodEditWindowVM : ViewModelBase
     public FoodModel Food { get; set; } =
         new() { I18nResource = ModInfoModel.Current.I18nResource };
 
-    //TODO: 在FoodModel设置推荐价格
-    //partial void OnFoodChanged(FoodModel oldValue, FoodModel newValue)
-    //{
-    //    if (oldValue is not null)
-    //        oldValue.PropertyChanged -= Food_PropertyChangedX;
-    //    if (newValue is not null)
-    //        newValue.PropertyChanged += Food_PropertyChangedX;
-    //}
+    partial void OnFoodChanged(FoodModel oldValue, FoodModel newValue)
+    {
+        if (oldValue is not null)
+            oldValue.PropertyChanged -= Food_PropertyChanged;
+        if (newValue is not null)
+            newValue.PropertyChanged += Food_PropertyChanged;
+    }
 
-    //private void Food_PropertyChangedX(object? sender, PropertyChangedEventArgs e)
-    //{
-    //    if (e.PropertyName == nameof(FoodModel.ReferencePrice))
-    //    {
-    //        if (ModInfo.AutoSetFoodPrice)
-    //            SetReferencePrice((double)e.NewValue!);
-    //    }
-    //}
+    private void Food_PropertyChanged(object? sender, PropertyChangedEventArgs e)
+    {
+        if (e.PropertyName == nameof(FoodModel.ReferencePrice))
+        {
+            if (ModInfo.AutoSetFoodPrice)
+                SetReferencePrice(Food.ReferencePrice);
+        }
+    }
     #endregion
 
-    //#region Command
-    //public ObservableCommand AddImageCommand { get; } = new();
-    //public ObservableCommand ChangeImageCommand { get; } = new();
-    //public ObservableCommand<double> SetReferencePriceCommand { get; } = new();
-    //#endregion
     /// <summary>
     /// 设置推荐价格
     /// </summary>

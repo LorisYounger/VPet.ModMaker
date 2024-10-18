@@ -61,7 +61,7 @@ public class ModLoader
     /// <summary>
     /// 标签
     /// </summary>
-    public HashSet<string> Tag { get; } = new();
+    public HashSet<string> Tag { get; } = [];
 
     /// <summary>
     /// 缓存数据
@@ -71,27 +71,27 @@ public class ModLoader
     /// <summary>
     /// 宠物列表
     /// </summary>
-    public List<PetLoader> Pets { get; } = new();
+    public List<PetLoader> Pets { get; } = [];
 
     /// <summary>
     /// 食物列表
     /// </summary>
-    public List<Food> Foods { get; } = new();
+    public List<Food> Foods { get; } = [];
 
     /// <summary>
     /// 低状态文本列表
     /// </summary>
-    public List<LowText> LowTexts { get; } = new();
+    public List<LowText> LowTexts { get; } = [];
 
     /// <summary>
     /// 点击文本列表
     /// </summary>
-    public List<ClickText> ClickTexts { get; } = new();
+    public List<ClickText> ClickTexts { get; } = [];
 
     /// <summary>
     /// 选择文本列表
     /// </summary>
-    public List<SelectText> SelectTexts { get; } = new();
+    public List<SelectText> SelectTexts { get; } = [];
 
     /// <summary>
     /// I18n资源
@@ -101,7 +101,7 @@ public class ModLoader
     /// <summary>
     /// I18n资源
     /// </summary>
-    public Dictionary<string, Dictionary<string, string>> I18nDatas { get; } = new();
+    public Dictionary<string, Dictionary<string, string>> I18nDatas { get; } = [];
 
     public ModLoader(DirectoryInfo path)
     {

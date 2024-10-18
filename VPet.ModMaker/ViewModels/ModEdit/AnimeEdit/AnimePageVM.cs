@@ -2,17 +2,21 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
+using System.Reactive.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using DynamicData.Binding;
 using HKW.HKWReactiveUI;
 using HKW.HKWUtils.Collections;
 using HKW.HKWUtils.Extensions;
 using HKW.HKWUtils.Observable;
 using LinePutScript.Localization.WPF;
 using Panuon.WPF.UI;
+using ReactiveUI;
 using VPet.ModMaker.Models;
 using VPet.ModMaker.Models.ModModel;
 using VPet.ModMaker.Views.ModEdit.AnimeEdit;
@@ -40,46 +44,34 @@ public partial class AnimePageVM : ViewModelBase
                     throw new Exception("???");
             }
         );
-        //TODO:
-        //PropertyChangedX += AnimePageVM_PropertyChangedX;
         if (Pets.HasValue())
             CurrentPet = Pets.FirstOrDefault(
                 m => m.FromMain is false && m.AnimeCount > 0,
                 Pets.First()
             );
 
-        //AddCommand.ExecuteCommand += Add;
-        //EditCommand.ExecuteCommand += Edit;
-        //RemoveCommand.ExecuteCommand += Remove;
-        //TODO:
-        //ModInfo.PropertyChangedX += ModInfo_PropertyChangedX;
+        ModInfo.PropertyChanged += ModInfo_PropertyChanged;
+
+        this.WhenValueChanged(x => x.Search)
+            .Throttle(TimeSpan.FromSeconds(1), RxApp.TaskpoolScheduler)
+            .DistinctUntilChanged()
+            .ObserveOn(RxApp.MainThreadScheduler)
+            .Subscribe(_ => AllAnimes.Refresh());
     }
 
-    //private void ModInfo_PropertyChangedX(object? sender, PropertyChangedXEventArgs e)
-    //{
-    //    if (e.PropertyName == nameof(ModInfoModel.ShowMainPet))
-    //    {
-    //        if (e.NewValue is false)
-    //        {
-    //            if (CurrentPet?.FromMain is true)
-    //            {
-    //                CurrentPet = null!;
-    //            }
-    //        }
-    //    }
-    //}
-
-    //private void AnimePageVM_PropertyChangedX(object? sender, PropertyChangedXEventArgs e)
-    //{
-    //    if (e.PropertyName == nameof(CurrentPet))
-    //    {
-    //        InitializeAllAnimes();
-    //    }
-    //    else if (e.PropertyName == nameof(Search))
-    //    {
-    //        AllAnimes.Refresh();
-    //    }
-    //}
+    private void ModInfo_PropertyChanged(object? sender, PropertyChangedEventArgs e)
+    {
+        if (e.PropertyName == nameof(ModInfoModel.ShowMainPet))
+        {
+            if (ModInfo.ShowMainPet is false)
+            {
+                if (CurrentPet?.FromMain is true)
+                {
+                    CurrentPet = null!;
+                }
+            }
+        }
+    }
 
     public static ModInfoModel ModInfo => ModInfoModel.Current;
 
@@ -109,7 +101,12 @@ public partial class AnimePageVM : ViewModelBase
     /// 当前宠物
     /// </summary>
     [ReactiveProperty]
-    public PetModel CurrentPet { get; set; }
+    public PetModel CurrentPet { get; set; } = null!;
+
+    partial void OnCurrentPetChanged(PetModel oldValue, PetModel newValue)
+    {
+        InitializeAllAnimes();
+    }
 
     /// <summary>
     /// 搜索
@@ -117,22 +114,7 @@ public partial class AnimePageVM : ViewModelBase
     [ReactiveProperty]
     public string Search { get; set; } = string.Empty;
     #endregion
-    //#region Command
-    ///// <summary>
-    ///// 添加命令
-    ///// </summary>
-    //public ObservableCommand AddCommand { get; } = new();
 
-    ///// <summary>
-    ///// 编辑命令
-    ///// </summary>
-    //public ObservableCommand<object> EditCommand { get; } = new();
-
-    ///// <summary>
-    ///// 删除命令
-    ///// </summary>
-    //public ObservableCommand<object> RemoveCommand { get; } = new();
-    //#endregion
     private void InitializeAllAnimes()
     {
         AllAnimes.Clear();
@@ -159,7 +141,7 @@ public partial class AnimePageVM : ViewModelBase
     }
 
     /// <summary>
-    /// 添加动画
+    /// 添加
     /// </summary>
     [ReactiveCommand]
     private void Add()
@@ -195,8 +177,6 @@ public partial class AnimePageVM : ViewModelBase
                 vm.Anime.ID = graphType.ToString();
             else
                 vm.Anime.Name = animeName;
-            //TODO:
-            //vm.CheckGraphType();
             window.ShowDialog();
             if (window.IsCancel)
                 return;
@@ -205,9 +185,9 @@ public partial class AnimePageVM : ViewModelBase
     }
 
     /// <summary>
-    /// 编辑动画
+    /// 编辑
     /// </summary>
-    /// <param name="model">动画类型模型</param>
+    /// <param name="model">模型</param>
     [ReactiveCommand]
     public void Edit(object model)
     {
@@ -241,9 +221,9 @@ public partial class AnimePageVM : ViewModelBase
     }
 
     /// <summary>
-    /// 删除动画
+    /// 删除
     /// </summary>
-    /// <param name="model">动画类型模型</param>
+    /// <param name="model">模型</param>
     [ReactiveCommand]
     private void Remove(object model)
     {

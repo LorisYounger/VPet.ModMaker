@@ -3,14 +3,17 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Linq;
+using System.Reactive.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using DynamicData.Binding;
 using HKW.HKWReactiveUI;
 using HKW.HKWUtils.Collections;
 using HKW.HKWUtils.Extensions;
 using HKW.HKWUtils.Observable;
 using LinePutScript.Localization.WPF;
+using ReactiveUI;
 using VPet.ModMaker.Models;
 using VPet.ModMaker.Views.ModEdit.I18nEdit;
 using VPet.ModMaker.Views.ModEdit.PetEdit;
@@ -22,21 +25,26 @@ public partial class PetPageVM : ViewModelBase
     public PetPageVM()
     {
         Pets = new(
-            ModInfoModel.Current.Pets,
+            new(ModInfoModel.Current.Pets),
             [],
-            (f) =>
+            f =>
             {
                 if (ShowMainPet is false && f.FromMain)
                     return false;
                 return f.ID.Contains(Search, StringComparison.OrdinalIgnoreCase);
             }
         );
-        //TODO:
-        //Pets.BindingList(ModInfoModel.Current.Pets);
+        Pets.BaseList.WhenValueChanged(x => x.Count)
+            .Throttle(TimeSpan.FromSeconds(1), RxApp.TaskpoolScheduler)
+            .DistinctUntilChanged()
+            .ObserveOn(RxApp.MainThreadScheduler)
+            .Subscribe(_ => Pets.Refresh());
 
-        //AddCommand.ExecuteCommand += Add;
-        //EditCommand.ExecuteCommand += Edit;
-        //RemoveCommand.ExecuteCommand += Remove;
+        this.WhenValueChanged(x => x.Search)
+            .Throttle(TimeSpan.FromSeconds(1), RxApp.TaskpoolScheduler)
+            .DistinctUntilChanged()
+            .ObserveOn(RxApp.MainThreadScheduler)
+            .Subscribe(_ => Pets.Refresh());
     }
 
     public static ModInfoModel ModInfo => ModInfoModel.Current;
@@ -51,11 +59,6 @@ public partial class PetPageVM : ViewModelBase
     [ReactiveProperty]
     public string Search { get; set; } = string.Empty;
 
-    partial void OnSearchChanged(string oldValue, string newValue)
-    {
-        Pets.Refresh();
-    }
-
     [ReactiveProperty]
     public bool ShowMainPet { get; set; }
 
@@ -66,14 +69,11 @@ public partial class PetPageVM : ViewModelBase
     }
     #endregion
 
-    //#region Command
-    //public ObservableCommand AddCommand { get; } = new();
-    //public ObservableCommand<PetModel> EditCommand { get; } = new();
-    //public ObservableCommand<PetModel> RemoveCommand { get; } = new();
-    //#endregion
-
     public void Close() { }
 
+    /// <summary>
+    /// 添加
+    /// </summary>
     [ReactiveCommand]
     private void Add()
     {
@@ -85,6 +85,10 @@ public partial class PetPageVM : ViewModelBase
         Pets.Add(vm.Pet);
     }
 
+    /// <summary>
+    /// 编辑
+    /// </summary>
+    /// <param name="model">模型</param>
     [ReactiveCommand]
     public void Edit(PetModel model)
     {
@@ -127,6 +131,10 @@ public partial class PetPageVM : ViewModelBase
         model.CloseI18nResource();
     }
 
+    /// <summary>
+    /// 删除
+    /// </summary>
+    /// <param name="model">模型</param>
     [ReactiveCommand]
     private void Remove(PetModel model)
     {

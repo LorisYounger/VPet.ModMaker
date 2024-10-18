@@ -9,6 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Media.Imaging;
 using HKW.HKWReactiveUI;
+using HKW.HKWUtils.Extensions;
 using HKW.HKWUtils.Observable;
 using LinePutScript;
 using LinePutScript.Converter;
@@ -23,32 +24,7 @@ namespace VPet.ModMaker.Models;
 /// </summary>
 public partial class FoodModel : ViewModelBase
 {
-    public FoodModel()
-    {
-        //PropertyChangedX += FoodModel_PropertyChangedX;
-    }
-
-    private static readonly FrozenSet<string> _notifyReferencePrice = FrozenSet.ToFrozenSet(
-        [
-            nameof(Strength),
-            nameof(StrengthFood),
-            nameof(StrengthDrink),
-            nameof(Feeling),
-            nameof(Health),
-            nameof(Likability),
-            nameof(Exp)
-        ]
-    );
-
-    //TODO:
-    //private void FoodModel_PropertyChangedX(object? sender, PropertyChangedXEventArgs e)
-    //{
-    //    if (e.PropertyName is not null && _notifyReferencePrice.Contains(e.PropertyName))
-    //    {
-    //        this.Adapt(_food);
-    //        ReferencePrice = Math.Floor(_food.RealPrice);
-    //    }
-    //}
+    public FoodModel() { }
 
     public FoodModel(FoodModel model)
         : this()
@@ -68,8 +44,7 @@ public partial class FoodModel : ViewModelBase
     /// <summary>
     /// 食物类型
     /// </summary>
-    public static ObservableList<Food.FoodType> FoodTypes { get; } =
-        new(Enum.GetValues(typeof(Food.FoodType)).Cast<Food.FoodType>());
+    public static FrozenSet<Food.FoodType> FoodTypes => EnumInfo<Food.FoodType>.Values;
 
     /// <summary>
     /// ID
@@ -90,41 +65,24 @@ public partial class FoodModel : ViewModelBase
     [ReactiveProperty]
     public string DescriptionID { get; set; } = string.Empty;
 
-    #region I18nData
-
     [AdaptIgnore]
-    private I18nResource<string, string> _i18nResource = null!;
+    [ReactiveProperty]
+    public required I18nResource<string, string> I18nResource { get; set; }
 
-    [AdaptIgnore]
-    public required I18nResource<string, string> I18nResource
+    partial void OnI18nResourceChanged(
+        I18nResource<string, string> oldValue,
+        I18nResource<string, string> newValue
+    )
     {
-        get => _i18nResource;
-        set
-        {
-            // TODO:
-            //if (_i18nResource is not null)
-            //    I18nResource.I18nObjectInfos.Remove(this);
-            //_i18nResource = value;
-            //InitializeI18nResource();
-        }
+        oldValue?.I18nObjects.Remove(I18nObject);
+        newValue?.I18nObjects.Add(I18nObject);
     }
 
-    public void InitializeI18nResource()
-    {
-        // TODO:
-        //I18nResource?.I18nObjectInfos.Add(
-        //    this,
-        //    new I18nObjectInfo<string, string>(this, OnPropertyChanged).AddPropertyInfo(
-        //        [
-        //            (nameof(ID), ID, nameof(Name)),
-        //            (nameof(DescriptionID), DescriptionID, nameof(Description))
-        //        ],
-        //        true
-        //    )
-        //);
-    }
+    [NotifyPropertyChangeFrom("")]
+    public I18nObject<string, string> I18nObject => new(this);
 
     [AdaptIgnore]
+    [ReactiveI18nProperty("I18nResource", nameof(I18nObject), nameof(ID))]
     public string Name
     {
         get => I18nResource.GetCurrentCultureDataOrDefault(ID);
@@ -132,13 +90,12 @@ public partial class FoodModel : ViewModelBase
     }
 
     [AdaptIgnore]
+    [ReactiveI18nProperty("I18nResource", nameof(I18nObject), nameof(DescriptionID))]
     public string Description
     {
         get => I18nResource.GetCurrentCultureDataOrDefault(DescriptionID);
         set => I18nResource.SetCurrentCultureData(DescriptionID, value);
     }
-    #endregion
-
 
     /// <summary>
     /// 指定动画
@@ -221,10 +178,23 @@ public partial class FoodModel : ViewModelBase
     /// 推荐价格
     /// </summary>
     [AdaptIgnore]
-    [ReactiveProperty]
-    public double ReferencePrice { get; set; }
+    [NotifyPropertyChangeFrom(
+        nameof(Strength),
+        nameof(StrengthFood),
+        nameof(StrengthDrink),
+        nameof(Feeling),
+        nameof(Health),
+        nameof(Likability),
+        nameof(Exp)
+    )]
+    public double ReferencePrice =>
+        this.To(x =>
+        {
+            x.Adapt(_food);
+            return Math.Floor(_food.RealPrice);
+        });
 
-    private readonly Food _food = new();
+    private static readonly Food _food = new();
 
     public Food ToFood()
     {
@@ -254,7 +224,6 @@ public partial class FoodModel : ViewModelBase
     public void Close()
     {
         Image?.CloseStream();
-        //TODO:
-        //I18nResource.I18nObjectInfos.Remove(this);
+        I18nResource.I18nObjects.Remove(I18nObject);
     }
 }

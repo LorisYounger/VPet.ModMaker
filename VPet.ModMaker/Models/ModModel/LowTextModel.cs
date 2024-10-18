@@ -37,20 +37,18 @@ public partial class LowTextModel : ViewModelBase
     /// <summary>
     /// 状态类型
     /// </summary>
-    public static FrozenSet<LowText.ModeType> ModeTypes { get; } =
-        Enum.GetValues<LowText.ModeType>().ToFrozenSet();
+    public static FrozenSet<LowText.ModeType> ModeTypes => EnumInfo<LowText.ModeType>.Values;
 
     /// <summary>
     /// 好感度类型
     /// </summary>
-    public static FrozenSet<LowText.LikeType> LikeTypes { get; } =
-        Enum.GetValues<LowText.LikeType>().ToFrozenSet();
+    public static FrozenSet<LowText.LikeType> LikeTypes => EnumInfo<LowText.LikeType>.Values;
 
     /// <summary>
     /// 体力类型
     /// </summary>
-    public static FrozenSet<LowText.StrengthType> StrengthTypes { get; } =
-        Enum.GetValues<LowText.StrengthType>().ToFrozenSet();
+    public static FrozenSet<LowText.StrengthType> StrengthTypes =>
+        EnumInfo<LowText.StrengthType>.Values;
 
     /// <summary>
     /// ID
@@ -59,45 +57,29 @@ public partial class LowTextModel : ViewModelBase
     [ReactiveProperty]
     public string ID { get; set; } = string.Empty;
 
-    #region I18nData
     [AdaptIgnore]
-    private I18nResource<string, string> _i18nResource = null!;
+    [ReactiveProperty]
+    public required I18nResource<string, string> I18nResource { get; set; }
 
-    [AdaptIgnore]
-    public required I18nResource<string, string> I18nResource
+    partial void OnI18nResourceChanged(
+        I18nResource<string, string> oldValue,
+        I18nResource<string, string> newValue
+    )
     {
-        get => _i18nResource;
-        set
-        {
-            //TODO:
-            //if (_i18nResource is not null)
-            //    I18nResource.I18nObjectInfos.Remove(this);
-            //_i18nResource = value;
-            //InitializeI18nResource();
-        }
+        oldValue?.I18nObjects.Remove(I18nObject);
+        newValue?.I18nObjects?.Add(I18nObject);
     }
 
-    public void InitializeI18nResource()
-    {
-        //I18nResource?.I18nObjectInfos.Add(
-        //    this,
-        //    new I18nObjectInfo<string, string>(this, OnPropertyChanged).AddPropertyInfo(
-        //        nameof(ID),
-        //        ID,
-        //        nameof(Text),
-        //        true
-        //    )
-        //);
-    }
+    [NotifyPropertyChangeFrom("")]
+    public I18nObject<string, string> I18nObject => new(this);
 
     [AdaptIgnore]
+    [ReactiveI18nProperty("I18nResource", nameof(I18nObject), nameof(ID))]
     public string Text
     {
         get => I18nResource.GetCurrentCultureDataOrDefault(ID);
         set => I18nResource.SetCurrentCultureData(ID, value);
     }
-    #endregion
-
 
     /// <summary>
     /// 状态
@@ -127,7 +109,6 @@ public partial class LowTextModel : ViewModelBase
 
     public void Close()
     {
-        //TODO:
-        //I18nResource.I18nObjectInfos.Remove(this);
+        I18nResource.I18nObjects.Remove(I18nObject);
     }
 }

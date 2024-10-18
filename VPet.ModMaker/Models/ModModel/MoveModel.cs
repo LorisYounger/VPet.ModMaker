@@ -69,14 +69,14 @@ public partial class MoveModel : ViewModelBase
     /// <summary>
     /// 移动类型
     /// </summary>
-    public static FrozenSet<GraphHelper.Move.DirectionType> DirectionTypes { get; } =
-        Enum.GetValues<GraphHelper.Move.DirectionType>().ToFrozenSet();
+    public static FrozenSet<GraphHelper.Move.DirectionType> DirectionTypes =>
+        EnumInfo<GraphHelper.Move.DirectionType>.Values;
 
     /// <summary>
     /// 模式类型
     /// </summary>
-    public static FrozenSet<GraphHelper.Move.ModeType> ModeTypes { get; } =
-        Enum.GetValues<GraphHelper.Move.ModeType>().ToFrozenSet();
+    public static FrozenSet<GraphHelper.Move.ModeType> ModeTypes =>
+        EnumInfo<GraphHelper.Move.ModeType>.Values;
 
     //#region Id
     //[DebuggerBrowsable(DebuggerBrowsableState.Never)]
@@ -173,13 +173,13 @@ public partial class MoveModel : ViewModelBase
     /// 定位类型
     /// </summary>
     public ObservableEnum<GraphHelper.Move.DirectionType> LocateType { get; } =
-        new(GraphHelper.Move.DirectionType.None, (v, f) => v |= f, (v, f) => v &= f);
+        new(GraphHelper.Move.DirectionType.None);
 
     /// <summary>
     /// 触发类型
     /// </summary>
     public ObservableEnum<GraphHelper.Move.DirectionType> TriggerType { get; } =
-        new(GraphHelper.Move.DirectionType.None, (v, f) => v |= f, (v, f) => v &= f);
+        new(GraphHelper.Move.DirectionType.None);
 
     /// <summary>
     /// 模式
@@ -189,9 +189,7 @@ public partial class MoveModel : ViewModelBase
             GraphHelper.Move.ModeType.Happy
                 | GraphHelper.Move.ModeType.Nomal
                 | GraphHelper.Move.ModeType.PoorCondition
-                | GraphHelper.Move.ModeType.Ill,
-            (v, f) => v |= f,
-            (v, f) => v &= f
+                | GraphHelper.Move.ModeType.Ill
         );
 
     public GraphHelper.Move ToMove()

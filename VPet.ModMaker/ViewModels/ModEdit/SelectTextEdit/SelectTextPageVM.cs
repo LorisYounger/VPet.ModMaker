@@ -1,16 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Collections.Specialized;
 using System.Diagnostics;
 using System.Linq;
+using System.Reactive.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using DynamicData.Binding;
 using HKW.HKWReactiveUI;
 using HKW.HKWUtils.Collections;
 using HKW.HKWUtils.Extensions;
 using HKW.HKWUtils.Observable;
 using LinePutScript.Localization.WPF;
+using ReactiveUI;
 using VPet.ModMaker.Models;
 using VPet.ModMaker.Views.ModEdit.SelectTextEdit;
 using VPet_Simulator.Windows.Interface;
@@ -26,12 +30,18 @@ public partial class SelectTextPageVM : ViewModelBase
             [],
             f => f.ID.Contains(Search, StringComparison.OrdinalIgnoreCase)
         );
-        //TODO:
-        //SelectTexts.BindingList(ModInfoModel.Current.SelectTexts);
+        SelectTexts
+            .BaseList.WhenValueChanged(x => x.Count)
+            .Throttle(TimeSpan.FromSeconds(1), RxApp.TaskpoolScheduler)
+            .DistinctUntilChanged()
+            .ObserveOn(RxApp.MainThreadScheduler)
+            .Subscribe(_ => SelectTexts.Refresh());
 
-        //AddCommand.ExecuteCommand += Add;
-        //EditCommand.ExecuteCommand += Edit;
-        //RemoveCommand.ExecuteCommand += Remove;
+        this.WhenValueChanged(x => x.Search)
+            .Throttle(TimeSpan.FromSeconds(1), RxApp.TaskpoolScheduler)
+            .DistinctUntilChanged()
+            .ObserveOn(RxApp.MainThreadScheduler)
+            .Subscribe(_ => SelectTexts.Refresh());
     }
 
     #region Property
@@ -45,16 +55,10 @@ public partial class SelectTextPageVM : ViewModelBase
     [ReactiveProperty]
     public string Search { get; set; } = string.Empty;
 
-    partial void OnSearchChanged(string oldValue, string newValue)
-    {
-        SelectTexts.Refresh();
-    }
     #endregion
-    //#region Command
-    //public ObservableCommand AddCommand { get; } = new();
-    //public ObservableCommand<SelectTextModel> EditCommand { get; } = new();
-    //public ObservableCommand<SelectTextModel> RemoveCommand { get; } = new();
-    //#endregion
+    /// <summary>
+    /// 添加
+    /// </summary>
     [ReactiveCommand]
     private void Add()
     {
@@ -66,6 +70,10 @@ public partial class SelectTextPageVM : ViewModelBase
         SelectTexts.Add(vm.SelectText);
     }
 
+    /// <summary>
+    /// 编辑
+    /// </summary>
+    /// <param name="model">模型</param>
     [ReactiveCommand]
     public void Edit(SelectTextModel model)
     {
@@ -90,6 +98,10 @@ public partial class SelectTextPageVM : ViewModelBase
         model.Close();
     }
 
+    /// <summary>
+    /// 删除
+    /// </summary>
+    /// <param name="model">模型</param>
     [ReactiveCommand]
     private void Remove(SelectTextModel model)
     {

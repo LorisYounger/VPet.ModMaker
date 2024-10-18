@@ -30,18 +30,8 @@ public partial class PetModel : ViewModelBase
 {
     public PetModel()
     {
-        PropertyChanged += PetModel_PropertyChanged;
         Animes.PropertyChanged += Animes_PropertyChanged;
         FoodAnimes.PropertyChanged += FoodAnimes_PropertyChanged;
-    }
-
-    private void PetModel_PropertyChanged(object? sender, PropertyChangedEventArgs e)
-    {
-        if (e.PropertyName == nameof(ID))
-        {
-            PetNameID = $"{ID}_{nameof(PetNameID)}";
-            DescriptionID = $"{ID}_{nameof(DescriptionID)}";
-        }
     }
 
     public PetModel(PetModel model)
@@ -137,6 +127,11 @@ public partial class PetModel : ViewModelBase
     [ReactiveProperty]
     public string ID { get; set; } = string.Empty;
 
+    partial void OnIDChanged(string oldValue, string newValue)
+    {
+        RefreshID();
+    }
+
     /// <summary>
     /// 名称ID
     /// </summary>
@@ -147,38 +142,21 @@ public partial class PetModel : ViewModelBase
     /// </summary>
     public string DescriptionID { get; set; } = string.Empty;
 
-    #region I18nData
     [AdaptIgnore]
-    private I18nResource<string, string> _i18nResource = null!;
+    [ReactiveProperty]
+    public required I18nResource<string, string> I18nResource { get; set; }
 
-    [AdaptIgnore]
-    public required I18nResource<string, string> I18nResource
+    partial void OnI18nResourceChanged(
+        I18nResource<string, string> oldValue,
+        I18nResource<string, string> newValue
+    )
     {
-        get => _i18nResource;
-        set
-        {
-            //TODO:
-            //if (_i18nResource is not null)
-            //    I18nResource.I18nObjectInfos.Remove(this);
-            //_i18nResource = value;
-            //InitializeI18nResource();
-        }
+        oldValue?.I18nObjects.Remove(I18nObject);
+        newValue?.I18nObjects?.Add(I18nObject);
     }
 
     public void InitializeI18nResource()
     {
-        // TODO:
-        //I18nResource.I18nObjectInfos.Add(
-        //    this,
-        //    new I18nObjectInfo<string, string>(this, OnPropertyChanged).AddPropertyInfo(
-        //        [
-        //            (nameof(ID), ID, nameof(Name)),
-        //            (nameof(PetNameID), PetNameID, nameof(PetName)),
-        //            (nameof(DescriptionID), DescriptionID, nameof(Description))
-        //        ],
-        //        true
-        //    )
-        //);
         foreach (var work in Works)
             work.I18nResource = I18nResource;
         if (FromMain)
@@ -211,7 +189,11 @@ public partial class PetModel : ViewModelBase
         }
     }
 
+    [NotifyPropertyChangeFrom("")]
+    public I18nObject<string, string> I18nObject => new(this);
+
     [AdaptIgnore]
+    [ReactiveI18nProperty("I18nResource", nameof(I18nObject), nameof(ID))]
     public string Name
     {
         get => I18nResource.GetCurrentCultureDataOrDefault(ID);
@@ -219,6 +201,7 @@ public partial class PetModel : ViewModelBase
     }
 
     [AdaptIgnore]
+    [ReactiveI18nProperty("I18nResource", nameof(I18nObject), nameof(PetNameID))]
     public string PetName
     {
         get => I18nResource.GetCurrentCultureDataOrDefault(PetNameID);
@@ -226,13 +209,12 @@ public partial class PetModel : ViewModelBase
     }
 
     [AdaptIgnore]
+    [ReactiveI18nProperty("I18nResource", nameof(I18nObject), nameof(DescriptionID))]
     public string Description
     {
         get => I18nResource.GetCurrentCultureDataOrDefault(DescriptionID);
         set => I18nResource.SetCurrentCultureData(DescriptionID, value);
     }
-    #endregion
-
 
     /// <summary>
     /// 标签
@@ -311,9 +293,8 @@ public partial class PetModel : ViewModelBase
 
     public void RefreshID()
     {
-        // TODO:
-        //PetNameID = $"{ID}_{nameof(PetNameID)}";
-        //DescriptionID = $"{ID}_{nameof(DescriptionID)}";
+        PetNameID = $"{ID}_{nameof(PetNameID)}";
+        DescriptionID = $"{ID}_{nameof(DescriptionID)}";
     }
 
     public void Close()
@@ -326,8 +307,7 @@ public partial class PetModel : ViewModelBase
 
     public void CloseI18nResource()
     {
-        //TODO:
-        //I18nResource.I18nObjectInfos.Remove(this);
+        I18nResource.I18nObjects.Remove(I18nObject);
     }
 
     #region Save

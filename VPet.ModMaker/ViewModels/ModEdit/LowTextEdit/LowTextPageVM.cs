@@ -5,14 +5,17 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Reactive.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using DynamicData.Binding;
 using HKW.HKWReactiveUI;
 using HKW.HKWUtils.Collections;
 using HKW.HKWUtils.Extensions;
 using HKW.HKWUtils.Observable;
 using LinePutScript.Localization.WPF;
+using ReactiveUI;
 using VPet.ModMaker.Models;
 using VPet.ModMaker.Views.ModEdit.LowTextEdit;
 
@@ -23,37 +26,43 @@ public partial class LowTextPageVM : ViewModelBase
     public LowTextPageVM()
     {
         LowTexts = new(
-            ModInfoModel.Current.LowTexts,
+            new(ModInfoModel.Current.LowTexts),
             [],
             f => f.ID.Contains(Search, StringComparison.OrdinalIgnoreCase)
         );
-        //TODO:
-        //LowTexts.BindingList(ModInfoModel.Current.LowTexts);
 
-        //AddCommand.ExecuteCommand += Add;
-        //EditCommand.ExecuteCommand += Edit;
-        //RemoveCommand.ExecuteCommand += Remove;
+        LowTexts
+            .BaseList.WhenValueChanged(x => x.Count)
+            .Throttle(TimeSpan.FromSeconds(1), RxApp.TaskpoolScheduler)
+            .DistinctUntilChanged()
+            .ObserveOn(RxApp.MainThreadScheduler)
+            .Subscribe(_ => LowTexts.Refresh());
+
+        this.WhenValueChanged(x => x.Search)
+            .Throttle(TimeSpan.FromSeconds(1), RxApp.TaskpoolScheduler)
+            .DistinctUntilChanged()
+            .ObserveOn(RxApp.MainThreadScheduler)
+            .Subscribe(_ => LowTexts.Refresh());
     }
 
+    /// <summary>
+    /// 低状态文本
+    /// </summary>
     public FilterListWrapper<
         LowTextModel,
         ObservableList<LowTextModel>,
         ObservableList<LowTextModel>
     > LowTexts { get; set; } = null!;
 
+    /// <summary>
+    /// 搜索
+    /// </summary>
     [ReactiveProperty]
     public string Search { get; set; } = string.Empty;
 
-    partial void OnSearchChanged(string oldValue, string newValue)
-    {
-        LowTexts.Refresh();
-    }
-
-    //#region Command
-    //public ObservableCommand AddCommand { get; } = new();
-    //public ObservableCommand<LowTextModel> EditCommand { get; } = new();
-    //public ObservableCommand<LowTextModel> RemoveCommand { get; } = new();
-    //#endregion
+    /// <summary>
+    /// 添加
+    /// </summary>
     [ReactiveCommand]
     private void Add()
     {
@@ -65,6 +74,10 @@ public partial class LowTextPageVM : ViewModelBase
         LowTexts.Add(vm.LowText);
     }
 
+    /// <summary>
+    /// 编辑
+    /// </summary>
+    /// <param name="model">模型</param>
     [ReactiveCommand]
     public void Edit(LowTextModel model)
     {
@@ -89,6 +102,10 @@ public partial class LowTextPageVM : ViewModelBase
         model.Close();
     }
 
+    /// <summary>
+    /// 删除
+    /// </summary>
+    /// <param name="model">模型</param>
     [ReactiveCommand]
     private void Remove(LowTextModel model)
     {

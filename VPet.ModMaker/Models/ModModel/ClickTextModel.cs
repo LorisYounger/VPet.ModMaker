@@ -90,20 +90,18 @@ public partial class ClickTextModel : ViewModelBase
     /// <summary>
     /// 模式类型
     /// </summary>
-    public static FrozenSet<ClickText.ModeType> ModeTypes { get; } =
-        Enum.GetValues<ClickText.ModeType>().ToFrozenSet();
+    public static FrozenSet<ClickText.ModeType> ModeTypes => EnumInfo<ClickText.ModeType>.Values;
 
     /// <summary>
     /// 日期区间
     /// </summary>
-    public static FrozenSet<ClickText.DayTime> DayTimes { get; } =
-        Enum.GetValues<ClickText.DayTime>().ToFrozenSet();
+    public static FrozenSet<ClickText.DayTime> DayTimes => EnumInfo<ClickText.DayTime>.Values;
 
     /// <summary>
     /// 工作状态
     /// </summary>
-    public static FrozenSet<VPet_Simulator.Core.Main.WorkingState> WorkingStates { get; } =
-        Enum.GetValues<VPet_Simulator.Core.Main.WorkingState>().ToFrozenSet();
+    public static FrozenSet<VPet_Simulator.Core.Main.WorkingState> WorkingStates =>
+        EnumInfo<VPet_Simulator.Core.Main.WorkingState>.Values;
 
     /// <summary>
     /// ID
@@ -112,46 +110,29 @@ public partial class ClickTextModel : ViewModelBase
     [ReactiveProperty]
     public string ID { get; set; } = string.Empty;
 
-    #region I18nData
     [AdaptIgnore]
-    private I18nResource<string, string> _i18nResource = null!;
+    [ReactiveProperty]
+    public required I18nResource<string, string> I18nResource { get; set; }
 
-    [AdaptIgnore]
-    public required I18nResource<string, string> I18nResource
+    partial void OnI18nResourceChanged(
+        I18nResource<string, string> oldValue,
+        I18nResource<string, string> newValue
+    )
     {
-        get => _i18nResource;
-        set
-        {
-            //TODO:
-            //if (_i18nResource is not null)
-            //    I18nResource.I18nObjectInfos.Remove(this);
-            //_i18nResource = value;
-            InitializeI18nResource();
-        }
+        oldValue?.I18nObjects.Remove(I18nObject);
+        newValue?.I18nObjects.Add(I18nObject);
     }
 
-    public void InitializeI18nResource()
-    {
-        //TODO:
-        //I18nResource?.I18nObjectInfos.Add(
-        //    this,
-        //    new I18nObjectInfo<string, string>(this, OnPropertyChanged).AddPropertyInfo(
-        //        nameof(ID),
-        //        ID,
-        //        nameof(Text),
-        //        true
-        //    )
-        //);
-    }
+    [NotifyPropertyChangeFrom("")]
+    public I18nObject<string, string> I18nObject => new(this);
 
     [AdaptIgnore]
+    [ReactiveI18nProperty("I18nResource", nameof(I18nObject), nameof(ID))]
     public string Text
     {
         get => I18nResource.GetCurrentCultureDataOrDefault(ID);
         set => I18nResource.SetCurrentCultureData(ID, value);
     }
-    #endregion
-
 
     /// <summary>
     /// 指定工作
@@ -168,9 +149,7 @@ public partial class ClickTextModel : ViewModelBase
             ClickText.ModeType.Happy
                 | ClickText.ModeType.Nomal
                 | ClickText.ModeType.PoorCondition
-                | ClickText.ModeType.Ill,
-            (v, f) => v |= f,
-            (v, f) => v &= f
+                | ClickText.ModeType.Ill
         );
 
     /// <summary>
@@ -189,9 +168,7 @@ public partial class ClickTextModel : ViewModelBase
             ClickText.DayTime.Morning
                 | ClickText.DayTime.Afternoon
                 | ClickText.DayTime.Night
-                | ClickText.DayTime.Midnight,
-            (v, f) => v |= f,
-            (v, f) => v &= f
+                | ClickText.DayTime.Midnight
         );
 
     /// <summary>
@@ -237,6 +214,6 @@ public partial class ClickTextModel : ViewModelBase
     public void Close()
     {
         //TODO:
-        //I18nResource.I18nObjectInfos.Remove(this);
+        I18nResource.I18nObjects.Remove(I18nObject);
     }
 }

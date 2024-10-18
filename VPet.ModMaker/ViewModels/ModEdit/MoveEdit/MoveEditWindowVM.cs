@@ -15,12 +15,7 @@ namespace VPet.ModMaker.ViewModels.ModEdit.MoveEdit;
 
 public partial class MoveEditWindowVM : ViewModelBase
 {
-    public MoveEditWindowVM()
-    {
-        //AddImageCommand.ExecuteCommand += AddImage;
-        //ChangeImageCommand.ExecuteCommand += ChangeImage;
-        //Image.ValueChanged += Image_ValueChanged;
-    }
+    public MoveEditWindowVM() { }
 
     public PetModel CurrentPet { get; set; } = null!;
     public MoveModel? OldMove { get; set; }
@@ -37,24 +32,14 @@ public partial class MoveEditWindowVM : ViewModelBase
     [ReactiveProperty]
     public BitmapImage? Image { get; set; }
 
-    //#region Command
-    //public ObservableCommand AddImageCommand { get; } = new();
-    //public ObservableCommand ChangeImageCommand { get; } = new();
-    //#endregion
-
-    private void Image_ValueChanged(
-        ObservableValue<BitmapImage> sender,
-        ValueChangedEventArgs<BitmapImage> e
-    )
-    {
-        //LengthRatio.EnumValue = BorderLength.EnumValue / value.PixelWidth;
-    }
-
     public void Close()
     {
         Image?.StreamSource?.Close();
     }
 
+    /// <summary>
+    /// 添加图片
+    /// </summary>
     [ReactiveCommand]
     private void AddImage()
     {
@@ -69,6 +54,9 @@ public partial class MoveEditWindowVM : ViewModelBase
         }
     }
 
+    /// <summary>
+    /// 改变图片
+    /// </summary>
     [ReactiveCommand]
     private void ChangeImage()
     {

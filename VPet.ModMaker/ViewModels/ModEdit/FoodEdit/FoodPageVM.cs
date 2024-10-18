@@ -5,14 +5,17 @@ using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
+using System.Reactive.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using DynamicData.Binding;
 using HKW.HKWReactiveUI;
 using HKW.HKWUtils.Collections;
 using HKW.HKWUtils.Extensions;
 using HKW.HKWUtils.Observable;
 using LinePutScript.Localization.WPF;
+using ReactiveUI;
 using VPet.ModMaker.Models;
 using VPet.ModMaker.Views.ModEdit.FoodEdit;
 
@@ -23,20 +26,25 @@ public partial class FoodPageVM : ViewModelBase
     public FoodPageVM()
     {
         Foods = new(
-            ModInfoModel.Current.Foods,
+            new(ModInfoModel.Current.Foods),
             [],
             f => f.ID.Contains(Search, StringComparison.OrdinalIgnoreCase)
         );
-        //TODO:
-        //Foods.BindingList(ModInfoModel.Current.Foods);
+        Foods
+            .BaseList.WhenValueChanged(x => x.Count)
+            .Throttle(TimeSpan.FromSeconds(1), RxApp.TaskpoolScheduler)
+            .DistinctUntilChanged()
+            .ObserveOn(RxApp.MainThreadScheduler)
+            .Subscribe(_ => Foods.Refresh());
 
-        //AddCommand.ExecuteCommand += Add;
-        //EditCommand.ExecuteCommand += Edit;
-        //RemoveCommand.ExecuteCommand += Remove;
+        this.WhenValueChanged(x => x.Search)
+            .Throttle(TimeSpan.FromSeconds(1), RxApp.TaskpoolScheduler)
+            .DistinctUntilChanged()
+            .ObserveOn(RxApp.MainThreadScheduler)
+            .Subscribe(_ => Foods.Refresh());
     }
 
     #region Property
-
 
     public FilterListWrapper<
         FoodModel,
@@ -47,16 +55,11 @@ public partial class FoodPageVM : ViewModelBase
     [ReactiveProperty]
     public string Search { get; set; } = string.Empty;
 
-    partial void OnSearchChanged(string oldValue, string newValue)
-    {
-        Foods.Refresh();
-    }
     #endregion
-    //#region Command
-    //public ObservableCommand AddCommand { get; } = new();
-    //public ObservableCommand<FoodModel> EditCommand { get; } = new();
-    //public ObservableCommand<FoodModel> RemoveCommand { get; } = new();
-    //#endregion
+
+    /// <summary>
+    /// 添加
+    /// </summary>
     [ReactiveCommand]
     private void Add()
     {
@@ -68,6 +71,10 @@ public partial class FoodPageVM : ViewModelBase
         Foods.Add(vm.Food);
     }
 
+    /// <summary>
+    /// 编辑
+    /// </summary>
+    /// <param name="model">模型</param>
     [ReactiveCommand]
     public void Edit(FoodModel model)
     {
@@ -92,6 +99,10 @@ public partial class FoodPageVM : ViewModelBase
         model.Close();
     }
 
+    /// <summary>
+    /// 删除
+    /// </summary>
+    /// <param name="model">模型</param>
     [ReactiveCommand]
     private void Remove(FoodModel model)
     {

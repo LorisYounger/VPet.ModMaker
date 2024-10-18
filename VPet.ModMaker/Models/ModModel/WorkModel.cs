@@ -22,10 +22,7 @@ namespace VPet.ModMaker.Models;
 /// </summary>
 public partial class WorkModel : ViewModelBase
 {
-    public WorkModel()
-    {
-        //PropertyChanged += WorkModel_PropertyChanged;
-    }
+    public WorkModel() { }
 
     private static readonly FrozenSet<string> _notifyIsOverLoad = FrozenSet.ToFrozenSet(
         [
@@ -39,14 +36,6 @@ public partial class WorkModel : ViewModelBase
             nameof(FinishBonus)
         ]
     );
-
-    private void WorkModel_PropertyChanged(object? sender, PropertyChangedEventArgs e)
-    {
-        if (e.PropertyName is not null && _notifyIsOverLoad.Contains(e.PropertyName))
-        {
-            IsOverLoad = VPet_Simulator.Windows.Interface.ExtensionFunction.IsOverLoad(ToWork());
-        }
-    }
 
     public WorkModel(WorkModel model)
         : this()
@@ -107,8 +96,8 @@ public partial class WorkModel : ViewModelBase
     /// <summary>
     /// 工作类型
     /// </summary>
-    public static FrozenSet<VPet_Simulator.Core.GraphHelper.Work.WorkType> WorkTypes { get; } =
-        Enum.GetValues<VPet_Simulator.Core.GraphHelper.Work.WorkType>().ToFrozenSet();
+    public static FrozenSet<VPet_Simulator.Core.GraphHelper.Work.WorkType> WorkTypes =>
+        EnumInfo<VPet_Simulator.Core.GraphHelper.Work.WorkType>.Values;
 
     /// <summary>
     /// ID
@@ -116,45 +105,20 @@ public partial class WorkModel : ViewModelBase
     [ReactiveProperty]
     public string ID { get; set; } = string.Empty;
 
-    #region I18nData
     [AdaptIgnore]
-    private I18nResource<string, string> _i18nResource = null!;
+    [ReactiveProperty]
+    public required I18nResource<string, string> I18nResource { get; set; }
+
+    [NotifyPropertyChangeFrom("")]
+    public I18nObject<string, string> I18nObject => new(this);
 
     [AdaptIgnore]
-    public required I18nResource<string, string> I18nResource
-    {
-        get => _i18nResource;
-        set
-        {
-            //TODO:
-            //if (_i18nResource is not null)
-            //    I18nResource.I18nObjectInfos.Remove(this);
-            //_i18nResource = value;
-            //InitializeI18nResource();
-        }
-    }
-
-    public void InitializeI18nResource()
-    {
-        //I18nResource?.I18nObjectInfos.Add(
-        //    this,
-        //    new I18nObjectInfo<string, string>(this, OnPropertyChanged).AddPropertyInfo(
-        //        nameof(ID),
-        //        ID,
-        //        nameof(Name),
-        //        true
-        //    )
-        //);
-    }
-
-    [AdaptIgnore]
+    [ReactiveI18nProperty("I18nResource", nameof(I18nObject), nameof(ID))]
     public string Name
     {
         get => I18nResource.GetCurrentCultureDataOrDefault(ID);
         set => I18nResource.SetCurrentCultureData(ID, value);
     }
-    #endregion
-
 
     /// <summary>
     /// 指定动画
@@ -162,20 +126,11 @@ public partial class WorkModel : ViewModelBase
     [ReactiveProperty]
     public string Graph { get; set; } = string.Empty;
 
-    //#region MoneyLevel
-    //[DebuggerBrowsable(DebuggerBrowsableState.Never)]
-    //private double _moneyLevel;
-
     ///// <summary>
     ///// 收获倍率
     ///// </summary>
-    //public double MoneyLevel
-    //{
-    //    get => _moneyLevel;
-    //    set => SetProperty(ref _moneyLevel, value);
-    //}
-    //#endregion
-
+    //[ReactiveProperty]
+    //public double MoneyLevel { get; set; }
 
     /// <summary>
     /// 收获基础
@@ -219,26 +174,28 @@ public partial class WorkModel : ViewModelBase
     [ReactiveProperty]
     public double FinishBonus { get; set; }
 
+    //TODO: IsOverLoad不要使用ToWork 性能不好
     /// <summary>
     /// 是否超模
     /// </summary>
-    [ReactiveProperty]
-    public bool IsOverLoad { get; set; }
-
-    //#region Image
-    //[DebuggerBrowsable(DebuggerBrowsableState.Never)]
-    //private BitmapImage? _image;
+    [NotifyPropertyChangeFrom(
+        nameof(WorkType),
+        nameof(MoneyBase),
+        nameof(StrengthFood),
+        nameof(StrengthDrink),
+        nameof(Feeling),
+        nameof(Feeling),
+        nameof(LevelLimit),
+        nameof(FinishBonus)
+    )]
+    public bool IsOverLoad =>
+        VPet_Simulator.Windows.Interface.ExtensionFunction.IsOverLoad(ToWork());
 
     ///// <summary>
     ///// 图片
     ///// </summary>
-    //public BitmapImage? Image
-    //{
-    //    get => _image;
-    //    set => SetProperty(ref _image, value);
-    //}
-    //#endregion
-
+    //[ReactiveProperty]
+    //public BitmapImage? Image { get; set; }
 
     /// <summary>
     /// 工作类型
@@ -342,7 +299,6 @@ public partial class WorkModel : ViewModelBase
     public void Close()
     {
         //Image?.CloseStream();
-        //TODO:
-        //I18nResource.I18nObjectInfos.Remove(this);
+        I18nResource.I18nObjects.Remove(I18nObject);
     }
 }

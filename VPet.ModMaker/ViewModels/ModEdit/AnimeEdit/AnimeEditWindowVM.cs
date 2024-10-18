@@ -26,15 +26,6 @@ public partial class AnimeEditWindowVM : ViewModelBase
     public AnimeEditWindowVM()
     {
         _playerTask = new(Play);
-
-        //PlayCommand.ExecuteAsyncCommand += PlayCommand_ExecuteAsyncCommand;
-        //StopCommand.ExecuteCommand += Stop;
-        //AddAnimeCommand.ExecuteCommand += AddAnime;
-        //RemoveAnimeCommand.ExecuteCommand += RemoveAnime;
-        //AddImageCommand.ExecuteCommand += AddImage;
-        //RemoveImageCommand.ExecuteCommand += RemoveImage;
-        //ChangeImageCommand.ExecuteCommand += ChangeImage;
-        //ClearImageCommand.ExecuteCommand += ClearImage;
     }
 
     /// <summary>
@@ -51,19 +42,19 @@ public partial class AnimeEditWindowVM : ViewModelBase
     /// 动画
     /// </summary>
     [ReactiveProperty]
-    public AnimeTypeModel Anime { get; set; }
+    public AnimeTypeModel Anime { get; set; } = null!;
 
     /// <summary>
     /// 当前图像模型
     /// </summary>
     [ReactiveProperty]
-    public ImageModel CurrentImageModel { get; set; }
+    public ImageModel CurrentImageModel { get; set; } = null!;
 
     /// <summary>
     /// 当前动画模型
     /// </summary>
     [ReactiveProperty]
-    public AnimeModel CurrentAnimeModel { get; set; }
+    public AnimeModel CurrentAnimeModel { get; set; } = null!;
 
     partial void OnCurrentAnimeModelChanged(AnimeModel oldValue, AnimeModel newValue)
     {
@@ -96,48 +87,6 @@ public partial class AnimeEditWindowVM : ViewModelBase
     /// </summary>
     [NotifyPropertyChangeFrom(nameof(Anime))]
     public bool HasAnimeName => AnimeTypeModel.HasNameAnimes.Contains(Anime.GraphType);
-
-    //#region Command
-    ///// <summary>
-    ///// 播放命令
-    ///// </summary>
-    //public ObservableCommand PlayCommand { get; } = new();
-
-    ///// <summary>
-    ///// 停止命令
-    ///// </summary>
-    //public ObservableCommand StopCommand { get; } = new();
-
-    ///// <summary>
-    ///// 添加动画命令
-    ///// </summary>
-    //public ObservableCommand AddAnimeCommand { get; } = new();
-
-    ///// <summary>
-    ///// 删除动画命令
-    ///// </summary>
-    //public ObservableCommand<AnimeModel> RemoveAnimeCommand { get; } = new();
-
-    ///// <summary>
-    ///// 添加图片命令
-    ///// </summary>
-    //public ObservableCommand<AnimeModel> AddImageCommand { get; } = new();
-
-    ///// <summary>
-    ///// 删除图片命令
-    ///// </summary>
-    //public ObservableCommand<AnimeModel> RemoveImageCommand { get; } = new();
-
-    ///// <summary>
-    ///// 替换图片命令
-    ///// </summary>
-    //public ObservableCommand<AnimeModel> ChangeImageCommand { get; } = new();
-
-    ///// <summary>
-    ///// 清除图片命令
-    ///// </summary>
-    //public ObservableCommand<AnimeModel> ClearImageCommand { get; } = new();
-    //#endregion
 
     /// <summary>
     /// 正在播放

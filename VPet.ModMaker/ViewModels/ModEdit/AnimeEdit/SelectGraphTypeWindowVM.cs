@@ -15,35 +15,22 @@ namespace VPet.ModMaker.ViewModels.ModEdit.AnimeEdit;
 
 public partial class SelectGraphTypeWindowVM : ViewModelBase
 {
-    public SelectGraphTypeWindowVM()
-    {
-        PropertyChanged += SelectGraphTypeWindowVM_PropertyChanged;
-    }
-
-    private void SelectGraphTypeWindowVM_PropertyChanged(object? sender, PropertyChangedEventArgs e)
-    {
-        if (e.PropertyName == nameof(CurrentPet))
-        {
-            GraphTypes = new(
-                AnimeTypeModel.GraphTypes.Except(CurrentPet.Animes.Select(m => m.GraphType))
-            );
-            // 可添加多个项的类型
-            GraphTypes.AddRange(AnimeTypeModel.HasNameAnimes);
-        }
-        else if (e.PropertyName == nameof(GraphType))
-        {
-            if (GraphType.IsHasNameAnime())
-                HasNameAnime = true;
-            else
-                HasNameAnime = false;
-        }
-    }
+    public SelectGraphTypeWindowVM() { }
 
     /// <summary>
     /// 当前宠物
     /// </summary>
     [ReactiveProperty]
-    public PetModel CurrentPet { get; set; }
+    public PetModel CurrentPet { get; set; } = null!;
+
+    partial void OnCurrentPetChanged(PetModel oldValue, PetModel newValue)
+    {
+        GraphTypes = new(
+            AnimeTypeModel.GraphTypes.Except(CurrentPet.Animes.Select(m => m.GraphType))
+        );
+        // 可添加多个项的类型
+        GraphTypes.AddRange(AnimeTypeModel.HasNameAnimes);
+    }
 
     /// <summary>
     /// 动画类型
@@ -51,11 +38,19 @@ public partial class SelectGraphTypeWindowVM : ViewModelBase
     [ReactiveProperty]
     public GraphInfo.GraphType GraphType { get; set; }
 
+    partial void OnGraphTypeChanged(GraphInfo.GraphType oldValue, GraphInfo.GraphType newValue)
+    {
+        if (GraphType.IsHasNameAnime())
+            HasNameAnime = true;
+        else
+            HasNameAnime = false;
+    }
+
     /// <summary>
     /// 动画类型列表
     /// </summary>
     [ReactiveProperty]
-    public ObservableSet<GraphInfo.GraphType> GraphTypes { get; set; } = new();
+    public ObservableSet<GraphInfo.GraphType> GraphTypes { get; set; } = [];
 
     /// <summary>
     /// 动画名称

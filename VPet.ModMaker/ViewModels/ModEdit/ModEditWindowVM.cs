@@ -29,16 +29,6 @@ public partial class ModEditWindowVM : ViewModelBase
     public ModEditWindowVM(ModEditWindow window)
     {
         ModEditWindow = window;
-        //ChangeImageCommand.ExecuteCommand += ChangeImage;
-        //AddCultureCommand.ExecuteCommand += AddCulture;
-        //EditCultureCommand.ExecuteCommand += EditCulture;
-        //RemoveCultureCommand.ExecuteCommand += RemoveCulture;
-        //EditI18nCommand.ExecuteCommand += EditI18n;
-        //SetMainCultureCommand.ExecuteCommand += SetMainCulture;
-
-        //SaveCommand.ExecuteCommand += Save;
-        //SaveToCommand.ExecuteCommand += SaveTo;
-        //SaveAsTranslationModCommand.ExecuteCommand += SaveAsTranslationMod;
     }
 
     public ModEditWindow ModEditWindow { get; }
@@ -56,53 +46,6 @@ public partial class ModEditWindowVM : ViewModelBase
     public I18nResource<string, string> I18nResource => ModInfo.I18nResource;
     #endregion
 
-    //#region Command
-
-    ///// <summary>
-    ///// 改变图片命令
-    ///// </summary>
-    //public ObservableCommand ChangeImageCommand { get; } = new();
-
-    ///// <summary>
-    ///// 添加文化命令
-    ///// </summary>
-    //public ObservableCommand AddCultureCommand { get; } = new();
-
-    ///// <summary>
-    ///// 编辑文化命令
-    ///// </summary>
-    //public ObservableCommand<string> EditCultureCommand { get; } = new();
-
-    ///// <summary>
-    ///// 删除文化命令
-    ///// </summary>
-    //public ObservableCommand<string> RemoveCultureCommand { get; } = new();
-
-    ///// <summary>
-    ///// 设置主要文化命令
-    ///// </summary>
-    //public ObservableCommand<string> SetMainCultureCommand { get; } = new();
-
-    ///// <summary>
-    ///// 保存命令
-    ///// </summary>
-    //public ObservableCommand SaveCommand { get; } = new();
-
-    ///// <summary>
-    ///// 保存至命令
-    ///// </summary>
-    //public ObservableCommand SaveToCommand { get; } = new();
-
-    ///// <summary>
-    ///// 编辑多语言内容
-    ///// </summary>
-    //public ObservableCommand EditI18nCommand { get; } = new();
-
-    ///// <summary>
-    ///// 保存为翻译模组
-    ///// </summary>
-    //public ObservableCommand SaveAsTranslationModCommand { get; } = new();
-    //#endregion
     /// <summary>
     /// 保存为翻译模组
     /// </summary>
@@ -199,6 +142,10 @@ public partial class ModEditWindowVM : ViewModelBase
         I18nResource.RemoveCulture(oldCulture);
     }
 
+    /// <summary>
+    /// 设置主文化
+    /// </summary>
+    /// <param name="culture"></param>
     [ReactiveCommand]
     public void SetMainCulture(string culture)
     {
@@ -259,7 +206,7 @@ public partial class ModEditWindowVM : ViewModelBase
     /// <summary>
     /// 保存至
     /// </summary>
-    /// <param name="path"></param>
+    /// <param name="path">路径</param>
     private void SaveTo(string path)
     {
         var pending = PendingBox.Show("保存中".Translate());

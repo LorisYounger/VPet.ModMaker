@@ -23,58 +23,17 @@ public partial class SaveTranslationModWindowVM : ViewModelBase
     [ReactiveProperty]
     public bool? CheckAll { get; set; }
 
-    public ObservableList<CheckCultureModel> CheckCultures { get; } = [];
+    public ObservableSelectionGroup<CultureInfo> CheckCultures { get; }
     #endregion
-
-    //#region Command
-    //public ObservableCommand SaveCommand { get; } = new();
-    //#endregion
 
     public SaveTranslationModWindowVM()
     {
-        foreach (var culture in ModInfoModel.Current.I18nResource.Cultures)
-        {
-            var model = new CheckCultureModel(culture);
-            model.Culture = culture;
-            // TODO:使用SelectionGroup
-            //model.PropertyChangedX += Model_PropertyChangedX;
-            CheckCultures.Add(model);
-        }
-        //PropertyChangedX += SaveTranslationModWindowVM_PropertyChangedX;
-        //SaveCommand.ExecuteCommand += Save;
+        CheckCultures = new(ModInfoModel.Current.I18nResource.Cultures);
     }
 
-    //private void SaveTranslationModWindowVM_PropertyChangedX(
-    //    object? sender,
-    //    PropertyChangedXEventArgs e
-    //)
-    //{
-    //    if (e.NewValue is null)
-    //    {
-    //        if (CheckCultures.All(m => m.IsChecked))
-    //            CheckAll = false;
-    //        else if (CheckCultures.All(m => m.IsChecked is false))
-    //            CheckAll = true;
-    //        return;
-    //    }
-    //    foreach (var model in CheckCultures)
-    //        model.IsChecked = e.NewValue is true;
-    //}
-
-    //private void Model_PropertyChangedX(object? sender, PropertyChangedXEventArgs e)
-    //{
-    //    var count = 0;
-    //    foreach (var model in CheckCultures)
-    //        if (model.IsChecked)
-    //            count += 1;
-    //    if (count == CheckCultures.Count)
-    //        CheckAll = true;
-    //    else if (count == 0)
-    //        CheckAll = false;
-    //    else
-    //        CheckAll = null;
-    //}
-
+    /// <summary>
+    /// 保存
+    /// </summary>
     [ReactiveCommand]
     private void Save()
     {
@@ -91,7 +50,7 @@ public partial class SaveTranslationModWindowVM : ViewModelBase
         {
             ModInfoModel.Current.SaveTranslationMod(
                 Path.GetDirectoryName(saveFileDialog.FileName)!,
-                CheckCultures.Where(m => m.IsChecked).Select(m => m.Culture)
+                CheckCultures.Where(m => m.IsSelected).Select(m => m.Source)
             );
             MessageBox.Show("保存成功".Translate());
         }
@@ -100,18 +59,4 @@ public partial class SaveTranslationModWindowVM : ViewModelBase
             MessageBox.Show("保存失败 错误信息:\n{0}".Translate(ex));
         }
     }
-}
-
-public partial class CheckCultureModel : ViewModelBase
-{
-    public CheckCultureModel(CultureInfo culture)
-    {
-        Culture = culture;
-    }
-
-    [ReactiveProperty]
-    public bool IsChecked { get; set; }
-
-    [ReactiveProperty]
-    public CultureInfo Culture { get; set; }
 }

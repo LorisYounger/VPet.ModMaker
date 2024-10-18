@@ -16,12 +16,7 @@ namespace VPet.ModMaker.ViewModels.ModEdit.PetEdit;
 
 public partial class PetEditWindowVM : ViewModelBase
 {
-    public PetEditWindowVM()
-    {
-        //AddImageCommand.ExecuteCommand += AddImage;
-        //ChangeImageCommand.ExecuteCommand += ChangeImage;
-        //Image.ValueChanged += Image_ValueChanged;
-    }
+    public PetEditWindowVM() { }
 
     #region Property
     /// <summary>
@@ -43,23 +38,14 @@ public partial class PetEditWindowVM : ViewModelBase
     public BitmapImage? Image { get; set; }
     #endregion
 
-    //#region Command
-    //public ObservableCommand AddImageCommand { get; } = new();
-    //public ObservableCommand ChangeImageCommand { get; } = new();
-    //#endregion
-    //private void Image_ValueChanged(
-    //    ObservableValue<BitmapImage> sender,
-    //    ValueChangedEventArgs<BitmapImage> e
-    //)
-    //{
-    //    //LengthRatio.EnumValue = BorderLength.EnumValue / value.PixelWidth;
-    //}
-
     public void Close()
     {
         Image?.CloseStream();
     }
 
+    /// <summary>
+    /// 添加图片
+    /// </summary>
     [ReactiveCommand]
     private void AddImage()
     {
@@ -74,6 +60,9 @@ public partial class PetEditWindowVM : ViewModelBase
         }
     }
 
+    /// <summary>
+    /// 改变图片
+    /// </summary>
     [ReactiveCommand]
     private void ChangeImage()
     {
@@ -84,7 +73,7 @@ public partial class PetEditWindowVM : ViewModelBase
         };
         if (openFileDialog.ShowDialog() is true)
         {
-            Image?.StreamSource?.Close();
+            Image?.CloseStream();
             Image = NativeUtils.LoadImageToMemoryStream(openFileDialog.FileName);
         }
     }

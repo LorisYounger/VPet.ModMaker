@@ -38,17 +38,6 @@ public partial class ModInfoModel : ViewModelBase
         Pets.CollectionChanged += Pets_CollectionChanged;
         I18nResource.PropertyChanged += I18nResource_PropertyChanged;
         I18nResource.Cultures.SetChanged += Cultures_SetChanged;
-        //TODO:
-        //I18nResource?.I18nObjectInfos.Add(
-        //    this,
-        //    new I18nObjectInfo<string, string>(this, OnPropertyChanged).AddPropertyInfo(
-        //        [
-        //            (nameof(ID), ID, nameof(Name)),
-        //            (nameof(DescriptionID), DescriptionID, nameof(Description))
-        //        ],
-        //        true
-        //    )
-        //);
         foreach (var pet in ModMakerInfo.MainPets)
         {
             // 确保ID不重复
@@ -164,18 +153,22 @@ public partial class ModInfoModel : ViewModelBase
     public I18nResource<string, string> TempI18nResource { get; } =
         new() { FillDefaultValueToNewCulture = true, DefaultValue = string.Empty };
 
-    #region I18nData
+    [NotifyPropertyChangeFrom("")]
+    public I18nObject<string, string> I18nObject => new(this);
+
+    [ReactiveI18nProperty("I18nResource", nameof(I18nObject), nameof(ID))]
     public string Name
     {
         get => I18nResource.GetCurrentCultureDataOrDefault(ID);
         set => I18nResource.SetCurrentCultureData(ID, value);
     }
+
+    [ReactiveI18nProperty("I18nResource", nameof(I18nObject), nameof(ID))]
     public string Description
     {
         get => I18nResource.GetCurrentCultureDataOrDefault(DescriptionID);
         set => I18nResource.SetCurrentCultureData(DescriptionID, value);
     }
-    #endregion
 
     /// <summary>
     /// 自动设置食物推荐价格
@@ -205,6 +198,11 @@ public partial class ModInfoModel : ViewModelBase
     /// </summary>
     [ReactiveProperty]
     public string ID { get; set; } = string.Empty;
+
+    partial void OnIDChanged(string oldValue, string newValue)
+    {
+        RefreshID();
+    }
 
     /// <summary>
     /// 描述ID
@@ -270,7 +268,7 @@ public partial class ModInfoModel : ViewModelBase
     public ObservableList<PetModel> Pets { get; } = [];
 
     /// <summary>
-    /// 宠物实际数量
+    /// 宠物显示的数量
     /// </summary>
     [ReactiveProperty]
     public int PetDisplayedCount { get; set; }
