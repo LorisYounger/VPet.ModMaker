@@ -12,7 +12,7 @@ using LinePutScript.Localization.WPF;
 using Microsoft.Win32;
 using VPet.ModMaker.Models;
 
-namespace VPet.ModMaker.ViewModels.ModEdit.PetEdit;
+namespace VPet.ModMaker.ViewModels.ModEdit;
 
 public partial class PetEditWindowVM : ViewModelBase
 {

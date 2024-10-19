@@ -15,7 +15,7 @@ using VPet.ModMaker.Models;
 using VPet.ModMaker.Models.ModModel;
 using VPet_Simulator.Windows.Interface;
 
-namespace VPet.ModMaker.ViewModels.ModEdit.WorkEdit;
+namespace VPet.ModMaker.ViewModels.ModEdit;
 
 public partial class WorkEditWindowVM : ViewModelBase
 {

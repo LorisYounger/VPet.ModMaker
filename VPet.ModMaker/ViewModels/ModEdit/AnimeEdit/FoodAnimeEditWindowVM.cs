@@ -18,7 +18,7 @@ using VPet.ModMaker.Resources;
 using VPet_Simulator.Core;
 using static VPet_Simulator.Core.IGameSave;
 
-namespace VPet.ModMaker.ViewModels.ModEdit.AnimeEdit;
+namespace VPet.ModMaker.ViewModels.ModEdit;
 
 public partial class FoodAnimeEditWindowVM : ViewModelBase
 {

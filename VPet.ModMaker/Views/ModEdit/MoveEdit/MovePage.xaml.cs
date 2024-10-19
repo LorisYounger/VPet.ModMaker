@@ -13,9 +13,9 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using VPet.ModMaker.Models;
-using VPet.ModMaker.ViewModels.ModEdit.MoveEdit;
+using VPet.ModMaker.ViewModels.ModEdit;
 
-namespace VPet.ModMaker.Views.ModEdit.MoveEdit;
+namespace VPet.ModMaker.Views.ModEdit;
 
 /// <summary>
 /// MovePage.xaml 的交互逻辑

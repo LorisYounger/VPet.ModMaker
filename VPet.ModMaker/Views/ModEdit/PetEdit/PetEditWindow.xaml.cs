@@ -13,9 +13,9 @@ using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using LinePutScript.Localization.WPF;
 using VPet.ModMaker.Models;
-using VPet.ModMaker.ViewModels.ModEdit.PetEdit;
+using VPet.ModMaker.ViewModels.ModEdit;
 
-namespace VPet.ModMaker.Views.ModEdit.PetEdit;
+namespace VPet.ModMaker.Views.ModEdit;
 
 /// <summary>
 /// PetEditWindow.xaml 的交互逻辑

@@ -10,7 +10,7 @@ using HKW.HKWUtils.Observable;
 using VPet.ModMaker.Models;
 using VPet_Simulator.Windows.Interface;
 
-namespace VPet.ModMaker.ViewModels.ModEdit.LowTextEdit;
+namespace VPet.ModMaker.ViewModels.ModEdit;
 
 public partial class LowTextEditWindowVM : ViewModelBase
 {

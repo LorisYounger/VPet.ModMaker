@@ -17,9 +17,9 @@ using HKW.HKWUtils.Observable;
 using LinePutScript.Localization.WPF;
 using ReactiveUI;
 using VPet.ModMaker.Models;
-using VPet.ModMaker.Views.ModEdit.LowTextEdit;
+using VPet.ModMaker.Views.ModEdit;
 
-namespace VPet.ModMaker.ViewModels.ModEdit.LowTextEdit;
+namespace VPet.ModMaker.ViewModels.ModEdit;
 
 public partial class LowTextPageVM : ViewModelBase
 {

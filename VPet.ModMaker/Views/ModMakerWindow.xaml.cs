@@ -20,8 +20,8 @@ using Panuon.WPF.UI;
 using VPet.ModMaker.Models;
 using VPet.ModMaker.ViewModels;
 using VPet.ModMaker.Views.ModEdit;
-using VPet.ModMaker.Views.ModEdit.AnimeEdit;
-using VPet.ModMaker.Views.ModEdit.PetEdit;
+using VPet.ModMaker.Views.ModEdit;
+using VPet.ModMaker.Views.ModEdit;
 
 namespace VPet.ModMaker.Views;
 

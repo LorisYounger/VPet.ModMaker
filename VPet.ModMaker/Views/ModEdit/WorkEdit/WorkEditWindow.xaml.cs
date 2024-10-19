@@ -13,9 +13,9 @@ using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using LinePutScript.Localization.WPF;
 using VPet.ModMaker.Models;
-using VPet.ModMaker.ViewModels.ModEdit.WorkEdit;
+using VPet.ModMaker.ViewModels.ModEdit;
 
-namespace VPet.ModMaker.Views.ModEdit.WorkEdit;
+namespace VPet.ModMaker.Views.ModEdit;
 
 /// <summary>
 /// WorkEditWindow.xaml 的交互逻辑

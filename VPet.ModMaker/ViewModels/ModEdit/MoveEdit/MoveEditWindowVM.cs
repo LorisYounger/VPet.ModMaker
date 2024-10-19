@@ -11,7 +11,7 @@ using LinePutScript.Localization.WPF;
 using Microsoft.Win32;
 using VPet.ModMaker.Models;
 
-namespace VPet.ModMaker.ViewModels.ModEdit.MoveEdit;
+namespace VPet.ModMaker.ViewModels.ModEdit;
 
 public partial class MoveEditWindowVM : ViewModelBase
 {

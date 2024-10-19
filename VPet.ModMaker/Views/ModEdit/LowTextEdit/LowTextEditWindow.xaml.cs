@@ -14,9 +14,9 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using LinePutScript.Localization.WPF;
 using VPet.ModMaker.Models;
-using VPet.ModMaker.ViewModels.ModEdit.LowTextEdit;
+using VPet.ModMaker.ViewModels.ModEdit;
 
-namespace VPet.ModMaker.Views.ModEdit.LowTextEdit;
+namespace VPet.ModMaker.Views.ModEdit;
 
 /// <summary>
 /// Window_AddLowText.xaml 的交互逻辑

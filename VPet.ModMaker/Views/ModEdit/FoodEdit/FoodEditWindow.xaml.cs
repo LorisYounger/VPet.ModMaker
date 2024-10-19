@@ -14,10 +14,10 @@ using System.Windows.Shapes;
 using LinePutScript.Localization.WPF;
 using Microsoft.Win32;
 using VPet.ModMaker.Models;
-using VPet.ModMaker.ViewModels.ModEdit.FoodEdit;
+using VPet.ModMaker.ViewModels.ModEdit;
 using VPet_Simulator.Windows.Interface;
 
-namespace VPet.ModMaker.Views.ModEdit.FoodEdit;
+namespace VPet.ModMaker.Views.ModEdit;
 
 /// <summary>
 /// AddFoodWindow.xaml 的交互逻辑

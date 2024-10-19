@@ -15,7 +15,7 @@ using Microsoft.Win32;
 using VPet.ModMaker.Models;
 using VPet_Simulator.Windows.Interface;
 
-namespace VPet.ModMaker.ViewModels.ModEdit.FoodEdit;
+namespace VPet.ModMaker.ViewModels.ModEdit;
 
 public partial class FoodEditWindowVM : ViewModelBase
 {

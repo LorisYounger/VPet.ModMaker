@@ -15,9 +15,9 @@ using HKW.HKWUtils.Observable;
 using LinePutScript.Localization.WPF;
 using ReactiveUI;
 using VPet.ModMaker.Models;
-using VPet.ModMaker.Views.ModEdit.ClickTextEdit;
+using VPet.ModMaker.Views.ModEdit;
 
-namespace VPet.ModMaker.ViewModels.ModEdit.ClickTextEdit;
+namespace VPet.ModMaker.ViewModels.ModEdit;
 
 public partial class ClickTextPageVM : ViewModelBase
 {

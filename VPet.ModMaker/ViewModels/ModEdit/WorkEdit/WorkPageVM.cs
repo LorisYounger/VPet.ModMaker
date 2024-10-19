@@ -16,9 +16,9 @@ using HKW.HKWUtils.Observable;
 using LinePutScript.Localization.WPF;
 using ReactiveUI;
 using VPet.ModMaker.Models;
-using VPet.ModMaker.Views.ModEdit.WorkEdit;
+using VPet.ModMaker.Views.ModEdit;
 
-namespace VPet.ModMaker.ViewModels.ModEdit.WorkEdit;
+namespace VPet.ModMaker.ViewModels.ModEdit;
 
 public partial class WorkPageVM : ViewModelBase
 {

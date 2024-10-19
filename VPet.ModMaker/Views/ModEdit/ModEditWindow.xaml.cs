@@ -23,15 +23,7 @@ using Panuon.WPF;
 using Panuon.WPF.UI;
 using VPet.ModMaker.Models;
 using VPet.ModMaker.ViewModels.ModEdit;
-using VPet.ModMaker.Views.ModEdit.AnimeEdit;
-using VPet.ModMaker.Views.ModEdit.ClickTextEdit;
-using VPet.ModMaker.Views.ModEdit.FoodEdit;
-using VPet.ModMaker.Views.ModEdit.I18nEdit;
-using VPet.ModMaker.Views.ModEdit.LowTextEdit;
-using VPet.ModMaker.Views.ModEdit.MoveEdit;
-using VPet.ModMaker.Views.ModEdit.PetEdit;
-using VPet.ModMaker.Views.ModEdit.SelectTextEdit;
-using VPet.ModMaker.Views.ModEdit.WorkEdit;
+using VPet.ModMaker.Views.ModEdit;
 using VPet_Simulator.Windows.Interface;
 
 namespace VPet.ModMaker.Views.ModEdit;

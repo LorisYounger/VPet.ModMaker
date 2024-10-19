@@ -17,10 +17,10 @@ using HKW.HKWUtils.Observable;
 using LinePutScript.Localization.WPF;
 using VPet.ModMaker.Models;
 using VPet.ModMaker.Models.ModModel;
-using VPet.ModMaker.ViewModels.ModEdit.AnimeEdit;
+using VPet.ModMaker.ViewModels.ModEdit;
 using VPet_Simulator.Core;
 
-namespace VPet.ModMaker.Views.ModEdit.AnimeEdit;
+namespace VPet.ModMaker.Views.ModEdit;
 
 /// <summary>
 /// SelectGraphTypeWindow.xaml 的交互逻辑

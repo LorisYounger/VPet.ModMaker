@@ -10,9 +10,9 @@ using HKW.HKWUtils.Extensions;
 using HKW.HKWUtils.Observable;
 using Panuon.WPF.UI;
 using VPet.ModMaker.Models;
-using VPet.ModMaker.ViewModels.ModEdit.I18nEdit;
+using VPet.ModMaker.ViewModels.ModEdit;
 
-namespace VPet.ModMaker.Views.ModEdit.I18nEdit;
+namespace VPet.ModMaker.Views.ModEdit;
 
 /// <summary>
 /// I18nEditWindow.xaml 的交互逻辑

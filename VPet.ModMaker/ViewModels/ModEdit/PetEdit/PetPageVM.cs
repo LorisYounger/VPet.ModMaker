@@ -15,10 +15,9 @@ using HKW.HKWUtils.Observable;
 using LinePutScript.Localization.WPF;
 using ReactiveUI;
 using VPet.ModMaker.Models;
-using VPet.ModMaker.Views.ModEdit.I18nEdit;
-using VPet.ModMaker.Views.ModEdit.PetEdit;
+using VPet.ModMaker.Views.ModEdit;
 
-namespace VPet.ModMaker.ViewModels.ModEdit.PetEdit;
+namespace VPet.ModMaker.ViewModels.ModEdit;
 
 public partial class PetPageVM : ViewModelBase
 {

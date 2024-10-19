@@ -20,7 +20,6 @@ using LinePutScript.Converter;
 using LinePutScript.Localization.WPF;
 using VPet.ModMaker.Models.ModModel;
 using VPet.ModMaker.ViewModels;
-using VPet.ModMaker.Views.ModEdit.I18nEdit;
 using VPet_Simulator.Core;
 using VPet_Simulator.Windows.Interface;
 

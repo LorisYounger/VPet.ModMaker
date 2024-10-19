@@ -13,9 +13,9 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using VPet.ModMaker.Models;
-using VPet.ModMaker.ViewModels.ModEdit.WorkEdit;
+using VPet.ModMaker.ViewModels.ModEdit;
 
-namespace VPet.ModMaker.Views.ModEdit.WorkEdit;
+namespace VPet.ModMaker.Views.ModEdit;
 
 /// <summary>
 /// WorkPage.xaml 的交互逻辑

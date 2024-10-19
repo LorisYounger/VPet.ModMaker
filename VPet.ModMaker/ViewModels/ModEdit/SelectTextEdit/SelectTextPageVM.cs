@@ -16,10 +16,10 @@ using HKW.HKWUtils.Observable;
 using LinePutScript.Localization.WPF;
 using ReactiveUI;
 using VPet.ModMaker.Models;
-using VPet.ModMaker.Views.ModEdit.SelectTextEdit;
+using VPet.ModMaker.Views.ModEdit;
 using VPet_Simulator.Windows.Interface;
 
-namespace VPet.ModMaker.ViewModels.ModEdit.SelectTextEdit;
+namespace VPet.ModMaker.ViewModels.ModEdit;
 
 public partial class SelectTextPageVM : ViewModelBase
 {

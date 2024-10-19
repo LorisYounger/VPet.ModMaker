@@ -20,7 +20,6 @@ using Ookii.Dialogs.Wpf;
 using Panuon.WPF.UI;
 using VPet.ModMaker.Models;
 using VPet.ModMaker.Views.ModEdit;
-using VPet.ModMaker.Views.ModEdit.I18nEdit;
 
 namespace VPet.ModMaker.ViewModels.ModEdit;
 

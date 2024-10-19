@@ -5,10 +5,12 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Reactive.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
+using DynamicData.Binding;
 using HKW.HKWReactiveUI;
 using HKW.HKWUtils.Collections;
 using HKW.HKWUtils.Extensions;
@@ -18,29 +20,43 @@ using LinePutScript.Converter;
 using LinePutScript.Localization.WPF;
 using Microsoft.Win32;
 using Panuon.WPF.UI;
+using ReactiveUI;
 using VPet.ModMaker.Models;
+using VPet.ModMaker.Resources;
 using VPet.ModMaker.Views;
 using VPet.ModMaker.Views.ModEdit;
-using VPet.ModMaker.Views.ModEdit.I18nEdit;
 
 namespace VPet.ModMaker.ViewModels;
 
 public partial class ModMakerWindowVM : ViewModelBase
 {
+    private static bool _isFirst;
+
     public ModMakerWindowVM(ModMakerWindow window)
     {
         Histories = new([], [], f => f.ID.Contains(Search, StringComparison.OrdinalIgnoreCase));
         LoadHistory();
         ModMakerWindow = window;
-        PropertyChanged += ModMakerWindowVM_PropertyChanged;
+
+        this.WhenValueChanged(x => x.Search)
+            .Throttle(TimeSpan.FromSeconds(1), RxApp.TaskpoolScheduler)
+            .DistinctUntilChanged()
+            .ObserveOn(RxApp.MainThreadScheduler)
+            .Subscribe(_ => Histories.Refresh());
     }
 
-    private void ModMakerWindowVM_PropertyChanged(object? sender, PropertyChangedEventArgs e)
+    private static void Initialize()
     {
-        if (e.PropertyName == nameof(Search))
-        {
-            Histories.Refresh();
-        }
+        if (_isFirst is false)
+            return;
+        var configPath = Path.Combine(NativeData.BaseDirectory, "NLog.config");
+        Directory.CreateDirectory(NativeData.VPetHouseBaseDirectory);
+        if (File.Exists(configPath) is false)
+            NativeResources.SaveTo(NativeResources.NLogConfig, configPath);
+        DependencyInjection.Initialize();
+
+        //EnumInfo<RoomZoneType>.DefaultToString = x => x.Name.Translate();
+        _isFirst = false;
     }
 
     #region Property

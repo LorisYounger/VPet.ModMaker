@@ -17,9 +17,9 @@ using HKW.HKWUtils.Observable;
 using LinePutScript.Localization.WPF;
 using ReactiveUI;
 using VPet.ModMaker.Models;
-using VPet.ModMaker.Views.ModEdit.FoodEdit;
+using VPet.ModMaker.Views.ModEdit;
 
-namespace VPet.ModMaker.ViewModels.ModEdit.FoodEdit;
+namespace VPet.ModMaker.ViewModels.ModEdit;
 
 public partial class FoodPageVM : ViewModelBase
 {

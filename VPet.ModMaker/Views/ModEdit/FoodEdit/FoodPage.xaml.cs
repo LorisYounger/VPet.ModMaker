@@ -15,10 +15,10 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using VPet.ModMaker.Models;
-using VPet.ModMaker.ViewModels.ModEdit.FoodEdit;
+using VPet.ModMaker.ViewModels.ModEdit;
 using VPet_Simulator.Windows.Interface;
 
-namespace VPet.ModMaker.Views.ModEdit.FoodEdit;
+namespace VPet.ModMaker.Views.ModEdit;
 
 /// <summary>
 /// Page_Food.xaml 的交互逻辑

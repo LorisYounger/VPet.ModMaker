@@ -16,7 +16,7 @@ using HKW.HKWUtils.Observable;
 using Mapster;
 using VPet.ModMaker.Models;
 
-namespace VPet.ModMaker.ViewModels.ModEdit.I18nEdit;
+namespace VPet.ModMaker.ViewModels.ModEdit;
 
 public partial class I18nEditWindowVM : ViewModelBase
 {

@@ -19,6 +19,11 @@ internal class NativeResources
     /// </summary>
     public const string FoodImage = $"{ResourcePath}.food.png";
 
+    /// <summary>
+    /// NLog配置文件
+    /// </summary>
+    public const string NLogConfig = $"{ResourcePath}.NLog.config";
+
     #region Native
     private static readonly Assembly _assembly = Assembly.GetExecutingAssembly();
 
@@ -36,7 +41,10 @@ internal class NativeResources
     /// <param name="resourceName">资源名</param>
     /// <param name="resourceStream">资源流</param>
     /// <returns>成功为 <see langword="true"/> 失败为 <see langword="false"/></returns>
-    public static bool TryGetStream(string resourceName, out Stream resourceStream)
+    public static bool TryGetStream(
+        string resourceName,
+        [MaybeNullWhen(false)] out Stream resourceStream
+    )
     {
         resourceStream = null;
         if (_assembly.GetManifestResourceStream(resourceName) is not Stream stream)

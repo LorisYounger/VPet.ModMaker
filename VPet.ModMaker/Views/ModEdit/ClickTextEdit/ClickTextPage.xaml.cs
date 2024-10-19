@@ -13,9 +13,9 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using VPet.ModMaker.Models;
-using VPet.ModMaker.ViewModels.ModEdit.ClickTextEdit;
+using VPet.ModMaker.ViewModels.ModEdit;
 
-namespace VPet.ModMaker.Views.ModEdit.ClickTextEdit;
+namespace VPet.ModMaker.Views.ModEdit;
 
 /// <summary>
 /// ClickTextPage.xaml 的交互逻辑

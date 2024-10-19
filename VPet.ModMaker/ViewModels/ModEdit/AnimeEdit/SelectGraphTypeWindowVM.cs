@@ -11,7 +11,7 @@ using VPet.ModMaker.Models;
 using VPet.ModMaker.Models.ModModel;
 using VPet_Simulator.Core;
 
-namespace VPet.ModMaker.ViewModels.ModEdit.AnimeEdit;
+namespace VPet.ModMaker.ViewModels.ModEdit;
 
 public partial class SelectGraphTypeWindowVM : ViewModelBase
 {

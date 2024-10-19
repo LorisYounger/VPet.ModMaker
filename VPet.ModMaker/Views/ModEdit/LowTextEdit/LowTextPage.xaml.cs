@@ -15,10 +15,10 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using VPet.ModMaker.Models;
-using VPet.ModMaker.ViewModels.ModEdit.LowTextEdit;
+using VPet.ModMaker.ViewModels.ModEdit;
 using VPet_Simulator.Windows.Interface;
 
-namespace VPet.ModMaker.Views.ModEdit.LowTextEdit;
+namespace VPet.ModMaker.Views.ModEdit;
 
 /// <summary>
 /// Page_LowText.xaml 的交互逻辑

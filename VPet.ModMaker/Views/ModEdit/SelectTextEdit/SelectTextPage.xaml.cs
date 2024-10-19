@@ -13,9 +13,9 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using VPet.ModMaker.Models;
-using VPet.ModMaker.ViewModels.ModEdit.SelectTextEdit;
+using VPet.ModMaker.ViewModels.ModEdit;
 
-namespace VPet.ModMaker.Views.ModEdit.SelectTextEdit;
+namespace VPet.ModMaker.Views.ModEdit;
 
 /// <summary>
 /// SelectTextPage.xaml 的交互逻辑

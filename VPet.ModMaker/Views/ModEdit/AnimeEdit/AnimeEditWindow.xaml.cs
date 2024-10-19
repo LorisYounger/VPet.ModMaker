@@ -14,11 +14,11 @@ using System.Windows.Shapes;
 using LinePutScript.Localization.WPF;
 using VPet.ModMaker.Models;
 using VPet.ModMaker.Models.ModModel;
-using VPet.ModMaker.ViewModels.ModEdit.AnimeEdit;
+using VPet.ModMaker.ViewModels.ModEdit;
 using VPet_Simulator.Core;
 using static VPet_Simulator.Core.IGameSave;
 
-namespace VPet.ModMaker.Views.ModEdit.AnimeEdit;
+namespace VPet.ModMaker.Views.ModEdit;
 
 /// <summary>
 /// AnimeEditWindow.xaml 的交互逻辑

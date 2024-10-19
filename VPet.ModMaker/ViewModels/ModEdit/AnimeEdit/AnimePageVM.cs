@@ -19,9 +19,9 @@ using Panuon.WPF.UI;
 using ReactiveUI;
 using VPet.ModMaker.Models;
 using VPet.ModMaker.Models.ModModel;
-using VPet.ModMaker.Views.ModEdit.AnimeEdit;
+using VPet.ModMaker.Views.ModEdit;
 
-namespace VPet.ModMaker.ViewModels.ModEdit.AnimeEdit;
+namespace VPet.ModMaker.ViewModels.ModEdit;
 
 public partial class AnimePageVM : ViewModelBase
 {

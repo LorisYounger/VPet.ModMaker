@@ -12,9 +12,9 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using LinePutScript.Localization.WPF;
-using VPet.ModMaker.ViewModels.ModEdit.MoveEdit;
+using VPet.ModMaker.ViewModels.ModEdit;
 
-namespace VPet.ModMaker.Views.ModEdit.MoveEdit;
+namespace VPet.ModMaker.Views.ModEdit;
 
 /// <summary>
 /// MoveEditWindow.xaml 的交互逻辑

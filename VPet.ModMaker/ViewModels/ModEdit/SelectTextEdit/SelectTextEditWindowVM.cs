@@ -8,7 +8,7 @@ using HKW.HKWReactiveUI;
 using HKW.HKWUtils.Observable;
 using VPet.ModMaker.Models;
 
-namespace VPet.ModMaker.ViewModels.ModEdit.SelectTextEdit;
+namespace VPet.ModMaker.ViewModels.ModEdit;
 
 public partial class SelectTextEditWindowVM : ViewModelBase
 {

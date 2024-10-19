@@ -13,9 +13,9 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using VPet.ModMaker.Models.ModModel;
-using VPet.ModMaker.ViewModels.ModEdit.AnimeEdit;
+using VPet.ModMaker.ViewModels.ModEdit;
 
-namespace VPet.ModMaker.Views.ModEdit.AnimeEdit;
+namespace VPet.ModMaker.Views.ModEdit;
 
 /// <summary>
 /// AnimePage.xaml 的交互逻辑
