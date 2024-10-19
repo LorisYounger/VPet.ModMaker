@@ -39,8 +39,10 @@
           Style="{DynamicResource StandardTextBoxStyle}"
           Text="{Binding Search}" />
         <Button
+          x:Name="Button_ClearHistory"
           Grid.Column="1"
-          Command="{Binding ClearHistoriesCommand}"
+          AutomationProperties.AutomationId="Button_CreateNewMod"
+          Command="{Binding ClearHistoryCommand}"
           Content="{ll:Str 清空历史}"
           Style="{StaticResource ThemedButtonStyle}" />
       </Grid>

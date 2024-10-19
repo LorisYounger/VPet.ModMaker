@@ -64,7 +64,7 @@ public partial class ModMakerWindow : WindowX
             )
             {
                 ViewModel.Histories.Remove(history);
-                ViewModel.SaveHistories();
+                ViewModel.SaveHistory();
                 return;
             }
         }

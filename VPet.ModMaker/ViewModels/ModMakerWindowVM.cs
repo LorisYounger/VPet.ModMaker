@@ -30,7 +30,7 @@ public partial class ModMakerWindowVM : ViewModelBase
     public ModMakerWindowVM(ModMakerWindow window)
     {
         Histories = new([], [], f => f.ID.Contains(Search, StringComparison.OrdinalIgnoreCase));
-        LoadHistories();
+        LoadHistory();
         ModMakerWindow = window;
         PropertyChanged += ModMakerWindowVM_PropertyChanged;
     }
@@ -95,13 +95,13 @@ public partial class ModMakerWindowVM : ViewModelBase
     private void RemoveHistory(ModMakeHistory value)
     {
         Histories.Remove(value);
-        SaveHistories();
+        SaveHistory();
     }
 
     /// <summary>
     /// 载入历史
     /// </summary>
-    private void LoadHistories()
+    private void LoadHistory()
     {
         if (File.Exists(ModMakerInfo.HistoryFile) is false)
             return;
@@ -120,7 +120,7 @@ public partial class ModMakerWindowVM : ViewModelBase
     /// <summary>
     /// 保存历史
     /// </summary>
-    public void SaveHistories()
+    public void SaveHistory()
     {
         Directory.CreateDirectory(nameof(ModMaker));
         if (File.Exists(ModMakerInfo.HistoryFile) is false)
@@ -136,7 +136,7 @@ public partial class ModMakerWindowVM : ViewModelBase
     /// 添加历史
     /// </summary>
     /// <param name="modInfo">模组信息</param>
-    private void AddHistories(ModInfoModel modInfo)
+    private void AddHistory(ModInfoModel modInfo)
     {
         if (
             Histories.FirstOrDefault(h => h.SourcePath == modInfo.SourcePath)
@@ -161,7 +161,7 @@ public partial class ModMakerWindowVM : ViewModelBase
     }
 
     [ReactiveCommand]
-    private void ClearHistories()
+    private void ClearHistory()
     {
         if (
             MessageBox.Show("确定要清空吗?".Translate(), "", MessageBoxButton.YesNo)
@@ -204,8 +204,8 @@ public partial class ModMakerWindowVM : ViewModelBase
         ModMakerWindow.Hide();
         // 将当前模组添加到历史
         if (string.IsNullOrEmpty(ModInfoModel.Current.SourcePath) is false)
-            AddHistories(ModInfoModel.Current);
-        SaveHistories();
+            AddHistory(ModInfoModel.Current);
+        SaveHistory();
         ModEditWindow = new();
         ModEditWindow.Show();
         ModEditWindow.InitializeData();
@@ -214,8 +214,8 @@ public partial class ModMakerWindowVM : ViewModelBase
             var modInfo = ModInfoModel.Current;
             if (string.IsNullOrEmpty(modInfo.SourcePath) is false)
             {
-                AddHistories(modInfo);
-                SaveHistories();
+                AddHistory(modInfo);
+                SaveHistory();
             }
             ModInfoModel.Current?.Close();
             ModMakerWindow.Show();
