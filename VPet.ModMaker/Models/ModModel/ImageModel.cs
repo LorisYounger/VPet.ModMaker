@@ -8,6 +8,8 @@ using System.Windows.Media.Imaging;
 using HKW.HKWReactiveUI;
 using HKW.HKWUtils;
 using HKW.HKWUtils.Observable;
+using HKW.WPF.Extensions;
+using VPet.ModMaker.Native;
 using VPet.ModMaker.ViewModels;
 
 namespace VPet.ModMaker.Models.ModModel;

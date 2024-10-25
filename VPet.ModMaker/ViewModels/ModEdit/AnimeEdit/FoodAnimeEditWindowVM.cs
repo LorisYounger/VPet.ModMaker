@@ -10,6 +10,7 @@ using System.Windows;
 using System.Windows.Media.Imaging;
 using HKW.HKWReactiveUI;
 using HKW.HKWUtils.Observable;
+using HKW.WPF.Extensions;
 using LinePutScript.Localization.WPF;
 using Microsoft.Win32;
 using VPet.ModMaker.Models;
@@ -149,7 +150,7 @@ public partial class FoodAnimeEditWindowVM : ViewModelBase
     private void ResetFoodImage()
     {
         if (FoodImage != DefaultFoodImage)
-            FoodImage.CloseStream();
+            FoodImage?.CloseStream();
         FoodImage = DefaultFoodImage;
     }
 
@@ -161,7 +162,7 @@ public partial class FoodAnimeEditWindowVM : ViewModelBase
         if (openFileDialog.ShowDialog() is true)
         {
             if (FoodImage != DefaultFoodImage)
-                FoodImage.CloseStream();
+                FoodImage?.CloseStream();
             FoodImage = NativeUtils.LoadImageToMemoryStream(openFileDialog.FileName);
         }
     }

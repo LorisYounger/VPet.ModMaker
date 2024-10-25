@@ -22,12 +22,12 @@ namespace VPet.ModMaker.Views.ModEdit;
 public partial class MoveEditWindow : Window
 {
     public bool IsCancel { get; private set; } = true;
-    public MoveEditWindowVM ViewModel => (MoveEditWindowVM)DataContext;
+    public MoveEditVM ViewModel => (MoveEditVM)DataContext;
 
     public MoveEditWindow()
     {
         InitializeComponent();
-        DataContext = new MoveEditWindowVM();
+        DataContext = new MoveEditVM();
         Closed += (s, e) =>
         {
             ViewModel.Close();

@@ -13,6 +13,7 @@ using HKW.HKWUtils.Extensions;
 using HKW.HKWUtils.Observable;
 using LinePutScript;
 using LinePutScript.Localization.WPF;
+using VPet.ModMaker.Native;
 using VPet.ModMaker.ViewModels;
 using VPet_Simulator.Core;
 using static VPet_Simulator.Core.IGameSave;
@@ -118,7 +119,7 @@ public partial class FoodAnimeTypeModel : ViewModelBase
         Name = Path.GetFileName(path);
         var infoFiles = Directory.EnumerateFiles(
             path,
-            ModMakerInfo.InfoFile,
+            NativeData.InfoFileName,
             SearchOption.AllDirectories
         );
         if (infoFiles.Any() is false)
@@ -309,7 +310,7 @@ public partial class FoodAnimeTypeModel : ViewModelBase
         {
             var indexPath = Path.Combine(modeAnimePath, index.ToString());
             Directory.CreateDirectory(indexPath);
-            var infoFile = Path.Combine(indexPath, ModMakerInfo.InfoFile);
+            var infoFile = Path.Combine(indexPath, NativeData.InfoFileName);
             var frontLayName = $"{Name.ToLower()}_{FrontLayName}_{index}";
             var backLayName = $"{Name.ToLower()}_{BackLayName}_{index}";
             SaveInfoFile(infoFile, frontLayName, backLayName, anime, mode);

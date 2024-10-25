@@ -23,12 +23,12 @@ namespace VPet.ModMaker.Views.ModEdit;
 public partial class SelectTextEditWindow : Window
 {
     public bool IsCancel { get; private set; } = true;
-    public SelectTextEditWindowVM ViewModel => (SelectTextEditWindowVM)DataContext;
+    public SelectTextEditVM ViewModel => (SelectTextEditVM)DataContext;
 
     public SelectTextEditWindow()
     {
         InitializeComponent();
-        DataContext = new SelectTextEditWindowVM();
+        //DataContext = new SelectTextEditVM();
         Closed += (s, e) =>
         {
             try
@@ -53,7 +53,7 @@ public partial class SelectTextEditWindow : Window
         }
         if (
             ViewModel.OldSelectText?.ID != ViewModel.SelectText.ID
-            && ModInfoModel.Current.SelectTexts.Any(i => i.ID == ViewModel.SelectText.ID)
+            && ViewModel.ModInfo.SelectTexts.Any(i => i.ID == ViewModel.SelectText.ID)
         )
         {
             MessageBox.Show("此ID已存在".Translate(), "", MessageBoxButton.OK, MessageBoxImage.Warning);

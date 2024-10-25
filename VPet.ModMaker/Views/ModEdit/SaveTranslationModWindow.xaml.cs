@@ -1,5 +1,4 @@
-﻿using Panuon.WPF.UI;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -12,6 +11,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using Panuon.WPF.UI;
 using VPet.ModMaker.ViewModels.ModEdit;
 
 namespace VPet.ModMaker.Views.ModEdit;
@@ -21,20 +21,8 @@ namespace VPet.ModMaker.Views.ModEdit;
 /// </summary>
 public partial class SaveTranslationModWindow : WindowX
 {
-    public SaveTranslationModWindowVM ViewModel => (SaveTranslationModWindowVM)DataContext;
-
     public SaveTranslationModWindow()
     {
         InitializeComponent();
-        DataContext = new SaveTranslationModWindowVM();
-        Closed += (s, e) =>
-        {
-            //ViewModel.Close();
-            try
-            {
-                DataContext = null;
-            }
-            catch { }
-        };
     }
 }

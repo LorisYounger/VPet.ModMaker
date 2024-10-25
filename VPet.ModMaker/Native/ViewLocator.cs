@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using HanumanInstitute.MvvmDialogs.Wpf;
 using HKW.WPF.MVVMDialogs;
+using VPet.ModMaker.Native;
 using VPet.ModMaker.ViewModels;
 using VPet.ModMaker.ViewModels.ModEdit;
 using VPet.ModMaker.Views;
@@ -20,32 +21,23 @@ internal class ViewLocator : StrongViewLocatorX
     /// <inheritdoc/>
     public ViewLocator()
     {
-        Register<ModMakerWindowVM, ModMakerWindow>();
-        Register<ModEditWindowVM, ModEditWindow>();
-        Register<I18nEditWindowVM, I18nEditWindow>();
-        Register<SaveTranslationModWindowVM, SaveTranslationModWindow>();
-        Register<FoodEditWindowVM, FoodEditWindow>();
-        RegisterPage<FoodPageVM, FoodPage>();
-        Register<ClickTextEditWindowVM, ClickTextEditWindow>();
-        RegisterPage<ClickTextPageVM, ClickTextPage>();
-        Register<LowTextEditWindowVM, LowTextEditWindow>();
-        RegisterPage<LowTextPageVM, LowTextPage>();
-        Register<SelectTextEditWindowVM, SelectTextEditWindow>();
-        RegisterPage<SelectTextPageVM, SelectTextPage>();
-        Register<PetEditWindowVM, PetEditWindow>();
-        RegisterPage<PetPageVM, PetPage>();
-        Register<MoveEditWindowVM, MoveEditWindow>();
-        RegisterPage<MovePageVM, MovePage>();
-        Register<WorkEditWindowVM, WorkEditWindow>();
-        RegisterPage<WorkPageVM, WorkPage>();
+        Register<ModMakerVM, ModMakerWindow>();
+        Register<ModEditVM, ModEditWindow>();
+        Register<I18nEditVM, I18nEditWindow>();
+        Register<SaveTranslationModVM, SaveTranslationModWindow>();
+        Register<FoodEditVM, FoodPage, FoodEditWindow>();
+        Register<ClickTextEditVM, ClickTextPage, ClickTextEditWindow>();
+        Register<LowTextEditVM, LowTextPage, LowTextEditWindow>();
+        Register<SelectTextEditVM, SelectTextPage, SelectTextEditWindow>();
+        Register<PetEditVM, PetPage, PetEditWindow>();
+        Register<MoveEditVM, MovePage, MoveEditWindow>();
+        Register<WorkEditVM, WorkPage, WorkEditWindow>();
         Register<AnimeEditWindowVM, AnimeEditWindow>();
         Register<FoodAnimeEditWindowVM, FoodAnimeEditWindow>();
-        Register<AnimeEditWindowVM, AnimeEditWindow>();
+        RegisterPage<AnimePageVM, AnimePage>();
         Register<SelectGraphTypeWindowVM, SelectGraphTypeWindow>();
-        //RegisterPage<HouseVM, HousePage>();
-        //RegisterPage<RoomVM, RoomPage>();
 
         this.RegisterAllDialogX();
-        //this.RegisterLoadHouseTemplateDialog();
+        this.RegisterAddCultureDialog();
     }
 }

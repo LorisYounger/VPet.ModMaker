@@ -9,6 +9,7 @@ using HKW.HKWReactiveUI;
 using HKW.HKWUtils.Extensions;
 using VPet.ModMaker.Models;
 using VPet.ModMaker.Models.ModModel;
+using VPet.ModMaker.Native;
 using VPet_Simulator.Core;
 
 namespace VPet.ModMaker.ViewModels.ModEdit;

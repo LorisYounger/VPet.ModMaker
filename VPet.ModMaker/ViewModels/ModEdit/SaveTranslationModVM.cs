@@ -9,16 +9,29 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using HanumanInstitute.MvvmDialogs;
 using HKW.HKWReactiveUI;
+using HKW.HKWUtils.Extensions;
 using HKW.HKWUtils.Observable;
+using HKW.MVVMDialogs;
+using HKW.WPF.MVVMDialogs;
 using LinePutScript.Localization.WPF;
 using Microsoft.Win32;
+using Splat;
 using VPet.ModMaker.Models;
 
 namespace VPet.ModMaker.ViewModels.ModEdit;
 
-public partial class SaveTranslationModWindowVM : ViewModelBase
+public partial class SaveTranslationModVM : DialogViewModel
 {
+    private static IDialogService DialogService => Locator.Current.GetService<IDialogService>()!;
+
+    public SaveTranslationModVM(ModInfoModel modInfo)
+    {
+        ModInfo = modInfo;
+        CheckCultures = new(modInfo.I18nResource.Cultures);
+    }
+
     #region Property
     [ReactiveProperty]
     public bool? CheckAll { get; set; }
@@ -26,10 +39,10 @@ public partial class SaveTranslationModWindowVM : ViewModelBase
     public ObservableSelectionGroup<CultureInfo> CheckCultures { get; }
     #endregion
 
-    public SaveTranslationModWindowVM()
-    {
-        CheckCultures = new(ModInfoModel.Current.I18nResource.Cultures);
-    }
+    /// <summary>
+    /// 模组信息
+    /// </summary>
+    public ModInfoModel ModInfo { get; }
 
     /// <summary>
     /// 保存
@@ -37,26 +50,28 @@ public partial class SaveTranslationModWindowVM : ViewModelBase
     [ReactiveCommand]
     private void Save()
     {
-        SaveFileDialog saveFileDialog =
+        var saveFileDialog = DialogService.ShowSaveFileDialog(
+            this,
             new()
             {
                 Title = "保存模组信息文件,并在文件夹内保存模组数据".Translate(),
-                Filter = $"LPS文件|*.lps;".Translate(),
-                FileName = "info.lps".Translate()
-            };
-        if (saveFileDialog.ShowDialog() is not true)
+                Filters = [new("LPS文件".Translate(), "lps")],
+                SuggestedFileName = "info.lps".Translate()
+            }
+        );
+        if (saveFileDialog is null)
             return;
         try
         {
-            ModInfoModel.Current.SaveTranslationMod(
-                Path.GetDirectoryName(saveFileDialog.FileName)!,
+            ModInfo.SaveToTranslationMod(
+                Path.GetDirectoryName(saveFileDialog.Name)!,
                 CheckCultures.Where(m => m.IsSelected).Select(m => m.Source)
             );
-            MessageBox.Show("保存成功".Translate());
+            DialogService.ShowMessageBoxX("保存成功".Translate());
         }
         catch (Exception ex)
         {
-            MessageBox.Show("保存失败 错误信息:\n{0}".Translate(ex));
+            DialogService.ShowMessageBoxX("保存失败 错误信息:\n{0}".Translate(ex));
         }
     }
 }

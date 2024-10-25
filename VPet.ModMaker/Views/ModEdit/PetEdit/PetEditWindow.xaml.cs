@@ -22,13 +22,13 @@ namespace VPet.ModMaker.Views.ModEdit;
 /// </summary>
 public partial class PetEditWindow : Window
 {
-    public PetEditWindowVM ViewModel => (PetEditWindowVM)DataContext;
+    public PetEditVM ViewModel => (PetEditVM)DataContext;
     public bool IsCancel { get; private set; } = true;
 
     public PetEditWindow()
     {
         InitializeComponent();
-        DataContext = new PetEditWindowVM();
+        //DataContext = new PetEditWindowVM();
         Closed += (s, e) =>
         {
             ViewModel.Close();
@@ -69,7 +69,7 @@ public partial class PetEditWindow : Window
         }
         if (
             ViewModel.OldPet?.ID != ViewModel.Pet.ID
-            && ModInfoModel.Current.Pets.Any(i => i.ID == ViewModel.Pet.ID)
+            && ViewModel.ModInfo.Pets.Any(i => i.ID == ViewModel.Pet.ID)
         )
         {
             MessageBox.Show("此ID已存在", "", MessageBoxButton.OK, MessageBoxImage.Warning);

@@ -25,7 +25,11 @@
 		<DebugType>embedded</DebugType>
 	</PropertyGroup>
 	<ItemGroup>
+	  <None Remove="Resources\NLog.config" />
+	</ItemGroup>
+	<ItemGroup>
 		<EmbeddedResource Include="Resources\food.png" />
+		<EmbeddedResource Include="Resources\NLog.config" />
 	</ItemGroup>
   <ItemGroup Condition="'$(Configuration)'=='Test'">
     <Reference Include="HKW.Utils">
@@ -52,13 +56,13 @@
     <PackageReference Include="HKW.ReactiveUI" Version="0.1.2" />
   </ItemGroup>
 	<ItemGroup>
-		<PackageReference Include="VPet-Simulator.Core" Version="1.1.0.14-beta" />
-		<PackageReference Include="VPet-Simulator.Windows.Interface" Version="1.1.0.14-beta" />
-		<PackageReference Include="LinePutScript" Version="1.11.6" />
+		<PackageReference Include="VPet-Simulator.Core" Version="1.1.0.32" />
+		<PackageReference Include="VPet-Simulator.Windows.Interface" Version="1.1.0.32" />
+		<PackageReference Include="LinePutScript" Version="1.11.8" />
 		<PackageReference Include="LinePutScript.Localization.WPF" Version="1.0.7" />
 		<PackageReference Include="Ookii.Dialogs.Wpf" Version="5.0.1" />
-		<PackageReference Include="Panuon.WPF" Version="1.1.0" />
-		<PackageReference Include="Panuon.WPF.UI" Version="1.2.1.2" />
+		<PackageReference Include="Panuon.WPF" Version="1.1.2.2" />
+		<PackageReference Include="Panuon.WPF.UI" Version="1.2.4.7" />
 		<PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
 	</ItemGroup>
 	<ItemGroup>

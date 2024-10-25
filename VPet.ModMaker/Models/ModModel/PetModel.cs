@@ -313,23 +313,6 @@ public partial class PetModel : ViewModelBase
     #region Save
 
     /// <summary>
-    /// 能被保存
-    /// </summary>
-    /// <returns></returns>
-    public bool CanSave()
-    {
-        if (
-            FromMain
-            && Works.Count == 0
-            && Moves.Count == 0
-            && Animes.Count == 0
-            && FoodAnimes.Count == 0
-        )
-            return false;
-        return true;
-    }
-
-    /// <summary>
     /// 保存宠物
     /// </summary>
     /// <param name="path">路径</param>
@@ -340,7 +323,7 @@ public partial class PetModel : ViewModelBase
             File.Create(petFile).Close();
         var lps = new LPS();
         // 如果本体中存在相同的宠物, 则只保存差异信息
-        if (ModMakerInfo.MainPets.TryGetValue(ID, out var mainPet))
+        if (NativeData.MainPets.TryGetValue(ID, out var mainPet))
             SaveDifferentPetInfo(lps, mainPet);
         else
             SavePetInfo(lps);

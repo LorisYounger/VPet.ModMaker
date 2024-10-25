@@ -19,17 +19,12 @@ namespace VPet.ModMaker.Views.ModEdit;
 /// </summary>
 public partial class I18nEditWindow : WindowX
 {
-    public bool IsCancel { get; private set; } = true;
-
-    public I18nEditWindowVM ViewModel => (I18nEditWindowVM)DataContext;
+    public I18nEditVM ViewModel => (I18nEditVM)DataContext;
 
     public I18nEditWindow()
     {
         InitializeComponent();
-        this.SetDataContext<I18nEditWindowVM>();
-        this.SetCloseState(WindowCloseState.Collapsed);
-        foreach (var culture in ModInfoModel.Current.I18nResource.Cultures)
-            AddCulture(culture.Name);
+
         ViewModel.CultureChanged += ViewModel_CultureChanged;
     }
 
@@ -102,7 +97,7 @@ public partial class I18nEditWindow : WindowX
             MaxWidth = 500,
             Header = header,
             Binding = new Binding(dataPath) { Mode = BindingMode.TwoWay },
-            ElementStyle = (Style)ModMakerInfo.NativeStyles["TextBlock_Wrap"],
+            ElementStyle = (Style)NativeData.NativeStyles["TextBlock_Wrap"],
             SortMemberPath = dataPath,
             CanUserSort = true
         };

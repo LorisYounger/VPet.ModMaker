@@ -22,12 +22,11 @@ namespace VPet.ModMaker.Views.ModEdit;
 /// </summary>
 public partial class ClickTextPage : Page
 {
-    public ClickTextPageVM ViewModel => (ClickTextPageVM)DataContext;
+    public ClickTextEditVM ViewModel => (ClickTextEditVM)DataContext;
 
     public ClickTextPage()
     {
         InitializeComponent();
-        DataContext = new ClickTextPageVM();
     }
 
     private void DataGrid_MouseDoubleClick(object? sender, MouseButtonEventArgs e)

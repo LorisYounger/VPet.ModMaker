@@ -25,10 +25,9 @@ public partial class MovePage : Page
     public MovePage()
     {
         InitializeComponent();
-        DataContext = new MovePageVM();
     }
 
-    public MovePageVM ViewModel => (MovePageVM)DataContext;
+    public MoveEditVM ViewModel => (MoveEditVM)DataContext;
 
     private void DataGrid_MouseDoubleClick(object? sender, MouseButtonEventArgs e)
     {

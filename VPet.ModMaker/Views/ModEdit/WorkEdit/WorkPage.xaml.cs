@@ -22,12 +22,11 @@ namespace VPet.ModMaker.Views.ModEdit;
 /// </summary>
 public partial class WorkPage : Page
 {
-    public WorkPageVM ViewModel => (WorkPageVM)DataContext;
+    public WorkEditVM ViewModel => (WorkEditVM)DataContext;
 
     public WorkPage()
     {
         InitializeComponent();
-        DataContext = new WorkPageVM();
     }
 
     private void DataGrid_MouseDoubleClick(object? sender, MouseButtonEventArgs e)

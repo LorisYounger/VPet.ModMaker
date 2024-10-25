@@ -37,7 +37,7 @@ public class ModMaker : MainPlugin
             Setting();
         };
         modset.Items.Add(menuset);
-        Application.Current.Resources.MergedDictionaries.Add(ModMakerInfo.NativeStyles);
+        Application.Current.Resources.MergedDictionaries.Add(NativeData.NativeStyles);
     }
 
     public static I18nResource<string, string> I18nResource { get; } =
@@ -50,10 +50,10 @@ public class ModMaker : MainPlugin
             // 载入ModMaker资源
             Maker = new ModMakerWindow();
             // 设置游戏版本
-            ModMakerInfo.GameVersion = MW.version;
+            NativeData.GameVersion = MW.version;
             // 载入本体宠物
             foreach (var pet in MW.Pets)
-                ModMakerInfo.MainPets.TryAdd(
+                NativeData.MainPets.TryAdd(
                     pet.Name,
                     new(pet, true) { I18nResource = I18nResource }
                 );

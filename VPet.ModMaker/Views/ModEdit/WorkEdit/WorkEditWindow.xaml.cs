@@ -23,12 +23,12 @@ namespace VPet.ModMaker.Views.ModEdit;
 public partial class WorkEditWindow : Window
 {
     public bool IsCancel { get; private set; } = true;
-    public WorkEditWindowVM ViewModel => (WorkEditWindowVM)DataContext;
+    public WorkEditVM ViewModel => (WorkEditVM)DataContext;
 
     public WorkEditWindow()
     {
         InitializeComponent();
-        this.SetDataContext<WorkEditWindowVM>();
+        //this.SetDataContext<WorkEditVM>();
     }
 
     private void Button_Cancel_Click(object? sender, RoutedEventArgs e)

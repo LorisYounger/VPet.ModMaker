@@ -14,13 +14,17 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using DynamicData.Binding;
+using HKW.HKWUtils.Extensions;
+using HKW.WPF.Extensions;
+using HKW.WPF.MVVMDialogs;
 using LinePutScript;
 using LinePutScript.Localization.WPF;
 using Panuon.WPF.UI;
+using ReactiveUI;
+using Splat;
 using VPet.ModMaker.Models;
 using VPet.ModMaker.ViewModels;
-using VPet.ModMaker.Views.ModEdit;
-using VPet.ModMaker.Views.ModEdit;
 using VPet.ModMaker.Views.ModEdit;
 
 namespace VPet.ModMaker.Views;
@@ -28,27 +32,51 @@ namespace VPet.ModMaker.Views;
 /// <summary>
 /// winModMaker.xaml 的交互逻辑
 /// </summary>
-public partial class ModMakerWindow : WindowX
+public partial class ModMakerWindow : WindowX, IPageLocator
 {
-    public ModMakerWindowVM ViewModel => (ModMakerWindowVM)DataContext;
-    public Models.ModMaker ModMaker { get; internal set; } = null!;
-
     public ModMakerWindow()
     {
         InitializeComponent();
-        DataContext = new ModMakerWindowVM(this);
-        Closed += ModMakerWindow_Closed;
+        this.SetViewModel<ModMakerVM>();
+        MessageBus
+            .Current.Listen<ModInfoModel>()
+            .Subscribe(x =>
+            {
+                if (x is null)
+                {
+                    GC.Collect();
+                    this.ShowOrActivate();
+                    ModEditWindow.Hide();
+                    if (string.IsNullOrEmpty(ViewModel.ModInfo?.SourcePath) is false)
+                        ViewModel.AddHistory(ViewModel.ModInfo);
+                    ModEditWindow.ViewModel.ModInfo = ViewModel.ModInfo = null!;
+                }
+                else
+                {
+                    this.Hide();
+                    ModEditWindow.ViewModel.ModInfo = x;
+#if !RELEASE
+                    ModEditWindow.InitializePage();
+#endif
+                    ModEditWindow.ShowOrActivate();
+                }
+            });
     }
 
-    private void ModMakerWindow_Closed(object? sender, EventArgs e)
-    {
-        // 当模组载入错误时, 会产生野窗口, 需要手动关闭
-        foreach (var item in Application.Current.Windows)
-        {
-            if (item is ModEditWindow window)
-                window.Close();
-        }
-    }
+    public ModMakerVM ViewModel => (ModMakerVM)DataContext;
+
+    /// <inheritdoc/>
+    public Dictionary<Type, Func<Window, Page?>>? PageLocatorByType { get; } = null;
+
+    #region ModEditWindow
+    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+    private ModEditWindow? _modEditWindow;
+
+    /// <summary>
+    /// 单例窗口
+    /// </summary>
+    public ModEditWindow ModEditWindow => _modEditWindow ??= new ModEditWindow().MaskClose(this);
+    #endregion
 
     private void ListBoxItem_MouseDoubleClick(object? sender, MouseButtonEventArgs e)
     {
@@ -59,12 +87,16 @@ public partial class ModMakerWindow : WindowX
         if (Directory.Exists(history.SourcePath) is false)
         {
             if (
-                MessageBox.Show($"路径不存在, 是否删除?".Translate(), "", MessageBoxButton.YesNo)
-                is MessageBoxResult.Yes
+                MessageBoxX.Show(
+                    this,
+                    $"路径不存在, 是否删除?".Translate(),
+                    "数据错误".Translate(),
+                    MessageBoxButton.YesNo
+                ) is MessageBoxResult.Yes
             )
             {
-                ViewModel.Histories.Remove(history);
-                ViewModel.SaveHistory();
+                ViewModel.RemoveHistory(history);
+                ViewModel.SaveHistory(NativeData.HistoryBaseFilePath);
                 return;
             }
         }
@@ -93,7 +125,7 @@ public partial class ModMakerWindow : WindowX
             )
                 return;
             Clipboard.SetText(WikiLink);
-            MessageBoxX.Show(this, "已复制到剪贴板".Translate());
+            MessageBoxX.Show(this, "已复制链接到剪贴板".Translate());
         }
     }
 }

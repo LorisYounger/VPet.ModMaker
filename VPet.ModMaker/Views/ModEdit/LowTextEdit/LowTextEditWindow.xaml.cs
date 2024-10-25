@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using HKW.WPF.Extensions;
 using LinePutScript.Localization.WPF;
 using VPet.ModMaker.Models;
 using VPet.ModMaker.ViewModels.ModEdit;
@@ -23,13 +24,13 @@ namespace VPet.ModMaker.Views.ModEdit;
 /// </summary>
 public partial class LowTextEditWindow : Window
 {
-    public LowTextEditWindowVM ViewModel => (LowTextEditWindowVM)DataContext;
+    public LowTextEditVM ViewModel => (LowTextEditVM)DataContext;
     public bool IsCancel { get; private set; } = true;
 
     public LowTextEditWindow()
     {
         InitializeComponent();
-        this.SetDataContext<LowTextEditWindowVM>();
+        this.SetViewModel<LowTextEditVM>();
     }
 
     private void Button_Cancel_Click(object? sender, RoutedEventArgs e)
@@ -46,7 +47,7 @@ public partial class LowTextEditWindow : Window
         }
         if (
             ViewModel.OldLowText?.ID != ViewModel.LowText.ID
-            && ModInfoModel.Current.LowTexts.Any(i => i.ID == ViewModel.LowText.ID)
+            && ViewModel.ModInfo.LowTexts.Any(i => i.ID == ViewModel.LowText.ID)
         )
         {
             MessageBox.Show("此ID已存在".Translate(), "", MessageBoxButton.OK, MessageBoxImage.Warning);

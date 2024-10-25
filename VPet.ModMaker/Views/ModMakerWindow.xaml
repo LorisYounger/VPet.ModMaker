@@ -11,7 +11,7 @@
   Title="{ll:Str Mod制作器}"
   Width="600"
   Height="450"
-  d:DataContext="{d:DesignInstance Type=vm:ModMakerWindowVM}"
+  d:DataContext="{d:DesignInstance Type=vm:ModMakerVM}"
   FontSize="16"
   Style="{DynamicResource WindowXStyle}"
   WindowStartupLocation="CenterScreen"

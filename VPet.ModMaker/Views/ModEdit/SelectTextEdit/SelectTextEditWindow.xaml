@@ -11,7 +11,7 @@
   Title="{ll:Str 编辑选择文本}"
   Width="800"
   Height="450"
-  d:DataContext="{d:DesignInstance Type=vm:SelectTextEditWindowVM}"
+  d:DataContext="{d:DesignInstance Type=vm:SelectTextEditVM}"
   WindowStartupLocation="CenterScreen"
   mc:Ignorable="d">
   <Window.Resources>

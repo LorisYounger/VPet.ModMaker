@@ -11,9 +11,11 @@ using System.Windows.Media.Imaging;
 using HKW.HKWReactiveUI;
 using HKW.HKWUtils.Extensions;
 using HKW.HKWUtils.Observable;
+using HKW.WPF.Extensions;
 using LinePutScript;
 using LinePutScript.Converter;
 using Mapster;
+using VPet.ModMaker.Native;
 using VPet.ModMaker.ViewModels;
 using VPet_Simulator.Windows.Interface;
 
@@ -55,7 +57,7 @@ public partial class FoodModel : ViewModelBase
 
     partial void OnIDChanged(string oldValue, string newValue)
     {
-        DescriptionID = $"{ID}_{nameof(DescriptionID)}";
+        DescriptionID = $"{ID}_{nameof(Description)}";
     }
 
     /// <summary>
@@ -82,7 +84,7 @@ public partial class FoodModel : ViewModelBase
     public I18nObject<string, string> I18nObject => new(this);
 
     [AdaptIgnore]
-    [ReactiveI18nProperty("I18nResource", nameof(I18nObject), nameof(ID))]
+    [ReactiveI18nProperty("I18nResource", nameof(I18nObject), nameof(ID), true)]
     public string Name
     {
         get => I18nResource.GetCurrentCultureDataOrDefault(ID);
@@ -90,7 +92,7 @@ public partial class FoodModel : ViewModelBase
     }
 
     [AdaptIgnore]
-    [ReactiveI18nProperty("I18nResource", nameof(I18nObject), nameof(DescriptionID))]
+    [ReactiveI18nProperty("I18nResource", nameof(I18nObject), nameof(DescriptionID), true)]
     public string Description
     {
         get => I18nResource.GetCurrentCultureDataOrDefault(DescriptionID);

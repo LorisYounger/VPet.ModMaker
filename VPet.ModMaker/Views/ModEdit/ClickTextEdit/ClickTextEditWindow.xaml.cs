@@ -11,6 +11,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using HKW.WPF.Extensions;
 using LinePutScript.Localization.WPF;
 using VPet.ModMaker.Models;
 using VPet.ModMaker.ViewModels.ModEdit;
@@ -23,12 +24,12 @@ namespace VPet.ModMaker.Views.ModEdit;
 public partial class ClickTextEditWindow : Window
 {
     public bool IsCancel { get; private set; } = true;
-    public ClickTextEditWindowVM ViewModel => (ClickTextEditWindowVM)DataContext;
+    public ClickTextEditVM ViewModel => (ClickTextEditVM)DataContext;
 
     public ClickTextEditWindow()
     {
         InitializeComponent();
-        this.SetDataContext<ClickTextEditWindowVM>();
+        this.SetViewModel<ClickTextEditVM>();
     }
 
     private void Button_Cancel_Click(object? sender, RoutedEventArgs e)
@@ -45,7 +46,7 @@ public partial class ClickTextEditWindow : Window
         }
         if (
             ViewModel.OldClickText?.ID != ViewModel.ClickText.ID
-            && ModInfoModel.Current.ClickTexts.Any(i => i.ID == ViewModel.ClickText.ID)
+            && ViewModel.ModInfo.ClickTexts.Any(i => i.ID == ViewModel.ClickText.ID)
         )
         {
             MessageBox.Show("此ID已存在".Translate(), "", MessageBoxButton.OK, MessageBoxImage.Warning);

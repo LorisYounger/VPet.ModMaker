@@ -25,12 +25,11 @@ namespace VPet.ModMaker.Views.ModEdit;
 /// </summary>
 public partial class FoodPage : Page
 {
-    public FoodPageVM ViewModel => (FoodPageVM)DataContext;
+    public FoodEditVM ViewModel => (FoodEditVM)DataContext;
 
     public FoodPage()
     {
         InitializeComponent();
-        DataContext = new FoodPageVM();
     }
 
     private void DataGrid_MouseDoubleClick(object? sender, MouseButtonEventArgs e)

@@ -11,7 +11,7 @@
   Title="{ll:Str 编辑点击文本}"
   Width="800"
   Height="450"
-  d:DataContext="{d:DesignInstance Type=vm:ClickTextEditWindowVM}"
+  d:DataContext="{d:DesignInstance Type=vm:ClickTextEditVM}"
   WindowStartupLocation="CenterScreen"
   mc:Ignorable="d">
   <Window.Resources>

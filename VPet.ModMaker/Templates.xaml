@@ -46,9 +46,9 @@
   </ControlTemplate>
   <ControlTemplate x:Key="ListBox_ShowLangs" TargetType="ListBox">
     <ListBox
-      ItemsSource="{Binding I18nResource.Cultures}"
+      ItemsSource="{Binding ModInfo.I18nResource.Cultures}"
       ScrollViewer.VerticalScrollBarVisibility="Auto"
-      SelectedItem="{Binding I18nResource.CurrentCulture}">
+      SelectedItem="{Binding ModInfo.I18nResource.CurrentCulture}">
       <ListBox.ItemContainerStyle>
         <Style BasedOn="{StaticResource {x:Type ListBoxItem}}" TargetType="ListBoxItem">
           <Setter Property="Content" Value="{Binding}" />

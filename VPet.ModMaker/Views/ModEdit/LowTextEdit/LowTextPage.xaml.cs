@@ -25,12 +25,11 @@ namespace VPet.ModMaker.Views.ModEdit;
 /// </summary>
 public partial class LowTextPage : Page
 {
-    public LowTextPageVM ViewModel => (LowTextPageVM)DataContext;
+    public LowTextEditVM ViewModel => (LowTextEditVM)DataContext;
 
     public LowTextPage()
     {
         InitializeComponent();
-        DataContext = new LowTextPageVM();
     }
 
     private void DataGrid_LowText_MouseDoubleClick(object? sender, MouseButtonEventArgs e)

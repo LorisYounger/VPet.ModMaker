@@ -11,7 +11,7 @@
   Title="{ll:Str 模组编辑器}"
   Width="1000"
   Height="500"
-  d:DataContext="{d:DesignInstance Type=vm:ModEditWindowVM}"
+  d:DataContext="{d:DesignInstance Type=vm:ModEditVM}"
   WindowStartupLocation="CenterScreen"
   mc:Ignorable="d">
   <Window.Resources>
@@ -143,7 +143,7 @@
                 <Binding Path="ModInfo.Foods.Count" />
               </MultiBinding>
             </TabItem.Header>
-            <Frame Content="{Binding ModEditWindow.FoodPage}" />
+            <Frame x:Name="Frame_Food" Loaded="Frame_Food_Loaded" />
           </TabItem>
           <TabItem Tag="{ll:Str 点击文本}">
             <TabItem.Header>
@@ -279,9 +279,9 @@
         x:Name="ListBox_Cultures"
         Grid.Row="1"
         d:ItemsSource="{d:SampleData ItemCount=5}"
-        ItemsSource="{Binding I18nResource.Cultures}"
+        ItemsSource="{Binding ModInfo.I18nResource.Cultures}"
         ScrollViewer.VerticalScrollBarVisibility="Auto"
-        SelectedItem="{Binding I18nResource.CurrentCulture}">
+        SelectedItem="{Binding ModInfo.I18nResource.CurrentCulture}">
         <ListBox.ItemContainerStyle>
           <Style BasedOn="{StaticResource {x:Type ListBoxItem}}" TargetType="ListBoxItem">
             <Setter Property="Tag" Value="{Binding DataContext, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}}" />

@@ -73,7 +73,7 @@ public partial class AnimePageVM : ViewModelBase
         }
     }
 
-    public static ModInfoModel ModInfo => ModInfoModel.Current;
+    public ModInfoModel ModInfo { get; }
 
     #region Property
     /// <summary>
@@ -95,7 +95,7 @@ public partial class AnimePageVM : ViewModelBase
     /// <summary>
     /// 宠物列表
     /// </summary>
-    public static ObservableList<PetModel> Pets => ModInfoModel.Current.Pets;
+    public ObservableList<PetModel> Pets => ModInfo.Pets;
 
     /// <summary>
     /// 当前宠物

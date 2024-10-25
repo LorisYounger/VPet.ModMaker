@@ -36,37 +36,21 @@ public static class ModUpdataHelper
     /// 升级模组
     /// </summary>
     /// <param name="mod">模组</param>
-    /// <param name="version">版本</param>
-    /// <returns>可以升级为 <see langword="true"/> 不可以为 <see langword="false"/></returns>
-    public static bool Updata(ModInfoModel mod)
+    /// <returns>更新完成的目标版本</returns>
+    public static int Updata(ModInfoModel mod)
     {
         if (CanUpdata(mod) is false)
-            return false;
+            return mod.GameVersion;
         foreach (var action in UpdataAction)
         {
             if (mod.GameVersion >= action.Key)
                 continue;
-            try
-            {
-                // 更新模组
-                action.Value(mod);
-                // 更新支持的游戏版本
-                mod.GameVersion = action.Key;
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(
-                    ModEditWindow.Current,
-                    "模组更新失败\n当前支持的游戏版本: {0}\n目标支持的游戏版本: {1}\n{2}".Translate(
-                        mod.ModVersion,
-                        action.Key,
-                        ex
-                    )
-                );
-                return false;
-            }
+            // 更新模组
+            action.Value(mod);
+            // 更新支持的游戏版本
+            mod.GameVersion = action.Key;
         }
-        return true;
+        return mod.GameVersion;
     }
 
     public static SortedDictionary<int, Action<ModInfoModel>> UpdataAction { get; } =

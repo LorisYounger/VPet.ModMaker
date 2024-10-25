@@ -12,16 +12,18 @@ using HKW.HKWReactiveUI;
 using HKW.HKWUtils.Collections;
 using HKW.HKWUtils.Extensions;
 using HKW.HKWUtils.Observable;
+using HKW.MVVMDialogs;
 using LinePutScript.Localization.WPF;
 using ReactiveUI;
 using VPet.ModMaker.Models;
 
 namespace VPet.ModMaker.ViewModels.ModEdit;
 
-public partial class AddCultureWindowVM : ViewModelBase
+public partial class AddCultureVM : DialogViewModel
 {
-    public AddCultureWindowVM()
+    public AddCultureVM(ModInfoModel modInfo)
     {
+        ModInfo = modInfo;
         AllCultures = new(
             new(LocalizeCore.AvailableCultures),
             [],
@@ -33,6 +35,12 @@ public partial class AddCultureWindowVM : ViewModelBase
             .ObserveOn(RxApp.MainThreadScheduler)
             .Subscribe(_ => AllCultures.Refresh());
     }
+
+    /// <summary>
+    /// 模组信息
+    /// </summary>
+    [ReactiveProperty]
+    public ModInfoModel ModInfo { get; set; } = null!;
 
     /// <summary>
     /// 全部文化

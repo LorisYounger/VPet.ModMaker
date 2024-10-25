@@ -22,12 +22,11 @@ namespace VPet.ModMaker.Views.ModEdit;
 /// </summary>
 public partial class SelectTextPage : Page
 {
-    public SelectTextPageVM ViewModel => (SelectTextPageVM)DataContext;
+    public SelectTextEditVM ViewModel => (SelectTextEditVM)DataContext;
 
     public SelectTextPage()
     {
         InitializeComponent();
-        DataContext = new SelectTextPageVM();
     }
 
     private void DataGrid_MouseDoubleClick(object? sender, MouseButtonEventArgs e)

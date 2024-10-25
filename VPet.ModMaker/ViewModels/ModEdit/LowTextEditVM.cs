@@ -1,35 +1,26 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
-using System.Linq.Expressions;
 using System.Reactive.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.Windows;
 using DynamicData.Binding;
 using HKW.HKWReactiveUI;
 using HKW.HKWUtils.Collections;
-using HKW.HKWUtils.Extensions;
 using HKW.HKWUtils.Observable;
-using LinePutScript.Localization.WPF;
 using ReactiveUI;
 using VPet.ModMaker.Models;
-using VPet.ModMaker.Views.ModEdit;
+using VPet_Simulator.Windows.Interface;
 
 namespace VPet.ModMaker.ViewModels.ModEdit;
 
-public partial class LowTextPageVM : ViewModelBase
+public partial class LowTextEditVM : ViewModelBase
 {
-    public LowTextPageVM()
+    public LowTextEditVM()
     {
-        LowTexts = new(
-            new(ModInfoModel.Current.LowTexts),
-            [],
-            f => f.ID.Contains(Search, StringComparison.OrdinalIgnoreCase)
-        );
+        LowTexts = new([], [], f => f.ID.Contains(Search, StringComparison.OrdinalIgnoreCase));
 
         LowTexts
             .BaseList.WhenValueChanged(x => x.Count)
@@ -46,6 +37,11 @@ public partial class LowTextPageVM : ViewModelBase
     }
 
     /// <summary>
+    /// 模组信息
+    /// </summary>
+    public ModInfoModel ModInfo { get; } = null!;
+
+    /// <summary>
     /// 低状态文本
     /// </summary>
     public FilterListWrapper<
@@ -60,18 +56,23 @@ public partial class LowTextPageVM : ViewModelBase
     [ReactiveProperty]
     public string Search { get; set; } = string.Empty;
 
+    public LowTextModel? OldLowText { get; set; }
+
+    [ReactiveProperty]
+    public LowTextModel LowText { get; set; } = null!;
+
     /// <summary>
     /// 添加
     /// </summary>
     [ReactiveCommand]
     private void Add()
     {
-        var window = new LowTextEditWindow();
-        var vm = window.ViewModel;
-        window.ShowDialog();
-        if (window.IsCancel)
-            return;
-        LowTexts.Add(vm.LowText);
+        //var window = new LowTextEditWindow();
+        //var vm = window.ViewModel;
+        //window.ShowDialog();
+        //if (window.IsCancel)
+        //    return;
+        //LowTexts.Add(vm.LowText);
     }
 
     /// <summary>
@@ -81,25 +82,25 @@ public partial class LowTextPageVM : ViewModelBase
     [ReactiveCommand]
     public void Edit(LowTextModel model)
     {
-        var window = new LowTextEditWindow();
-        var vm = window.ViewModel;
-        vm.OldLowText = model;
-        var newModel = vm.LowText = new(model)
-        {
-            I18nResource = ModInfoModel.Current.TempI18nResource
-        };
-        model.I18nResource.CopyDataTo(newModel.I18nResource, model.ID, true);
-        window.ShowDialog();
-        if (window.IsCancel)
-        {
-            newModel.I18nResource.ClearCultureData();
-            newModel.Close();
-            return;
-        }
-        newModel.I18nResource.CopyDataTo(ModInfoModel.Current.I18nResource, true);
-        newModel.I18nResource = ModInfoModel.Current.I18nResource;
-        LowTexts[LowTexts.IndexOf(model)] = newModel;
-        model.Close();
+        //var window = new LowTextEditWindow();
+        //var vm = window.ViewModel;
+        //vm.OldLowText = model;
+        //var newModel = vm.LowText = new(model)
+        //{
+        //    I18nResource = ModInfoModel.Current.TempI18nResource
+        //};
+        //model.I18nResource.CopyDataTo(newModel.I18nResource, model.ID, true);
+        //window.ShowDialog();
+        //if (window.IsCancel)
+        //{
+        //    newModel.I18nResource.ClearCultureData();
+        //    newModel.Close();
+        //    return;
+        //}
+        //newModel.I18nResource.CopyDataTo(ModInfoModel.Current.I18nResource, true);
+        //newModel.I18nResource = ModInfoModel.Current.I18nResource;
+        //LowTexts[LowTexts.IndexOf(model)] = newModel;
+        //model.Close();
     }
 
     /// <summary>
@@ -109,9 +110,9 @@ public partial class LowTextPageVM : ViewModelBase
     [ReactiveCommand]
     private void Remove(LowTextModel model)
     {
-        if (MessageBox.Show("确定删除吗".Translate(), "", MessageBoxButton.YesNo) is MessageBoxResult.No)
-            return;
-        LowTexts.Remove(model);
-        model.Close();
+        //if (MessageBox.Show("确定删除吗".Translate(), "", MessageBoxButton.YesNo) is MessageBoxResult.No)
+        //    return;
+        //LowTexts.Remove(model);
+        //model.Close();
     }
 }

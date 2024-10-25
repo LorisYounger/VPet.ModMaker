@@ -9,7 +9,7 @@
   xmlns:pu="https://opensource.panuon.com/wpf-ui"
   xmlns:vm="clr-namespace:VPet.ModMaker.ViewModels.ModEdit"
   Title="FoodPage"
-  d:DataContext="{d:DesignInstance Type=vm:FoodPageVM}"
+  d:DataContext="{d:DesignInstance Type=vm:FoodEditVM}"
   d:DesignHeight="450"
   d:DesignWidth="800"
   mc:Ignorable="d">
@@ -18,10 +18,21 @@
       <RowDefinition Height="Auto" />
       <RowDefinition />
     </Grid.RowDefinitions>
-    <TextBox
-      pu:TextBoxHelper.Watermark="{ll:Str 搜索ID}"
-      Style="{DynamicResource StandardTextBoxStyle}"
-      Text="{Binding Search, UpdateSourceTrigger=PropertyChanged}" />
+    <Grid>
+      <Grid.ColumnDefinitions>
+        <ColumnDefinition />
+        <ColumnDefinition Width="Auto" MinWidth="200" />
+      </Grid.ColumnDefinitions>
+      <TextBox
+        pu:TextBoxHelper.Watermark="{ll:Str 搜索ID}"
+        Style="{DynamicResource StandardTextBoxStyle}"
+        Text="{Binding Search, UpdateSourceTrigger=PropertyChanged}" />
+      <ComboBox
+        Grid.Column="1"
+        ItemsSource="{Binding SearchTargets, Converter={StaticResource EnumsToEnumInfosConverter}}"
+        SelectedItem="{Binding SearchTargets.SelectedItem, Converter={StaticResource EnumToEnumInfoConverter}}"
+        Style="{StaticResource StandardComboBoxStyle}" />
+    </Grid>
     <DataGrid
       Grid.Row="1"
       d:ItemsSource="{d:SampleData ItemCount=5}"

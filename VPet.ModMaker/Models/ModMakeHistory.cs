@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Media.Imaging;
+using HKW.WPF.Extensions;
 using LinePutScript.Converter;
 
 namespace VPet.ModMaker.Models;

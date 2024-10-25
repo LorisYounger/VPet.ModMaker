@@ -13,15 +13,18 @@ using HKW.HKWReactiveUI;
 using HKW.HKWUtils.Collections;
 using HKW.HKWUtils.Extensions;
 using HKW.HKWUtils.Observable;
+using HKW.MVVMDialogs;
 using Mapster;
 using VPet.ModMaker.Models;
 
 namespace VPet.ModMaker.ViewModels.ModEdit;
 
-public partial class I18nEditWindowVM : ViewModelBase
+public partial class I18nEditVM : DialogViewModel
 {
-    public I18nEditWindowVM()
+    public I18nEditVM(ModInfoModel modInfo)
     {
+        ModInfo = modInfo;
+        I18nResource = ModInfo.I18nResource;
         SearchTarget = SearchTargets.First();
         PropertyChanged += I18nEditWindowVM_PropertyChanged;
 
@@ -41,8 +44,11 @@ public partial class I18nEditWindowVM : ViewModelBase
             SearchTargets.Add(culture.Name);
     }
 
-    public I18nResource<string, string> I18nResource { get; set; } =
-        ModInfoModel.Current.I18nResource;
+    /// <summary>
+    /// 模组信息
+    /// </summary>
+    public ModInfoModel ModInfo { get; }
+    public I18nResource<string, string> I18nResource { get; }
 
     public bool CellEdit { get; set; } = false;
 

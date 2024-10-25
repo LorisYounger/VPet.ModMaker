@@ -11,6 +11,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using HKW.WPF.Extensions;
 using LinePutScript.Localization.WPF;
 using VPet.ModMaker.Models;
 using VPet.ModMaker.Models.ModModel;
@@ -94,7 +95,7 @@ public partial class AnimeEditWindow : Window
         HitTestResult result = VisualTreeHelper.HitTest(listBox, pos);
         if (result is null)
             return;
-        var listBoxItem = result.VisualHit.FindParent<ListBoxItem>();
+        var listBoxItem = result.VisualHit.FindVisuaParent<ListBoxItem>();
         if (listBoxItem == null || listBoxItem.Content != listBox.SelectedItem)
             return;
         var dataObj = new DataObject(listBoxItem.Content);
@@ -121,7 +122,7 @@ public partial class AnimeEditWindow : Window
         if (e.Data.GetData(typeof(ImageModel)) is not ImageModel sourcePerson)
             return;
         //查找目标数据
-        var listBoxItem = result.VisualHit.FindParent<ListBoxItem>();
+        var listBoxItem = result.VisualHit.FindVisuaParent<ListBoxItem>();
         if (listBoxItem == null)
             return;
         var targetPerson = listBoxItem.Content as ImageModel;

@@ -3,39 +3,104 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
+using System.Reactive.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Media.Imaging;
+using DynamicData.Binding;
 using HKW.HKWReactiveUI;
+using HKW.HKWUtils.Collections;
 using HKW.HKWUtils.Extensions;
 using HKW.HKWUtils.Observable;
+using HKW.WPF.Extensions;
 using LinePutScript.Localization.WPF;
 using Microsoft.Win32;
+using ReactiveUI;
 using VPet.ModMaker.Models;
 using VPet.ModMaker.Models.ModModel;
+using VPet.ModMaker.Native;
 using VPet_Simulator.Windows.Interface;
 
 namespace VPet.ModMaker.ViewModels.ModEdit;
 
-public partial class WorkEditWindowVM : ViewModelBase
+public partial class WorkEditVM : ViewModelBase
 {
-    public WorkEditWindowVM()
+    public WorkEditVM(ModInfoModel modInfo)
     {
-        //PropertyChangedX += WorkEditWindowVM_PropertyChangedX;
-        //Work.PropertyChanged += NewWork_PropertyChanged;
+        ModInfo = modInfo;
+        Works = new([], [], f => f.ID.Contains(Search, StringComparison.OrdinalIgnoreCase));
+
+        if (ModInfo.Pets.HasValue())
+            CurrentPet = ModInfo.Pets.FirstOrDefault(
+                m => m.FromMain is false && m.Works.HasValue(),
+                ModInfo.Pets.First()
+            );
+
+        ModInfo
+            .WhenValueChanged(x => x.ShowMainPet)
+            .Throttle(TimeSpan.FromSeconds(1), RxApp.TaskpoolScheduler)
+            .DistinctUntilChanged()
+            .ObserveOn(RxApp.MainThreadScheduler)
+            .Subscribe(_ =>
+            {
+                if (CurrentPet?.FromMain is false)
+                    CurrentPet = null!;
+            });
+
+        this.WhenValueChanged(x => x.Search)
+            .Throttle(TimeSpan.FromSeconds(1), RxApp.TaskpoolScheduler)
+            .DistinctUntilChanged()
+            .ObserveOn(RxApp.MainThreadScheduler)
+            .Subscribe(_ => Works.Refresh());
     }
+
+    #region Property
+    /// <summary>
+    /// 模组信息
+    /// </summary>
+    public ModInfoModel ModInfo { get; }
 
     /// <summary>
     /// I18n资源
     /// </summary>
-    public static I18nResource<string, string> I18nResource => ModInfoModel.Current.I18nResource;
-    #region Property
+    public I18nResource<string, string> I18nResource => ModInfo.I18nResource;
+
+    /// <summary>
+    /// 当前宠物
+    /// </summary>
+    [ReactiveProperty]
     public PetModel CurrentPet { get; set; } = null!;
+
+    partial void OnCurrentPetChanged(PetModel oldValue, PetModel newValue)
+    {
+        Works.Clear();
+        if (oldValue is not null)
+            Works.BaseList.BindingList(oldValue.Works, true);
+        if (newValue is null)
+            return;
+        Works.AddRange(CurrentPet.Works);
+        Works.BaseList.BindingList(CurrentPet.Works);
+    }
+
+    /// <summary>
+    /// 全部工作
+    /// </summary>
+    public FilterListWrapper<
+        WorkModel,
+        ObservableList<WorkModel>,
+        ObservableList<WorkModel>
+    > Works { get; set; } = null!;
+
+    [ReactiveProperty]
+    public string Search { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 旧工作
+    /// </summary>
     public WorkModel? OldWork { get; set; }
 
     [ReactiveProperty]
-    public WorkModel Work { get; set; } =
-        new() { I18nResource = ModInfoModel.Current.I18nResource };
+    public WorkModel Work { get; set; } = null!;
 
     partial void OnWorkChanged(WorkModel oldValue, WorkModel newValue)
     {
@@ -156,6 +221,60 @@ public partial class WorkEditWindowVM : ViewModelBase
         {
             Image = anime.IllAnimes.Random().Images.Random().Image.CloneStream();
         }
+    }
+
+    /// <summary>
+    /// 添加
+    /// </summary>
+    [ReactiveCommand]
+    private void Add()
+    {
+        //var window = new WorkEditWindow();
+        //var vm = window.ViewModel;
+        //vm.CurrentPet = CurrentPet;
+        //window.ShowDialog();
+        //if (window.IsCancel)
+        //    return;
+        //Works.Add(vm.Work);
+    }
+
+    /// <summary>
+    /// 编辑
+    /// </summary>
+    /// <param name="model">模型</param>
+    [ReactiveCommand]
+    public void Edit(WorkModel model)
+    {
+        //var window = new WorkEditWindow();
+        //var vm = window.ViewModel;
+        //vm.CurrentPet = CurrentPet;
+        //vm.OldWork = model;
+        //var newModel = vm.Work = new(model) { I18nResource = ModInfo.TempI18nResource };
+        //model.I18nResource.CopyDataTo(newModel.I18nResource, model.ID, true);
+        //window.ShowDialog();
+        //if (window.IsCancel)
+        //{
+        //    newModel.I18nResource.ClearCultureData();
+        //    newModel.Close();
+        //    return;
+        //}
+        //newModel.I18nResource.CopyDataTo(ModInfo.I18nResource, true);
+        //newModel.I18nResource = ModInfo.I18nResource;
+        //Works[Works.IndexOf(model)] = newModel;
+        //model.Close();
+    }
+
+    /// <summary>
+    /// 删除
+    /// </summary>
+    /// <param name="model">模型</param>
+    [ReactiveCommand]
+    private void Remove(WorkModel model)
+    {
+        //if (MessageBox.Show("确定删除吗".Translate(), "", MessageBoxButton.YesNo) is MessageBoxResult.No)
+        //    return;
+        //Works.Remove(model);
+        //model.Close();
     }
 
     public void Close()
