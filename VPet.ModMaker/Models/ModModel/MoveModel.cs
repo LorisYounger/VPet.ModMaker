@@ -6,6 +6,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using HKW.HKWMapper;
 using HKW.HKWReactiveUI;
 using HKW.HKWUtils.Observable;
 using VPet.ModMaker.ViewModels;
@@ -16,6 +17,9 @@ namespace VPet.ModMaker.Models;
 /// <summary>
 /// 移动模型
 /// </summary>
+[MapTo(typeof(GraphHelper.Move), MapConfig = typeof(MoveModelMapToMoveConfig))]
+[MapFrom(typeof(GraphHelper.Move), MapConfig = typeof(MoveModelMapFromMoveConfig))]
+[MapFrom(typeof(MoveModel), MapConfig = typeof(MoveModelMapFromMoveModelConfig))]
 public partial class MoveModel : ViewModelBase
 {
     public MoveModel() { }
@@ -23,47 +27,13 @@ public partial class MoveModel : ViewModelBase
     public MoveModel(MoveModel model)
         : this()
     {
-        //Id.EnumValue = model.Id.EnumValue;
-        Graph = model.Graph;
-        Distance = model.Distance;
-        Interval = model.Interval;
-        CheckLeft = model.CheckLeft;
-        CheckRight = model.CheckRight;
-        CheckTop = model.CheckTop;
-        CheckBottom = model.CheckBottom;
-        SpeedX = model.SpeedX;
-        SpeedY = model.SpeedY;
-        LocateLength = model.LocateLength;
-        TriggerLeft = model.TriggerLeft;
-        TriggerRight = model.TriggerRight;
-        TriggerTop = model.TriggerTop;
-        TriggerBottom = model.TriggerBottom;
-        LocateType.Value = model.LocateType.Value;
-        TriggerType.Value = model.TriggerType.Value;
-        ModeType.Value = model.ModeType.Value;
+        this.MapFromMoveModel(model);
     }
 
     public MoveModel(GraphHelper.Move move)
         : this()
     {
-        //Id.EnumValue = move.Id.EnumValue;
-        Graph = move.Graph;
-        Distance = move.Distance;
-        Interval = move.Interval;
-        CheckLeft = move.CheckLeft;
-        CheckRight = move.CheckRight;
-        CheckTop = move.CheckTop;
-        CheckBottom = move.CheckBottom;
-        SpeedX = move.SpeedX;
-        SpeedY = move.SpeedY;
-        LocateLength = move.LocateLength;
-        TriggerLeft = move.TriggerLeft;
-        TriggerRight = move.TriggerRight;
-        TriggerTop = move.TriggerTop;
-        TriggerBottom = move.TriggerBottom;
-        LocateType.Value = move.LocateType;
-        TriggerType.Value = move.TriggerType;
-        ModeType.Value = move.Mode;
+        this.MapFromMove(move);
     }
 
     /// <summary>
@@ -88,84 +58,112 @@ public partial class MoveModel : ViewModelBase
     /// <summary>
     /// 指定动画
     /// </summary>
+    [MoveModelMapToMoveProperty(nameof(GraphHelper.Move.Graph))]
+    [MoveModelMapFromMoveProperty(nameof(GraphHelper.Move.Graph))]
     [ReactiveProperty]
     public string Graph { get; set; } = string.Empty;
 
     /// <summary>
     /// 移动距离
     /// </summary>
+    [MoveModelMapToMoveProperty(nameof(GraphHelper.Move.Distance))]
+    [MoveModelMapFromMoveProperty(nameof(GraphHelper.Move.Distance))]
     [ReactiveProperty]
     public int Distance { get; set; }
 
     /// <summary>
     /// 间隔
     /// </summary>
+    [MoveModelMapToMoveProperty(nameof(GraphHelper.Move.Interval))]
+    [MoveModelMapFromMoveProperty(nameof(GraphHelper.Move.Interval))]
     [ReactiveProperty]
     public int Interval { get; set; }
 
     /// <summary>
     /// 定位长度
     /// </summary>
+    [MoveModelMapToMoveProperty(nameof(GraphHelper.Move.LocateLength))]
+    [MoveModelMapFromMoveProperty(nameof(GraphHelper.Move.LocateLength))]
     [ReactiveProperty]
     public int LocateLength { get; set; }
 
     /// <summary>
     /// X速度
     /// </summary>
+    [MoveModelMapToMoveProperty(nameof(GraphHelper.Move.SpeedX))]
+    [MoveModelMapFromMoveProperty(nameof(GraphHelper.Move.SpeedX))]
     [ReactiveProperty]
     public int SpeedX { get; set; }
 
     /// <summary>
     /// Y速度
     /// </summary>
+    [MoveModelMapToMoveProperty(nameof(GraphHelper.Move.SpeedY))]
+    [MoveModelMapFromMoveProperty(nameof(GraphHelper.Move.SpeedY))]
     [ReactiveProperty]
     public int SpeedY { get; set; }
 
     /// <summary>
     /// 左侧检测距离
     /// </summary>
+    [MoveModelMapToMoveProperty(nameof(GraphHelper.Move.CheckLeft))]
+    [MoveModelMapFromMoveProperty(nameof(GraphHelper.Move.CheckLeft))]
     [ReactiveProperty]
     public int CheckLeft { get; set; }
 
     /// <summary>
     /// 右侧检测距离
     /// </summary>
+    [MoveModelMapToMoveProperty(nameof(GraphHelper.Move.CheckRight))]
+    [MoveModelMapFromMoveProperty(nameof(GraphHelper.Move.CheckRight))]
     [ReactiveProperty]
     public int CheckRight { get; set; }
 
     /// <summary>
     /// 上方检测距离
     /// </summary>
+    [MoveModelMapToMoveProperty(nameof(GraphHelper.Move.CheckTop))]
+    [MoveModelMapFromMoveProperty(nameof(GraphHelper.Move.CheckTop))]
     [ReactiveProperty]
     public int CheckTop { get; set; }
 
     /// <summary>
     /// 下方检测距离
     /// </summary>
+    [MoveModelMapToMoveProperty(nameof(GraphHelper.Move.CheckBottom))]
+    [MoveModelMapFromMoveProperty(nameof(GraphHelper.Move.CheckBottom))]
     [ReactiveProperty]
     public int CheckBottom { get; set; }
 
     /// <summary>
     /// 左侧触发距离
     /// </summary>
+    [MoveModelMapToMoveProperty(nameof(GraphHelper.Move.TriggerLeft))]
+    [MoveModelMapFromMoveProperty(nameof(GraphHelper.Move.TriggerLeft))]
     [ReactiveProperty]
     public int TriggerLeft { get; set; }
 
     /// <summary>
     /// 右侧触发距离
     /// </summary>
+    [MoveModelMapToMoveProperty(nameof(GraphHelper.Move.TriggerRight))]
+    [MoveModelMapFromMoveProperty(nameof(GraphHelper.Move.TriggerRight))]
     [ReactiveProperty]
     public int TriggerRight { get; set; }
 
     /// <summary>
     /// 上方触发距离
     /// </summary>
+    [MoveModelMapToMoveProperty(nameof(GraphHelper.Move.TriggerTop))]
+    [MoveModelMapFromMoveProperty(nameof(GraphHelper.Move.TriggerTop))]
     [ReactiveProperty]
     public int TriggerTop { get; set; }
 
     /// <summary>
     /// 下方触发距离
     /// </summary>
+    [MoveModelMapToMoveProperty(nameof(GraphHelper.Move.TriggerBottom))]
+    [MoveModelMapFromMoveProperty(nameof(GraphHelper.Move.TriggerBottom))]
     [ReactiveProperty]
     public int TriggerBottom { get; set; }
 
@@ -191,28 +189,88 @@ public partial class MoveModel : ViewModelBase
                 | GraphHelper.Move.ModeType.PoorCondition
                 | GraphHelper.Move.ModeType.Ill
         );
+}
 
-    public GraphHelper.Move ToMove()
+internal class MoveModelMapToMoveConfig : MapConfig<MoveModel, GraphHelper.Move>
+{
+    public MoveModelMapToMoveConfig()
     {
-        return new()
-        {
-            Graph = Graph,
-            Distance = Distance,
-            Interval = Interval,
-            CheckLeft = CheckLeft,
-            CheckRight = CheckRight,
-            CheckTop = CheckTop,
-            CheckBottom = CheckBottom,
-            SpeedX = SpeedX,
-            SpeedY = SpeedY,
-            LocateLength = LocateLength,
-            TriggerLeft = TriggerLeft,
-            TriggerRight = TriggerRight,
-            TriggerTop = TriggerTop,
-            TriggerBottom = TriggerBottom,
-            LocateType = LocateType.Value,
-            TriggerType = TriggerType.Value,
-            Mode = ModeType.Value,
-        };
+        AddMap(
+            x => x.LocateType,
+            (s, t) =>
+            {
+                t.LocateType = s.LocateType.Value;
+            }
+        );
+        AddMap(
+            x => x.TriggerType,
+            (s, t) =>
+            {
+                t.TriggerType = s.TriggerType.Value;
+            }
+        );
+        AddMap(
+            x => x.ModeType,
+            (s, t) =>
+            {
+                t.Mode = s.ModeType.Value;
+            }
+        );
+    }
+}
+
+internal class MoveModelMapFromMoveConfig : MapConfig<MoveModel, GraphHelper.Move>
+{
+    public MoveModelMapFromMoveConfig()
+    {
+        AddMap(
+            x => x.LocateType,
+            (s, t) =>
+            {
+                s.LocateType.Value = t.LocateType;
+            }
+        );
+        AddMap(
+            x => x.TriggerType,
+            (s, t) =>
+            {
+                s.TriggerType.Value = t.TriggerType;
+            }
+        );
+        AddMap(
+            x => x.ModeType,
+            (s, t) =>
+            {
+                s.ModeType.Value = t.Mode;
+            }
+        );
+    }
+}
+
+internal class MoveModelMapFromMoveModelConfig : MapConfig<MoveModel, MoveModel>
+{
+    public MoveModelMapFromMoveModelConfig()
+    {
+        AddMap(
+            x => x.LocateType,
+            (s, t) =>
+            {
+                s.LocateType.Value = t.LocateType.Value;
+            }
+        );
+        AddMap(
+            x => x.TriggerType,
+            (s, t) =>
+            {
+                s.TriggerType.Value = t.TriggerType.Value;
+            }
+        );
+        AddMap(
+            x => x.ModeType,
+            (s, t) =>
+            {
+                s.ModeType.Value = t.ModeType.Value;
+            }
+        );
     }
 }

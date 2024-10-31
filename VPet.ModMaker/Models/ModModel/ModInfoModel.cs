@@ -12,6 +12,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Media.Imaging;
 using DynamicData.Binding;
+using HKW.HKWMapper;
 using HKW.HKWReactiveUI;
 using HKW.HKWUtils;
 using HKW.HKWUtils.Extensions;
@@ -657,7 +658,9 @@ public partial class ModInfoModel : ViewModelBase
         File.Create(textFile).Close();
         var lps = new LPS();
         foreach (var text in SelectTexts)
-            lps.Add(LPSConvert.SerializeObjectToLine<Line>(text.ToSelectText(), "SelectText"));
+            lps.Add(
+                LPSConvert.SerializeObjectToLine<Line>(text.MapToSelectText(new()), "SelectText")
+            );
         File.WriteAllText(textFile, lps.ToString());
     }
 
@@ -674,7 +677,9 @@ public partial class ModInfoModel : ViewModelBase
         File.Create(textFile).Close();
         var lps = new LPS();
         foreach (var text in LowTexts)
-            lps.Add(LPSConvert.SerializeObjectToLine<Line>(text.ToLowText(), "lowfoodtext"));
+            lps.Add(
+                LPSConvert.SerializeObjectToLine<Line>(text.MapFromLowText(new()), "lowfoodtext")
+            );
         File.WriteAllText(textFile, lps.ToString());
     }
 
@@ -691,7 +696,9 @@ public partial class ModInfoModel : ViewModelBase
         File.Create(textFile).Close();
         var lps = new LPS();
         foreach (var text in ClickTexts)
-            lps.Add(LPSConvert.SerializeObjectToLine<Line>(text.ToClickText(), "clicktext"));
+            lps.Add(
+                LPSConvert.SerializeObjectToLine<Line>(text.MapToClickText(new()), "clicktext")
+            );
         File.WriteAllText(textFile, lps.ToString());
     }
     #endregion

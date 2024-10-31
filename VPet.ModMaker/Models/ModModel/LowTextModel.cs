@@ -7,9 +7,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Serialization;
+using HKW.HKWMapper;
 using HKW.HKWReactiveUI;
 using HKW.HKWUtils.Observable;
-using Mapster;
 using VPet.ModMaker.ViewModels;
 using VPet_Simulator.Windows.Interface;
 
@@ -18,6 +18,9 @@ namespace VPet.ModMaker.Models;
 /// <summary>
 /// 低状态文本
 /// </summary>
+[MapTo(typeof(LowText))]
+[MapFrom(typeof(LowText))]
+[MapFrom(typeof(LowTextModel))]
 public partial class LowTextModel : ViewModelBase
 {
     public LowTextModel() { }
@@ -25,13 +28,13 @@ public partial class LowTextModel : ViewModelBase
     public LowTextModel(LowTextModel lowText)
         : this()
     {
-        lowText.Adapt(this);
+        this.MapFromLowTextModel(lowText);
     }
 
     public LowTextModel(LowText lowText)
         : this()
     {
-        lowText.Adapt(this);
+        this.MapFromLowText(lowText);
     }
 
     /// <summary>
@@ -53,11 +56,12 @@ public partial class LowTextModel : ViewModelBase
     /// <summary>
     /// ID
     /// </summary>
-    [AdaptMember(nameof(LowText.Text))]
+    [LowTextModelMapToLowTextProperty(nameof(LowText.Text))]
+    [LowTextModelMapFromLowTextProperty(nameof(LowText.Text))]
     [ReactiveProperty]
     public string ID { get; set; } = string.Empty;
 
-    [AdaptIgnore]
+    [MapIgnoreProperty]
     [ReactiveProperty]
     public required I18nResource<string, string> I18nResource { get; set; }
 
@@ -70,10 +74,11 @@ public partial class LowTextModel : ViewModelBase
         newValue?.I18nObjects?.Add(I18nObject);
     }
 
+    [MapIgnoreProperty]
     [NotifyPropertyChangeFrom("")]
     public I18nObject<string, string> I18nObject => new(this);
 
-    [AdaptIgnore]
+    [MapIgnoreProperty]
     [ReactiveI18nProperty("I18nResource", nameof(I18nObject), nameof(ID))]
     public string Text
     {
@@ -84,28 +89,26 @@ public partial class LowTextModel : ViewModelBase
     /// <summary>
     /// 状态
     /// </summary>
-    [AdaptMember(nameof(LowText.Mode))]
+    [LowTextModelMapToLowTextProperty(nameof(LowText.Mode))]
+    [LowTextModelMapFromLowTextProperty(nameof(LowText.Mode))]
     [ReactiveProperty]
     public LowText.ModeType Mode { get; set; }
 
     /// <summary>
     /// 体力
     /// </summary>
-    [AdaptMember(nameof(LowText.Strength))]
+    [LowTextModelMapToLowTextProperty(nameof(LowText.Strength))]
+    [LowTextModelMapFromLowTextProperty(nameof(LowText.Strength))]
     [ReactiveProperty]
     public LowText.StrengthType Strength { get; set; }
 
     /// <summary>
     /// 好感度
     /// </summary>
-    [AdaptMember(nameof(LowText.Like))]
+    [LowTextModelMapToLowTextProperty(nameof(LowText.Like))]
+    [LowTextModelMapFromLowTextProperty(nameof(LowText.Like))]
     [ReactiveProperty]
     public LowText.LikeType Like { get; set; }
-
-    public LowText ToLowText()
-    {
-        return this.Adapt<LowText>();
-    }
 
     public void Close()
     {

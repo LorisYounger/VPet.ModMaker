@@ -10,13 +10,13 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Media.Imaging;
+using HKW.HKWMapper;
 using HKW.HKWReactiveUI;
 using HKW.HKWUtils;
 using HKW.HKWUtils.Observable;
 using LinePutScript;
 using LinePutScript.Converter;
 using LinePutScript.Localization.WPF;
-using Mapster;
 using VPet.ModMaker.Models.ModModel;
 using VPet.ModMaker.ViewModels;
 using VPet_Simulator.Core;
@@ -142,7 +142,7 @@ public partial class PetModel : ViewModelBase
     /// </summary>
     public string DescriptionID { get; set; } = string.Empty;
 
-    [AdaptIgnore]
+    [MapIgnoreProperty]
     [ReactiveProperty]
     public required I18nResource<string, string> I18nResource { get; set; }
 
@@ -192,7 +192,7 @@ public partial class PetModel : ViewModelBase
     [NotifyPropertyChangeFrom("")]
     public I18nObject<string, string> I18nObject => new(this);
 
-    [AdaptIgnore]
+    [MapIgnoreProperty]
     [ReactiveI18nProperty("I18nResource", nameof(I18nObject), nameof(ID))]
     public string Name
     {
@@ -200,7 +200,7 @@ public partial class PetModel : ViewModelBase
         set => I18nResource.SetCurrentCultureData(ID, value);
     }
 
-    [AdaptIgnore]
+    [MapIgnoreProperty]
     [ReactiveI18nProperty("I18nResource", nameof(I18nObject), nameof(PetNameID))]
     public string PetName
     {
@@ -208,7 +208,7 @@ public partial class PetModel : ViewModelBase
         set => I18nResource.SetCurrentCultureData(PetNameID, value);
     }
 
-    [AdaptIgnore]
+    [MapIgnoreProperty]
     [ReactiveI18nProperty("I18nResource", nameof(I18nObject), nameof(DescriptionID))]
     public string Description
     {
@@ -352,7 +352,7 @@ public partial class PetModel : ViewModelBase
     {
         foreach (var move in Moves)
         {
-            lps.Add(LPSConvert.SerializeObjectToLine<Line>(move.ToMove(), "move"));
+            lps.Add(LPSConvert.SerializeObjectToLine<Line>(move.MapToMove(new()), "move"));
         }
     }
 

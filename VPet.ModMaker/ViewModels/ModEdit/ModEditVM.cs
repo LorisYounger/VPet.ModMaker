@@ -71,35 +71,32 @@ public partial class ModEditVM : ViewModelBase
                 SetMainCulture(ModInfo.I18nResource.Cultures.First().Name);
             }
             // 更新模组
-            if (ModUpdataHelper.CanUpdata(ModInfo))
-            {
-                if (
-                    DialogService.ShowMessageBoxX(
-                        this,
-                        "是否更新模组\n当前版本: {0}\n最新版本: {1}".Translate(
-                            ModInfo.ModVersion,
-                            ModUpdataHelper.LastVersion
-                        ),
-                        "更新模组".Translate(),
-                        MessageBoxButton.YesNo
-                    )
-                    is true
+            if (ModUpdataHelper.CanUpdata(ModInfo) is false)
+                return;
+
+            if (
+                DialogService.ShowMessageBoxX(
+                    this,
+                    "是否更新模组\n当前版本: {0}\n最新版本: {1}".Translate(
+                        ModInfo.ModVersion,
+                        ModUpdataHelper.LastVersion
+                    ),
+                    "更新模组".Translate(),
+                    MessageBoxButton.YesNo
                 )
+                is true
+            )
+            {
+                try
                 {
-                    try
-                    {
-                        var version = ModUpdataHelper.Updata(ModInfo);
-                        DialogService.ShowMessageBoxX(
-                            this,
-                            "更新成功更新至版本 {0}, 请手动保存".Translate(version)
-                        );
-                        this.Log().Error("更新成功更新至版本 {version}", version);
-                    }
-                    catch (Exception ex)
-                    {
-                        DialogService.ShowMessageBoxX(this, "模组更新失败, 详情请查看日志".Translate());
-                        this.Log().Error("模组更新失败", ex);
-                    }
+                    var version = ModUpdataHelper.Updata(ModInfo);
+                    DialogService.ShowMessageBoxX(this, "更新成功更新至版本 {0}, 请手动保存".Translate(version));
+                    this.Log().Error("更新成功更新至版本 {version}", version);
+                }
+                catch (Exception ex)
+                {
+                    DialogService.ShowMessageBoxX(this, "模组更新失败, 详情请查看日志".Translate());
+                    this.Log().Error("模组更新失败", ex);
                 }
             }
         }

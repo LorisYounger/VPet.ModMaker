@@ -6,9 +6,9 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using HKW.HKWMapper;
 using HKW.HKWReactiveUI;
 using HKW.HKWUtils.Observable;
-using Mapster;
 using VPet.ModMaker.Models;
 using VPet.ModMaker.ViewModels;
 using VPet_Simulator.Windows.Interface;
@@ -18,6 +18,9 @@ namespace VPet.ModMaker.Models;
 /// <summary>
 /// 选择文本模型
 /// </summary>
+[MapTo(typeof(SelectText), MapConfig = typeof(SelectTextModelMapToSelectTextConfig))]
+[MapFrom(typeof(SelectText), MapConfig = typeof(SelectTextModelMapFromSelectTextConfig))]
+[MapFrom(typeof(SelectTextModel), MapConfig = typeof(SelectTextModelMapFromSelectTextModelConfig))]
 public partial class SelectTextModel : ViewModelBase
 {
     public SelectTextModel() { }
@@ -25,38 +28,13 @@ public partial class SelectTextModel : ViewModelBase
     public SelectTextModel(SelectTextModel model)
         : this()
     {
-        //model.Adapt(this);
-        //Like.Min = -100;
-        ID = model.ID;
-        Mode.Value = model.Mode.Value;
-        Tags = model.Tags;
-        ToTags = model.ToTags;
-        Like = model.Like.Clone();
-        Health = model.Health.Clone();
-        Level = model.Level.Clone();
-        Money = model.Money.Clone();
-        Food = model.Food.Clone();
-        Drink = model.Drink.Clone();
-        Feel = model.Feel.Clone();
-        Strength = model.Strength.Clone();
+        this.MapFromSelectTextModel(model);
     }
 
     public SelectTextModel(SelectText text)
         : this()
     {
-        ID = text.Text;
-        ChooseID = text.Choose ?? string.Empty;
-        Mode.Value = text.Mode;
-        Tags = text.Tags is null ? string.Empty : string.Join(", ", text.Tags);
-        ToTags = text.ToTags is null ? string.Empty : string.Join(", ", text.ToTags);
-        Like = new(text.LikeMin, text.LikeMax);
-        Health = new(text.HealthMin, text.HealthMax);
-        Level = new(text.LevelMin, text.LevelMax);
-        Money = new(text.MoneyMin, text.MoneyMax);
-        Food = new(text.FoodMin, text.FoodMax);
-        Drink = new(text.DrinkMin, text.DrinkMax);
-        Feel = new(text.FeelMin, text.FeelMax);
-        Strength = new(text.StrengthMin, text.StrengthMax);
+        this.MapFromSelectText(text);
     }
 
     /// <summary>
@@ -67,18 +45,24 @@ public partial class SelectTextModel : ViewModelBase
     /// <summary>
     /// 标签
     /// </summary>
+    [SelectTextModelMapToSelectTextProperty(nameof(SelectText.Tags))]
+    [SelectTextModelMapFromSelectTextProperty(nameof(SelectText.Tags))]
     [ReactiveProperty]
     public string Tags { get; set; } = string.Empty;
 
     /// <summary>
     /// 跳转标签
     /// </summary>
+    [SelectTextModelMapToSelectTextProperty(nameof(SelectText.ToTags))]
+    [SelectTextModelMapFromSelectTextProperty(nameof(SelectText.ToTags))]
     [ReactiveProperty]
     public string ToTags { get; set; } = string.Empty;
 
     /// <summary>
     /// ID
     /// </summary>
+    [SelectTextModelMapToSelectTextProperty(nameof(SelectText.Text))]
+    [SelectTextModelMapFromSelectTextProperty(nameof(SelectText.Text))]
     [ReactiveProperty]
     public string ID { get; set; } = string.Empty;
 
@@ -90,10 +74,12 @@ public partial class SelectTextModel : ViewModelBase
     /// <summary>
     /// 选择Id
     /// </summary>
+    [SelectTextModelMapToSelectTextProperty(nameof(SelectText.Choose))]
+    [SelectTextModelMapFromSelectTextProperty(nameof(SelectText.Choose))]
     [ReactiveProperty]
     public string ChooseID { get; set; } = string.Empty;
 
-    [AdaptIgnore]
+    [MapIgnoreProperty]
     [ReactiveProperty]
     public required I18nResource<string, string> I18nResource { get; set; }
 
@@ -109,7 +95,7 @@ public partial class SelectTextModel : ViewModelBase
     [NotifyPropertyChangeFrom("")]
     public I18nObject<string, string> I18nObject => new(this);
 
-    [AdaptIgnore]
+    [MapIgnoreProperty]
     [ReactiveI18nProperty("I18nResource", nameof(I18nObject), nameof(ID))]
     public string Text
     {
@@ -117,7 +103,7 @@ public partial class SelectTextModel : ViewModelBase
         set => I18nResource.SetCurrentCultureData(ID, value);
     }
 
-    [AdaptIgnore]
+    [MapIgnoreProperty]
     [ReactiveI18nProperty("I18nResource", nameof(I18nObject), nameof(ChooseID))]
     public string Choose
     {
@@ -128,7 +114,9 @@ public partial class SelectTextModel : ViewModelBase
     /// <summary>
     /// 宠物状态
     /// </summary>
-    public ObservableEnum<ClickText.ModeType> Mode { get; } =
+    [SelectTextModelMapToSelectTextProperty(nameof(SelectText.Mode))]
+    [SelectTextModelMapFromSelectTextProperty(nameof(SelectText.Mode))]
+    public ObservableEnum<ClickText.ModeType> Mode { get; set; } =
         new(
             ClickText.ModeType.Happy
                 | ClickText.ModeType.Nomal
@@ -181,38 +169,259 @@ public partial class SelectTextModel : ViewModelBase
         ChooseID = $"{ID}_{nameof(ChooseID)}";
     }
 
-    private static readonly char[] _splitChars = [',', ' '];
-
-    public SelectText ToSelectText()
-    {
-        return new()
-        {
-            Text = ID,
-            Choose = ChooseID,
-            Mode = Mode.Value,
-            Tags = new(Tags.Split(_splitChars, StringSplitOptions.RemoveEmptyEntries)),
-            ToTags = new(ToTags.Split(_splitChars, StringSplitOptions.RemoveEmptyEntries)),
-            LikeMax = Like.Max,
-            LikeMin = Like.Min,
-            HealthMin = Health.Min,
-            HealthMax = Health.Max,
-            LevelMin = Level.Min,
-            LevelMax = Level.Max,
-            MoneyMin = Money.Min,
-            MoneyMax = Money.Max,
-            FoodMin = Food.Min,
-            FoodMax = Food.Max,
-            DrinkMin = Drink.Min,
-            DrinkMax = Drink.Max,
-            FeelMin = Feel.Min,
-            FeelMax = Feel.Max,
-            StrengthMin = Strength.Min,
-            StrengthMax = Strength.Max,
-        };
-    }
-
     public void Close()
     {
         I18nResource.I18nObjects.Remove(I18nObject);
+    }
+}
+
+internal class SelectTextModelMapFromSelectTextModelConfig
+    : MapConfig<SelectTextModel, SelectTextModel>
+{
+    public SelectTextModelMapFromSelectTextModelConfig()
+    {
+        AddMap(
+            x => x.Mode,
+            (s, t) =>
+            {
+                s.Mode = t.Mode.Clone();
+            }
+        );
+        AddMap(
+            x => x.Like,
+            (s, t) =>
+            {
+                s.Like.SetValue(t.Like);
+            }
+        );
+        AddMap(
+            x => x.Health,
+            (s, t) =>
+            {
+                s.Health.SetValue(t.Health);
+            }
+        );
+        AddMap(
+            x => x.Level,
+            (s, t) =>
+            {
+                s.Level.SetValue(t.Level);
+            }
+        );
+        AddMap(
+            x => x.Money,
+            (s, t) =>
+            {
+                s.Money.SetValue(t.Money);
+            }
+        );
+        AddMap(
+            x => x.Food,
+            (s, t) =>
+            {
+                s.Food.SetValue(t.Food);
+            }
+        );
+        AddMap(
+            x => x.Drink,
+            (s, t) =>
+            {
+                s.Drink.SetValue(t.Drink);
+            }
+        );
+        AddMap(
+            x => x.Feel,
+            (s, t) =>
+            {
+                s.Feel.SetValue(t.Feel);
+            }
+        );
+        AddMap(
+            x => x.Strength,
+            (s, t) =>
+            {
+                s.Strength.SetValue(t.Strength);
+            }
+        );
+    }
+}
+
+internal class SelectTextModelMapToSelectTextConfig : MapConfig<SelectTextModel, SelectText>
+{
+    public SelectTextModelMapToSelectTextConfig()
+    {
+        AddMap(
+            x => x.Tags,
+            (s, t) =>
+            {
+                t.Tags = new(
+                    s.Tags.Split(',', StringSplitOptions.RemoveEmptyEntries).Select(s => s.Trim())
+                );
+            }
+        );
+        AddMap(
+            x => x.ToTags,
+            (s, t) =>
+            {
+                t.ToTags = new(
+                    s.ToTags.Split(',', StringSplitOptions.RemoveEmptyEntries).Select(s => s.Trim())
+                );
+            }
+        );
+        AddMap(
+            x => x.Mode,
+            (s, t) =>
+            {
+                t.Mode = s.Mode.Value;
+            }
+        );
+        AddMap(
+            x => x.Like,
+            (s, t) =>
+            {
+                t.LikeMax = s.Like.Max;
+                t.LikeMin = s.Like.Min;
+            }
+        );
+        AddMap(
+            x => x.Health,
+            (s, t) =>
+            {
+                t.HealthMax = s.Health.Max;
+                t.HealthMin = s.Health.Min;
+            }
+        );
+        AddMap(
+            x => x.Level,
+            (s, t) =>
+            {
+                t.LevelMax = s.Level.Max;
+                t.LevelMin = s.Level.Min;
+            }
+        );
+        AddMap(
+            x => x.Money,
+            (s, t) =>
+            {
+                t.MoneyMax = s.Money.Max;
+                t.MoneyMin = s.Money.Min;
+            }
+        );
+        AddMap(
+            x => x.Food,
+            (s, t) =>
+            {
+                t.FoodMax = s.Food.Max;
+                t.FoodMin = s.Food.Min;
+            }
+        );
+        AddMap(
+            x => x.Drink,
+            (s, t) =>
+            {
+                t.DrinkMax = s.Drink.Max;
+                t.DrinkMin = s.Drink.Min;
+            }
+        );
+        AddMap(
+            x => x.Feel,
+            (s, t) =>
+            {
+                t.FeelMax = s.Feel.Max;
+                t.FeelMin = s.Feel.Min;
+            }
+        );
+        AddMap(
+            x => x.Strength,
+            (s, t) =>
+            {
+                t.StrengthMax = s.Strength.Max;
+                t.StrengthMin = s.Strength.Min;
+            }
+        );
+    }
+}
+
+internal class SelectTextModelMapFromSelectTextConfig : MapConfig<SelectTextModel, SelectText>
+{
+    public SelectTextModelMapFromSelectTextConfig()
+    {
+        AddMap(
+            x => x.Tags,
+            (s, t) =>
+            {
+                s.Tags = string.Join(",", s.Tags);
+            }
+        );
+        AddMap(
+            x => x.ToTags,
+            (s, t) =>
+            {
+                s.ToTags = string.Join(",", s.ToTags);
+            }
+        );
+        AddMap(
+            x => x.Mode,
+            (s, t) =>
+            {
+                s.Mode = new(t.Mode);
+            }
+        );
+        AddMap(
+            x => x.Like,
+            (s, t) =>
+            {
+                s.Like.SetValue(t.LikeMin, t.LikeMax);
+            }
+        );
+        AddMap(
+            x => x.Health,
+            (s, t) =>
+            {
+                s.Health.SetValue(t.HealthMin, t.HealthMax);
+            }
+        );
+        AddMap(
+            x => x.Level,
+            (s, t) =>
+            {
+                s.Level.SetValue(t.LevelMin, t.LevelMax);
+            }
+        );
+        AddMap(
+            x => x.Money,
+            (s, t) =>
+            {
+                s.Money.SetValue(t.MoneyMin, t.MoneyMax);
+            }
+        );
+        AddMap(
+            x => x.Food,
+            (s, t) =>
+            {
+                s.Food.SetValue(t.FoodMin, t.FoodMax);
+            }
+        );
+        AddMap(
+            x => x.Drink,
+            (s, t) =>
+            {
+                s.Drink.SetValue(t.DrinkMin, t.DrinkMax);
+            }
+        );
+        AddMap(
+            x => x.Feel,
+            (s, t) =>
+            {
+                s.Feel.SetValue(t.FeelMin, t.FeelMax);
+            }
+        );
+        AddMap(
+            x => x.Strength,
+            (s, t) =>
+            {
+                s.Strength.SetValue(t.StrengthMin, t.StrengthMax);
+            }
+        );
     }
 }

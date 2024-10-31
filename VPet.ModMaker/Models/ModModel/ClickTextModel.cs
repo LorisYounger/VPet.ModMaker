@@ -6,11 +6,11 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using HKW.HKWMapper;
 using HKW.HKWReactiveUI;
 using HKW.HKWUtils;
 using HKW.HKWUtils.Observable;
 using LinePutScript.Converter;
-using Mapster;
 using VPet.ModMaker.ViewModels;
 using VPet_Simulator.Windows.Interface;
 
@@ -19,6 +19,9 @@ namespace VPet.ModMaker.Models;
 /// <summary>
 /// 点击文本模型
 /// </summary>
+[MapTo(typeof(ClickText), MapConfig = typeof(ClickTextModelMapToClickTextConfig))]
+[MapFrom(typeof(ClickText), MapConfig = typeof(ClickTextModelMapFromClickTextConfig))]
+[MapFrom(typeof(ClickTextModel), MapConfig = typeof(ClickTextModelMapFromClickTextModelConfig))]
 public partial class ClickTextModel : ViewModelBase
 {
     public ClickTextModel() { }
@@ -26,65 +29,18 @@ public partial class ClickTextModel : ViewModelBase
     public ClickTextModel(ClickTextModel clickText)
         : this()
     {
-        ID = clickText.ID;
-        Mode.Value = clickText.Mode.Value;
-        Working = clickText.Working;
-        WorkingState = clickText.WorkingState;
-        DayTime.Value = clickText.DayTime.Value;
-        Like = clickText.Like.Clone();
-        Health = clickText.Health.Clone();
-        Level = clickText.Level.Clone();
-        Money = clickText.Money.Clone();
-        Food = clickText.Food.Clone();
-        Drink = clickText.Drink.Clone();
-        Feel = clickText.Feel.Clone();
-        Strength = clickText.Strength.Clone();
+        this.MapFromClickTextModel(clickText);
     }
 
     public ClickTextModel(ClickText clickText)
         : this()
     {
-        ID = clickText.Text;
-        Mode.Value = clickText.Mode;
-        Working = clickText.Working;
-        WorkingState = clickText.State;
-        DayTime.Value = clickText.DaiTime;
-        Like = new(clickText.LikeMin, clickText.LikeMax);
-        Health = new(clickText.HealthMin, clickText.HealthMax);
-        Level = new(clickText.LevelMin, clickText.LevelMax);
-        Money = new(clickText.MoneyMin, clickText.MoneyMax);
-        Food = new(clickText.FoodMin, clickText.FoodMax);
-        Drink = new(clickText.DrinkMin, clickText.DrinkMax);
-        Feel = new(clickText.FeelMin, clickText.FeelMax);
-        Strength = new(clickText.StrengthMin, clickText.StrengthMax);
+        this.MapFromClickText(clickText);
     }
 
     public ClickText ToClickText()
     {
-        return new()
-        {
-            Text = ID,
-            Mode = Mode.Value,
-            Working = Working,
-            State = WorkingState,
-            DaiTime = DayTime.Value,
-            LikeMax = Like.Max,
-            LikeMin = Like.Min,
-            HealthMin = Health.Min,
-            HealthMax = Health.Max,
-            LevelMin = Level.Min,
-            LevelMax = Level.Max,
-            MoneyMin = Money.Min,
-            MoneyMax = Money.Max,
-            FoodMin = Food.Min,
-            FoodMax = Food.Max,
-            DrinkMin = Drink.Min,
-            DrinkMax = Drink.Max,
-            FeelMin = Feel.Min,
-            FeelMax = Feel.Max,
-            StrengthMin = Strength.Min,
-            StrengthMax = Strength.Max,
-        };
+        return this.MapToClickText(new());
     }
 
     /// <summary>
@@ -106,11 +62,12 @@ public partial class ClickTextModel : ViewModelBase
     /// <summary>
     /// ID
     /// </summary>
-    [AdaptMember(nameof(ClickText.Text))]
+    [ClickTextModelMapToClickTextProperty(nameof(ClickText.Text))]
+    [ClickTextModelMapFromClickTextProperty(nameof(ClickText.Text))]
     [ReactiveProperty]
     public string ID { get; set; } = string.Empty;
 
-    [AdaptIgnore]
+    [MapIgnoreProperty]
     [ReactiveProperty]
     public required I18nResource<string, string> I18nResource { get; set; }
 
@@ -126,7 +83,7 @@ public partial class ClickTextModel : ViewModelBase
     [NotifyPropertyChangeFrom("")]
     public I18nObject<string, string> I18nObject => new(this);
 
-    [AdaptIgnore]
+    [MapIgnoreProperty]
     [ReactiveI18nProperty("I18nResource", nameof(I18nObject), nameof(ID))]
     public string Text
     {
@@ -137,14 +94,15 @@ public partial class ClickTextModel : ViewModelBase
     /// <summary>
     /// 指定工作
     /// </summary>
-    [AdaptMember(nameof(ClickText.Working))]
+    [ClickTextModelMapToClickTextProperty(nameof(ClickText.Working))]
+    [ClickTextModelMapFromClickTextProperty(nameof(ClickText.Working))]
     [ReactiveProperty]
     public string Working { get; set; } = string.Empty;
 
     /// <summary>
     /// 宠物状态
     /// </summary>
-    public ObservableEnum<ClickText.ModeType> Mode { get; } =
+    public ObservableEnum<ClickText.ModeType> Mode { get; set; } =
         new(
             ClickText.ModeType.Happy
                 | ClickText.ModeType.Nomal
@@ -155,15 +113,15 @@ public partial class ClickTextModel : ViewModelBase
     /// <summary>
     /// 行动状态
     /// </summary>
-    [AdaptMember(nameof(ClickText.State))]
+    [ClickTextModelMapToClickTextProperty(nameof(ClickText.State))]
+    [ClickTextModelMapFromClickTextProperty(nameof(ClickText.State))]
     [ReactiveProperty]
     public VPet_Simulator.Core.Main.WorkingState WorkingState { get; set; }
 
     /// <summary>
     /// 日期区间
     /// </summary>
-
-    public ObservableEnum<ClickText.DayTime> DayTime { get; } =
+    public ObservableEnum<ClickText.DayTime> DayTime { get; set; } =
         new(
             ClickText.DayTime.Morning
                 | ClickText.DayTime.Afternoon
@@ -213,7 +171,224 @@ public partial class ClickTextModel : ViewModelBase
 
     public void Close()
     {
-        //TODO:
         I18nResource.I18nObjects.Remove(I18nObject);
+    }
+}
+
+internal class ClickTextModelMapFromClickTextModelConfig : MapConfig<ClickTextModel, ClickTextModel>
+{
+    public ClickTextModelMapFromClickTextModelConfig()
+    {
+        AddMap(
+            x => x.Mode,
+            (s, t) =>
+            {
+                s.Mode = t.Mode.Clone();
+            }
+        );
+        AddMap(
+            x => x.Like,
+            (s, t) =>
+            {
+                s.Like.SetValue(t.Like);
+            }
+        );
+        AddMap(
+            x => x.Health,
+            (s, t) =>
+            {
+                s.Health.SetValue(t.Health);
+            }
+        );
+        AddMap(
+            x => x.Level,
+            (s, t) =>
+            {
+                s.Level.SetValue(t.Level);
+            }
+        );
+        AddMap(
+            x => x.Money,
+            (s, t) =>
+            {
+                s.Money.SetValue(t.Money);
+            }
+        );
+        AddMap(
+            x => x.Food,
+            (s, t) =>
+            {
+                s.Food.SetValue(t.Food);
+            }
+        );
+        AddMap(
+            x => x.Drink,
+            (s, t) =>
+            {
+                s.Drink.SetValue(t.Drink);
+            }
+        );
+        AddMap(
+            x => x.Feel,
+            (s, t) =>
+            {
+                s.Feel.SetValue(t.Feel);
+            }
+        );
+        AddMap(
+            x => x.Strength,
+            (s, t) =>
+            {
+                s.Strength.SetValue(t.Strength);
+            }
+        );
+    }
+}
+
+internal class ClickTextModelMapToClickTextConfig : MapConfig<ClickTextModel, ClickText>
+{
+    public ClickTextModelMapToClickTextConfig()
+    {
+        AddMap(
+            x => x.Mode,
+            (s, t) =>
+            {
+                t.Mode = s.Mode.Value;
+            }
+        );
+        AddMap(
+            x => x.Like,
+            (s, t) =>
+            {
+                t.LikeMax = s.Like.Max;
+                t.LikeMin = s.Like.Min;
+            }
+        );
+        AddMap(
+            x => x.Health,
+            (s, t) =>
+            {
+                t.HealthMax = s.Health.Max;
+                t.HealthMin = s.Health.Min;
+            }
+        );
+        AddMap(
+            x => x.Level,
+            (s, t) =>
+            {
+                t.LevelMax = s.Level.Max;
+                t.LevelMin = s.Level.Min;
+            }
+        );
+        AddMap(
+            x => x.Money,
+            (s, t) =>
+            {
+                t.MoneyMax = s.Money.Max;
+                t.MoneyMin = s.Money.Min;
+            }
+        );
+        AddMap(
+            x => x.Food,
+            (s, t) =>
+            {
+                t.FoodMax = s.Food.Max;
+                t.FoodMin = s.Food.Min;
+            }
+        );
+        AddMap(
+            x => x.Drink,
+            (s, t) =>
+            {
+                t.DrinkMax = s.Drink.Max;
+                t.DrinkMin = s.Drink.Min;
+            }
+        );
+        AddMap(
+            x => x.Feel,
+            (s, t) =>
+            {
+                t.FeelMax = s.Feel.Max;
+                t.FeelMin = s.Feel.Min;
+            }
+        );
+        AddMap(
+            x => x.Strength,
+            (s, t) =>
+            {
+                t.StrengthMax = s.Strength.Max;
+                t.StrengthMin = s.Strength.Min;
+            }
+        );
+    }
+}
+
+internal class ClickTextModelMapFromClickTextConfig : MapConfig<ClickTextModel, ClickText>
+{
+    public ClickTextModelMapFromClickTextConfig()
+    {
+        AddMap(
+            x => x.Mode,
+            (s, t) =>
+            {
+                s.Mode = new(t.Mode);
+            }
+        );
+        AddMap(
+            x => x.Like,
+            (s, t) =>
+            {
+                s.Like.SetValue(t.LikeMin, t.LikeMax);
+            }
+        );
+        AddMap(
+            x => x.Health,
+            (s, t) =>
+            {
+                s.Health.SetValue(t.HealthMin, t.HealthMax);
+            }
+        );
+        AddMap(
+            x => x.Level,
+            (s, t) =>
+            {
+                s.Level.SetValue(t.LevelMin, t.LevelMax);
+            }
+        );
+        AddMap(
+            x => x.Money,
+            (s, t) =>
+            {
+                s.Money.SetValue(t.MoneyMin, t.MoneyMax);
+            }
+        );
+        AddMap(
+            x => x.Food,
+            (s, t) =>
+            {
+                s.Food.SetValue(t.FoodMin, t.FoodMax);
+            }
+        );
+        AddMap(
+            x => x.Drink,
+            (s, t) =>
+            {
+                s.Drink.SetValue(t.DrinkMin, t.DrinkMax);
+            }
+        );
+        AddMap(
+            x => x.Feel,
+            (s, t) =>
+            {
+                s.Feel.SetValue(t.FeelMin, t.FeelMax);
+            }
+        );
+        AddMap(
+            x => x.Strength,
+            (s, t) =>
+            {
+                s.Strength.SetValue(t.StrengthMin, t.StrengthMax);
+            }
+        );
     }
 }

@@ -7,4 +7,4 @@ using HKW.HKWReactiveUI;
 
 namespace VPet.ModMaker.ViewModels;
 
-public class ViewModelBase : ReactiveObjectX { }
+public partial class ViewModelBase : ReactiveObjectX { }

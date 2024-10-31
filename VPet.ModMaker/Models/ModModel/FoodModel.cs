@@ -8,13 +8,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Media.Imaging;
+using HKW.HKWMapper;
 using HKW.HKWReactiveUI;
 using HKW.HKWUtils.Extensions;
 using HKW.HKWUtils.Observable;
 using HKW.WPF.Extensions;
 using LinePutScript;
 using LinePutScript.Converter;
-using Mapster;
 using VPet.ModMaker.Native;
 using VPet.ModMaker.ViewModels;
 using VPet_Simulator.Windows.Interface;
@@ -24,6 +24,9 @@ namespace VPet.ModMaker.Models;
 /// <summary>
 /// 食物模型
 /// </summary>
+[MapTo(typeof(Food))]
+[MapFrom(typeof(Food))]
+[MapFrom(typeof(FoodModel))]
 public partial class FoodModel : ViewModelBase
 {
     public FoodModel() { }
@@ -31,14 +34,14 @@ public partial class FoodModel : ViewModelBase
     public FoodModel(FoodModel model)
         : this()
     {
-        model.Adapt(this);
+        this.MapFromFoodModel(model);
         Image = model.Image?.CloneStream();
     }
 
     public FoodModel(Food food)
         : this()
     {
-        food.Adapt(this);
+        this.MapFromFood(food);
         if (File.Exists(food.Image))
             Image = NativeUtils.LoadImageToMemoryStream(food.Image);
     }
@@ -51,7 +54,8 @@ public partial class FoodModel : ViewModelBase
     /// <summary>
     /// ID
     /// </summary>
-    [AdaptMember(nameof(Food.Name))]
+    [FoodModelMapToFoodProperty(nameof(Food.Name))]
+    [FoodModelMapFromFoodProperty(nameof(Food.Name))]
     [ReactiveProperty]
     public string ID { get; set; } = string.Empty;
 
@@ -63,11 +67,12 @@ public partial class FoodModel : ViewModelBase
     /// <summary>
     /// 详情Id
     /// </summary>
-    [AdaptMember(nameof(Food.Desc))]
+    [FoodModelMapToFoodProperty(nameof(Food.Desc))]
+    [FoodModelMapFromFoodProperty(nameof(Food.Desc))]
     [ReactiveProperty]
     public string DescriptionID { get; set; } = string.Empty;
 
-    [AdaptIgnore]
+    [MapIgnoreProperty]
     [ReactiveProperty]
     public required I18nResource<string, string> I18nResource { get; set; }
 
@@ -83,7 +88,7 @@ public partial class FoodModel : ViewModelBase
     [NotifyPropertyChangeFrom("")]
     public I18nObject<string, string> I18nObject => new(this);
 
-    [AdaptIgnore]
+    [MapIgnoreProperty]
     [ReactiveI18nProperty("I18nResource", nameof(I18nObject), nameof(ID), true)]
     public string Name
     {
@@ -91,7 +96,7 @@ public partial class FoodModel : ViewModelBase
         set => I18nResource.SetCurrentCultureData(ID, value);
     }
 
-    [AdaptIgnore]
+    [MapIgnoreProperty]
     [ReactiveI18nProperty("I18nResource", nameof(I18nObject), nameof(DescriptionID), true)]
     public string Description
     {
@@ -102,84 +107,94 @@ public partial class FoodModel : ViewModelBase
     /// <summary>
     /// 指定动画
     /// </summary>
-    [AdaptMember(nameof(Food.Graph))]
+    [FoodModelMapToFoodProperty(nameof(Food.Graph))]
+    [FoodModelMapFromFoodProperty(nameof(Food.Graph))]
     [ReactiveProperty]
     public string Graph { get; set; } = string.Empty;
 
     /// <summary>
     /// 类型
     /// </summary>
-    [AdaptMember(nameof(Food.Type))]
+    [FoodModelMapToFoodProperty(nameof(Food.Type))]
+    [FoodModelMapFromFoodProperty(nameof(Food.Type))]
     [ReactiveProperty]
     public Food.FoodType Type { get; set; }
 
     /// <summary>
     /// 体力
     /// </summary>
-    [AdaptMember(nameof(Food.Strength))]
+    [FoodModelMapToFoodProperty(nameof(Food.Strength))]
+    [FoodModelMapFromFoodProperty(nameof(Food.Strength))]
     [ReactiveProperty]
     public double Strength { get; set; }
 
     /// <summary>
     /// 饱食度
     /// </summary>
-    [AdaptMember(nameof(Food.StrengthFood))]
+    [FoodModelMapToFoodProperty(nameof(Food.StrengthFood))]
+    [FoodModelMapFromFoodProperty(nameof(Food.StrengthFood))]
     [ReactiveProperty]
     public double StrengthFood { get; set; }
 
     /// <summary>
     /// 口渴度
     /// </summary>
-    [AdaptMember(nameof(Food.StrengthDrink))]
+    [FoodModelMapToFoodProperty(nameof(Food.StrengthDrink))]
+    [FoodModelMapFromFoodProperty(nameof(Food.StrengthDrink))]
     [ReactiveProperty]
     public double StrengthDrink { get; set; }
 
     /// <summary>
     /// 心情
     /// </summary>
-    [AdaptMember(nameof(Food.Feeling))]
+    [FoodModelMapToFoodProperty(nameof(Food.Feeling))]
+    [FoodModelMapFromFoodProperty(nameof(Food.Feeling))]
     [ReactiveProperty]
     public double Feeling { get; set; }
 
     /// <summary>
     /// 健康度
     /// </summary>
-    [AdaptMember(nameof(Food.Health))]
+    [FoodModelMapToFoodProperty(nameof(Food.Health))]
+    [FoodModelMapFromFoodProperty(nameof(Food.Health))]
     [ReactiveProperty]
     public double Health { get; set; }
 
     /// <summary>
     /// 好感度
     /// </summary>
-    [AdaptMember(nameof(Food.Likability))]
+    [FoodModelMapToFoodProperty(nameof(Food.Likability))]
+    [FoodModelMapFromFoodProperty(nameof(Food.Likability))]
     [ReactiveProperty]
     public double Likability { get; set; }
 
     /// <summary>
     /// 价格
     /// </summary>
-    [AdaptMember(nameof(Food.Price))]
+    [FoodModelMapToFoodProperty(nameof(Food.Price))]
+    [FoodModelMapFromFoodProperty(nameof(Food.Price))]
     [ReactiveProperty]
     public double Price { get; set; }
 
     /// <summary>
     /// 经验
     /// </summary>
-    [AdaptMember(nameof(Food.Exp))]
+    [FoodModelMapToFoodProperty(nameof(Food.Exp))]
+    [FoodModelMapFromFoodProperty(nameof(Food.Exp))]
     [ReactiveProperty]
     public int Exp { get; set; }
 
     /// <summary>
     /// 图片
     /// </summary>
-    [AdaptIgnore]
+    [MapIgnoreProperty]
     [ReactiveProperty]
     public BitmapImage? Image { get; set; }
 
     /// <summary>
     /// 推荐价格
     /// </summary>
-    [AdaptIgnore]
+    [MapIgnoreProperty]
     [NotifyPropertyChangeFrom(
         nameof(Strength),
         nameof(StrengthFood),
@@ -192,7 +207,7 @@ public partial class FoodModel : ViewModelBase
     public double ReferencePrice =>
         this.To(x =>
         {
-            x.Adapt(_food);
+            x.MapToFood(_food);
             return Math.Floor(_food.RealPrice);
         });
 
@@ -200,22 +215,7 @@ public partial class FoodModel : ViewModelBase
 
     public Food ToFood()
     {
-        return this.Adapt<Food>();
-        //return new Food()
-        //{
-        //    Name = ID,
-        //    Desc = DescriptionID,
-        //    Graph = Graph,
-        //    Type = Type,
-        //    Strength = Strength,
-        //    StrengthFood = StrengthFood,
-        //    StrengthDrink = StrengthDrink,
-        //    Feeling = Feeling,
-        //    Health = Health,
-        //    Likability = Likability,
-        //    Price = Price,
-        //    Exp = Exp,
-        //};
+        return this.MapToFood(new());
     }
 
     public void RefreshID()

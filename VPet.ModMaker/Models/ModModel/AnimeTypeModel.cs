@@ -119,22 +119,22 @@ public partial class AnimeTypeModel : ViewModelBase
     /// <summary>
     /// 开心动画
     /// </summary>
-    public ObservableList<AnimeModel> HappyAnimes { get; } = new();
+    public ObservableList<AnimeModel> HappyAnimes { get; } = [];
 
     /// <summary>
     /// 普通动画 (默认)
     /// </summary>
-    public ObservableList<AnimeModel> NomalAnimes { get; } = new();
+    public ObservableList<AnimeModel> NomalAnimes { get; } = [];
 
     /// <summary>
     /// 低状态动画
     /// </summary>
-    public ObservableList<AnimeModel> PoorConditionAnimes { get; } = new();
+    public ObservableList<AnimeModel> PoorConditionAnimes { get; } = [];
 
     /// <summary>
     /// 生病动画
     /// </summary>
-    public ObservableList<AnimeModel> IllAnimes { get; } = new();
+    public ObservableList<AnimeModel> IllAnimes { get; } = [];
 
     /// <summary>
     /// 创建动画类型模型

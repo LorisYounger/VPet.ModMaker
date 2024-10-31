@@ -49,6 +49,10 @@
     </Reference>
     <Analyzer Include="..\..\HKW.ReactiveUI\HKW.ReactiveUI\bin\Debug\netstandard2.0\HKW.ReactiveUI.dll" />
     <WeaverFiles Include="..\..\HKW.ReactiveUI\HKW.ReactiveUI.Fody\bin\Debug\netstandard2.0\HKW.ReactiveUI.Fody.dll" />
+    <Reference Include="HKW.Mapper">
+      <HintPath>..\..\HKW.Mapper\HKW.Mapper\bin\Debug\netstandard2.0\HKW.Mapper.dll</HintPath>
+    </Reference>
+    <Analyzer Include="..\..\HKW.Mapper\HKW.Mapper\bin\Debug\netstandard2.0\HKW.Mapper.dll" />
   </ItemGroup>
   <ItemGroup Condition="'$(Configuration)'!='Test'">
     <PackageReference Include="HKW.WPF" Version="1.0.6" />
@@ -62,7 +66,7 @@
 		<PackageReference Include="LinePutScript.Localization.WPF" Version="1.0.7" />
 		<PackageReference Include="Ookii.Dialogs.Wpf" Version="5.0.1" />
 		<PackageReference Include="Panuon.WPF" Version="1.1.2.2" />
-		<PackageReference Include="Panuon.WPF.UI" Version="1.2.4.7" />
+		<PackageReference Include="Panuon.WPF.UI" Version="1.2.4.8" />
 		<PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
 	</ItemGroup>
 	<ItemGroup>
@@ -74,7 +78,6 @@
     <PackageReference Include="System.Data.DataSetExtensions" Version="4.5.0" />
     <PackageReference Include="NLog" Version="5.3.4" />
     <PackageReference Include="Splat.NLog" Version="15.2.22" />
-		<PackageReference Include="Mapster" Version="7.4.0" />
 	</ItemGroup>
 	<ItemGroup>
 	  <Compile Update="Properties\Settings.Designer.cs">
