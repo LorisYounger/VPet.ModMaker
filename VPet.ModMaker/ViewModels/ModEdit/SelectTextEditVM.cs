@@ -16,9 +16,9 @@ namespace VPet.ModMaker.ViewModels.ModEdit;
 
 public partial class SelectTextEditVM : ViewModelBase
 {
-    public SelectTextEditVM(ModInfoModel modInfo)
+    public SelectTextEditVM()
     {
-        ModInfo = modInfo;
+        //ModInfo = modInfo;
         SelectText = new() { I18nResource = ModInfo.I18nResource };
         SelectTexts = new(
             ModInfo.SelectTexts,
@@ -42,7 +42,8 @@ public partial class SelectTextEditVM : ViewModelBase
     /// <summary>
     /// 模组信息
     /// </summary>
-    public ModInfoModel ModInfo { get; }
+    [ReactiveProperty]
+    public ModInfoModel ModInfo { get; set; } = null!;
 
     /// <summary>
     /// 全部选择文本

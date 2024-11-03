@@ -11,7 +11,7 @@
   Title="{ll:Str 编辑工作}"
   Width="800"
   Height="450"
-  d:DataContext="{d:DesignInstance Type=vm:WorkEditWindowVM}"
+  d:DataContext="{d:DesignInstance Type=vm:WorkEditVM}"
   WindowStartupLocation="CenterScreen"
   mc:Ignorable="d">
   <Window.Resources>

@@ -40,15 +40,16 @@ public partial class FoodEditVM : DialogViewModel
             [],
             f =>
             {
-                if (SearchTargets.SelectedItem is FoodSearchTarget.ID)
-                    return f.ID.Contains(Search, StringComparison.OrdinalIgnoreCase);
-                else if (SearchTargets.SelectedItem is FoodSearchTarget.Name)
-                    return f.Name.Contains(Search, StringComparison.OrdinalIgnoreCase);
-                else if (SearchTargets.SelectedItem is FoodSearchTarget.Type)
-                    return f.Type.ToString().Contains(Search, StringComparison.OrdinalIgnoreCase);
-                else if (SearchTargets.SelectedItem is FoodSearchTarget.Graph)
-                    return f.Graph.Contains(Search, StringComparison.OrdinalIgnoreCase);
-                return false;
+                return SearchTargets.SelectedItem switch
+                {
+                    FoodSearchTarget.ID
+                        => f.ID.Contains(Search, StringComparison.OrdinalIgnoreCase),
+                    FoodSearchTarget.Name
+                        => f.Name.Contains(Search, StringComparison.OrdinalIgnoreCase),
+                    FoodSearchTarget.Graph
+                        => f.Graph.Contains(Search, StringComparison.OrdinalIgnoreCase),
+                    _ => false,
+                };
             }
         );
 
@@ -97,7 +98,7 @@ public partial class FoodEditVM : DialogViewModel
         {
             DialogService.ShowMessageBoxX(
                 this,
-                "此ID已存在",
+                "此ID已存在".Translate(),
                 "数据错误".Translate(),
                 MessageBoxButton.Ok,
                 MessageBoxImage.Warning
@@ -140,8 +141,8 @@ public partial class FoodEditVM : DialogViewModel
     public ObservableSelectableSet<
         FoodSearchTarget,
         FrozenSet<FoodSearchTarget>
-    > SearchTargets { get; } = new(EnumInfo<FoodSearchTarget>.Values, FoodSearchTarget.ID);
-    public FoodModel OldFood { get; private set; }
+    > SearchTargets { get; } = new(EnumInfo<FoodSearchTarget>.Values);
+    public FoodModel OldFood { get; private set; } = null!;
 
     [ReactiveProperty]
     public FoodModel Food { get; private set; } = null!;
@@ -225,6 +226,7 @@ public partial class FoodEditVM : DialogViewModel
     [ReactiveCommand]
     private async void Add()
     {
+        ModInfo.TempI18nResource.ClearCultureData();
         Food = new() { I18nResource = ModInfo.I18nResource };
         await DialogService.ShowSingletonDialogAsync(this, this);
         if (DialogResult is not true)
@@ -233,6 +235,8 @@ public partial class FoodEditVM : DialogViewModel
         }
         else
         {
+            Food.I18nResource.CopyDataTo(ModInfo.I18nResource, true);
+            Food.I18nResource = ModInfo.I18nResource;
             Foods.Add(Food);
             if (this.Log().Level is LogLevel.Info)
                 this.Log().Info("添加新食物 {food}", Food.ID);
@@ -327,11 +331,6 @@ public enum FoodSearchTarget
     /// 名称
     /// </summary>
     Name,
-
-    /// <summary>
-    /// 类型
-    /// </summary>
-    Type,
 
     /// <summary>
     /// 指定动画

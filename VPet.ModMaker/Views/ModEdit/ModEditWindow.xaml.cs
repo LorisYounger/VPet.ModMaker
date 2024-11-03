@@ -60,20 +60,40 @@ public partial class ModEditWindow : WindowX, IPageLocator
     /// </summary>
     public ModEditVM ViewModel => (ModEditVM)DataContext;
     #region Food
-    public FoodPage FoodPage { get; set; } = null!;
-    public FoodEditWindow FoodEditWindow { get; set; } = null!;
-    public FoodEditVM FoodEditVM { get; set; } = null!;
+    public FoodPage FoodPage { get; private set; } = null!;
+    public FoodEditVM FoodEditVM { get; private set; } = null!;
     #endregion
-    public LowTextPage LowTextPage { get; } = null!;
-    public ClickTextPage ClickTextPage { get; } = null!;
-    public SelectTextPage SelectTextPage { get; } = null!;
-    public PetPage PetPage { get; } = null!;
-    public WorkPage WorkPage { get; } = null!;
-    public MovePage MovePage { get; } = null!;
-    public AnimePage AnimePage { get; } = null!;
-    public I18nEditWindow I18nEditWindow { get; } = null!;
+    #region ClickText
+    public ClickTextPage ClickTextPage { get; private set; } = null!;
+    public ClickTextEditVM ClickTextEditVM { get; private set; } = null!;
+    #endregion
+    #region LowText
+    public LowTextPage LowTextPage { get; private set; } = null!;
+    public LowTextEditVM LowTextEditVM { get; private set; } = null!;
+    #endregion
+    #region SelectText
+    public SelectTextPage SelectTextPage { get; private set; } = null!;
+    public SelectTextEditVM SelectTextEditVM { get; private set; } = null!;
+    #endregion
+    #region Pet
+    public PetPage PetPage { get; private set; } = null!;
+    public PetEditVM PetEditVM { get; private set; } = null!;
+    #endregion
+    #region Work
+    public WorkPage WorkPage { get; private set; } = null!;
+    public WorkEditVM WorkEditVM { get; private set; } = null!;
+    #endregion
+    #region Move
+    public MovePage MovePage { get; private set; } = null!;
+    public MoveEditVM MoveEditVM { get; private set; } = null!;
+    #endregion
+    #region Anime
+    public AnimePage AnimePage { get; private set; } = null!;
+    public AnimeEditWindowVM AnimeEditWindowVM { get; private set; } = null!;
+    #endregion
+    //public I18nEditWindow I18nEditWindow { get; } = null!;
 
-    public AddCulturePage AddCultureWindow { get; private set; } = null!;
+    //public AddCulturePage AddCultureWindow { get; private set; } = null!;
 
     /// <inheritdoc/>
     public Dictionary<Type, Func<Window, Page?>> PageLocatorByType { get; } =
@@ -81,7 +101,31 @@ public partial class ModEditWindow : WindowX, IPageLocator
             [
                 KeyValuePair.Create<Type, Func<Window, Page?>>(
                     typeof(FoodPage),
-                    x => (Page)((ModEditWindow)x).Frame_Food.Content
+                    x => (Page)((ModEditWindow)x).ContentControl_Food.Content
+                ),
+                KeyValuePair.Create<Type, Func<Window, Page?>>(
+                    typeof(ClickTextPage),
+                    x => (Page)((ModEditWindow)x).ContentControl_ClickText.Content
+                ),
+                KeyValuePair.Create<Type, Func<Window, Page?>>(
+                    typeof(LowTextPage),
+                    x => (Page)((ModEditWindow)x).ContentControl_LowText.Content
+                ),
+                KeyValuePair.Create<Type, Func<Window, Page?>>(
+                    typeof(SelectTextPage),
+                    x => (Page)((ModEditWindow)x).ContentControl_SelectText.Content
+                ),
+                KeyValuePair.Create<Type, Func<Window, Page?>>(
+                    typeof(PetPage),
+                    x => (Page)((ModEditWindow)x).ContentControl_Pet.Content
+                ),
+                KeyValuePair.Create<Type, Func<Window, Page?>>(
+                    typeof(WorkPage),
+                    x => (Page)((ModEditWindow)x).ContentControl_Work.Content
+                ),
+                KeyValuePair.Create<Type, Func<Window, Page?>>(
+                    typeof(AnimePage),
+                    x => (Page)((ModEditWindow)x).ContentControl_Anime.Content
                 )
             ]
         );
@@ -122,13 +166,70 @@ public partial class ModEditWindow : WindowX, IPageLocator
 
     public void InitializePage()
     {
-        Frame_Food_Loaded(null!, null!);
+        ContentControl_Food_Loaded(null!, null!);
+        ContentControl_ClickText_Loaded(null!, null!);
+        ContentControl_LowText_Loaded(null!, null!);
+        ContentControl_SelectText_Loaded(null!, null!);
+        ContentControl_Pet_Loaded(null!, null!);
+        ContentControl_Work_Loaded(null!, null!);
+        ContentControl_Move_Loaded(null!, null!);
+        ContentControl_Anime_Loaded(null!, null!);
     }
 
-    private void Frame_Food_Loaded(object sender, RoutedEventArgs e)
+    private void ContentControl_Food_Loaded(object sender, RoutedEventArgs e)
     {
         FoodEditVM ??= new() { ModInfo = ViewModel.ModInfo };
         FoodPage ??= new() { DataContext = FoodEditVM };
-        Frame_Food.Content ??= FoodPage;
+        ContentControl_Food.Content ??= FoodPage;
+    }
+
+    private void ContentControl_ClickText_Loaded(object sender, RoutedEventArgs e)
+    {
+        ClickTextEditVM ??= new() { ModInfo = ViewModel.ModInfo };
+        ClickTextPage ??= new() { DataContext = ClickTextEditVM };
+        ContentControl_ClickText.Content ??= ClickTextPage;
+    }
+
+    private void ContentControl_LowText_Loaded(object sender, RoutedEventArgs e)
+    {
+        LowTextEditVM ??= new() { ModInfo = ViewModel.ModInfo };
+        LowTextPage ??= new() { DataContext = LowTextEditVM };
+        ContentControl_LowText.Content ??= LowTextPage;
+    }
+
+    private void ContentControl_SelectText_Loaded(object sender, RoutedEventArgs e)
+    {
+        SelectTextEditVM ??= new() { ModInfo = ViewModel.ModInfo };
+        SelectTextPage ??= new() { DataContext = SelectTextEditVM };
+        ContentControl_SelectText.Content ??= SelectTextPage;
+    }
+
+    private void ContentControl_Pet_Loaded(object sender, RoutedEventArgs e)
+    {
+        PetEditVM ??= new() { ModInfo = ViewModel.ModInfo };
+        PetPage ??= new() { DataContext = PetEditVM };
+        ContentControl_Pet.Content ??= PetPage;
+    }
+
+    private void ContentControl_Work_Loaded(object sender, RoutedEventArgs e)
+    {
+        WorkEditVM ??= new() { ModInfo = ViewModel.ModInfo };
+        WorkPage ??= new() { DataContext = WorkEditVM };
+        ContentControl_Work.Content ??= WorkPage;
+    }
+
+    private void ContentControl_Move_Loaded(object sender, RoutedEventArgs e)
+    {
+        MoveEditVM ??= new() { ModInfo = ViewModel.ModInfo };
+        MovePage ??= new() { DataContext = MoveEditVM };
+        ContentControl_Move.Content ??= MovePage;
+    }
+
+    private void ContentControl_Anime_Loaded(object sender, RoutedEventArgs e)
+    {
+        //TODO:
+        //AnimeEditVM ??= new() { ModInfo = ViewModel.ModInfo };
+        //AnimePage ??= new() { DataContext = AnimeEditVM };
+        //ContentControl_Anime.Content ??= AnimePage;
     }
 }

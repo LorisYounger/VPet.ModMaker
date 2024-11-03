@@ -23,7 +23,7 @@ namespace VPet.ModMaker.Views.ModEdit;
 /// <summary>
 /// Page_Food.xaml 的交互逻辑
 /// </summary>
-public partial class FoodPage : Page
+public partial class FoodPage : UserControl
 {
     public FoodEditVM ViewModel => (FoodEditVM)DataContext;
 

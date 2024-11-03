@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using LinePutScript.Localization.WPF;
+using Panuon.WPF.UI;
 using VPet.ModMaker.Models;
 using VPet.ModMaker.ViewModels.ModEdit;
 
@@ -22,13 +23,11 @@ namespace VPet.ModMaker.Views.ModEdit;
 /// </summary>
 public partial class WorkEditWindow : Window
 {
-    public bool IsCancel { get; private set; } = true;
     public WorkEditVM ViewModel => (WorkEditVM)DataContext;
 
     public WorkEditWindow()
     {
         InitializeComponent();
-        //this.SetDataContext<WorkEditVM>();
     }
 
     private void Button_Cancel_Click(object? sender, RoutedEventArgs e)
@@ -40,16 +39,21 @@ public partial class WorkEditWindow : Window
     {
         if (string.IsNullOrWhiteSpace(ViewModel.Work.ID))
         {
-            MessageBox.Show("ID不可为空".Translate(), "", MessageBoxButton.OK, MessageBoxImage.Warning);
+            MessageBoxX.Show(
+                "ID不可为空".Translate(),
+                "数据错误".Translate(),
+                MessageBoxButton.OK,
+                MessageBoxIcon.Warning
+            );
             return;
         }
         if (string.IsNullOrWhiteSpace(ViewModel.Work.Graph))
         {
-            MessageBox.Show(
+            MessageBoxX.Show(
                 "指定动画ID不可为空".Translate(),
-                "",
+                "数据错误".Translate(),
                 MessageBoxButton.OK,
-                MessageBoxImage.Warning
+                MessageBoxIcon.Warning
             );
             return;
         }
@@ -58,10 +62,14 @@ public partial class WorkEditWindow : Window
             && ViewModel.CurrentPet.Works.Any(i => i.ID == ViewModel.Work.ID)
         )
         {
-            MessageBox.Show("此ID已存在".Translate(), "", MessageBoxButton.OK, MessageBoxImage.Warning);
+            MessageBoxX.Show(
+                "此ID已存在".Translate(),
+                "数据错误".Translate(),
+                MessageBoxButton.OK,
+                MessageBoxIcon.Warning
+            );
             return;
         }
-        IsCancel = false;
         Close();
     }
 }

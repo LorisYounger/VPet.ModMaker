@@ -20,7 +20,7 @@ namespace VPet.ModMaker.Views.ModEdit;
 /// <summary>
 /// PetPage.xaml 的交互逻辑
 /// </summary>
-public partial class PetPage : Page
+public partial class PetPage : UserControl
 {
     public PetEditVM ViewModel => (PetEditVM)DataContext;
 

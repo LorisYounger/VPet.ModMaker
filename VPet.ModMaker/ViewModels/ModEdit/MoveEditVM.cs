@@ -44,7 +44,8 @@ public partial class MoveEditVM : ViewModelBase
     /// <summary>
     /// 模组信息
     /// </summary>
-    public ModInfoModel ModInfo { get; } = null!;
+    [ReactiveProperty]
+    public ModInfoModel ModInfo { get; set; } = null!;
 
     /// <summary>
     /// 全部移动
@@ -59,7 +60,7 @@ public partial class MoveEditVM : ViewModelBase
     /// 当前宠物
     /// </summary>
     [ReactiveProperty]
-    public PetModel CurrentPet { get; set; }
+    public PetModel CurrentPet { get; set; } = null!;
 
     partial void OnCurrentPetChanged(PetModel oldValue, PetModel newValue)
     {

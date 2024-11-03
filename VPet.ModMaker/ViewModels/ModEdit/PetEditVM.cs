@@ -21,9 +21,9 @@ namespace VPet.ModMaker.ViewModels.ModEdit;
 
 public partial class PetEditVM : ViewModelBase
 {
-    public PetEditVM(ModInfoModel modInfo)
+    public PetEditVM()
     {
-        ModInfo = modInfo;
+        //ModInfo = modInfo;
         Pet = new() { I18nResource = ModInfo.I18nResource };
         Pets = new(
             new(ModInfo.Pets),
@@ -52,7 +52,8 @@ public partial class PetEditVM : ViewModelBase
     /// <summary>
     /// 模组信息
     /// </summary>
-    public ModInfoModel ModInfo { get; }
+    [ReactiveProperty]
+    public ModInfoModel ModInfo { get; set; } = null!;
 
     public FilterListWrapper<
         PetModel,

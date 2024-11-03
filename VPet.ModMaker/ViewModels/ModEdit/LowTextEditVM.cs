@@ -39,7 +39,8 @@ public partial class LowTextEditVM : ViewModelBase
     /// <summary>
     /// 模组信息
     /// </summary>
-    public ModInfoModel ModInfo { get; } = null!;
+    [ReactiveProperty]
+    public ModInfoModel ModInfo { get; set; } = null!;
 
     /// <summary>
     /// 低状态文本

@@ -23,7 +23,7 @@ namespace VPet.ModMaker.Views.ModEdit;
 /// <summary>
 /// Page_LowText.xaml 的交互逻辑
 /// </summary>
-public partial class LowTextPage : Page
+public partial class LowTextPage : UserControl
 {
     public LowTextEditVM ViewModel => (LowTextEditVM)DataContext;
 

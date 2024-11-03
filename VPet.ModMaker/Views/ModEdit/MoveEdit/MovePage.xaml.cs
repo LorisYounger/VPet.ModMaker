@@ -20,7 +20,7 @@ namespace VPet.ModMaker.Views.ModEdit;
 /// <summary>
 /// MovePage.xaml 的交互逻辑
 /// </summary>
-public partial class MovePage : Page
+public partial class MovePage : UserControl
 {
     public MovePage()
     {

@@ -20,7 +20,7 @@ namespace VPet.ModMaker.Views.ModEdit;
 /// <summary>
 /// WorkPage.xaml 的交互逻辑
 /// </summary>
-public partial class WorkPage : Page
+public partial class WorkPage : UserControl
 {
     public WorkEditVM ViewModel => (WorkEditVM)DataContext;
 

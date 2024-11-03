@@ -20,7 +20,7 @@ namespace VPet.ModMaker.Views.ModEdit;
 /// <summary>
 /// AnimePage.xaml 的交互逻辑
 /// </summary>
-public partial class AnimePage : Page
+public partial class AnimePage : UserControl
 {
     public AnimePage()
     {

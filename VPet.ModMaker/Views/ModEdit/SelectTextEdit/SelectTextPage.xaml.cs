@@ -20,7 +20,7 @@ namespace VPet.ModMaker.Views.ModEdit;
 /// <summary>
 /// SelectTextPage.xaml 的交互逻辑
 /// </summary>
-public partial class SelectTextPage : Page
+public partial class SelectTextPage : UserControl
 {
     public SelectTextEditVM ViewModel => (SelectTextEditVM)DataContext;
 

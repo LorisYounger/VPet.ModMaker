@@ -20,7 +20,7 @@ namespace VPet.ModMaker.Views.ModEdit;
 /// <summary>
 /// ClickTextPage.xaml 的交互逻辑
 /// </summary>
-public partial class ClickTextPage : Page
+public partial class ClickTextPage : UserControl
 {
     public ClickTextEditVM ViewModel => (ClickTextEditVM)DataContext;
 

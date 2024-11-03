@@ -21,7 +21,7 @@ namespace VPet.ModMaker.Models;
 /// <summary>
 /// 工作模型
 /// </summary>
-[MapTo(typeof(GraphHelper.Work), MapConfig = typeof(WorkModelMapToWorkConfig))]
+[MapTo(typeof(GraphHelper.Work), MapConfig = typeof(WorkModelMapToWorkConfig), ScrutinyMode = true)]
 [MapFrom(typeof(GraphHelper.Work), MapConfig = typeof(WorkModelMapFromWorkConfig))]
 [MapFrom(typeof(WorkModel), MapConfig = typeof(WorkModelMapFromWorkModelConfig))]
 public partial class WorkModel : ViewModelBase
@@ -58,6 +58,7 @@ public partial class WorkModel : ViewModelBase
     [ReactiveProperty]
     public required I18nResource<string, string> I18nResource { get; set; }
 
+    [MapIgnoreProperty]
     [NotifyPropertyChangeFrom("")]
     public I18nObject<string, string> I18nObject => new(this);
 
@@ -139,10 +140,10 @@ public partial class WorkModel : ViewModelBase
     [ReactiveProperty]
     public double FinishBonus { get; set; }
 
-    //TODO: IsOverLoad不要使用ToWork 性能不好
     /// <summary>
     /// 是否超模
     /// </summary>
+    [MapIgnoreProperty]
     [NotifyPropertyChangeFrom(
         nameof(WorkType),
         nameof(MoneyBase),
@@ -290,6 +291,45 @@ internal class WorkModelMapFromWorkConfig : MapConfig<WorkModel, GraphHelper.Wor
     public WorkModelMapFromWorkConfig()
     {
         AddMap(
+            x => x.BorderBrush,
+            (s, t) =>
+            {
+                s.BorderBrush = new((Color)ColorConverter.ConvertFromString("#FF" + t.BorderBrush));
+            }
+        );
+        AddMap(
+            x => x.Background,
+            (s, t) =>
+            {
+                s.Background = new((Color)ColorConverter.ConvertFromString("#FF" + t.Background));
+            }
+        );
+        AddMap(
+            x => x.Foreground,
+            (s, t) =>
+            {
+                s.Foreground = new((Color)ColorConverter.ConvertFromString("#FF" + t.Foreground));
+            }
+        );
+        AddMap(
+            x => x.ButtonBackground,
+            (s, t) =>
+            {
+                s.ButtonBackground = new(
+                    (Color)ColorConverter.ConvertFromString("#FF" + t.ButtonBackground)
+                );
+            }
+        );
+        AddMap(
+            x => x.ButtonForeground,
+            (s, t) =>
+            {
+                s.ButtonForeground = new(
+                    (Color)ColorConverter.ConvertFromString("#FF" + t.ButtonForeground)
+                );
+            }
+        );
+        AddMap(
             x => x.Left,
             (s, t) =>
             {
@@ -311,28 +351,47 @@ internal class WorkModelMapFromWorkConfig : MapConfig<WorkModel, GraphHelper.Wor
             }
         );
     }
-
-    public override void EndMapAction(WorkModel source, GraphHelper.Work target)
-    {
-        source.BorderBrush = new(
-            (Color)ColorConverter.ConvertFromString("#FF" + target.BorderBrush)
-        );
-        source.Background = new((Color)ColorConverter.ConvertFromString("#FF" + target.Background));
-        source.Foreground = new((Color)ColorConverter.ConvertFromString("#FF" + target.Foreground));
-        source.ButtonBackground = new(
-            (Color)ColorConverter.ConvertFromString("#AA" + target.ButtonBackground)
-        );
-        source.ButtonForeground = new(
-            (Color)ColorConverter.ConvertFromString("#FF" + target.ButtonForeground)
-        );
-        return;
-    }
 }
 
 internal class WorkModelMapToWorkConfig : MapConfig<WorkModel, GraphHelper.Work>
 {
     public WorkModelMapToWorkConfig()
     {
+        AddMap(
+            x => x.BorderBrush,
+            (s, t) =>
+            {
+                t.BorderBrush = s.BorderBrush.ToString()[3..];
+            }
+        );
+        AddMap(
+            x => x.Background,
+            (s, t) =>
+            {
+                t.Background = s.Background.ToString()[3..];
+            }
+        );
+        AddMap(
+            x => x.ButtonBackground,
+            (s, t) =>
+            {
+                t.ButtonBackground = s.ButtonBackground.ToString()[3..];
+            }
+        );
+        AddMap(
+            x => x.ButtonForeground,
+            (s, t) =>
+            {
+                t.ButtonForeground = s.ButtonForeground.ToString()[3..];
+            }
+        );
+        AddMap(
+            x => x.Foreground,
+            (s, t) =>
+            {
+                t.Foreground = s.Foreground.ToString()[3..];
+            }
+        );
         AddMap(
             x => x.Left,
             (s, t) =>
@@ -354,14 +413,5 @@ internal class WorkModelMapToWorkConfig : MapConfig<WorkModel, GraphHelper.Work>
                 t.Width = s.Width;
             }
         );
-    }
-
-    public override void EndMapAction(WorkModel source, GraphHelper.Work target)
-    {
-        target.BorderBrush = source.BorderBrush.ToString()[3..];
-        target.Background = source.Background.ToString()[3..];
-        target.ButtonBackground = source.ButtonBackground.ToString()[3..];
-        target.ButtonForeground = source.ButtonForeground.ToString()[3..];
-        target.Foreground = source.Foreground.ToString()[3..];
     }
 }

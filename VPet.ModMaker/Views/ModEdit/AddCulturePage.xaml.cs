@@ -28,7 +28,7 @@ namespace VPet.ModMaker.Views.ModEdit;
 /// <summary>
 /// Window_AddLang.xaml 的交互逻辑
 /// </summary>
-public partial class AddCulturePage : Page, IDialogPage<Window>
+public partial class AddCulturePage : UserControl, IDialogPage<Window>
 {
     public bool IsCancel { get; private set; } = true;
 

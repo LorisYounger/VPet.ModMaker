@@ -1,4 +1,4 @@
-﻿<Page
+﻿<UserControl
   x:Class="VPet.ModMaker.Views.ModEdit.FoodPage"
   xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
   xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
@@ -8,7 +8,6 @@
   xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
   xmlns:pu="https://opensource.panuon.com/wpf-ui"
   xmlns:vm="clr-namespace:VPet.ModMaker.ViewModels.ModEdit"
-  Title="FoodPage"
   d:DataContext="{d:DesignInstance Type=vm:FoodEditVM}"
   d:DesignHeight="450"
   d:DesignWidth="800"
@@ -179,4 +178,4 @@
       Content="➕"
       Style="{StaticResource AddButton}" />
   </Grid>
-</Page>
+</UserControl>

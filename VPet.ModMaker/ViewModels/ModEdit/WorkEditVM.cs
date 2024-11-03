@@ -25,9 +25,9 @@ namespace VPet.ModMaker.ViewModels.ModEdit;
 
 public partial class WorkEditVM : ViewModelBase
 {
-    public WorkEditVM(ModInfoModel modInfo)
+    public WorkEditVM()
     {
-        ModInfo = modInfo;
+        //ModInfo = modInfo;
         Works = new([], [], f => f.ID.Contains(Search, StringComparison.OrdinalIgnoreCase));
 
         if (ModInfo.Pets.HasValue())
@@ -58,7 +58,8 @@ public partial class WorkEditVM : ViewModelBase
     /// <summary>
     /// 模组信息
     /// </summary>
-    public ModInfoModel ModInfo { get; }
+    [ReactiveProperty]
+    public ModInfoModel ModInfo { get; set; } = null!;
 
     /// <summary>
     /// I18n资源

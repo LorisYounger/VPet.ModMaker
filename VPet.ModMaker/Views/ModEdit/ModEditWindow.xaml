@@ -143,7 +143,7 @@
                 <Binding Path="ModInfo.Foods.Count" />
               </MultiBinding>
             </TabItem.Header>
-            <Frame x:Name="Frame_Food" Loaded="Frame_Food_Loaded" />
+            <ContentControl x:Name="ContentControl_Food" Loaded="ContentControl_Food_Loaded" />
           </TabItem>
           <TabItem Tag="{ll:Str 点击文本}">
             <TabItem.Header>
@@ -152,7 +152,7 @@
                 <Binding Path="ModInfo.ClickTexts.Count" />
               </MultiBinding>
             </TabItem.Header>
-            <Frame Content="{Binding ModEditWindow.ClickTextPage}" />
+            <ContentControl x:Name="ContentControl_ClickText" Loaded="ContentControl_ClickText_Loaded" />
           </TabItem>
           <TabItem Tag="{ll:Str 低状态文本}">
             <TabItem.Header>
@@ -161,7 +161,7 @@
                 <Binding Path="ModInfo.LowTexts.Count" />
               </MultiBinding>
             </TabItem.Header>
-            <Frame Content="{Binding ModEditWindow.LowTextPage}" />
+            <ContentControl x:Name="ContentControl_LowText" Loaded="ContentControl_LowText_Loaded" />
           </TabItem>
           <TabItem Tag="{ll:Str 选择文本}">
             <TabItem.Header>
@@ -170,7 +170,7 @@
                 <Binding Path="ModInfo.SelectTexts.Count" />
               </MultiBinding>
             </TabItem.Header>
-            <Frame Content="{Binding ModEditWindow.SelectTextPage}" />
+            <ContentControl x:Name="ContentControl_SelectText" Loaded="ContentControl_SelectText_Loaded" />
           </TabItem>
           <TabItem Tag="{ll:Str 宠物}">
             <TabItem.Header>
@@ -179,16 +179,16 @@
                 <Binding Path="ModInfo.PetDisplayedCount" />
               </MultiBinding>
             </TabItem.Header>
-            <Frame Content="{Binding ModEditWindow.PetPage}" />
+            <ContentControl x:Name="ContentControl_Pet" Loaded="ContentControl_Pet_Loaded" />
           </TabItem>
           <TabItem Tag="{ll:Str 工作}">
             <TabItem.Header>
               <MultiBinding Converter="{StaticResource StringFormatConverter}" ConverterParameter="{}{0} ({1})">
                 <Binding Path="Tag" RelativeSource="{RelativeSource Mode=Self}" />
-                <Binding Path="ModEditWindow.WorkPage.ViewModel.CurrentPet.Works.Count" />
+                <Binding Path="WorkPage.ViewModel.CurrentPet.Works.Count" />
               </MultiBinding>
             </TabItem.Header>
-            <Frame Content="{Binding ModEditWindow.WorkPage}" />
+            <ContentControl x:Name="ContentControl_Work" Loaded="ContentControl_Work_Loaded" />
           </TabItem>
           <TabItem Tag="{ll:Str 移动}">
             <TabItem.Header>
@@ -197,7 +197,7 @@
                 <Binding Path="ModEditWindow.MovePage.ViewModel.CurrentPet.Moves.Count" />
               </MultiBinding>
             </TabItem.Header>
-            <Frame Content="{Binding ModEditWindow.MovePage}" />
+            <ContentControl x:Name="ContentControl_Move" Loaded="ContentControl_Move_Loaded" />
           </TabItem>
           <TabItem Tag="{ll:Str 动画}">
             <TabItem.Header>
@@ -206,7 +206,7 @@
                 <Binding Path="ModEditWindow.AnimePage.ViewModel.CurrentPet.AnimeCount" />
               </MultiBinding>
             </TabItem.Header>
-            <Frame Content="{Binding ModEditWindow.AnimePage}" />
+            <ContentControl x:Name="ContentControl_Anime" Loaded="ContentControl_Anime_Loaded" />
           </TabItem>
           <!--<TabItem Header="物品 (0)" Tag="{ll:Str 物品}">
             <Grid>
