@@ -87,8 +87,6 @@ public partial class ModInfoModel : ViewModelBase
         this.Log().Info("载入点击文本, 数量: {count}", loader.ClickTexts.Count);
         foreach (var clickText in loader.ClickTexts)
         {
-            //if (string.IsNullOrEmpty(clickText.Text))
-            //    continue;
             try
             {
                 ClickTexts.Add(new(clickText) { I18nResource = I18nResource });

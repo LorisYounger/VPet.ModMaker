@@ -1,4 +1,4 @@
-﻿<Window
+﻿<pu:WindowX
   x:Class="VPet.ModMaker.Views.ModEdit.WorkEditWindow"
   xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
   xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
@@ -317,4 +317,4 @@
     </Grid>
     <ListBox Grid.Column="2" Template="{StaticResource ListBox_ShowLangs}" />
   </Grid>
-</Window>
+</pu:WindowX>

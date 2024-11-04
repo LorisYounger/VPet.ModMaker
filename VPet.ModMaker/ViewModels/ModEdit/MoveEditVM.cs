@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Reactive.Linq;
@@ -8,11 +9,17 @@ using System.Threading.Tasks;
 using System.Windows.Media.Imaging;
 using DynamicData.Binding;
 using HanumanInstitute.MvvmDialogs;
+using HanumanInstitute.MvvmDialogs.FrameworkDialogs;
+using HKW.HKWMapper;
 using HKW.HKWReactiveUI;
 using HKW.HKWUtils.Collections;
 using HKW.HKWUtils.Extensions;
 using HKW.HKWUtils.Observable;
+using HKW.MVVMDialogs;
 using HKW.WPF.Extensions;
+using HKW.WPF.MVVMDialogs;
+using LinePutScript;
+using LinePutScript.Converter;
 using LinePutScript.Localization.WPF;
 using Microsoft.Win32;
 using ReactiveUI;
@@ -21,7 +28,7 @@ using VPet.ModMaker.Models;
 
 namespace VPet.ModMaker.ViewModels.ModEdit;
 
-public partial class MoveEditVM : ViewModelBase
+public partial class MoveEditVM : DialogViewModel
 {
     private static IDialogService DialogService => Locator.Current.GetService<IDialogService>()!;
 
@@ -29,16 +36,23 @@ public partial class MoveEditVM : ViewModelBase
     {
         Moves = new([], [], f => f.Graph.Contains(Search, StringComparison.OrdinalIgnoreCase));
 
-        //if (Pets.HasValue())
-        //    CurrentPet = Pets.FirstOrDefault(
-        //        m => m.FromMain is false && m.Moves.HasValue(),
-        //        Pets.First()
-        //    );
         this.WhenValueChanged(x => x.Search)
             .Throttle(TimeSpan.FromSeconds(1), RxApp.TaskpoolScheduler)
             .DistinctUntilChanged()
             .ObserveOn(RxApp.MainThreadScheduler)
             .Subscribe(_ => Moves.Refresh());
+
+        Closing += MoveEditVM_Closing;
+    }
+
+    private void MoveEditVM_Closing(object? sender, System.ComponentModel.CancelEventArgs e)
+    {
+        if (string.IsNullOrWhiteSpace(Move.Graph))
+        {
+            DialogService.ShowMessageBoxX(this, "指定动画不可为空".Translate(), "数据错误".Translate());
+            e.Cancel = true;
+            return;
+        }
     }
 
     /// <summary>
@@ -46,6 +60,33 @@ public partial class MoveEditVM : ViewModelBase
     /// </summary>
     [ReactiveProperty]
     public ModInfoModel ModInfo { get; set; } = null!;
+
+    partial void OnModInfoChanged(ModInfoModel oldValue, ModInfoModel newValue)
+    {
+        if (oldValue is not null)
+        {
+            oldValue.PropertyChanged -= ModInfo_PropertyChanged;
+        }
+        if (newValue is not null)
+        {
+            if (newValue.Pets.HasValue())
+                CurrentPet = newValue.Pets.FirstOrDefault(
+                    m => m.FromMain is false && m.Moves.HasValue(),
+                    newValue.Pets.First()
+                );
+            newValue.PropertyChanged -= ModInfo_PropertyChanged;
+            newValue.PropertyChanged += ModInfo_PropertyChanged;
+        }
+    }
+
+    private void ModInfo_PropertyChanged(object? sender, PropertyChangedEventArgs e)
+    {
+        if (e.PropertyName == nameof(ModInfoModel.ShowMainPet))
+        {
+            if (CurrentPet?.FromMain is false)
+                CurrentPet = null!;
+        }
+    }
 
     /// <summary>
     /// 全部移动
@@ -64,13 +105,13 @@ public partial class MoveEditVM : ViewModelBase
 
     partial void OnCurrentPetChanged(PetModel oldValue, PetModel newValue)
     {
-        if (oldValue is not null)
-            Moves.BaseList.BindingList(oldValue.Moves, true);
+        Moves.AutoFilter = false;
         Moves.Clear();
         if (newValue is null)
             return;
-        Moves.AddRange(CurrentPet.Moves);
-        Moves.BaseList.BindingList(CurrentPet.Moves);
+        Moves.AddRange(newValue.Moves);
+        Search = string.Empty;
+        Moves.AutoFilter = true;
     }
 
     /// <summary>
@@ -140,15 +181,22 @@ public partial class MoveEditVM : ViewModelBase
     /// 添加
     /// </summary>
     [ReactiveCommand]
-    private void Add()
+    private async void Add()
     {
-        //var window = new MoveEditWindow();
-        //var vm = window.ViewModel;
-        //vm.CurrentPet = CurrentPet;
-        //window.ShowDialog();
-        //if (window.IsCancel)
-        //    return;
-        //Moves.Add(vm.Move);
+        await DialogService.ShowSingletonDialogAsync(this, this);
+        if (DialogResult is not true)
+            return;
+
+        Moves.Add(Move);
+        if (this.Log().Level is LogLevel.Info)
+            this.Log().Info("添加新移动 {move}", Move.Graph);
+        else
+            this.Log()
+                .Debug(
+                    "添加新移动 {$move}",
+                    LPSConvert.SerializeObjectToLine<Line>(Move.MapToMove(new()), "Move")
+                );
+        Reset();
     }
 
     /// <summary>
@@ -156,17 +204,17 @@ public partial class MoveEditVM : ViewModelBase
     /// </summary>
     /// <param name="model">模型</param>
     [ReactiveCommand]
-    public void Edit(MoveModel model)
+    public async void Edit(MoveModel model)
     {
-        //var window = new MoveEditWindow();
-        //var vm = window.ViewModel;
-        //vm.CurrentPet = CurrentPet;
-        //vm.OldMove = model;
-        //var newMove = vm.Move = new(model);
-        //window.ShowDialog();
-        //if (window.IsCancel)
-        //    return;
-        //Moves[Moves.IndexOf(model)] = newMove;
+        OldMove = model;
+        var newModel = new MoveModel(model);
+        Move = newModel;
+        await DialogService.ShowDialogAsync(this, this);
+        if (DialogResult is not true)
+            return;
+        Moves[Moves.IndexOf(model)] = newModel;
+        this.Log().Info("编辑移动 {oldMove} => {newMove}", OldMove.Graph, Move.Graph);
+        Reset();
     }
 
     /// <summary>
@@ -176,8 +224,25 @@ public partial class MoveEditVM : ViewModelBase
     [ReactiveCommand]
     private void Remove(MoveModel model)
     {
-        //if (MessageBox.Show("确定删除吗".Translate(), "", MessageBoxButton.YesNo) is MessageBoxResult.No)
-        //    return;
-        //Moves.Remove(model);
+        if (
+            DialogService.ShowMessageBoxX(
+                this,
+                "确定删除 {0} 吗".Translate(model.Graph),
+                "删除移动".Translate(),
+                MessageBoxButton.YesNo
+            )
+            is not true
+        )
+            return;
+        Moves.Remove(model);
+        this.Log().Info("删除移动 {move}", model.Graph);
+        Reset();
+    }
+
+    public void Reset()
+    {
+        Move = null!;
+        OldMove = null!;
+        DialogResult = false;
     }
 }

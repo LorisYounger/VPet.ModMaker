@@ -1,51 +1,128 @@
 ﻿using System;
+using System.Collections.Frozen;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Reactive.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.Windows;
 using System.Windows.Media.Imaging;
 using DynamicData.Binding;
+using HanumanInstitute.MvvmDialogs;
+using HanumanInstitute.MvvmDialogs.FrameworkDialogs;
+using HKW.HKWMapper;
 using HKW.HKWReactiveUI;
 using HKW.HKWUtils.Collections;
+using HKW.HKWUtils.Extensions;
 using HKW.HKWUtils.Observable;
+using HKW.MVVMDialogs;
 using HKW.WPF.Extensions;
+using HKW.WPF.MVVMDialogs;
+using LinePutScript;
+using LinePutScript.Converter;
 using LinePutScript.Localization.WPF;
 using Microsoft.Win32;
 using ReactiveUI;
+using Splat;
 using VPet.ModMaker.Models;
 
 namespace VPet.ModMaker.ViewModels.ModEdit;
 
-public partial class PetEditVM : ViewModelBase
+public partial class PetEditVM : DialogViewModel
 {
+    private static IDialogService DialogService => Locator.Current.GetService<IDialogService>()!;
+
     public PetEditVM()
     {
-        //ModInfo = modInfo;
-        Pet = new() { I18nResource = ModInfo.I18nResource };
         Pets = new(
-            new(ModInfo.Pets),
+            [],
             [],
             f =>
             {
                 if (ShowMainPet is false && f.FromMain)
                     return false;
-                return f.ID.Contains(Search, StringComparison.OrdinalIgnoreCase);
+                return SearchTargets.SelectedItem switch
+                {
+                    PetSearchTarget.ID => f.ID.Contains(Search, StringComparison.OrdinalIgnoreCase),
+                    PetSearchTarget.Name
+                        => f.Name.Contains(Search, StringComparison.OrdinalIgnoreCase),
+                    PetSearchTarget.PetName
+                        => f.PetName.Contains(Search, StringComparison.OrdinalIgnoreCase),
+                    PetSearchTarget.Description
+                        => f.Description.Contains(Search, StringComparison.OrdinalIgnoreCase),
+                    PetSearchTarget.Tags
+                        => f.Tags.Contains(Search, StringComparison.OrdinalIgnoreCase),
+                    _ => false
+                };
             }
         );
-        Pets.BaseList.WhenValueChanged(x => x.Count)
-            .Throttle(TimeSpan.FromSeconds(1), RxApp.TaskpoolScheduler)
-            .DistinctUntilChanged()
-            .ObserveOn(RxApp.MainThreadScheduler)
-            .Subscribe(_ => Pets.Refresh());
 
         this.WhenValueChanged(x => x.Search)
             .Throttle(TimeSpan.FromSeconds(1), RxApp.TaskpoolScheduler)
             .DistinctUntilChanged()
             .ObserveOn(RxApp.MainThreadScheduler)
             .Subscribe(_ => Pets.Refresh());
+        SearchTargets
+            .WhenValueChanged(x => x.SelectedItem)
+            .Throttle(TimeSpan.FromSeconds(1), RxApp.TaskpoolScheduler)
+            .DistinctUntilChanged()
+            .ObserveOn(RxApp.MainThreadScheduler)
+            .Subscribe(_ => Pets.Refresh());
+
+        Closing += PetEditVM_Closing;
+    }
+
+    private void PetEditVM_Closing(object? sender, System.ComponentModel.CancelEventArgs e)
+    {
+        if (string.IsNullOrWhiteSpace(Pet.ID))
+        {
+            DialogService.ShowMessageBoxX(
+                this,
+                "ID不可为空".Translate(),
+                "数据错误".Translate(),
+                MessageBoxButton.Ok,
+                MessageBoxImage.Warning
+            );
+            e.Cancel = true;
+            return;
+        }
+        if (Pet.Name is null)
+        {
+            DialogService.ShowMessageBoxX(
+                this,
+                "名称不可为空".Translate(),
+                "数据错误".Translate(),
+                MessageBoxButton.Ok,
+                MessageBoxImage.Warning
+            );
+            e.Cancel = true;
+            return;
+        }
+        if (Pet.PetName is null)
+        {
+            DialogService.ShowMessageBoxX(
+                this,
+                "宠物名称不可为空".Translate(),
+                "数据错误".Translate(),
+                MessageBoxButton.Ok,
+                MessageBoxImage.Warning
+            );
+            e.Cancel = true;
+            return;
+        }
+        if (OldPet?.ID != Pet.ID && ModInfo.Pets.Any(i => i.ID == Pet.ID))
+        {
+            DialogService.ShowMessageBoxX(
+                this,
+                "此ID已存在".Translate(),
+                "数据错误".Translate(),
+                MessageBoxButton.Ok,
+                MessageBoxImage.Warning
+            );
+            e.Cancel = true;
+            return;
+        }
+        DialogResult = true;
     }
 
     #region Property
@@ -55,15 +132,42 @@ public partial class PetEditVM : ViewModelBase
     [ReactiveProperty]
     public ModInfoModel ModInfo { get; set; } = null!;
 
+    partial void OnModInfoChanged(ModInfoModel oldValue, ModInfoModel newValue)
+    {
+        Pets.AutoFilter = false;
+        Pets.Clear();
+        if (newValue is null)
+            return;
+        Pets.AddRange(newValue.Pets);
+        Search = string.Empty;
+        SearchTargets.SelectedItem = PetSearchTarget.ID;
+        Pets.Refresh();
+        Pets.AutoFilter = true;
+    }
+
     public FilterListWrapper<
         PetModel,
         ObservableList<PetModel>,
         ObservableList<PetModel>
-    > Pets { get; set; }
+    > Pets { get; }
 
+    /// <summary>
+    /// 搜索
+    /// </summary>
     [ReactiveProperty]
     public string Search { get; set; } = string.Empty;
 
+    /// <summary>
+    /// 搜索目标
+    /// </summary>
+    public ObservableSelectableSet<
+        PetSearchTarget,
+        FrozenSet<PetSearchTarget>
+    > SearchTargets { get; } = new(EnumInfo<PetSearchTarget>.Values);
+
+    /// <summary>
+    /// 显示本体宠物
+    /// </summary>
     [ReactiveProperty]
     public bool ShowMainPet { get; set; }
 
@@ -77,10 +181,17 @@ public partial class PetEditVM : ViewModelBase
     /// I18n资源
     /// </summary>
     public I18nResource<string, string> I18nResource => ModInfo.I18nResource;
+
+    /// <summary>
+    /// 旧宠物
+    /// </summary>
     public PetModel? OldPet { get; set; }
 
+    /// <summary>
+    /// 宠物
+    /// </summary>
     [ReactiveProperty]
-    public PetModel Pet { get; set; }
+    public PetModel Pet { get; set; } = null!;
 
     [ReactiveProperty]
     public double BorderLength { get; set; } = 250;
@@ -98,52 +209,65 @@ public partial class PetEditVM : ViewModelBase
     }
 
     /// <summary>
-    /// 添加图片
+    /// 添加图像
     /// </summary>
     [ReactiveCommand]
     private void AddImage()
     {
-        var openFileDialog = new OpenFileDialog()
-        {
-            Title = "选择图片".Translate(),
-            Filter = $"图片|*.jpg;*.jpeg;*.png;*.bmp".Translate()
-        };
-        if (openFileDialog.ShowDialog() is true)
-        {
-            Image = NativeUtils.LoadImageToMemoryStream(openFileDialog.FileName);
-        }
+        var openFileDialog = DialogService.ShowOpenFileDialog(
+            this,
+            new()
+            {
+                Title = "选择图片".Translate(),
+                Filters = [new("图片".Translate(), ["jpg", "jpeg", "png", "bmp"])]
+            }
+        );
+        if (openFileDialog is null)
+            return;
+        Image = NativeUtils.LoadImageToMemoryStream(openFileDialog.LocalPath);
     }
 
     /// <summary>
-    /// 改变图片
+    /// 改变图像
     /// </summary>
     [ReactiveCommand]
     private void ChangeImage()
     {
-        var openFileDialog = new OpenFileDialog()
-        {
-            Title = "选择图片".Translate(),
-            Filter = $"图片|*.jpg;*.jpeg;*.png;*.bmp".Translate()
-        };
-        if (openFileDialog.ShowDialog() is true)
-        {
-            Image?.CloseStream();
-            Image = NativeUtils.LoadImageToMemoryStream(openFileDialog.FileName);
-        }
+        var openFileDialog = DialogService.ShowOpenFileDialog(
+            this,
+            new()
+            {
+                Title = "选择图片".Translate(),
+                Filters = [new("图片".Translate(), ["jpg", "jpeg", "png", "bmp"])]
+            }
+        );
+        if (openFileDialog is null)
+            return;
+        Image?.CloseStream();
+        Image = NativeUtils.LoadImageToMemoryStream(openFileDialog.LocalPath);
     }
 
     /// <summary>
     /// 添加
     /// </summary>
     [ReactiveCommand]
-    private void Add()
+    private async void Add()
     {
-        //var window = new PetEditWindow();
-        //var vm = window.ViewModel;
-        //window.ShowDialog();
-        //if (window.IsCancel)
-        //    return;
-        //Pets.Add(vm.Pet);
+        ModInfo.TempI18nResource.ClearCultureData();
+        Pet = new() { I18nResource = ModInfo.I18nResource };
+        await DialogService.ShowSingletonDialogAsync(this, this);
+        if (DialogResult is not true)
+        {
+            Pet.Close();
+        }
+        else
+        {
+            Pet.I18nResource.CopyDataTo(ModInfo.I18nResource, true);
+            Pet.I18nResource = ModInfo.I18nResource;
+            Pets.Add(Pet);
+            this.Log().Info("添加新宠物 {pet}", Pet.ID);
+        }
+        Reset();
     }
 
     /// <summary>
@@ -151,45 +275,43 @@ public partial class PetEditVM : ViewModelBase
     /// </summary>
     /// <param name="model">模型</param>
     [ReactiveCommand]
-    public void Edit(PetModel model)
+    public async void Edit(PetModel model)
     {
-        //if (model.FromMain)
-        //{
-        //    if (
-        //        MessageBox.Show("这是本体自带的宠物, 确定要编辑吗".Translate(), "", MessageBoxButton.YesNo)
-        //        is not MessageBoxResult.Yes
-        //    )
-        //        return;
-        //}
-        //var window = new PetEditWindow();
-        //var vm = window.ViewModel;
-        //vm.OldPet = model;
-        //var newModel = vm.Pet = new(model) { I18nResource = ModInfo.TempI18nResource };
-        //model.I18nResource.CopyDataTo(
-        //    newModel.I18nResource,
-        //    [model.ID, model.PetNameID, model.DescriptionID],
-        //    true
-        //);
-        //window.ShowDialog();
-        //if (window.IsCancel)
-        //{
-        //    newModel.I18nResource.ClearCultureData();
-        //    newModel.CloseI18nResource();
-        //    return;
-        //}
-        //newModel.I18nResource.CopyDataTo(ModInfoModel.Current.I18nResource, true);
-        //newModel.I18nResource = ModInfoModel.Current.I18nResource;
-        //if (model.FromMain)
-        //{
-        //    var index = Pets.IndexOf(model);
-        //    Pets.Remove(model);
-        //    Pets.Insert(index, newModel);
-        //}
-        //else
-        //{
-        //    Pets[Pets.IndexOf(model)] = newModel;
-        //}
-        //model.CloseI18nResource();
+        if (model.FromMain)
+        {
+            if (
+                DialogService.ShowMessageBoxX(
+                    "这是本体自带的宠物, 确定要编辑吗?".Translate(),
+                    "编辑".Translate(),
+                    MessageBoxButton.YesNo
+                )
+                is not true
+            )
+                return;
+        }
+        OldPet = model;
+        var newModel = new PetModel(model) { I18nResource = ModInfo.TempI18nResource };
+        model.I18nResource.CopyDataTo(
+            newModel.I18nResource,
+            [model.ID, model.PetNameID, model.DescriptionID],
+            true
+        );
+        Pet = newModel;
+        await DialogService.ShowDialogAsync(this, this);
+        if (DialogResult is not true)
+        {
+            newModel.I18nResource.ClearCultureData();
+            newModel.Close();
+        }
+        else
+        {
+            OldPet.Close();
+            newModel.I18nResource.CopyDataTo(ModInfo.I18nResource, true);
+            newModel.I18nResource = ModInfo.I18nResource;
+            Pets[Pets.IndexOf(model)] = newModel;
+            this.Log().Info("编辑宠物 {oldPet} => {newPet}", OldPet.ID, Pet.ID);
+        }
+        Reset();
     }
 
     /// <summary>
@@ -199,14 +321,57 @@ public partial class PetEditVM : ViewModelBase
     [ReactiveCommand]
     private void Remove(PetModel model)
     {
-        //if (model.FromMain)
-        //{
-        //    MessageBox.Show("这是本体自带的宠物, 无法删除".Translate());
-        //    return;
-        //}
-        //if (MessageBox.Show("确定删除吗".Translate(), "", MessageBoxButton.YesNo) is MessageBoxResult.No)
-        //    return;
-        //Pets.Remove(model);
-        //model.CloseI18nResource();
+        if (
+            DialogService.ShowMessageBoxX(
+                this,
+                "确定删除 {0} 吗".Translate(model.ID),
+                "删除宠物".Translate(),
+                MessageBoxButton.YesNo
+            )
+            is not true
+        )
+            return;
+        Pets.Remove(model);
+        model.Close();
+        this.Log().Info("删除宠物 {pet}", model.ID);
+        Reset();
     }
+
+    public void Reset()
+    {
+        Pet = null!;
+        OldPet = null!;
+        DialogResult = false;
+    }
+}
+
+/// <summary>
+/// 宠物搜索目标
+/// </summary>
+public enum PetSearchTarget
+{
+    /// <summary>
+    /// ID
+    /// </summary>
+    ID,
+
+    /// <summary>
+    /// 名称
+    /// </summary>
+    Name,
+
+    /// <summary>
+    /// 宠物名称
+    /// </summary>
+    PetName,
+
+    /// <summary>
+    /// 描述
+    /// </summary>
+    Description,
+
+    /// <summary>
+    /// 标签
+    /// </summary>
+    Tags,
 }

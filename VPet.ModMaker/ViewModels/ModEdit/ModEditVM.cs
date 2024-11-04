@@ -29,9 +29,9 @@ namespace VPet.ModMaker.ViewModels.ModEdit;
 
 public partial class ModEditVM : ViewModelBase
 {
-    public ModEditVM() { }
-
     private static IDialogService DialogService => Locator.Current.GetService<IDialogService>()!;
+
+    public ModEditVM() { }
 
     #region Property
     /// <summary>
@@ -56,13 +56,11 @@ public partial class ModEditVM : ViewModelBase
                 )
                     return;
                 AddCulture();
-                //if (string.IsNullOrWhiteSpace(ModInfo.ID))
-                //    return;
                 if (
                     ModInfo.I18nResource.Cultures.HasValue() is false
                     || DialogService.ShowMessageBoxX(
                         "需要将文化 {0} 设为主要文化吗?".Translate(ModInfo.I18nResource.Cultures.First().Name),
-                        "",
+                        "设置主要文化".Translate(),
                         MessageBoxButton.YesNo
                     )
                         is not true

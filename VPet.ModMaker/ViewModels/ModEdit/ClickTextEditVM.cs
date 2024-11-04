@@ -13,6 +13,7 @@ using HanumanInstitute.MvvmDialogs;
 using HanumanInstitute.MvvmDialogs.FrameworkDialogs;
 using HKW.HKWReactiveUI;
 using HKW.HKWUtils.Collections;
+using HKW.HKWUtils.Extensions;
 using HKW.HKWUtils.Observable;
 using HKW.MVVMDialogs;
 using HKW.WPF.MVVMDialogs;
@@ -43,7 +44,7 @@ public partial class ClickTextEditVM : DialogViewModel
                         => f.ID.Contains(Search, StringComparison.OrdinalIgnoreCase),
                     ClickTextSearchTarget.Working
                         => f.Working.Contains(Search, StringComparison.OrdinalIgnoreCase),
-                    _ => f.ID.Contains(Search, StringComparison.OrdinalIgnoreCase)
+                    _ => false
                 };
             }
         );
@@ -110,6 +111,19 @@ public partial class ClickTextEditVM : DialogViewModel
     [ReactiveProperty]
     public ModInfoModel ModInfo { get; set; } = null!;
 
+    partial void OnModInfoChanged(ModInfoModel oldValue, ModInfoModel newValue)
+    {
+        ClickTexts.AutoFilter = false;
+        ClickTexts.Clear();
+        if (newValue is null)
+            return;
+        ClickTexts.AddRange(newValue.ClickTexts);
+        Search = string.Empty;
+        SearchTargets.SelectedItem = ClickTextSearchTarget.ID;
+        ClickTexts.Refresh();
+        ClickTexts.AutoFilter = true;
+    }
+
     /// <summary>
     /// 显示的点击文本
     /// </summary>
@@ -125,6 +139,9 @@ public partial class ClickTextEditVM : DialogViewModel
     [ReactiveProperty]
     public string Search { get; set; } = string.Empty;
 
+    /// <summary>
+    /// 搜索目标
+    /// </summary>
     public ObservableSelectableSet<
         ClickTextSearchTarget,
         FrozenSet<ClickTextSearchTarget>
@@ -256,6 +273,11 @@ public enum ClickTextSearchTarget
     /// ID
     /// </summary>
     ID,
+
+    /// <summary>
+    /// 文本
+    /// </summary>
+    Text,
 
     /// <summary>
     /// 指定工作

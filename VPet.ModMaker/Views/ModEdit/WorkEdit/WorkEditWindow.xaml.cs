@@ -21,10 +21,8 @@ namespace VPet.ModMaker.Views.ModEdit;
 /// <summary>
 /// WorkEditWindow.xaml 的交互逻辑
 /// </summary>
-public partial class WorkEditWindow : Window
+public partial class WorkEditWindow : WindowX
 {
-    public WorkEditVM ViewModel => (WorkEditVM)DataContext;
-
     public WorkEditWindow()
     {
         InitializeComponent();
@@ -37,39 +35,6 @@ public partial class WorkEditWindow : Window
 
     private void Button_Yes_Click(object? sender, RoutedEventArgs e)
     {
-        if (string.IsNullOrWhiteSpace(ViewModel.Work.ID))
-        {
-            MessageBoxX.Show(
-                "ID不可为空".Translate(),
-                "数据错误".Translate(),
-                MessageBoxButton.OK,
-                MessageBoxIcon.Warning
-            );
-            return;
-        }
-        if (string.IsNullOrWhiteSpace(ViewModel.Work.Graph))
-        {
-            MessageBoxX.Show(
-                "指定动画ID不可为空".Translate(),
-                "数据错误".Translate(),
-                MessageBoxButton.OK,
-                MessageBoxIcon.Warning
-            );
-            return;
-        }
-        if (
-            ViewModel.OldWork?.ID != ViewModel.Work.ID
-            && ViewModel.CurrentPet.Works.Any(i => i.ID == ViewModel.Work.ID)
-        )
-        {
-            MessageBoxX.Show(
-                "此ID已存在".Translate(),
-                "数据错误".Translate(),
-                MessageBoxButton.OK,
-                MessageBoxIcon.Warning
-            );
-            return;
-        }
         Close();
     }
 }

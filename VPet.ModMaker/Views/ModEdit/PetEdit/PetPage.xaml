@@ -20,14 +20,21 @@
     <Grid>
       <Grid.ColumnDefinitions>
         <ColumnDefinition />
-        <ColumnDefinition Width="Auto" />
+        <ColumnDefinition Width=" Auto" MinWidth="150" />
+        <ColumnDefinition Width="Auto" MinWidth="150" />
       </Grid.ColumnDefinitions>
       <TextBox
-        pu:TextBoxHelper.Watermark="{ll:Str 搜索ID}"
+        pu:TextBoxHelper.Watermark="{ll:Str 搜索}"
         Style="{DynamicResource StandardTextBoxStyle}"
         Text="{Binding Search, UpdateSourceTrigger=PropertyChanged}" />
-      <pu:Switch
+      <ComboBox
         Grid.Column="1"
+        ItemsSource="{Binding SearchTargets, Converter={StaticResource EnumsToEnumInfosConverter}}"
+        SelectedItem="{Binding SearchTargets.SelectedItem, Converter={StaticResource EnumToEnumInfoConverter}}"
+        Style="{StaticResource StandardComboBoxStyle}"
+        ToolTip="{ll:Str 搜索目标}" />
+      <pu:Switch
+        Grid.Column="2"
         Content="{ll:Str 显示本体宠物}"
         IsChecked="{Binding ShowMainPet}" />
     </Grid>

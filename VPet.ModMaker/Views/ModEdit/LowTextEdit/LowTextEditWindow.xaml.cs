@@ -14,6 +14,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using HKW.WPF.Extensions;
 using LinePutScript.Localization.WPF;
+using Panuon.WPF.UI;
 using VPet.ModMaker.Models;
 using VPet.ModMaker.ViewModels.ModEdit;
 
@@ -22,15 +23,11 @@ namespace VPet.ModMaker.Views.ModEdit;
 /// <summary>
 /// Window_AddLowText.xaml 的交互逻辑
 /// </summary>
-public partial class LowTextEditWindow : Window
+public partial class LowTextEditWindow : WindowX
 {
-    public LowTextEditVM ViewModel => (LowTextEditVM)DataContext;
-    public bool IsCancel { get; private set; } = true;
-
     public LowTextEditWindow()
     {
         InitializeComponent();
-        this.SetViewModel<LowTextEditVM>();
     }
 
     private void Button_Cancel_Click(object? sender, RoutedEventArgs e)
@@ -40,25 +37,6 @@ public partial class LowTextEditWindow : Window
 
     private void Button_Yes_Click(object? sender, RoutedEventArgs e)
     {
-        if (string.IsNullOrWhiteSpace(ViewModel.LowText.ID))
-        {
-            MessageBox.Show("ID不可为空".Translate(), "", MessageBoxButton.OK, MessageBoxImage.Warning);
-            return;
-        }
-        if (
-            ViewModel.OldLowText?.ID != ViewModel.LowText.ID
-            && ViewModel.ModInfo.LowTexts.Any(i => i.ID == ViewModel.LowText.ID)
-        )
-        {
-            MessageBox.Show("此ID已存在".Translate(), "", MessageBoxButton.OK, MessageBoxImage.Warning);
-            return;
-        }
-        if (string.IsNullOrWhiteSpace(ViewModel.LowText.Text))
-        {
-            MessageBox.Show("文本不可为空".Translate(), "", MessageBoxButton.OK, MessageBoxImage.Warning);
-            return;
-        }
-        IsCancel = false;
         Close();
     }
 }

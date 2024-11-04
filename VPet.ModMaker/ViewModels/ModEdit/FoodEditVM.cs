@@ -126,6 +126,7 @@ public partial class FoodEditVM : DialogViewModel
         Foods.AddRange(newValue.Foods);
         Search = string.Empty;
         SearchTargets.SelectedItem = FoodSearchTarget.ID;
+        Foods.Refresh();
         Foods.AutoFilter = true;
     }
 

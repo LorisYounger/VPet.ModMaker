@@ -60,6 +60,11 @@ public partial class ModMakerVM : ViewModelBase
         DependencyInjection.Initialize();
         EnumInfo.DefaultToString = x => $"{x.EnumType.Name}_{x.Value}".Translate();
         EnumInfo<FoodSearchTarget>.Initialize();
+        EnumInfo<ClickTextSearchTarget>.Initialize();
+        EnumInfo<LowTextSearchTarget>.Initialize();
+        EnumInfo<SelectTextSearchTarget>.Initialize();
+        EnumInfo<PetSearchTarget>.Initialize();
+        EnumInfo<WorkSearchTarget>.Initialize();
         _isFirst = false;
     }
 

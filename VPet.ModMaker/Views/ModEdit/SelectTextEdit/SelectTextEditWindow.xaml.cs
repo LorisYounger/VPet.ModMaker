@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using LinePutScript.Localization.WPF;
+using Panuon.WPF.UI;
 using VPet.ModMaker.Models;
 using VPet.ModMaker.ViewModels.ModEdit;
 
@@ -20,23 +21,11 @@ namespace VPet.ModMaker.Views.ModEdit;
 /// <summary>
 /// SelectTextWindow.xaml 的交互逻辑
 /// </summary>
-public partial class SelectTextEditWindow : Window
+public partial class SelectTextEditWindow : WindowX
 {
-    public bool IsCancel { get; private set; } = true;
-    public SelectTextEditVM ViewModel => (SelectTextEditVM)DataContext;
-
     public SelectTextEditWindow()
     {
         InitializeComponent();
-        //DataContext = new SelectTextEditVM();
-        Closed += (s, e) =>
-        {
-            try
-            {
-                DataContext = null;
-            }
-            catch { }
-        };
     }
 
     private void Button_Cancel_Click(object? sender, RoutedEventArgs e)
@@ -46,35 +35,6 @@ public partial class SelectTextEditWindow : Window
 
     private void Button_Yes_Click(object? sender, RoutedEventArgs e)
     {
-        if (string.IsNullOrWhiteSpace(ViewModel.SelectText.ID))
-        {
-            MessageBox.Show("ID不可为空".Translate(), "", MessageBoxButton.OK, MessageBoxImage.Warning);
-            return;
-        }
-        if (
-            ViewModel.OldSelectText?.ID != ViewModel.SelectText.ID
-            && ViewModel.ModInfo.SelectTexts.Any(i => i.ID == ViewModel.SelectText.ID)
-        )
-        {
-            MessageBox.Show("此ID已存在".Translate(), "", MessageBoxButton.OK, MessageBoxImage.Warning);
-            return;
-        }
-        if (string.IsNullOrWhiteSpace(ViewModel.SelectText.Choose))
-        {
-            MessageBox.Show(
-                "选项名不可为空".Translate(),
-                "",
-                MessageBoxButton.OK,
-                MessageBoxImage.Warning
-            );
-            return;
-        }
-        if (string.IsNullOrWhiteSpace(ViewModel.SelectText.Text))
-        {
-            MessageBox.Show("文本不可为空".Translate(), "", MessageBoxButton.OK, MessageBoxImage.Warning);
-            return;
-        }
-        IsCancel = false;
         Close();
     }
 }

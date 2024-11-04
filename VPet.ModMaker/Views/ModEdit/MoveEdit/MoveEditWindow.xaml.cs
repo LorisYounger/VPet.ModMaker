@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using LinePutScript.Localization.WPF;
+using Panuon.WPF.UI;
 using VPet.ModMaker.ViewModels.ModEdit;
 
 namespace VPet.ModMaker.Views.ModEdit;
@@ -19,24 +20,11 @@ namespace VPet.ModMaker.Views.ModEdit;
 /// <summary>
 /// MoveEditWindow.xaml 的交互逻辑
 /// </summary>
-public partial class MoveEditWindow : Window
+public partial class MoveEditWindow : WindowX
 {
-    public bool IsCancel { get; private set; } = true;
-    public MoveEditVM ViewModel => (MoveEditVM)DataContext;
-
     public MoveEditWindow()
     {
         InitializeComponent();
-        DataContext = new MoveEditVM();
-        Closed += (s, e) =>
-        {
-            ViewModel.Close();
-            try
-            {
-                DataContext = null;
-            }
-            catch { }
-        };
     }
 
     private void Button_Cancel_Click(object? sender, RoutedEventArgs e)
@@ -46,17 +34,6 @@ public partial class MoveEditWindow : Window
 
     private void Button_Yes_Click(object? sender, RoutedEventArgs e)
     {
-        if (string.IsNullOrEmpty(ViewModel.Move.Graph))
-        {
-            MessageBox.Show(
-                "指定动画Id不可为空".Translate(),
-                "",
-                MessageBoxButton.OK,
-                MessageBoxImage.Warning
-            );
-            return;
-        }
-        IsCancel = false;
         Close();
     }
 }
