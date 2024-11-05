@@ -28,6 +28,8 @@ public partial class PetEditWindow : WindowX
         InitializeComponent();
     }
 
+    public PetEditVM ViewModel => (PetEditVM)DataContext;
+
     private void Button_Cancel_Click(object? sender, RoutedEventArgs e)
     {
         Close();
@@ -35,6 +37,7 @@ public partial class PetEditWindow : WindowX
 
     private void Button_Yes_Click(object? sender, RoutedEventArgs e)
     {
+        ViewModel.DialogResult = true;
         Close();
     }
 }

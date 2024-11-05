@@ -6,13 +6,18 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using System.Threading.Tasks;
-using System.Windows;
 using System.Windows.Media.Imaging;
+using HanumanInstitute.MvvmDialogs;
+using HanumanInstitute.MvvmDialogs.FrameworkDialogs;
 using HKW.HKWReactiveUI;
 using HKW.HKWUtils.Observable;
+using HKW.MVVMDialogs;
+using HKW.WPF;
 using HKW.WPF.Extensions;
+using HKW.WPF.MVVMDialogs;
 using LinePutScript.Localization.WPF;
 using Microsoft.Win32;
+using Splat;
 using VPet.ModMaker.Models;
 using VPet.ModMaker.Models.ModModel;
 using VPet.ModMaker.Resources;
@@ -21,9 +26,11 @@ using static VPet_Simulator.Core.IGameSave;
 
 namespace VPet.ModMaker.ViewModels.ModEdit;
 
-public partial class FoodAnimeEditWindowVM : ViewModelBase
+public partial class FoodAnimeEditVM : DialogViewModel
 {
-    public FoodAnimeEditWindowVM()
+    private static IDialogService DialogService => Locator.Current.GetService<IDialogService>()!;
+
+    public FoodAnimeEditVM()
     {
         _frontPlayerTask = new(FrontPlay);
         _backPlayerTask = new(BackPlay);
@@ -40,7 +47,7 @@ public partial class FoodAnimeEditWindowVM : ViewModelBase
     /// 默认食物图片
     /// </summary>
     public static BitmapImage DefaultFoodImage { get; } =
-        NativeUtils.LoadImageToMemoryStream(NativeResources.GetStream(NativeResources.FoodImage));
+        HKWImageUtils.LoadImage(NativeResources.GetStream(NativeResources.FoodImage))!;
 
     /// <summary>
     /// 食物图片
@@ -63,7 +70,7 @@ public partial class FoodAnimeEditWindowVM : ViewModelBase
     /// 动画
     /// </summary>
     [ReactiveProperty]
-    public FoodAnimeTypeModel Anime { get; set; } = new();
+    public required FoodAnimeTypeModel Anime { get; set; }
 
     /// <summary>
     /// 当前顶层图像模型
@@ -157,14 +164,27 @@ public partial class FoodAnimeEditWindowVM : ViewModelBase
     [ReactiveCommand]
     private void ChangeFoodImage()
     {
-        OpenFileDialog openFileDialog =
-            new() { Title = "选择食物图片".Translate(), Filter = $"图片|*.png".Translate() };
-        if (openFileDialog.ShowDialog() is true)
+        var openFileDialog = DialogService.ShowOpenFileDialog(
+            this,
+            new() { Title = "选择图片".Translate(), Filters = [new("图片".Translate(), ["png"])] }
+        );
+        if (openFileDialog is null)
+            return;
+        if (FoodImage != DefaultFoodImage)
+            FoodImage?.CloseStream();
+        var image = HKWImageUtils.LoadImageToMemory(openFileDialog.LocalPath, this);
+        if (image is null)
         {
-            if (FoodImage != DefaultFoodImage)
-                FoodImage?.CloseStream();
-            FoodImage = NativeUtils.LoadImageToMemoryStream(openFileDialog.FileName);
+            DialogService.ShowMessageBoxX(
+                this,
+                "图片载入失败, 详情请查看日志".Translate(),
+                "图片载入失败".Translate(),
+                icon: MessageBoxImage.Warning
+            );
+            return;
         }
+        else
+            FoodImage = image;
     }
 
     #region AnimeCommand
@@ -189,19 +209,24 @@ public partial class FoodAnimeEditWindowVM : ViewModelBase
     private void RemoveAnime(FoodAnimeModel value)
     {
         if (
-            MessageBox.Show("确定删除吗".Translate(), "", MessageBoxButton.YesNo) is MessageBoxResult.Yes
+            DialogService.ShowMessageBoxX(
+                this,
+                "确定删除动画 \"{0}\"".Translate(value.ID),
+                "删除动画".Translate(),
+                MessageBoxButton.YesNo
+            )
+            is not true
         )
-        {
-            if (CurrentMode is ModeType.Happy)
-                Anime.HappyAnimes.Remove(value);
-            else if (CurrentMode is ModeType.Nomal)
-                Anime.NomalAnimes.Remove(value);
-            else if (CurrentMode is ModeType.PoorCondition)
-                Anime.PoorConditionAnimes.Remove(value);
-            else if (CurrentMode is ModeType.Ill)
-                Anime.IllAnimes.Remove(value);
-            value.Close();
-        }
+            return;
+        if (CurrentMode is ModeType.Happy)
+            Anime.HappyAnimes.Remove(value);
+        else if (CurrentMode is ModeType.Nomal)
+            Anime.NomalAnimes.Remove(value);
+        else if (CurrentMode is ModeType.PoorCondition)
+            Anime.PoorConditionAnimes.Remove(value);
+        else if (CurrentMode is ModeType.Ill)
+            Anime.IllAnimes.Remove(value);
+        value.Close();
     }
     #endregion
     #region ImageCommand
@@ -214,17 +239,13 @@ public partial class FoodAnimeEditWindowVM : ViewModelBase
     [ReactiveCommand]
     private void AddFrontImage(FoodAnimeModel value)
     {
-        OpenFileDialog openFileDialog =
-            new()
-            {
-                Title = "选择图片".Translate(),
-                Filter = $"图片|*.png".Translate(),
-                Multiselect = true
-            };
-        if (openFileDialog.ShowDialog() is true)
-        {
-            AddImages(value.FrontImages, openFileDialog.FileNames);
-        }
+        var openFilesDialog = DialogService.ShowOpenFilesDialog(
+            this,
+            new() { Title = "选择图片".Translate(), Filters = [new("图片".Translate(), ["png"])] }
+        );
+        if (openFilesDialog is null)
+            return;
+        AddImages(value.FrontImages, openFilesDialog.Select(x => x.LocalPath));
     }
 
     /// <summary>
@@ -246,13 +267,18 @@ public partial class FoodAnimeEditWindowVM : ViewModelBase
     private void ClearFrontImage(FoodAnimeModel value)
     {
         if (
-            MessageBox.Show("确定清空吗".Translate(), "", MessageBoxButton.YesNo) is MessageBoxResult.Yes
+            DialogService.ShowMessageBoxX(
+                this,
+                "确定清空吗".Translate(),
+                "清空图像".Translate(),
+                MessageBoxButton.YesNo
+            )
+            is not true
         )
-        {
-            foreach (var image in value.FrontImages)
-                image.Close();
-            value.FrontImages.Clear();
-        }
+            return;
+        foreach (var image in value.FrontImages)
+            image.Close();
+        value.FrontImages.Clear();
     }
 
     /// <summary>
@@ -262,22 +288,23 @@ public partial class FoodAnimeEditWindowVM : ViewModelBase
     [ReactiveCommand]
     private void ChangeFrontImage(FoodAnimeModel value)
     {
-        OpenFileDialog openFileDialog =
-            new() { Title = "选择图片".Translate(), Filter = $"图片|*.png".Translate() };
-        if (openFileDialog.ShowDialog() is not true)
+        var openFileDialog = DialogService.ShowOpenFileDialog(
+            this,
+            new() { Title = "选择图片".Translate(), Filters = [new("图片".Translate(), ["png"])] }
+        );
+        if (openFileDialog is null)
             return;
-        BitmapImage newImage;
-        try
-        {
-            newImage = NativeUtils.LoadImageToMemoryStream(openFileDialog.FileName);
-        }
-        catch (Exception ex)
-        {
-            MessageBox.Show("替换失败失败 \n{0}".Translate(ex));
-            return;
-        }
+        var newImage = HKWImageUtils.LoadImageToMemory(openFileDialog.LocalPath, this);
         if (newImage is null)
+        {
+            DialogService.ShowMessageBoxX(
+                this,
+                "图片载入失败, 详情请查看日志".Translate(),
+                "图片载入失败".Translate(),
+                icon: MessageBoxImage.Warning
+            );
             return;
+        }
         CurrentFrontImageModel.Close();
         CurrentFrontImageModel.Image = newImage;
     }
@@ -285,27 +312,23 @@ public partial class FoodAnimeEditWindowVM : ViewModelBase
 
     #region BackImageCommand
     /// <summary>
-    /// 添加顶层图片
+    /// 添加底层图片
     /// </summary>
     /// <param name="value">动画模型</param>
     [ReactiveCommand]
     private void AddBackImage(FoodAnimeModel value)
     {
-        OpenFileDialog openFileDialog =
-            new()
-            {
-                Title = "选择图片".Translate(),
-                Filter = $"图片|*.png".Translate(),
-                Multiselect = true
-            };
-        if (openFileDialog.ShowDialog() is true)
-        {
-            AddImages(value.BackImages, openFileDialog.FileNames);
-        }
+        var openFilesDialog = DialogService.ShowOpenFilesDialog(
+            this,
+            new() { Title = "选择图片".Translate(), Filters = [new("图片".Translate(), ["png"])] }
+        );
+        if (openFilesDialog is null)
+            return;
+        AddImages(value.BackImages, openFilesDialog.Select(x => x.LocalPath));
     }
 
     /// <summary>
-    /// 删除顶层图片
+    /// 删除底层图片
     /// </summary>
     /// <param name="value">动画模型</param>
     [ReactiveCommand]
@@ -316,20 +339,25 @@ public partial class FoodAnimeEditWindowVM : ViewModelBase
     }
 
     /// <summary>
-    /// 清空顶层图片
+    /// 清空底层图片
     /// </summary>
     /// <param name="value">动画模型</param>
     [ReactiveCommand]
     private void ClearBackImage(FoodAnimeModel value)
     {
         if (
-            MessageBox.Show("确定清空吗".Translate(), "", MessageBoxButton.YesNo) is MessageBoxResult.Yes
+            DialogService.ShowMessageBoxX(
+                this,
+                "确定清空图片吗".Translate(),
+                "清空图片".Translate(),
+                MessageBoxButton.YesNo
+            )
+            is not null
         )
-        {
-            foreach (var image in value.BackImages)
-                image.Close();
-            value.BackImages.Clear();
-        }
+            return;
+        foreach (var image in value.BackImages)
+            image.Close();
+        value.BackImages.Clear();
     }
 
     /// <summary>
@@ -340,22 +368,23 @@ public partial class FoodAnimeEditWindowVM : ViewModelBase
     [ReactiveCommand]
     private void ChangeBackImage(FoodAnimeModel value)
     {
-        OpenFileDialog openFileDialog =
-            new() { Title = "选择图片".Translate(), Filter = $"图片|*.png".Translate() };
-        if (openFileDialog.ShowDialog() is not true)
+        var openFileDialog = DialogService.ShowOpenFileDialog(
+            this,
+            new() { Title = "选择图片".Translate(), Filters = [new("图片".Translate(), ["png"])] }
+        );
+        if (openFileDialog is null)
             return;
-        BitmapImage newImage;
-        try
-        {
-            newImage = NativeUtils.LoadImageToMemoryStream(openFileDialog.FileName);
-        }
-        catch (Exception ex)
-        {
-            MessageBox.Show("替换失败失败 \n{0}".Translate(ex));
-            return;
-        }
+        var newImage = HKWImageUtils.LoadImageToMemory(openFileDialog.LocalPath, this);
         if (newImage is null)
+        {
+            DialogService.ShowMessageBoxX(
+                this,
+                "图片载入失败, 详情请查看日志".Translate(),
+                "图片载入失败".Translate(),
+                icon: MessageBoxImage.Warning
+            );
             return;
+        }
         CurrentBackImageModel.Close();
         CurrentBackImageModel.Image = newImage;
     }
@@ -368,29 +397,37 @@ public partial class FoodAnimeEditWindowVM : ViewModelBase
     /// <param name="paths">路径</param>
     public void AddImages(ObservableList<ImageModel> images, IEnumerable<string> paths)
     {
-        try
+        var failCount = 0;
+        foreach (string path in paths)
         {
-            var newImages = new List<ImageModel>();
-            foreach (string path in paths)
+            if (File.Exists(path))
             {
-                if (File.Exists(path))
+                var image = HKWImageUtils.LoadImageToMemory(path, this);
+                if (image is null)
+                    failCount++;
+                else
+                    images.Add(new(image));
+            }
+            else if (Directory.Exists(path))
+            {
+                foreach (var file in Directory.EnumerateFiles(path, "*.png"))
                 {
-                    newImages.Add(new(NativeUtils.LoadImageToMemoryStream(path)));
-                }
-                else if (Directory.Exists(path))
-                {
-                    foreach (var file in Directory.EnumerateFiles(path, "*.png"))
-                    {
-                        newImages.Add(new(NativeUtils.LoadImageToMemoryStream(path)));
-                    }
+                    var image = HKWImageUtils.LoadImageToMemory(file, this);
+                    if (image is null)
+                        failCount++;
+                    else
+                        images.Add(new(image));
                 }
             }
-            foreach (var image in newImages)
-                images.Add(image);
         }
-        catch (Exception ex)
+        if (failCount > 0)
         {
-            MessageBox.Show("添加失败 \n{0}".Translate(ex));
+            DialogService.ShowMessageBoxX(
+                this,
+                "图片载入失败, 数量 {0}, 详情请查看日志".Translate(failCount),
+                "图片载入失败".Translate(),
+                icon: MessageBoxImage.Warning
+            );
         }
     }
     #endregion
@@ -412,11 +449,16 @@ public partial class FoodAnimeEditWindowVM : ViewModelBase
     private void ClearFoodLocation(FoodAnimeModel value)
     {
         if (
-            MessageBox.Show("确定清空吗".Translate(), "", MessageBoxButton.YesNo) is MessageBoxResult.Yes
+            DialogService.ShowMessageBoxX(
+                this,
+                "确定清空图像吗".Translate(),
+                "清空图像".Translate(),
+                MessageBoxButton.YesNo
+            )
+            is not true
         )
-        {
-            value.FoodLocations.Clear();
-        }
+            return;
+        value.FoodLocations.Clear();
     }
     #endregion
     #region FrontPlayer
@@ -443,7 +485,12 @@ public partial class FoodAnimeEditWindowVM : ViewModelBase
     {
         if (CurrentAnimeModel is null)
         {
-            MessageBox.Show("未选中动画".Translate());
+            DialogService.ShowMessageBoxX(
+                this,
+                "未选中动画".Translate(),
+                "播放失败".Translate(),
+                icon: MessageBoxImage.Warning
+            );
             return;
         }
         _playing = true;

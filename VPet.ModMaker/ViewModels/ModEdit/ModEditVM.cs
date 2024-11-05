@@ -16,6 +16,7 @@ using HKW.HKWReactiveUI;
 using HKW.HKWUtils.Extensions;
 using HKW.HKWUtils.Observable;
 using HKW.MVVMDialogs;
+using HKW.WPF;
 using HKW.WPF.Extensions;
 using HKW.WPF.MVVMDialogs;
 using LinePutScript.Localization.WPF;
@@ -48,6 +49,7 @@ public partial class ModEditVM : ViewModelBase
             {
                 if (
                     DialogService.ShowMessageBoxX(
+                        this,
                         "未添加任何文化,确定要添加文化吗?".Translate(),
                         "缺少文化".Translate(),
                         MessageBoxButton.YesNo
@@ -59,6 +61,7 @@ public partial class ModEditVM : ViewModelBase
                 if (
                     ModInfo.I18nResource.Cultures.HasValue() is false
                     || DialogService.ShowMessageBoxX(
+                        this,
                         "需要将文化 {0} 设为主要文化吗?".Translate(ModInfo.I18nResource.Cultures.First().Name),
                         "设置主要文化".Translate(),
                         MessageBoxButton.YesNo
@@ -146,9 +149,19 @@ public partial class ModEditVM : ViewModelBase
         );
         if (openFileDialog is null)
             return;
-
+        var newImage = HKWImageUtils.LoadImageToMemory(openFileDialog.LocalPath, this);
+        if (newImage is null)
+        {
+            DialogService.ShowMessageBoxX(
+                this,
+                "图片载入失败, 详情请查看日志".Translate(),
+                "图片载入失败".Translate(),
+                icon: MessageBoxImage.Warning
+            );
+            return;
+        }
         ModInfo.Image?.CloseStream();
-        ModInfo.Image = NativeUtils.LoadImageToMemoryStream(openFileDialog.LocalPath);
+        ModInfo.Image = newImage;
     }
 
     #region Culture
@@ -192,6 +205,7 @@ public partial class ModEditVM : ViewModelBase
     {
         if (
             DialogService.ShowMessageBoxX(
+                this,
                 "确定删除文化 \"{0}\" 吗".Translate(oldCulture),
                 "删除文化".Translate(),
                 MessageBoxButton.YesNo
@@ -240,6 +254,7 @@ public partial class ModEditVM : ViewModelBase
             return;
         if (
             DialogService.ShowMessageBoxX(
+                this,
                 "确定保存吗".Translate(),
                 "保存".Translate(),
                 MessageBoxButton.YesNo
@@ -249,7 +264,11 @@ public partial class ModEditVM : ViewModelBase
             return;
         if (string.IsNullOrEmpty(ModInfo.SourcePath))
         {
-            DialogService.ShowMessageBoxX("源路径为空, 请使用 保存至".Translate());
+            DialogService.ShowMessageBoxX(
+                this,
+                "源路径为空, 请使用 \"保存至\"".Translate(),
+                "保存失败".Translate()
+            );
             return;
         }
         SaveTo(ModInfo.SourcePath);
@@ -291,7 +310,7 @@ public partial class ModEditVM : ViewModelBase
         catch (Exception ex)
         {
             pending.Close();
-            DialogService.ShowMessageBoxX("保存失败, 详情请查看日志".Translate());
+            DialogService.ShowMessageBoxX(this, "保存失败, 详情请查看日志".Translate());
             this.Log().Error("保存失败", ex);
             return;
         }

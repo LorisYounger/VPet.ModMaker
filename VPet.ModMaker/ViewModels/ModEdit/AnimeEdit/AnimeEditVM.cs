@@ -8,12 +8,17 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.Windows;
 using System.Windows.Media.Imaging;
+using HanumanInstitute.MvvmDialogs;
+using HanumanInstitute.MvvmDialogs.FrameworkDialogs;
 using HKW.HKWReactiveUI;
 using HKW.HKWUtils.Observable;
+using HKW.MVVMDialogs;
+using HKW.WPF;
+using HKW.WPF.MVVMDialogs;
 using LinePutScript.Localization.WPF;
 using Microsoft.Win32;
+using Splat;
 using VPet.ModMaker.Models;
 using VPet.ModMaker.Models.ModModel;
 using VPet_Simulator.Core;
@@ -21,9 +26,11 @@ using static VPet_Simulator.Core.IGameSave;
 
 namespace VPet.ModMaker.ViewModels.ModEdit;
 
-public partial class AnimeEditWindowVM : ViewModelBase
+public partial class AnimeEditVM : DialogViewModel
 {
-    public AnimeEditWindowVM()
+    private static IDialogService DialogService => Locator.Current.GetService<IDialogService>()!;
+
+    public AnimeEditVM()
     {
         _playerTask = new(Play);
     }
@@ -124,19 +131,24 @@ public partial class AnimeEditWindowVM : ViewModelBase
     private void RemoveAnime(AnimeModel value)
     {
         if (
-            MessageBox.Show("确定删除吗".Translate(), "", MessageBoxButton.YesNo) is MessageBoxResult.Yes
+            DialogService.ShowMessageBoxX(
+                this,
+                "确认删除动画 \"{0}\"".Translate(value.ID),
+                "删除动画".Translate(),
+                MessageBoxButton.YesNo
+            )
+            is not true
         )
-        {
-            if (CurrentMode is ModeType.Happy)
-                Anime.HappyAnimes.Remove(value);
-            else if (CurrentMode is ModeType.Nomal)
-                Anime.NomalAnimes.Remove(value);
-            else if (CurrentMode is ModeType.PoorCondition)
-                Anime.PoorConditionAnimes.Remove(value);
-            else if (CurrentMode is ModeType.Ill)
-                Anime.IllAnimes.Remove(value);
-            value.Close();
-        }
+            return;
+        if (CurrentMode is ModeType.Happy)
+            Anime.HappyAnimes.Remove(value);
+        else if (CurrentMode is ModeType.Nomal)
+            Anime.NomalAnimes.Remove(value);
+        else if (CurrentMode is ModeType.PoorCondition)
+            Anime.PoorConditionAnimes.Remove(value);
+        else if (CurrentMode is ModeType.Ill)
+            Anime.IllAnimes.Remove(value);
+        value.Close();
     }
     #endregion
 
@@ -149,16 +161,17 @@ public partial class AnimeEditWindowVM : ViewModelBase
     [ReactiveCommand]
     private void AddImage(AnimeModel value)
     {
-        OpenFileDialog openFileDialog =
+        var openFilesDialog = DialogService.ShowOpenFilesDialog(
+            this,
             new()
             {
                 Title = "选择图片".Translate(),
-                Filter = $"图片|*.png".Translate(),
-                Multiselect = true
-            };
-        if (openFileDialog.ShowDialog() is not true)
+                Filters = [new("图片".Translate(), ["jpg", "jpeg", "png", "bmp"])]
+            }
+        );
+        if (openFilesDialog is null)
             return;
-        AddImages(value.Images, openFileDialog.FileNames);
+        AddImages(value.Images, openFilesDialog.Select(x => x.LocalPath));
     }
 
     /// <summary>
@@ -180,22 +193,23 @@ public partial class AnimeEditWindowVM : ViewModelBase
     [ReactiveCommand]
     private void ChangeImage(AnimeModel value)
     {
-        OpenFileDialog openFileDialog =
-            new() { Title = "选择图片".Translate(), Filter = $"图片|*.png".Translate() };
-        if (openFileDialog.ShowDialog() is not true)
+        var openFileDialog = DialogService.ShowOpenFileDialog(
+            this,
+            new() { Title = "选择图片".Translate(), Filters = [new("图片".Translate(), ["png"])] }
+        );
+        if (openFileDialog is null)
             return;
-        BitmapImage newImage;
-        try
-        {
-            newImage = NativeUtils.LoadImageToMemoryStream(openFileDialog.FileName);
-        }
-        catch (Exception ex)
-        {
-            MessageBox.Show("替换失败失败 \n{0}".Translate(ex));
-            return;
-        }
+        var newImage = HKWImageUtils.LoadImageToMemory(openFileDialog.LocalPath, this);
         if (newImage is null)
+        {
+            DialogService.ShowMessageBoxX(
+                this,
+                "图片载入失败, 详情请查看日志".Translate(),
+                "图片载入失败".Translate(),
+                icon: MessageBoxImage.Warning
+            );
             return;
+        }
         CurrentImageModel.Close();
         CurrentImageModel.Image = newImage;
     }
@@ -208,12 +222,17 @@ public partial class AnimeEditWindowVM : ViewModelBase
     private void ClearImage(AnimeModel value)
     {
         if (
-            MessageBox.Show("确定清空吗".Translate(), "", MessageBoxButton.YesNo) is MessageBoxResult.Yes
+            DialogService.ShowMessageBoxX(
+                this,
+                "确定清空图像吗".Translate(),
+                "清空图像".Translate(),
+                MessageBoxButton.YesNo
+            )
+            is not true
         )
-        {
-            value.Close();
-            value.Images.Clear();
-        }
+            return;
+        value.Close();
+        value.Images.Clear();
     }
 
     /// <summary>
@@ -223,29 +242,37 @@ public partial class AnimeEditWindowVM : ViewModelBase
     /// <param name="paths">路径</param>
     public void AddImages(ObservableList<ImageModel> images, IEnumerable<string> paths)
     {
-        try
+        var failCount = 0;
+        foreach (string path in paths)
         {
-            var newImages = new List<ImageModel>();
-            foreach (string path in paths)
+            if (File.Exists(path))
             {
-                if (File.Exists(path))
+                var image = HKWImageUtils.LoadImageToMemory(path, this);
+                if (image is null)
+                    failCount++;
+                else
+                    images.Add(new(image));
+            }
+            else if (Directory.Exists(path))
+            {
+                foreach (var file in Directory.EnumerateFiles(path, "*.png"))
                 {
-                    newImages.Add(new(NativeUtils.LoadImageToMemoryStream(path)));
-                }
-                else if (Directory.Exists(path))
-                {
-                    foreach (var file in Directory.EnumerateFiles(path, "*.png"))
-                    {
-                        newImages.Add(new(NativeUtils.LoadImageToMemoryStream(path)));
-                    }
+                    var image = HKWImageUtils.LoadImageToMemory(file, this);
+                    if (image is null)
+                        failCount++;
+                    else
+                        images.Add(new(image));
                 }
             }
-            foreach (var image in newImages)
-                images.Add(image);
         }
-        catch (Exception ex)
+        if (failCount > 0)
         {
-            MessageBox.Show("添加失败 \n{0}".Translate(ex));
+            DialogService.ShowMessageBoxX(
+                this,
+                "图片载入失败, 数量 {0}, 详情请查看日志".Translate(failCount),
+                "图片载入失败".Translate(),
+                icon: MessageBoxImage.Warning
+            );
         }
     }
     #endregion
@@ -273,7 +300,12 @@ public partial class AnimeEditWindowVM : ViewModelBase
     {
         if (CurrentAnimeModel is null)
         {
-            MessageBox.Show("未选中动画".Translate());
+            DialogService.ShowMessageBoxX(
+                this,
+                "未选中动画".Translate(),
+                "播放失败".Translate(),
+                icon: MessageBoxImage.Warning
+            );
             return;
         }
         _playing = true;

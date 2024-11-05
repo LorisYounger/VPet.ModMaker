@@ -5,15 +5,17 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Media.Imaging;
+using HKW.WPF;
 using HKW.WPF.Extensions;
 using LinePutScript.Converter;
+using Splat;
 
 namespace VPet.ModMaker.Models;
 
 /// <summary>
 /// 模组制作历史
 /// </summary>
-public class ModMakeHistory : IEquatable<ModMakeHistory>
+public class ModMakeHistory : IEquatable<ModMakeHistory>, IEnableLogger
 {
     public ModMakeHistory() { }
 
@@ -46,8 +48,8 @@ public class ModMakeHistory : IEquatable<ModMakeHistory>
                 Image?.CloseStream();
             _sourcePath = value;
             var imagePath = Path.Combine(_sourcePath, "icon.png");
-            if (File.Exists(imagePath))
-                Image = NativeUtils.LoadImageToMemoryStream(imagePath);
+
+            Image = HKWImageUtils.LoadImageToMemory(imagePath, this);
         }
     }
 

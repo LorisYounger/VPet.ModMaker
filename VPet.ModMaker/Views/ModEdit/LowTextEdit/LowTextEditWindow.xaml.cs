@@ -30,6 +30,8 @@ public partial class LowTextEditWindow : WindowX
         InitializeComponent();
     }
 
+    public LowTextEditVM ViewModel => (LowTextEditVM)DataContext;
+
     private void Button_Cancel_Click(object? sender, RoutedEventArgs e)
     {
         Close();
@@ -37,6 +39,7 @@ public partial class LowTextEditWindow : WindowX
 
     private void Button_Yes_Click(object? sender, RoutedEventArgs e)
     {
+        ViewModel.DialogResult = true;
         Close();
     }
 }

@@ -27,12 +27,12 @@ namespace VPet.ModMaker.Views.ModEdit;
 /// </summary>
 public partial class SelectGraphTypeWindow : Window
 {
-    public SelectGraphTypeWindowVM ViewModel => (SelectGraphTypeWindowVM)DataContext;
+    public SelectGraphTypeVM ViewModel => (SelectGraphTypeVM)DataContext;
 
     public SelectGraphTypeWindow()
     {
         InitializeComponent();
-        DataContext = new SelectGraphTypeWindowVM();
+        DataContext = new SelectGraphTypeVM();
     }
 
     public bool IsCancel { get; private set; } = true;

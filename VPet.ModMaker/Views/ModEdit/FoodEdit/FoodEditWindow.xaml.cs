@@ -27,12 +27,12 @@ namespace VPet.ModMaker.Views.ModEdit;
 /// </summary>
 public partial class FoodEditWindow : WindowX
 {
-    public FoodEditVM ViewModel => (FoodEditVM)DataContext;
-
     public FoodEditWindow()
     {
         InitializeComponent();
     }
+
+    public FoodEditVM ViewModel => (FoodEditVM)DataContext;
 
     private void Button_Cancel_Click(object? sender, RoutedEventArgs e)
     {
@@ -41,6 +41,7 @@ public partial class FoodEditWindow : WindowX
 
     private void Button_Yes_Click(object? sender, RoutedEventArgs e)
     {
+        ViewModel.DialogResult = true;
         Close();
     }
 }

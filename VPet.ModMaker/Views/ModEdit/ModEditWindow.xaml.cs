@@ -89,43 +89,43 @@ public partial class ModEditWindow : WindowX, IPageLocator
     #endregion
     #region Anime
     public AnimePage AnimePage { get; private set; } = null!;
-    public AnimeEditWindowVM AnimeEditWindowVM { get; private set; } = null!;
+    public AnimeEditVM AnimeEditWindowVM { get; private set; } = null!;
     #endregion
     //public I18nEditWindow I18nEditWindow { get; } = null!;
 
     //public AddCulturePage AddCultureWindow { get; private set; } = null!;
 
     /// <inheritdoc/>
-    public Dictionary<Type, Func<Window, Page?>> PageLocatorByType { get; } =
+    public Dictionary<Type, Func<Window, UserControl?>> PageLocatorByType { get; } =
         new(
             [
-                KeyValuePair.Create<Type, Func<Window, Page?>>(
+                KeyValuePair.Create<Type, Func<Window, UserControl?>>(
                     typeof(FoodPage),
-                    x => (Page)((ModEditWindow)x).ContentControl_Food.Content
+                    x => (UserControl)((ModEditWindow)x).ContentControl_Food.Content
                 ),
-                KeyValuePair.Create<Type, Func<Window, Page?>>(
+                KeyValuePair.Create<Type, Func<Window, UserControl?>>(
                     typeof(ClickTextPage),
-                    x => (Page)((ModEditWindow)x).ContentControl_ClickText.Content
+                    x => (UserControl)((ModEditWindow)x).ContentControl_ClickText.Content
                 ),
-                KeyValuePair.Create<Type, Func<Window, Page?>>(
+                KeyValuePair.Create<Type, Func<Window, UserControl?>>(
                     typeof(LowTextPage),
-                    x => (Page)((ModEditWindow)x).ContentControl_LowText.Content
+                    x => (UserControl)((ModEditWindow)x).ContentControl_LowText.Content
                 ),
-                KeyValuePair.Create<Type, Func<Window, Page?>>(
+                KeyValuePair.Create<Type, Func<Window, UserControl?>>(
                     typeof(SelectTextPage),
-                    x => (Page)((ModEditWindow)x).ContentControl_SelectText.Content
+                    x => (UserControl)((ModEditWindow)x).ContentControl_SelectText.Content
                 ),
-                KeyValuePair.Create<Type, Func<Window, Page?>>(
+                KeyValuePair.Create<Type, Func<Window, UserControl?>>(
                     typeof(PetPage),
-                    x => (Page)((ModEditWindow)x).ContentControl_Pet.Content
+                    x => (UserControl)((ModEditWindow)x).ContentControl_Pet.Content
                 ),
-                KeyValuePair.Create<Type, Func<Window, Page?>>(
+                KeyValuePair.Create<Type, Func<Window, UserControl?>>(
                     typeof(WorkPage),
-                    x => (Page)((ModEditWindow)x).ContentControl_Work.Content
+                    x => (UserControl)((ModEditWindow)x).ContentControl_Work.Content
                 ),
-                KeyValuePair.Create<Type, Func<Window, Page?>>(
+                KeyValuePair.Create<Type, Func<Window, UserControl?>>(
                     typeof(AnimePage),
-                    x => (Page)((ModEditWindow)x).ContentControl_Anime.Content
+                    x => (UserControl)((ModEditWindow)x).ContentControl_Anime.Content
                 )
             ]
         );

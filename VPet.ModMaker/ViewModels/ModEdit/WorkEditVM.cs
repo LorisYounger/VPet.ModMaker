@@ -16,6 +16,7 @@ using HKW.HKWUtils.Collections;
 using HKW.HKWUtils.Extensions;
 using HKW.HKWUtils.Observable;
 using HKW.MVVMDialogs;
+using HKW.WPF;
 using HKW.WPF.Extensions;
 using HKW.WPF.MVVMDialogs;
 using LinePutScript;
@@ -264,7 +265,18 @@ public partial class WorkEditVM : DialogViewModel
         );
         if (openFileDialog is null)
             return;
-        Image = NativeUtils.LoadImageToMemoryStream(openFileDialog.LocalPath);
+        var newImage = HKWImageUtils.LoadImageToMemory(openFileDialog.LocalPath, this);
+        if (newImage is null)
+        {
+            DialogService.ShowMessageBoxX(
+                this,
+                "图片载入失败, 详情请查看日志".Translate(),
+                "图片载入失败".Translate(),
+                icon: MessageBoxImage.Warning
+            );
+            return;
+        }
+        Image = newImage;
     }
 
     /// <summary>
@@ -283,8 +295,19 @@ public partial class WorkEditVM : DialogViewModel
         );
         if (openFileDialog is null)
             return;
+        var newImage = HKWImageUtils.LoadImageToMemory(openFileDialog.LocalPath, this);
+        if (newImage is null)
+        {
+            DialogService.ShowMessageBoxX(
+                this,
+                "图片载入失败, 详情请查看日志".Translate(),
+                "图片载入失败".Translate(),
+                icon: MessageBoxImage.Warning
+            );
+            return;
+        }
         Image?.CloseStream();
-        Image = NativeUtils.LoadImageToMemoryStream(openFileDialog.LocalPath);
+        Image = newImage;
     }
 
     /// <summary>

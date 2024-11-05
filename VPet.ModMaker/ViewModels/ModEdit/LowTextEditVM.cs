@@ -11,6 +11,7 @@ using DynamicData.Binding;
 using HanumanInstitute.MvvmDialogs;
 using HanumanInstitute.MvvmDialogs.FrameworkDialogs;
 using HanumanInstitute.MvvmDialogs.Wpf;
+using HKW.HKWMapper;
 using HKW.HKWReactiveUI;
 using HKW.HKWUtils.Collections;
 using HKW.HKWUtils.Extensions;
@@ -177,7 +178,10 @@ public partial class LowTextEditVM : DialogViewModel
                 this.Log()
                     .Debug(
                         "添加新低状态文本 {$lowText}",
-                        LPSConvert.SerializeObjectToLine<Line>(LowText.ToLowText(), "LowText")
+                        LPSConvert.SerializeObjectToLine<Line>(
+                            LowText.MapToLowText(new()),
+                            "LowText"
+                        )
                     );
         }
         Reset();
@@ -212,8 +216,14 @@ public partial class LowTextEditVM : DialogViewModel
                 this.Log()
                     .Debug(
                         "编辑低状态文本\n {$oldLowText} => {$newLowText}",
-                        LPSConvert.SerializeObjectToLine<Line>(OldLowText.ToLowText(), "LowText"),
-                        LPSConvert.SerializeObjectToLine<Line>(LowText.ToLowText(), "LowText")
+                        LPSConvert.SerializeObjectToLine<Line>(
+                            OldLowText.MapToLowText(new()),
+                            "LowText"
+                        ),
+                        LPSConvert.SerializeObjectToLine<Line>(
+                            LowText.MapToLowText(new()),
+                            "LowText"
+                        )
                     );
         }
         Reset();

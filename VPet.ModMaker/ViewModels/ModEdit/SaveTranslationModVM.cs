@@ -67,11 +67,13 @@ public partial class SaveTranslationModVM : DialogViewModel
                 Path.GetDirectoryName(saveFileDialog.Name)!,
                 CheckCultures.Where(m => m.IsSelected).Select(m => m.Source)
             );
-            DialogService.ShowMessageBoxX("保存成功".Translate());
+            this.Log().Info("保存成功");
+            DialogService.ShowMessageBoxX(this, "保存成功".Translate());
         }
         catch (Exception ex)
         {
-            DialogService.ShowMessageBoxX("保存失败 错误信息:\n{0}".Translate(ex));
+            this.Log().Warn("保存失败", ex);
+            DialogService.ShowMessageBoxX(this, "保存失败, 详情请查看日志".Translate());
         }
     }
 }

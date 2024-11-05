@@ -8,6 +8,7 @@ using System.Windows.Media.Imaging;
 using HKW.HKWReactiveUI;
 using HKW.HKWUtils;
 using HKW.HKWUtils.Observable;
+using HKW.WPF;
 using HKW.WPF.Extensions;
 using VPet.ModMaker.Native;
 using VPet.ModMaker.ViewModels;
@@ -50,13 +51,13 @@ public partial class ImageModel : ViewModelBase, ICloneable<ImageModel>
 
     public void LoadImage()
     {
-        Image = NativeUtils.LoadImageToMemoryStream(ImageFile);
+        Image = HKWImageUtils.LoadImageToMemory(ImageFile, this)!;
     }
 
     public ImageModel Clone()
     {
         var model = new ImageModel(
-            Image?.CloneStream() ?? NativeUtils.LoadImageToMemoryStream(ImageFile),
+            Image?.CloneStream() ?? HKWImageUtils.LoadImageToMemory(ImageFile, this)!,
             Duration
         );
         return model;

@@ -10,22 +10,27 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using DynamicData.Binding;
+using HanumanInstitute.MvvmDialogs;
 using HKW.HKWReactiveUI;
 using HKW.HKWUtils.Collections;
 using HKW.HKWUtils.Extensions;
 using HKW.HKWUtils.Observable;
+using HKW.WPF.MVVMDialogs;
 using LinePutScript.Localization.WPF;
 using Panuon.WPF.UI;
 using ReactiveUI;
+using Splat;
 using VPet.ModMaker.Models;
 using VPet.ModMaker.Models.ModModel;
 using VPet.ModMaker.Views.ModEdit;
 
 namespace VPet.ModMaker.ViewModels.ModEdit;
 
-public partial class AnimePageVM : ViewModelBase
+public partial class AnimeVM : ViewModelBase
 {
-    public AnimePageVM()
+    private static IDialogService DialogService => Locator.Current.GetService<IDialogService>()!;
+
+    public AnimeVM()
     {
         AllAnimes = new(
             [],
@@ -41,16 +46,9 @@ public partial class AnimePageVM : ViewModelBase
                     return foodAnimeModel.ID.Contains(Search, StringComparison.OrdinalIgnoreCase);
                 }
                 else
-                    throw new Exception("???");
+                    return false;
             }
         );
-        if (Pets.HasValue())
-            CurrentPet = Pets.FirstOrDefault(
-                m => m.FromMain is false && m.AnimeCount > 0,
-                Pets.First()
-            );
-
-        ModInfo.PropertyChanged += ModInfo_PropertyChanged;
 
         this.WhenValueChanged(x => x.Search)
             .Throttle(TimeSpan.FromSeconds(1), RxApp.TaskpoolScheduler)
@@ -59,27 +57,35 @@ public partial class AnimePageVM : ViewModelBase
             .Subscribe(_ => AllAnimes.Refresh());
     }
 
+    #region Property
+    [ReactiveProperty]
+    public ModInfoModel ModInfo { get; set; } = null!;
+
+    partial void OnModInfoChanged(ModInfoModel oldValue, ModInfoModel newValue)
+    {
+        if (oldValue is not null)
+        {
+            oldValue.PropertyChanged -= ModInfo_PropertyChanged;
+        }
+        if (newValue is not null)
+        {
+            newValue.PropertyChanged -= ModInfo_PropertyChanged;
+            newValue.PropertyChanged += ModInfo_PropertyChanged;
+        }
+    }
+
     private void ModInfo_PropertyChanged(object? sender, PropertyChangedEventArgs e)
     {
         if (e.PropertyName == nameof(ModInfoModel.ShowMainPet))
         {
-            if (ModInfo.ShowMainPet is false)
-            {
-                if (CurrentPet?.FromMain is true)
-                {
-                    CurrentPet = null!;
-                }
-            }
+            if (CurrentPet?.FromMain is false)
+                CurrentPet = null!;
         }
     }
 
-    public ModInfoModel ModInfo { get; }
-
-    #region Property
     /// <summary>
     /// 所有动画
     /// </summary>
-
     public FilterListWrapper<object, List<object>, ObservableList<object>> AllAnimes { get; }
 
     /// <summary>
@@ -105,7 +111,25 @@ public partial class AnimePageVM : ViewModelBase
 
     partial void OnCurrentPetChanged(PetModel oldValue, PetModel newValue)
     {
-        InitializeAllAnimes();
+        if (oldValue is not null)
+        {
+            Animes.CollectionChanged -= Animes_CollectionChanged;
+            FoodAnimes.CollectionChanged -= Animes_CollectionChanged;
+        }
+        AllAnimes.AutoFilter = false;
+        AllAnimes.Clear();
+        if (newValue is null)
+            return;
+        AllAnimes.AddRange(newValue.Animes);
+        AllAnimes.AddRange(newValue.FoodAnimes);
+        Search = string.Empty;
+        AllAnimes.Refresh();
+        AllAnimes.AutoFilter = true;
+
+        Animes.CollectionChanged -= Animes_CollectionChanged;
+        Animes.CollectionChanged += Animes_CollectionChanged;
+        FoodAnimes.CollectionChanged -= Animes_CollectionChanged;
+        FoodAnimes.CollectionChanged += Animes_CollectionChanged;
     }
 
     /// <summary>
@@ -114,21 +138,6 @@ public partial class AnimePageVM : ViewModelBase
     [ReactiveProperty]
     public string Search { get; set; } = string.Empty;
     #endregion
-
-    private void InitializeAllAnimes()
-    {
-        AllAnimes.Clear();
-        if (CurrentPet is null)
-            return;
-        foreach (var item in Animes)
-            AllAnimes.Add(item);
-        foreach (var item in FoodAnimes)
-            AllAnimes.Add(item);
-        Animes.CollectionChanged -= Animes_CollectionChanged;
-        Animes.CollectionChanged += Animes_CollectionChanged;
-        FoodAnimes.CollectionChanged -= Animes_CollectionChanged;
-        FoodAnimes.CollectionChanged += Animes_CollectionChanged;
-    }
 
     private void Animes_CollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
     {
@@ -144,43 +153,52 @@ public partial class AnimePageVM : ViewModelBase
     /// 添加
     /// </summary>
     [ReactiveCommand]
-    private void Add()
+    private async void Add()
     {
-        var selectGraphTypeWindow = new SelectGraphTypeWindow();
-        selectGraphTypeWindow.ViewModel.CurrentPet = CurrentPet;
-        selectGraphTypeWindow.ShowDialog();
-        var graphType = selectGraphTypeWindow.ViewModel.GraphType;
-        var animeName = selectGraphTypeWindow.ViewModel.AnimeName;
-        if (selectGraphTypeWindow.IsCancel)
+        var vm = await DialogService.ShowSingletonDialogAsync(
+            this,
+            new SelectGraphTypeVM() { CurrentPet = CurrentPet, }
+        );
+        if (vm.DialogResult is not true)
             return;
+        var graphType = vm.GraphType;
+        var animeName = vm.AnimeName;
         if (
             graphType is VPet_Simulator.Core.GraphInfo.GraphType.Common
             && FoodAnimeTypeModel.FoodAnimeNames.Contains(animeName)
         )
         {
-            var window = new FoodAnimeEditWindow();
-            var vm = window.ViewModel;
-            vm.CurrentPet = CurrentPet;
-            vm.Anime.Name = animeName;
-            window.ShowDialog();
-            if (window.IsCancel)
+            var animeVM = await DialogService.ShowSingletonDialogAsync(
+                this,
+                new FoodAnimeEditVM()
+                {
+                    CurrentPet = CurrentPet,
+                    Anime = new() { Name = animeName }
+                }
+            );
+            if (animeVM.DialogResult is not true)
                 return;
-            FoodAnimes.Add(vm.Anime);
+            FoodAnimes.Add(animeVM.Anime);
         }
         else
         {
-            var window = new AnimeEditWindow();
-            var vm = window.ViewModel;
-            vm.CurrentPet = CurrentPet;
-            vm.Anime.GraphType = graphType;
-            if (string.IsNullOrWhiteSpace(animeName))
-                vm.Anime.ID = graphType.ToString();
-            else
-                vm.Anime.Name = animeName;
-            window.ShowDialog();
-            if (window.IsCancel)
+            var animeVM = await DialogService.ShowSingletonDialogAsync(
+                this,
+                new AnimeEditVM()
+                {
+                    CurrentPet = CurrentPet,
+                    Anime = new()
+                    {
+                        GraphType = graphType,
+                        Name = string.IsNullOrWhiteSpace(animeName)
+                            ? graphType.ToString()
+                            : animeName
+                    }
+                }
+            );
+            if (animeVM.DialogResult is not true)
                 return;
-            Animes.Add(vm.Anime);
+            Animes.Add(animeVM.Anime);
         }
     }
 
@@ -189,34 +207,50 @@ public partial class AnimePageVM : ViewModelBase
     /// </summary>
     /// <param name="model">模型</param>
     [ReactiveCommand]
-    public void Edit(object model)
+    public async void Edit(object model)
     {
-        var pendingHandler = PendingBox.Show("载入中".Translate());
+        //var pendingHandler = PendingBox.Show("载入中".Translate());
         if (model is AnimeTypeModel animeTypeModel)
         {
-            var window = new AnimeEditWindow();
-            var vm = window.ViewModel;
-            vm.CurrentPet = CurrentPet;
-            vm.OldAnime = animeTypeModel;
-            var newAnime = vm.Anime = new(animeTypeModel);
-            pendingHandler.Close();
-            window.ShowDialog();
-            if (window.IsCancel)
-                return;
-            Animes[Animes.IndexOf(animeTypeModel)] = newAnime;
+            var animeVM = await DialogService.ShowSingletonDialogAsync(
+                this,
+                new AnimeEditVM()
+                {
+                    CurrentPet = CurrentPet,
+                    OldAnime = animeTypeModel,
+                    Anime = new(animeTypeModel)
+                }
+            );
+            if (animeVM.DialogResult is not true)
+            {
+                animeVM.Anime?.Close();
+            }
+            else
+            {
+                animeVM.OldAnime?.Close();
+                Animes[Animes.IndexOf(animeTypeModel)] = animeVM.Anime;
+            }
         }
         else if (model is FoodAnimeTypeModel foodAnimeTypeModel)
         {
-            var window = new FoodAnimeEditWindow();
-            var vm = window.ViewModel;
-            vm.CurrentPet = CurrentPet;
-            vm.OldAnime = foodAnimeTypeModel;
-            var newAnime = vm.Anime = new(foodAnimeTypeModel);
-            pendingHandler.Close();
-            window.ShowDialog();
-            if (window.IsCancel)
-                return;
-            FoodAnimes[FoodAnimes.IndexOf(foodAnimeTypeModel)] = newAnime;
+            var animeVM = await DialogService.ShowSingletonDialogAsync(
+                this,
+                new FoodAnimeEditVM()
+                {
+                    CurrentPet = CurrentPet,
+                    OldAnime = foodAnimeTypeModel,
+                    Anime = new(foodAnimeTypeModel)
+                }
+            );
+            if (animeVM.DialogResult is not true)
+            {
+                animeVM.Anime?.Close();
+            }
+            else
+            {
+                animeVM.OldAnime?.Close();
+                FoodAnimes[FoodAnimes.IndexOf(foodAnimeTypeModel)] = animeVM.Anime;
+            }
         }
     }
 

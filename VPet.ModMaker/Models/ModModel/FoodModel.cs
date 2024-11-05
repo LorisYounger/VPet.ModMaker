@@ -12,6 +12,7 @@ using HKW.HKWMapper;
 using HKW.HKWReactiveUI;
 using HKW.HKWUtils.Extensions;
 using HKW.HKWUtils.Observable;
+using HKW.WPF;
 using HKW.WPF.Extensions;
 using LinePutScript;
 using LinePutScript.Converter;
@@ -42,8 +43,7 @@ public partial class FoodModel : ViewModelBase
         : this()
     {
         this.MapFromFood(food);
-        if (File.Exists(food.Image))
-            Image = NativeUtils.LoadImageToMemoryStream(food.Image);
+        Image = HKWImageUtils.LoadImageToMemory(food.Image, this);
     }
 
     /// <summary>

@@ -25,10 +25,10 @@ public partial class AnimePage : UserControl
     public AnimePage()
     {
         InitializeComponent();
-        DataContext = new AnimePageVM();
+        DataContext = new AnimeVM();
     }
 
-    public AnimePageVM ViewModel => (AnimePageVM)DataContext;
+    public AnimeVM ViewModel => (AnimeVM)DataContext;
 
     private void DataGrid_MouseDoubleClick(object? sender, MouseButtonEventArgs e)
     {

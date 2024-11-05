@@ -27,6 +27,8 @@ public partial class MoveEditWindow : WindowX
         InitializeComponent();
     }
 
+    public MoveEditVM ViewModel => (MoveEditVM)DataContext;
+
     private void Button_Cancel_Click(object? sender, RoutedEventArgs e)
     {
         Close();
@@ -34,6 +36,7 @@ public partial class MoveEditWindow : WindowX
 
     private void Button_Yes_Click(object? sender, RoutedEventArgs e)
     {
+        ViewModel.DialogResult = true;
         Close();
     }
 }

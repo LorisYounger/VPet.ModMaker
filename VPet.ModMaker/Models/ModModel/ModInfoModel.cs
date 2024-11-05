@@ -17,6 +17,7 @@ using HKW.HKWReactiveUI;
 using HKW.HKWUtils;
 using HKW.HKWUtils.Extensions;
 using HKW.HKWUtils.Observable;
+using HKW.WPF;
 using HKW.WPF.Extensions;
 using LinePutScript;
 using LinePutScript.Converter;
@@ -69,8 +70,7 @@ public partial class ModInfoModel : ViewModelBase
         ItemID = loader.ItemID;
         AuthorID = loader.AuthorID;
         var imagePath = Path.Combine(loader.ModPath.FullName, "icon.png");
-        if (File.Exists(imagePath))
-            Image = NativeUtils.LoadImageToMemoryStream(imagePath);
+        Image = HKWImageUtils.LoadImageToMemory(imagePath, this);
         this.Log().Info("载入食物, 数量: {count}", loader.Foods.Count);
         foreach (var food in loader.Foods)
         {

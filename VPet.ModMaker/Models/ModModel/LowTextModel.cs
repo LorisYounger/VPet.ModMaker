@@ -114,9 +114,4 @@ public partial class LowTextModel : ViewModelBase
     {
         I18nResource.I18nObjects.Remove(I18nObject);
     }
-
-    internal object ToLowText()
-    {
-        throw new NotImplementedException();
-    }
 }

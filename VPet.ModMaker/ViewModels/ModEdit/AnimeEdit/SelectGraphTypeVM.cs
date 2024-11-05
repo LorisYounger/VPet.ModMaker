@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using HKW.HKWReactiveUI;
 using HKW.HKWUtils.Extensions;
+using HKW.MVVMDialogs;
 using VPet.ModMaker.Models;
 using VPet.ModMaker.Models.ModModel;
 using VPet.ModMaker.Native;
@@ -14,9 +15,9 @@ using VPet_Simulator.Core;
 
 namespace VPet.ModMaker.ViewModels.ModEdit;
 
-public partial class SelectGraphTypeWindowVM : ViewModelBase
+public partial class SelectGraphTypeVM : DialogViewModel
 {
-    public SelectGraphTypeWindowVM() { }
+    public SelectGraphTypeVM() { }
 
     /// <summary>
     /// 当前宠物
@@ -26,11 +27,14 @@ public partial class SelectGraphTypeWindowVM : ViewModelBase
 
     partial void OnCurrentPetChanged(PetModel oldValue, PetModel newValue)
     {
-        GraphTypes = new(
-            AnimeTypeModel.GraphTypes.Except(CurrentPet.Animes.Select(m => m.GraphType))
-        );
-        // 可添加多个项的类型
-        GraphTypes.AddRange(AnimeTypeModel.HasNameAnimes);
+        if (newValue is not null)
+        {
+            GraphTypes = new(
+                AnimeTypeModel.GraphTypes.Except(CurrentPet.Animes.Select(m => m.GraphType))
+            );
+            // 可添加多个项的类型
+            GraphTypes.AddRange(AnimeTypeModel.HasNameAnimes);
+        }
     }
 
     /// <summary>
@@ -38,14 +42,6 @@ public partial class SelectGraphTypeWindowVM : ViewModelBase
     /// </summary>
     [ReactiveProperty]
     public GraphInfo.GraphType GraphType { get; set; }
-
-    partial void OnGraphTypeChanged(GraphInfo.GraphType oldValue, GraphInfo.GraphType newValue)
-    {
-        if (GraphType.IsHasNameAnime())
-            HasNameAnime = true;
-        else
-            HasNameAnime = false;
-    }
 
     /// <summary>
     /// 动画类型列表
@@ -62,6 +58,6 @@ public partial class SelectGraphTypeWindowVM : ViewModelBase
     /// <summary>
     /// 具有动画名称
     /// </summary>
-    [ReactiveProperty]
-    public bool HasNameAnime { get; set; } = true;
+    [NotifyPropertyChangeFrom(nameof(GraphType))]
+    public bool HasNameAnime => GraphType.IsHasNameAnime();
 }

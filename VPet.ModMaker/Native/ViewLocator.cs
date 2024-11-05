@@ -32,10 +32,10 @@ internal class ViewLocator : StrongViewLocatorX
         Register<PetEditVM, PetPage, PetEditWindow>();
         Register<MoveEditVM, MovePage, MoveEditWindow>();
         Register<WorkEditVM, WorkPage, WorkEditWindow>();
-        Register<AnimeEditWindowVM, AnimeEditWindow>();
-        Register<FoodAnimeEditWindowVM, FoodAnimeEditWindow>();
-        RegisterPage<AnimePageVM, AnimePage>();
-        Register<SelectGraphTypeWindowVM, SelectGraphTypeWindow>();
+        Register<AnimeEditVM, AnimeEditWindow>();
+        Register<FoodAnimeEditVM, FoodAnimeEditWindow>();
+        RegisterPage<AnimeVM, AnimePage>();
+        Register<SelectGraphTypeVM, SelectGraphTypeWindow>();
 
         this.RegisterAllDialogX();
         this.RegisterAddCultureDialog();

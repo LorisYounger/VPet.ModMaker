@@ -29,20 +29,9 @@ public partial class AnimeEditWindow : Window
     public AnimeEditWindow()
     {
         InitializeComponent();
-        DataContext = new AnimeEditWindowVM();
-        Closed += (s, e) =>
-        {
-            try
-            {
-                DataContext = null;
-            }
-            catch { }
-        };
     }
 
-    public AnimeEditWindowVM ViewModel => (AnimeEditWindowVM)DataContext;
-
-    public bool IsCancel { get; private set; } = true;
+    public AnimeEditVM ViewModel => (AnimeEditVM)DataContext;
 
     private void Button_Cancel_Click(object? sender, RoutedEventArgs e)
     {
@@ -51,7 +40,7 @@ public partial class AnimeEditWindow : Window
 
     private void Button_Yes_Click(object? sender, RoutedEventArgs e)
     {
-        IsCancel = false;
+        ViewModel.DialogResult = true;
         Close();
     }
 
@@ -66,8 +55,8 @@ public partial class AnimeEditWindow : Window
         if (Enum.TryParse<ModeType>(str, true, out var mode))
         {
             ViewModel.CurrentMode = mode;
-            ViewModel.CurrentImageModel = null;
-            ViewModel.CurrentAnimeModel = null;
+            ViewModel.CurrentImageModel = null!;
+            ViewModel.CurrentAnimeModel = null!;
         }
     }
 
@@ -79,7 +68,7 @@ public partial class AnimeEditWindow : Window
             Source = sender
         };
         var parent = ((Control)sender!).Parent as UIElement;
-        parent.RaiseEvent(eventArg);
+        parent!.RaiseEvent(eventArg);
         e.Handled = true;
     }
 
@@ -125,16 +114,14 @@ public partial class AnimeEditWindow : Window
         var listBoxItem = result.VisualHit.FindVisuaParent<ListBoxItem>();
         if (listBoxItem == null)
             return;
-        var targetPerson = listBoxItem.Content as ImageModel;
+        var targetPerson = (ImageModel)listBoxItem.Content;
         if (ReferenceEquals(targetPerson, sourcePerson))
             return;
         if (listBox.ItemsSource is not IList<ImageModel> list)
             return;
         var sourceIndex = list.IndexOf(sourcePerson);
         var targetIndex = list.IndexOf(targetPerson);
-        var temp = list[sourceIndex];
-        list[sourceIndex] = list[targetIndex];
-        list[targetIndex] = temp;
+        (list[targetIndex], list[sourceIndex]) = (list[sourceIndex], list[targetIndex]);
     }
 
     private void ListBox_SelectionChanged(object? sender, SelectionChangedEventArgs e)

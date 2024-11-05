@@ -17,7 +17,7 @@
     <ResourceDictionary Source="/VPet-Simulator.Windows.Interface;component/ResourceStyle.xaml" />
   </Window.Resources>
   <d:Window.DataContext>
-    <vm:SelectGraphTypeWindowVM />
+    <vm:SelectGraphTypeVM />
   </d:Window.DataContext>
   <Grid>
     <Grid.RowDefinitions>

@@ -38,7 +38,7 @@ public partial class ModMakerVM : ViewModelBase
     public ModMakerVM()
     {
         Initialize();
-        this.Log().Info("初始化完成");
+        this.Log().Info("初始化完成".Translate());
         Histories = new([], [], f => f.ID.Contains(Search, StringComparison.OrdinalIgnoreCase));
         LoadHistory(NativeData.HistoryBaseFilePath);
 

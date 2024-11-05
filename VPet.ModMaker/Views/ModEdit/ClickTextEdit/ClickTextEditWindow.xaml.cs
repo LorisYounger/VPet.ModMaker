@@ -29,6 +29,8 @@ public partial class ClickTextEditWindow : WindowX
         InitializeComponent();
     }
 
+    public ClickTextEditVM ViewModel => (ClickTextEditVM)DataContext;
+
     private void Button_Cancel_Click(object? sender, RoutedEventArgs e)
     {
         Close();
@@ -36,6 +38,7 @@ public partial class ClickTextEditWindow : WindowX
 
     private void Button_Yes_Click(object? sender, RoutedEventArgs e)
     {
+        ViewModel.DialogResult = true;
         Close();
     }
 }

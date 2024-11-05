@@ -30,20 +30,9 @@ public partial class FoodAnimeEditWindow : Window
     public FoodAnimeEditWindow()
     {
         InitializeComponent();
-        DataContext = new FoodAnimeEditWindowVM();
-        Closed += (s, e) =>
-        {
-            try
-            {
-                DataContext = null;
-            }
-            catch { }
-        };
     }
 
-    public FoodAnimeEditWindowVM ViewModel => (FoodAnimeEditWindowVM)DataContext;
-
-    public bool IsCancel { get; private set; } = true;
+    public FoodAnimeEditVM ViewModel => (FoodAnimeEditVM)DataContext;
 
     private void Button_Cancel_Click(object? sender, RoutedEventArgs e)
     {
@@ -52,7 +41,7 @@ public partial class FoodAnimeEditWindow : Window
 
     private void Button_Yes_Click(object? sender, RoutedEventArgs e)
     {
-        IsCancel = false;
+        ViewModel.DialogResult = true;
         Close();
     }
 
@@ -69,10 +58,10 @@ public partial class FoodAnimeEditWindow : Window
         if (Enum.TryParse<ModeType>(str, true, out var mode))
         {
             ViewModel.CurrentMode = mode;
-            ViewModel.CurrentFrontImageModel = null;
-            ViewModel.CurrentBackImageModel = null;
-            ViewModel.CurrentFoodLocationModel = null;
-            ViewModel.CurrentAnimeModel = null;
+            ViewModel.CurrentFrontImageModel = null!;
+            ViewModel.CurrentBackImageModel = null!;
+            ViewModel.CurrentFoodLocationModel = null!;
+            ViewModel.CurrentAnimeModel = null!;
         }
     }
 
@@ -83,8 +72,8 @@ public partial class FoodAnimeEditWindow : Window
             RoutedEvent = MouseWheelEvent,
             Source = sender
         };
-        var parent = ((Control)sender).Parent as UIElement;
-        parent.RaiseEvent(eventArg);
+        var parent = ((Control)sender!).Parent as UIElement;
+        parent!.RaiseEvent(eventArg);
         e.Handled = true;
     }
 
@@ -145,16 +134,14 @@ public partial class FoodAnimeEditWindow : Window
         var listBoxItem = result.VisualHit.FindVisuaParent<ListBoxItem>();
         if (listBoxItem == null)
             return;
-        var targetPerson = listBoxItem.Content as ImageModel;
+        var targetPerson = (ImageModel)listBoxItem.Content;
         if (ReferenceEquals(targetPerson, sourcePerson))
             return;
         if (listBox.ItemsSource is not IList<ImageModel> list)
             return;
         var sourceIndex = list.IndexOf(sourcePerson);
         var targetIndex = list.IndexOf(targetPerson);
-        var temp = list[sourceIndex];
-        list[sourceIndex] = list[targetIndex];
-        list[targetIndex] = temp;
+        (list[targetIndex], list[sourceIndex]) = (list[sourceIndex], list[targetIndex]);
     }
 
     private void ListBox_SelectionChanged(object? sender, SelectionChangedEventArgs e)
