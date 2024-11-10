@@ -39,7 +39,7 @@ public partial class ModInfoModel : ViewModelBase
 {
     public ModInfoModel()
     {
-        PropertyChanged += ModInfoModel_PropertyChanged;
+        GameVersion = ModUpdataHelper.LastVersion;
         Pets.WhenPropertyChanged(x => x.Count)
             .Subscribe(x => this.RaisePropertyChange(nameof(PetDisplayedCount)));
         I18nResource.PropertyChanged += I18nResource_PropertyChanged;
@@ -61,9 +61,13 @@ public partial class ModInfoModel : ViewModelBase
         : this()
     {
         this.Log().Info("载入模组, ID: {id}, 路径: {path}", loader.Name, loader.ModPath.FullName);
+        LoadI18nDatas(loader);
+
         SourcePath = loader.ModPath.FullName;
         ID = loader.Name;
-        DescriptionID = loader.Intro;
+        if (loader.Intro != DescriptionID)
+            I18nResource.ReplaceCultureDataKey(loader.Intro, DescriptionID, true);
+
         Author = loader.Author;
         GameVersion = loader.GameVer;
         ModVersion = loader.Ver;
@@ -71,65 +75,30 @@ public partial class ModInfoModel : ViewModelBase
         AuthorID = loader.AuthorID;
         var imagePath = Path.Combine(loader.ModPath.FullName, "icon.png");
         Image = HKWImageUtils.LoadImageToMemory(imagePath, this);
-        this.Log().Info("载入食物, 数量: {count}", loader.Foods.Count);
-        foreach (var food in loader.Foods)
-        {
-            try
-            {
-                Foods.Add(new(food) { I18nResource = I18nResource });
-                this.Log().Debug("添加食物成功, ID: {id}", food.Name);
-            }
-            catch (Exception ex)
-            {
-                this.Log().Warn("添加食物失败, ID: {id}", food.Name, ex);
-            }
-        }
-        this.Log().Info("载入点击文本, 数量: {count}", loader.ClickTexts.Count);
-        foreach (var clickText in loader.ClickTexts)
-        {
-            try
-            {
-                ClickTexts.Add(new(clickText) { I18nResource = I18nResource });
-                this.Log().Debug("添加点击文本成功, ID: {id}", clickText.Text);
-            }
-            catch (Exception ex)
-            {
-                this.Log().Warn("添加点击文本失败, ID: {id}", clickText.Text, ex);
-            }
-        }
-        this.Log().Info("载入低状态文本, 数量: {count}", loader.LowTexts.Count);
-        foreach (var lowText in loader.LowTexts)
-        {
-            try
-            {
-                LowTexts.Add(new(lowText) { I18nResource = I18nResource });
-                this.Log().Debug("添加低状态文本成功, ID: {id}", lowText.Text);
-            }
-            catch (Exception ex)
-            {
-                this.Log().Warn("添加低状态文本失败, ID: {id}", lowText.Text, ex);
-            }
-        }
-        this.Log().Info("载入选择文本, 数量: {count}", loader.SelectTexts.Count);
-        foreach (var selectText in loader.SelectTexts)
-        {
-            try
-            {
-                SelectTexts.Add(new(selectText) { I18nResource = I18nResource });
-                this.Log().Debug("添加选择文本成功, ID: {id}", selectText.Text);
-            }
-            catch (Exception ex)
-            {
-                this.Log().Warn("添加选择文本失败, ID: {id}", selectText.Text, ex);
-            }
-        }
+
+        LoadFoods(loader);
+        LoadClickTexts(loader);
+        LoadLowTexts(loader);
+        LoadSelectTexts(loader);
+        LoadPets(loader);
+        //if (loader.I18nDatas.HasValue() is false)
+        //    return;
+        //LoadI18nDatas(loader);
+        //RefreshAllID();
+        //if (I18nResource.CultureDatas.HasValue())
+        //    RefreshID();
+        I18nResource.FillDefaultValue();
+    }
+
+    private void LoadPets(ModLoader loader)
+    {
         this.Log().Info("载入宠物, 数量: {count}", loader.Pets.Count);
         // 载入模组宠物
         foreach (var pet in loader.Pets)
         {
             try
             {
-                var petModel = new PetModel(pet) { I18nResource = I18nResource };
+                var petModel = new PetModel(pet, I18nResource);
                 // 如果检测到本体存在同名宠物
                 if (NativeData.MainPets.TryGetValue(petModel.ID, out var mainPet))
                 {
@@ -170,20 +139,73 @@ public partial class ModInfoModel : ViewModelBase
                 this.Log().Warn("添加宠物失败, ID: {id}, 宠物名称: {name}", pet.Name, pet.PetName, ex);
             }
         }
-        if (loader.I18nDatas.HasValue() is false)
-            return;
-        LoadI18nDatas(loader);
-        RefreshAllID();
-        if (I18nResource.CultureDatas.HasValue())
-            RefreshID();
-        I18nResource.FillDefaultValue();
     }
 
-    private void ModInfoModel_PropertyChanged(object? sender, PropertyChangedEventArgs e)
+    private void LoadSelectTexts(ModLoader loader)
     {
-        if (e.PropertyName == nameof(ID))
+        this.Log().Info("载入选择文本, 数量: {count}", loader.SelectTexts.Count);
+        foreach (var selectText in loader.SelectTexts)
         {
-            DescriptionID = $"{ID}_{nameof(Description)}";
+            try
+            {
+                SelectTexts.Add(new(selectText, I18nResource));
+                this.Log().Debug("添加选择文本成功, ID: {id}", selectText.Text);
+            }
+            catch (Exception ex)
+            {
+                this.Log().Warn("添加选择文本失败, ID: {id}", selectText.Text, ex);
+            }
+        }
+    }
+
+    private void LoadLowTexts(ModLoader loader)
+    {
+        this.Log().Info("载入低状态文本, 数量: {count}", loader.LowTexts.Count);
+        foreach (var lowText in loader.LowTexts)
+        {
+            try
+            {
+                LowTexts.Add(new(lowText) { I18nResource = I18nResource });
+                this.Log().Debug("添加低状态文本成功, ID: {id}", lowText.Text);
+            }
+            catch (Exception ex)
+            {
+                this.Log().Warn("添加低状态文本失败, ID: {id}", lowText.Text, ex);
+            }
+        }
+    }
+
+    private void LoadClickTexts(ModLoader loader)
+    {
+        this.Log().Info("载入点击文本, 数量: {count}", loader.ClickTexts.Count);
+        foreach (var clickText in loader.ClickTexts)
+        {
+            try
+            {
+                ClickTexts.Add(new(clickText) { I18nResource = I18nResource });
+                this.Log().Debug("添加点击文本成功, ID: {id}", clickText.Text);
+            }
+            catch (Exception ex)
+            {
+                this.Log().Warn("添加点击文本失败, ID: {id}", clickText.Text, ex);
+            }
+        }
+    }
+
+    private void LoadFoods(ModLoader loader)
+    {
+        this.Log().Info("载入食物, 数量: {count}", loader.Foods.Count);
+        foreach (var food in loader.Foods)
+        {
+            try
+            {
+                Foods.Add(new(food, I18nResource));
+                this.Log().Debug("添加食物成功, ID: {id}", food.Name);
+            }
+            catch (Exception ex)
+            {
+                this.Log().Warn("添加食物失败, ID: {id}", food.Name, ex);
+            }
         }
     }
 
@@ -245,16 +267,11 @@ public partial class ModInfoModel : ViewModelBase
     [ReactiveProperty]
     public string ID { get; set; } = string.Empty;
 
-    partial void OnIDChanged(string oldValue, string newValue)
-    {
-        RefreshID();
-    }
-
     /// <summary>
     /// 描述ID
     /// </summary>
-    [ReactiveProperty]
-    public string DescriptionID { get; set; } = string.Empty;
+    [NotifyPropertyChangeFrom(nameof(ID))]
+    public string DescriptionID => $"{ID}_Description";
 
     /// <summary>
     /// 作者
@@ -356,11 +373,6 @@ public partial class ModInfoModel : ViewModelBase
                 }
             }
         }
-    }
-
-    public void RefreshID()
-    {
-        DescriptionID = $"{ID}_{nameof(DescriptionID)}";
     }
 
     #region Load
@@ -468,13 +480,27 @@ public partial class ModInfoModel : ViewModelBase
     /// </summary>
     private void LoadI18nDatas(ModLoader modLoader)
     {
+        if (modLoader.I18nDatas.Count == 0)
+        {
+            I18nResource.AddCulture(CultureInfo.CurrentCulture);
+            this.Log().Info("模组未包含本地化数据");
+            return;
+        }
         this.Log().Info("载入本地化数据, 目标文化: {cultrue}", string.Join(", ", modLoader.I18nDatas.Keys));
         foreach (var cultureDatas in modLoader.I18nDatas)
         {
-            var culture = CultureInfo.GetCultureInfo(cultureDatas.Key);
+            CultureInfo? culture;
+            try
+            {
+                culture = CultureInfo.GetCultureInfo(cultureDatas.Key);
+            }
+            catch (Exception ex)
+            {
+                this.Log().Warn($"载入文化 {cultureDatas.Key} 错误, 请检查文化名称", ex);
+                continue;
+            }
             I18nResource.AddCulture(culture);
-            foreach (var data in cultureDatas.Value)
-                I18nResource.SetCultureData(culture, data.Key, data.Value);
+            I18nResource.SetCultureDatas(culture, cultureDatas.Value);
         }
         if (I18nResource.SetCurrentCulture(CultureInfo.CurrentCulture) is false)
             I18nResource.SetCurrentCulture(I18nResource.Cultures.First());
@@ -487,17 +513,6 @@ public partial class ModInfoModel : ViewModelBase
         //    DescriptionID = $"{ID}_{nameof(DescriptionID)}";
         //    return;
         //}
-    }
-
-    public void RefreshAllID()
-    {
-        RefreshID();
-        foreach (var food in Foods)
-            food.RefreshID();
-        foreach (var selectText in SelectTexts)
-            selectText.RefreshID();
-        foreach (var pet in Pets)
-            pet.RefreshID();
     }
     #endregion
     #region Save

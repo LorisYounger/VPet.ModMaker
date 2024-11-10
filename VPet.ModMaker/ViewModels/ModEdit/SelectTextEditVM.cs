@@ -69,6 +69,8 @@ public partial class SelectTextEditVM : DialogViewModel
 
     private void SelectTextEditVM_Closing(object? sender, System.ComponentModel.CancelEventArgs e)
     {
+        if (DialogResult is not true)
+            return;
         if (string.IsNullOrWhiteSpace(SelectText.ID))
         {
             DialogService.ShowMessageBoxX(
@@ -79,9 +81,8 @@ public partial class SelectTextEditVM : DialogViewModel
                 MessageBoxImage.Warning
             );
             e.Cancel = true;
-            return;
         }
-        if (SelectText.Text is null)
+        else if (SelectText.Text is null)
         {
             DialogService.ShowMessageBoxX(
                 this,
@@ -91,9 +92,8 @@ public partial class SelectTextEditVM : DialogViewModel
                 MessageBoxImage.Warning
             );
             e.Cancel = true;
-            return;
         }
-        if (
+        else if (
             OldSelectText?.ID != SelectText.ID
             && ModInfo.SelectTexts.Any(i => i.ID == SelectText.ID)
         )
@@ -106,9 +106,8 @@ public partial class SelectTextEditVM : DialogViewModel
                 MessageBoxImage.Warning
             );
             e.Cancel = true;
-            return;
         }
-        DialogResult = true;
+        DialogResult = e.Cancel is not true;
     }
 
     /// <summary>
@@ -270,6 +269,7 @@ public partial class SelectTextEditVM : DialogViewModel
         SelectText = null!;
         OldSelectText = null!;
         DialogResult = false;
+        ModInfo.TempI18nResource.ClearCultureData();
     }
 }
 

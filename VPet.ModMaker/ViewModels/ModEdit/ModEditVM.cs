@@ -45,36 +45,39 @@ public partial class ModEditVM : ViewModelBase
     {
         if (newValue is not null)
         {
-            if (ModInfo.I18nResource.Cultures.HasValue() is false)
+            if (ModInfo.I18nResource.Cultures.Count == 0)
             {
-                if (
+                DialogService.ShowMessageBoxX(
+                    this,
+                    "未添加任何文化,请添加文化".Translate(),
+                    "缺少文化".Translate()
+                );
+                AddCulture();
+                if (ModInfo.I18nResource.Cultures.Count == 0)
+                {
                     DialogService.ShowMessageBoxX(
                         this,
-                        "未添加任何文化,确定要添加文化吗?".Translate(),
-                        "缺少文化".Translate(),
-                        MessageBoxButton.YesNo
-                    )
-                    is not true
-                )
+                        "未设置文化, 将退出编辑".Translate(),
+                        "数据错误".Translate()
+                    );
+                    MessageBus.Current.SendMessage<ModInfoModel?>(null);
                     return;
-                AddCulture();
-                if (
-                    ModInfo.I18nResource.Cultures.HasValue() is false
-                    || DialogService.ShowMessageBoxX(
-                        this,
-                        "需要将文化 {0} 设为主要文化吗?".Translate(ModInfo.I18nResource.Cultures.First().Name),
-                        "设置主要文化".Translate(),
-                        MessageBoxButton.YesNo
-                    )
-                        is not true
-                )
-                    return;
-                SetMainCulture(ModInfo.I18nResource.Cultures.First().Name);
+                }
+                //if (
+                //    DialogService.ShowMessageBoxX(
+                //        this,
+                //        "需要将文化 {0} 设为主要文化吗?".Translate(ModInfo.I18nResource.Cultures.First().Name),
+                //        "设置主要文化".Translate(),
+                //        MessageBoxButton.YesNo
+                //    )
+                //    is not true
+                //)
+                //    return;
+                //SetMainCulture(ModInfo.I18nResource.Cultures.First().Name);
             }
             // 更新模组
             if (ModUpdataHelper.CanUpdata(ModInfo) is false)
                 return;
-
             if (
                 DialogService.ShowMessageBoxX(
                     this,
@@ -169,9 +172,10 @@ public partial class ModEditVM : ViewModelBase
     /// 添加文化
     /// </summary>
     [ReactiveCommand]
-    public async void AddCulture()
+    [STAThread]
+    public void AddCulture()
     {
-        var vm = await DialogService.ShowDialogAsyncX(this, new AddCultureVM(ModInfo));
+        var vm = DialogService.ShowDialogX(this, new AddCultureVM(ModInfo));
         if (vm.DialogResult is not true)
             return;
         ModInfo.I18nResource.AddCulture(vm.CultureName);
@@ -184,9 +188,9 @@ public partial class ModEditVM : ViewModelBase
     /// </summary>
     /// <param name="oldCulture">旧文化</param>
     [ReactiveCommand]
-    private async void EditCulture(string oldCulture)
+    private void EditCulture(string oldCulture)
     {
-        var vm = await DialogService.ShowDialogAsyncX(
+        var vm = DialogService.ShowDialogX(
             this,
             new AddCultureVM(ModInfo) { CultureName = oldCulture }
         );
@@ -224,22 +228,22 @@ public partial class ModEditVM : ViewModelBase
     [ReactiveCommand]
     public void SetMainCulture(string culture)
     {
-        if (
-            DialogService.ShowMessageBoxX(
-                this,
-                "!!!注意!!!\n此操作会将所有ID设为当前文化的翻译内容,仅适用于初次设置多文化的模组\n确定要继续吗?".Translate(),
-                "设置主文化".Translate(),
-                MessageBoxButton.YesNo
-            )
-            is not true
-        )
-            return;
-        foreach (var datas in ModInfo.I18nResource.CultureDatas)
-        {
-            ModInfo.I18nResource.SetCurrentCultureData(datas.Key, datas.Key);
-        }
-        ModInfo.RefreshAllID();
-        this.Log().Info("设置主要文化为 {culture}", culture);
+        //TODO: 可能已经不需要了?
+        //if (
+        //    DialogService.ShowMessageBoxX(
+        //        this,
+        //        "!!!注意!!!\n此操作会将所有ID设为当前文化的翻译内容,仅适用于初次设置多文化的模组\n确定要继续吗?".Translate(),
+        //        "设置主文化".Translate(),
+        //        MessageBoxButton.YesNo
+        //    )
+        //    is not true
+        //)
+        //    return;
+        //foreach (var datas in ModInfo.I18nResource.CultureDatas)
+        //{
+        //    ModInfo.I18nResource.SetCurrentCultureData(datas.Key, datas.Key);
+        //}
+        //this.Log().Info("设置主要文化为 {culture}", culture);
     }
     #endregion
 

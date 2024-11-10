@@ -69,6 +69,8 @@ public partial class LowTextEditVM : DialogViewModel
 
     private void LowTextEditVM_Closing(object? sender, System.ComponentModel.CancelEventArgs e)
     {
+        if (DialogResult is not true)
+            return;
         if (string.IsNullOrWhiteSpace(LowText.ID))
         {
             DialogService.ShowMessageBoxX(
@@ -79,9 +81,8 @@ public partial class LowTextEditVM : DialogViewModel
                 MessageBoxImage.Warning
             );
             e.Cancel = true;
-            return;
         }
-        if (LowText.Text is null)
+        else if (LowText.Text is null)
         {
             DialogService.ShowMessageBoxX(
                 this,
@@ -91,9 +92,8 @@ public partial class LowTextEditVM : DialogViewModel
                 MessageBoxImage.Warning
             );
             e.Cancel = true;
-            return;
         }
-        if (OldLowText?.ID != LowText.ID && ModInfo.LowTexts.Any(i => i.ID == LowText.ID))
+        else if (OldLowText?.ID != LowText.ID && ModInfo.LowTexts.Any(i => i.ID == LowText.ID))
         {
             DialogService.ShowMessageBoxX(
                 this,
@@ -103,9 +103,8 @@ public partial class LowTextEditVM : DialogViewModel
                 MessageBoxImage.Warning
             );
             e.Cancel = true;
-            return;
         }
-        DialogResult = true;
+        DialogResult = e.Cancel is not true;
     }
 
     /// <summary>
@@ -257,6 +256,7 @@ public partial class LowTextEditVM : DialogViewModel
         LowText = null!;
         OldLowText = null!;
         DialogResult = false;
+        ModInfo.TempI18nResource.ClearCultureData();
     }
 }
 

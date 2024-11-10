@@ -37,9 +37,9 @@ public partial class ModMakerWindow : WindowX, IPageLocator
     public ModMakerWindow()
     {
         InitializeComponent();
-        this.SetViewModel<ModMakerVM>();
+        this.SetViewModel<ModMakerVM>((s, e) => ViewModel.Close());
         MessageBus
-            .Current.Listen<ModInfoModel>()
+            .Current.Listen<ModInfoModel?>()
             .Subscribe(x =>
             {
                 if (x is null)
@@ -54,11 +54,14 @@ public partial class ModMakerWindow : WindowX, IPageLocator
                 else
                 {
                     this.Hide();
+                    ModEditWindow.ShowOrActivate();
                     ModEditWindow.ViewModel.ModInfo = x;
+                    ModEditWindow.ContentControl_Food_Loaded(null!, null!);
+                    ModEditWindow.SetLocationToCenter();
+
 #if !RELEASE
                     ModEditWindow.InitializePage();
 #endif
-                    ModEditWindow.ShowOrActivate();
                 }
             });
     }
@@ -77,31 +80,6 @@ public partial class ModMakerWindow : WindowX, IPageLocator
     /// </summary>
     public ModEditWindow ModEditWindow => _modEditWindow ??= new ModEditWindow().MaskClose(this);
     #endregion
-
-    private void ListBoxItem_MouseDoubleClick(object? sender, MouseButtonEventArgs e)
-    {
-        if (sender is not ListBoxItem item)
-            return;
-        if (item.DataContext is not ModMakeHistory history)
-            return;
-        if (Directory.Exists(history.SourcePath) is false)
-        {
-            if (
-                MessageBoxX.Show(
-                    this,
-                    $"路径不存在, 是否删除?".Translate(),
-                    "数据错误".Translate(),
-                    MessageBoxButton.YesNo
-                ) is MessageBoxResult.Yes
-            )
-            {
-                ViewModel.RemoveHistory(history);
-                ViewModel.SaveHistory(NativeData.HistoryBaseFilePath);
-                return;
-            }
-        }
-        ViewModel.LoadMod(history.SourcePath);
-    }
 
     public const string WikiLink = "https://github.com/LorisYounger/VPet.ModMaker/wiki";
 
@@ -127,5 +105,14 @@ public partial class ModMakerWindow : WindowX, IPageLocator
             Clipboard.SetText(WikiLink);
             MessageBoxX.Show(this, "已复制链接到剪贴板".Translate());
         }
+    }
+
+    private void ListBox_ItemClick(object sender, RoutedEventArgs e)
+    {
+        if (e.OriginalSource is not ListBoxItem item)
+            return;
+        if (item.DataContext is not ModMakeHistory history)
+            return;
+        ViewModel.LoadHistory(history);
     }
 }

@@ -3,6 +3,7 @@ using System.Collections.Frozen;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -31,10 +32,14 @@ public partial class SelectTextModel : ViewModelBase
         this.MapFromSelectTextModel(model);
     }
 
-    public SelectTextModel(SelectText text)
+    [SetsRequiredMembers]
+    public SelectTextModel(SelectText text, I18nResource<string, string> i18nResource)
         : this()
     {
         this.MapFromSelectText(text);
+        if (text.Choose != ChooseID)
+            i18nResource.ReplaceCultureDataKey(text.Choose, ChooseID);
+        I18nResource = i18nResource;
     }
 
     /// <summary>
@@ -66,18 +71,11 @@ public partial class SelectTextModel : ViewModelBase
     [ReactiveProperty]
     public string ID { get; set; } = string.Empty;
 
-    partial void OnIDChanged(string oldValue, string newValue)
-    {
-        RefreshID();
-    }
-
     /// <summary>
-    /// 选择Id
+    /// 选择ID
     /// </summary>
-    [SelectTextModelMapToSelectTextProperty(nameof(SelectText.Choose))]
-    [SelectTextModelMapFromSelectTextProperty(nameof(SelectText.Choose))]
-    [ReactiveProperty]
-    public string ChooseID { get; set; } = string.Empty;
+    [NotifyPropertyChangeFrom(nameof(ID))]
+    public string ChooseID => $"{ID}_Choose";
 
     [MapIgnoreProperty]
     [ReactiveProperty]
@@ -163,11 +161,6 @@ public partial class SelectTextModel : ViewModelBase
     /// 体力值
     /// </summary>
     public ObservableRange<double> Strength { get; } = new(0, int.MaxValue);
-
-    public void RefreshID()
-    {
-        ChooseID = $"{ID}_{nameof(ChooseID)}";
-    }
 
     public void Close()
     {

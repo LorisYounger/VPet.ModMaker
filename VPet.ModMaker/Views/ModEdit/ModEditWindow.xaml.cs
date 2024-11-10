@@ -142,7 +142,7 @@ public partial class ModEditWindow : WindowX, IPageLocator
             this.SkipNextClose();
             return;
         }
-        MessageBus.Current.SendMessage<ModInfoModel>(null!);
+        MessageBus.Current.SendMessage<ModInfoModel?>(null);
     }
 
     private void ModEditWindow_Closed(object? sender, EventArgs e)
@@ -176,7 +176,7 @@ public partial class ModEditWindow : WindowX, IPageLocator
         ContentControl_Anime_Loaded(null!, null!);
     }
 
-    private void ContentControl_Food_Loaded(object sender, RoutedEventArgs e)
+    public void ContentControl_Food_Loaded(object sender, RoutedEventArgs e)
     {
         FoodEditVM ??= new() { ModInfo = ViewModel.ModInfo };
         FoodPage ??= new() { DataContext = FoodEditVM };

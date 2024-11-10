@@ -49,7 +49,10 @@ public class ModMakeHistory : IEquatable<ModMakeHistory>, IEnableLogger
             _sourcePath = value;
             var imagePath = Path.Combine(_sourcePath, "icon.png");
 
-            Image = HKWImageUtils.LoadImageToMemory(imagePath, this);
+            if (File.Exists(imagePath) is false)
+                this.Log().Warn("目标文件不存在, 路径: {path}", imagePath);
+            else
+                Image = HKWImageUtils.LoadImageToMemory(imagePath, this);
         }
     }
 

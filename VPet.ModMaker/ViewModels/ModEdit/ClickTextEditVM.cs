@@ -66,6 +66,8 @@ public partial class ClickTextEditVM : DialogViewModel
 
     private void ClickTextEditVM_Closing(object? sender, CancelEventArgs e)
     {
+        if (DialogResult is not true)
+            return;
         if (string.IsNullOrWhiteSpace(ClickText.ID))
         {
             DialogService.ShowMessageBoxX(
@@ -76,9 +78,8 @@ public partial class ClickTextEditVM : DialogViewModel
                 MessageBoxImage.Warning
             );
             e.Cancel = true;
-            return;
         }
-        if (ClickText.Text is null)
+        else if (ClickText.Text is null)
         {
             DialogService.ShowMessageBoxX(
                 this,
@@ -88,9 +89,11 @@ public partial class ClickTextEditVM : DialogViewModel
                 MessageBoxImage.Warning
             );
             e.Cancel = true;
-            return;
         }
-        if (OldClickText?.ID != ClickText.ID && ModInfo.ClickTexts.Any(i => i.ID == ClickText.ID))
+        else if (
+            OldClickText?.ID != ClickText.ID
+            && ModInfo.ClickTexts.Any(i => i.ID == ClickText.ID)
+        )
         {
             DialogService.ShowMessageBoxX(
                 this,
@@ -100,9 +103,8 @@ public partial class ClickTextEditVM : DialogViewModel
                 MessageBoxImage.Warning
             );
             e.Cancel = true;
-            return;
         }
-        DialogResult = true;
+        DialogResult = e.Cancel is not true;
     }
 
     /// <summary>
@@ -261,6 +263,7 @@ public partial class ClickTextEditVM : DialogViewModel
         ClickText = null!;
         OldClickText = null!;
         DialogResult = false;
+        ModInfo.TempI18nResource.ClearCultureData();
     }
 }
 

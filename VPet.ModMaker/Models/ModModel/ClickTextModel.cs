@@ -38,9 +38,11 @@ public partial class ClickTextModel : ViewModelBase
         this.MapFromClickText(clickText);
     }
 
+    private readonly ClickText _clickText = new();
+
     public ClickText ToClickText()
     {
-        return this.MapToClickText(new());
+        return this.MapToClickText(_clickText);
     }
 
     /// <summary>

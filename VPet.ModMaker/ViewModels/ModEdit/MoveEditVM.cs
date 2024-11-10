@@ -48,12 +48,14 @@ public partial class MoveEditVM : DialogViewModel
 
     private void MoveEditVM_Closing(object? sender, System.ComponentModel.CancelEventArgs e)
     {
+        if (DialogResult is not true)
+            return;
         if (string.IsNullOrWhiteSpace(Move.Graph))
         {
             DialogService.ShowMessageBoxX(this, "指定动画不可为空".Translate(), "数据错误".Translate());
             e.Cancel = true;
-            return;
         }
+        DialogResult = e.Cancel is not true;
     }
 
     /// <summary>
@@ -267,5 +269,6 @@ public partial class MoveEditVM : DialogViewModel
         Move = null!;
         OldMove = null!;
         DialogResult = false;
+        ModInfo.TempI18nResource.ClearCultureData();
     }
 }

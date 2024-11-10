@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Diagnostics;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Reactive.Linq;
@@ -124,6 +125,7 @@ public partial class ModMakerVM : ViewModelBase
             if (LPSConvert.DeserializeObject<ModMakeHistory>(line) is not ModMakeHistory history)
                 continue;
             history.ID ??= string.Empty;
+            var c = CultureInfo.CurrentCulture;
             set.Add(history);
             this.Log().Debug("添加历史 {history}", history.SourcePath);
         }
@@ -241,6 +243,30 @@ public partial class ModMakerVM : ViewModelBase
     }
 
     /// <summary>
+    /// 载入历史
+    /// </summary>
+    /// <param name="history">历史</param>
+    public void LoadHistory(ModMakeHistory history)
+    {
+        if (Directory.Exists(history.SourcePath) is false)
+        {
+            if (
+                DialogService.ShowMessageBoxX(
+                    this,
+                    $"历史路径不存在, 是否删除?".Translate(),
+                    "数据错误".Translate(),
+                    MessageBoxButton.YesNo
+                )
+                is not true
+            )
+                return;
+            RemoveHistory(history);
+        }
+        else
+            LoadMod(history.SourcePath);
+    }
+
+    /// <summary>
     /// 载入模组
     /// </summary>
     /// <param name="directory">目录</param>
@@ -253,12 +279,12 @@ public partial class ModMakerVM : ViewModelBase
         }
         catch (Exception ex)
         {
+            this.Log().Error("模组载入失败, 路径: {path}", directory, ex);
             DialogService.ShowMessageBoxX(
                 this,
                 "模组载入失败, 详情请查看日志".Translate(),
                 icon: MessageBoxImage.Error
             );
-            this.Log().Error("模组载入失败, 路径: {path}", directory, ex);
         }
         if (loader is null)
             return;
@@ -271,9 +297,14 @@ public partial class ModMakerVM : ViewModelBase
         {
             ModInfo?.Close();
             ModInfo = null!;
-            DialogService.ShowMessageBoxX(this, "模组载入失败, 详情请查看日志".Translate());
             this.Log().Error("模组载入失败, 路径: {path}", directory, ex);
+            DialogService.ShowMessageBoxX(this, "模组载入失败, 详情请查看日志".Translate());
         }
     }
     #endregion
+
+    public void Close()
+    {
+        DialogService.ClearSingletonDialog();
+    }
 }

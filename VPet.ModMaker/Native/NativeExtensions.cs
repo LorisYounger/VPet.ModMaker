@@ -161,13 +161,4 @@ public static class NativeExtensions
             return bytesRead;
         }
     }
-
-    /// <summary>
-    /// 注册添加文化, 使用默认对话框
-    /// </summary>
-    /// <param name="strongViewLocator">强视图定位器</param>
-    public static void RegisterAddCultureDialog(this StrongViewLocatorX strongViewLocator)
-    {
-        strongViewLocator.RegisterDialogX<AddCultureVM, AddCulturePage, DialogWindowX>();
-    }
 }

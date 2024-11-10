@@ -33,8 +33,6 @@ public partial class SaveTranslationModVM : DialogViewModel
     }
 
     #region Property
-    [ReactiveProperty]
-    public bool? CheckAll { get; set; }
 
     public ObservableSelectionGroup<CultureInfo> CheckCultures { get; }
     #endregion

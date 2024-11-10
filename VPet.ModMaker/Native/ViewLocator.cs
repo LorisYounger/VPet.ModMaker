@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using HanumanInstitute.MvvmDialogs.Wpf;
 using HKW.WPF.MVVMDialogs;
+using HKW.WPF.MVVMDialogs.Windows;
 using VPet.ModMaker.Native;
 using VPet.ModMaker.ViewModels;
 using VPet.ModMaker.ViewModels.ModEdit;
@@ -23,6 +24,7 @@ internal class ViewLocator : StrongViewLocatorX
     {
         Register<ModMakerVM, ModMakerWindow>();
         Register<ModEditVM, ModEditWindow>();
+        Register<AddCultureVM, AddCultureWindow>();
         Register<I18nEditVM, I18nEditWindow>();
         Register<SaveTranslationModVM, SaveTranslationModWindow>();
         Register<FoodEditVM, FoodPage, FoodEditWindow>();
@@ -38,6 +40,5 @@ internal class ViewLocator : StrongViewLocatorX
         Register<SelectGraphTypeVM, SelectGraphTypeWindow>();
 
         this.RegisterAllDialogX();
-        this.RegisterAddCultureDialog();
     }
 }

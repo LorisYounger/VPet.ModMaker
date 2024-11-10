@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.IO;
 using System.Linq;
@@ -38,8 +39,6 @@ public partial class PetModel : ViewModelBase
         : this()
     {
         ID = model.ID;
-        PetNameID = model.PetNameID;
-        DescriptionID = model.DescriptionID;
         Tags = model.Tags;
         TouchHeadRectangleLocation = model.TouchHeadRectangleLocation.Clone();
         TouchBodyRectangleLocation = model.TouchBodyRectangleLocation.Clone();
@@ -49,12 +48,21 @@ public partial class PetModel : ViewModelBase
             Works.Add(work);
     }
 
-    public PetModel(PetLoader loader, bool fromMain = false)
+    [SetsRequiredMembers]
+    public PetModel(
+        PetLoader loader,
+        I18nResource<string, string> i18nResource,
+        bool fromMain = false
+    )
         : this()
     {
         ID = loader.Name;
-        PetNameID = loader.PetName;
-        DescriptionID = loader.Intor;
+        if (loader.PetName != PetNameID)
+            i18nResource.ReplaceCultureDataKey(loader.PetName, PetNameID);
+        if (loader.Intor != DescriptionID)
+            i18nResource.ReplaceCultureDataKey(loader.Intor, DescriptionID);
+        I18nResource = i18nResource;
+
         Tags = loader.Config.Data["tag"].Info;
 
         TouchHeadRectangleLocation = new(
@@ -127,20 +135,17 @@ public partial class PetModel : ViewModelBase
     [ReactiveProperty]
     public string ID { get; set; } = string.Empty;
 
-    partial void OnIDChanged(string oldValue, string newValue)
-    {
-        RefreshID();
-    }
-
     /// <summary>
     /// 名称ID
     /// </summary>
-    public string PetNameID { get; set; } = string.Empty;
+    [NotifyPropertyChangeFrom(nameof(ID))]
+    public string PetNameID => $"{ID}_PetName";
 
     /// <summary>
     /// 描述ID
     /// </summary>
-    public string DescriptionID { get; set; } = string.Empty;
+    [NotifyPropertyChangeFrom(nameof(ID))]
+    public string DescriptionID => $"{ID}_Description";
 
     [MapIgnoreProperty]
     [ReactiveProperty]
@@ -289,12 +294,6 @@ public partial class PetModel : ViewModelBase
     private void Animes_PropertyChanged(object? sender, PropertyChangedEventArgs e)
     {
         AnimeCount = Animes.Count + FoodAnimes.Count;
-    }
-
-    public void RefreshID()
-    {
-        PetNameID = $"{ID}_{nameof(PetNameID)}";
-        DescriptionID = $"{ID}_{nameof(DescriptionID)}";
     }
 
     public void Close()

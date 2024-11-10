@@ -72,6 +72,8 @@ public partial class FoodEditVM : DialogViewModel
 
     private void FoodEditVM_Closing(object? sender, CancelEventArgs e)
     {
+        if (DialogResult is not true)
+            return;
         if (string.IsNullOrWhiteSpace(Food.ID))
         {
             DialogService.ShowMessageBoxX(
@@ -82,9 +84,8 @@ public partial class FoodEditVM : DialogViewModel
                 MessageBoxImage.Warning
             );
             e.Cancel = true;
-            return;
         }
-        if (Food.Image is null)
+        else if (Food.Image is null)
         {
             DialogService.ShowMessageBoxX(
                 this,
@@ -94,9 +95,8 @@ public partial class FoodEditVM : DialogViewModel
                 MessageBoxImage.Warning
             );
             e.Cancel = true;
-            return;
         }
-        if (OldFood?.ID != Food.ID && ModInfo.Foods.Any(i => i.ID == Food.ID))
+        else if (OldFood?.ID != Food.ID && ModInfo.Foods.Any(i => i.ID == Food.ID))
         {
             DialogService.ShowMessageBoxX(
                 this,
@@ -106,9 +106,8 @@ public partial class FoodEditVM : DialogViewModel
                 MessageBoxImage.Warning
             );
             e.Cancel = true;
-            return;
         }
-        DialogResult = true;
+        DialogResult = e.Cancel is not true;
     }
 
     #region Property
@@ -252,7 +251,7 @@ public partial class FoodEditVM : DialogViewModel
     private async void Add()
     {
         ModInfo.TempI18nResource.ClearCultureData();
-        Food = new() { I18nResource = ModInfo.I18nResource };
+        Food = new() { I18nResource = ModInfo.TempI18nResource };
         await DialogService.ShowSingletonDialogAsync(this, this);
         if (DialogResult is not true)
         {
@@ -283,6 +282,7 @@ public partial class FoodEditVM : DialogViewModel
     public async void Edit(FoodModel model)
     {
         OldFood = model;
+        ModInfo.TempI18nResource.ClearCultureData();
         var newModel = new FoodModel(model) { I18nResource = ModInfo.TempI18nResource };
         model.I18nResource.CopyDataTo(newModel.I18nResource, [model.ID, model.DescriptionID], true);
         Food = newModel;
@@ -339,6 +339,7 @@ public partial class FoodEditVM : DialogViewModel
         Food = null!;
         OldFood = null!;
         DialogResult = false;
+        ModInfo.TempI18nResource.ClearCultureData();
     }
 }
 

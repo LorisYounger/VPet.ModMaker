@@ -3,15 +3,43 @@
   xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
   xmlns:pu="https://opensource.panuon.com/wpf-ui">
   <Style
+    x:Key="ThemedLabelStyle"
+    BasedOn="{StaticResource {x:Type Label}}"
+    TargetType="Label">
+    <Setter Property="Height" Value="30" />
+    <Setter Property="FontSize" Value="14" />
+    <Setter Property="Background" Value="{StaticResource PrimaryDarker}" />
+    <Setter Property="Foreground" Value="{StaticResource DARKPrimaryText}" />
+    <Setter Property="pu:LabelHelper.CornerRadius" Value="4" />
+  </Style>
+  <Style
+    x:Key="Label_Left"
+    BasedOn="{StaticResource ThemedLabelStyle}"
+    TargetType="Label">
+    <Setter Property="HorizontalContentAlignment" Value="Left" />
+    <Setter Property="VerticalContentAlignment" Value="Center" />
+  </Style>
+  <Style
     x:Key="AddButton"
     BasedOn="{StaticResource {x:Type Button}}"
     TargetType="Button">
-    <Setter Property="Background" Value="{StaticResource DARKPrimary}" />
+    <Setter Property="Background" Value="{StaticResource PrimaryDarker}" />
+    <Setter Property="Foreground" Value="{StaticResource DARKPrimaryText}" />
     <Setter Property="pu:ButtonHelper.ShadowColor" Value="{StaticResource ShadowColor}" />
     <Setter Property="FontSize" Value="24" />
     <Setter Property="Padding" Value="10" />
     <Setter Property="Margin" Value="10" />
     <Setter Property="pu:ButtonHelper.CornerRadius" Value="24" />
+  </Style>
+  <Style
+    x:Key="ThemedButtonStyle"
+    BasedOn="{StaticResource {x:Type Button}}"
+    TargetType="{x:Type Button}">
+    <Setter Property="Height" Value="30" />
+    <Setter Property="Background" Value="{DynamicResource DARKPrimary}" />
+    <Setter Property="Foreground" Value="{DynamicResource DARKPrimaryText}" />
+    <Setter Property="Padding" Value="10,5" />
+    <Setter Property="pu:ButtonHelper.CornerRadius" Value="5" />
   </Style>
   <Style
     x:Key="Button_Cancel"

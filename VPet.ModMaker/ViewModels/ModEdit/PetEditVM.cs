@@ -75,6 +75,8 @@ public partial class PetEditVM : DialogViewModel
 
     private void PetEditVM_Closing(object? sender, System.ComponentModel.CancelEventArgs e)
     {
+        if (DialogResult is not true)
+            return;
         if (string.IsNullOrWhiteSpace(Pet.ID))
         {
             DialogService.ShowMessageBoxX(
@@ -85,9 +87,8 @@ public partial class PetEditVM : DialogViewModel
                 MessageBoxImage.Warning
             );
             e.Cancel = true;
-            return;
         }
-        if (Pet.Name is null)
+        else if (Pet.Name is null)
         {
             DialogService.ShowMessageBoxX(
                 this,
@@ -97,9 +98,8 @@ public partial class PetEditVM : DialogViewModel
                 MessageBoxImage.Warning
             );
             e.Cancel = true;
-            return;
         }
-        if (Pet.PetName is null)
+        else if (Pet.PetName is null)
         {
             DialogService.ShowMessageBoxX(
                 this,
@@ -109,9 +109,8 @@ public partial class PetEditVM : DialogViewModel
                 MessageBoxImage.Warning
             );
             e.Cancel = true;
-            return;
         }
-        if (OldPet?.ID != Pet.ID && ModInfo.Pets.Any(i => i.ID == Pet.ID))
+        else if (OldPet?.ID != Pet.ID && ModInfo.Pets.Any(i => i.ID == Pet.ID))
         {
             DialogService.ShowMessageBoxX(
                 this,
@@ -121,9 +120,8 @@ public partial class PetEditVM : DialogViewModel
                 MessageBoxImage.Warning
             );
             e.Cancel = true;
-            return;
         }
-        DialogResult = true;
+        DialogResult = e.Cancel is not true;
     }
 
     #region Property
@@ -366,6 +364,7 @@ public partial class PetEditVM : DialogViewModel
         Pet = null!;
         OldPet = null!;
         DialogResult = false;
+        ModInfo.TempI18nResource.ClearCultureData();
     }
 }
 

@@ -53,10 +53,7 @@ public class ModMaker : MainPlugin
             NativeData.GameVersion = MW.version;
             // 载入本体宠物
             foreach (var pet in MW.Pets)
-                NativeData.MainPets.TryAdd(
-                    pet.Name,
-                    new(pet, true) { I18nResource = I18nResource }
-                );
+                NativeData.MainPets.TryAdd(pet.Name, new(pet, I18nResource, true));
             //Maker.ModMaker = this;
             Maker.Show();
             Maker.Closed += Maker_Closed;

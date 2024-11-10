@@ -3,6 +3,7 @@ using System.Collections.Frozen;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -33,16 +34,18 @@ public partial class FoodModel : ViewModelBase
     public FoodModel() { }
 
     public FoodModel(FoodModel model)
-        : this()
     {
         this.MapFromFoodModel(model);
         Image = model.Image?.CloneStream();
     }
 
-    public FoodModel(Food food)
-        : this()
+    [SetsRequiredMembers]
+    public FoodModel(Food food, I18nResource<string, string> i18nResource)
     {
         this.MapFromFood(food);
+        if (food.Desc != DescriptionID)
+            i18nResource.ReplaceCultureDataKey(food.Desc, DescriptionID);
+        I18nResource = i18nResource;
         Image = HKWImageUtils.LoadImageToMemory(food.Image, this);
     }
 
@@ -59,18 +62,11 @@ public partial class FoodModel : ViewModelBase
     [ReactiveProperty]
     public string ID { get; set; } = string.Empty;
 
-    partial void OnIDChanged(string oldValue, string newValue)
-    {
-        DescriptionID = $"{ID}_{nameof(Description)}";
-    }
-
     /// <summary>
     /// 详情Id
     /// </summary>
-    [FoodModelMapToFoodProperty(nameof(Food.Desc))]
-    [FoodModelMapFromFoodProperty(nameof(Food.Desc))]
-    [ReactiveProperty]
-    public string DescriptionID { get; set; } = string.Empty;
+    [NotifyPropertyChangeFrom(nameof(ID))]
+    public string DescriptionID => $"{ID}_Description";
 
     [MapIgnoreProperty]
     [ReactiveProperty]
@@ -216,11 +212,6 @@ public partial class FoodModel : ViewModelBase
     public Food ToFood()
     {
         return this.MapToFood(new());
-    }
-
-    public void RefreshID()
-    {
-        DescriptionID = $"{ID}_{nameof(DescriptionID)}";
     }
 
     public void Close()

@@ -72,6 +72,8 @@ public partial class WorkEditVM : DialogViewModel
 
     private void WorkEditVM_Closing(object? sender, CancelEventArgs e)
     {
+        if (DialogResult is not true)
+            return;
         if (string.IsNullOrWhiteSpace(Work.ID))
         {
             DialogService.ShowMessageBoxX(
@@ -82,9 +84,8 @@ public partial class WorkEditVM : DialogViewModel
                 MessageBoxImage.Warning
             );
             e.Cancel = true;
-            return;
         }
-        if (Work.Graph is null)
+        else if (Work.Graph is null)
         {
             DialogService.ShowMessageBoxX(
                 this,
@@ -94,9 +95,8 @@ public partial class WorkEditVM : DialogViewModel
                 MessageBoxImage.Warning
             );
             e.Cancel = true;
-            return;
         }
-        if (OldWork?.ID != Work.ID && CurrentPet.Works.Any(i => i.ID == Work.ID))
+        else if (OldWork?.ID != Work.ID && CurrentPet.Works.Any(i => i.ID == Work.ID))
         {
             DialogService.ShowMessageBoxX(
                 this,
@@ -106,9 +106,8 @@ public partial class WorkEditVM : DialogViewModel
                 MessageBoxImage.Warning
             );
             e.Cancel = true;
-            return;
         }
-        DialogResult = true;
+        DialogResult = e.Cancel is not true;
     }
 
     #region Property
@@ -444,6 +443,7 @@ public partial class WorkEditVM : DialogViewModel
         Work = null!;
         OldWork = null!;
         DialogResult = false;
+        ModInfo.TempI18nResource.ClearCultureData();
     }
 
     public void Close()
