@@ -65,7 +65,7 @@
           Click="Button_Yes_Click"
           Content="{ll:Str 确定}"
           IsDefault="True"
-          Style="{DynamicResource ThemedButtonStyle}" />
+          Style="{DynamicResource MyThemedButtonStyle}" />
         <Button
           x:Name="Button_Cancel"
           Grid.Column="1"

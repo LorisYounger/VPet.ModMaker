@@ -37,15 +37,6 @@ public partial class AddCultureWindow : WindowX
         InitializeComponent();
         TextBox_Lang.Focus();
         TextBox_Lang.Dispatcher.InvokeAsync(TextBox_Lang.SelectAll);
-        DataContextChanged += AddCulturePage_DataContextChanged;
-    }
-
-    private void AddCulturePage_DataContextChanged(
-        object sender,
-        DependencyPropertyChangedEventArgs e
-    )
-    {
-        ViewModel.ClipboardSetTextAction = Clipboard.SetText;
     }
 
     private void Button_Cancel_Click(object? sender, RoutedEventArgs e)

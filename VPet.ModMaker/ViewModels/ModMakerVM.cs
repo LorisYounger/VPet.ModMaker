@@ -303,6 +303,33 @@ public partial class ModMakerVM : ViewModelBase
     }
     #endregion
 
+    public const string WikiLink = "https://github.com/LorisYounger/VPet.ModMaker/wiki";
+
+    [ReactiveCommand]
+    private void OpenWikiLink()
+    {
+        try
+        {
+            NativeUtils.OpenLink(WikiLink);
+        }
+        catch
+        {
+            if (
+                DialogService.ShowMessageBoxX(
+                    this,
+                    "无法打开链接,需要复制自行访问吗".Translate(),
+                    "打开链接失败".Translate(),
+                    MessageBoxButton.YesNo,
+                    icon: MessageBoxImage.Warning
+                )
+                is not true
+            )
+                return;
+            NativeUtils.ClipboardSetText(WikiLink);
+            DialogService.ShowMessageBoxX(this, "已复制到剪贴板".Translate());
+        }
+    }
+
     public void Close()
     {
         DialogService.ClearSingletonDialog();

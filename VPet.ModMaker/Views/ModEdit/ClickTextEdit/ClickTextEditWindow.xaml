@@ -174,7 +174,7 @@
           Margin="10"
           Click="Button_Yes_Click"
           Content="{ll:Str 确定}"
-          Style="{DynamicResource ThemedButtonStyle}" />
+          Style="{DynamicResource MyThemedButtonStyle}" />
         <Button
           x:Name="Button_Cancel"
           Grid.Column="1"

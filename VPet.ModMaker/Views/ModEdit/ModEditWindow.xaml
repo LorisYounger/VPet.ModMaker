@@ -64,7 +64,7 @@
           Command="{Binding ChangeImageCommand}"
           Content="{ll:Str 添加图片}">
           <Button.Style>
-            <Style BasedOn="{StaticResource ThemedButtonStyle}" TargetType="Button">
+            <Style BasedOn="{StaticResource MyThemedButtonStyle}" TargetType="Button">
               <Setter Property="Visibility" Value="Hidden" />
               <Style.Triggers>
                 <DataTrigger Binding="{Binding ModInfo.Image}" Value="{x:Null}">
@@ -159,7 +159,17 @@
         </ScrollViewer>
       </Grid>
       <Grid Grid.Column="1">
-        <TabControl>
+        <TabControl
+          x:Name="TabControl_Main"
+          pu:TabControlHelper.HeaderPanelCornerRadius="4"
+          pu:TabControlHelper.HeaderPanelShadowColor="Aqua"
+          pu:TabControlHelper.ItemsBackground="{StaticResource DARKPrimary}"
+          pu:TabControlHelper.ItemsHoverBackground="{StaticResource DARKPrimaryLight}"
+          pu:TabControlHelper.ItemsSelectedBackground="{StaticResource DARKPrimaryLighter}"
+          Background="White"
+          Foreground="{StaticResource DARKPrimaryText}"
+          SelectedIndex="1"
+          SelectionChanged="TabControl_SelectionChanged">
           <TabItem Tag="{ll:Str 食物}">
             <TabItem.Header>
               <MultiBinding Converter="{StaticResource StringFormatConverter}" ConverterParameter="{}{0} ({1})">
@@ -176,7 +186,7 @@
                 <Binding Path="ModInfo.ClickTexts.Count" />
               </MultiBinding>
             </TabItem.Header>
-            <ContentControl x:Name="ContentControl_ClickText" Loaded="ContentControl_ClickText_Loaded" />
+            <ContentControl x:Name="ContentControl_ClickText" />
           </TabItem>
           <TabItem Tag="{ll:Str 低状态文本}">
             <TabItem.Header>
@@ -185,7 +195,7 @@
                 <Binding Path="ModInfo.LowTexts.Count" />
               </MultiBinding>
             </TabItem.Header>
-            <ContentControl x:Name="ContentControl_LowText" Loaded="ContentControl_LowText_Loaded" />
+            <ContentControl x:Name="ContentControl_LowText" />
           </TabItem>
           <TabItem Tag="{ll:Str 选择文本}">
             <TabItem.Header>
@@ -194,7 +204,7 @@
                 <Binding Path="ModInfo.SelectTexts.Count" />
               </MultiBinding>
             </TabItem.Header>
-            <ContentControl x:Name="ContentControl_SelectText" Loaded="ContentControl_SelectText_Loaded" />
+            <ContentControl x:Name="ContentControl_SelectText" />
           </TabItem>
           <TabItem Tag="{ll:Str 宠物}">
             <TabItem.Header>
@@ -203,34 +213,34 @@
                 <Binding Path="ModInfo.PetDisplayedCount" />
               </MultiBinding>
             </TabItem.Header>
-            <ContentControl x:Name="ContentControl_Pet" Loaded="ContentControl_Pet_Loaded" />
+            <ContentControl x:Name="ContentControl_Pet" />
           </TabItem>
           <TabItem Tag="{ll:Str 工作}">
             <TabItem.Header>
               <MultiBinding Converter="{StaticResource StringFormatConverter}" ConverterParameter="{}{0} ({1})">
                 <Binding Path="Tag" RelativeSource="{RelativeSource Mode=Self}" />
-                <Binding Path="WorkPage.ViewModel.CurrentPet.Works.Count" />
+                <Binding Path="ModInfo.CurrentPet.Works.Count" />
               </MultiBinding>
             </TabItem.Header>
-            <ContentControl x:Name="ContentControl_Work" Loaded="ContentControl_Work_Loaded" />
+            <ContentControl x:Name="ContentControl_Work" />
           </TabItem>
           <TabItem Tag="{ll:Str 移动}">
             <TabItem.Header>
               <MultiBinding Converter="{StaticResource StringFormatConverter}" ConverterParameter="{}{0} ({1})">
                 <Binding Path="Tag" RelativeSource="{RelativeSource Mode=Self}" />
-                <Binding Path="ModEditWindow.MovePage.ViewModel.CurrentPet.Moves.Count" />
+                <Binding Path="ModInfo.CurrentPet.Moves.Count" />
               </MultiBinding>
             </TabItem.Header>
-            <ContentControl x:Name="ContentControl_Move" Loaded="ContentControl_Move_Loaded" />
+            <ContentControl x:Name="ContentControl_Move" />
           </TabItem>
           <TabItem Tag="{ll:Str 动画}">
             <TabItem.Header>
               <MultiBinding Converter="{StaticResource StringFormatConverter}" ConverterParameter="{}{0} ({1})">
                 <Binding Path="Tag" RelativeSource="{RelativeSource Mode=Self}" />
-                <Binding Path="ModEditWindow.AnimePage.ViewModel.CurrentPet.AnimeCount" />
+                <Binding Path="ModInfo.CurrentPet.AnimeCount" />
               </MultiBinding>
             </TabItem.Header>
-            <ContentControl x:Name="ContentControl_Anime" Loaded="ContentControl_Anime_Loaded" />
+            <ContentControl x:Name="ContentControl_Anime" />
           </TabItem>
           <!--<TabItem Header="物品 (0)" Tag="{ll:Str 物品}">
             <Grid>
@@ -296,16 +306,18 @@
         <RowDefinition Height="Auto" />
       </Grid.RowDefinitions>
       <Button
+        Height="30"
         Command="{Binding AddCultureCommand}"
         Content="{ll:Str 添加文化}"
-        Style="{DynamicResource ThemedButtonStyle}" />
+        Style="{StaticResource MyThemedButtonStyle}" />
       <ListBox
         x:Name="ListBox_Cultures"
         Grid.Row="1"
         d:ItemsSource="{d:SampleData ItemCount=5}"
         ItemsSource="{Binding ModInfo.I18nResource.Cultures}"
         ScrollViewer.VerticalScrollBarVisibility="Auto"
-        SelectedItem="{Binding ModInfo.I18nResource.CurrentCulture}">
+        SelectedItem="{Binding ModInfo.I18nResource.CurrentCulture}"
+        Style="{StaticResource SideMenuListBoxStyle}">
         <ListBox.ItemContainerStyle>
           <Style BasedOn="{StaticResource {x:Type ListBoxItem}}" TargetType="ListBoxItem">
             <Setter Property="Tag" Value="{Binding DataContext, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}}" />
@@ -333,22 +345,26 @@
       </ListBox>
       <StackPanel Grid.Row="2">
         <Button
+          Height="30"
           Command="{Binding EditI18nCommand}"
           Content="{ll:Str 编辑多语言内容}"
-          Style="{DynamicResource ThemedButtonStyle}" />
+          Style="{StaticResource MyThemedButtonStyle}" />
         <Button
+          Height="30"
           Command="{Binding SaveCommand}"
           Content="{ll:Str 保存}"
-          Style="{DynamicResource ThemedButtonStyle}" />
+          Style="{StaticResource MyThemedButtonStyle}" />
         <Button
+          Height="30"
           Command="{Binding SaveToCommand}"
           Content="{ll:Str 保存至}"
-          Style="{DynamicResource ThemedButtonStyle}" />
+          Style="{StaticResource MyThemedButtonStyle}" />
         <!--  TODO  -->
         <Button
+          Height="30"
           Command="{Binding SaveAsTranslationModCommand}"
           Content="{ll:Str 保存为翻译模组}"
-          Style="{DynamicResource ThemedButtonStyle}" />
+          Style="{StaticResource MyThemedButtonStyle}" />
       </StackPanel>
     </Grid>
   </Grid>

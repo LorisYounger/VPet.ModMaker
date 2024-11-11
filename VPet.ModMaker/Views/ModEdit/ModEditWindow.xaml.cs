@@ -164,68 +164,97 @@ public partial class ModEditWindow : WindowX, IPageLocator
         catch { }
     }
 
-    public void InitializePage()
+    public void ShowTab(int index)
     {
-        ContentControl_Food_Loaded(null!, null!);
-        ContentControl_ClickText_Loaded(null!, null!);
-        ContentControl_LowText_Loaded(null!, null!);
-        ContentControl_SelectText_Loaded(null!, null!);
-        ContentControl_Pet_Loaded(null!, null!);
-        ContentControl_Work_Loaded(null!, null!);
-        ContentControl_Move_Loaded(null!, null!);
-        ContentControl_Anime_Loaded(null!, null!);
+        TabControl_Main.SelectedIndex = index;
     }
 
-    public void ContentControl_Food_Loaded(object sender, RoutedEventArgs e)
+    public void InitializePages()
+    {
+        InitializeFood();
+        InitializeClickText();
+        InitializeLowText();
+        InitializeSelectText();
+        InitializePet();
+        InitializeWork();
+        InitializeMove();
+        InitializeAnime();
+    }
+
+    private void TabControl_SelectionChanged(object sender, SelectionChangedEventArgs e)
+    {
+        if (IsLoaded is false)
+            return;
+        if (sender is not TabControl tabControl)
+            return;
+        if (tabControl.SelectedIndex == 0)
+            InitializeFood();
+        else if (tabControl.SelectedIndex == 1)
+            InitializeClickText();
+        else if (tabControl.SelectedIndex == 2)
+            InitializeLowText();
+        else if (tabControl.SelectedIndex == 3)
+            InitializeSelectText();
+        else if (tabControl.SelectedIndex == 4)
+            InitializePet();
+        else if (tabControl.SelectedIndex == 5)
+            InitializeWork();
+        else if (tabControl.SelectedIndex == 6)
+            InitializeMove();
+        else if (tabControl.SelectedIndex == 7)
+            InitializeAnime();
+    }
+
+    private void InitializeFood()
     {
         FoodEditVM ??= new() { ModInfo = ViewModel.ModInfo };
         FoodPage ??= new() { DataContext = FoodEditVM };
         ContentControl_Food.Content ??= FoodPage;
     }
 
-    private void ContentControl_ClickText_Loaded(object sender, RoutedEventArgs e)
+    private void InitializeClickText()
     {
         ClickTextEditVM ??= new() { ModInfo = ViewModel.ModInfo };
         ClickTextPage ??= new() { DataContext = ClickTextEditVM };
         ContentControl_ClickText.Content ??= ClickTextPage;
     }
 
-    private void ContentControl_LowText_Loaded(object sender, RoutedEventArgs e)
+    private void InitializeLowText()
     {
         LowTextEditVM ??= new() { ModInfo = ViewModel.ModInfo };
         LowTextPage ??= new() { DataContext = LowTextEditVM };
         ContentControl_LowText.Content ??= LowTextPage;
     }
 
-    private void ContentControl_SelectText_Loaded(object sender, RoutedEventArgs e)
+    private void InitializeSelectText()
     {
         SelectTextEditVM ??= new() { ModInfo = ViewModel.ModInfo };
         SelectTextPage ??= new() { DataContext = SelectTextEditVM };
         ContentControl_SelectText.Content ??= SelectTextPage;
     }
 
-    private void ContentControl_Pet_Loaded(object sender, RoutedEventArgs e)
+    private void InitializePet()
     {
         PetEditVM ??= new() { ModInfo = ViewModel.ModInfo };
         PetPage ??= new() { DataContext = PetEditVM };
         ContentControl_Pet.Content ??= PetPage;
     }
 
-    private void ContentControl_Work_Loaded(object sender, RoutedEventArgs e)
+    private void InitializeWork()
     {
         WorkEditVM ??= new() { ModInfo = ViewModel.ModInfo };
         WorkPage ??= new() { DataContext = WorkEditVM };
         ContentControl_Work.Content ??= WorkPage;
     }
 
-    private void ContentControl_Move_Loaded(object sender, RoutedEventArgs e)
+    private void InitializeMove()
     {
         MoveEditVM ??= new() { ModInfo = ViewModel.ModInfo };
         MovePage ??= new() { DataContext = MoveEditVM };
         ContentControl_Move.Content ??= MovePage;
     }
 
-    private void ContentControl_Anime_Loaded(object sender, RoutedEventArgs e)
+    private void InitializeAnime()
     {
         //TODO:
         //AnimeEditVM ??= new() { ModInfo = ViewModel.ModInfo };

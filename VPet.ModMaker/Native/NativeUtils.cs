@@ -13,6 +13,8 @@ namespace HKW.HKWUtils;
 /// </summary>
 public static class NativeUtils
 {
+    public static Action<string> ClipboardSetText { get; set; } = null!;
+
     /// <summary>
     /// 解码像素宽度
     /// </summary>

@@ -517,12 +517,12 @@
         <Button
           Command="{Binding StopCommand}"
           Content="{ll:Str 停止}"
-          Style="{DynamicResource ThemedButtonStyle}" />
+          Style="{DynamicResource MyThemedButtonStyle}" />
         <Button
           Grid.Column="1"
           Command="{Binding PlayCommand}"
           Content="{ll:Str 播放}"
-          Style="{DynamicResource ThemedButtonStyle}" />
+          Style="{DynamicResource MyThemedButtonStyle}" />
         <ToggleButton
           Grid.Column="2"
           Content="{ll:Str 循环}"
@@ -630,14 +630,14 @@
           Margin="10"
           Command="{Binding AddAnimeCommand}"
           Content="{ll:Str 添加动画}"
-          Style="{DynamicResource ThemedButtonStyle}" />
+          Style="{DynamicResource MyThemedButtonStyle}" />
         <Button
           x:Name="Button_Yes"
           Grid.Column="1"
           Margin="10"
           Click="Button_Yes_Click"
           Content="{ll:Str 确定}"
-          Style="{DynamicResource ThemedButtonStyle}" />
+          Style="{DynamicResource MyThemedButtonStyle}" />
         <Button
           x:Name="Button_Cancel"
           Grid.Column="2"

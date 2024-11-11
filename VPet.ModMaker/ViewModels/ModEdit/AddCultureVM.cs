@@ -138,8 +138,6 @@ public partial class AddCultureVM : DialogViewModel
     public string CultureLink { get; } =
         "https://learn.microsoft.com/en-us/openspecs/windows_protocols/ms-lcid/a9eac961-e77d-41a6-90a5-ce1a8b0cdb9c";
 
-    public Action<string> ClipboardSetTextAction { get; set; } = null!;
-
     [ReactiveCommand]
     private void OpenCultureLink()
     {
@@ -160,7 +158,7 @@ public partial class AddCultureVM : DialogViewModel
                 is not true
             )
                 return;
-            ClipboardSetTextAction(CultureLink);
+            NativeUtils.ClipboardSetText(CultureLink);
             DialogService.ShowMessageBoxX(this, "已复制到剪贴板".Translate());
         }
     }

@@ -56,11 +56,11 @@ public partial class ModMakerWindow : WindowX, IPageLocator
                     this.Hide();
                     ModEditWindow.ShowOrActivate();
                     ModEditWindow.ViewModel.ModInfo = x;
-                    ModEditWindow.ContentControl_Food_Loaded(null!, null!);
+                    ModEditWindow.ShowTab(0);
                     ModEditWindow.SetLocationToCenter();
 
 #if !RELEASE
-                    ModEditWindow.InitializePage();
+                    //ModEditWindow.InitializePages();
 #endif
                 }
             });
@@ -80,32 +80,6 @@ public partial class ModMakerWindow : WindowX, IPageLocator
     /// </summary>
     public ModEditWindow ModEditWindow => _modEditWindow ??= new ModEditWindow().MaskClose(this);
     #endregion
-
-    public const string WikiLink = "https://github.com/LorisYounger/VPet.ModMaker/wiki";
-
-    private void Hyperlink_Click(object? sender, RoutedEventArgs e)
-    {
-        try
-        {
-            NativeUtils.OpenLink(WikiLink);
-        }
-        catch
-        {
-            if (
-                MessageBoxX.Show(
-                    this,
-                    "无法打开链接,需要复制自行访问吗".Translate(),
-                    "",
-                    MessageBoxButton.YesNo,
-                    MessageBoxIcon.Warning
-                )
-                is not MessageBoxResult.Yes
-            )
-                return;
-            Clipboard.SetText(WikiLink);
-            MessageBoxX.Show(this, "已复制链接到剪贴板".Translate());
-        }
-    }
 
     private void ListBox_ItemClick(object sender, RoutedEventArgs e)
     {

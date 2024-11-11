@@ -7,7 +7,7 @@
     BasedOn="{StaticResource {x:Type Label}}"
     TargetType="Label">
     <Setter Property="Height" Value="30" />
-    <Setter Property="FontSize" Value="14" />
+    <Setter Property="FontSize" Value="16" />
     <Setter Property="Background" Value="{StaticResource PrimaryDarker}" />
     <Setter Property="Foreground" Value="{StaticResource DARKPrimaryText}" />
     <Setter Property="pu:LabelHelper.CornerRadius" Value="4" />
@@ -32,25 +32,27 @@
     <Setter Property="pu:ButtonHelper.CornerRadius" Value="24" />
   </Style>
   <Style
-    x:Key="ThemedButtonStyle"
-    BasedOn="{StaticResource {x:Type Button}}"
+    x:Key="MyThemedButtonStyle"
+    BasedOn="{StaticResource ThemedButtonStyle}"
     TargetType="{x:Type Button}">
     <Setter Property="Height" Value="30" />
     <Setter Property="Background" Value="{DynamicResource DARKPrimary}" />
     <Setter Property="Foreground" Value="{DynamicResource DARKPrimaryText}" />
     <Setter Property="Padding" Value="10,5" />
-    <Setter Property="pu:ButtonHelper.CornerRadius" Value="5" />
+    <Setter Property="pu:ButtonHelper.CornerRadius" Value="4" />
+    <Setter Property="BorderThickness" Value="0.5" />
+    <Setter Property="BorderBrush" Value="{StaticResource DARKPrimaryLighter}" />
   </Style>
   <Style
     x:Key="Button_Cancel"
-    BasedOn="{StaticResource ThemedButtonStyle}"
+    BasedOn="{StaticResource MyThemedButtonStyle}"
     TargetType="Button">
     <Setter Property="Background" Value="{StaticResource PrimaryLight}" />
     <Setter Property="Foreground" Value="{StaticResource SecondaryText}" />
   </Style>
   <Style
     x:Key="Button_HiddenOnTagNull"
-    BasedOn="{StaticResource ThemedButtonStyle}"
+    BasedOn="{StaticResource MyThemedButtonStyle}"
     TargetType="Button">
     <Setter Property="Visibility" Value="Hidden" />
     <Style.Triggers>
@@ -61,7 +63,7 @@
   </Style>
   <Style
     x:Key="Button_CollapsedOnTagNull"
-    BasedOn="{StaticResource ThemedButtonStyle}"
+    BasedOn="{StaticResource MyThemedButtonStyle}"
     TargetType="Button">
     <Setter Property="Visibility" Value="Collapsed" />
     <Style.Triggers>
