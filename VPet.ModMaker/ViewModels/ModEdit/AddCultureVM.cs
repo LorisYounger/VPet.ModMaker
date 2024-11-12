@@ -37,7 +37,7 @@ public partial class AddCultureVM : DialogViewModel
             c => c.Contains(Search, StringComparison.OrdinalIgnoreCase)
         );
         this.WhenValueChanged(x => x.Search)
-            .Throttle(TimeSpan.FromSeconds(1), RxApp.TaskpoolScheduler)
+            .Throttle(TimeSpan.FromSeconds(0.5), RxApp.TaskpoolScheduler)
             .DistinctUntilChanged()
             .ObserveOn(RxApp.MainThreadScheduler)
             .Subscribe(_ => AllCultures.Refresh());

@@ -330,6 +330,13 @@ internal class ClickTextModelMapFromClickTextConfig : MapConfig<ClickTextModel, 
     public ClickTextModelMapFromClickTextConfig()
     {
         AddMap(
+            x => x.Text,
+            (s, t) =>
+            {
+                s.Text = t.Text ?? string.Empty;
+            }
+        );
+        AddMap(
             x => x.Mode,
             (s, t) =>
             {

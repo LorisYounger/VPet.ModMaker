@@ -59,13 +59,13 @@ public partial class PetEditVM : DialogViewModel
         );
 
         this.WhenValueChanged(x => x.Search)
-            .Throttle(TimeSpan.FromSeconds(1), RxApp.TaskpoolScheduler)
+            .Throttle(TimeSpan.FromSeconds(0.5), RxApp.TaskpoolScheduler)
             .DistinctUntilChanged()
             .ObserveOn(RxApp.MainThreadScheduler)
             .Subscribe(_ => Pets.Refresh());
         SearchTargets
             .WhenValueChanged(x => x.SelectedItem)
-            .Throttle(TimeSpan.FromSeconds(1), RxApp.TaskpoolScheduler)
+            .Throttle(TimeSpan.FromSeconds(0.5), RxApp.TaskpoolScheduler)
             .DistinctUntilChanged()
             .ObserveOn(RxApp.MainThreadScheduler)
             .Subscribe(_ => Pets.Refresh());
@@ -133,15 +133,28 @@ public partial class PetEditVM : DialogViewModel
 
     partial void OnModInfoChanged(ModInfoModel oldValue, ModInfoModel newValue)
     {
+        if (oldValue is not null)
+        {
+            Pets.BaseList.BindingList(newValue.Pets, true);
+        }
         Pets.AutoFilter = false;
         Pets.Clear();
-        if (newValue is null)
-            return;
-        Pets.AddRange(newValue.Pets);
-        Search = string.Empty;
-        SearchTargets.SelectedItem = PetSearchTarget.ID;
-        Pets.Refresh();
-        Pets.AutoFilter = true;
+        if (newValue is not null)
+        {
+            newValue
+                .I18nResource.WhenValueChanged(x => x.CurrentCulture)
+                .Throttle(TimeSpan.FromSeconds(0.5), RxApp.TaskpoolScheduler)
+                .DistinctUntilChanged()
+                .ObserveOn(RxApp.MainThreadScheduler)
+                .Subscribe(_ => Pets.Refresh());
+
+            Pets.AddRange(newValue.Pets);
+            Search = string.Empty;
+            SearchTargets.SelectedItem = PetSearchTarget.ID;
+            Pets.Refresh();
+            Pets.BaseList.BindingList(newValue.Pets);
+            Pets.AutoFilter = true;
+        }
     }
 
     public FilterListWrapper<

@@ -207,49 +207,56 @@ public partial class ModEditWindow : WindowX, IPageLocator
 
     private void InitializeFood()
     {
-        FoodEditVM ??= new() { ModInfo = ViewModel.ModInfo };
+        FoodEditVM ??= new();
+        FoodEditVM.ModInfo = ViewModel.ModInfo;
         FoodPage ??= new() { DataContext = FoodEditVM };
         ContentControl_Food.Content ??= FoodPage;
     }
 
     private void InitializeClickText()
     {
-        ClickTextEditVM ??= new() { ModInfo = ViewModel.ModInfo };
+        ClickTextEditVM ??= new();
+        ClickTextEditVM.ModInfo = ViewModel.ModInfo;
         ClickTextPage ??= new() { DataContext = ClickTextEditVM };
         ContentControl_ClickText.Content ??= ClickTextPage;
     }
 
     private void InitializeLowText()
     {
-        LowTextEditVM ??= new() { ModInfo = ViewModel.ModInfo };
+        LowTextEditVM ??= new();
+        LowTextEditVM.ModInfo = ViewModel.ModInfo;
         LowTextPage ??= new() { DataContext = LowTextEditVM };
         ContentControl_LowText.Content ??= LowTextPage;
     }
 
     private void InitializeSelectText()
     {
-        SelectTextEditVM ??= new() { ModInfo = ViewModel.ModInfo };
+        SelectTextEditVM ??= new();
+        SelectTextEditVM.ModInfo = ViewModel.ModInfo;
         SelectTextPage ??= new() { DataContext = SelectTextEditVM };
         ContentControl_SelectText.Content ??= SelectTextPage;
     }
 
     private void InitializePet()
     {
-        PetEditVM ??= new() { ModInfo = ViewModel.ModInfo };
+        PetEditVM ??= new();
+        PetEditVM.ModInfo = ViewModel.ModInfo;
         PetPage ??= new() { DataContext = PetEditVM };
         ContentControl_Pet.Content ??= PetPage;
     }
 
     private void InitializeWork()
     {
-        WorkEditVM ??= new() { ModInfo = ViewModel.ModInfo };
+        WorkEditVM ??= new();
+        WorkEditVM.ModInfo = ViewModel.ModInfo;
         WorkPage ??= new() { DataContext = WorkEditVM };
         ContentControl_Work.Content ??= WorkPage;
     }
 
     private void InitializeMove()
     {
-        MoveEditVM ??= new() { ModInfo = ViewModel.ModInfo };
+        MoveEditVM ??= new();
+        MoveEditVM.ModInfo = ViewModel.ModInfo;
         MovePage ??= new() { DataContext = MoveEditVM };
         ContentControl_Move.Content ??= MovePage;
     }

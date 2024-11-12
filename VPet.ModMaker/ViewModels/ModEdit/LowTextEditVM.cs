@@ -52,14 +52,14 @@ public partial class LowTextEditVM : DialogViewModel
         );
 
         this.WhenValueChanged(x => x.Search)
-            .Throttle(TimeSpan.FromSeconds(1), RxApp.TaskpoolScheduler)
+            .Throttle(TimeSpan.FromSeconds(0.5), RxApp.TaskpoolScheduler)
             .DistinctUntilChanged()
             .ObserveOn(RxApp.MainThreadScheduler)
             .Subscribe(_ => LowTexts.Refresh());
 
         SearchTargets
             .WhenValueChanged(x => x.SelectedItem)
-            .Throttle(TimeSpan.FromSeconds(1), RxApp.TaskpoolScheduler)
+            .Throttle(TimeSpan.FromSeconds(0.5), RxApp.TaskpoolScheduler)
             .DistinctUntilChanged()
             .ObserveOn(RxApp.MainThreadScheduler)
             .Subscribe(_ => LowTexts.Refresh());
@@ -115,13 +115,26 @@ public partial class LowTextEditVM : DialogViewModel
 
     partial void OnModInfoChanged(ModInfoModel oldValue, ModInfoModel newValue)
     {
+        if (oldValue is not null)
+        {
+            LowTexts.BaseList.BindingList(oldValue.LowTexts, true);
+        }
         LowTexts.AutoFilter = false;
         LowTexts.Clear();
-        if (newValue is null)
-            return;
-        LowTexts.AddRange(newValue.LowTexts);
-        Search = string.Empty;
-        SearchTargets.SelectedItem = LowTextSearchTarget.ID;
+        if (newValue is not null)
+        {
+            newValue
+                .I18nResource.WhenValueChanged(x => x.CurrentCulture)
+                .Throttle(TimeSpan.FromSeconds(0.5), RxApp.TaskpoolScheduler)
+                .DistinctUntilChanged()
+                .ObserveOn(RxApp.MainThreadScheduler)
+                .Subscribe(_ => LowTexts.Refresh());
+            LowTexts.AddRange(newValue.LowTexts);
+            LowTexts.BaseList.BindingList(newValue.LowTexts);
+            Search = string.Empty;
+            SearchTargets.SelectedItem = LowTextSearchTarget.ID;
+        }
+        LowTexts.Refresh();
         LowTexts.AutoFilter = true;
     }
 

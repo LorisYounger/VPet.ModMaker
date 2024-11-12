@@ -55,14 +55,14 @@ public partial class WorkEditVM : DialogViewModel
         );
 
         this.WhenValueChanged(x => x.Search)
-            .Throttle(TimeSpan.FromSeconds(1), RxApp.TaskpoolScheduler)
+            .Throttle(TimeSpan.FromSeconds(0.5), RxApp.TaskpoolScheduler)
             .DistinctUntilChanged()
             .ObserveOn(RxApp.MainThreadScheduler)
             .Subscribe(_ => Works.Refresh());
 
         SearchTargets
             .WhenValueChanged(x => x.SelectedItem)
-            .Throttle(TimeSpan.FromSeconds(1), RxApp.TaskpoolScheduler)
+            .Throttle(TimeSpan.FromSeconds(0.5), RxApp.TaskpoolScheduler)
             .DistinctUntilChanged()
             .ObserveOn(RxApp.MainThreadScheduler)
             .Subscribe(_ => Works.Refresh());
@@ -96,7 +96,7 @@ public partial class WorkEditVM : DialogViewModel
             );
             e.Cancel = true;
         }
-        else if (OldWork?.ID != Work.ID && CurrentPet.Works.Any(i => i.ID == Work.ID))
+        else if (OldWork?.ID != Work.ID && CurrentPet?.Works.Any(i => i.ID == Work.ID) is true)
         {
             DialogService.ShowMessageBoxX(
                 this,
@@ -119,29 +119,15 @@ public partial class WorkEditVM : DialogViewModel
 
     partial void OnModInfoChanged(ModInfoModel oldValue, ModInfoModel newValue)
     {
-        if (oldValue is not null)
-        {
-            oldValue.PropertyChanged -= ModInfo_PropertyChanged;
-        }
+        if (oldValue is not null) { }
         if (newValue is not null)
         {
-            if (newValue.Pets.HasValue())
-                CurrentPet = newValue.Pets.FirstOrDefault(
-                    m => m.FromMain is false && m.Works.HasValue(),
-                    newValue.Pets.First()
-                );
-
-            newValue.PropertyChanged -= ModInfo_PropertyChanged;
-            newValue.PropertyChanged += ModInfo_PropertyChanged;
-        }
-    }
-
-    private void ModInfo_PropertyChanged(object? sender, PropertyChangedEventArgs e)
-    {
-        if (e.PropertyName == nameof(ModInfoModel.ShowMainPet))
-        {
-            if (CurrentPet?.FromMain is false)
-                CurrentPet = null!;
+            newValue
+                .WhenValueChanged(x => x.CurrentPet)
+                .Throttle(TimeSpan.FromSeconds(0.5), RxApp.TaskpoolScheduler)
+                .DistinctUntilChanged()
+                .ObserveOn(RxApp.MainThreadScheduler)
+                .Subscribe(x => CurrentPet = x);
         }
     }
 
@@ -154,17 +140,31 @@ public partial class WorkEditVM : DialogViewModel
     /// 当前宠物
     /// </summary>
     [ReactiveProperty]
-    public PetModel CurrentPet { get; set; } = null!;
+    public PetModel? CurrentPet { get; set; }
 
     partial void OnCurrentPetChanged(PetModel oldValue, PetModel newValue)
     {
+        if (oldValue is not null)
+        {
+            Works.BaseList.BindingList(oldValue.Works, true);
+        }
         Works.AutoFilter = false;
         Works.Clear();
-        if (newValue is null)
-            return;
-        Works.AddRange(newValue.Works);
-        Search = string.Empty;
-        SearchTargets.SelectedItem = WorkSearchTarget.ID;
+        if (newValue is not null)
+        {
+            newValue
+                .I18nResource.WhenValueChanged(x => x.CurrentCulture)
+                .Throttle(TimeSpan.FromSeconds(0.5), RxApp.TaskpoolScheduler)
+                .DistinctUntilChanged()
+                .ObserveOn(RxApp.MainThreadScheduler)
+                .Subscribe(_ => Works.Refresh());
+
+            Works.AddRange(newValue.Works);
+            Works.BaseList.BindingList(newValue.Works);
+            Search = string.Empty;
+            SearchTargets.SelectedItem = WorkSearchTarget.ID;
+        }
+        Works.Refresh();
         Works.AutoFilter = true;
     }
 

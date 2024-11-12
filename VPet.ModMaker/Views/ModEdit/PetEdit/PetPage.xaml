@@ -56,17 +56,6 @@
           <Setter Property="Height" Value="64" />
           <Setter Property="Tag" Value="{Binding}" />
           <Setter Property="ContextMenu" Value="{StaticResource ContextMenu_DataGridRow}" />
-          <Setter Property="Visibility">
-            <Setter.Value>
-              <MultiBinding Converter="{StaticResource AllTrueToCollapsedConverter}">
-                <Binding
-                  Converter="{StaticResource BoolInverter}"
-                  Path="DataContext.ModInfo.ShowMainPet"
-                  RelativeSource="{RelativeSource AncestorType=Page}" />
-                <Binding Path="FromMain" />
-              </MultiBinding>
-            </Setter.Value>
-          </Setter>
         </Style>
       </DataGrid.RowStyle>
       <DataGrid.Columns>

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using HKW.HKWUtils.Extensions;
 using VPet.ModMaker.Models;
 
 namespace VPet.ModMaker;
@@ -70,4 +71,54 @@ public static class NativeData
     /// </para>
     /// </summary>
     public static Dictionary<string, PetModel> MainPets { get; } = [];
+
+    static NativeData()
+    {
+#if !RELEASE
+        // 本体宠物测试
+        MainPets.Add(
+            "TestMainPet",
+            new()
+            {
+                I18nResource = new I18nResource<string, string>().To(x =>
+                {
+                    x.AddCulture("en");
+                    x.AddCulture("zh-Hans");
+                    x.AddCulture("zh-Hant");
+                    x.AddCultureDatas(
+                        "en",
+                        [
+                            KeyValuePair.Create("TestMainPet", "TestMainPet[en]"),
+                            KeyValuePair.Create("TestMainPet_PetName", "TestMainPetName[en]")
+                        ]
+                    );
+                    x.AddCultureDatas(
+                        "zh-Hans",
+                        [
+                            KeyValuePair.Create("TestMainPet", "TestMainPet[zh-Hans]"),
+                            KeyValuePair.Create(
+                                "TestMainPet_PetName",
+                                "TestMainPet_PetName[zh-Hans]"
+                            )
+                        ]
+                    );
+                    x.AddCultureDatas(
+                        "zh-Hant",
+                        [
+                            KeyValuePair.Create("TestMainPet", "TestMainPet[zh-Hant]"),
+                            KeyValuePair.Create(
+                                "TestMainPet_PetName",
+                                "TestMainPet_PetName[zh-Hant]"
+                            )
+                        ]
+                    );
+                    x.SetCurrentCulture("en");
+                    return x;
+                }),
+                ID = "TestMainPet",
+                FromMain = true
+            }
+        );
+#endif
+    }
 }

@@ -6,11 +6,11 @@
   xmlns:vm="clr-namespace:VPet.ModMaker.ViewModels.ModEdit">
   <ContextMenu x:Key="ContextMenu_DataGridRow" x:Shared="false">
     <MenuItem
-      Command="{Binding DataContext.EditCommand, RelativeSource={RelativeSource AncestorType=Page, Mode=FindAncestor}}"
+      Command="{Binding DataContext.EditCommand, RelativeSource={RelativeSource AncestorType=UserControl, Mode=FindAncestor}}"
       CommandParameter="{Binding DataContext, RelativeSource={RelativeSource AncestorType=DataGridRow, Mode=FindAncestor}}"
       Header="{ll:Str 修改}" />
     <MenuItem
-      Command="{Binding DataContext.RemoveCommand, RelativeSource={RelativeSource AncestorType=Page, Mode=FindAncestor}}"
+      Command="{Binding DataContext.RemoveCommand, RelativeSource={RelativeSource AncestorType=UserControl, Mode=FindAncestor}}"
       CommandParameter="{Binding DataContext, RelativeSource={RelativeSource AncestorType=DataGridRow, Mode=FindAncestor}}"
       Header="{ll:Str 删除}" />
   </ContextMenu>

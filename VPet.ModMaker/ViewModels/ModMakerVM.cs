@@ -44,7 +44,7 @@ public partial class ModMakerVM : ViewModelBase
         LoadHistory(NativeData.HistoryBaseFilePath);
 
         this.WhenValueChanged(x => x.Search)
-            .Throttle(TimeSpan.FromSeconds(1), RxApp.TaskpoolScheduler)
+            .Throttle(TimeSpan.FromSeconds(0.5), RxApp.TaskpoolScheduler)
             .DistinctUntilChanged()
             .ObserveOn(RxApp.MainThreadScheduler)
             .Subscribe(_ => Histories.Refresh());
@@ -54,6 +54,7 @@ public partial class ModMakerVM : ViewModelBase
     {
         if (_isFirst is false)
             return;
+        Splat.ModeDetector.OverrideModeDetector(Splat.ModeDetection.Mode.Run);
         Directory.CreateDirectory(NativeData.ModMakerBaseDirectory);
         var configPath = Path.Combine(NativeData.ModMakerBaseDirectory, "NLog.config");
         if (File.Exists(configPath) is false)
@@ -212,7 +213,7 @@ public partial class ModMakerVM : ViewModelBase
     [ReactiveCommand]
     public void CreateNewMod()
     {
-        ModInfo = new();
+        ModInfo = new() { GameVersion = ModUpdataHelper.LastVersion };
         MessageBus.Current.SendMessage(ModInfo);
     }
 

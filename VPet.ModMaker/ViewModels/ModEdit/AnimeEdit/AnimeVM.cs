@@ -51,7 +51,7 @@ public partial class AnimeVM : ViewModelBase
         );
 
         this.WhenValueChanged(x => x.Search)
-            .Throttle(TimeSpan.FromSeconds(1), RxApp.TaskpoolScheduler)
+            .Throttle(TimeSpan.FromSeconds(0.5), RxApp.TaskpoolScheduler)
             .DistinctUntilChanged()
             .ObserveOn(RxApp.MainThreadScheduler)
             .Subscribe(_ => AllAnimes.Refresh());
@@ -69,8 +69,12 @@ public partial class AnimeVM : ViewModelBase
         }
         if (newValue is not null)
         {
-            newValue.PropertyChanged -= ModInfo_PropertyChanged;
-            newValue.PropertyChanged += ModInfo_PropertyChanged;
+            newValue
+                .WhenValueChanged(x => x.CurrentPet)
+                .Throttle(TimeSpan.FromSeconds(0.5), RxApp.TaskpoolScheduler)
+                .DistinctUntilChanged()
+                .ObserveOn(RxApp.MainThreadScheduler)
+                .Subscribe(x => CurrentPet = x!);
         }
     }
 
@@ -99,11 +103,6 @@ public partial class AnimeVM : ViewModelBase
     public ObservableList<FoodAnimeTypeModel> FoodAnimes => CurrentPet.FoodAnimes;
 
     /// <summary>
-    /// 宠物列表
-    /// </summary>
-    public ObservableList<PetModel> Pets => ModInfo.Pets;
-
-    /// <summary>
     /// 当前宠物
     /// </summary>
     [ReactiveProperty]
@@ -118,11 +117,12 @@ public partial class AnimeVM : ViewModelBase
         }
         AllAnimes.AutoFilter = false;
         AllAnimes.Clear();
-        if (newValue is null)
-            return;
-        AllAnimes.AddRange(newValue.Animes);
-        AllAnimes.AddRange(newValue.FoodAnimes);
-        Search = string.Empty;
+        if (newValue is not null)
+        {
+            AllAnimes.AddRange(newValue.Animes);
+            AllAnimes.AddRange(newValue.FoodAnimes);
+            Search = string.Empty;
+        }
         AllAnimes.Refresh();
         AllAnimes.AutoFilter = true;
 

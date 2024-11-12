@@ -42,6 +42,8 @@ public partial class ClickTextEditVM : DialogViewModel
                 {
                     ClickTextSearchTarget.ID
                         => f.ID.Contains(Search, StringComparison.OrdinalIgnoreCase),
+                    ClickTextSearchTarget.Text
+                        => f.Text.Contains(Search, StringComparison.OrdinalIgnoreCase),
                     ClickTextSearchTarget.Working
                         => f.Working.Contains(Search, StringComparison.OrdinalIgnoreCase),
                     _ => false
@@ -50,13 +52,13 @@ public partial class ClickTextEditVM : DialogViewModel
         );
 
         this.WhenValueChanged(x => x.Search)
-            .Throttle(TimeSpan.FromSeconds(1), RxApp.TaskpoolScheduler)
+            .Throttle(TimeSpan.FromSeconds(0.5), RxApp.TaskpoolScheduler)
             .DistinctUntilChanged()
             .ObserveOn(RxApp.MainThreadScheduler)
             .Subscribe(_ => ClickTexts.Refresh());
         SearchTargets
             .WhenValueChanged(x => x.SelectedItem)
-            .Throttle(TimeSpan.FromSeconds(1), RxApp.TaskpoolScheduler)
+            .Throttle(TimeSpan.FromSeconds(0.5), RxApp.TaskpoolScheduler)
             .DistinctUntilChanged()
             .ObserveOn(RxApp.MainThreadScheduler)
             .Subscribe(_ => ClickTexts.Refresh());
@@ -115,13 +117,25 @@ public partial class ClickTextEditVM : DialogViewModel
 
     partial void OnModInfoChanged(ModInfoModel oldValue, ModInfoModel newValue)
     {
+        if (oldValue is not null)
+        {
+            ClickTexts.BaseList.BindingList(oldValue.ClickTexts, true);
+        }
         ClickTexts.AutoFilter = false;
         ClickTexts.Clear();
-        if (newValue is null)
-            return;
-        ClickTexts.AddRange(newValue.ClickTexts);
-        Search = string.Empty;
-        SearchTargets.SelectedItem = ClickTextSearchTarget.ID;
+        if (newValue is not null)
+        {
+            newValue
+                .I18nResource.WhenValueChanged(x => x.CurrentCulture)
+                .Throttle(TimeSpan.FromSeconds(0.5), RxApp.TaskpoolScheduler)
+                .DistinctUntilChanged()
+                .ObserveOn(RxApp.MainThreadScheduler)
+                .Subscribe(_ => ClickTexts.Refresh());
+            ClickTexts.AddRange(newValue.ClickTexts);
+            ClickTexts.BaseList.BindingList(newValue.ClickTexts);
+            Search = string.Empty;
+            SearchTargets.SelectedItem = ClickTextSearchTarget.ID;
+        }
         ClickTexts.Refresh();
         ClickTexts.AutoFilter = true;
     }

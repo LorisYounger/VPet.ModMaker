@@ -7,6 +7,7 @@ using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Reactive.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -15,6 +16,7 @@ using DynamicData.Binding;
 using HKW.HKWMapper;
 using HKW.HKWReactiveUI;
 using HKW.HKWUtils;
+using HKW.HKWUtils.Collections;
 using HKW.HKWUtils.Extensions;
 using HKW.HKWUtils.Observable;
 using HKW.WPF;
@@ -39,9 +41,21 @@ public partial class ModInfoModel : ViewModelBase
 {
     public ModInfoModel()
     {
-        GameVersion = ModUpdataHelper.LastVersion;
-        Pets.WhenPropertyChanged(x => x.Count)
-            .Subscribe(x => this.RaisePropertyChange(nameof(PetDisplayedCount)));
+        Pets = new([], [], m => m.FromMain is false || ShowMainPet && m.FromMain);
+        Pets.BaseList.WhenPropertyChanged(x => x.Count)
+            .Subscribe(x => RaisePetDisplayedCountChange());
+
+        this.WhenValueChanged(x => x.ShowMainPet)
+            .Throttle(TimeSpan.FromSeconds(0.5), RxApp.TaskpoolScheduler)
+            .DistinctUntilChanged()
+            .ObserveOn(RxApp.MainThreadScheduler)
+            .Subscribe(_ =>
+            {
+                Pets.Refresh();
+                if (CurrentPet is null || (CurrentPet.FromMain && ShowMainPet is false))
+                    CurrentPet = Pets.FilteredList.FirstOrDefault();
+            });
+
         I18nResource.PropertyChanged += I18nResource_PropertyChanged;
         I18nResource.Cultures.SetChanged += Cultures_SetChanged;
         foreach (var pet in NativeData.MainPets)
@@ -88,6 +102,7 @@ public partial class ModInfoModel : ViewModelBase
         //if (I18nResource.CultureDatas.HasValue())
         //    RefreshID();
         I18nResource.FillDefaultValue();
+        CurrentPet = Pets.FirstOrDefault()!;
     }
 
     private void LoadPets(ModLoader loader)
@@ -327,14 +342,24 @@ public partial class ModInfoModel : ViewModelBase
     public ObservableList<SelectTextModel> SelectTexts { get; } = [];
 
     /// <summary>
+    /// 当前宠物
+    /// </summary>
+    [ReactiveProperty]
+    public PetModel? CurrentPet { get; set; } = null!;
+
+    /// <summary>
     /// 宠物
     /// </summary>
-    public ObservableList<PetModel> Pets { get; } = [];
+    public FilterListWrapper<
+        PetModel,
+        ObservableList<PetModel>,
+        ObservableList<PetModel>
+    > Pets { get; }
 
     /// <summary>
     /// 宠物显示的数量
     /// </summary>
-    [NotifyPropertyChangeFrom(nameof(ShowMainPet))]
+    [NotifyPropertyChangeFrom(false, nameof(ShowMainPet))]
     public int PetDisplayedCount =>
         ShowMainPet ? Pets.Count : Pets.Count - Pets.Count(m => m.FromMain);
 

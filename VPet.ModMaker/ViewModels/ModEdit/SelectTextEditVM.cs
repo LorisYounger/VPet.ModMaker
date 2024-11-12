@@ -52,14 +52,14 @@ public partial class SelectTextEditVM : DialogViewModel
         );
 
         this.WhenValueChanged(x => x.Search)
-            .Throttle(TimeSpan.FromSeconds(1), RxApp.TaskpoolScheduler)
+            .Throttle(TimeSpan.FromSeconds(0.5), RxApp.TaskpoolScheduler)
             .DistinctUntilChanged()
             .ObserveOn(RxApp.MainThreadScheduler)
             .Subscribe(_ => SelectTexts.Refresh());
 
         SearchTargets
             .WhenValueChanged(x => x.SelectedItem)
-            .Throttle(TimeSpan.FromSeconds(1), RxApp.TaskpoolScheduler)
+            .Throttle(TimeSpan.FromSeconds(0.5), RxApp.TaskpoolScheduler)
             .DistinctUntilChanged()
             .ObserveOn(RxApp.MainThreadScheduler)
             .Subscribe(_ => SelectTexts.Refresh());
@@ -118,15 +118,26 @@ public partial class SelectTextEditVM : DialogViewModel
 
     partial void OnModInfoChanged(ModInfoModel oldValue, ModInfoModel newValue)
     {
+        if (oldValue is not null)
+        {
+            SelectTexts.BaseList.BindingList(oldValue.SelectTexts, true);
+        }
         SelectTexts.AutoFilter = false;
         SelectTexts.Clear();
-        if (newValue is null)
-            return;
-        SelectTexts.AddRange(newValue.SelectTexts);
-        Search = string.Empty;
-        SearchTargets.SelectedItem = SelectTextSearchTarget.ID;
-        SelectTexts.Refresh();
-        SelectTexts.AutoFilter = true;
+        if (newValue is not null)
+        {
+            newValue
+                .I18nResource.WhenValueChanged(x => x.CurrentCulture)
+                .Throttle(TimeSpan.FromSeconds(0.5), RxApp.TaskpoolScheduler)
+                .DistinctUntilChanged()
+                .ObserveOn(RxApp.MainThreadScheduler)
+                .Subscribe(_ => SelectTexts.Refresh());
+            SelectTexts.AddRange(newValue.SelectTexts);
+            Search = string.Empty;
+            SearchTargets.SelectedItem = SelectTextSearchTarget.ID;
+            SelectTexts.Refresh();
+            SelectTexts.AutoFilter = true;
+        }
     }
 
     /// <summary>

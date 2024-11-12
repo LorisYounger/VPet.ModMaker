@@ -172,7 +172,6 @@ public partial class ModEditVM : ViewModelBase
     /// 添加文化
     /// </summary>
     [ReactiveCommand]
-    [STAThread]
     public void AddCulture()
     {
         var vm = DialogService.ShowDialogX(this, new AddCultureVM(ModInfo));

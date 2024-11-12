@@ -56,13 +56,13 @@ public partial class FoodEditVM : DialogViewModel
         );
 
         this.WhenValueChanged(x => x.Search)
-            .Throttle(TimeSpan.FromSeconds(1), RxApp.TaskpoolScheduler)
+            .Throttle(TimeSpan.FromSeconds(0.5), RxApp.TaskpoolScheduler)
             .DistinctUntilChanged()
             .ObserveOn(RxApp.MainThreadScheduler)
             .Subscribe(_ => Foods.Refresh());
         SearchTargets
             .WhenValueChanged(x => x.SelectedItem)
-            .Throttle(TimeSpan.FromSeconds(1), RxApp.TaskpoolScheduler)
+            .Throttle(TimeSpan.FromSeconds(0.5), RxApp.TaskpoolScheduler)
             .DistinctUntilChanged()
             .ObserveOn(RxApp.MainThreadScheduler)
             .Subscribe(_ => Foods.Refresh());
@@ -120,13 +120,26 @@ public partial class FoodEditVM : DialogViewModel
 
     partial void OnModInfoChanged(ModInfoModel oldValue, ModInfoModel newValue)
     {
+        if (oldValue is not null)
+        {
+            Foods.BaseList.BindingList(newValue.Foods, true);
+        }
         Foods.AutoFilter = false;
         Foods.Clear();
-        if (newValue is null)
-            return;
-        Foods.AddRange(newValue.Foods);
-        Search = string.Empty;
-        SearchTargets.SelectedItem = FoodSearchTarget.ID;
+        if (newValue is not null)
+        {
+            newValue
+                .I18nResource.WhenValueChanged(x => x.CurrentCulture)
+                .Throttle(TimeSpan.FromSeconds(0.5), RxApp.TaskpoolScheduler)
+                .DistinctUntilChanged()
+                .ObserveOn(RxApp.MainThreadScheduler)
+                .Subscribe(_ => Foods.Refresh());
+
+            Foods.AddRange(newValue.Foods);
+            Foods.BaseList.BindingList(newValue.Foods);
+            Search = string.Empty;
+            SearchTargets.SelectedItem = FoodSearchTarget.ID;
+        }
         Foods.Refresh();
         Foods.AutoFilter = true;
     }
@@ -318,6 +331,7 @@ public partial class FoodEditVM : DialogViewModel
     [ReactiveCommand]
     private void Remove(FoodModel model)
     {
+        //TODO: 一次性删除多个
         if (
             DialogService.ShowMessageBoxX(
                 this,

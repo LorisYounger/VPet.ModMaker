@@ -49,23 +49,12 @@
         Grid.Column="2"
         MinWidth="100"
         pu:ComboBoxHelper.Watermark="{ll:Str 选择宠物}"
-        ItemsSource="{Binding ModInfo.Pets}"
-        SelectedItem="{Binding CurrentPet}"
+        ItemsSource="{Binding ModInfo.Pets.FilteredList}"
+        SelectedItem="{Binding ModInfo.CurrentPet}"
         Style="{DynamicResource StandardComboBoxStyle}">
         <ComboBox.ItemContainerStyle>
           <Style BasedOn="{StaticResource {x:Type ComboBoxItem}}" TargetType="ComboBoxItem">
             <Setter Property="ToolTip" Value="{Binding Name}" />
-            <Setter Property="Visibility">
-              <Setter.Value>
-                <MultiBinding Converter="{StaticResource AllTrueToCollapsedConverter}">
-                  <Binding
-                    Converter="{StaticResource BoolInverter}"
-                    Path="DataContext.ModInfo.ShowMainPet"
-                    RelativeSource="{RelativeSource AncestorType=Page}" />
-                  <Binding Path="FromMain" />
-                </MultiBinding>
-              </Setter.Value>
-            </Setter>
           </Style>
         </ComboBox.ItemContainerStyle>
         <ComboBox.ItemTemplate>

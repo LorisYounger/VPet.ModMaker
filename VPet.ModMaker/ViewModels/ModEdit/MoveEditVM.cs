@@ -38,7 +38,7 @@ public partial class MoveEditVM : DialogViewModel
         Moves = new([], [], f => f.Graph.Contains(Search, StringComparison.OrdinalIgnoreCase));
 
         this.WhenValueChanged(x => x.Search)
-            .Throttle(TimeSpan.FromSeconds(1), RxApp.TaskpoolScheduler)
+            .Throttle(TimeSpan.FromSeconds(0.5), RxApp.TaskpoolScheduler)
             .DistinctUntilChanged()
             .ObserveOn(RxApp.MainThreadScheduler)
             .Subscribe(_ => Moves.Refresh());
@@ -66,28 +66,15 @@ public partial class MoveEditVM : DialogViewModel
 
     partial void OnModInfoChanged(ModInfoModel oldValue, ModInfoModel newValue)
     {
-        if (oldValue is not null)
-        {
-            oldValue.PropertyChanged -= ModInfo_PropertyChanged;
-        }
+        if (oldValue is not null) { }
         if (newValue is not null)
         {
-            if (newValue.Pets.HasValue())
-                CurrentPet = newValue.Pets.FirstOrDefault(
-                    m => m.FromMain is false && m.Moves.HasValue(),
-                    newValue.Pets.First()
-                );
-            newValue.PropertyChanged -= ModInfo_PropertyChanged;
-            newValue.PropertyChanged += ModInfo_PropertyChanged;
-        }
-    }
-
-    private void ModInfo_PropertyChanged(object? sender, PropertyChangedEventArgs e)
-    {
-        if (e.PropertyName == nameof(ModInfoModel.ShowMainPet))
-        {
-            if (CurrentPet?.FromMain is false)
-                CurrentPet = null!;
+            newValue
+                .WhenValueChanged(x => x.CurrentPet)
+                .Throttle(TimeSpan.FromSeconds(0.5), RxApp.TaskpoolScheduler)
+                .DistinctUntilChanged()
+                .ObserveOn(RxApp.MainThreadScheduler)
+                .Subscribe(x => CurrentPet = x);
         }
     }
 
@@ -104,17 +91,31 @@ public partial class MoveEditVM : DialogViewModel
     /// 当前宠物
     /// </summary>
     [ReactiveProperty]
-    public PetModel CurrentPet { get; set; } = null!;
+    public PetModel? CurrentPet { get; set; }
 
     partial void OnCurrentPetChanged(PetModel oldValue, PetModel newValue)
     {
+        if (oldValue is not null)
+        {
+            Moves.BaseList.BindingList(oldValue.Moves, true);
+        }
         Moves.AutoFilter = false;
         Moves.Clear();
-        if (newValue is null)
-            return;
-        Moves.AddRange(newValue.Moves);
-        Search = string.Empty;
-        Moves.AutoFilter = true;
+        if (newValue is not null)
+        {
+            newValue
+                .I18nResource.WhenValueChanged(x => x.CurrentCulture)
+                .Throttle(TimeSpan.FromSeconds(0.5), RxApp.TaskpoolScheduler)
+                .DistinctUntilChanged()
+                .ObserveOn(RxApp.MainThreadScheduler)
+                .Subscribe(_ => Moves.Refresh());
+
+            Moves.AddRange(newValue.Moves);
+            Moves.BaseList.BindingList(newValue.Moves);
+            Search = string.Empty;
+            Moves.Refresh();
+            Moves.AutoFilter = true;
+        }
     }
 
     /// <summary>
