@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Frozen;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -32,10 +33,14 @@ using VPet_Simulator.Windows.Interface;
 
 namespace VPet.ModMaker.ViewModels.ModEdit;
 
+/// <summary>
+/// 工作编辑视图模型
+/// </summary>
 public partial class WorkEditVM : DialogViewModel
 {
     private static IDialogService DialogService => Locator.Current.GetService<IDialogService>()!;
 
+    /// <inheritdoc/>
     public WorkEditVM()
     {
         Works = new(
@@ -226,12 +231,6 @@ public partial class WorkEditVM : DialogViewModel
         }
     }
 
-    [ReactiveProperty]
-    public double BorderLength { get; set; } = 250;
-
-    [ReactiveProperty]
-    public double LengthRatio { get; set; } = 250 / 500;
-
     /// <summary>
     /// 图片
     /// </summary>
@@ -357,7 +356,7 @@ public partial class WorkEditVM : DialogViewModel
     {
         ModInfo.TempI18nResource.ClearCultureData();
         Work = new() { I18nResource = ModInfo.I18nResource };
-        await DialogService.ShowSingletonDialogAsync(this, this);
+        await DialogService.ShowDialogAsyncX(this, this);
         if (DialogResult is not true)
         {
             Work.Close();
@@ -418,34 +417,45 @@ public partial class WorkEditVM : DialogViewModel
     /// <summary>
     /// 删除
     /// </summary>
-    /// <param name="model">模型</param>
+    /// <param name="list">列表</param>
     [ReactiveCommand]
-    private void Remove(WorkModel model)
+    private void Remove(IList list)
     {
+        var models = list.Cast<WorkModel>().ToArray();
         if (
             DialogService.ShowMessageBoxX(
                 this,
-                "确定删除 {0} 吗".Translate(model.ID),
+                "确定删除已选中的 {0} 个工作吗".Translate(models.Length),
                 "删除工作".Translate(),
                 MessageBoxButton.YesNo
             )
             is not true
         )
             return;
-        Works.Remove(model);
-        model.Close();
-        this.Log().Info("删除工作 {work}", model.ID);
+        foreach (var model in models)
+        {
+            Works.Remove(model);
+            model.Close();
+            this.Log().Info("删除工作 {work}", model.ID);
+        }
         Reset();
     }
 
+    /// <summary>
+    /// 重置
+    /// </summary>
     public void Reset()
     {
         Work = null!;
         OldWork = null!;
         DialogResult = false;
+        Image?.CloseStream();
         ModInfo.TempI18nResource.ClearCultureData();
     }
 
+    /// <summary>
+    /// 关闭
+    /// </summary>
     public void Close()
     {
         Image?.CloseStream();

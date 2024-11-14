@@ -18,37 +18,44 @@ using VPet.ModMaker.Models;
 
 namespace VPet.ModMaker.ViewModels.ModEdit;
 
+/// <summary>
+/// I18n编辑
+/// </summary>
 public partial class I18nEditVM : DialogViewModel
 {
+    /// <inheritdoc/>
     public I18nEditVM(ModInfoModel modInfo)
     {
         ModInfo = modInfo;
-        I18nResource = ModInfo.I18nResource;
         SearchTarget = SearchTargets.First();
         PropertyChanged += I18nEditWindowVM_PropertyChanged;
 
-        I18nResource.Cultures.SetChanged -= Cultures_SetChanged;
-        I18nResource.Cultures.SetChanged += Cultures_SetChanged;
+        ModInfo.I18nResource.Cultures.SetChanged -= Cultures_SetChanged;
+        ModInfo.I18nResource.Cultures.SetChanged += Cultures_SetChanged;
 
-        I18nResource.CultureDatas.DictionaryChanged -= CultureDatas_DictionaryChanged;
-        I18nResource.CultureDatas.DictionaryChanged += CultureDatas_DictionaryChanged;
+        ModInfo.I18nResource.CultureDatas.DictionaryChanged -= CultureDatas_DictionaryChanged;
+        ModInfo.I18nResource.CultureDatas.DictionaryChanged += CultureDatas_DictionaryChanged;
 
         I18nDatas = new([], [], DataFilter);
-        foreach (var data in I18nResource.CultureDatas.Values)
+        foreach (var data in ModInfo.I18nResource.CultureDatas.Values)
         {
             I18nDatas.Add(data);
             data.DictionaryChanged += Data_DictionaryChanged;
         }
-        foreach (var culture in I18nResource.Cultures)
+        foreach (var culture in ModInfo.I18nResource.Cultures)
+        {
             SearchTargets.Add(culture.Name);
+        }
     }
 
     /// <summary>
     /// 模组信息
     /// </summary>
-    public ModInfoModel ModInfo { get; }
-    public I18nResource<string, string> I18nResource { get; }
+    public ModInfoModel ModInfo { get; } = null!;
 
+    /// <summary>
+    /// 单元格编辑
+    /// </summary>
     public bool CellEdit { get; set; } = false;
 
     /// <summary>
@@ -216,8 +223,16 @@ public partial class I18nEditVM : DialogViewModel
     //    CultureChanged?.Invoke(oldCulture, newCulture);
     //}
 
+    /// <summary>
+    /// 文化改变事件
+    /// </summary>
     public event CultureChangedEventHandler? CultureChanged;
     #endregion
 }
 
+/// <summary>
+/// 文化改变
+/// </summary>
+/// <param name="oldCulture">旧文化</param>
+/// <param name="newCulture">新文化</param>
 public delegate void CultureChangedEventHandler(string oldCulture, string newCulture);

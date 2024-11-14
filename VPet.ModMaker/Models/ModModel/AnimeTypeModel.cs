@@ -20,10 +20,16 @@ using static VPet_Simulator.Core.IGameSave;
 
 namespace VPet.ModMaker.Models.ModModel;
 
-public partial class AnimeTypeModel : ViewModelBase
+/// <summary>
+/// 多类型动画模型
+/// </summary>
+public partial class AnimeTypeModel : ViewModelBase, IAnimeModel
 {
+    /// <inheritdoc/>
     public AnimeTypeModel() { }
 
+    /// <inheritdoc/>
+    /// <param name="model">模型</param>
     public AnimeTypeModel(AnimeTypeModel model)
         : this()
     {
@@ -38,6 +44,46 @@ public partial class AnimeTypeModel : ViewModelBase
             PoorConditionAnimes.Add(anime.Clone());
         foreach (var anime in model.IllAnimes)
             IllAnimes.Add(anime.Clone());
+    }
+
+    /// <inheritdoc/>
+    /// <param name="graphType">动画类型</param>
+    /// <param name="path">路径</param>
+    public AnimeTypeModel(GraphInfo.GraphType graphType, string path)
+    {
+        Name = Path.GetFileName(path);
+        // 为带有名字的类型设置ID
+        if (graphType.IsHasNameAnime())
+            ID = $"{graphType}_{Name}";
+        else
+            ID = graphType.ToString();
+        GraphType = graphType;
+        if (
+            graphType
+            is GraphInfo.GraphType.Default
+                or GraphInfo.GraphType.Shutdown
+                or GraphInfo.GraphType.StartUP
+                or GraphInfo.GraphType.Switch_Up
+                or GraphInfo.GraphType.Switch_Down
+                or GraphInfo.GraphType.Switch_Thirsty
+                or GraphInfo.GraphType.Switch_Hunger
+                or GraphInfo.GraphType.Raised_Dynamic
+        )
+            LoadDefault(path);
+        else if (
+            graphType
+            is GraphInfo.GraphType.Touch_Head
+                or GraphInfo.GraphType.Touch_Body
+                or GraphInfo.GraphType.Sleep
+                or GraphInfo.GraphType.Raised_Static
+                or GraphInfo.GraphType.StateONE
+                or GraphInfo.GraphType.StateTWO
+        )
+            LoadMultiType(path);
+        else if (graphType.IsHasNameAnime())
+            LoadMultiType(path);
+        else
+            throw new Exception();
     }
 
     /// <summary>
@@ -137,24 +183,8 @@ public partial class AnimeTypeModel : ViewModelBase
     public ObservableList<AnimeModel> IllAnimes { get; } = [];
 
     /// <summary>
-    /// 创建动画类型模型
+    /// 载入动画
     /// </summary>
-    /// <param name="graphType">动作类型</param>
-    /// <param name="path">路径</param>
-    /// <returns></returns>
-    public static AnimeTypeModel? Create(GraphInfo.GraphType graphType, string path)
-    {
-        try
-        {
-            var model = new AnimeTypeModel(graphType, path);
-            return model;
-        }
-        catch
-        {
-            return null;
-        }
-    }
-
     public void LoadTypeAnime()
     {
         foreach (var anime in HappyAnimes)
@@ -167,6 +197,9 @@ public partial class AnimeTypeModel : ViewModelBase
             anime.LoadAnime();
     }
 
+    /// <summary>
+    /// 关闭动画
+    /// </summary>
     public void Close()
     {
         foreach (var anime in HappyAnimes)
@@ -179,6 +212,9 @@ public partial class AnimeTypeModel : ViewModelBase
             anime.Close();
     }
 
+    /// <summary>
+    /// 清除动画
+    /// </summary>
     public void Clear()
     {
         Close();
@@ -186,43 +222,6 @@ public partial class AnimeTypeModel : ViewModelBase
         NomalAnimes.Clear();
         PoorConditionAnimes.Clear();
         IllAnimes.Clear();
-    }
-
-    public AnimeTypeModel(GraphInfo.GraphType graphType, string path)
-    {
-        Name = Path.GetFileName(path);
-        // 为带有名字的类型设置ID
-        if (graphType.IsHasNameAnime())
-            ID = $"{graphType}_{Name}";
-        else
-            ID = graphType.ToString();
-        GraphType = graphType;
-        if (
-            graphType
-            is GraphInfo.GraphType.Default
-                or GraphInfo.GraphType.Shutdown
-                or GraphInfo.GraphType.StartUP
-                or GraphInfo.GraphType.Switch_Up
-                or GraphInfo.GraphType.Switch_Down
-                or GraphInfo.GraphType.Switch_Thirsty
-                or GraphInfo.GraphType.Switch_Hunger
-                or GraphInfo.GraphType.Raised_Dynamic
-        )
-            LoadDefault(path);
-        else if (
-            graphType
-            is GraphInfo.GraphType.Touch_Head
-                or GraphInfo.GraphType.Touch_Body
-                or GraphInfo.GraphType.Sleep
-                or GraphInfo.GraphType.Raised_Static
-                or GraphInfo.GraphType.StateONE
-                or GraphInfo.GraphType.StateTWO
-        )
-            LoadMultiType(path);
-        else if (graphType.IsHasNameAnime())
-            LoadMultiType(path);
-        else
-            throw new Exception();
     }
 
     #region Load

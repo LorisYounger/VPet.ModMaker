@@ -20,12 +20,18 @@ namespace VPet.ModMaker.Models.ModModel;
 /// </summary>
 public partial class ImageModel : ViewModelBase, ICloneable<ImageModel>
 {
+    /// <inheritdoc/>
+    /// <param name="imageFile">图像文件</param>
+    /// <param name="duration">间隔</param>/>
     public ImageModel(string imageFile, int duration = 100)
     {
         ImageFile = imageFile;
         Duration = duration;
     }
 
+    /// <inheritdoc/>
+    /// <param name="image">图像</param>
+    /// <param name="duration">间隔</param>/>
     public ImageModel(BitmapImage image, int duration = 100)
     {
         Image = image;
@@ -49,15 +55,22 @@ public partial class ImageModel : ViewModelBase, ICloneable<ImageModel>
     [ReactiveProperty]
     public int Duration { get; set; } = 100;
 
+    /// <summary>
+    /// 载入图像
+    /// </summary>
     public void LoadImage()
     {
         Image = HKWImageUtils.LoadImageToMemory(ImageFile, this)!;
     }
 
+    /// <summary>
+    /// 克隆图像
+    /// </summary>
+    /// <returns></returns>
     public ImageModel Clone()
     {
         var model = new ImageModel(
-            Image?.CloneStream() ?? HKWImageUtils.LoadImageToMemory(ImageFile, this)!,
+            Image ??= HKWImageUtils.LoadImageToMemory(ImageFile, this)!,
             Duration
         );
         return model;
@@ -65,6 +78,9 @@ public partial class ImageModel : ViewModelBase, ICloneable<ImageModel>
 
     object ICloneable.Clone() => Clone();
 
+    /// <summary>
+    /// 关闭
+    /// </summary>
     public void Close()
     {
         Image?.CloseStream();

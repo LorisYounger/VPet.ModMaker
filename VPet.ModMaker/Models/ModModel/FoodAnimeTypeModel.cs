@@ -13,6 +13,7 @@ using HKW.HKWUtils.Extensions;
 using HKW.HKWUtils.Observable;
 using LinePutScript;
 using LinePutScript.Localization.WPF;
+using Splat;
 using VPet.ModMaker.Native;
 using VPet.ModMaker.ViewModels;
 using VPet_Simulator.Core;
@@ -20,22 +21,60 @@ using static VPet_Simulator.Core.IGameSave;
 
 namespace VPet.ModMaker.Models.ModModel;
 
-public partial class FoodAnimeTypeModel : ViewModelBase
+/// <summary>
+/// 食物多状态动画模型
+/// </summary>
+public partial class FoodAnimeTypeModel : ViewModelBase, IAnimeModel
 {
+    /// <inheritdoc/>
     public FoodAnimeTypeModel() { }
+
+    /// <inheritdoc/>
+    /// <param name="path">路径</param>
+    public FoodAnimeTypeModel(string path)
+        : this()
+    {
+        Name = Path.GetFileName(path);
+        var infoFiles = Directory.EnumerateFiles(
+            path,
+            NativeData.InfoFileName,
+            SearchOption.AllDirectories
+        );
+        if (infoFiles.Any() is false)
+            throw new Exception("信息文件不存在".Translate());
+        foreach (var file in infoFiles)
+        {
+            ParseInfoFile(Path.GetDirectoryName(file)!, file);
+        }
+    }
+
+    /// <inheritdoc/>
+    /// <param name="model">食物动画类型模型</param>
+    public FoodAnimeTypeModel(FoodAnimeTypeModel model)
+        : this()
+    {
+        ID = model.ID;
+        Name = model.Name;
+        foreach (var anime in model.HappyAnimes)
+            HappyAnimes.Add(anime.Clone());
+        foreach (var anime in model.NomalAnimes)
+            NomalAnimes.Add(anime.Clone());
+        foreach (var anime in model.PoorConditionAnimes)
+            PoorConditionAnimes.Add(anime.Clone());
+        foreach (var anime in model.IllAnimes)
+            IllAnimes.Add(anime.Clone());
+    }
 
     /// <summary>
     /// 动作类型
     /// </summary>
-    public static GraphInfo.GraphType GraphType => GraphInfo.GraphType.Common;
+    public GraphInfo.GraphType GraphType => GraphInfo.GraphType.Common;
 
     /// <summary>
     /// 动画名称
     /// </summary>
-    public static FrozenSet<string> FoodAnimeNames = FrozenSet.ToFrozenSet(
-        ["Eat", "Drink", "Gift"],
-        StringComparer.InvariantCultureIgnoreCase
-    );
+    public static FrozenSet<string> FoodAnimeNames { get; } =
+        FrozenSet.ToFrozenSet(["Eat", "Drink", "Gift"], StringComparer.InvariantCultureIgnoreCase);
 
     /// <summary>
     /// 顶层名称
@@ -47,6 +86,9 @@ public partial class FoodAnimeTypeModel : ViewModelBase
     /// </summary>
     public const string BackLayName = "back_lay";
 
+    /// <summary>
+    /// ID
+    /// </summary>
     [ReactiveProperty]
     public string ID { get; set; } = string.Empty;
 
@@ -74,13 +116,16 @@ public partial class FoodAnimeTypeModel : ViewModelBase
     /// <summary>
     /// 低状态动画
     /// </summary>
-    public ObservableList<FoodAnimeModel> PoorConditionAnimes { get; } = new();
+    public ObservableList<FoodAnimeModel> PoorConditionAnimes { get; } = [];
 
     /// <summary>
     /// 生病动画
     /// </summary>
-    public ObservableList<FoodAnimeModel> IllAnimes { get; } = new();
+    public ObservableList<FoodAnimeModel> IllAnimes { get; } = [];
 
+    /// <summary>
+    /// 载入多类型动画
+    /// </summary>
     public void LoadTypeAnime()
     {
         foreach (var anime in HappyAnimes)
@@ -93,6 +138,7 @@ public partial class FoodAnimeTypeModel : ViewModelBase
             anime.LoadAnime();
     }
 
+    /// <inheritdoc/>
     public void Close()
     {
         foreach (var anime in HappyAnimes)
@@ -105,6 +151,7 @@ public partial class FoodAnimeTypeModel : ViewModelBase
             anime.Close();
     }
 
+    /// <inheritdoc/>
     public void Clear()
     {
         HappyAnimes.Clear();
@@ -113,79 +160,35 @@ public partial class FoodAnimeTypeModel : ViewModelBase
         IllAnimes.Clear();
     }
 
-    public FoodAnimeTypeModel(string path)
-        : this()
-    {
-        Name = Path.GetFileName(path);
-        var infoFiles = Directory.EnumerateFiles(
-            path,
-            NativeData.InfoFileName,
-            SearchOption.AllDirectories
-        );
-        if (infoFiles.Any() is false)
-            throw new Exception("信息文件不存在".Translate());
-        foreach (var file in infoFiles)
-        {
-            ParseInfoFile(Path.GetDirectoryName(file)!, file);
-        }
-    }
-
-    public FoodAnimeTypeModel(FoodAnimeTypeModel model)
-        : this()
-    {
-        ID = model.ID;
-        Name = model.Name;
-        foreach (var anime in model.HappyAnimes)
-            HappyAnimes.Add(anime.Clone());
-        foreach (var anime in model.NomalAnimes)
-            NomalAnimes.Add(anime.Clone());
-        foreach (var anime in model.PoorConditionAnimes)
-            PoorConditionAnimes.Add(anime.Clone());
-        foreach (var anime in model.IllAnimes)
-            IllAnimes.Add(anime.Clone());
-    }
-
-    /// <summary>
-    /// 创建动画类型模型
-    /// </summary>
-    /// <param name="graphType">动作类型</param>
-    /// <param name="path">路径</param>
-    /// <returns></returns>
-    public static FoodAnimeTypeModel? Create(string path)
-    {
-        try
-        {
-            var model = new FoodAnimeTypeModel(path);
-            return model;
-        }
-        catch
-        {
-            return null;
-        }
-    }
-
     /// <summary>
     /// 解析信息文件
     /// </summary>
     /// <param name="path">路径</param>
-    /// <param name="infoPath">信息文件路径</param>
+    /// <param name="infoFile">信息文件路径</param>
     /// <exception cref="Exception"></exception>
-    public void ParseInfoFile(string path, string infoPath)
+    public void ParseInfoFile(string path, string infoFile)
     {
-        var lps = new LPS(File.ReadAllText(infoPath));
-        var foodAnimeInfos = lps.FindAllLine(nameof(FoodAnimation));
-        if (foodAnimeInfos.Any() is false)
-            throw new Exception("信息文件\n{0}\n未包含食物动画信息".Translate(infoPath));
-        var pngAnimeInfos = lps.FindAllLine(nameof(PNGAnimation))
-            .Select(i => new PNGAnimeInfo(
-                i.Info,
-                i.Find("path").Info,
-                (ModeType)Enum.Parse(typeof(ModeType), i.Find("mode").Info, true)
-            ))
-            .ToList();
-        foreach (var foodAnimation in foodAnimeInfos)
+        try
         {
-            ParseFoodAnimeInfo(path, foodAnimation, pngAnimeInfos);
+            var lps = new LPS(File.ReadAllText(infoFile));
+            var foodAnimeInfos = lps.FindAllLine(nameof(FoodAnimation));
+            if (foodAnimeInfos.Length != 0)
+                throw new Exception("信息文件\n{0}\n未包含食物动画信息".Translate(infoFile));
+            var pngAnimeInfos = lps.FindAllLine(nameof(PNGAnimation))
+                .Select(i => new PNGAnimeInfo(
+                    i.Info,
+                    i.Find("path")!.Info,
+                    (ModeType)Enum.Parse(typeof(ModeType), i.Find("mode")!.Info, true)
+                ))
+                .ToList();
+            foreach (var foodAnimation in foodAnimeInfos)
+            {
+                ParseFoodAnimeInfo(path, foodAnimation, pngAnimeInfos);
+            }
+        }
+        catch (Exception ex)
+        {
+            this.Log().Warn("食物动画信息文件解析失败, 信息文件: {infoFile}, 目标文件夹: {path}", infoFile, path, ex);
         }
     }
 
@@ -197,15 +200,28 @@ public partial class FoodAnimeTypeModel : ViewModelBase
     /// <param name="pngAnimeInfos">PNG动画信息</param>
     public void ParseFoodAnimeInfo(string path, ILine line, List<PNGAnimeInfo> pngAnimeInfos)
     {
-        var mode = (ModeType)Enum.Parse(typeof(ModeType), line.Find("mode").Info, true);
-        if (mode is ModeType.Happy)
-            AddModeAnime(path, ModeType.Happy, HappyAnimes, line, pngAnimeInfos);
-        else if (mode is ModeType.Nomal)
-            AddModeAnime(path, ModeType.Nomal, NomalAnimes, line, pngAnimeInfos);
-        else if (mode is ModeType.PoorCondition)
-            AddModeAnime(path, ModeType.PoorCondition, PoorConditionAnimes, line, pngAnimeInfos);
-        else if (mode is ModeType.Ill)
-            AddModeAnime(path, ModeType.Ill, IllAnimes, line, pngAnimeInfos);
+        try
+        {
+            var mode = (ModeType)Enum.Parse(typeof(ModeType), line.Find("mode")!.Info, true);
+            if (mode is ModeType.Happy)
+                AddModeAnime(path, ModeType.Happy, HappyAnimes, line, pngAnimeInfos);
+            else if (mode is ModeType.Nomal)
+                AddModeAnime(path, ModeType.Nomal, NomalAnimes, line, pngAnimeInfos);
+            else if (mode is ModeType.PoorCondition)
+                AddModeAnime(
+                    path,
+                    ModeType.PoorCondition,
+                    PoorConditionAnimes,
+                    line,
+                    pngAnimeInfos
+                );
+            else if (mode is ModeType.Ill)
+                AddModeAnime(path, ModeType.Ill, IllAnimes, line, pngAnimeInfos);
+        }
+        catch (Exception ex)
+        {
+            this.Log().Warn("食物动画信息解析失败, 目标文件夹: {path}, 信息行: {$line}", path, line, ex);
+        }
     }
 
     /// <summary>
@@ -225,8 +241,8 @@ public partial class FoodAnimeTypeModel : ViewModelBase
     )
     {
         var anime = new FoodAnimeModel(line);
-        var frontLay = line.Find("front_lay").Info;
-        var backLay = line.Find("back_lay").Info;
+        var frontLay = line.Find("front_lay")!.Info;
+        var backLay = line.Find("back_lay")!.Info;
         var frontLayAnimes = pngAnimeInfos.Where(i => i.Name == frontLay).ToList();
         var backLayAnimes = pngAnimeInfos.Where(i => i.Name == backLay).ToList();
         // 尝试获取相同模式的动画
@@ -271,26 +287,33 @@ public partial class FoodAnimeTypeModel : ViewModelBase
     /// <param name="path">路径</param>
     public void Save(string path)
     {
-        var animePath = Path.Combine(path, Name);
-        if (
-            Directory.Exists(animePath)
-            && HappyAnimes.HasValue() is false
-            && NomalAnimes.HasValue() is false
-            && PoorConditionAnimes.HasValue() is false
-            && IllAnimes.HasValue() is false
-        )
+        try
         {
-            Directory.Delete(animePath, true);
-            return;
+            var animePath = Path.Combine(path, Name);
+            if (
+                Directory.Exists(animePath)
+                && HappyAnimes.HasValue() is false
+                && NomalAnimes.HasValue() is false
+                && PoorConditionAnimes.HasValue() is false
+                && IllAnimes.HasValue() is false
+            )
+            {
+                Directory.Delete(animePath, true);
+                return;
+            }
+            if (HappyAnimes.Count > 0)
+                SaveAnimeInfo(animePath, HappyAnimes, ModeType.Happy);
+            if (NomalAnimes.Count > 0)
+                SaveAnimeInfo(animePath, NomalAnimes, ModeType.Nomal);
+            if (PoorConditionAnimes.Count > 0)
+                SaveAnimeInfo(animePath, PoorConditionAnimes, ModeType.PoorCondition);
+            if (IllAnimes.Count > 0)
+                SaveAnimeInfo(animePath, IllAnimes, ModeType.Ill);
         }
-        if (HappyAnimes.Count > 0)
-            SaveAnimeInfo(animePath, HappyAnimes, ModeType.Happy);
-        if (NomalAnimes.Count > 0)
-            SaveAnimeInfo(animePath, NomalAnimes, ModeType.Nomal);
-        if (PoorConditionAnimes.Count > 0)
-            SaveAnimeInfo(animePath, PoorConditionAnimes, ModeType.PoorCondition);
-        if (IllAnimes.Count > 0)
-            SaveAnimeInfo(animePath, IllAnimes, ModeType.Ill);
+        catch (Exception ex)
+        {
+            this.Log().Warn("食物动画保存失败, 目标文件夹: {path}", path, ex);
+        }
     }
 
     /// <summary>
@@ -323,8 +346,6 @@ public partial class FoodAnimeTypeModel : ViewModelBase
     /// </summary>
     /// <param name="anime">动画</param>
     /// <param name="indexPath">索引路径</param>
-    /// <param name="frontLayName">顶层名称</param>
-    /// <param name="backLayName">底层名称</param>
     private static void SaveImages(FoodAnimeModel anime, string indexPath)
     {
         var frontLayPath = Path.Combine(indexPath, FrontLayName);
@@ -398,9 +419,26 @@ public partial class FoodAnimeTypeModel : ViewModelBase
     }
 }
 
+/// <summary>
+/// PNG动画信息
+/// </summary>
+/// <param name="name">名称</param>
+/// <param name="path">路径</param>
+/// <param name="mode">模式</param>
 public class PNGAnimeInfo(string name, string path, IGameSave.ModeType mode)
 {
+    /// <summary>
+    /// 名称
+    /// </summary>
     public string Name { get; } = name;
+
+    /// <summary>
+    /// 路径
+    /// </summary>
     public string Path { get; } = path;
+
+    /// <summary>
+    /// 模式
+    /// </summary>
     public ModeType Mode { get; } = mode;
 }

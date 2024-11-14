@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Frozen;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -28,10 +29,14 @@ using VPet_Simulator.Windows.Interface;
 
 namespace VPet.ModMaker.ViewModels.ModEdit;
 
+/// <summary>
+/// 低状态文本编辑视图模型
+/// </summary>
 public partial class LowTextEditVM : DialogViewModel
 {
     private static IDialogService DialogService => Locator.Current.GetService<IDialogService>()!;
 
+    /// <inheritdoc/>
     public LowTextEditVM()
     {
         LowTexts = new(
@@ -161,8 +166,14 @@ public partial class LowTextEditVM : DialogViewModel
         FrozenSet<LowTextSearchTarget>
     > SearchTargets { get; } = new(EnumInfo<LowTextSearchTarget>.Values);
 
+    /// <summary>
+    /// 旧低状态文本
+    /// </summary>
     public LowTextModel? OldLowText { get; set; }
 
+    /// <summary>
+    /// 低状态文本
+    /// </summary>
     [ReactiveProperty]
     public LowTextModel LowText { get; set; } = null!;
 
@@ -174,7 +185,7 @@ public partial class LowTextEditVM : DialogViewModel
     {
         ModInfo.TempI18nResource.ClearCultureData();
         LowText = new() { I18nResource = ModInfo.I18nResource };
-        await DialogService.ShowSingletonDialogAsync(this, this);
+        await DialogService.ShowDialogAsyncX(this, this);
         if (DialogResult is not true)
         {
             LowText.Close();
@@ -244,26 +255,33 @@ public partial class LowTextEditVM : DialogViewModel
     /// <summary>
     /// 删除
     /// </summary>
-    /// <param name="model">模型</param>
+    /// <param name="list">列表</param>
     [ReactiveCommand]
-    private void Remove(LowTextModel model)
+    private void Remove(IList list)
     {
+        var models = list.Cast<LowTextModel>().ToArray();
         if (
             DialogService.ShowMessageBoxX(
                 this,
-                "确定删除 {0} 吗".Translate(model.ID),
+                "确定删除已选中的 {0} 个低状态文本吗".Translate(models.Length),
                 "删除低状态文本".Translate(),
                 MessageBoxButton.YesNo
             )
             is not true
         )
             return;
-        LowTexts.Remove(model);
-        model.Close();
-        this.Log().Info("删除低状态文本 {lowText}", model.ID);
+        foreach (var model in models)
+        {
+            LowTexts.Remove(model);
+            model.Close();
+            this.Log().Info("删除低状态文本 {lowText}", model.ID);
+        }
         Reset();
     }
 
+    /// <summary>
+    /// 重置
+    /// </summary>
     public void Reset()
     {
         LowText = null!;

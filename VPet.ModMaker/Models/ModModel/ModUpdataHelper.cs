@@ -17,17 +17,19 @@ namespace VPet.ModMaker.Models;
 /// </summary>
 public static class ModUpdataHelper
 {
-    public static int LastVersion => UpdataAction.Last().Key;
+    /// <summary>
+    /// 最新游戏版本
+    /// </summary>
+    public static int LastGameVersion => UpdataAction.Last().Key;
 
     /// <summary>
     /// 能否升级模组
     /// </summary>
     /// <param name="mod">模组</param>
-    /// <param name="version">版本</param>
     /// <returns>可以升级为 <see langword="true"/> 不可以为 <see langword="false"/></returns>
     public static bool CanUpdata(ModInfoModel mod)
     {
-        if (mod.GameVersion >= LastVersion)
+        if (mod.GameVersion >= LastGameVersion)
             return false;
         return true;
     }
@@ -53,6 +55,9 @@ public static class ModUpdataHelper
         return mod.GameVersion;
     }
 
+    /// <summary>
+    /// 更新行动
+    /// </summary>
     public static SortedDictionary<int, Action<ModInfoModel>> UpdataAction { get; } =
         new()
         {

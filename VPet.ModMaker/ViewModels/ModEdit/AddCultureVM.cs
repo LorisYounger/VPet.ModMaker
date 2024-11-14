@@ -24,10 +24,14 @@ using VPet.ModMaker.Models;
 
 namespace VPet.ModMaker.ViewModels.ModEdit;
 
+/// <summary>
+/// 添加文化视图模型
+/// </summary>
 public partial class AddCultureVM : DialogViewModel
 {
     private static IDialogService DialogService => Locator.Current.GetService<IDialogService>()!;
 
+    /// <inheritdoc/>
     public AddCultureVM(ModInfoModel modInfo)
     {
         ModInfo = modInfo;
@@ -133,8 +137,14 @@ public partial class AddCultureVM : DialogViewModel
     [ReactiveProperty]
     public string Search { get; set; } = string.Empty;
 
+    /// <summary>
+    /// 未知文化
+    /// </summary>
     public static string UnknownCulture => "未知文化".Translate();
 
+    /// <summary>
+    /// 文化链接
+    /// </summary>
     public string CultureLink { get; } =
         "https://learn.microsoft.com/en-us/openspecs/windows_protocols/ms-lcid/a9eac961-e77d-41a6-90a5-ce1a8b0cdb9c";
 

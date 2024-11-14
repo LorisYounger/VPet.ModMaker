@@ -22,14 +22,19 @@ namespace VPet.ModMaker.Models;
 [MapFrom(typeof(MoveModel), MapConfig = typeof(MoveModelMapFromMoveModelConfig))]
 public partial class MoveModel : ViewModelBase
 {
+    /// <inheritdoc/>
     public MoveModel() { }
 
+    /// <inheritdoc/>
+    /// <param name="model">移动模型</param>
     public MoveModel(MoveModel model)
         : this()
     {
         this.MapFromMoveModel(model);
     }
 
+    /// <inheritdoc/>
+    /// <param name="move">移动</param>
     public MoveModel(GraphHelper.Move move)
         : this()
     {

@@ -16,8 +16,11 @@ namespace VPet.ModMaker.Models.ModModel;
 /// </summary>
 public partial class AnimeModel : ViewModelBase, ICloneable<AnimeModel>
 {
+    /// <inheritdoc/>
     public AnimeModel() { }
 
+    /// <inheritdoc/>
+    /// <param name="imagesPath">图像路径</param>
     public AnimeModel(string imagesPath)
     {
         foreach (var file in Directory.EnumerateFiles(imagesPath))
@@ -49,6 +52,9 @@ public partial class AnimeModel : ViewModelBase, ICloneable<AnimeModel>
     /// </summary>
     public ObservableList<ImageModel> Images { get; } = [];
 
+    /// <summary>
+    /// 载入动画
+    /// </summary>
     public void LoadAnime()
     {
         if (Images.HasValue() is false || Images.First().Image is not null)
@@ -71,9 +77,7 @@ public partial class AnimeModel : ViewModelBase, ICloneable<AnimeModel>
 
     object ICloneable.Clone() => Clone();
 
-    /// <summary>
-    /// 关闭所有图像流
-    /// </summary>
+    /// <inheritdoc/>
     public void Close()
     {
         foreach (var image in Images)

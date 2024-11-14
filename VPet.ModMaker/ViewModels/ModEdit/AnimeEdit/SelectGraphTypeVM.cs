@@ -15,8 +15,12 @@ using VPet_Simulator.Core;
 
 namespace VPet.ModMaker.ViewModels.ModEdit;
 
+/// <summary>
+/// 选择图像类型视图模型
+/// </summary>
 public partial class SelectGraphTypeVM : DialogViewModel
 {
+    /// <inheritdoc/>
     public SelectGraphTypeVM() { }
 
     /// <summary>

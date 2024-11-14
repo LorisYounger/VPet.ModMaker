@@ -8,13 +8,14 @@ using System.Linq;
 using System.Reactive.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.Windows;
 using DynamicData.Binding;
 using HanumanInstitute.MvvmDialogs;
+using HanumanInstitute.MvvmDialogs.FrameworkDialogs;
 using HKW.HKWReactiveUI;
 using HKW.HKWUtils.Collections;
 using HKW.HKWUtils.Extensions;
 using HKW.HKWUtils.Observable;
+using HKW.MVVMDialogs;
 using HKW.WPF.MVVMDialogs;
 using LinePutScript.Localization.WPF;
 using Panuon.WPF.UI;
@@ -26,10 +27,14 @@ using VPet.ModMaker.Views.ModEdit;
 
 namespace VPet.ModMaker.ViewModels.ModEdit;
 
+/// <summary>
+/// 动画视图模型
+/// </summary>
 public partial class AnimeVM : ViewModelBase
 {
     private static IDialogService DialogService => Locator.Current.GetService<IDialogService>()!;
 
+    /// <inheritdoc/>
     public AnimeVM()
     {
         AllAnimes = new(
@@ -58,6 +63,9 @@ public partial class AnimeVM : ViewModelBase
     }
 
     #region Property
+    /// <summary>
+    /// 模组信息
+    /// </summary>
     [ReactiveProperty]
     public ModInfoModel ModInfo { get; set; } = null!;
 
@@ -155,7 +163,7 @@ public partial class AnimeVM : ViewModelBase
     [ReactiveCommand]
     private async void Add()
     {
-        var vm = await DialogService.ShowSingletonDialogAsync(
+        var vm = await DialogService.ShowDialogAsyncX(
             this,
             new SelectGraphTypeVM() { CurrentPet = CurrentPet, }
         );
@@ -168,7 +176,7 @@ public partial class AnimeVM : ViewModelBase
             && FoodAnimeTypeModel.FoodAnimeNames.Contains(animeName)
         )
         {
-            var animeVM = await DialogService.ShowSingletonDialogAsync(
+            var animeVM = await DialogService.ShowDialogAsyncX(
                 this,
                 new FoodAnimeEditVM()
                 {
@@ -182,7 +190,7 @@ public partial class AnimeVM : ViewModelBase
         }
         else
         {
-            var animeVM = await DialogService.ShowSingletonDialogAsync(
+            var animeVM = await DialogService.ShowDialogAsyncX(
                 this,
                 new AnimeEditVM()
                 {
@@ -212,7 +220,7 @@ public partial class AnimeVM : ViewModelBase
         //var pendingHandler = PendingBox.Show("载入中".Translate());
         if (model is AnimeTypeModel animeTypeModel)
         {
-            var animeVM = await DialogService.ShowSingletonDialogAsync(
+            var animeVM = await DialogService.ShowDialogAsyncX(
                 this,
                 new AnimeEditVM()
                 {
@@ -233,7 +241,7 @@ public partial class AnimeVM : ViewModelBase
         }
         else if (model is FoodAnimeTypeModel foodAnimeTypeModel)
         {
-            var animeVM = await DialogService.ShowSingletonDialogAsync(
+            var animeVM = await DialogService.ShowDialogAsyncX(
                 this,
                 new FoodAnimeEditVM()
                 {
@@ -261,7 +269,15 @@ public partial class AnimeVM : ViewModelBase
     [ReactiveCommand]
     private void Remove(object model)
     {
-        if (MessageBox.Show("确定删除吗".Translate(), "", MessageBoxButton.YesNo) is MessageBoxResult.No)
+        if (
+            DialogService.ShowMessageBoxX(
+                "确定删除动画 {} 吗".Translate(),
+                "删除动画".Translate(),
+                MessageBoxButton.YesNo,
+                MessageBoxImage.Warning
+            )
+            is not true
+        )
             return;
         AllAnimes.Remove(model);
         if (model is AnimeTypeModel animeTypeModel)

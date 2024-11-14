@@ -31,14 +31,20 @@ namespace VPet.ModMaker.Models;
 [MapFrom(typeof(FoodModel))]
 public partial class FoodModel : ViewModelBase
 {
+    /// <inheritdoc/>
     public FoodModel() { }
 
+    /// <inheritdoc/>
+    /// <param name="model">食物模型</param>
     public FoodModel(FoodModel model)
     {
         this.MapFromFoodModel(model);
         Image = model.Image?.CloneStream();
     }
 
+    /// <inheritdoc/>
+    /// <param name="food">食物</param>
+    /// <param name="i18nResource">I18n资源</param>
     [SetsRequiredMembers]
     public FoodModel(Food food, I18nResource<string, string> i18nResource)
     {
@@ -68,6 +74,9 @@ public partial class FoodModel : ViewModelBase
     [NotifyPropertyChangeFrom(nameof(ID))]
     public string DescriptionID => $"{ID}_Description";
 
+    /// <summary>
+    /// I18n资源
+    /// </summary>
     [MapIgnoreProperty]
     [ReactiveProperty]
     public required I18nResource<string, string> I18nResource { get; set; }
@@ -81,9 +90,15 @@ public partial class FoodModel : ViewModelBase
         newValue?.I18nObjects.Add(I18nObject);
     }
 
+    /// <summary>
+    /// I18n对象
+    /// </summary>
     [NotifyPropertyChangeFrom("")]
     public I18nObject<string, string> I18nObject => new(this);
 
+    /// <summary>
+    /// 名称
+    /// </summary>
     [MapIgnoreProperty]
     [ReactiveI18nProperty("I18nResource", nameof(I18nObject), nameof(ID), true)]
     public string Name
@@ -92,6 +107,9 @@ public partial class FoodModel : ViewModelBase
         set => I18nResource.SetCurrentCultureData(ID, value);
     }
 
+    /// <summary>
+    /// 详情
+    /// </summary>
     [MapIgnoreProperty]
     [ReactiveI18nProperty("I18nResource", nameof(I18nObject), nameof(DescriptionID), true)]
     public string Description
@@ -209,11 +227,18 @@ public partial class FoodModel : ViewModelBase
 
     private static readonly Food _food = new();
 
+    /// <summary>
+    /// 转换为食物
+    /// </summary>
+    /// <returns>食物</returns>
     public Food ToFood()
     {
-        return this.MapToFood(new());
+        return this.MapToFood(_food);
     }
 
+    /// <summary>
+    /// 关闭
+    /// </summary>
     public void Close()
     {
         Image?.CloseStream();

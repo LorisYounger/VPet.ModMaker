@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Frozen;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -27,10 +28,14 @@ using VPet_Simulator.Windows.Interface;
 
 namespace VPet.ModMaker.ViewModels.ModEdit;
 
+/// <summary>
+/// 点击文本视图模型
+/// </summary>
 public partial class ClickTextEditVM : DialogViewModel
 {
     private static IDialogService DialogService => Locator.Current.GetService<IDialogService>()!;
 
+    /// <inheritdoc/>
     public ClickTextEditVM()
     {
         ClickTexts = new(
@@ -187,7 +192,7 @@ public partial class ClickTextEditVM : DialogViewModel
     {
         ModInfo.TempI18nResource.ClearCultureData();
         ClickText = new() { I18nResource = ModInfo.TempI18nResource };
-        await DialogService.ShowSingletonDialogAsync(this, this);
+        await DialogService.ShowDialogAsyncX(this, this);
         if (DialogResult is not true)
         {
             ClickText.Close();
@@ -252,26 +257,33 @@ public partial class ClickTextEditVM : DialogViewModel
     /// <summary>
     /// 删除
     /// </summary>
-    /// <param name="model">模型</param>
+    /// <param name="list">列表</param>
     [ReactiveCommand]
-    private void Remove(ClickTextModel model)
+    private void Remove(IList list)
     {
+        var models = list.Cast<ClickTextModel>().ToArray();
         if (
             DialogService.ShowMessageBoxX(
                 this,
-                "确定删除 {0} 吗".Translate(model.ID),
+                "确定删除已选中的 {0} 个点击文本吗".Translate(models.Length),
                 "删除点击文本".Translate(),
                 MessageBoxButton.YesNo
             )
             is not true
         )
             return;
-        ClickTexts.Remove(model);
-        model.Close();
-        this.Log().Info("删除点击文本 {clickText}", model.ID);
+        foreach (var model in models)
+        {
+            ClickTexts.Remove(model);
+            model.Close();
+            this.Log().Info("删除点击文本 {clickText}", model.ID);
+        }
         Reset();
     }
 
+    /// <summary>
+    /// 重置
+    /// </summary>
     public void Reset()
     {
         ClickText = null!;

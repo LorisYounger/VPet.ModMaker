@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
@@ -29,10 +30,14 @@ using VPet.ModMaker.Models;
 
 namespace VPet.ModMaker.ViewModels.ModEdit;
 
+/// <summary>
+/// 移动编辑视图模型
+/// </summary>
 public partial class MoveEditVM : DialogViewModel
 {
     private static IDialogService DialogService => Locator.Current.GetService<IDialogService>()!;
 
+    /// <inheritdoc/>
     public MoveEditVM()
     {
         Moves = new([], [], f => f.Graph.Contains(Search, StringComparison.OrdinalIgnoreCase));
@@ -123,20 +128,27 @@ public partial class MoveEditVM : DialogViewModel
     /// </summary>
     [ReactiveProperty]
     public string Search { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 旧移动
+    /// </summary>
     public MoveModel? OldMove { get; set; }
 
+    /// <summary>
+    /// 移动
+    /// </summary>
     [ReactiveProperty]
     public MoveModel Move { get; set; } = new();
 
-    [ReactiveProperty]
-    public double BorderLength { get; set; } = 250;
-
-    [ReactiveProperty]
-    public double LengthRatio { get; set; } = 250 / 500;
-
+    /// <summary>
+    /// 图像
+    /// </summary>
     [ReactiveProperty]
     public BitmapImage? Image { get; set; }
 
+    /// <summary>
+    /// 关闭
+    /// </summary>
     public void Close()
     {
         Image?.CloseStream();
@@ -209,7 +221,7 @@ public partial class MoveEditVM : DialogViewModel
     [ReactiveCommand]
     private async void Add()
     {
-        await DialogService.ShowSingletonDialogAsync(this, this);
+        await DialogService.ShowDialogAsyncX(this, this);
         if (DialogResult is not true)
             return;
 
@@ -246,25 +258,32 @@ public partial class MoveEditVM : DialogViewModel
     /// <summary>
     /// 删除
     /// </summary>
-    /// <param name="model">模型</param>
+    /// <param name="list">列表</param>
     [ReactiveCommand]
-    private void Remove(MoveModel model)
+    private void Remove(IList list)
     {
+        var models = list.Cast<MoveModel>().ToArray();
         if (
             DialogService.ShowMessageBoxX(
                 this,
-                "确定删除 {0} 吗".Translate(model.Graph),
+                "确定删除已选中的 {0} 个移动吗".Translate(models.Length),
                 "删除移动".Translate(),
                 MessageBoxButton.YesNo
             )
             is not true
         )
             return;
-        Moves.Remove(model);
-        this.Log().Info("删除移动 {move}", model.Graph);
+        foreach (var model in models)
+        {
+            Moves.Remove(model);
+            this.Log().Info("删除移动 {move}", model.Graph);
+        }
         Reset();
     }
 
+    /// <summary>
+    /// 重置
+    /// </summary>
     public void Reset()
     {
         Move = null!;

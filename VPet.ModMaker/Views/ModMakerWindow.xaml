@@ -33,7 +33,7 @@
         Height="NaN"
         Margin="5"
         Padding="10"
-        Content="{ll:Str 打开最近的内容}"
+        Content="{ll:Str 最近的内容}"
         FontSize="20"
         FontWeight="Bold"
         Style="{StaticResource Label_Left}" />
@@ -43,7 +43,7 @@
           <ColumnDefinition Width="Auto" />
         </Grid.ColumnDefinitions>
         <TextBox
-          Margin="5"
+          Margin="5,5,0,5"
           pu:TextBoxHelper.Watermark="{ll:Str 搜索}"
           Style="{DynamicResource StandardTextBoxStyle}"
           Text="{Binding Search}" />
@@ -60,15 +60,21 @@
         Grid.Row="2"
         HorizontalContentAlignment="Stretch"
         d:ItemsSource="{d:SampleData ItemCount=5}"
-        pu:ListBoxHelper.ItemClick="ListBox_ItemClick"
         pu:ListBoxHelper.ItemsBackground="{StaticResource PrimaryDarker}"
         pu:ListBoxHelper.ItemsHeight="64"
         pu:ListBoxHelper.ItemsHoverBackground="{StaticResource PrimaryDark}"
         pu:ListBoxHelper.ItemsMargin="5"
         pu:ListBoxHelper.ItemsPadding="5"
+        pu:ListBoxHelper.ItemsSelectedBackground="{StaticResource DARKPrimaryDarker}"
         Foreground="{StaticResource DARKPrimaryText}"
         ItemsSource="{Binding Histories.FilteredList}"
         Style="{StaticResource SideMenuListBoxStyle}">
+        <ListBox.ItemContainerStyle>
+          <Style BasedOn="{StaticResource {x:Type ListBoxItem}}" TargetType="ListBoxItem">
+            <Setter Property="Focusable" Value="False" />
+            <EventSetter Event="MouseDoubleClick" Handler="ListBoxItem_MouseDoubleClick" />
+          </Style>
+        </ListBox.ItemContainerStyle>
         <ListBox.ItemTemplate>
           <DataTemplate>
             <Grid Tag="{Binding DataContext, RelativeSource={RelativeSource AncestorType=Window, Mode=FindAncestor}}" ToolTip="{Binding SourcePath}">
@@ -77,7 +83,7 @@
                   <MenuItem
                     Command="{Binding PlacementTarget.Tag.RemoveHistoryCommand, RelativeSource={RelativeSource AncestorType=ContextMenu, Mode=FindAncestor}}"
                     CommandParameter="{Binding PlacementTarget.DataContext, RelativeSource={RelativeSource AncestorType=ContextMenu, Mode=FindAncestor}}"
-                    Header="{ll:Str 删除此历史}" />
+                    Header="{ll:Str 删除历史}" />
                 </ContextMenu>
               </Grid.ContextMenu>
               <Grid.ColumnDefinitions>

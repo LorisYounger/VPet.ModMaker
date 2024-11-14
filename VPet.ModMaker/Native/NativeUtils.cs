@@ -13,6 +13,9 @@ namespace HKW.HKWUtils;
 /// </summary>
 public static class NativeUtils
 {
+    /// <summary>
+    /// 粘贴板复制文本
+    /// </summary>
     public static Action<string> ClipboardSetText { get; set; } = null!;
 
     /// <summary>
@@ -24,7 +27,11 @@ public static class NativeUtils
     /// 解码像素高度
     /// </summary>
     public const int DecodePixelHeight = 250;
-    public static char[] Separator { get; } = new char[] { '_' };
+
+    /// <summary>
+    /// 分隔符
+    /// </summary>
+    public static char[] Separator { get; } = ['_'];
 
     //public static BitmapImage LoadImageToStream(string imagePath)
     //{

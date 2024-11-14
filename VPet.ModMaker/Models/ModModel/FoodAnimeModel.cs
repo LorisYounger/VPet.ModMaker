@@ -16,10 +16,16 @@ using static VPet_Simulator.Core.IGameSave;
 
 namespace VPet.ModMaker.Models.ModModel;
 
+/// <summary>
+/// 食物动画模型
+/// </summary>
 public partial class FoodAnimeModel : ViewModelBase, ICloneable<FoodAnimeModel>
 {
+    /// <inheritdoc/>
     public FoodAnimeModel() { }
 
+    /// <inheritdoc/>
+    /// <param name="line">行</param>
     public FoodAnimeModel(ILine line)
         : this()
     {
@@ -45,26 +51,30 @@ public partial class FoodAnimeModel : ViewModelBase, ICloneable<FoodAnimeModel>
         }
     }
 
+    /// <summary>
+    /// ID
+    /// </summary>
     [ReactiveProperty]
     public string ID { get; set; } = string.Empty;
-
-    public ObservableValue<ModeType> Mode { get; }
 
     /// <summary>
     /// 后图像列表
     /// </summary>
-    public ObservableList<ImageModel> BackImages { get; set; } = new();
+    public ObservableList<ImageModel> BackImages { get; set; } = [];
 
     /// <summary>
     /// 前图像列表
     /// </summary>
-    public ObservableList<ImageModel> FrontImages { get; set; } = new();
+    public ObservableList<ImageModel> FrontImages { get; set; } = [];
 
     /// <summary>
     /// 食物定位列表
     /// </summary>
-    public ObservableList<FoodAnimeLocationModel> FoodLocations { get; } = new();
+    public ObservableList<FoodAnimeLocationModel> FoodLocations { get; } = [];
 
+    /// <summary>
+    /// 载入动画
+    /// </summary>
     public void LoadAnime()
     {
         if (BackImages.FirstOrDefault()?.Image is null)
@@ -79,10 +89,7 @@ public partial class FoodAnimeModel : ViewModelBase, ICloneable<FoodAnimeModel>
         }
     }
 
-    /// <summary>
-    /// 复制
-    /// </summary>
-    /// <returns></returns>
+    /// <inheritdoc/>
     public FoodAnimeModel Clone()
     {
         var model = new FoodAnimeModel();
@@ -99,7 +106,7 @@ public partial class FoodAnimeModel : ViewModelBase, ICloneable<FoodAnimeModel>
     object ICloneable.Clone() => Clone();
 
     /// <summary>
-    /// 关闭所有图像流
+    /// 关闭
     /// </summary>
     public void Close()
     {

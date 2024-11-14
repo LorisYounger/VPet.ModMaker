@@ -26,14 +26,19 @@ namespace VPet.ModMaker.Models;
 [MapFrom(typeof(WorkModel), MapConfig = typeof(WorkModelMapFromWorkModelConfig))]
 public partial class WorkModel : ViewModelBase
 {
+    /// <inheritdoc/>
     public WorkModel() { }
 
+    /// <inheritdoc/>
+    /// <param name="model">工作模型</param>
     public WorkModel(WorkModel model)
         : this()
     {
         this.MapFromWorkModel(model);
     }
 
+    /// <inheritdoc/>
+    /// <param name="work">工作</param>
     public WorkModel(GraphHelper.Work work)
         : this()
     {
@@ -54,14 +59,23 @@ public partial class WorkModel : ViewModelBase
     [ReactiveProperty]
     public string ID { get; set; } = string.Empty;
 
+    /// <summary>
+    /// I18n资源
+    /// </summary>
     [MapIgnoreProperty]
     [ReactiveProperty]
     public required I18nResource<string, string> I18nResource { get; set; }
 
+    /// <summary>
+    /// I18n对象
+    /// </summary>
     [MapIgnoreProperty]
     [NotifyPropertyChangeFrom("")]
     public I18nObject<string, string> I18nObject => new(this);
 
+    /// <summary>
+    /// 名称
+    /// </summary>
     [MapIgnoreProperty]
     [ReactiveI18nProperty("I18nResource", nameof(I18nObject), nameof(ID))]
     public string Name
@@ -225,6 +239,9 @@ public partial class WorkModel : ViewModelBase
 
     private readonly GraphHelper.Work _work = new();
 
+    /// <summary>
+    /// 修复超模
+    /// </summary>
     public void FixOverLoad()
     {
         this.MapToWork(_work);
@@ -232,12 +249,16 @@ public partial class WorkModel : ViewModelBase
         this.MapFromWork(_work);
     }
 
+    /// <summary>
+    /// 转化为工作
+    /// </summary>
+    /// <returns></returns>
     public GraphHelper.Work ToWork()
     {
-        this.MapToWork(_work);
-        return _work;
+        return this.MapToWork(_work);
     }
 
+    /// <inheritdoc/>
     public void Close()
     {
         I18nResource.I18nObjects.Remove(I18nObject);

@@ -24,14 +24,20 @@ namespace VPet.ModMaker.Models;
 [MapFrom(typeof(SelectTextModel), MapConfig = typeof(SelectTextModelMapFromSelectTextModelConfig))]
 public partial class SelectTextModel : ViewModelBase
 {
+    /// <inheritdoc/>
     public SelectTextModel() { }
 
+    /// <inheritdoc/>
+    /// <param name="model">选择文本模型</param>
     public SelectTextModel(SelectTextModel model)
         : this()
     {
         this.MapFromSelectTextModel(model);
     }
 
+    /// <inheritdoc/>
+    /// <param name="text">选择文本</param>
+    /// <param name="i18nResource">I18n资源</param>
     [SetsRequiredMembers]
     public SelectTextModel(SelectText text, I18nResource<string, string> i18nResource)
         : this()
@@ -77,6 +83,9 @@ public partial class SelectTextModel : ViewModelBase
     [NotifyPropertyChangeFrom(nameof(ID))]
     public string ChooseID => $"{ID}_Choose";
 
+    /// <summary>
+    /// I18n资源
+    /// </summary>
     [MapIgnoreProperty]
     [ReactiveProperty]
     public required I18nResource<string, string> I18nResource { get; set; }
@@ -90,9 +99,15 @@ public partial class SelectTextModel : ViewModelBase
         newValue?.I18nObjects?.Add(I18nObject);
     }
 
+    /// <summary>
+    /// I18n对象
+    /// </summary>
     [NotifyPropertyChangeFrom("")]
     public I18nObject<string, string> I18nObject => new(this);
 
+    /// <summary>
+    /// 文本
+    /// </summary>
     [MapIgnoreProperty]
     [ReactiveI18nProperty("I18nResource", nameof(I18nObject), nameof(ID))]
     public string Text
@@ -101,6 +116,9 @@ public partial class SelectTextModel : ViewModelBase
         set => I18nResource.SetCurrentCultureData(ID, value);
     }
 
+    /// <summary>
+    /// 选择
+    /// </summary>
     [MapIgnoreProperty]
     [ReactiveI18nProperty("I18nResource", nameof(I18nObject), nameof(ChooseID))]
     public string Choose
@@ -162,6 +180,7 @@ public partial class SelectTextModel : ViewModelBase
     /// </summary>
     public ObservableRange<double> Strength { get; } = new(0, int.MaxValue);
 
+    /// <inheritdoc/>
     public void Close()
     {
         I18nResource.I18nObjects.Remove(I18nObject);

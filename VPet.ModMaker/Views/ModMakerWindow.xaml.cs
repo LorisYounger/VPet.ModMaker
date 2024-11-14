@@ -54,6 +54,7 @@ public partial class ModMakerWindow : WindowX, IPageLocator
                 }
                 else
                 {
+                    GC.Collect();
                     this.Hide();
                     ModEditWindow.ShowOrActivate();
                     ModEditWindow.ViewModel.ModInfo = x;
@@ -82,9 +83,9 @@ public partial class ModMakerWindow : WindowX, IPageLocator
     public ModEditWindow ModEditWindow => _modEditWindow ??= new ModEditWindow().MaskClose(this);
     #endregion
 
-    private void ListBox_ItemClick(object sender, RoutedEventArgs e)
+    private void ListBoxItem_MouseDoubleClick(object sender, MouseButtonEventArgs e)
     {
-        if (e.OriginalSource is not ListBoxItem item)
+        if (sender is not ListBoxItem item)
             return;
         if (item.DataContext is not ModMakeHistory history)
             return;

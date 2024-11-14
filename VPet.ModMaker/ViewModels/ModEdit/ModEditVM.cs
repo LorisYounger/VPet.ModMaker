@@ -28,10 +28,14 @@ using VPet.ModMaker.Views.ModEdit;
 
 namespace VPet.ModMaker.ViewModels.ModEdit;
 
+/// <summary>
+/// 模组编辑视图模型
+/// </summary>
 public partial class ModEditVM : ViewModelBase
 {
     private static IDialogService DialogService => Locator.Current.GetService<IDialogService>()!;
 
+    /// <inheritdoc/>
     public ModEditVM() { }
 
     #region Property
@@ -83,7 +87,7 @@ public partial class ModEditVM : ViewModelBase
                     this,
                     "是否更新模组\n当前版本: {0}\n最新版本: {1}".Translate(
                         ModInfo.ModVersion,
-                        ModUpdataHelper.LastVersion
+                        ModUpdataHelper.LastGameVersion
                     ),
                     "更新模组".Translate(),
                     MessageBoxButton.YesNo
@@ -133,7 +137,7 @@ public partial class ModEditVM : ViewModelBase
     /// </summary>
     public void Close()
     {
-        ModInfo.Image?.CloseStream();
+        ModInfo.Close();
     }
 
     /// <summary>

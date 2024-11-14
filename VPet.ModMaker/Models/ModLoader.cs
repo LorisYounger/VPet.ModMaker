@@ -13,6 +13,9 @@ using VPet_Simulator.Windows.Interface;
 
 namespace VPet.ModMaker.Models;
 
+#pragma warning disable CS8604 // 引用类型参数可能为 null。
+#pragma warning disable CS8602 // 解引用可能出现空引用。
+#pragma warning disable CS1591 // 缺少对公共可见类型或成员的 XML 注释
 /// <summary>
 /// 模组加载器
 /// </summary>
@@ -107,6 +110,7 @@ public class ModLoader
     {
         ModPath = path;
         var modlps = new LPS(File.ReadAllText(path.FullName + @"\info.lps"));
+
         Name = modlps.FindLine("vupmod").Info;
         Intro = modlps.FindLine("intro").Info;
         GameVer = modlps.FindSub("gamever").InfoToInt;
@@ -196,6 +200,7 @@ public class ModLoader
                             switch (li.Name.ToLower())
                             {
                                 case "lowfoodtext":
+
                                     LowTexts.Add(LPSConvert.DeserializeObject<LowText>(li));
                                     break;
                                 case "lowdrinktext":

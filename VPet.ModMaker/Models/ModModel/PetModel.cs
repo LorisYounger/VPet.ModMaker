@@ -29,12 +29,15 @@ namespace VPet.ModMaker.Models;
 /// </summary>
 public partial class PetModel : ViewModelBase
 {
+    /// <inheritdoc/>
     public PetModel()
     {
         Animes.PropertyChanged += Animes_PropertyChanged;
         FoodAnimes.PropertyChanged += FoodAnimes_PropertyChanged;
     }
 
+    /// <inheritdoc/>
+    /// <param name="model">宠物模型</param>
     public PetModel(PetModel model)
         : this()
     {
@@ -48,6 +51,10 @@ public partial class PetModel : ViewModelBase
             Works.Add(work);
     }
 
+    /// <inheritdoc/>
+    /// <param name="loader">宠物载入器</param>
+    /// <param name="i18nResource">I18n资源</param>
+    /// <param name="fromMain">来自本体</param>
     [SetsRequiredMembers]
     public PetModel(
         PetLoader loader,
@@ -121,6 +128,9 @@ public partial class PetModel : ViewModelBase
             Moves.Add(new(move));
     }
 
+    /// <summary>
+    /// 默认宠物
+    /// </summary>
     public static PetModel Default { get; } = new() { I18nResource = new() };
 
     /// <summary>
@@ -147,6 +157,9 @@ public partial class PetModel : ViewModelBase
     [NotifyPropertyChangeFrom(nameof(ID))]
     public string DescriptionID => $"{ID}_Description";
 
+    /// <summary>
+    /// I18n资源
+    /// </summary>
     [MapIgnoreProperty]
     [ReactiveProperty]
     public required I18nResource<string, string> I18nResource { get; set; }
@@ -160,6 +173,9 @@ public partial class PetModel : ViewModelBase
         newValue?.I18nObjects?.Add(I18nObject);
     }
 
+    /// <summary>
+    /// 初始化I18n资源
+    /// </summary>
     public void InitializeI18nResource()
     {
         foreach (var work in Works)
@@ -194,9 +210,15 @@ public partial class PetModel : ViewModelBase
         }
     }
 
+    /// <summary>
+    /// I18n对象
+    /// </summary>
     [NotifyPropertyChangeFrom("")]
     public I18nObject<string, string> I18nObject => new(this);
 
+    /// <summary>
+    /// 名称
+    /// </summary>
     [MapIgnoreProperty]
     [ReactiveI18nProperty("I18nResource", nameof(I18nObject), nameof(ID))]
     public string Name
@@ -205,6 +227,9 @@ public partial class PetModel : ViewModelBase
         set => I18nResource.SetCurrentCultureData(ID, value);
     }
 
+    /// <summary>
+    /// 宠物名称
+    /// </summary>
     [MapIgnoreProperty]
     [ReactiveI18nProperty("I18nResource", nameof(I18nObject), nameof(PetNameID))]
     public string PetName
@@ -213,6 +238,9 @@ public partial class PetModel : ViewModelBase
         set => I18nResource.SetCurrentCultureData(PetNameID, value);
     }
 
+    /// <summary>
+    /// 详情
+    /// </summary>
     [MapIgnoreProperty]
     [ReactiveI18nProperty("I18nResource", nameof(I18nObject), nameof(DescriptionID))]
     public string Description
@@ -296,16 +324,15 @@ public partial class PetModel : ViewModelBase
         AnimeCount = Animes.Count + FoodAnimes.Count;
     }
 
+    /// <summary>
+    /// 关闭
+    /// </summary>
     public void Close()
     {
         foreach (var anime in Animes)
             anime.Close();
         foreach (var anime in FoodAnimes)
             anime.Close();
-    }
-
-    public void CloseI18nResource()
-    {
         I18nResource.I18nObjects.Remove(I18nObject);
     }
 
@@ -330,7 +357,6 @@ public partial class PetModel : ViewModelBase
         SaveMoveInfo(lps);
         File.WriteAllText(petFile, lps.ToString());
 
-        // 保存图片
         SaveAnime(path);
     }
 
@@ -503,11 +529,37 @@ public partial class PetModel : ViewModelBase
     #endregion
 }
 
+/// <summary>
+/// 可观察的多状态矩形位置
+/// </summary>
 public partial class ObservableMultiStateRectangleLocation
     : ViewModelBase,
         IEquatable<ObservableMultiStateRectangleLocation>,
         ICloneable<ObservableMultiStateRectangleLocation>
 {
+    /// <inheritdoc/>
+    public ObservableMultiStateRectangleLocation()
+    {
+        Happy = new();
+        Nomal = new();
+        PoorCondition = new();
+        Ill = new();
+    }
+
+    /// <inheritdoc/>
+    public ObservableMultiStateRectangleLocation(
+        ObservableRectangle<double> happy,
+        ObservableRectangle<double> nomal,
+        ObservableRectangle<double> poorCondition,
+        ObservableRectangle<double> ill
+    )
+    {
+        Happy = happy;
+        Nomal = nomal;
+        PoorCondition = poorCondition;
+        Ill = ill;
+    }
+
     /// <summary>
     /// 开心时的范围
     /// </summary>
@@ -532,27 +584,7 @@ public partial class ObservableMultiStateRectangleLocation
     [ReactiveProperty]
     public ObservableRectangle<double> Ill { get; set; }
 
-    public ObservableMultiStateRectangleLocation()
-    {
-        Happy = new();
-        Nomal = new();
-        PoorCondition = new();
-        Ill = new();
-    }
-
-    public ObservableMultiStateRectangleLocation(
-        ObservableRectangle<double> happy,
-        ObservableRectangle<double> nomal,
-        ObservableRectangle<double> poorCondition,
-        ObservableRectangle<double> ill
-    )
-    {
-        Happy = happy;
-        Nomal = nomal;
-        PoorCondition = poorCondition;
-        Ill = ill;
-    }
-
+    /// <inheritdoc/>
     public ObservableMultiStateRectangleLocation Clone()
     {
         return new()
@@ -610,11 +642,37 @@ public partial class ObservableMultiStateRectangleLocation
     #endregion
 }
 
+/// <summary>
+/// 可观察的多状态点位
+/// </summary>
 public partial class ObservableMultiStatePoint
     : ViewModelBase,
         IEquatable<ObservableMultiStatePoint>,
         ICloneable<ObservableMultiStatePoint>
 {
+    /// <inheritdoc/>
+    public ObservableMultiStatePoint()
+    {
+        Happy = new();
+        Nomal = new();
+        PoorCondition = new();
+        Ill = new();
+    }
+
+    /// <inheritdoc/>
+    public ObservableMultiStatePoint(
+        ObservablePoint<double> happy,
+        ObservablePoint<double> nomal,
+        ObservablePoint<double> poorCondition,
+        ObservablePoint<double> ill
+    )
+    {
+        Happy = happy;
+        Nomal = nomal;
+        PoorCondition = poorCondition;
+        Ill = ill;
+    }
+
     /// <summary>
     /// 开心时的点位
     /// </summary>
@@ -639,27 +697,7 @@ public partial class ObservableMultiStatePoint
     [ReactiveProperty]
     public ObservablePoint<double> Ill { get; set; }
 
-    public ObservableMultiStatePoint()
-    {
-        Happy = new();
-        Nomal = new();
-        PoorCondition = new();
-        Ill = new();
-    }
-
-    public ObservableMultiStatePoint(
-        ObservablePoint<double> happy,
-        ObservablePoint<double> nomal,
-        ObservablePoint<double> poorCondition,
-        ObservablePoint<double> ill
-    )
-    {
-        Happy = happy;
-        Nomal = nomal;
-        PoorCondition = poorCondition;
-        Ill = ill;
-    }
-
+    /// <inheritdoc/>
     public ObservableMultiStatePoint Clone()
     {
         return new()

@@ -15,6 +15,7 @@ namespace VPet.ModMaker.Models.ModModel;
 /// </summary>
 public partial class FoodAnimeLocationModel : ViewModelBase, ICloneable<FoodAnimeLocationModel>
 {
+    /// <inheritdoc/>
     public FoodAnimeLocationModel() { }
 
     /// <summary>
@@ -40,6 +41,7 @@ public partial class FoodAnimeLocationModel : ViewModelBase, ICloneable<FoodAnim
     [ReactiveProperty]
     public double Opacity { get; set; } = 1.0;
 
+    /// <inheritdoc/>
     public FoodAnimeLocationModel Clone()
     {
         var model = new FoodAnimeLocationModel
@@ -59,6 +61,7 @@ public partial class FoodAnimeLocationModel : ViewModelBase, ICloneable<FoodAnim
 
     object ICloneable.Clone() => Clone();
 
+    /// <inheritdoc/>
     public override string ToString()
     {
         return $"{Duration}, {RectangleLocation.X}, {RectangleLocation.Y}, {RectangleLocation.Width}, {Rotate}, {Opacity}";

@@ -89,7 +89,7 @@ public partial class ModEditWindow : WindowX, IPageLocator
     #endregion
     #region Anime
     public AnimePage AnimePage { get; private set; } = null!;
-    public AnimeEditVM AnimeEditWindowVM { get; private set; } = null!;
+    public AnimeVM AnimeVM { get; private set; } = null!;
     #endregion
     //public I18nEditWindow I18nEditWindow { get; } = null!;
 
@@ -142,6 +142,7 @@ public partial class ModEditWindow : WindowX, IPageLocator
             this.SkipNextClose();
             return;
         }
+        ViewModel.Close();
         MessageBus.Current.SendMessage<ModInfoModel?>(null);
     }
 
@@ -263,9 +264,8 @@ public partial class ModEditWindow : WindowX, IPageLocator
 
     private void InitializeAnime()
     {
-        //TODO:
-        //AnimeEditVM ??= new() { ModInfo = ViewModel.ModInfo };
-        //AnimePage ??= new() { DataContext = AnimeEditVM };
-        //ContentControl_Anime.Content ??= AnimePage;
+        AnimeVM ??= new() { ModInfo = ViewModel.ModInfo };
+        AnimePage ??= new() { DataContext = AnimeVM };
+        ContentControl_Anime.Content ??= AnimePage;
     }
 }

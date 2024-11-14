@@ -11,7 +11,7 @@
       Header="{ll:Str 修改}" />
     <MenuItem
       Command="{Binding DataContext.RemoveCommand, RelativeSource={RelativeSource AncestorType=UserControl, Mode=FindAncestor}}"
-      CommandParameter="{Binding DataContext, RelativeSource={RelativeSource AncestorType=DataGridRow, Mode=FindAncestor}}"
+      CommandParameter="{Binding SelectedItems, RelativeSource={RelativeSource AncestorType=DataGrid, Mode=FindAncestor}}"
       Header="{ll:Str 删除}" />
   </ContextMenu>
   <ControlTemplate x:Key="ListBoxItem_RangeData" TargetType="ListBoxItem">
@@ -48,7 +48,8 @@
     <ListBox
       ItemsSource="{Binding ModInfo.I18nResource.Cultures}"
       ScrollViewer.VerticalScrollBarVisibility="Auto"
-      SelectedItem="{Binding ModInfo.I18nResource.CurrentCulture}">
+      SelectedItem="{Binding ModInfo.I18nResource.CurrentCulture}"
+      Style="{StaticResource SideMenuListBoxStyle}">
       <ListBox.ItemContainerStyle>
         <Style BasedOn="{StaticResource {x:Type ListBoxItem}}" TargetType="ListBoxItem">
           <Setter Property="Content" Value="{Binding}" />

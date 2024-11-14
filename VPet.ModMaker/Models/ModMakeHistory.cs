@@ -17,6 +17,7 @@ namespace VPet.ModMaker.Models;
 /// </summary>
 public class ModMakeHistory : IEquatable<ModMakeHistory>, IEnableLogger
 {
+    /// <inheritdoc/>
     public ModMakeHistory() { }
 
     /// <summary>
@@ -67,6 +68,7 @@ public class ModMakeHistory : IEquatable<ModMakeHistory>, IEnableLogger
     [Line(ignoreCase: true)]
     public DateTime LastTime { get; set; } = DateTime.Now;
 
+    /// <inheritdoc/>
     public bool Equals(ModMakeHistory? other)
     {
         return SourcePath.Equals(other?.SourcePath);
@@ -78,6 +80,7 @@ public class ModMakeHistory : IEquatable<ModMakeHistory>, IEnableLogger
         return Equals(obj as ModMakeHistory);
     }
 
+    /// <inheritdoc/>
     public override int GetHashCode()
     {
         return SourcePath.GetHashCode();

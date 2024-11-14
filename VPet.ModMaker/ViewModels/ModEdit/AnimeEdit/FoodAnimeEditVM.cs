@@ -26,10 +26,14 @@ using static VPet_Simulator.Core.IGameSave;
 
 namespace VPet.ModMaker.ViewModels.ModEdit;
 
+/// <summary>
+/// 食物动画编辑视图模型
+/// </summary>
 public partial class FoodAnimeEditVM : DialogViewModel
 {
     private static IDialogService DialogService => Locator.Current.GetService<IDialogService>()!;
 
+    /// <inheritdoc/>
     public FoodAnimeEditVM()
     {
         _frontPlayerTask = new(FrontPlay);

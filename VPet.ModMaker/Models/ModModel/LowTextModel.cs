@@ -23,14 +23,19 @@ namespace VPet.ModMaker.Models;
 [MapFrom(typeof(LowTextModel))]
 public partial class LowTextModel : ViewModelBase
 {
+    /// <inheritdoc/>
     public LowTextModel() { }
 
+    /// <inheritdoc/>
+    /// <param name="lowText">低状态文本模型</param>
     public LowTextModel(LowTextModel lowText)
         : this()
     {
         this.MapFromLowTextModel(lowText);
     }
 
+    /// <inheritdoc/>
+    /// <param name="lowText">低状态文本</param>
     public LowTextModel(LowText lowText)
         : this()
     {
@@ -61,6 +66,9 @@ public partial class LowTextModel : ViewModelBase
     [ReactiveProperty]
     public string ID { get; set; } = string.Empty;
 
+    /// <summary>
+    /// I18n资源
+    /// </summary>
     [MapIgnoreProperty]
     [ReactiveProperty]
     public required I18nResource<string, string> I18nResource { get; set; }
@@ -74,10 +82,16 @@ public partial class LowTextModel : ViewModelBase
         newValue?.I18nObjects?.Add(I18nObject);
     }
 
+    /// <summary>
+    /// I18n对象
+    /// </summary>
     [MapIgnoreProperty]
     [NotifyPropertyChangeFrom("")]
     public I18nObject<string, string> I18nObject => new(this);
 
+    /// <summary>
+    /// 文本
+    /// </summary>
     [MapIgnoreProperty]
     [ReactiveI18nProperty("I18nResource", nameof(I18nObject), nameof(ID))]
     public string Text
@@ -110,6 +124,9 @@ public partial class LowTextModel : ViewModelBase
     [ReactiveProperty]
     public LowText.LikeType Like { get; set; }
 
+    /// <summary>
+    /// 关闭
+    /// </summary>
     public void Close()
     {
         I18nResource.I18nObjects.Remove(I18nObject);

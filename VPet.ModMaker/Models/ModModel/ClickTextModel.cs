@@ -24,14 +24,19 @@ namespace VPet.ModMaker.Models;
 [MapFrom(typeof(ClickTextModel), MapConfig = typeof(ClickTextModelMapFromClickTextModelConfig))]
 public partial class ClickTextModel : ViewModelBase
 {
+    /// <inheritdoc/>
     public ClickTextModel() { }
 
+    /// <inheritdoc/>
+    /// <param name="clickText">点击文本模型</param>
     public ClickTextModel(ClickTextModel clickText)
         : this()
     {
         this.MapFromClickTextModel(clickText);
     }
 
+    /// <inheritdoc/>
+    /// <param name="clickText">点击文本</param>
     public ClickTextModel(ClickText clickText)
         : this()
     {
@@ -40,6 +45,10 @@ public partial class ClickTextModel : ViewModelBase
 
     private readonly ClickText _clickText = new();
 
+    /// <summary>
+    /// 转化为点击文本
+    /// </summary>
+    /// <returns>点击文本</returns>
     public ClickText ToClickText()
     {
         return this.MapToClickText(_clickText);
@@ -69,6 +78,9 @@ public partial class ClickTextModel : ViewModelBase
     [ReactiveProperty]
     public string ID { get; set; } = string.Empty;
 
+    /// <summary>
+    /// 本地化资源
+    /// </summary>
     [MapIgnoreProperty]
     [ReactiveProperty]
     public required I18nResource<string, string> I18nResource { get; set; }
@@ -82,9 +94,15 @@ public partial class ClickTextModel : ViewModelBase
         newValue?.I18nObjects.Add(I18nObject);
     }
 
+    /// <summary>
+    /// 本地化对象
+    /// </summary>
     [NotifyPropertyChangeFrom("")]
     public I18nObject<string, string> I18nObject => new(this);
 
+    /// <summary>
+    /// 点击文本
+    /// </summary>
     [MapIgnoreProperty]
     [ReactiveI18nProperty("I18nResource", nameof(I18nObject), nameof(ID))]
     public string Text
@@ -171,6 +189,9 @@ public partial class ClickTextModel : ViewModelBase
     /// </summary>
     public ObservableRange<double> Strength { get; } = new(0, int.MaxValue);
 
+    /// <summary>
+    /// 关闭
+    /// </summary>
     public void Close()
     {
         I18nResource.I18nObjects.Remove(I18nObject);

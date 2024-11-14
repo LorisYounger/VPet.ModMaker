@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Frozen;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -31,10 +32,14 @@ using VPet.ModMaker.Models;
 
 namespace VPet.ModMaker.ViewModels.ModEdit;
 
+/// <summary>
+/// 食物编辑视图模型
+/// </summary>
 public partial class FoodEditVM : DialogViewModel
 {
     private static IDialogService DialogService => Locator.Current.GetService<IDialogService>()!;
 
+    /// <inheritdoc/>
     public FoodEditVM()
     {
         Foods = new(
@@ -144,21 +149,37 @@ public partial class FoodEditVM : DialogViewModel
         Foods.AutoFilter = true;
     }
 
+    /// <summary>
+    /// 食物
+    /// </summary>
     public FilterListWrapper<
         FoodModel,
         ObservableList<FoodModel>,
         ObservableList<FoodModel>
     > Foods { get; }
 
+    /// <summary>
+    /// 搜索
+    /// </summary>
     [ReactiveProperty]
     public string Search { get; set; } = string.Empty;
 
+    /// <summary>
+    /// 搜索目标
+    /// </summary>
     public ObservableSelectableSet<
         FoodSearchTarget,
         FrozenSet<FoodSearchTarget>
     > SearchTargets { get; } = new(EnumInfo<FoodSearchTarget>.Values);
+
+    /// <summary>
+    /// 旧食物
+    /// </summary>
     public FoodModel OldFood { get; private set; } = null!;
 
+    /// <summary>
+    /// 食物
+    /// </summary>
     [ReactiveProperty]
     public FoodModel Food { get; private set; } = null!;
 
@@ -252,6 +273,9 @@ public partial class FoodEditVM : DialogViewModel
         Food.Image = newImage;
     }
 
+    /// <summary>
+    /// 关闭
+    /// </summary>
     public void Close()
     {
         Food.Close();
@@ -265,7 +289,7 @@ public partial class FoodEditVM : DialogViewModel
     {
         ModInfo.TempI18nResource.ClearCultureData();
         Food = new() { I18nResource = ModInfo.TempI18nResource };
-        await DialogService.ShowSingletonDialogAsync(this, this);
+        await DialogService.ShowDialogAsyncX(this, this);
         if (DialogResult is not true)
         {
             Food.Close();
@@ -327,27 +351,33 @@ public partial class FoodEditVM : DialogViewModel
     /// <summary>
     /// 删除
     /// </summary>
-    /// <param name="model">模型</param>
+    /// <param name="list">列表</param>
     [ReactiveCommand]
-    private void Remove(FoodModel model)
+    private void Remove(IList list)
     {
-        //TODO: 一次性删除多个
+        var models = list.Cast<FoodModel>().ToArray();
         if (
             DialogService.ShowMessageBoxX(
                 this,
-                "确定删除 {0} 吗".Translate(model.ID),
+                "确定删除已选中的 {0} 个食物吗".Translate(models.Length),
                 "删除食物".Translate(),
                 MessageBoxButton.YesNo
             )
             is not true
         )
             return;
-        Foods.Remove(model);
-        model.Close();
-        this.Log().Info("删除食物 {food}", model.ID);
+        foreach (var model in models)
+        {
+            Foods.Remove(model);
+            model.Close();
+            this.Log().Info("删除食物 {food}", model.ID);
+        }
         Reset();
     }
 
+    /// <summary>
+    /// 重置
+    /// </summary>
     public void Reset()
     {
         Food = null!;

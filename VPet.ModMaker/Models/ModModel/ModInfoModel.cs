@@ -39,6 +39,7 @@ namespace VPet.ModMaker.Models;
 /// </summary>
 public partial class ModInfoModel : ViewModelBase
 {
+    /// <inheritdoc/>
     public ModInfoModel()
     {
         Pets = new([], [], m => m.FromMain is false || ShowMainPet && m.FromMain);
@@ -71,6 +72,8 @@ public partial class ModInfoModel : ViewModelBase
         }
     }
 
+    /// <inheritdoc/>
+    /// <param name="loader">模组载入器</param>
     public ModInfoModel(ModLoader loader)
         : this()
     {
@@ -236,9 +239,15 @@ public partial class ModInfoModel : ViewModelBase
     public I18nResource<string, string> TempI18nResource { get; } =
         new() { FillDefaultValueToNewCulture = true, DefaultValue = string.Empty };
 
+    /// <summary>
+    /// I18n对象
+    /// </summary>
     [NotifyPropertyChangeFrom("")]
     public I18nObject<string, string> I18nObject => new(this);
 
+    /// <summary>
+    /// 名称
+    /// </summary>
     [ReactiveI18nProperty("I18nResource", nameof(I18nObject), nameof(ID), true)]
     public string Name
     {
@@ -246,6 +255,9 @@ public partial class ModInfoModel : ViewModelBase
         set => I18nResource.SetCurrentCultureData(ID, value);
     }
 
+    /// <summary>
+    /// 详情
+    /// </summary>
     [ReactiveI18nProperty("I18nResource", nameof(I18nObject), nameof(DescriptionID), true)]
     public string Description
     {
@@ -414,88 +426,114 @@ public partial class ModInfoModel : ViewModelBase
         this.Log().Info("载入宠物动画, 数量: {count}, 路径: {path}", directories.Length, path);
         foreach (var animeDir in directories)
         {
-            try
+            var dirName = Path.GetFileName(animeDir);
+            this.Log().Debug("载入动画, 路径: {path}", animeDir);
+            if (Enum.TryParse<GraphInfo.GraphType>(dirName, true, out var graphType))
             {
-                var dirName = Path.GetFileName(animeDir);
-                this.Log().Debug("载入动画, 路径: {path}", animeDir);
-                if (Enum.TryParse<GraphInfo.GraphType>(dirName, true, out var graphType))
+                if (graphType.IsHasNameAnime())
                 {
-                    if (graphType.IsHasNameAnime())
+                    foreach (var dir in Directory.EnumerateDirectories(animeDir))
                     {
-                        foreach (var dir in Directory.EnumerateDirectories(animeDir))
+                        try
                         {
-                            if (AnimeTypeModel.Create(graphType, dir) is AnimeTypeModel model1)
-                                petModel.Animes.Add(model1);
+                            var anime = new AnimeTypeModel(graphType, Path.Combine(animeDir, dir));
+                            petModel.Animes.Add(anime);
+                        }
+                        catch (Exception ex)
+                        {
+                            this.Log()
+                                .Warn("{$graphType} 动画载入失败, 目标文件夹: {path}", graphType, dir, ex);
                         }
                     }
-                    else if (AnimeTypeModel.Create(graphType, animeDir) is AnimeTypeModel model)
-                        petModel.Animes.Add(model);
                 }
-                else if (dirName.Equals("Switch", StringComparison.InvariantCultureIgnoreCase))
+                else
                 {
-                    foreach (var dir in Directory.EnumerateDirectories(animeDir))
+                    try
                     {
-                        Enum.TryParse<GraphInfo.GraphType>(
-                            $"{dirName}_{Path.GetFileName(dir)}",
-                            true,
-                            out var switchType
-                        );
-                        if (
-                            AnimeTypeModel.Create(switchType, Path.Combine(animeDir, dir))
-                            is AnimeTypeModel switchModel
-                        )
-                            petModel.Animes.Add(switchModel);
+                        var anime = new AnimeTypeModel(graphType, animeDir);
+                        petModel.Animes.Add(anime);
                     }
-                }
-                else if (dirName.Equals("Raise", StringComparison.InvariantCultureIgnoreCase))
-                {
-                    foreach (var dir in Directory.EnumerateDirectories(animeDir))
+                    catch (Exception ex)
                     {
-                        Enum.TryParse<GraphInfo.GraphType>(
-                            Path.GetFileName(dir),
-                            true,
-                            out var switchType
-                        );
-                        if (
-                            AnimeTypeModel.Create(switchType, Path.Combine(animeDir, dir))
-                            is AnimeTypeModel switchModel
-                        )
-                            petModel.Animes.Add(switchModel);
+                        this.Log()
+                            .Warn("{$graphType} 动画载入失败, 目标文件夹: {path}", graphType, animeDir, ex);
                     }
-                }
-                else if (dirName.Equals("State", StringComparison.InvariantCultureIgnoreCase))
-                {
-                    foreach (var dir in Directory.EnumerateDirectories(animeDir))
-                    {
-                        Enum.TryParse<GraphInfo.GraphType>(
-                            Path.GetFileName(dir),
-                            true,
-                            out var switchType
-                        );
-                        if (
-                            AnimeTypeModel.Create(switchType, Path.Combine(animeDir, dir))
-                            is AnimeTypeModel switchModel
-                        )
-                            petModel.Animes.Add(switchModel);
-                    }
-                }
-                else if (dirName.Equals("Music", StringComparison.InvariantCultureIgnoreCase))
-                {
-                    if (
-                        AnimeTypeModel.Create(GraphInfo.GraphType.Common, animeDir)
-                        is AnimeTypeModel model1
-                    )
-                        petModel.Animes.Add(model1);
-                }
-                else if (FoodAnimeTypeModel.FoodAnimeNames.Contains(dirName))
-                {
-                    if (FoodAnimeTypeModel.Create(animeDir) is FoodAnimeTypeModel model1)
-                        petModel.FoodAnimes.Add(model1);
                 }
             }
-            catch (Exception ex)
+            else if (dirName.Equals("Switch", StringComparison.InvariantCultureIgnoreCase))
             {
-                this.Log().Warn("载入动画失败, 路径: {path}", animeDir, ex);
+                foreach (var dir in Directory.EnumerateDirectories(animeDir))
+                {
+                    try
+                    {
+                        var type = Enum.Parse<GraphInfo.GraphType>(
+                            $"{dirName}_{Path.GetFileName(dir)}",
+                            true
+                        );
+                        var anime = new AnimeTypeModel(type, Path.Combine(animeDir, dir));
+                        petModel.Animes.Add(anime);
+                    }
+                    catch (Exception ex)
+                    {
+                        this.Log().Warn("\"Switch\" 动画载入失败, 目标文件夹: {path}", dir, ex);
+                    }
+                }
+            }
+            else if (dirName.Equals("Raise", StringComparison.InvariantCultureIgnoreCase))
+            {
+                foreach (var dir in Directory.EnumerateDirectories(animeDir))
+                {
+                    try
+                    {
+                        var type = Enum.Parse<GraphInfo.GraphType>(Path.GetFileName(dir), true);
+                        var anime = new AnimeTypeModel(type, Path.Combine(animeDir, dir));
+                        petModel.Animes.Add(anime);
+                    }
+                    catch (Exception ex)
+                    {
+                        this.Log().Warn("\"Raise\" 动画载入失败, 目标文件夹: {path}", dir, ex);
+                    }
+                }
+            }
+            else if (dirName.Equals("State", StringComparison.InvariantCultureIgnoreCase))
+            {
+                foreach (var dir in Directory.EnumerateDirectories(animeDir))
+                {
+                    try
+                    {
+                        var type = Enum.Parse<GraphInfo.GraphType>(Path.GetFileName(dir), true);
+                        var anime = new AnimeTypeModel(type, Path.Combine(animeDir, dir));
+                        petModel.Animes.Add(anime);
+                    }
+                    catch (Exception ex)
+                    {
+                        this.Log().Warn("\"State\" 动画载入失败, 目标文件夹: {path}", dir, ex);
+                    }
+                }
+            }
+            else if (dirName.Equals("Music", StringComparison.InvariantCultureIgnoreCase))
+            {
+                try
+                {
+                    var anime = new AnimeTypeModel(GraphInfo.GraphType.Common, animeDir);
+                    petModel.Animes.Add(anime);
+                }
+                catch (Exception ex)
+                {
+                    this.Log().Warn("\"Music\" 动画载入失败, 目标文件夹: {path}", animeDir, ex);
+                }
+            }
+            else if (FoodAnimeTypeModel.FoodAnimeNames.Contains(dirName))
+            {
+                try
+                {
+                    var anime = new FoodAnimeTypeModel(animeDir);
+                    petModel.FoodAnimes.Add(anime);
+                }
+                catch (Exception ex)
+                {
+                    this.Log().Warn("{dirName} 动画载入失败, 目标文件夹: {path}", dirName, animeDir, ex);
+                }
             }
         }
     }
@@ -529,15 +567,6 @@ public partial class ModInfoModel : ViewModelBase
         }
         if (I18nResource.SetCurrentCulture(CultureInfo.CurrentCulture) is false)
             I18nResource.SetCurrentCulture(I18nResource.Cultures.First());
-
-        //if (
-        //    DescriptionID.StartsWith(ID) is false
-        //    && I18nResource.TryGetCultureDatas(DescriptionID, out var datas)
-        //)
-        //{
-        //    DescriptionID = $"{ID}_{nameof(DescriptionID)}";
-        //    return;
-        //}
     }
     #endregion
     #region Save
@@ -687,12 +716,12 @@ public partial class ModInfoModel : ViewModelBase
     /// 保存选择文本
     /// </summary>
     /// <param name="path">路径</param>
-    private void SaveSelectText(string textPath)
+    private void SaveSelectText(string path)
     {
         if (SelectTexts.Count == 0)
             return;
         this.Log().Info("正在保存选择文本, 数量: {count}", SelectTexts.Count);
-        var textFile = Path.Combine(textPath, "selectText.lps");
+        var textFile = Path.Combine(path, "selectText.lps");
         File.Create(textFile).Close();
         var lps = new LPS();
         foreach (var text in SelectTexts)
@@ -706,12 +735,12 @@ public partial class ModInfoModel : ViewModelBase
     /// 保存低状态文本
     /// </summary>
     /// <param name="path">路径</param>
-    private void SaveLowText(string textPath)
+    private void SaveLowText(string path)
     {
         if (LowTexts.Count == 0)
             return;
         this.Log().Info("正在保存低状态文本, 数量: {count}", LowTexts.Count);
-        var textFile = Path.Combine(textPath, "lowText.lps");
+        var textFile = Path.Combine(path, "lowText.lps");
         File.Create(textFile).Close();
         var lps = new LPS();
         foreach (var text in LowTexts)
@@ -725,12 +754,12 @@ public partial class ModInfoModel : ViewModelBase
     /// 保存点击文本
     /// </summary>
     /// <param name="path">路径</param>
-    private void SaveClickText(string textPath)
+    private void SaveClickText(string path)
     {
         if (ClickTexts.Count == 0)
             return;
         this.Log().Info("正在保存点击文本, 数量: {count}", ClickTexts.Count);
-        var textFile = Path.Combine(textPath, "clickText.lps");
+        var textFile = Path.Combine(path, "clickText.lps");
         File.Create(textFile).Close();
         var lps = new LPS();
         foreach (var text in ClickTexts)
@@ -799,6 +828,8 @@ public partial class ModInfoModel : ViewModelBase
     public void Close()
     {
         Image?.CloseStream();
+        I18nResource.Clear();
+        TempI18nResource.Clear();
         foreach (var food in Foods)
             food.Close();
         foreach (var pet in Pets)

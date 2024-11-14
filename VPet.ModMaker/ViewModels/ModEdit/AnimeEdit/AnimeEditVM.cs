@@ -26,10 +26,14 @@ using static VPet_Simulator.Core.IGameSave;
 
 namespace VPet.ModMaker.ViewModels.ModEdit;
 
+/// <summary>
+/// 动画编辑视图模型
+/// </summary>
 public partial class AnimeEditVM : DialogViewModel
 {
     private static IDialogService DialogService => Locator.Current.GetService<IDialogService>()!;
 
+    /// <inheritdoc/>
     public AnimeEditVM()
     {
         _playerTask = new(Play);
@@ -109,7 +113,6 @@ public partial class AnimeEditVM : DialogViewModel
     /// <summary>
     /// 添加动画
     /// </summary>
-    /// <param name="value">动画模型</param>
     [ReactiveCommand]
     private void AddAnime()
     {

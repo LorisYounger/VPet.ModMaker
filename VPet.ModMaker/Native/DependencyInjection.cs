@@ -20,6 +20,10 @@ namespace VPet.ModMaker;
 /// </summary>
 public static class DependencyInjection
 {
+    /// <summary>
+    /// 注册
+    /// </summary>
+    /// <param name="build"></param>
     public static void Register(IMutableDependencyResolver build)
     {
         //build.Register<ModMakerWindowVM>(() => new());

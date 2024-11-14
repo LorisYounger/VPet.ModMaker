@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Frozen;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -25,10 +26,14 @@ using VPet.ModMaker.Models;
 
 namespace VPet.ModMaker.ViewModels.ModEdit;
 
+/// <summary>
+/// 选择文本编辑视图模型
+/// </summary>
 public partial class SelectTextEditVM : DialogViewModel
 {
     private static IDialogService DialogService => Locator.Current.GetService<IDialogService>()!;
 
+    /// <inheritdoc/>
     public SelectTextEditVM()
     {
         SelectTexts = new(
@@ -164,11 +169,13 @@ public partial class SelectTextEditVM : DialogViewModel
     > SearchTargets { get; } = new(EnumInfo<SelectTextSearchTarget>.Values);
 
     /// <summary>
-    /// I18n资源
+    /// 旧选择文本
     /// </summary>
-    public I18nResource<string, string> I18nResource => ModInfo.I18nResource;
     public SelectTextModel? OldSelectText { get; set; } = null!;
 
+    /// <summary>
+    /// 选择文本
+    /// </summary>
     [ReactiveProperty]
     public SelectTextModel SelectText { get; set; } = null!;
 
@@ -180,7 +187,7 @@ public partial class SelectTextEditVM : DialogViewModel
     {
         ModInfo.TempI18nResource.ClearCultureData();
         SelectText = new() { I18nResource = ModInfo.I18nResource };
-        await DialogService.ShowSingletonDialogAsync(this, this);
+        await DialogService.ShowDialogAsyncX(this, this);
         if (DialogResult is not true)
         {
             SelectText.Close();
@@ -255,26 +262,33 @@ public partial class SelectTextEditVM : DialogViewModel
     /// <summary>
     /// 删除
     /// </summary>
-    /// <param name="model">模型</param>
+    /// <param name="list">列表</param>
     [ReactiveCommand]
-    private void Remove(SelectTextModel model)
+    private void Remove(IList list)
     {
+        var models = list.Cast<SelectTextModel>().ToArray();
         if (
             DialogService.ShowMessageBoxX(
                 this,
-                "确定删除 {0} 吗".Translate(model.ID),
+                "确定删除已选中的 {0} 个选择文本吗".Translate(models.Length),
                 "删除选择文本".Translate(),
                 MessageBoxButton.YesNo
             )
             is not true
         )
             return;
-        SelectTexts.Remove(model);
-        model.Close();
-        this.Log().Info("删除选择文本 {selectText}", model.ID);
+        foreach (var model in models)
+        {
+            SelectTexts.Remove(model);
+            model.Close();
+            this.Log().Info("删除选择文本 {selectText}", model.ID);
+        }
         Reset();
     }
 
+    /// <summary>
+    /// 重置
+    /// </summary>
     public void Reset()
     {
         SelectText = null!;

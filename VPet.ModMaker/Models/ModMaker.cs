@@ -12,16 +12,28 @@ using VPet_Simulator.Windows.Interface;
 
 namespace VPet.ModMaker.Models;
 
+/// <summary>
+/// 模组制作器
+/// </summary>
 public class ModMaker : MainPlugin
 {
-    //public ILine Set;
+    /// <summary>
+    /// 名称
+    /// </summary>
     public override string PluginName => "ModMaker";
 
+    /// <summary>
+    /// 单例
+    /// </summary>
     public ModMakerWindow Maker = null!;
 
+    /// <inheritdoc/>
     public ModMaker(IMainWindow mainwin)
         : base(mainwin) { }
 
+    /// <summary>
+    /// 载入插件
+    /// </summary>
     public override void LoadPlugin()
     {
         //Set = MW.Set.FindLine("ModMaker");
@@ -40,9 +52,13 @@ public class ModMaker : MainPlugin
         Application.Current.Resources.MergedDictionaries.Add(NativeData.NativeStyles);
     }
 
+    /// <summary>
+    /// I18n资源
+    /// </summary>
     public static I18nResource<string, string> I18nResource { get; } =
         new() { FillDefaultValueToNewCulture = true, DefaultValue = string.Empty };
 
+    /// <inheritdoc/>
     public override void Setting()
     {
         if (Maker is null)

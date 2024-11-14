@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Frozen;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -29,10 +30,14 @@ using VPet.ModMaker.Models;
 
 namespace VPet.ModMaker.ViewModels.ModEdit;
 
+/// <summary>
+/// 宠物编辑视图模型
+/// </summary>
 public partial class PetEditVM : DialogViewModel
 {
     private static IDialogService DialogService => Locator.Current.GetService<IDialogService>()!;
 
+    /// <inheritdoc/>
     public PetEditVM()
     {
         Pets = new(
@@ -157,6 +162,9 @@ public partial class PetEditVM : DialogViewModel
         }
     }
 
+    /// <summary>
+    /// 宠物
+    /// </summary>
     public FilterListWrapper<
         PetModel,
         ObservableList<PetModel>,
@@ -205,16 +213,16 @@ public partial class PetEditVM : DialogViewModel
     [ReactiveProperty]
     public PetModel Pet { get; set; } = null!;
 
-    [ReactiveProperty]
-    public double BorderLength { get; set; } = 250;
-
-    [ReactiveProperty]
-    public double LengthRatio { get; set; } = 0.5;
-
+    /// <summary>
+    /// 图像
+    /// </summary>
     [ReactiveProperty]
     public BitmapImage? Image { get; set; }
     #endregion
 
+    /// <summary>
+    /// 关闭
+    /// </summary>
     public void Close()
     {
         Image?.CloseStream();
@@ -289,7 +297,7 @@ public partial class PetEditVM : DialogViewModel
     {
         ModInfo.TempI18nResource.ClearCultureData();
         Pet = new() { I18nResource = ModInfo.I18nResource };
-        await DialogService.ShowSingletonDialogAsync(this, this);
+        await DialogService.ShowDialogAsyncX(this, this);
         if (DialogResult is not true)
         {
             Pet.Close();
@@ -352,31 +360,39 @@ public partial class PetEditVM : DialogViewModel
     /// <summary>
     /// 删除
     /// </summary>
-    /// <param name="model">模型</param>
+    /// <param name="list">列表</param>
     [ReactiveCommand]
-    private void Remove(PetModel model)
+    private void Remove(IList list)
     {
+        var models = list.Cast<PetModel>().ToArray();
         if (
             DialogService.ShowMessageBoxX(
                 this,
-                "确定删除 {0} 吗".Translate(model.ID),
+                "确定删除已选中的 {0} 个宠物吗".Translate(models.Length),
                 "删除宠物".Translate(),
                 MessageBoxButton.YesNo
             )
             is not true
         )
             return;
-        Pets.Remove(model);
-        model.Close();
-        this.Log().Info("删除宠物 {pet}", model.ID);
+        foreach (var model in models)
+        {
+            Pets.Remove(model);
+            model.Close();
+            this.Log().Info("删除宠物 {pet}", model.ID);
+        }
         Reset();
     }
 
+    /// <summary>
+    /// 重置
+    /// </summary>
     public void Reset()
     {
         Pet = null!;
         OldPet = null!;
         DialogResult = false;
+        Image?.CloseStream();
         ModInfo.TempI18nResource.ClearCultureData();
     }
 }

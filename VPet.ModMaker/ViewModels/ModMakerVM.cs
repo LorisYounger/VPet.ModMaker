@@ -30,12 +30,16 @@ using VPet.ModMaker.ViewModels.ModEdit;
 
 namespace VPet.ModMaker.ViewModels;
 
+/// <summary>
+/// 模组制作器视图模型
+/// </summary>
 public partial class ModMakerVM : ViewModelBase
 {
     private static bool _isFirst = true;
 
     private static IDialogService DialogService => Locator.Current.GetService<IDialogService>()!;
 
+    /// <inheritdoc/>
     public ModMakerVM()
     {
         Initialize();
@@ -213,7 +217,7 @@ public partial class ModMakerVM : ViewModelBase
     [ReactiveCommand]
     public void CreateNewMod()
     {
-        ModInfo = new() { GameVersion = ModUpdataHelper.LastVersion };
+        ModInfo = new() { GameVersion = ModUpdataHelper.LastGameVersion };
         MessageBus.Current.SendMessage(ModInfo);
     }
 
@@ -331,8 +335,8 @@ public partial class ModMakerVM : ViewModelBase
         }
     }
 
-    public void Close()
-    {
-        DialogService.ClearSingletonDialog();
-    }
+    /// <summary>
+    /// 关闭
+    /// </summary>
+    public void Close() { }
 }
