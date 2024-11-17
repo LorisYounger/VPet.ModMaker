@@ -17,9 +17,9 @@ namespace VPet.ModMaker.Models;
 /// <summary>
 /// 移动模型
 /// </summary>
-[MapTo(typeof(GraphHelper.Move), MapConfig = typeof(MoveModelMapToMoveConfig))]
-[MapFrom(typeof(GraphHelper.Move), MapConfig = typeof(MoveModelMapFromMoveConfig))]
-[MapFrom(typeof(MoveModel), MapConfig = typeof(MoveModelMapFromMoveModelConfig))]
+[MapTo(typeof(GraphHelper.Move), MapperConfig = typeof(MoveModelMapToMoveConfig))]
+[MapFrom(typeof(GraphHelper.Move), MapperConfig = typeof(MoveModelMapFromMoveConfig))]
+[MapFrom(typeof(MoveModel), MapperConfig = typeof(MoveModelMapFromMoveModelConfig))]
 public partial class MoveModel : ViewModelBase
 {
     /// <inheritdoc/>
@@ -196,7 +196,7 @@ public partial class MoveModel : ViewModelBase
         );
 }
 
-internal class MoveModelMapToMoveConfig : MapConfig<MoveModel, GraphHelper.Move>
+internal class MoveModelMapToMoveConfig : MapperConfig<MoveModel, GraphHelper.Move>
 {
     public MoveModelMapToMoveConfig()
     {
@@ -224,7 +224,7 @@ internal class MoveModelMapToMoveConfig : MapConfig<MoveModel, GraphHelper.Move>
     }
 }
 
-internal class MoveModelMapFromMoveConfig : MapConfig<MoveModel, GraphHelper.Move>
+internal class MoveModelMapFromMoveConfig : MapperConfig<MoveModel, GraphHelper.Move>
 {
     public MoveModelMapFromMoveConfig()
     {
@@ -252,7 +252,7 @@ internal class MoveModelMapFromMoveConfig : MapConfig<MoveModel, GraphHelper.Mov
     }
 }
 
-internal class MoveModelMapFromMoveModelConfig : MapConfig<MoveModel, MoveModel>
+internal class MoveModelMapFromMoveModelConfig : MapperConfig<MoveModel, MoveModel>
 {
     public MoveModelMapFromMoveModelConfig()
     {

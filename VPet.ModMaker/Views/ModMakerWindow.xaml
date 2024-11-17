@@ -77,9 +77,16 @@
         </ListBox.ItemContainerStyle>
         <ListBox.ItemTemplate>
           <DataTemplate>
-            <Grid Tag="{Binding DataContext, RelativeSource={RelativeSource AncestorType=Window, Mode=FindAncestor}}" ToolTip="{Binding SourcePath}">
+            <Grid
+              Background="Transparent"
+              Tag="{Binding DataContext, RelativeSource={RelativeSource AncestorType=Window, Mode=FindAncestor}}"
+              ToolTip="{Binding SourcePath}">
               <Grid.ContextMenu>
                 <ContextMenu>
+                  <MenuItem
+                    Command="{Binding PlacementTarget.Tag.OpenModDirectoryCommand, RelativeSource={RelativeSource AncestorType=ContextMenu, Mode=FindAncestor}}"
+                    CommandParameter="{Binding PlacementTarget.DataContext, RelativeSource={RelativeSource AncestorType=ContextMenu, Mode=FindAncestor}}"
+                    Header="{ll:Str 打开所在文件夹}" />
                   <MenuItem
                     Command="{Binding PlacementTarget.Tag.RemoveHistoryCommand, RelativeSource={RelativeSource AncestorType=ContextMenu, Mode=FindAncestor}}"
                     CommandParameter="{Binding PlacementTarget.DataContext, RelativeSource={RelativeSource AncestorType=ContextMenu, Mode=FindAncestor}}"
@@ -148,6 +155,7 @@
         Content="{ll:Str 开始使用}"
         FontSize="20"
         FontWeight="Bold"
+        MouseDoubleClick="Label_MouseDoubleClick"
         Style="{StaticResource Label_Left}" />
       <StackPanel Grid.Row="1">
         <Button

@@ -104,7 +104,7 @@ public partial class ModEditVM : ViewModelBase
                 catch (Exception ex)
                 {
                     DialogService.ShowMessageBoxX(this, "模组更新失败, 详情请查看日志".Translate());
-                    this.Log().Error("模组更新失败", ex);
+                    this.Log().Error(ex, "模组更新失败");
                 }
             }
         }
@@ -259,6 +259,15 @@ public partial class ModEditVM : ViewModelBase
     {
         if (ValidationData(ModInfo) is false)
             return;
+        if (string.IsNullOrEmpty(ModInfo.SourcePath))
+        {
+            DialogService.ShowMessageBoxX(
+                this,
+                "源路径为空, 请使用 \"保存至\"".Translate(),
+                "保存失败".Translate()
+            );
+            return;
+        }
         if (
             DialogService.ShowMessageBoxX(
                 this,
@@ -269,15 +278,6 @@ public partial class ModEditVM : ViewModelBase
             is not true
         )
             return;
-        if (string.IsNullOrEmpty(ModInfo.SourcePath))
-        {
-            DialogService.ShowMessageBoxX(
-                this,
-                "源路径为空, 请使用 \"保存至\"".Translate(),
-                "保存失败".Translate()
-            );
-            return;
-        }
         SaveTo(ModInfo.SourcePath);
     }
 
@@ -318,7 +318,7 @@ public partial class ModEditVM : ViewModelBase
         {
             pending.Close();
             DialogService.ShowMessageBoxX(this, "保存失败, 详情请查看日志".Translate());
-            this.Log().Error("保存失败", ex);
+            this.Log().Error(ex, "保存失败");
             return;
         }
     }

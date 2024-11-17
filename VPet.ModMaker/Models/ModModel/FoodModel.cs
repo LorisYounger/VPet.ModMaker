@@ -17,6 +17,7 @@ using HKW.WPF;
 using HKW.WPF.Extensions;
 using LinePutScript;
 using LinePutScript.Converter;
+using Splat;
 using VPet.ModMaker.Native;
 using VPet.ModMaker.ViewModels;
 using VPet_Simulator.Windows.Interface;
@@ -39,7 +40,7 @@ public partial class FoodModel : ViewModelBase
     public FoodModel(FoodModel model)
     {
         this.MapFromFoodModel(model);
-        Image = model.Image?.CloneStream();
+        Image = model.Image?.AddReferenceCount();
     }
 
     /// <inheritdoc/>
@@ -52,7 +53,10 @@ public partial class FoodModel : ViewModelBase
         if (food.Desc != DescriptionID)
             i18nResource.ReplaceCultureDataKey(food.Desc, DescriptionID);
         I18nResource = i18nResource;
-        Image = HKWImageUtils.LoadImageToMemory(food.Image, this);
+        if (File.Exists(food.Image))
+            Image = HKWImageUtils.LoadImageToMemory(food.Image, this);
+        else
+            this.Log().Warn("获取食物图像失败, 目标路径: {path}", food.Image);
     }
 
     /// <summary>
@@ -71,6 +75,7 @@ public partial class FoodModel : ViewModelBase
     /// <summary>
     /// 详情Id
     /// </summary>
+    [FoodModelMapToFoodProperty(nameof(Food.Desc))]
     [NotifyPropertyChangeFrom(nameof(ID))]
     public string DescriptionID => $"{ID}_Description";
 
@@ -225,23 +230,15 @@ public partial class FoodModel : ViewModelBase
             return Math.Floor(_food.RealPrice);
         });
 
-    private static readonly Food _food = new();
-
-    /// <summary>
-    /// 转换为食物
-    /// </summary>
-    /// <returns>食物</returns>
-    public Food ToFood()
-    {
-        return this.MapToFood(_food);
-    }
+    private static readonly Food _food = new() { Image = string.Empty };
 
     /// <summary>
     /// 关闭
     /// </summary>
     public void Close()
     {
-        Image?.CloseStream();
+        Image?.CloseStreamWhenNoReference();
         I18nResource.I18nObjects.Remove(I18nObject);
+        I18nObject.Close();
     }
 }

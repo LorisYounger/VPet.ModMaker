@@ -17,6 +17,7 @@ using HKW.HKWReactiveUI;
 using HKW.HKWUtils.Collections;
 using HKW.HKWUtils.Extensions;
 using HKW.HKWUtils.Observable;
+using HKW.WPF;
 using HKW.WPF.MVVMDialogs;
 using LinePutScript;
 using LinePutScript.Converter;
@@ -167,6 +168,8 @@ public partial class ModMakerVM : ViewModelBase
         {
             history.ID = modInfo.ID;
             history.LastTime = DateTime.Now;
+            Histories.Remove(history);
+            Histories.Insert(0, history);
             this.Log().Info("已存在相同的历史 {history}, 更新最后修改时间", modInfo.SourcePath);
         }
         else
@@ -284,7 +287,7 @@ public partial class ModMakerVM : ViewModelBase
         }
         catch (Exception ex)
         {
-            this.Log().Error("模组载入失败, 路径: {path}", directory, ex);
+            this.Log().Error(ex, "模组载入失败, 路径: {path}", directory);
             DialogService.ShowMessageBoxX(
                 this,
                 "模组载入失败, 详情请查看日志".Translate(),
@@ -296,18 +299,49 @@ public partial class ModMakerVM : ViewModelBase
         try
         {
             var modInfo = new ModInfoModel(loader);
+            AddHistory(modInfo);
             EditMod(modInfo);
         }
         catch (Exception ex)
         {
             ModInfo?.Close();
             ModInfo = null!;
-            this.Log().Error("模组载入失败, 路径: {path}", directory, ex);
+            this.Log().Error(ex, "模组载入失败, 路径: {path}", directory);
             DialogService.ShowMessageBoxX(this, "模组载入失败, 详情请查看日志".Translate());
+        }
+    }
+
+    /// <summary>
+    /// 打开模组文件夹
+    /// </summary>
+    /// <param name="history"></param>
+    [ReactiveCommand]
+    public void OpenModDirectory(ModMakeHistory history)
+    {
+        if (Directory.Exists(history.SourcePath) is false)
+        {
+            if (
+                DialogService.ShowMessageBoxX(
+                    this,
+                    $"历史路径不存在, 是否删除?".Translate(),
+                    "数据错误".Translate(),
+                    MessageBoxButton.YesNo
+                )
+                is not true
+            )
+                return;
+            RemoveHistory(history);
+        }
+        else
+        {
+            NativeUtils.OpenLink(history.SourcePath);
         }
     }
     #endregion
 
+    /// <summary>
+    /// Wiki链接
+    /// </summary>
     public const string WikiLink = "https://github.com/LorisYounger/VPet.ModMaker/wiki";
 
     [ReactiveCommand]

@@ -3,6 +3,7 @@ using System.Collections.Frozen;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -19,9 +20,9 @@ namespace VPet.ModMaker.Models;
 /// <summary>
 /// 点击文本模型
 /// </summary>
-[MapTo(typeof(ClickText), MapConfig = typeof(ClickTextModelMapToClickTextConfig))]
-[MapFrom(typeof(ClickText), MapConfig = typeof(ClickTextModelMapFromClickTextConfig))]
-[MapFrom(typeof(ClickTextModel), MapConfig = typeof(ClickTextModelMapFromClickTextModelConfig))]
+[MapTo(typeof(ClickText), MapperConfig = typeof(ClickTextModelMapToClickTextConfig))]
+[MapFrom(typeof(ClickText), MapperConfig = typeof(ClickTextModelMapFromClickTextConfig))]
+[MapFrom(typeof(ClickTextModel), MapperConfig = typeof(ClickTextModelMapFromClickTextModelConfig))]
 public partial class ClickTextModel : ViewModelBase
 {
     /// <inheritdoc/>
@@ -195,10 +196,12 @@ public partial class ClickTextModel : ViewModelBase
     public void Close()
     {
         I18nResource.I18nObjects.Remove(I18nObject);
+        I18nObject.Close();
     }
 }
 
-internal class ClickTextModelMapFromClickTextModelConfig : MapConfig<ClickTextModel, ClickTextModel>
+internal class ClickTextModelMapFromClickTextModelConfig
+    : MapperConfig<ClickTextModel, ClickTextModel>
 {
     public ClickTextModelMapFromClickTextModelConfig()
     {
@@ -268,7 +271,7 @@ internal class ClickTextModelMapFromClickTextModelConfig : MapConfig<ClickTextMo
     }
 }
 
-internal class ClickTextModelMapToClickTextConfig : MapConfig<ClickTextModel, ClickText>
+internal class ClickTextModelMapToClickTextConfig : MapperConfig<ClickTextModel, ClickText>
 {
     public ClickTextModelMapToClickTextConfig()
     {
@@ -346,17 +349,10 @@ internal class ClickTextModelMapToClickTextConfig : MapConfig<ClickTextModel, Cl
     }
 }
 
-internal class ClickTextModelMapFromClickTextConfig : MapConfig<ClickTextModel, ClickText>
+internal class ClickTextModelMapFromClickTextConfig : MapperConfig<ClickTextModel, ClickText>
 {
     public ClickTextModelMapFromClickTextConfig()
     {
-        AddMap(
-            x => x.Text,
-            (s, t) =>
-            {
-                s.Text = t.Text ?? string.Empty;
-            }
-        );
         AddMap(
             x => x.Mode,
             (s, t) =>

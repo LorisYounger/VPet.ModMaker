@@ -70,7 +70,7 @@ public partial class SaveTranslationModVM : DialogViewModel
         }
         catch (Exception ex)
         {
-            this.Log().Warn("保存失败", ex);
+            this.Log().Warn(ex, "保存失败");
             DialogService.ShowMessageBoxX(this, "保存失败, 详情请查看日志".Translate());
         }
     }

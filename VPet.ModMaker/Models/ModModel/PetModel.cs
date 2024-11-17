@@ -334,6 +334,7 @@ public partial class PetModel : ViewModelBase
         foreach (var anime in FoodAnimes)
             anime.Close();
         I18nResource.I18nObjects.Remove(I18nObject);
+        I18nObject.Close();
     }
 
     #region Save

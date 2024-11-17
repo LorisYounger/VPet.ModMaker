@@ -21,9 +21,13 @@ namespace VPet.ModMaker.Models;
 /// <summary>
 /// 工作模型
 /// </summary>
-[MapTo(typeof(GraphHelper.Work), MapConfig = typeof(WorkModelMapToWorkConfig), ScrutinyMode = true)]
-[MapFrom(typeof(GraphHelper.Work), MapConfig = typeof(WorkModelMapFromWorkConfig))]
-[MapFrom(typeof(WorkModel), MapConfig = typeof(WorkModelMapFromWorkModelConfig))]
+[MapTo(
+    typeof(GraphHelper.Work),
+    MapperConfig = typeof(WorkModelMapToWorkConfig),
+    ScrutinyMode = true
+)]
+[MapFrom(typeof(GraphHelper.Work), MapperConfig = typeof(WorkModelMapFromWorkConfig))]
+[MapFrom(typeof(WorkModel), MapperConfig = typeof(WorkModelMapFromWorkModelConfig))]
 public partial class WorkModel : ViewModelBase
 {
     /// <inheritdoc/>
@@ -261,11 +265,12 @@ public partial class WorkModel : ViewModelBase
     /// <inheritdoc/>
     public void Close()
     {
+        I18nObject.Close();
         I18nResource.I18nObjects.Remove(I18nObject);
     }
 }
 
-internal class WorkModelMapFromWorkModelConfig : MapConfig<WorkModel, WorkModel>
+internal class WorkModelMapFromWorkModelConfig : MapperConfig<WorkModel, WorkModel>
 {
     public WorkModelMapFromWorkModelConfig()
     {
@@ -307,7 +312,7 @@ internal class WorkModelMapFromWorkModelConfig : MapConfig<WorkModel, WorkModel>
     }
 }
 
-internal class WorkModelMapFromWorkConfig : MapConfig<WorkModel, GraphHelper.Work>
+internal class WorkModelMapFromWorkConfig : MapperConfig<WorkModel, GraphHelper.Work>
 {
     public WorkModelMapFromWorkConfig()
     {
@@ -374,7 +379,7 @@ internal class WorkModelMapFromWorkConfig : MapConfig<WorkModel, GraphHelper.Wor
     }
 }
 
-internal class WorkModelMapToWorkConfig : MapConfig<WorkModel, GraphHelper.Work>
+internal class WorkModelMapToWorkConfig : MapperConfig<WorkModel, GraphHelper.Work>
 {
     public WorkModelMapToWorkConfig()
     {

@@ -291,6 +291,16 @@ public partial class ClickTextEditVM : DialogViewModel
         DialogResult = false;
         ModInfo.TempI18nResource.ClearCultureData();
     }
+
+    /// <summary>
+    /// 关闭
+    /// </summary>
+    public void Close()
+    {
+        AddCommand.Dispose();
+        RemoveCommand.Dispose();
+        EditCommand.Dispose();
+    }
 }
 
 /// <summary>

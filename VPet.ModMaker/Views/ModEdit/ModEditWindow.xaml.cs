@@ -36,59 +36,105 @@ namespace VPet.ModMaker.Views.ModEdit;
 /// </summary>
 public partial class ModEditWindow : WindowX, IPageLocator
 {
+    /// <inheritdoc/>
     public ModEditWindow()
     {
         InitializeComponent();
         this.SetViewModel<ModEditVM>();
         Closing += ModEditWindow_Closing;
-
-        //Closed += ModEditWindow_Closed;
-
-
-        //LowTextPage = new();
-        //ClickTextPage = new();
-        //SelectTextPage = new();
-        //PetPage = new();
-        //WorkPage = new();
-        //MovePage = new();
-        //AnimePage = new();
-        //I18nEditWindow = new();
     }
 
     /// <summary>
     /// 视图模型
     /// </summary>
     public ModEditVM ViewModel => (ModEditVM)DataContext;
+
     #region Food
+    /// <summary>
+    /// 食物页面
+    /// </summary>
     public FoodPage FoodPage { get; private set; } = null!;
+
+    /// <summary>
+    /// 食物编辑视图模型
+    /// </summary>
     public FoodEditVM FoodEditVM { get; private set; } = null!;
     #endregion
     #region ClickText
+    /// <summary>
+    /// 点击文本页面
+    /// </summary>
     public ClickTextPage ClickTextPage { get; private set; } = null!;
+
+    /// <summary>
+    /// 点击文本编辑视图模型
+    /// </summary>
     public ClickTextEditVM ClickTextEditVM { get; private set; } = null!;
     #endregion
     #region LowText
+    /// <summary>
+    /// 低状态文本页面
+    /// </summary>
     public LowTextPage LowTextPage { get; private set; } = null!;
+
+    /// <summary>
+    /// 低状态文本编辑视图模型
+    /// </summary>
     public LowTextEditVM LowTextEditVM { get; private set; } = null!;
     #endregion
     #region SelectText
+    /// <summary>
+    /// 选择文本页面
+    /// </summary>
     public SelectTextPage SelectTextPage { get; private set; } = null!;
+
+    /// <summary>
+    /// 选择文本编辑视图模型
+    /// </summary>
     public SelectTextEditVM SelectTextEditVM { get; private set; } = null!;
     #endregion
     #region Pet
+    /// <summary>
+    /// 宠物页面
+    /// </summary>
     public PetPage PetPage { get; private set; } = null!;
+
+    /// <summary>
+    /// 宠物编辑视图模型
+    /// </summary>
     public PetEditVM PetEditVM { get; private set; } = null!;
     #endregion
     #region Work
+    /// <summary>
+    /// 工作页面
+    /// </summary>
     public WorkPage WorkPage { get; private set; } = null!;
+
+    /// <summary>
+    /// 工作编辑视图模型
+    /// </summary>
     public WorkEditVM WorkEditVM { get; private set; } = null!;
     #endregion
     #region Move
+    /// <summary>
+    /// 移动页面
+    /// </summary>
     public MovePage MovePage { get; private set; } = null!;
+
+    /// <summary>
+    /// 移动编辑视图模型
+    /// </summary>
     public MoveEditVM MoveEditVM { get; private set; } = null!;
     #endregion
     #region Anime
+    /// <summary>
+    /// 动画页面
+    /// </summary>
     public AnimePage AnimePage { get; private set; } = null!;
+
+    /// <summary>
+    /// 动画编辑视图模型
+    /// </summary>
     public AnimeVM AnimeVM { get; private set; } = null!;
     #endregion
     //public I18nEditWindow I18nEditWindow { get; } = null!;
@@ -143,6 +189,7 @@ public partial class ModEditWindow : WindowX, IPageLocator
             return;
         }
         ViewModel.Close();
+        ResetPage();
         MessageBus.Current.SendMessage<ModInfoModel?>(null);
     }
 
@@ -165,11 +212,18 @@ public partial class ModEditWindow : WindowX, IPageLocator
         catch { }
     }
 
+    /// <summary>
+    /// 显示页面
+    /// </summary>
+    /// <param name="index"></param>
     public void ShowTab(int index)
     {
         TabControl_Main.SelectedIndex = index;
     }
 
+    /// <summary>
+    /// 初始化所有页面
+    /// </summary>
     public void InitializePages()
     {
         InitializeFood();
@@ -180,6 +234,29 @@ public partial class ModEditWindow : WindowX, IPageLocator
         InitializeWork();
         InitializeMove();
         InitializeAnime();
+    }
+
+    /// <summary>
+    /// 重置页面
+    /// </summary>
+    public void ResetPage()
+    {
+        if (FoodEditVM is not null)
+            FoodEditVM.ModInfo = null!;
+        if (ClickTextEditVM is not null)
+            ClickTextEditVM.ModInfo = null!;
+        if (LowTextEditVM is not null)
+            LowTextEditVM.ModInfo = null!;
+        if (SelectTextEditVM is not null)
+            SelectTextEditVM.ModInfo = null!;
+        if (PetEditVM is not null)
+            PetEditVM.ModInfo = null!;
+        if (MoveEditVM is not null)
+            MoveEditVM.ModInfo = null!;
+        if (WorkEditVM is not null)
+            WorkEditVM.ModInfo = null!;
+        if (AnimeVM is not null)
+            AnimeVM.ModInfo = null!;
     }
 
     private void TabControl_SelectionChanged(object sender, SelectionChangedEventArgs e)

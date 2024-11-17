@@ -130,5 +130,6 @@ public partial class LowTextModel : ViewModelBase
     public void Close()
     {
         I18nResource.I18nObjects.Remove(I18nObject);
+        I18nObject.Close();
     }
 }

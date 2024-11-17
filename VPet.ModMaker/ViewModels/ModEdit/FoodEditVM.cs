@@ -15,6 +15,7 @@ using System.Windows.Media.Imaging;
 using DynamicData.Binding;
 using HanumanInstitute.MvvmDialogs;
 using HanumanInstitute.MvvmDialogs.FrameworkDialogs;
+using HKW.HKWMapper;
 using HKW.HKWReactiveUI;
 using HKW.HKWUtils.Collections;
 using HKW.HKWUtils.Extensions;
@@ -127,7 +128,7 @@ public partial class FoodEditVM : DialogViewModel
     {
         if (oldValue is not null)
         {
-            Foods.BaseList.BindingList(newValue.Foods, true);
+            Foods.BaseList.BindingList(oldValue.Foods, true);
         }
         Foods.AutoFilter = false;
         Foods.Clear();
@@ -305,7 +306,7 @@ public partial class FoodEditVM : DialogViewModel
                 this.Log()
                     .Debug(
                         "添加新食物 {$food}",
-                        LPSConvert.SerializeObjectToLine<Line>(Food.ToFood(), "Food")
+                        LPSConvert.SerializeObjectToLine<Line>(Food.MapToFood(new()), "Food")
                     );
         }
         Reset();
@@ -341,8 +342,8 @@ public partial class FoodEditVM : DialogViewModel
                 this.Log()
                     .Debug(
                         "编辑食物\n {$oldFood} => {$newFood}",
-                        LPSConvert.SerializeObjectToLine<Line>(OldFood.ToFood(), "Food"),
-                        LPSConvert.SerializeObjectToLine<Line>(Food.ToFood(), "Food")
+                        LPSConvert.SerializeObjectToLine<Line>(OldFood.MapToFood(new()), "Food"),
+                        LPSConvert.SerializeObjectToLine<Line>(Food.MapToFood(new()), "Food")
                     );
         }
         Reset();

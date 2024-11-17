@@ -34,6 +34,7 @@ namespace VPet.ModMaker.Views;
 /// </summary>
 public partial class ModMakerWindow : WindowX, IPageLocator
 {
+    /// <inheritdoc/>
     public ModMakerWindow()
     {
         InitializeComponent();
@@ -68,6 +69,9 @@ public partial class ModMakerWindow : WindowX, IPageLocator
             });
     }
 
+    /// <summary>
+    /// 视图模型
+    /// </summary>
     public ModMakerVM ViewModel => (ModMakerVM)DataContext;
 
     /// <inheritdoc/>
@@ -90,5 +94,12 @@ public partial class ModMakerWindow : WindowX, IPageLocator
         if (item.DataContext is not ModMakeHistory history)
             return;
         ViewModel.LoadHistory(history);
+    }
+
+    private void Label_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+    {
+#if !RELEASE
+        GC.Collect();
+#endif
     }
 }

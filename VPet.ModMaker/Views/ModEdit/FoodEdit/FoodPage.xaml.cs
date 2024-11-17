@@ -25,8 +25,12 @@ namespace VPet.ModMaker.Views.ModEdit;
 /// </summary>
 public partial class FoodPage : UserControl
 {
+    /// <summary>
+    /// 视图模型
+    /// </summary>
     public FoodEditVM ViewModel => (FoodEditVM)DataContext;
 
+    /// <inheritdoc/>
     public FoodPage()
     {
         InitializeComponent();

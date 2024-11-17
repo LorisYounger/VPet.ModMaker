@@ -98,12 +98,7 @@ public partial class ModInfoModel : ViewModelBase
         LoadLowTexts(loader);
         LoadSelectTexts(loader);
         LoadPets(loader);
-        //if (loader.I18nDatas.HasValue() is false)
-        //    return;
-        //LoadI18nDatas(loader);
-        //RefreshAllID();
-        //if (I18nResource.CultureDatas.HasValue())
-        //    RefreshID();
+
         I18nResource.FillDefaultValue();
         CurrentPet = Pets.FirstOrDefault()!;
     }
@@ -154,7 +149,7 @@ public partial class ModInfoModel : ViewModelBase
             }
             catch (Exception ex)
             {
-                this.Log().Warn("添加宠物失败, ID: {id}, 宠物名称: {name}", pet.Name, pet.PetName, ex);
+                this.Log().Warn(ex, "添加宠物失败, ID: {id}, 宠物名称: {name}", pet.Name, pet.PetName);
             }
         }
     }
@@ -171,7 +166,7 @@ public partial class ModInfoModel : ViewModelBase
             }
             catch (Exception ex)
             {
-                this.Log().Warn("添加选择文本失败, ID: {id}", selectText.Text, ex);
+                this.Log().Warn(ex, "添加选择文本失败, ID: {id}", selectText.Text);
             }
         }
     }
@@ -188,7 +183,7 @@ public partial class ModInfoModel : ViewModelBase
             }
             catch (Exception ex)
             {
-                this.Log().Warn("添加低状态文本失败, ID: {id}", lowText.Text, ex);
+                this.Log().Warn(ex, "添加低状态文本失败, ID: {id}", lowText.Text);
             }
         }
     }
@@ -205,7 +200,7 @@ public partial class ModInfoModel : ViewModelBase
             }
             catch (Exception ex)
             {
-                this.Log().Warn("添加点击文本失败, ID: {id}", clickText.Text, ex);
+                this.Log().Warn(ex, "添加点击文本失败, ID: {id}", clickText.Text);
             }
         }
     }
@@ -222,7 +217,7 @@ public partial class ModInfoModel : ViewModelBase
             }
             catch (Exception ex)
             {
-                this.Log().Warn("添加食物失败, ID: {id}", food.Name, ex);
+                this.Log().Warn(ex, "添加食物失败, ID: {id}", food.Name);
             }
         }
     }
@@ -442,7 +437,7 @@ public partial class ModInfoModel : ViewModelBase
                         catch (Exception ex)
                         {
                             this.Log()
-                                .Warn("{$graphType} 动画载入失败, 目标文件夹: {path}", graphType, dir, ex);
+                                .Warn(ex, "{$graphType} 动画载入失败, 目标文件夹: {path}", graphType, dir);
                         }
                     }
                 }
@@ -456,7 +451,7 @@ public partial class ModInfoModel : ViewModelBase
                     catch (Exception ex)
                     {
                         this.Log()
-                            .Warn("{$graphType} 动画载入失败, 目标文件夹: {path}", graphType, animeDir, ex);
+                            .Warn(ex, "{$graphType} 动画载入失败, 目标文件夹: {path}", graphType, animeDir);
                     }
                 }
             }
@@ -475,7 +470,7 @@ public partial class ModInfoModel : ViewModelBase
                     }
                     catch (Exception ex)
                     {
-                        this.Log().Warn("\"Switch\" 动画载入失败, 目标文件夹: {path}", dir, ex);
+                        this.Log().Warn(ex, "\"Switch\" 动画载入失败, 目标文件夹: {path}", dir);
                     }
                 }
             }
@@ -491,7 +486,7 @@ public partial class ModInfoModel : ViewModelBase
                     }
                     catch (Exception ex)
                     {
-                        this.Log().Warn("\"Raise\" 动画载入失败, 目标文件夹: {path}", dir, ex);
+                        this.Log().Warn(ex, "\"Raise\" 动画载入失败, 目标文件夹: {path}", dir);
                     }
                 }
             }
@@ -507,7 +502,7 @@ public partial class ModInfoModel : ViewModelBase
                     }
                     catch (Exception ex)
                     {
-                        this.Log().Warn("\"State\" 动画载入失败, 目标文件夹: {path}", dir, ex);
+                        this.Log().Warn(ex, "\"State\" 动画载入失败, 目标文件夹: {path}", dir);
                     }
                 }
             }
@@ -520,7 +515,7 @@ public partial class ModInfoModel : ViewModelBase
                 }
                 catch (Exception ex)
                 {
-                    this.Log().Warn("\"Music\" 动画载入失败, 目标文件夹: {path}", animeDir, ex);
+                    this.Log().Warn(ex, "\"Music\" 动画载入失败, 目标文件夹: {path}", animeDir);
                 }
             }
             else if (FoodAnimeTypeModel.FoodAnimeNames.Contains(dirName))
@@ -532,7 +527,7 @@ public partial class ModInfoModel : ViewModelBase
                 }
                 catch (Exception ex)
                 {
-                    this.Log().Warn("{dirName} 动画载入失败, 目标文件夹: {path}", dirName, animeDir, ex);
+                    this.Log().Warn(ex, "{dirName} 动画载入失败, 目标文件夹: {path}", dirName, animeDir);
                 }
             }
         }
@@ -659,7 +654,7 @@ public partial class ModInfoModel : ViewModelBase
                 }
                 catch (Exception ex)
                 {
-                    this.Log().Info("保存宠物失败, ID: {id}, 宠物名称: {petName}", pet.ID, pet.PetName, ex);
+                    this.Log().Info(ex, "保存宠物失败, ID: {id}, 宠物名称: {petName}", pet.ID, pet.PetName);
                 }
             }
         }
@@ -688,7 +683,7 @@ public partial class ModInfoModel : ViewModelBase
             File.Create(foodFile).Close();
         var lps = new LPS();
         foreach (var food in Foods)
-            lps.Add(LPSConvert.SerializeObjectToLine<Line>(food.ToFood(), "food"));
+            lps.Add(LPSConvert.SerializeObjectToLine<Line>(food.MapToFood(new()), "food"));
         File.WriteAllText(foodFile, lps.ToString());
     }
 
@@ -745,7 +740,7 @@ public partial class ModInfoModel : ViewModelBase
         var lps = new LPS();
         foreach (var text in LowTexts)
             lps.Add(
-                LPSConvert.SerializeObjectToLine<Line>(text.MapFromLowText(new()), "lowfoodtext")
+                LPSConvert.SerializeObjectToLine<Line>(text.MapToLowText(new()), "lowfoodtext")
             );
         File.WriteAllText(textFile, lps.ToString());
     }
@@ -822,19 +817,7 @@ public partial class ModInfoModel : ViewModelBase
         }
     }
     #endregion
-    /// <summary>
-    /// 关闭
-    /// </summary>
-    public void Close()
-    {
-        Image?.CloseStream();
-        I18nResource.Clear();
-        TempI18nResource.Clear();
-        foreach (var food in Foods)
-            food.Close();
-        foreach (var pet in Pets)
-            pet.Close();
-    }
+
 
     /// <summary>
     /// 保存为翻译模组
@@ -867,5 +850,21 @@ public partial class ModInfoModel : ViewModelBase
             File.WriteAllText(cultureFile, lps.ToString());
         }
         this.Log().Info("翻译模组保存完毕");
+    }
+
+    /// <summary>
+    /// 关闭
+    /// </summary>
+    public void Close()
+    {
+        Image?.CloseStreamWhenNoReference();
+        I18nObject.Close();
+        I18nResource.Clear();
+        TempI18nResource.Clear();
+        foreach (var food in Foods)
+            food.Close();
+        foreach (var pet in Pets.Where(x => x.FromMain is false))
+            pet.Close();
+        var images = HKWImageUtils.ImageByInfo;
     }
 }

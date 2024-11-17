@@ -140,7 +140,7 @@ public partial class PetEditVM : DialogViewModel
     {
         if (oldValue is not null)
         {
-            Pets.BaseList.BindingList(newValue.Pets, true);
+            Pets.BaseList.BindingList(oldValue.Pets, true);
         }
         Pets.AutoFilter = false;
         Pets.Clear();
@@ -225,7 +225,7 @@ public partial class PetEditVM : DialogViewModel
     /// </summary>
     public void Close()
     {
-        Image?.CloseStream();
+        Image?.CloseStreamWhenNoReference();
     }
 
     /// <summary>
@@ -392,7 +392,7 @@ public partial class PetEditVM : DialogViewModel
         Pet = null!;
         OldPet = null!;
         DialogResult = false;
-        Image?.CloseStream();
+        Image?.CloseStreamWhenNoReference();
         ModInfo.TempI18nResource.ClearCultureData();
     }
 }

@@ -19,9 +19,12 @@ namespace VPet.ModMaker.Models;
 /// <summary>
 /// 选择文本模型
 /// </summary>
-[MapTo(typeof(SelectText), MapConfig = typeof(SelectTextModelMapToSelectTextConfig))]
-[MapFrom(typeof(SelectText), MapConfig = typeof(SelectTextModelMapFromSelectTextConfig))]
-[MapFrom(typeof(SelectTextModel), MapConfig = typeof(SelectTextModelMapFromSelectTextModelConfig))]
+[MapTo(typeof(SelectText), MapperConfig = typeof(SelectTextModelMapToSelectTextConfig))]
+[MapFrom(typeof(SelectText), MapperConfig = typeof(SelectTextModelMapFromSelectTextConfig))]
+[MapFrom(
+    typeof(SelectTextModel),
+    MapperConfig = typeof(SelectTextModelMapFromSelectTextModelConfig)
+)]
 public partial class SelectTextModel : ViewModelBase
 {
     /// <inheritdoc/>
@@ -56,16 +59,12 @@ public partial class SelectTextModel : ViewModelBase
     /// <summary>
     /// 标签
     /// </summary>
-    [SelectTextModelMapToSelectTextProperty(nameof(SelectText.Tags))]
-    [SelectTextModelMapFromSelectTextProperty(nameof(SelectText.Tags))]
     [ReactiveProperty]
     public string Tags { get; set; } = string.Empty;
 
     /// <summary>
     /// 跳转标签
     /// </summary>
-    [SelectTextModelMapToSelectTextProperty(nameof(SelectText.ToTags))]
-    [SelectTextModelMapFromSelectTextProperty(nameof(SelectText.ToTags))]
     [ReactiveProperty]
     public string ToTags { get; set; } = string.Empty;
 
@@ -184,11 +183,12 @@ public partial class SelectTextModel : ViewModelBase
     public void Close()
     {
         I18nResource.I18nObjects.Remove(I18nObject);
+        I18nObject.Close();
     }
 }
 
 internal class SelectTextModelMapFromSelectTextModelConfig
-    : MapConfig<SelectTextModel, SelectTextModel>
+    : MapperConfig<SelectTextModel, SelectTextModel>
 {
     public SelectTextModelMapFromSelectTextModelConfig()
     {
@@ -258,7 +258,7 @@ internal class SelectTextModelMapFromSelectTextModelConfig
     }
 }
 
-internal class SelectTextModelMapToSelectTextConfig : MapConfig<SelectTextModel, SelectText>
+internal class SelectTextModelMapToSelectTextConfig : MapperConfig<SelectTextModel, SelectText>
 {
     public SelectTextModelMapToSelectTextConfig()
     {
@@ -354,7 +354,7 @@ internal class SelectTextModelMapToSelectTextConfig : MapConfig<SelectTextModel,
     }
 }
 
-internal class SelectTextModelMapFromSelectTextConfig : MapConfig<SelectTextModel, SelectText>
+internal class SelectTextModelMapFromSelectTextConfig : MapperConfig<SelectTextModel, SelectText>
 {
     public SelectTextModelMapFromSelectTextConfig()
     {

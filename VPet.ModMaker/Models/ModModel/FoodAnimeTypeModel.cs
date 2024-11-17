@@ -172,7 +172,7 @@ public partial class FoodAnimeTypeModel : ViewModelBase, IAnimeModel
         {
             var lps = new LPS(File.ReadAllText(infoFile));
             var foodAnimeInfos = lps.FindAllLine(nameof(FoodAnimation));
-            if (foodAnimeInfos.Length != 0)
+            if (foodAnimeInfos.Length == 0)
                 throw new Exception("信息文件\n{0}\n未包含食物动画信息".Translate(infoFile));
             var pngAnimeInfos = lps.FindAllLine(nameof(PNGAnimation))
                 .Select(i => new PNGAnimeInfo(
@@ -188,7 +188,7 @@ public partial class FoodAnimeTypeModel : ViewModelBase, IAnimeModel
         }
         catch (Exception ex)
         {
-            this.Log().Warn("食物动画信息文件解析失败, 信息文件: {infoFile}, 目标文件夹: {path}", infoFile, path, ex);
+            this.Log().Warn(ex, "食物动画信息文件解析失败, 信息文件: {infoFile}, 目标文件夹: {path}", infoFile, path);
         }
     }
 
@@ -220,7 +220,7 @@ public partial class FoodAnimeTypeModel : ViewModelBase, IAnimeModel
         }
         catch (Exception ex)
         {
-            this.Log().Warn("食物动画信息解析失败, 目标文件夹: {path}, 信息行: {$line}", path, line, ex);
+            this.Log().Warn(ex, "食物动画信息解析失败, 目标文件夹: {path}, 信息行: {$line}", path, line);
         }
     }
 
@@ -312,7 +312,7 @@ public partial class FoodAnimeTypeModel : ViewModelBase, IAnimeModel
         }
         catch (Exception ex)
         {
-            this.Log().Warn("食物动画保存失败, 目标文件夹: {path}", path, ex);
+            this.Log().Warn(ex, "食物动画保存失败, 目标文件夹: {path}", path);
         }
     }
 

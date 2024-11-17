@@ -12,6 +12,7 @@ using System.Windows.Media.Imaging;
 using HKW.HKWReactiveUI;
 using HKW.HKWUtils.Extensions;
 using HKW.HKWUtils.Observable;
+using LinePutScript.Localization.WPF;
 using VPet.ModMaker.Native;
 using VPet.ModMaker.ViewModels;
 using VPet_Simulator.Core;
@@ -83,7 +84,7 @@ public partial class AnimeTypeModel : ViewModelBase, IAnimeModel
         else if (graphType.IsHasNameAnime())
             LoadMultiType(path);
         else
-            throw new Exception();
+            throw new Exception("未知动画类型, 目标路径 {0}".Translate(path));
     }
 
     /// <summary>
@@ -287,6 +288,10 @@ public partial class AnimeTypeModel : ViewModelBase, IAnimeModel
                 NativeUtils.Separator,
                 StringSplitOptions.RemoveEmptyEntries
             );
+            //if (Directory.EnumerateDirectories(dir).Any())
+            //{
+            //    LoadMultiType(dir);
+            //}
             if (dirInfo.Length == 3)
             {
                 // 判断 A_1_Happy 类型文件夹
@@ -302,7 +307,34 @@ public partial class AnimeTypeModel : ViewModelBase, IAnimeModel
                 var typeName = dirInfo[0];
                 var modeName = dirInfo[1];
                 var type = GetAnimatType(typeName[0]);
-                var mode = (ModeType)Enum.Parse(typeof(ModeType), Path.GetFileName(modeName), true);
+                // 判断 Happy_A 类型文件夹
+                if (type is AnimatType.Single)
+                {
+                    var temp = GetAnimatType(modeName[0]);
+                    if (temp is not AnimatType.Single)
+                    {
+                        modeName = typeName;
+                        type = temp;
+                    }
+                    else if (
+                        modeName.Length > 1
+                        && (
+                            Enum.TryParse<ModeType>(typeName, out var imode)
+                            || Enum.TryParse<ModeType>(modeName, out imode)
+                        )
+                    )
+                    {
+                        foreach (var idir in Directory.EnumerateDirectories(dir))
+                        {
+                            var idirName = Path.GetFileName(idir)
+                                .Split('_', StringSplitOptions.RemoveEmptyEntries)[0];
+                            AddAnimeForModeType(idir, imode, GetAnimatType(idirName[0]));
+                        }
+                        continue;
+                    }
+                }
+
+                var mode = Enum.Parse<ModeType>(Path.GetFileName(modeName), true);
                 AddAnimeForModeType(dir, mode, type);
             }
             else if (Enum.TryParse<ModeType>(dirName, true, out var mode))
