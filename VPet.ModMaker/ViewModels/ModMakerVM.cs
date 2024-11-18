@@ -72,6 +72,7 @@ public partial class ModMakerVM : ViewModelBase
         EnumInfo<SelectTextSearchTarget>.Initialize();
         EnumInfo<PetSearchTarget>.Initialize();
         EnumInfo<WorkSearchTarget>.Initialize();
+        EnumInfo<VPet_Simulator.Core.GraphInfo.AnimatType>.Initialize();
         _isFirst = false;
     }
 

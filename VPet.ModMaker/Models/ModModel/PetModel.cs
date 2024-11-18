@@ -324,19 +324,6 @@ public partial class PetModel : ViewModelBase
         AnimeCount = Animes.Count + FoodAnimes.Count;
     }
 
-    /// <summary>
-    /// 关闭
-    /// </summary>
-    public void Close()
-    {
-        foreach (var anime in Animes)
-            anime.Close();
-        foreach (var anime in FoodAnimes)
-            anime.Close();
-        I18nResource.I18nObjects.Remove(I18nObject);
-        I18nObject.Close();
-    }
-
     #region Save
 
     /// <summary>
@@ -390,7 +377,7 @@ public partial class PetModel : ViewModelBase
     {
         foreach (var work in Works)
         {
-            lps.Add(LPSConvert.SerializeObjectToLine<Line>(work.ToWork(), "work"));
+            lps.Add(LPSConvert.SerializeObjectToLine<Line>(work.MapToWork(new()), "work"));
         }
     }
 
@@ -528,6 +515,18 @@ public partial class PetModel : ViewModelBase
     }
     #endregion
     #endregion
+    /// <summary>
+    /// 关闭
+    /// </summary>
+    public void Close()
+    {
+        foreach (var anime in Animes)
+            anime.Close();
+        foreach (var anime in FoodAnimes)
+            anime.Close();
+        I18nResource.I18nObjects.Remove(I18nObject);
+        I18nObject.Close();
+    }
 }
 
 /// <summary>

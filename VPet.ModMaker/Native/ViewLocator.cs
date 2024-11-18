@@ -34,9 +34,9 @@ internal class ViewLocator : StrongViewLocatorX
         Register<PetEditVM, PetPage, PetEditWindow>();
         Register<MoveEditVM, MovePage, MoveEditWindow>();
         Register<WorkEditVM, WorkPage, WorkEditWindow>();
+        RegisterPage<AnimeVM, AnimePage>();
         Register<AnimeEditVM, AnimeEditWindow>();
         Register<FoodAnimeEditVM, FoodAnimeEditWindow>();
-        RegisterPage<AnimeVM, AnimePage>();
         Register<SelectGraphTypeVM, SelectGraphTypeWindow>();
 
         this.RegisterAllDialogX();

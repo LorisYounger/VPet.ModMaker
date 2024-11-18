@@ -24,7 +24,7 @@
       </Grid.ColumnDefinitions>
       <TextBox
         pu:TextBoxHelper.Watermark="{ll:Str 搜索}"
-        Style="{DynamicResource StandardTextBoxStyle}"
+        Style="{StaticResource StandardTextBoxStyle}"
         Text="{Binding Search, UpdateSourceTrigger=PropertyChanged}" />
       <ComboBox
         Grid.Column="1"
@@ -74,7 +74,7 @@
           MaxWidth="200"
           Binding="{Binding Choose}"
           CanUserSort="True"
-          ElementStyle="{DynamicResource TextBlock_LeftCenter}"
+          ElementStyle="{StaticResource TextBlock_LeftCenter}"
           Header="{ll:Str 选择名}"
           IsReadOnly="True"
           SortMemberPath="Choose" />
@@ -82,7 +82,7 @@
           MaxWidth="200"
           Binding="{Binding Tags}"
           CanUserSort="True"
-          ElementStyle="{DynamicResource TextBlock_LeftCenter}"
+          ElementStyle="{StaticResource TextBlock_LeftCenter}"
           Header="{ll:Str 标签}"
           IsReadOnly="True"
           SortMemberPath="Tags" />
@@ -90,20 +90,20 @@
           MaxWidth="200"
           Binding="{Binding ToTags}"
           CanUserSort="True"
-          ElementStyle="{DynamicResource TextBlock_LeftCenter}"
+          ElementStyle="{StaticResource TextBlock_LeftCenter}"
           Header="{ll:Str 跳转标签}"
           IsReadOnly="True"
           SortMemberPath="ToTags" />
         <DataGridTextColumn
           Binding="{Binding Mode.Value}"
           CanUserSort="True"
-          ElementStyle="{DynamicResource TextBlock_LeftCenter}"
+          ElementStyle="{StaticResource TextBlock_LeftCenter}"
           Header="{ll:Str 状态}"
           IsReadOnly="True"
           SortMemberPath="Mode.Value" />
         <DataGridTextColumn
           CanUserSort="True"
-          ElementStyle="{DynamicResource TextBlock_LeftCenter}"
+          ElementStyle="{StaticResource TextBlock_LeftCenter}"
           Header="{ll:Str 好感度范围}"
           IsReadOnly="True"
           SortMemberPath="Like.Min">
@@ -116,7 +116,7 @@
         </DataGridTextColumn>
         <DataGridTextColumn
           CanUserSort="True"
-          ElementStyle="{DynamicResource TextBlock_LeftCenter}"
+          ElementStyle="{StaticResource TextBlock_LeftCenter}"
           Header="{ll:Str 健康度范围}"
           IsReadOnly="True"
           SortMemberPath="Health.Min">
@@ -129,7 +129,7 @@
         </DataGridTextColumn>
         <DataGridTextColumn
           CanUserSort="True"
-          ElementStyle="{DynamicResource TextBlock_LeftCenter}"
+          ElementStyle="{StaticResource TextBlock_LeftCenter}"
           Header="{ll:Str 等级范围}"
           IsReadOnly="True"
           SortMemberPath="Level.Min">
@@ -142,7 +142,7 @@
         </DataGridTextColumn>
         <DataGridTextColumn
           CanUserSort="True"
-          ElementStyle="{DynamicResource TextBlock_LeftCenter}"
+          ElementStyle="{StaticResource TextBlock_LeftCenter}"
           Header="{ll:Str 金钱范围}"
           IsReadOnly="True"
           SortMemberPath="Money.Min">
@@ -155,7 +155,7 @@
         </DataGridTextColumn>
         <DataGridTextColumn
           CanUserSort="True"
-          ElementStyle="{DynamicResource TextBlock_LeftCenter}"
+          ElementStyle="{StaticResource TextBlock_LeftCenter}"
           Header="{ll:Str 食物范围}"
           IsReadOnly="True"
           SortMemberPath="Food.Min">
@@ -168,7 +168,7 @@
         </DataGridTextColumn>
         <DataGridTextColumn
           CanUserSort="True"
-          ElementStyle="{DynamicResource TextBlock_LeftCenter}"
+          ElementStyle="{StaticResource TextBlock_LeftCenter}"
           Header="{ll:Str 口渴范围}"
           IsReadOnly="True"
           SortMemberPath="Drink.Min">
@@ -181,7 +181,7 @@
         </DataGridTextColumn>
         <DataGridTextColumn
           CanUserSort="True"
-          ElementStyle="{DynamicResource TextBlock_LeftCenter}"
+          ElementStyle="{StaticResource TextBlock_LeftCenter}"
           Header="{ll:Str 心情范围}"
           IsReadOnly="True"
           SortMemberPath="Feel.Min">
@@ -194,7 +194,7 @@
         </DataGridTextColumn>
         <DataGridTextColumn
           CanUserSort="True"
-          ElementStyle="{DynamicResource TextBlock_LeftCenter}"
+          ElementStyle="{StaticResource TextBlock_LeftCenter}"
           Header="{ll:Str 体力范围}"
           IsReadOnly="True"
           SortMemberPath="Strength.Min">

@@ -34,8 +34,9 @@ public partial class AnimeEditVM : DialogViewModel
     private static IDialogService DialogService => Locator.Current.GetService<IDialogService>()!;
 
     /// <inheritdoc/>
-    public AnimeEditVM()
+    public AnimeEditVM(AnimeTypeModel anime)
     {
+        Anime = anime;
         _playerTask = new(Play);
     }
 
@@ -52,7 +53,6 @@ public partial class AnimeEditVM : DialogViewModel
     /// <summary>
     /// 动画
     /// </summary>
-    [ReactiveProperty]
     public AnimeTypeModel Anime { get; set; } = null!;
 
     /// <summary>
@@ -90,13 +90,11 @@ public partial class AnimeEditVM : DialogViewModel
     /// <summary>
     /// 含有多个状态
     /// </summary>
-    [NotifyPropertyChangeFrom(nameof(Anime))]
     public bool HasMultiType => AnimeTypeModel.HasMultiTypeAnimes.Contains(Anime.GraphType);
 
     /// <summary>
     /// 含有动画名称
     /// </summary>
-    [NotifyPropertyChangeFrom(nameof(Anime))]
     public bool HasAnimeName => AnimeTypeModel.HasNameAnimes.Contains(Anime.GraphType);
 
     /// <summary>

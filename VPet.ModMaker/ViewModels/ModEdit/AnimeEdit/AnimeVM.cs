@@ -178,11 +178,7 @@ public partial class AnimeVM : ViewModelBase
         {
             var animeVM = await DialogService.ShowDialogAsyncX(
                 this,
-                new FoodAnimeEditVM()
-                {
-                    CurrentPet = CurrentPet,
-                    Anime = new() { Name = animeName }
-                }
+                new FoodAnimeEditVM(new() { Name = animeName }) { CurrentPet = CurrentPet }
             );
             if (animeVM.DialogResult is not true)
                 return;
@@ -192,16 +188,17 @@ public partial class AnimeVM : ViewModelBase
         {
             var animeVM = await DialogService.ShowDialogAsyncX(
                 this,
-                new AnimeEditVM()
-                {
-                    CurrentPet = CurrentPet,
-                    Anime = new()
+                new AnimeEditVM(
+                    new()
                     {
                         GraphType = graphType,
                         Name = string.IsNullOrWhiteSpace(animeName)
                             ? graphType.ToString()
                             : animeName
                     }
+                )
+                {
+                    CurrentPet = CurrentPet
                 }
             );
             if (animeVM.DialogResult is not true)
@@ -222,11 +219,10 @@ public partial class AnimeVM : ViewModelBase
         {
             var animeVM = await DialogService.ShowDialogAsyncX(
                 this,
-                new AnimeEditVM()
+                new AnimeEditVM(new(animeTypeModel))
                 {
                     CurrentPet = CurrentPet,
-                    OldAnime = animeTypeModel,
-                    Anime = new(animeTypeModel)
+                    OldAnime = animeTypeModel
                 }
             );
             if (animeVM.DialogResult is not true)
@@ -243,11 +239,10 @@ public partial class AnimeVM : ViewModelBase
         {
             var animeVM = await DialogService.ShowDialogAsyncX(
                 this,
-                new FoodAnimeEditVM()
+                new FoodAnimeEditVM(new(foodAnimeTypeModel))
                 {
                     CurrentPet = CurrentPet,
-                    OldAnime = foodAnimeTypeModel,
-                    Anime = new(foodAnimeTypeModel)
+                    OldAnime = foodAnimeTypeModel
                 }
             );
             if (animeVM.DialogResult is not true)

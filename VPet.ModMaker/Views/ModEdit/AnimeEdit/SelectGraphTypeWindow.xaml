@@ -42,7 +42,7 @@
         Grid.Column="1"
         ItemsSource="{Binding GraphTypes}"
         SelectedItem="{Binding GraphType}"
-        Style="{DynamicResource StandardComboBoxStyle}" />
+        Style="{StaticResource StandardComboBoxStyle}" />
       <Label
         Grid.Row="1"
         Content="{ll:Str 动画名称}"
@@ -50,7 +50,7 @@
       <TextBox
         Grid.Row="1"
         Grid.Column="1"
-        Style="{DynamicResource StandardTextBoxStyle}"
+        Style="{StaticResource StandardTextBoxStyle}"
         Text="{Binding AnimeName, UpdateSourceTrigger=PropertyChanged}"
         Visibility="{Binding HasNameAnime, Converter={StaticResource FalseToCollapsedConverter}}" />
     </Grid>
@@ -64,14 +64,14 @@
         Margin="10"
         Click="Button_Yes_Click"
         Content="{ll:Str 确定}"
-        Style="{DynamicResource MyThemedButtonStyle}" />
+        Style="{StaticResource MyThemedButtonStyle}" />
       <Button
         x:Name="Button_Cancel"
         Grid.Column="1"
         Margin="10"
         Click="Button_Cancel_Click"
         Content="{ll:Str 取消}"
-        Style="{DynamicResource Button_Cancel}" />
+        Style="{StaticResource Button_Cancel}" />
     </Grid>
   </Grid>
 </Window>

@@ -22,12 +22,15 @@ namespace VPet.ModMaker.Views.ModEdit;
 /// </summary>
 public partial class AnimePage : UserControl
 {
+    /// <inheritdoc/>
     public AnimePage()
     {
         InitializeComponent();
-        DataContext = new AnimeVM();
     }
 
+    /// <summary>
+    /// 视图模型
+    /// </summary>
     public AnimeVM ViewModel => (AnimeVM)DataContext;
 
     private void DataGrid_MouseDoubleClick(object? sender, MouseButtonEventArgs e)

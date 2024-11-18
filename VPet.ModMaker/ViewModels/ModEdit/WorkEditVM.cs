@@ -12,6 +12,7 @@ using System.Windows.Media.Imaging;
 using DynamicData.Binding;
 using HanumanInstitute.MvvmDialogs;
 using HanumanInstitute.MvvmDialogs.FrameworkDialogs;
+using HKW.HKWMapper;
 using HKW.HKWReactiveUI;
 using HKW.HKWUtils.Collections;
 using HKW.HKWUtils.Extensions;
@@ -207,6 +208,11 @@ public partial class WorkEditVM : DialogViewModel
     [ReactiveProperty]
     public WorkModel Work { get; set; } = null!;
 
+    /// <summary>
+    /// 比例
+    /// </summary>
+    public static double LengthRatio { get; } = 0.5;
+
     partial void OnWorkChanged(WorkModel oldValue, WorkModel newValue)
     {
         if (oldValue is not null)
@@ -372,7 +378,7 @@ public partial class WorkEditVM : DialogViewModel
                 this.Log()
                     .Debug(
                         "添加新工作 {$work}",
-                        LPSConvert.SerializeObjectToLine<Line>(Work.ToWork(), "Work")
+                        LPSConvert.SerializeObjectToLine<Line>(Work.MapToWork(new()), "Work")
                     );
         }
         Reset();
@@ -407,8 +413,8 @@ public partial class WorkEditVM : DialogViewModel
                 this.Log()
                     .Debug(
                         "编辑工作\n {$oldWork} => {$newWork}",
-                        LPSConvert.SerializeObjectToLine<Line>(OldWork.ToWork(), "Work"),
-                        LPSConvert.SerializeObjectToLine<Line>(Work.ToWork(), "Work")
+                        LPSConvert.SerializeObjectToLine<Line>(OldWork.MapToWork(new()), "Work"),
+                        LPSConvert.SerializeObjectToLine<Line>(Work.MapToWork(new()), "Work")
                     );
         }
         Reset();

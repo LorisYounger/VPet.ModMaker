@@ -337,7 +337,7 @@
           VerticalAlignment="Center"
           Command="{Binding AddImageCommand}"
           Content="{ll:Str 添加测试图片}"
-          Style="{DynamicResource Button_HiddenOnTagNull}"
+          Style="{StaticResource Button_HiddenOnTagNull}"
           Tag="{Binding Image}" />
       </Grid>
       <Grid Grid.Row="1">
@@ -352,42 +352,61 @@
           <RowDefinition Height="Auto" />
           <RowDefinition />
         </Grid.RowDefinitions>
-        <Label Content="ID" />
+        <Label Content="ID" Style="{StaticResource ThemedLabelStyle}" />
         <TextBox
           Grid.Column="1"
           pu:TextBoxHelper.Watermark="ID"
+          Style="{StaticResource StandardTextBoxStyle}"
           Text="{Binding Pet.ID, UpdateSourceTrigger=PropertyChanged}" />
-        <Label Grid.Row="1" Content="{ll:Str 标签}" />
+        <Label
+          Grid.Row="1"
+          Content="{ll:Str 标签}"
+          Style="{StaticResource ThemedLabelStyle}" />
         <TextBox
           Grid.Row="1"
           Grid.Column="1"
           pu:TextBoxHelper.Watermark="{ll:Str '标签, 用英文逗号分隔'}"
+          Style="{StaticResource StandardTextBoxStyle}"
           Text="{Binding Pet.Tags, UpdateSourceTrigger=PropertyChanged}" />
-        <!--<Label Grid.Row="1" Content="{ll:Str 名称}" />
-        <TextBox
+        <!--<Label  Style="{StaticResource ThemedLabelStyle}" Grid.Row="1" Content="{ll:Str 名称}" />
+        <TextBox Style="{StaticResource StandardTextBoxStyle}"
           Grid.Row="1"
           Grid.Column="1"
           pu:TextBoxHelper.Watermark="{ll:Str 名称}"
           Text="{Binding Pet.Name, UpdateSourceTrigger=PropertyChanged}" />-->
-        <Label Grid.Row="2" Content="{ll:Str 名称}" />
+        <Label
+          Grid.Row="2"
+          Content="{ll:Str 名称}"
+          Style="{StaticResource ThemedLabelStyle}" />
         <TextBox
           Grid.Row="2"
           Grid.Column="1"
           pu:TextBoxHelper.Watermark="{ll:Str 名称}"
+          Style="{StaticResource StandardTextBoxStyle}"
           Text="{Binding Pet.Name, UpdateSourceTrigger=PropertyChanged}" />
-        <Label Grid.Row="3" Content="{ll:Str 宠物名称}" />
+        <Label
+          Grid.Row="3"
+          Content="{ll:Str 宠物名称}"
+          Style="{StaticResource ThemedLabelStyle}" />
         <TextBox
           Grid.Row="3"
           Grid.Column="1"
           pu:TextBoxHelper.Watermark="{ll:Str 宠物名称}"
+          Style="{StaticResource StandardTextBoxStyle}"
           Text="{Binding Pet.PetName, UpdateSourceTrigger=PropertyChanged}" />
-        <Label Grid.Row="4" Content="{ll:Str 描述}" />
+        <Label
+          Grid.Row="4"
+          Height="NaN"
+          Content="{ll:Str 描述}"
+          Style="{StaticResource ThemedLabelStyle}" />
         <TextBox
           Grid.Row="4"
           Grid.Column="1"
+          Height="NaN"
           pu:TextBoxHelper.Watermark="{ll:Str 描述}"
-          Style="{StaticResource TextBox_Wrap}"
-          Text="{Binding Pet.Description, UpdateSourceTrigger=PropertyChanged}" />
+          Style="{StaticResource StandardTextBoxWrapStyle}"
+          Text="{Binding Pet.Description, UpdateSourceTrigger=PropertyChanged}"
+          TextWrapping="Wrap" />
       </Grid>
     </Grid>
     <Grid Grid.Column="1">
@@ -407,7 +426,8 @@
               Padding="5"
               HorizontalContentAlignment="Stretch"
               d:IsChecked="True"
-              Content="{ll:Str 头部触碰范围}" />
+              Content="{ll:Str 头部触碰范围}"
+              Style="{StaticResource StandardToggleButtonStyle}" />
             <Grid Grid.Column="1" Margin="5">
               <Grid.RowDefinitions>
                 <RowDefinition />
@@ -419,7 +439,7 @@
                 <ColumnDefinition Width="Auto" />
                 <ColumnDefinition />
               </Grid.ColumnDefinitions>
-              <Label Background="{x:Null}" Content="x:" />
+              <Label Background="{x:Null}" Content="X:" />
               <pu:NumberInput
                 Grid.Column="1"
                 d:Value="100"
@@ -427,7 +447,7 @@
               <Label
                 Grid.Column="2"
                 Background="{x:Null}"
-                Content="y:" />
+                Content="Y:" />
               <pu:NumberInput
                 Grid.Column="3"
                 d:Value="100"
@@ -435,7 +455,7 @@
               <Label
                 Grid.Row="1"
                 Background="{x:Null}"
-                Content="w:" />
+                Content="W:" />
               <pu:NumberInput
                 Grid.Row="1"
                 Grid.Column="1"
@@ -445,7 +465,7 @@
                 Grid.Row="1"
                 Grid.Column="2"
                 Background="{x:Null}"
-                Content="h:" />
+                Content="H:" />
               <pu:NumberInput
                 Grid.Row="1"
                 Grid.Column="3"
@@ -462,7 +482,8 @@
               x:Name="ToggleButton_TouchBody"
               Padding="5"
               HorizontalContentAlignment="Stretch"
-              Content="{ll:Str 身体触碰范围}" />
+              Content="{ll:Str 身体触碰范围}"
+              Style="{StaticResource StandardToggleButtonStyle}" />
             <Grid Grid.Column="1" Margin="5">
               <Grid.RowDefinitions>
                 <RowDefinition />
@@ -474,17 +495,17 @@
                 <ColumnDefinition Width="Auto" />
                 <ColumnDefinition />
               </Grid.ColumnDefinitions>
-              <Label Background="{x:Null}" Content="x:" />
+              <Label Background="{x:Null}" Content="X:" />
               <pu:NumberInput Grid.Column="1" Value="{Binding Pet.TouchBodyRectangleLocation.X}" />
               <Label
                 Grid.Column="2"
                 Background="{x:Null}"
-                Content="y:" />
+                Content="Y:" />
               <pu:NumberInput Grid.Column="3" Value="{Binding Pet.TouchBodyRectangleLocation.Y, Mode=TwoWay}" />
               <Label
                 Grid.Row="1"
                 Background="{x:Null}"
-                Content="w:" />
+                Content="W:" />
               <pu:NumberInput
                 Grid.Row="1"
                 Grid.Column="1"
@@ -493,7 +514,7 @@
                 Grid.Row="1"
                 Grid.Column="2"
                 Background="{x:Null}"
-                Content="h:" />
+                Content="H:" />
               <pu:NumberInput
                 Grid.Row="1"
                 Grid.Column="3"
@@ -517,7 +538,8 @@
                 Padding="5"
                 HorizontalContentAlignment="Stretch"
                 d:IsChecked="True"
-                Content="{ll:Str 开心状态}" />
+                Content="{ll:Str 开心状态}"
+                Style="{StaticResource StandardToggleButtonStyle}" />
               <Grid Grid.Column="1" Margin="5">
                 <Grid.RowDefinitions>
                   <RowDefinition />
@@ -529,17 +551,17 @@
                   <ColumnDefinition Width="Auto" />
                   <ColumnDefinition />
                 </Grid.ColumnDefinitions>
-                <Label Background="{x:Null}" Content="x:" />
+                <Label Background="{x:Null}" Content="X:" />
                 <pu:NumberInput Grid.Column="1" Value="{Binding Pet.TouchRaisedRectangleLocation.Happy.X, Mode=TwoWay}" />
                 <Label
                   Grid.Column="2"
                   Background="{x:Null}"
-                  Content="y:" />
+                  Content="Y:" />
                 <pu:NumberInput Grid.Column="3" Value="{Binding Pet.TouchRaisedRectangleLocation.Happy.Y, Mode=TwoWay}" />
                 <Label
                   Grid.Row="1"
                   Background="{x:Null}"
-                  Content="w:" />
+                  Content="W:" />
                 <pu:NumberInput
                   Grid.Row="1"
                   Grid.Column="1"
@@ -548,7 +570,7 @@
                   Grid.Row="1"
                   Grid.Column="2"
                   Background="{x:Null}"
-                  Content="h:" />
+                  Content="H:" />
                 <pu:NumberInput
                   Grid.Row="1"
                   Grid.Column="3"
@@ -560,7 +582,8 @@
                 Padding="5"
                 HorizontalContentAlignment="Stretch"
                 d:IsChecked="True"
-                Content="{ll:Str 普通状态}" />
+                Content="{ll:Str 普通状态}"
+                Style="{StaticResource StandardToggleButtonStyle}" />
               <Grid
                 Grid.Row="1"
                 Grid.Column="1"
@@ -575,17 +598,17 @@
                   <ColumnDefinition Width="Auto" />
                   <ColumnDefinition />
                 </Grid.ColumnDefinitions>
-                <Label Background="{x:Null}" Content="x:" />
+                <Label Background="{x:Null}" Content="X:" />
                 <pu:NumberInput Grid.Column="1" Value="{Binding Pet.TouchRaisedRectangleLocation.Nomal.X, Mode=TwoWay}" />
                 <Label
                   Grid.Column="2"
                   Background="{x:Null}"
-                  Content="y:" />
+                  Content="Y:" />
                 <pu:NumberInput Grid.Column="3" Value="{Binding Pet.TouchRaisedRectangleLocation.Nomal.Y, Mode=TwoWay}" />
                 <Label
                   Grid.Row="1"
                   Background="{x:Null}"
-                  Content="w:" />
+                  Content="W:" />
                 <pu:NumberInput
                   Grid.Row="1"
                   Grid.Column="1"
@@ -594,7 +617,7 @@
                   Grid.Row="1"
                   Grid.Column="2"
                   Background="{x:Null}"
-                  Content="h:" />
+                  Content="H:" />
                 <pu:NumberInput
                   Grid.Row="1"
                   Grid.Column="3"
@@ -606,7 +629,8 @@
                 Padding="5"
                 HorizontalContentAlignment="Stretch"
                 d:IsChecked="True"
-                Content="{ll:Str 低状态}" />
+                Content="{ll:Str 低状态}"
+                Style="{StaticResource StandardToggleButtonStyle}" />
               <Grid
                 Grid.Row="2"
                 Grid.Column="1"
@@ -621,17 +645,17 @@
                   <ColumnDefinition Width="Auto" />
                   <ColumnDefinition />
                 </Grid.ColumnDefinitions>
-                <Label Background="{x:Null}" Content="x:" />
+                <Label Background="{x:Null}" Content="X:" />
                 <pu:NumberInput Grid.Column="1" Value="{Binding Pet.TouchRaisedRectangleLocation.PoorCondition.X, Mode=TwoWay}" />
                 <Label
                   Grid.Column="2"
                   Background="{x:Null}"
-                  Content="y:" />
+                  Content="Y:" />
                 <pu:NumberInput Grid.Column="3" Value="{Binding Pet.TouchRaisedRectangleLocation.PoorCondition.Y, Mode=TwoWay}" />
                 <Label
                   Grid.Row="1"
                   Background="{x:Null}"
-                  Content="w:" />
+                  Content="W:" />
                 <pu:NumberInput
                   Grid.Row="1"
                   Grid.Column="1"
@@ -640,7 +664,7 @@
                   Grid.Row="1"
                   Grid.Column="2"
                   Background="{x:Null}"
-                  Content="h:" />
+                  Content="H:" />
                 <pu:NumberInput
                   Grid.Row="1"
                   Grid.Column="3"
@@ -652,7 +676,8 @@
                 Padding="5"
                 HorizontalContentAlignment="Stretch"
                 d:IsChecked="True"
-                Content="{ll:Str 生病状态}" />
+                Content="{ll:Str 生病状态}"
+                Style="{StaticResource StandardToggleButtonStyle}" />
               <Grid
                 Grid.Row="3"
                 Grid.Column="1"
@@ -667,17 +692,17 @@
                   <ColumnDefinition Width="Auto" />
                   <ColumnDefinition />
                 </Grid.ColumnDefinitions>
-                <Label Background="{x:Null}" Content="x:" />
+                <Label Background="{x:Null}" Content="X:" />
                 <pu:NumberInput Grid.Column="1" Value="{Binding Pet.TouchRaisedRectangleLocation.Ill.X, Mode=TwoWay}" />
                 <Label
                   Grid.Column="2"
                   Background="{x:Null}"
-                  Content="y:" />
+                  Content="Y:" />
                 <pu:NumberInput Grid.Column="3" Value="{Binding Pet.TouchRaisedRectangleLocation.Ill.Y, Mode=TwoWay}" />
                 <Label
                   Grid.Row="1"
                   Background="{x:Null}"
-                  Content="w:" />
+                  Content="W:" />
                 <pu:NumberInput
                   Grid.Row="1"
                   Grid.Column="1"
@@ -686,7 +711,7 @@
                   Grid.Row="1"
                   Grid.Column="2"
                   Background="{x:Null}"
-                  Content="h:" />
+                  Content="H:" />
                 <pu:NumberInput
                   Grid.Row="1"
                   Grid.Column="3"
@@ -710,7 +735,8 @@
                 x:Name="ToggleButton_RaisePoint_Happy"
                 Padding="5"
                 HorizontalContentAlignment="Stretch"
-                Content="{ll:Str 开心状态}" />
+                Content="{ll:Str 开心状态}"
+                Style="{StaticResource StandardToggleButtonStyle}" />
               <Grid Grid.Column="1" Margin="5">
                 <Grid.RowDefinitions>
                   <RowDefinition />
@@ -722,12 +748,12 @@
                   <ColumnDefinition Width="Auto" />
                   <ColumnDefinition />
                 </Grid.ColumnDefinitions>
-                <Label Background="{x:Null}" Content="x:" />
+                <Label Background="{x:Null}" Content="X:" />
                 <pu:NumberInput Grid.Column="1" Value="{Binding Pet.RaisePoint.Happy.X, Mode=TwoWay}" />
                 <Label
                   Grid.Column="2"
                   Background="{x:Null}"
-                  Content="y:" />
+                  Content="Y:" />
                 <pu:NumberInput Grid.Column="3" Value="{Binding Pet.RaisePoint.Happy.Y, Mode=TwoWay}" />
               </Grid>
               <ToggleButton
@@ -735,7 +761,8 @@
                 Grid.Row="1"
                 Padding="5"
                 HorizontalContentAlignment="Stretch"
-                Content="{ll:Str 普通状态}" />
+                Content="{ll:Str 普通状态}"
+                Style="{StaticResource StandardToggleButtonStyle}" />
               <Grid
                 Grid.Row="1"
                 Grid.Column="1"
@@ -750,12 +777,12 @@
                   <ColumnDefinition Width="Auto" />
                   <ColumnDefinition />
                 </Grid.ColumnDefinitions>
-                <Label Background="{x:Null}" Content="x:" />
+                <Label Background="{x:Null}" Content="X:" />
                 <pu:NumberInput Grid.Column="1" Value="{Binding Pet.RaisePoint.Nomal.X, Mode=TwoWay}" />
                 <Label
                   Grid.Column="2"
                   Background="{x:Null}"
-                  Content="y:" />
+                  Content="Y:" />
                 <pu:NumberInput Grid.Column="3" Value="{Binding Pet.RaisePoint.Nomal.Y, Mode=TwoWay}" />
               </Grid>
               <ToggleButton
@@ -763,7 +790,8 @@
                 Grid.Row="2"
                 Padding="5"
                 HorizontalContentAlignment="Stretch"
-                Content="{ll:Str 低状态}" />
+                Content="{ll:Str 低状态}"
+                Style="{StaticResource StandardToggleButtonStyle}" />
               <Grid
                 Grid.Row="2"
                 Grid.Column="1"
@@ -778,12 +806,12 @@
                   <ColumnDefinition Width="Auto" />
                   <ColumnDefinition />
                 </Grid.ColumnDefinitions>
-                <Label Background="{x:Null}" Content="x:" />
+                <Label Background="{x:Null}" Content="X:" />
                 <pu:NumberInput Grid.Column="1" Value="{Binding Pet.RaisePoint.PoorCondition.X, Mode=TwoWay}" />
                 <Label
                   Grid.Column="2"
                   Background="{x:Null}"
-                  Content="y:" />
+                  Content="Y:" />
                 <pu:NumberInput Grid.Column="3" Value="{Binding Pet.RaisePoint.PoorCondition.Y, Mode=TwoWay}" />
               </Grid>
               <ToggleButton
@@ -791,7 +819,8 @@
                 Grid.Row="3"
                 Padding="5"
                 HorizontalContentAlignment="Stretch"
-                Content="{ll:Str 生病状态}" />
+                Content="{ll:Str 生病状态}"
+                Style="{StaticResource StandardToggleButtonStyle}" />
               <Grid
                 Grid.Row="3"
                 Grid.Column="1"
@@ -806,12 +835,12 @@
                   <ColumnDefinition Width="Auto" />
                   <ColumnDefinition />
                 </Grid.ColumnDefinitions>
-                <Label Background="{x:Null}" Content="x:" />
+                <Label Background="{x:Null}" Content="X:" />
                 <pu:NumberInput Grid.Column="1" Value="{Binding Pet.RaisePoint.Ill.X, Mode=TwoWay}" />
                 <Label
                   Grid.Column="2"
                   Background="{x:Null}"
-                  Content="y:" />
+                  Content="Y:" />
                 <pu:NumberInput Grid.Column="3" Value="{Binding Pet.RaisePoint.Ill.Y, Mode=TwoWay}" />
               </Grid>
             </Grid>
@@ -828,14 +857,14 @@
           Margin="10"
           Click="Button_Yes_Click"
           Content="{ll:Str 确定}"
-          Style="{DynamicResource MyThemedButtonStyle}" />
+          Style="{StaticResource MyThemedButtonStyle}" />
         <Button
           x:Name="Button_Cancel"
           Grid.Column="1"
           Margin="10"
           Click="Button_Cancel_Click"
           Content="{ll:Str 取消}"
-          Style="{DynamicResource Button_Cancel}" />
+          Style="{StaticResource Button_Cancel}" />
       </Grid>
     </Grid>
     <ListBox Grid.Column="2" Template="{StaticResource ListBox_ShowLangs}" />

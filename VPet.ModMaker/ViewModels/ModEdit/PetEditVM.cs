@@ -218,6 +218,11 @@ public partial class PetEditVM : DialogViewModel
     /// </summary>
     [ReactiveProperty]
     public BitmapImage? Image { get; set; }
+
+    /// <summary>
+    /// 比例
+    /// </summary>
+    public static double LengthRatio { get; } = 0.5;
     #endregion
 
     /// <summary>

@@ -46,7 +46,7 @@
           x:Name="TextBox_Lang"
           Grid.Row="1"
           pu:TextBoxHelper.Watermark="{ll:Str 文化名称}"
-          Style="{DynamicResource StandardTextBoxStyle}"
+          Style="{StaticResource StandardTextBoxStyle}"
           Text="{Binding CultureName, UpdateSourceTrigger=PropertyChanged}" />
         <TextBlock Grid.Row="2">
           <Hyperlink Command="{Binding OpenCultureLinkCommand}">
@@ -65,7 +65,7 @@
           Click="Button_Yes_Click"
           Content="{ll:Str 确定}"
           IsDefault="True"
-          Style="{DynamicResource MyThemedButtonStyle}" />
+          Style="{StaticResource MyThemedButtonStyle}" />
         <Button
           x:Name="Button_Cancel"
           Grid.Column="1"
@@ -73,7 +73,7 @@
           Click="Button_Cancel_Click"
           Content="{ll:Str 取消}"
           IsCancel="True"
-          Style="{DynamicResource Button_Cancel}" />
+          Style="{StaticResource Button_Cancel}" />
       </Grid>
     </Grid>
     <Grid Grid.Column="1">
@@ -83,7 +83,7 @@
       </Grid.RowDefinitions>
       <!--<TextBox
         pu:TextBoxHelper.Watermark="{ll:Str 搜索}"
-        Style="{DynamicResource StandardTextBoxStyle}"
+        Style="{StaticResource StandardTextBoxStyle}"
         Text="{Binding Search, UpdateSourceTrigger=PropertyChanged}" />-->
       <Label Content="{ll:Str 本体的文化}" Style="{StaticResource ThemedLabelStyle}" />
       <ListBox

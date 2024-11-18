@@ -27,13 +27,13 @@
       </Grid.ColumnDefinitions>
       <TextBox
         pu:TextBoxHelper.Watermark="{ll:Str 搜索}"
-        Style="{DynamicResource StandardTextBoxStyle}"
+        Style="{StaticResource StandardTextBoxStyle}"
         Text="{Binding Search, UpdateSourceTrigger=PropertyChanged}" />
       <ComboBox
         Grid.Column="1"
         ItemsSource="{Binding SearchTargets}"
         SelectedItem="{Binding SearchTarget}"
-        Style="{DynamicResource StandardComboBoxStyle}" />
+        Style="{StaticResource StandardComboBoxStyle}" />
     </Grid>
     <DataGrid
       x:Name="DataGrid_Datas"

@@ -11,11 +11,9 @@
   Title="{ll:Str 编辑动画}"
   Width="1000"
   Height="600"
+  d:DataContext="{d:DesignInstance Type=vm:AnimeEditVM}"
   WindowStartupLocation="CenterScreen"
   mc:Ignorable="d">
-  <d:Window.DataContext>
-    <vm:AnimeEditWindowVM />
-  </d:Window.DataContext>
   <Window.Resources>
     <Style
       x:Key="ListBoxItem_Style"
@@ -55,11 +53,14 @@
         <Expander.Header>
           <Grid>
             <Grid.ColumnDefinitions>
-              <ColumnDefinition Width="Auto" />
+              <ColumnDefinition Width="Auto" MinWidth="50" />
               <ColumnDefinition Width="Auto" MinWidth="200" />
               <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
-            <TextBlock Margin="10,0,10,0">
+            <TextBlock
+              Margin="10,0,10,0"
+              VerticalAlignment="Center"
+              FontSize="14">
               <TextBlock.Text>
                 <MultiBinding Converter="{StaticResource StringFormatConverter}" ConverterParameter="{}({0})">
                   <Binding Path="Images.Count" />
@@ -68,14 +69,20 @@
             </TextBlock>
             <TextBox
               Grid.Column="1"
+              Height="NaN"
+              Margin="0"
+              VerticalAlignment="Center"
               pu:TextBoxHelper.Watermark="{ll:Str 动画ID(非必要)}"
+              FontSize="14"
+              Style="{StaticResource StandardTextBoxStyle}"
               Text="{Binding ID, UpdateSourceTrigger=PropertyChanged}" />
-            <!--  pu:TextBoxHelper.Watermark="{ll:Str 动画ID(非必要)}"  -->
             <ComboBox
               Grid.Column="2"
+              Height="NaN"
               Margin="10,0,0,0"
-              ItemsSource="{Binding DataContext.Anime.AnimatTypes, RelativeSource={RelativeSource AncestorType=Window, Mode=FindAncestor}}"
+              ItemsSource="{Binding DataContext.Anime.AnimatTypes, RelativeSource={RelativeSource AncestorType=Window, Mode=FindAncestor}, Converter={StaticResource EnumsToEnumInfosConverter}}"
               SelectedItem="{Binding AnimeType}"
+              Style="{StaticResource StandardComboBoxStyle}"
               Visibility="{Binding DataContext.HasMultiType, RelativeSource={RelativeSource AncestorType=Window, Mode=FindAncestor}, Converter={StaticResource FalseToCollapsedConverter}}" />
           </Grid>
         </Expander.Header>
@@ -177,17 +184,17 @@
         <Button
           Command="{Binding StopCommand}"
           Content="{ll:Str 停止}"
-          Style="{DynamicResource MyThemedButtonStyle}" />
+          Style="{StaticResource MyThemedButtonStyle}" />
         <Button
           Grid.Column="1"
-          Command="{Binding PlayCommand}"
+          Command="{Binding StartCommand}"
           Content="{ll:Str 播放}"
-          Style="{DynamicResource MyThemedButtonStyle}" />
+          Style="{StaticResource MyThemedButtonStyle}" />
         <ToggleButton
           Grid.Column="2"
           Content="{ll:Str 循环}"
           IsChecked="{Binding Loop}"
-          Style="{DynamicResource StndardToggleButtonStyle}" />
+          Style="{StaticResource StandardToggleButtonStyle}" />
       </Grid>
       <Grid Grid.Row="2">
         <Grid.ColumnDefinitions>
@@ -200,16 +207,24 @@
         </Grid.RowDefinitions>
         <!--<Label Content="{ll:Str 动画ID}" />
         <TextBox Grid.Column="1" />-->
-        <Label Content="{ll:Str 动画类型}" />
-        <TextBlock Grid.Column="1" Text="{Binding Anime.GraphType}" />
+        <Label Content="{ll:Str 动画类型}" Style="{StaticResource ThemedLabelStyle}" />
+        <TextBlock
+          Grid.Column="1"
+          Padding="5"
+          d:Text="Type"
+          FontSize="14"
+          Style="{StaticResource TextBlock_LeftCenter}"
+          Text="{Binding Anime.GraphType}" />
         <Label
           Grid.Row="1"
           Content="{ll:Str 动画名称}"
+          Style="{StaticResource ThemedLabelStyle}"
           Visibility="{Binding HasAnimeName, Converter={StaticResource FalseToCollapsedConverter}}" />
         <TextBox
           Grid.Row="1"
           Grid.Column="1"
           pu:TextBoxHelper.Watermark="{ll:Str 动画名称}"
+          Style="{StaticResource StandardTextBoxStyle}"
           Text="{Binding Anime.Name, UpdateSourceTrigger=PropertyChanged}"
           Visibility="{Binding HasAnimeName, Converter={StaticResource FalseToCollapsedConverter}}" />
       </Grid>
@@ -219,7 +234,15 @@
         <RowDefinition />
         <RowDefinition Height="Auto" />
       </Grid.RowDefinitions>
-      <TabControl SelectionChanged="TabControl_SelectionChanged">
+      <TabControl
+        pu:TabControlHelper.HeaderPanelCornerRadius="4"
+        pu:TabControlHelper.HeaderPanelShadowColor="Aqua"
+        pu:TabControlHelper.ItemsBackground="{StaticResource DARKPrimary}"
+        pu:TabControlHelper.ItemsHoverBackground="{StaticResource DARKPrimaryLight}"
+        pu:TabControlHelper.ItemsSelectedBackground="{StaticResource DARKPrimaryLighter}"
+        Background="White"
+        Foreground="{StaticResource DARKPrimaryText}"
+        SelectionChanged="TabControl_SelectionChanged">
         <TabItem d:Header="Happy (0)" Tag="Happy">
           <TabItem.Header>
             <MultiBinding Converter="{StaticResource StringFormatConverter}" ConverterParameter="{}{0} ({1})">
@@ -290,21 +313,21 @@
           Margin="10"
           Command="{Binding AddAnimeCommand}"
           Content="{ll:Str 添加动画}"
-          Style="{DynamicResource MyThemedButtonStyle}" />
+          Style="{StaticResource MyThemedButtonStyle}" />
         <Button
           x:Name="Button_Yes"
           Grid.Column="1"
           Margin="10"
           Click="Button_Yes_Click"
           Content="{ll:Str 确定}"
-          Style="{DynamicResource MyThemedButtonStyle}" />
+          Style="{StaticResource MyThemedButtonStyle}" />
         <Button
           x:Name="Button_Cancel"
           Grid.Column="2"
           Margin="10"
           Click="Button_Cancel_Click"
           Content="{ll:Str 取消}"
-          Style="{DynamicResource Button_Cancel}" />
+          Style="{StaticResource Button_Cancel}" />
       </Grid>
     </Grid>
   </Grid>

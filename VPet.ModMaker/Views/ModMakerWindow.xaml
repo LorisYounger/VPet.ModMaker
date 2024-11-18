@@ -14,7 +14,7 @@
   Height="500"
   d:DataContext="{d:DesignInstance Type=vm:ModMakerVM}"
   FontSize="16"
-  Style="{DynamicResource WindowXStyle}"
+  Style="{StaticResource WindowXStyle}"
   WindowStartupLocation="CenterScreen"
   mc:Ignorable="d">
   <Grid>
@@ -45,7 +45,7 @@
         <TextBox
           Margin="5,5,0,5"
           pu:TextBoxHelper.Watermark="{ll:Str 搜索}"
-          Style="{DynamicResource StandardTextBoxStyle}"
+          Style="{StaticResource StandardTextBoxStyle}"
           Text="{Binding Search}" />
         <Button
           x:Name="Button_ClearHistory"
@@ -163,13 +163,13 @@
           Margin="5"
           Command="{Binding CreateNewModCommand}"
           Content="{ll:Str 创建新的模组}"
-          Style="{DynamicResource MyThemedButtonStyle}" />
+          Style="{StaticResource MyThemedButtonStyle}" />
         <Button
           x:Name="Button_OpenFromFile"
           Margin="5"
           Command="{Binding LoadModFromFileCommand}"
           Content="{ll:Str 从文件夹中载入}"
-          Style="{DynamicResource MyThemedButtonStyle}" />
+          Style="{StaticResource MyThemedButtonStyle}" />
       </StackPanel>
     </Grid>
   </Grid>

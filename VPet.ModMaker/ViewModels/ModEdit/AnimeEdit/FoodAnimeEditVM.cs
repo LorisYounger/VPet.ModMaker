@@ -34,8 +34,9 @@ public partial class FoodAnimeEditVM : DialogViewModel
     private static IDialogService DialogService => Locator.Current.GetService<IDialogService>()!;
 
     /// <inheritdoc/>
-    public FoodAnimeEditVM()
+    public FoodAnimeEditVM(FoodAnimeTypeModel anime)
     {
+        Anime = anime;
         _frontPlayerTask = new(FrontPlay);
         _backPlayerTask = new(BackPlay);
         _foodPlayerTask = new(FoodPlay);
@@ -73,8 +74,7 @@ public partial class FoodAnimeEditVM : DialogViewModel
     /// <summary>
     /// 动画
     /// </summary>
-    [ReactiveProperty]
-    public required FoodAnimeTypeModel Anime { get; set; }
+    public FoodAnimeTypeModel Anime { get; set; }
 
     /// <summary>
     /// 当前顶层图像模型
@@ -127,13 +127,6 @@ public partial class FoodAnimeEditVM : DialogViewModel
     /// </summary>
     [ReactiveProperty]
     public bool Loop { get; set; }
-
-    ///// <summary>
-    ///// 含有多个状态
-    ///// </summary>
-    //[ReactiveProperty]
-    //[NotifyPropertyChangeFrom(nameof(Anime))]
-    //public bool HasMultiType => AnimeTypeModel.HasMultiTypeAnimes.Contains(Anime.GraphType);
 
     /// <summary>
     /// 正在播放
@@ -485,7 +478,7 @@ public partial class FoodAnimeEditVM : DialogViewModel
     /// 开始播放
     /// </summary>
     [ReactiveCommand]
-    private async Task Play()
+    private async Task Start()
     {
         if (CurrentAnimeModel is null)
         {

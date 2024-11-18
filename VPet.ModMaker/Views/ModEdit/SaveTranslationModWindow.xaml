@@ -55,7 +55,7 @@
         Margin="10"
         Command="{Binding SaveCommand}"
         Content="{ll:Str 保存}"
-        Style="{DynamicResource MyThemedButtonStyle}" />
+        Style="{StaticResource MyThemedButtonStyle}" />
     </Grid>
   </Grid>
 </pu:WindowX>

@@ -61,8 +61,8 @@
     <PackageReference Include="HKW.ReactiveUI" Version="0.1.2" />
   </ItemGroup>
 	<ItemGroup>
-		<PackageReference Include="VPet-Simulator.Core" Version="1.1.0.32" />
-		<PackageReference Include="VPet-Simulator.Windows.Interface" Version="1.1.0.32" />
+		<PackageReference Include="VPet-Simulator.Core" Version="1.1.0.40" />
+		<PackageReference Include="VPet-Simulator.Windows.Interface" Version="1.1.0.40" />
 		<PackageReference Include="LinePutScript" Version="1.11.8" />
 		<PackageReference Include="LinePutScript.Localization.WPF" Version="1.0.7" />
 		<PackageReference Include="Ookii.Dialogs.Wpf" Version="5.0.1" />
@@ -73,7 +73,7 @@
 	<ItemGroup>
     <PackageReference Include="ReactiveUI" Version="20.1.63" />
     <PackageReference Include="ReactiveUI.WPF" Version="20.1.63" />
-    <PackageReference Include="Fody" Version="6.8.2" PrivateAssets="all" />
+    <PackageReference Include="Fody" Version="6.9.0" PrivateAssets="all" />
     <PackageReference Include="HanumanInstitute.MvvmDialogs" Version="2.1.0" />
     <PackageReference Include="HanumanInstitute.MvvmDialogs.Wpf" Version="2.1.0" />
     <PackageReference Include="System.Data.DataSetExtensions" Version="4.5.0" />

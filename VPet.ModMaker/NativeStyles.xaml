@@ -7,7 +7,7 @@
     <pu:StyleDictionary Includes="All" />
     <ResourceDictionary Source="/VPet-Simulator.Windows.Interface;component/ResourceStyle.xaml" />
     <ResourceDictionary Source="Converters.xaml" />
-    <ResourceDictionary Source="Templates.xaml" />
     <ResourceDictionary Source="Styles.xaml" />
+    <ResourceDictionary Source="Templates.xaml" />
   </ResourceDictionary.MergedDictionaries>
 </ResourceDictionary>

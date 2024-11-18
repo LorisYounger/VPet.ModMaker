@@ -129,8 +129,6 @@ public partial class SelectTextModel : ViewModelBase
     /// <summary>
     /// 宠物状态
     /// </summary>
-    [SelectTextModelMapToSelectTextProperty(nameof(SelectText.Mode))]
-    [SelectTextModelMapFromSelectTextProperty(nameof(SelectText.Mode))]
     public ObservableEnum<ClickText.ModeType> Mode { get; set; } =
         new(
             ClickText.ModeType.Happy
@@ -262,6 +260,13 @@ internal class SelectTextModelMapToSelectTextConfig : MapperConfig<SelectTextMod
 {
     public SelectTextModelMapToSelectTextConfig()
     {
+        AddMap(
+            x => x.ChooseID,
+            (s, t) =>
+            {
+                t.Choose = s.ChooseID;
+            }
+        );
         AddMap(
             x => x.Tags,
             (s, t) =>

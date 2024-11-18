@@ -172,7 +172,7 @@ public partial class WorkModel : ViewModelBase
         nameof(LevelLimit),
         nameof(FinishBonus)
     )]
-    public bool IsOverLoad => ExtensionFunction.IsOverLoad(ToWork());
+    public bool IsOverLoad => ExtensionFunction.IsOverLoad(this.MapToWork(_work));
 
     ///// <summary>
     ///// 图片
@@ -194,6 +194,11 @@ public partial class WorkModel : ViewModelBase
     [ReactiveProperty]
     public SolidColorBrush BorderBrush { get; set; } =
         new((Color)ColorConverter.ConvertFromString("#FF0290D5"));
+
+    partial void OnBorderBrushChanged(SolidColorBrush oldValue, SolidColorBrush newValue)
+    {
+        return;
+    }
 
     /// <summary>
     /// 背景色
@@ -253,20 +258,11 @@ public partial class WorkModel : ViewModelBase
         this.MapFromWork(_work);
     }
 
-    /// <summary>
-    /// 转化为工作
-    /// </summary>
-    /// <returns></returns>
-    public GraphHelper.Work ToWork()
-    {
-        return this.MapToWork(_work);
-    }
-
     /// <inheritdoc/>
     public void Close()
     {
-        I18nObject.Close();
         I18nResource.I18nObjects.Remove(I18nObject);
+        I18nObject.Close();
     }
 }
 
@@ -278,35 +274,35 @@ internal class WorkModelMapFromWorkModelConfig : MapperConfig<WorkModel, WorkMod
             x => x.BorderBrush,
             (s, t) =>
             {
-                t.BorderBrush = s.BorderBrush.CloneCurrentValue();
+                s.BorderBrush = t.BorderBrush.CloneCurrentValue();
             }
         );
         AddMap(
             x => x.Background,
             (s, t) =>
             {
-                t.Background = s.Background.CloneCurrentValue();
+                s.Background = t.Background.CloneCurrentValue();
             }
         );
         AddMap(
             x => x.Foreground,
             (s, t) =>
             {
-                t.Foreground = s.Foreground.CloneCurrentValue();
+                s.Foreground = t.Foreground.CloneCurrentValue();
             }
         );
         AddMap(
             x => x.ButtonBackground,
             (s, t) =>
             {
-                t.ButtonBackground = s.ButtonBackground.CloneCurrentValue();
+                s.ButtonBackground = t.ButtonBackground.CloneCurrentValue();
             }
         );
         AddMap(
             x => x.ButtonForeground,
             (s, t) =>
             {
-                t.ButtonForeground = s.ButtonForeground.CloneCurrentValue();
+                s.ButtonForeground = t.ButtonForeground.CloneCurrentValue();
             }
         );
     }

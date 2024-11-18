@@ -166,6 +166,10 @@ public partial class ModEditWindow : WindowX, IPageLocator
                     x => (UserControl)((ModEditWindow)x).ContentControl_Pet.Content
                 ),
                 KeyValuePair.Create<Type, Func<Window, UserControl?>>(
+                    typeof(MovePage),
+                    x => (UserControl)((ModEditWindow)x).ContentControl_Move.Content
+                ),
+                KeyValuePair.Create<Type, Func<Window, UserControl?>>(
                     typeof(WorkPage),
                     x => (UserControl)((ModEditWindow)x).ContentControl_Work.Content
                 ),
@@ -341,7 +345,8 @@ public partial class ModEditWindow : WindowX, IPageLocator
 
     private void InitializeAnime()
     {
-        AnimeVM ??= new() { ModInfo = ViewModel.ModInfo };
+        AnimeVM ??= new();
+        AnimeVM.ModInfo = ViewModel.ModInfo;
         AnimePage ??= new() { DataContext = AnimeVM };
         ContentControl_Anime.Content ??= AnimePage;
     }
