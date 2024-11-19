@@ -37,10 +37,10 @@ public partial class I18nEditVM : DialogViewModel
         ModInfo.I18nResource.CultureDatas.DictionaryChanged += CultureDatas_DictionaryChanged;
 
         I18nDatas = new([], [], DataFilter);
-        foreach (var data in ModInfo.I18nResource.CultureDatas.Values)
+        foreach (var pair in ModInfo.I18nResource.CultureDatas)
         {
-            I18nDatas.Add(data);
-            data.DictionaryChanged += Data_DictionaryChanged;
+            I18nDatas.Add(pair.Value);
+            pair.Value.DictionaryChanged += Data_DictionaryChanged;
         }
         foreach (var culture in ModInfo.I18nResource.Cultures)
         {

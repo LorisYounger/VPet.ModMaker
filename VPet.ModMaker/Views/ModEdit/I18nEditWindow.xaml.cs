@@ -8,6 +8,7 @@ using System.Windows.Controls;
 using System.Windows.Data;
 using HKW.HKWUtils.Extensions;
 using HKW.HKWUtils.Observable;
+using HKW.WPF.Extensions;
 using Panuon.WPF.UI;
 using VPet.ModMaker.Models;
 using VPet.ModMaker.ViewModels.ModEdit;
@@ -19,12 +20,25 @@ namespace VPet.ModMaker.Views.ModEdit;
 /// </summary>
 public partial class I18nEditWindow : WindowX
 {
+    /// <summary>
+    /// 视图模型
+    /// </summary>
     public I18nEditVM ViewModel => (I18nEditVM)DataContext;
 
+    /// <inheritdoc/>
     public I18nEditWindow()
     {
         InitializeComponent();
+        DataContextChanged += I18nEditWindow_DataContextChanged;
+    }
 
+    private void I18nEditWindow_DataContextChanged(
+        object sender,
+        DependencyPropertyChangedEventArgs e
+    )
+    {
+        foreach (var culture in ViewModel.ModInfo.I18nResource.Cultures)
+            AddCulture(culture.Name);
         ViewModel.CultureChanged += ViewModel_CultureChanged;
     }
 
@@ -49,7 +63,7 @@ public partial class I18nEditWindow : WindowX
     /// <summary>
     /// 添加文化列
     /// </summary>
-    /// <param name="cultureName"></param>
+    /// <param name="cultureName">文化名称</param>
     public void AddCulture(string cultureName)
     {
         var dataPath = string.Format(ValueBindingFormat, cultureName);
@@ -62,7 +76,7 @@ public partial class I18nEditWindow : WindowX
     /// <summary>
     /// 删除文化列
     /// </summary>
-    /// <param name="cultureName"></param>
+    /// <param name="cultureName">文化名称</param>
     public void RemoveCulture(string cultureName)
     {
         DataGrid_Datas.Columns.Remove(_dataGridI18nColumns[cultureName]);
@@ -78,8 +92,8 @@ public partial class I18nEditWindow : WindowX
     /// <summary>
     /// 替换文化列
     /// </summary>
-    /// <param name="oldCultureName"></param>
-    /// <param name="newCultureName"></param>
+    /// <param name="oldCultureName">旧文化</param>
+    /// <param name="newCultureName">新文化</param>
     public void ReplaceCulture(string oldCultureName, string newCultureName)
     {
         var column = _dataGridI18nColumns[oldCultureName];
@@ -88,7 +102,7 @@ public partial class I18nEditWindow : WindowX
         _dataGridI18nColumns.Add(newCultureName, column);
     }
 
-    public static DataGridTextColumn CreateColumn(string header, string dataPath)
+    private static DataGridTextColumn CreateColumn(string header, string dataPath)
     {
         return new DataGridTextColumn()
         {

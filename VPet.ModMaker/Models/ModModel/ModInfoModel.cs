@@ -559,6 +559,12 @@ public partial class ModInfoModel : ViewModelBase
             }
             I18nResource.AddCulture(culture);
             I18nResource.SetCultureDatas(culture, cultureDatas.Value);
+            this.Log()
+                .Info(
+                    "已载入本地化数据, 文化: {cultrue}, 数据数量: {count}",
+                    cultureDatas.Key,
+                    cultureDatas.Value.Count
+                );
         }
         if (I18nResource.SetCurrentCulture(CultureInfo.CurrentCulture) is false)
             I18nResource.SetCurrentCulture(I18nResource.Cultures.First());

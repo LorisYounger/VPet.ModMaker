@@ -11,7 +11,7 @@
   Title="{ll:Str 多语言编辑器}"
   Width="800"
   Height="450"
-  d:DataContext="{d:DesignInstance Type=vm:I18nEditWindowVM}"
+  d:DataContext="{d:DesignInstance Type=vm:I18nEditVM}"
   WindowStartupLocation="CenterScreen"
   mc:Ignorable="d">
   <Window.Resources />

@@ -22,10 +22,14 @@ using VPet.ModMaker.Models;
 
 namespace VPet.ModMaker.ViewModels.ModEdit;
 
+/// <summary>
+/// 保持为翻译模组视图模型
+/// </summary>
 public partial class SaveTranslationModVM : DialogViewModel
 {
     private static IDialogService DialogService => Locator.Current.GetService<IDialogService>()!;
 
+    /// <inheritdoc/>
     public SaveTranslationModVM(ModInfoModel modInfo)
     {
         ModInfo = modInfo;
@@ -34,6 +38,9 @@ public partial class SaveTranslationModVM : DialogViewModel
 
     #region Property
 
+    /// <summary>
+    /// 文化选择组
+    /// </summary>
     public ObservableSelectionGroup<CultureInfo> CheckCultures { get; }
     #endregion
 
@@ -48,21 +55,16 @@ public partial class SaveTranslationModVM : DialogViewModel
     [ReactiveCommand]
     private void Save()
     {
-        var saveFileDialog = DialogService.ShowSaveFileDialog(
+        var saveFileDialog = DialogService.ShowOpenFolderDialog(
             this,
-            new()
-            {
-                Title = "保存模组信息文件,并在文件夹内保存模组数据".Translate(),
-                Filters = [new("LPS文件".Translate(), "lps")],
-                SuggestedFileName = "info.lps".Translate()
-            }
+            new() { Title = "保存模组至文件夹".Translate() }
         );
         if (saveFileDialog is null)
             return;
         try
         {
             ModInfo.SaveToTranslationMod(
-                Path.GetDirectoryName(saveFileDialog.Name)!,
+                saveFileDialog.LocalPath,
                 CheckCultures.Where(m => m.IsSelected).Select(m => m.Source)
             );
             this.Log().Info("保存成功");

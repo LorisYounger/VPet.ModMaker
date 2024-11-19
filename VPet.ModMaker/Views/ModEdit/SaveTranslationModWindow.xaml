@@ -11,7 +11,7 @@
   Title="{ll:Str 保存为翻译模组}"
   Width="500"
   Height="300"
-  d:DataContext="{d:DesignInstance Type=vm:SaveTranslationModWindowVM}"
+  d:DataContext="{d:DesignInstance Type=vm:SaveTranslationModVM}"
   WindowStartupLocation="CenterScreen"
   mc:Ignorable="d">
   <Grid>
@@ -20,11 +20,19 @@
       <RowDefinition />
       <RowDefinition Height="Auto" />
     </Grid.RowDefinitions>
-    <Label HorizontalContentAlignment="Center" Content="{ll:Str 选择文化}" />
+    <Label
+      HorizontalContentAlignment="Center"
+      Content="{ll:Str 选择文化}"
+      Style="{StaticResource ThemedLabelStyle}" />
     <ListBox
       Grid.Row="1"
       d:ItemsSource="{d:SampleData ItemCount=5}"
       ItemsSource="{Binding CheckCultures}">
+      <ListBox.ItemContainerStyle>
+        <Style BasedOn="{StaticResource {x:Type ListBoxItem}}" TargetType="{x:Type ListBoxItem}">
+          <Setter Property="Focusable" Value="False" />
+        </Style>
+      </ListBox.ItemContainerStyle>
       <ListBox.ItemsPanel>
         <ItemsPanelTemplate>
           <WrapPanel />
@@ -35,8 +43,8 @@
           <CheckBox
             d:Content="zh-CN"
             d:IsChecked="True"
-            Content="{Binding Culture}"
-            IsChecked="{Binding IsChecked}" />
+            Content="{Binding Source}"
+            IsChecked="{Binding IsSelected}" />
         </DataTemplate>
       </ListBox.ItemTemplate>
     </ListBox>
@@ -48,7 +56,7 @@
       <CheckBox
         Margin="5,0,5,0"
         Content="{ll:Str 全选}"
-        IsChecked="{Binding CheckAll}"
+        IsChecked="{Binding CheckCultures.Leader.Value}"
         IsThreeState="True" />
       <Button
         Grid.Column="1"

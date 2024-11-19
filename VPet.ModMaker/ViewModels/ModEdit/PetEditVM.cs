@@ -290,7 +290,7 @@ public partial class PetEditVM : DialogViewModel
             );
             return;
         }
-        Image?.CloseStream();
+        Image?.CloseStreamWhenNoReference();
         Image = newImage;
     }
 
@@ -398,6 +398,7 @@ public partial class PetEditVM : DialogViewModel
         OldPet = null!;
         DialogResult = false;
         Image?.CloseStreamWhenNoReference();
+        Image = null;
         ModInfo.TempI18nResource.ClearCultureData();
     }
 }

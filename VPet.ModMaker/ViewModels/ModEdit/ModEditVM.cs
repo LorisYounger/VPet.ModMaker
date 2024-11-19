@@ -124,12 +124,29 @@ public partial class ModEditVM : ViewModelBase
     }
 
     /// <summary>
+    /// 可以进行I18n编辑
+    /// </summary>
+    [ReactiveProperty]
+    public bool I18nEditCanExecute { get; set; } = true;
+
+    /// <summary>
     /// 编辑I18n数据
     /// </summary>
-    [ReactiveCommand]
-    private async void EditI18n()
+    [ReactiveCommand(nameof(I18nEditCanExecute))]
+    private void EditI18n()
     {
-        await DialogService.ShowDialogAsync<I18nEditVM>(this, new I18nEditVM(ModInfo));
+        var vm = new I18nEditVM(ModInfo);
+        DialogService.Show<I18nEditVM>(null, vm);
+        vm.Closing += I18nEdit_Closing;
+        I18nEditCanExecute = false;
+    }
+
+    private void I18nEdit_Closing(object? sender, CancelEventArgs e)
+    {
+        if (sender is not I18nEditVM vm)
+            return;
+        vm.Closing -= I18nEdit_Closing;
+        I18nEditCanExecute = true;
     }
 
     /// <summary>
