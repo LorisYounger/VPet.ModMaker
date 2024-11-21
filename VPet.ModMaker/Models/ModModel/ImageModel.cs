@@ -60,7 +60,7 @@ public partial class ImageModel : ViewModelBase, ICloneable<ImageModel>
     /// </summary>
     public void LoadImage()
     {
-        Image = HKWImageUtils.LoadImageToMemory(ImageFile, this)!;
+        Image = HKWImageUtils.LoadImageToMemory(ImageFile)!;
     }
 
     /// <summary>
@@ -69,10 +69,7 @@ public partial class ImageModel : ViewModelBase, ICloneable<ImageModel>
     /// <returns></returns>
     public ImageModel Clone()
     {
-        var model = new ImageModel(
-            Image ??= HKWImageUtils.LoadImageToMemory(ImageFile, this)!,
-            Duration
-        );
+        var model = new ImageModel(Image ??= HKWImageUtils.LoadImageToMemory(ImageFile)!, Duration);
         return model;
     }
 

@@ -9,9 +9,11 @@
   xmlns:pu="https://opensource.panuon.com/wpf-ui"
   xmlns:vm="clr-namespace:VPet.ModMaker.ViewModels.ModEdit"
   Title="{ll:Str 多语言编辑器}"
-  Width="800"
-  Height="450"
+  Width="1280"
+  Height="720"
   d:DataContext="{d:DesignInstance Type=vm:I18nEditVM}"
+  d:Height="500"
+  d:Width="800"
   WindowStartupLocation="CenterScreen"
   mc:Ignorable="d">
   <Window.Resources />

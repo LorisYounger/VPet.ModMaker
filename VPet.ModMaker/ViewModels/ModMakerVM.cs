@@ -18,6 +18,7 @@ using HKW.HKWUtils.Collections;
 using HKW.HKWUtils.Extensions;
 using HKW.HKWUtils.Observable;
 using HKW.WPF;
+using HKW.WPF.Extensions;
 using HKW.WPF.MVVMDialogs;
 using LinePutScript;
 using LinePutScript.Converter;
@@ -45,6 +46,10 @@ public partial class ModMakerVM : ViewModelBase
     {
         Initialize();
         this.Log().Info("初始化完成".Translate());
+#if !RELEASE
+        HKWImageUtils.Logger = this.Log();
+        HKWImageUtils.LogStackFrame = true;
+#endif
         Histories = new([], [], f => f.ID.Contains(Search, StringComparison.OrdinalIgnoreCase));
         LoadHistory(NativeData.HistoryBaseFilePath);
 
@@ -60,11 +65,14 @@ public partial class ModMakerVM : ViewModelBase
         if (_isFirst is false)
             return;
         Splat.ModeDetector.OverrideModeDetector(Splat.ModeDetection.Mode.Run);
+
         Directory.CreateDirectory(NativeData.ModMakerBaseDirectory);
         var configPath = Path.Combine(NativeData.ModMakerBaseDirectory, "NLog.config");
         if (File.Exists(configPath) is false)
             NativeResources.SaveTo(NativeResources.NLogConfig, configPath);
+
         DependencyInjection.Initialize();
+
         EnumInfo.DefaultToString = x => $"{x.EnumType.Name}_{x.Value}".Translate();
         EnumInfo<FoodSearchTarget>.Initialize();
         EnumInfo<ClickTextSearchTarget>.Initialize();
@@ -73,6 +81,19 @@ public partial class ModMakerVM : ViewModelBase
         EnumInfo<PetSearchTarget>.Initialize();
         EnumInfo<WorkSearchTarget>.Initialize();
         EnumInfo<VPet_Simulator.Core.GraphInfo.AnimatType>.Initialize();
+        EnumInfo<VPet_Simulator.Core.GraphHelper.Work.WorkType>.Initialize();
+        EnumInfo<VPet_Simulator.Windows.Interface.ClickText.ModeType>.Initialize();
+        EnumInfo<VPet_Simulator.Core.GraphHelper.Move.ModeType>.Initialize();
+        EnumInfo<VPet_Simulator.Core.GraphHelper.Move.DirectionType>.Initialize();
+        EnumInfo<VPet_Simulator.Windows.Interface.LowText.LikeType>.Initialize();
+        EnumInfo<VPet_Simulator.Windows.Interface.LowText.ModeType>.Initialize();
+        EnumInfo<VPet_Simulator.Windows.Interface.LowText.StrengthType>.Initialize();
+        EnumInfo<VPet_Simulator.Windows.Interface.Food.FoodType>.Initialize();
+        EnumInfo<VPet_Simulator.Windows.Interface.ClickText.ModeType>.Initialize();
+        EnumInfo<VPet_Simulator.Windows.Interface.ICheckText.ModeType>.Initialize();
+        EnumInfo<VPet_Simulator.Windows.Interface.ClickText.DayTime>.Initialize();
+        EnumInfo<VPet_Simulator.Core.Main.WorkingState>.Initialize();
+
         _isFirst = false;
     }
 
@@ -119,10 +140,9 @@ public partial class ModMakerVM : ViewModelBase
     /// </summary>
     public void LoadHistory(string historyFile)
     {
-        this.Log().Info("开始载入历史");
         if (File.Exists(historyFile) is false)
         {
-            this.Log().Info("载入历史失败,历史文件 {file} 不存在", historyFile);
+            this.Log().Warn("载入历史失败,历史文件 {file} 不存在", historyFile);
             return;
         }
         var lps = new LPS(File.ReadAllText(historyFile));
@@ -132,12 +152,11 @@ public partial class ModMakerVM : ViewModelBase
             if (LPSConvert.DeserializeObject<ModMakeHistory>(line) is not ModMakeHistory history)
                 continue;
             history.ID ??= string.Empty;
-            var c = CultureInfo.CurrentCulture;
             set.Add(history);
             this.Log().Debug("添加历史 {history}", history.SourcePath);
         }
         Histories.AddRange(set.OrderByDescending(h => h.LastTime));
-        this.Log().Info("已成功载入历史 {count} 个", set.Count);
+        this.Log().Info("载入历史, 数量: {count}", set.Count);
     }
 
     /// <summary>
@@ -153,7 +172,7 @@ public partial class ModMakerVM : ViewModelBase
         foreach (var history in Histories)
             lps.Add(LPSConvert.SerializeObjectToLine<Line>(history, nameof(history)));
         File.WriteAllText(historyFile, lps.ToString());
-        this.Log().Info("已成功保存历史");
+        this.Log().Info("成功保存历史");
     }
 
     /// <summary>
@@ -171,7 +190,7 @@ public partial class ModMakerVM : ViewModelBase
             history.LastTime = DateTime.Now;
             Histories.Remove(history);
             Histories.Insert(0, history);
-            this.Log().Info("已存在相同的历史 {history}, 更新最后修改时间", modInfo.SourcePath);
+            this.Log().Info("存在相同的历史 {history}, 更新最后修改时间", modInfo.SourcePath);
         }
         else
         {
@@ -373,5 +392,10 @@ public partial class ModMakerVM : ViewModelBase
     /// <summary>
     /// 关闭
     /// </summary>
-    public void Close() { }
+    public void Close()
+    {
+        foreach (var history in Histories)
+            history.Image?.CloseStreamWhenNoReference();
+        Histories.Clear();
+    }
 }

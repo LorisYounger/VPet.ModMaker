@@ -249,7 +249,7 @@ public partial class PetEditVM : DialogViewModel
         );
         if (openFileDialog is null)
             return;
-        var newImage = HKWImageUtils.LoadImageToMemory(openFileDialog.LocalPath, this);
+        var newImage = HKWImageUtils.LoadImageToMemory(openFileDialog.LocalPath);
         if (newImage is null)
         {
             DialogService.ShowMessageBoxX(
@@ -279,7 +279,7 @@ public partial class PetEditVM : DialogViewModel
         );
         if (openFileDialog is null)
             return;
-        var newImage = HKWImageUtils.LoadImageToMemory(openFileDialog.LocalPath, this);
+        var newImage = HKWImageUtils.LoadImageToMemory(openFileDialog.LocalPath);
         if (newImage is null)
         {
             DialogService.ShowMessageBoxX(

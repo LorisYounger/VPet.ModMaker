@@ -82,6 +82,7 @@ public class ModMaker : MainPlugin
 
     private void Maker_Closed(object? sender, EventArgs e)
     {
+        Maker.ViewModel.Close();
         Maker = null!;
     }
 }

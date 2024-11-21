@@ -29,7 +29,7 @@ public static class NativeData
     /// 历史文件基准目录
     /// </summary>
     public static string HistoryBaseFilePath { get; } =
-        Path.Combine(BaseDirectory, HistoryFileName);
+        Path.Combine(ModMakerBaseDirectory, HistoryFileName);
 
     #endregion
 

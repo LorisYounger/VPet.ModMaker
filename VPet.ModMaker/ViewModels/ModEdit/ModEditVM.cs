@@ -173,7 +173,7 @@ public partial class ModEditVM : ViewModelBase
         );
         if (openFileDialog is null)
             return;
-        var newImage = HKWImageUtils.LoadImageToMemory(openFileDialog.LocalPath, this);
+        var newImage = HKWImageUtils.LoadImageToMemory(openFileDialog.LocalPath);
         if (newImage is null)
         {
             DialogService.ShowMessageBoxX(
@@ -184,7 +184,7 @@ public partial class ModEditVM : ViewModelBase
             );
             return;
         }
-        ModInfo.Image?.CloseStream();
+        ModInfo.Image?.CloseStreamWhenNoReference();
         ModInfo.Image = newImage;
     }
 

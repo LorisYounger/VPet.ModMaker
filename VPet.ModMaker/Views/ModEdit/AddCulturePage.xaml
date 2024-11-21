@@ -10,7 +10,7 @@
   xmlns:vm="clr-namespace:VPet.ModMaker.ViewModels.ModEdit"
   Title="{ll:Str 添加文化}"
   Width="500"
-  Height="400"
+  Height="300"
   d:DataContext="{d:DesignInstance Type=vm:AddCultureVM}"
   WindowStartupLocation="CenterScreen"
   mc:Ignorable="d">

@@ -54,7 +54,7 @@ public partial class FoodModel : ViewModelBase
             i18nResource.ReplaceCultureDataKey(food.Desc, DescriptionID, true);
         I18nResource = i18nResource;
         if (File.Exists(food.Image))
-            Image = HKWImageUtils.LoadImageToMemory(food.Image, this);
+            Image = HKWImageUtils.LoadImageToMemory(food.Image);
         else
             this.Log().Warn("获取食物图像失败, 目标路径: {path}", food.Image);
     }

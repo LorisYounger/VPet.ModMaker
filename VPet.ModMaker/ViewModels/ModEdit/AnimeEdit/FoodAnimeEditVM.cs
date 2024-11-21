@@ -169,7 +169,7 @@ public partial class FoodAnimeEditVM : DialogViewModel
             return;
         if (FoodImage != DefaultFoodImage)
             FoodImage?.CloseStream();
-        var image = HKWImageUtils.LoadImageToMemory(openFileDialog.LocalPath, this);
+        var image = HKWImageUtils.LoadImageToMemory(openFileDialog.LocalPath);
         if (image is null)
         {
             DialogService.ShowMessageBoxX(
@@ -291,7 +291,7 @@ public partial class FoodAnimeEditVM : DialogViewModel
         );
         if (openFileDialog is null)
             return;
-        var newImage = HKWImageUtils.LoadImageToMemory(openFileDialog.LocalPath, this);
+        var newImage = HKWImageUtils.LoadImageToMemory(openFileDialog.LocalPath);
         if (newImage is null)
         {
             DialogService.ShowMessageBoxX(
@@ -371,7 +371,7 @@ public partial class FoodAnimeEditVM : DialogViewModel
         );
         if (openFileDialog is null)
             return;
-        var newImage = HKWImageUtils.LoadImageToMemory(openFileDialog.LocalPath, this);
+        var newImage = HKWImageUtils.LoadImageToMemory(openFileDialog.LocalPath);
         if (newImage is null)
         {
             DialogService.ShowMessageBoxX(
@@ -399,7 +399,7 @@ public partial class FoodAnimeEditVM : DialogViewModel
         {
             if (File.Exists(path))
             {
-                var image = HKWImageUtils.LoadImageToMemory(path, this);
+                var image = HKWImageUtils.LoadImageToMemory(path);
                 if (image is null)
                     failCount++;
                 else
@@ -409,7 +409,7 @@ public partial class FoodAnimeEditVM : DialogViewModel
             {
                 foreach (var file in Directory.EnumerateFiles(path, "*.png"))
                 {
-                    var image = HKWImageUtils.LoadImageToMemory(file, this);
+                    var image = HKWImageUtils.LoadImageToMemory(file);
                     if (image is null)
                         failCount++;
                     else

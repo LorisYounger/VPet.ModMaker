@@ -10,9 +10,11 @@
   xmlns:pu="clr-namespace:Panuon.WPF.UI;assembly=Panuon.WPF.UI"
   xmlns:vm="clr-namespace:VPet.ModMaker.ViewModels"
   Title="{ll:Str Mod制作器}"
-  Width="700"
-  Height="500"
+  Width="1000"
+  Height="600"
   d:DataContext="{d:DesignInstance Type=vm:ModMakerVM}"
+  d:Height="500"
+  d:Width="800"
   FontSize="16"
   Style="{StaticResource WindowXStyle}"
   WindowStartupLocation="CenterScreen"
@@ -20,7 +22,7 @@
   <Grid>
     <Grid.ColumnDefinitions>
       <ColumnDefinition MinWidth="500" />
-      <ColumnDefinition Width="Auto" MinWidth="150" />
+      <ColumnDefinition Width="Auto" MinWidth="200" />
     </Grid.ColumnDefinitions>
     <Grid>
       <Grid.RowDefinitions>

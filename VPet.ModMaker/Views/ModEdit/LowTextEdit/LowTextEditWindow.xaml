@@ -9,9 +9,11 @@
   xmlns:pu="https://opensource.panuon.com/wpf-ui"
   xmlns:vm="clr-namespace:VPet.ModMaker.ViewModels.ModEdit"
   Title="{ll:Str 编辑低状态文本}"
-  Width="800"
-  Height="450"
+  Width="1280"
+  Height="720"
   d:DataContext="{d:DesignInstance Type=vm:LowTextEditVM}"
+  d:Height="500"
+  d:Width="800"
   WindowStartupLocation="CenterScreen"
   mc:Ignorable="d">
   <Window.Resources>
@@ -68,8 +70,8 @@
         <Label Content="{ll:Str 状态}" Style="{StaticResource ThemedLabelStyle}" />
         <ComboBox
           Grid.Column="1"
-          ItemsSource="{Binding LowText.ModeTypes}"
-          SelectedItem="{Binding LowText.Mode}"
+          ItemsSource="{Binding LowText.ModeTypes, Converter={StaticResource EnumsToEnumInfosConverter}}"
+          SelectedItem="{Binding LowText.Mode, Converter={StaticResource EnumToEnumInfoConverter}}"
           Style="{StaticResource StandardComboBoxStyle}" />
         <Label
           Grid.Row="1"
@@ -78,8 +80,8 @@
         <ComboBox
           Grid.Row="1"
           Grid.Column="1"
-          ItemsSource="{Binding LowText.StrengthTypes}"
-          SelectedItem="{Binding LowText.Strength}"
+          ItemsSource="{Binding LowText.StrengthTypes, Converter={StaticResource EnumsToEnumInfosConverter}}"
+          SelectedItem="{Binding LowText.Strength, Converter={StaticResource EnumToEnumInfoConverter}}"
           Style="{StaticResource StandardComboBoxStyle}" />
         <Label
           Grid.Row="2"
@@ -88,8 +90,8 @@
         <ComboBox
           Grid.Row="2"
           Grid.Column="1"
-          ItemsSource="{Binding LowText.LikeTypes}"
-          SelectedItem="{Binding LowText.Like}"
+          ItemsSource="{Binding LowText.LikeTypes, Converter={StaticResource EnumsToEnumInfosConverter}}"
+          SelectedItem="{Binding LowText.Like, Converter={StaticResource EnumToEnumInfoConverter}}"
           Style="{StaticResource StandardComboBoxStyle}" />
       </Grid>
       <Grid Grid.Row="1">

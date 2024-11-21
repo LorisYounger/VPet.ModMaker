@@ -91,7 +91,7 @@ public partial class ModInfoModel : ViewModelBase
         ItemID = loader.ItemID;
         AuthorID = loader.AuthorID;
         var imagePath = Path.Combine(loader.ModPath.FullName, "icon.png");
-        Image = HKWImageUtils.LoadImageToMemory(imagePath, this);
+        Image = HKWImageUtils.LoadImageToMemory(imagePath);
 
         LoadFoods(loader);
         LoadClickTexts(loader);
@@ -871,6 +871,5 @@ public partial class ModInfoModel : ViewModelBase
             food.Close();
         foreach (var pet in Pets.Where(x => x.FromMain is false))
             pet.Close();
-        var images = HKWImageUtils.ImageByInfo;
     }
 }

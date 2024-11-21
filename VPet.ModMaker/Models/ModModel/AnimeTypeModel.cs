@@ -90,19 +90,18 @@ public partial class AnimeTypeModel : ViewModelBase, IAnimeModel
     /// <summary>
     /// 动作类型
     /// </summary>
-    public static FrozenSet<GraphInfo.GraphType> GraphTypes { get; } =
-        Enum.GetValues<GraphInfo.GraphType>().ToFrozenSet();
+    public static FrozenSet<GraphInfo.GraphType> GraphTypes => EnumInfo<GraphInfo.GraphType>.Values;
 
     /// <summary>
     /// 动画类型
     /// </summary>
-    public static FrozenSet<GraphInfo.AnimatType> AnimatTypes { get; } =
-        Enum.GetValues<GraphInfo.AnimatType>().ToFrozenSet();
+    public static FrozenSet<GraphInfo.AnimatType> AnimatTypes =>
+        EnumInfo<GraphInfo.AnimatType>.Values;
 
     /// <summary>
     /// 模式类型
     /// </summary>
-    public static FrozenSet<ModeType> ModeTypes { get; } = Enum.GetValues<ModeType>().ToFrozenSet();
+    public static FrozenSet<ModeType> ModeTypes => EnumInfo<ModeType>.Values;
 
     /// <summary>
     /// 含有名称的动作列表

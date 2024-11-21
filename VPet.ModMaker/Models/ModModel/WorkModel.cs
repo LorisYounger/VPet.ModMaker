@@ -195,11 +195,6 @@ public partial class WorkModel : ViewModelBase
     public SolidColorBrush BorderBrush { get; set; } =
         new((Color)ColorConverter.ConvertFromString("#FF0290D5"));
 
-    partial void OnBorderBrushChanged(SolidColorBrush oldValue, SolidColorBrush newValue)
-    {
-        return;
-    }
-
     /// <summary>
     /// 背景色
     /// </summary>

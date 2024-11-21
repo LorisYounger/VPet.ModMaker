@@ -12,11 +12,11 @@
         <ColumnDefinition Width="Auto" />
         <ColumnDefinition Width="Auto" />
       </Grid.ColumnDefinitions>
-      <TextBlock Text="{Binding Value}" />
+      <TextBlock Text="{Binding Value, Converter={StaticResource EnumToEnumInfoConverter}}" />
       <ComboBox
         x:Name="ComboBox_TriggerType"
         Grid.Column="1"
-        ItemsSource="{Binding Tag, RelativeSource={RelativeSource AncestorType=Control}}"
+        ItemsSource="{Binding Tag, RelativeSource={RelativeSource AncestorType=Control}, Converter={StaticResource EnumsToEnumInfosConverter}}"
         SelectedIndex="0"
         Style="{StaticResource StandardComboBoxStyle}"
         ToolTip="{ll:Str 选择枚举}" />

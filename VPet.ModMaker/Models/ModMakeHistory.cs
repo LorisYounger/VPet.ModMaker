@@ -5,10 +5,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Media.Imaging;
+using HKW.HKWReactiveUI;
 using HKW.WPF;
 using HKW.WPF.Extensions;
 using LinePutScript.Converter;
 using Splat;
+using VPet.ModMaker.ViewModels;
 
 namespace VPet.ModMaker.Models;
 
@@ -46,14 +48,14 @@ public class ModMakeHistory : IEquatable<ModMakeHistory>, IEnableLogger
         set
         {
             if (string.IsNullOrWhiteSpace(_sourcePath) is false)
-                Image?.CloseStream();
+                Image?.CloseStreamWhenNoReference();
             _sourcePath = value;
             var imagePath = Path.Combine(_sourcePath, "icon.png");
 
             if (File.Exists(imagePath) is false)
                 this.Log().Warn("目标文件不存在, 路径: {path}", imagePath);
             else
-                Image = HKWImageUtils.LoadImageToMemory(imagePath, this);
+                Image = HKWImageUtils.LoadImageToMemory(imagePath);
         }
     }
 
@@ -65,9 +67,10 @@ public class ModMakeHistory : IEquatable<ModMakeHistory>, IEnableLogger
     /// <summary>
     /// 最后编辑时间
     /// </summary>
-    [Line(ignoreCase: true)]
+    [Line(ignoreCase: true, Converter = typeof(DateTimeConverter))]
     public DateTime LastTime { get; set; } = DateTime.Now;
 
+    #region IEquatable
     /// <inheritdoc/>
     public bool Equals(ModMakeHistory? other)
     {
@@ -84,5 +87,26 @@ public class ModMakeHistory : IEquatable<ModMakeHistory>, IEnableLogger
     public override int GetHashCode()
     {
         return SourcePath.GetHashCode();
+    }
+    #endregion
+}
+
+/// <summary>
+/// 日期时间转换器
+/// </summary>
+public class DateTimeConverter : LPSConvert.ConvertFunction
+{
+    /// <inheritdoc/>
+    public override string Convert(dynamic value)
+    {
+        return value.ToString("G");
+    }
+
+    /// <inheritdoc/>
+    public override dynamic ConvertBack(string info)
+    {
+        if (DateTime.TryParse(info, out var dt) is false)
+            dt = new DateTime(long.Parse(info));
+        return dt;
     }
 }

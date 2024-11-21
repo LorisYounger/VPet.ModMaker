@@ -95,7 +95,7 @@
           IsReadOnly="True"
           SortMemberPath="ToTags" />
         <DataGridTextColumn
-          Binding="{Binding Mode.Value}"
+          Binding="{Binding Mode.Value, Converter={StaticResource EnumToEnumInfoConverter}}"
           CanUserSort="True"
           ElementStyle="{StaticResource TextBlock_LeftCenter}"
           Header="{ll:Str 状态}"

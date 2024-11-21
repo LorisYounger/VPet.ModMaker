@@ -9,9 +9,11 @@
   xmlns:pu="https://opensource.panuon.com/wpf-ui"
   xmlns:vm="clr-namespace:VPet.ModMaker.ViewModels.ModEdit"
   Title="{ll:Str 编辑动画}"
-  Width="1000"
-  Height="600"
+  Width="1280"
+  Height="720"
   d:DataContext="{d:DesignInstance Type=vm:FoodAnimeEditVM}"
+  d:Height="500"
+  d:Width="800"
   WindowStartupLocation="CenterScreen"
   mc:Ignorable="d">
   <Window.Resources>
@@ -429,7 +431,7 @@
       <Grid>
         <Grid.ContextMenu>
           <ContextMenu>
-            <MenuItem Command="{Binding ReplaceFoodImageCommand}" Header="{ll:Str 替换测试食物图片}" />
+            <MenuItem Command="{Binding ChangeFoodImageCommand}" Header="{ll:Str 替换测试食物图片}" />
             <MenuItem Command="{Binding ResetFoodImageCommand}" Header="{ll:Str 重置测试食物图片}">
               <MenuItem.IsEnabled>
                 <MultiBinding Converter="{StaticResource NotEqualsConverter}">

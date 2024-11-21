@@ -9,9 +9,11 @@
   xmlns:pu="https://opensource.panuon.com/wpf-ui"
   xmlns:vm="clr-namespace:VPet.ModMaker.ViewModels.ModEdit"
   Title="{ll:Str 编辑工作}"
-  Width="800"
-  Height="450"
+  Width="1280"
+  Height="720"
   d:DataContext="{d:DesignInstance Type=vm:WorkEditVM}"
+  d:Height="500"
+  d:Width="800"
   WindowStartupLocation="CenterScreen"
   mc:Ignorable="d">
   <Window.Resources>
@@ -147,8 +149,8 @@
         <ComboBox
           Grid.Row="2"
           Grid.Column="1"
-          ItemsSource="{Binding Work.WorkTypes}"
-          SelectedItem="{Binding Work.WorkType}"
+          ItemsSource="{Binding Work.WorkTypes, Converter={StaticResource EnumsToEnumInfosConverter}}"
+          SelectedItem="{Binding Work.WorkType, Converter={StaticResource EnumToEnumInfoConverter}}"
           Style="{StaticResource StandardComboBoxStyle}" />
         <Label
           Grid.Row="3"
