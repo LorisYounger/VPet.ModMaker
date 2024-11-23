@@ -74,25 +74,6 @@ public partial class ModMakerVM : ViewModelBase
         DependencyInjection.Initialize();
 
         EnumInfo.DefaultToString = x => $"{x.EnumType.Name}_{x.Value}".Translate();
-        EnumInfo<FoodSearchTarget>.Initialize();
-        EnumInfo<ClickTextSearchTarget>.Initialize();
-        EnumInfo<LowTextSearchTarget>.Initialize();
-        EnumInfo<SelectTextSearchTarget>.Initialize();
-        EnumInfo<PetSearchTarget>.Initialize();
-        EnumInfo<WorkSearchTarget>.Initialize();
-        EnumInfo<VPet_Simulator.Core.GraphInfo.AnimatType>.Initialize();
-        EnumInfo<VPet_Simulator.Core.GraphHelper.Work.WorkType>.Initialize();
-        EnumInfo<VPet_Simulator.Windows.Interface.ClickText.ModeType>.Initialize();
-        EnumInfo<VPet_Simulator.Core.GraphHelper.Move.ModeType>.Initialize();
-        EnumInfo<VPet_Simulator.Core.GraphHelper.Move.DirectionType>.Initialize();
-        EnumInfo<VPet_Simulator.Windows.Interface.LowText.LikeType>.Initialize();
-        EnumInfo<VPet_Simulator.Windows.Interface.LowText.ModeType>.Initialize();
-        EnumInfo<VPet_Simulator.Windows.Interface.LowText.StrengthType>.Initialize();
-        EnumInfo<VPet_Simulator.Windows.Interface.Food.FoodType>.Initialize();
-        EnumInfo<VPet_Simulator.Windows.Interface.ClickText.ModeType>.Initialize();
-        EnumInfo<VPet_Simulator.Windows.Interface.ICheckText.ModeType>.Initialize();
-        EnumInfo<VPet_Simulator.Windows.Interface.ClickText.DayTime>.Initialize();
-        EnumInfo<VPet_Simulator.Core.Main.WorkingState>.Initialize();
 
         _isFirst = false;
     }
@@ -203,6 +184,35 @@ public partial class ModMakerVM : ViewModelBase
                 }
             );
             this.Log().Info("添加历史 {history}", modInfo.SourcePath);
+        }
+        SaveHistory(NativeData.HistoryBaseFilePath);
+    }
+
+    /// <summary>
+    /// 添加历史
+    /// </summary>
+    /// <param name="modPath">模组路径</param>
+    public void AddHistory(string modPath)
+    {
+        if (Histories.FirstOrDefault(h => h.SourcePath == modPath) is ModMakeHistory history)
+        {
+            history.ID = modPath;
+            history.LastTime = DateTime.Now;
+            Histories.Remove(history);
+            Histories.Insert(0, history);
+            this.Log().Info("存在相同的历史 {history}, 更新最后修改时间", modPath);
+        }
+        else
+        {
+            Histories.Add(
+                new()
+                {
+                    ID = modPath,
+                    SourcePath = modPath,
+                    LastTime = DateTime.Now,
+                }
+            );
+            this.Log().Info("添加历史 {history}", modPath);
         }
         SaveHistory(NativeData.HistoryBaseFilePath);
     }

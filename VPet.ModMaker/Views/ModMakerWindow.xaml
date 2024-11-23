@@ -53,7 +53,7 @@
           x:Name="Button_ClearHistory"
           Grid.Column="1"
           Margin="5"
-          AutomationProperties.AutomationId="Button_CreateNewMod"
+          AutomationProperties.AutomationId="Button_ClearHistory"
           Command="{Binding ClearHistoryCommand}"
           Content="{ll:Str 清空历史}"
           Style="{StaticResource MyThemedButtonStyle}" />
