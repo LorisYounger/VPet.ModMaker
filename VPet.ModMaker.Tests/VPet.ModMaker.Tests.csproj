@@ -39,4 +39,26 @@
     <Folder Include="ModEditTests\" />
   </ItemGroup>
 
+  <ItemGroup Condition="'$(Configuration)'=='Debug'">
+    <Reference Include="HKW.Utils">
+      <HintPath>..\..\HKW.Utils\HKW.Utils\bin\Debug\net8.0\HKW.Utils.dll</HintPath>
+    </Reference>
+    <Reference Include="HKW.WPF">
+      <HintPath>..\..\HKW.WPF\HKW.WPF\bin\Debug\net8.0-windows\HKW.WPF.dll</HintPath>
+    </Reference>
+    <Reference Include="HKW.AutoGUI">
+      <HintPath>..\..\HKW.AutoGUI\HKW.AutoGUI\bin\Debug\net8.0\HKW.AutoGUI.dll</HintPath>
+    </Reference>
+    <Reference Include="HKW.AutoGUI.Windows">
+      <HintPath>..\..\HKW.AutoGUI\HKW.AutoGUI.Windows\bin\Debug\net8.0-windows\HKW.AutoGUI.Windows.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
+  <ItemGroup Condition="'$(Configuration)'=='Release'">
+    <PackageReference Include="HKW.AutoGUI" Version="1.0.0" />
+    <PackageReference Include="HKW.AutoGUI.Windows" Version="1.0.0" />
+    <PackageReference Include="HKW.WPF" Version="1.0.6" />
+    <PackageReference Include="HKW.Utils" Version="1.2.21" />
+  </ItemGroup>
+
 </Project>

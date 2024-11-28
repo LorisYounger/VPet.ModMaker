@@ -54,7 +54,8 @@ public partial class ModEditVM : ViewModelBase
                 DialogService.ShowMessageBoxX(
                     this,
                     "未添加任何文化,请添加文化".Translate(),
-                    "缺少文化".Translate()
+                    "缺少文化".Translate(),
+                    icon: MessageBoxImage.Information
                 );
                 AddCulture();
                 if (ModInfo.I18nResource.Cultures.Count == 0)
@@ -62,7 +63,8 @@ public partial class ModEditVM : ViewModelBase
                     DialogService.ShowMessageBoxX(
                         this,
                         "未设置文化, 将退出编辑".Translate(),
-                        "数据错误".Translate()
+                        "数据错误".Translate(),
+                        icon: MessageBoxImage.Warning
                     );
                     MessageBus.Current.SendMessage<ModInfoModel?>(null);
                     return;

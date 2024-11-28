@@ -268,7 +268,7 @@ public partial class ModMakerVM : ViewModelBase
     /// 从文件载入模组
     /// </summary>
     [ReactiveCommand]
-    public void LoadModFromFile()
+    public void LoadModFromPath()
     {
         var openFileDialog = DialogService.ShowOpenFolderDialog(
             this,

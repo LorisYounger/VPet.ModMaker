@@ -62,6 +62,7 @@
         <Button
           x:Name="Button_Yes"
           Margin="10"
+          AutomationProperties.AutomationId="PART_YesButton"
           Click="Button_Yes_Click"
           Content="{ll:Str 确定}"
           IsDefault="True"
@@ -70,6 +71,7 @@
           x:Name="Button_Cancel"
           Grid.Column="1"
           Margin="10"
+          AutomationProperties.AutomationId="PART_CancelButton"
           Click="Button_Cancel_Click"
           Content="{ll:Str 取消}"
           IsCancel="True"

@@ -61,7 +61,7 @@ public partial class AddCultureVM : DialogViewModel
                 "数据错误".Translate(),
                 icon: MessageBoxImage.Warning
             );
-            return;
+            e.Cancel = true;
         }
         else if (CultureUtils.TryGetCultureInfo(CultureName, out var culture) is false)
         {
@@ -71,7 +71,7 @@ public partial class AddCultureVM : DialogViewModel
                 "数据错误".Translate(),
                 icon: MessageBoxImage.Warning
             );
-            return;
+            e.Cancel = true;
         }
         else if (ModInfo.I18nResource.Cultures.Contains(culture))
         {
@@ -81,7 +81,7 @@ public partial class AddCultureVM : DialogViewModel
                 "数据错误".Translate(),
                 icon: MessageBoxImage.Warning
             );
-            return;
+            e.Cancel = true;
         }
         DialogResult = e.Cancel is not true;
     }

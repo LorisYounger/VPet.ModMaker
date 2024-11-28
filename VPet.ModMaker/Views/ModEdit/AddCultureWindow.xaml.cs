@@ -30,8 +30,12 @@ namespace VPet.ModMaker.Views.ModEdit;
 /// </summary>
 public partial class AddCultureWindow : WindowX
 {
+    /// <summary>
+    /// 视图模型
+    /// </summary>
     public AddCultureVM ViewModel => (AddCultureVM)DataContext;
 
+    /// <inheritdoc/>
     public AddCultureWindow()
     {
         InitializeComponent();
