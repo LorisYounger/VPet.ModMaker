@@ -47,7 +47,10 @@ public partial class SelectTextModel : ViewModelBase
     {
         this.MapFromSelectText(text);
         if (text.Choose != ChooseID)
-            i18nResource.ReplaceCultureDataKey(text.Choose, ChooseID);
+        {
+            if (i18nResource.ReplaceCultureDataKey(text.Choose, ChooseID, true) is false)
+                i18nResource.SetCurrentCultureData(ChooseID, text.Choose);
+        }
         I18nResource = i18nResource;
     }
 
@@ -367,14 +370,14 @@ internal class SelectTextModelMapFromSelectTextConfig : MapperConfig<SelectTextM
             x => x.Tags,
             (s, t) =>
             {
-                s.Tags = string.Join(",", s.Tags);
+                s.Tags = string.Join(",", t.Tags);
             }
         );
         AddMap(
             x => x.ToTags,
             (s, t) =>
             {
-                s.ToTags = string.Join(",", s.ToTags);
+                s.ToTags = string.Join(",", t.ToTags);
             }
         );
         AddMap(

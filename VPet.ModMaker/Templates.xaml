@@ -12,7 +12,12 @@
         <ColumnDefinition Width="Auto" />
         <ColumnDefinition Width="Auto" />
       </Grid.ColumnDefinitions>
-      <TextBlock Text="{Binding Value, Converter={StaticResource EnumToEnumInfoConverter}}" />
+      <TextBlock
+        Margin="5"
+        FontSize="12"
+        Style="{StaticResource TextBlock_LeftCenter}"
+        Text="{Binding Value, Converter={StaticResource EnumToEnumInfoConverter}}"
+        ToolTip="{Binding Value, Converter={StaticResource EnumToEnumInfoConverter}}" />
       <ComboBox
         x:Name="ComboBox_TriggerType"
         Grid.Column="1"
@@ -25,7 +30,7 @@
         Width="20"
         Height="30"
         Padding="0,0,0,3"
-        Command="{Binding AddFlagCommand}"
+        Command="{Binding AddFlagInfoCommand}"
         CommandParameter="{Binding SelectedItem, ElementName=ComboBox_TriggerType}"
         Content="+"
         FontSize="20"
@@ -36,7 +41,7 @@
         Width="20"
         Height="30"
         Padding="0,0,0,3"
-        Command="{Binding RemoveFlagCommand}"
+        Command="{Binding RemoveFlagInfoCommand}"
         CommandParameter="{Binding SelectedItem, ElementName=ComboBox_TriggerType}"
         Content="-"
         FontSize="20"

@@ -51,7 +51,10 @@ public partial class FoodModel : ViewModelBase
     {
         this.MapFromFood(food);
         if (food.Desc != DescriptionID)
-            i18nResource.ReplaceCultureDataKey(food.Desc, DescriptionID, true);
+        {
+            if (i18nResource.ReplaceCultureDataKey(food.Desc, DescriptionID, true) is false)
+                i18nResource.SetCurrentCultureData(DescriptionID, food.Desc);
+        }
         I18nResource = i18nResource;
         if (File.Exists(food.Image))
             Image = HKWImageUtils.LoadImageToMemory(food.Image);

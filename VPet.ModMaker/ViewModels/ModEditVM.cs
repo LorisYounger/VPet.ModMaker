@@ -69,17 +69,6 @@ public partial class ModEditVM : ViewModelBase
                     MessageBus.Current.SendMessage<ModInfoModel?>(null);
                     return;
                 }
-                //if (
-                //    DialogService.ShowMessageBoxX(
-                //        this,
-                //        "需要将文化 {0} 设为主要文化吗?".Translate(ModInfo.I18nResource.Cultures.First().Name),
-                //        "设置主要文化".Translate(),
-                //        MessageBoxButton.YesNo
-                //    )
-                //    is not true
-                //)
-                //    return;
-                //SetMainCulture(ModInfo.I18nResource.Cultures.First().Name);
             }
             // 更新模组
             if (ModUpdataHelper.CanUpdata(ModInfo) is false)
@@ -210,15 +199,15 @@ public partial class ModEditVM : ViewModelBase
     /// </summary>
     /// <param name="oldCulture">旧文化</param>
     [ReactiveCommand]
-    private void EditCulture(string oldCulture)
+    private void EditCulture(CultureInfo oldCulture)
     {
         var vm = DialogService.ShowDialogX(
             this,
-            new AddCultureVM(ModInfo) { CultureName = oldCulture }
+            new AddCultureVM(ModInfo) { CultureName = oldCulture.Name }
         );
         if (vm.DialogResult is not true)
             return;
-        ModInfo.I18nResource.ReplaceCulture(oldCulture, vm.CultureName);
+        ModInfo.I18nResource.ReplaceCulture(oldCulture, new(vm.CultureName));
         this.Log().Info("重命名文化 {oldCulture} => {newCulture}", oldCulture, vm.CultureName);
     }
 
@@ -227,7 +216,7 @@ public partial class ModEditVM : ViewModelBase
     /// </summary>
     /// <param name="oldCulture">旧文化</param>
     [ReactiveCommand]
-    private void RemoveCulture(string oldCulture)
+    private void RemoveCulture(CultureInfo oldCulture)
     {
         if (
             DialogService.ShowMessageBoxX(
@@ -241,31 +230,6 @@ public partial class ModEditVM : ViewModelBase
             return;
         ModInfo.I18nResource.RemoveCulture(oldCulture);
         this.Log().Info("删除文化 {culture}", oldCulture);
-    }
-
-    /// <summary>
-    /// 设置主文化
-    /// </summary>
-    /// <param name="culture">文化名称</param>
-    [ReactiveCommand]
-    public void SetMainCulture(string culture)
-    {
-        //TODO: 可能已经不需要了?
-        //if (
-        //    DialogService.ShowMessageBoxX(
-        //        this,
-        //        "!!!注意!!!\n此操作会将所有ID设为当前文化的翻译内容,仅适用于初次设置多文化的模组\n确定要继续吗?".Translate(),
-        //        "设置主文化".Translate(),
-        //        MessageBoxButton.YesNo
-        //    )
-        //    is not true
-        //)
-        //    return;
-        //foreach (var datas in ModInfo.I18nResource.CultureDatas)
-        //{
-        //    ModInfo.I18nResource.SetCurrentCultureData(datas.Key, datas.Key);
-        //}
-        //this.Log().Info("设置主要文化为 {culture}", culture);
     }
     #endregion
 

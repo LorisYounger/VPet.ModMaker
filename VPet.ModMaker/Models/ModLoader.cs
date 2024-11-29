@@ -99,11 +99,6 @@ public class ModLoader
     /// <summary>
     /// I18n资源
     /// </summary>
-    //public Dictionary<string, I18nModInfoModel> I18nDatas { get; } = new();
-
-    /// <summary>
-    /// I18n资源
-    /// </summary>
     public Dictionary<string, Dictionary<string, string>> I18nDatas { get; } = [];
 
     public ModLoader(DirectoryInfo path)
@@ -130,7 +125,7 @@ public class ModLoader
         foreach (var line in modlps.FindAllLine("lang"))
         {
             if (I18nDatas.TryGetValue(line.Info, out var datas) is false)
-                datas = I18nDatas[line.Info] = new();
+                datas = I18nDatas[line.Info] = [];
             foreach (var sub in line)
             {
                 if (sub.Name == Name)
@@ -150,19 +145,13 @@ public class ModLoader
                     foreach (FileInfo fi in di.EnumerateFiles("*.lps"))
                     {
                         var lps = new LpsDocument(File.ReadAllText(fi.FullName));
-                        if (lps.First().Name.ToLower() == "pet")
+                        if (lps.First().Name.Equals("pet", StringComparison.OrdinalIgnoreCase))
                         {
                             var name = lps.First().Info;
                             var pet = new PetLoader(lps, di);
                             if (pet.Name is null)
                                 break;
                             Pets.Add(pet);
-
-                            // ! : 此方法会导致 LoadImageToStream 无法使用
-                            //var graphCore = new GraphCore(0);
-                            //foreach (var p in pet.path)
-                            //    PetLoader.LoadGraph(graphCore, di, p);
-                            //MultiGraphs.Add(pet.Name, graphCore);
                         }
                     }
                     break;

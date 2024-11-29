@@ -70,6 +70,15 @@ public partial class WorkModel : ViewModelBase
     [ReactiveProperty]
     public required I18nResource<string, string> I18nResource { get; set; }
 
+    partial void OnI18nResourceChanged(
+        I18nResource<string, string> oldValue,
+        I18nResource<string, string> newValue
+    )
+    {
+        oldValue?.I18nObjects.Remove(I18nObject);
+        newValue?.I18nObjects.Add(I18nObject);
+    }
+
     /// <summary>
     /// I18n对象
     /// </summary>

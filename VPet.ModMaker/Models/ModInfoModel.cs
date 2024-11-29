@@ -42,23 +42,30 @@ public partial class ModInfoModel : ViewModelBase
     /// <inheritdoc/>
     public ModInfoModel()
     {
-        Pets = new([], [], m => m.FromMain is false || ShowMainPet && m.FromMain);
+        Pets = new([], [], m => m.FromMain is false || ShowMainPet);
         Pets.BaseList.WhenPropertyChanged(x => x.Count)
             .Subscribe(x => RaisePetDisplayedCountChange());
 
-        this.WhenValueChanged(x => x.ShowMainPet)
+        this.WhenValueChanged(x => x.ShowMainPet, false)
             .Throttle(TimeSpan.FromSeconds(0.5), RxApp.TaskpoolScheduler)
             .DistinctUntilChanged()
             .ObserveOn(RxApp.MainThreadScheduler)
             .Subscribe(_ =>
             {
+                var oldPet = CurrentPet;
                 Pets.Refresh();
-                if (CurrentPet is null || (CurrentPet.FromMain && ShowMainPet is false))
-                    CurrentPet = Pets.FilteredList.FirstOrDefault();
+                if (CurrentPet is null)
+                {
+                    if (oldPet.FromMain is false)
+                        CurrentPet = oldPet;
+                    else
+                        CurrentPet = Pets.FilteredList.FirstOrDefault();
+                }
             });
 
         I18nResource.PropertyChanged += I18nResource_PropertyChanged;
         I18nResource.Cultures.SetChanged += Cultures_SetChanged;
+        I18nResource.CultureDatas.DictionaryChanged += CultureDatas_DictionaryChanged;
         foreach (var pet in NativeData.MainPets)
         {
             // 确保ID不重复
@@ -72,18 +79,39 @@ public partial class ModInfoModel : ViewModelBase
         }
     }
 
+    private void CultureDatas_DictionaryChanged(
+        IObservableDictionary<string, ObservableCultureDataDictionary<string, string>> sender,
+        NotifyDictionaryChangeEventArgs<string, ObservableCultureDataDictionary<string, string>> e
+    )
+    {
+        if (e.Action is DictionaryChangeAction.Add)
+        {
+            if (e.TryGetNewPair(out var pair) && I18nResource.CurrentCulture is not null)
+            {
+                var value = I18nResource.GetCurrentCultureDataOrDefault(pair.Key);
+                if (string.IsNullOrWhiteSpace(value) is false)
+                    return;
+                I18nResource.SetCurrentCultureData(pair.Key, pair.Key);
+            }
+        }
+    }
+
     /// <inheritdoc/>
     /// <param name="loader">模组载入器</param>
     public ModInfoModel(ModLoader loader)
         : this()
     {
         this.Log().Info("载入模组, ID: {id}, 路径: {path}", loader.Name, loader.ModPath.FullName);
+        SourcePath = loader.ModPath.FullName;
+
         LoadI18nDatas(loader);
 
-        SourcePath = loader.ModPath.FullName;
         ID = loader.Name;
         if (loader.Intro != DescriptionID)
-            I18nResource.ReplaceCultureDataKey(loader.Intro, DescriptionID, true);
+        {
+            if (I18nResource.ReplaceCultureDataKey(loader.Intro, DescriptionID, true) is false)
+                I18nResource.SetCurrentCultureData(DescriptionID, loader.Intro);
+        }
 
         Author = loader.Author;
         GameVersion = loader.GameVer;
@@ -100,7 +128,8 @@ public partial class ModInfoModel : ViewModelBase
         LoadPets(loader);
 
         I18nResource.FillDefaultValue();
-        CurrentPet = Pets.FirstOrDefault()!;
+        I18nResource.RemoveAllUnreferencedKey();
+        CurrentPet = Pets.FilteredList.FirstOrDefault()!;
     }
 
     private void LoadPets(ModLoader loader)
@@ -541,6 +570,7 @@ public partial class ModInfoModel : ViewModelBase
         if (modLoader.I18nDatas.Count == 0)
         {
             I18nResource.AddCulture(CultureInfo.CurrentCulture);
+            I18nResource.CurrentCulture = CultureInfo.CurrentCulture;
             this.Log().Info("模组未包含本地化数据");
             return;
         }
@@ -554,7 +584,7 @@ public partial class ModInfoModel : ViewModelBase
             }
             catch (Exception ex)
             {
-                this.Log().Warn($"载入文化 {cultureDatas.Key} 错误, 请检查文化名称", ex);
+                this.Log().Warn(ex, $"载入文化 {cultureDatas.Key} 错误, 请检查文化名称");
                 continue;
             }
             I18nResource.AddCulture(culture);

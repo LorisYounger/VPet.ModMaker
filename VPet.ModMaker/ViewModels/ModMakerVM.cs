@@ -72,8 +72,13 @@ public partial class ModMakerVM : ViewModelBase
             NativeResources.SaveTo(NativeResources.NLogConfig, configPath);
 
         DependencyInjection.Initialize();
-
-        EnumInfo.DefaultToString = x => $"{x.EnumType.Name}_{x.Value}".Translate();
+        EnumInfo.DefaultToString = x =>
+            x.IsFlagable
+                ? string.Join(
+                    ", ",
+                    x.GetFlagInfos().Select(static i => $"{i.EnumType.Name}_{i.Value}".Translate())
+                )
+                : $"{x.EnumType.Name}_{x.Value}".Translate();
 
         _isFirst = false;
     }
@@ -346,7 +351,7 @@ public partial class ModMakerVM : ViewModelBase
     /// </summary>
     /// <param name="history"></param>
     [ReactiveCommand]
-    public void OpenModDirectory(ModMakeHistory history)
+    public void OpenModPath(ModMakeHistory history)
     {
         if (Directory.Exists(history.SourcePath) is false)
         {
@@ -366,6 +371,16 @@ public partial class ModMakerVM : ViewModelBase
         {
             NativeUtils.OpenLink(history.SourcePath);
         }
+    }
+
+    /// <summary>
+    /// 打开模组文件夹
+    /// </summary>
+    /// <param name="history"></param>
+    [ReactiveCommand]
+    public void OpenModMakerPath(ModMakeHistory history)
+    {
+        NativeUtils.OpenLink(NativeData.ModMakerBaseDirectory);
     }
     #endregion
 

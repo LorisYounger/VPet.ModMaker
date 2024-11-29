@@ -120,6 +120,11 @@
                 ScrollViewer.VerticalScrollBarVisibility="Hidden"
                 SelectedItem="{Binding DataContext.CurrentFrontImageModel, RelativeSource={RelativeSource AncestorType=Window, Mode=FindAncestor}}"
                 SelectionChanged="ListBox_SelectionChanged">
+                <ListBox.ItemContainerStyle>
+                  <Style BasedOn="{StaticResource {x:Type ListBoxItem}}" TargetType="ListBoxItem">
+                    <Setter Property="Focusable" Value="False" />
+                  </Style>
+                </ListBox.ItemContainerStyle>
                 <ListBox.ItemsPanel>
                   <ItemsPanelTemplate>
                     <StackPanel Orientation="Horizontal" />

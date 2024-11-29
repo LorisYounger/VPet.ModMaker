@@ -221,7 +221,7 @@ public partial class SelectTextEditVM : DialogViewModel
     {
         OldSelectText = model;
         var newModel = new SelectTextModel(model) { I18nResource = ModInfo.TempI18nResource };
-        model.I18nResource.CopyDataTo(newModel.I18nResource, [model.ID], true);
+        model.I18nResource.CopyDataTo(newModel.I18nResource, [model.ID, model.ChooseID], true);
         SelectText = newModel;
         await DialogService.ShowDialogAsync(this, this);
         if (DialogResult is not true)

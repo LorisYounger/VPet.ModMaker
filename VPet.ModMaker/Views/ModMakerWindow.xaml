@@ -87,7 +87,7 @@
               <Grid.ContextMenu>
                 <ContextMenu>
                   <MenuItem
-                    Command="{Binding PlacementTarget.Tag.OpenModDirectoryCommand, RelativeSource={RelativeSource AncestorType=ContextMenu, Mode=FindAncestor}}"
+                    Command="{Binding PlacementTarget.Tag.OpenModPathCommand, RelativeSource={RelativeSource AncestorType=ContextMenu, Mode=FindAncestor}}"
                     CommandParameter="{Binding PlacementTarget.DataContext, RelativeSource={RelativeSource AncestorType=ContextMenu, Mode=FindAncestor}}"
                     Header="{ll:Str 打开所在文件夹}" />
                   <MenuItem
@@ -172,7 +172,13 @@
           x:Name="Button_LoadFromPath"
           Margin="5"
           Command="{Binding LoadModFromPathCommand}"
-          Content="{ll:Str 从文件夹中载入}"
+          Content="{ll:Str 从文件夹中载入模组}"
+          Style="{StaticResource MyThemedButtonStyle}" />
+        <Button
+          x:Name="Button_OpenModMakerPath"
+          Margin="5"
+          Command="{Binding OpenModMakerPathCommand}"
+          Content="{ll:Str 打开模组制作器路径}"
           Style="{StaticResource MyThemedButtonStyle}" />
       </StackPanel>
     </Grid>
