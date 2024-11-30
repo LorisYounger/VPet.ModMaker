@@ -130,8 +130,8 @@ public partial class FoodEditVM : DialogViewModel
         {
             Foods.BaseList.BindingList(oldValue.Foods, true);
         }
-        Foods.AutoFilter = false;
         Foods.Clear();
+        Foods.AutoFilter = false;
         if (newValue is not null)
         {
             newValue
@@ -270,7 +270,7 @@ public partial class FoodEditVM : DialogViewModel
             );
             return;
         }
-        Food.Image?.CloseStream();
+        Food.Image?.CloseStreamWhenNoReference();
         Food.Image = newImage;
     }
 

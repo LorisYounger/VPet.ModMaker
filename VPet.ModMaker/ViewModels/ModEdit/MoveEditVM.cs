@@ -81,6 +81,8 @@ public partial class MoveEditVM : DialogViewModel
                 .ObserveOn(RxApp.MainThreadScheduler)
                 .Subscribe(x => CurrentPet = x);
         }
+        if (newValue is null)
+            CurrentPet = null;
     }
 
     /// <summary>
@@ -104,8 +106,8 @@ public partial class MoveEditVM : DialogViewModel
         {
             Moves.BaseList.BindingList(oldValue.Moves, true);
         }
-        Moves.AutoFilter = false;
         Moves.Clear();
+        Moves.AutoFilter = false;
         if (newValue is not null)
         {
             newValue
@@ -151,7 +153,7 @@ public partial class MoveEditVM : DialogViewModel
     /// </summary>
     public void Close()
     {
-        Image?.CloseStream();
+        Image?.CloseStreamWhenNoReference();
     }
 
     /// <summary>
@@ -211,7 +213,7 @@ public partial class MoveEditVM : DialogViewModel
             );
             return;
         }
-        Image?.CloseStream();
+        Image?.CloseStreamWhenNoReference();
         Image = newImage;
     }
 

@@ -245,60 +245,6 @@
             </TabItem.Header>
             <ContentControl x:Name="ContentControl_Anime" />
           </TabItem>
-          <!--<TabItem Header="物品 (0)" Tag="{ll:Str 物品}">
-            <Grid>
-              <Grid.RowDefinitions>
-                <RowDefinition Height="Auto" />
-                <RowDefinition />
-              </Grid.RowDefinitions>
-              <TextBox x:Name="TextBox_SearchItem" />
-              <ListBox x:Name="ListBox_Item" />
-              <Button
-                x:Name="Button_AddItem"
-                Grid.Row="1"
-                HorizontalAlignment="Right"
-                VerticalAlignment="Bottom"
-                Click="Button_AddItem_Click"
-                Content="➕"
-                Style="{StaticResource AddButton}" />
-            </Grid>
-          </TabItem>-->
-          <!--<TabItem Header="动画 (0)">
-            <Grid>
-              <Grid.RowDefinitions>
-                <RowDefinition Height="Auto" />
-                <RowDefinition />
-              </Grid.RowDefinitions>
-              <TextBox x:Name="TextBox_SearchAnime" />
-              <ListBox x:Name="ListBox_Anime" />
-              <Button
-                x:Name="Button_AddAnime"
-                Grid.Row="1"
-                HorizontalAlignment="Right"
-                VerticalAlignment="Bottom"
-                Click="Button_AddAnime_Click"
-                Content="➕"
-                Style="{StaticResource AddButton}" />
-            </Grid>
-          </TabItem>
-          <TabItem Header="语音 (0)">
-            <Grid>
-              <Grid.RowDefinitions>
-                <RowDefinition Height="Auto" />
-                <RowDefinition />
-              </Grid.RowDefinitions>
-              <TextBox x:Name="TextBox_SearchAudio" />
-              <ListBox x:Name="ListBox_Audio" />
-              <Button
-                x:Name="Button_AddAudio"
-                Grid.Row="1"
-                HorizontalAlignment="Right"
-                VerticalAlignment="Bottom"
-                Click="Button_AddAudio_Click"
-                Content="➕"
-                Style="{StaticResource AddButton}" />
-            </Grid>
-          </TabItem>-->
         </TabControl>
       </Grid>
     </Grid>

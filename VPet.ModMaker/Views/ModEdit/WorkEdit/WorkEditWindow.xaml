@@ -217,9 +217,9 @@
               <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
             <Label Content="{ll:Str 基础倍率}" Style="{StaticResource ThemedLabelStyle}" />
-            <pu:NumberInput Grid.Column="1" Value="{Binding Work.MoneyBase}" />
+            <pu:NumberInput IsSnapToIntervalEnabled="False"  Grid.Column="1" Value="{Binding Work.MoneyBase}" />
             <!--<Label Grid.Row="1" Content="{ll:Str 等级倍率}" />
-            <pu:NumberInput
+            <pu:NumberInput IsSnapToIntervalEnabled="False" 
               Grid.Row="1"
               Grid.Column="1"
               Value="{Binding Work.MoneyLevel}" />-->
@@ -227,7 +227,7 @@
               Grid.Row="2"
               Content="{ll:Str 饱食度消耗倍率}"
               Style="{StaticResource ThemedLabelStyle}" />
-            <pu:NumberInput
+            <pu:NumberInput IsSnapToIntervalEnabled="False" 
               Grid.Row="2"
               Grid.Column="1"
               Value="{Binding Work.StrengthFood}" />
@@ -235,7 +235,7 @@
               Grid.Row="3"
               Content="{ll:Str 口渴度消耗倍率}"
               Style="{StaticResource ThemedLabelStyle}" />
-            <pu:NumberInput
+            <pu:NumberInput IsSnapToIntervalEnabled="False" 
               Grid.Row="3"
               Grid.Column="1"
               Value="{Binding Work.StrengthDrink}" />
@@ -243,7 +243,7 @@
               Grid.Row="4"
               Content="{ll:Str 心情消耗倍率}"
               Style="{StaticResource ThemedLabelStyle}" />
-            <pu:NumberInput
+            <pu:NumberInput IsSnapToIntervalEnabled="False" 
               Grid.Row="4"
               Grid.Column="1"
               Value="{Binding Work.Feeling}" />
@@ -251,7 +251,7 @@
               Grid.Row="5"
               Content="{ll:Str 完成奖励倍率}"
               Style="{StaticResource ThemedLabelStyle}" />
-            <pu:NumberInput
+            <pu:NumberInput IsSnapToIntervalEnabled="False" 
               Grid.Row="5"
               Grid.Column="1"
               Value="{Binding Work.FinishBonus}" />
@@ -259,7 +259,7 @@
               Grid.Row="6"
               Content="{ll:Str 等级限制}"
               Style="{StaticResource ThemedLabelStyle}" />
-            <pu:NumberInput
+            <pu:NumberInput IsSnapToIntervalEnabled="False" 
               Grid.Row="6"
               Grid.Column="1"
               Value="{Binding Work.LevelLimit}" />
@@ -267,7 +267,7 @@
               Grid.Row="7"
               Content="{ll:Str 花费时间(分钟)}"
               Style="{StaticResource ThemedLabelStyle}" />
-            <pu:NumberInput
+            <pu:NumberInput IsSnapToIntervalEnabled="False" 
               Grid.Row="7"
               Grid.Column="1"
               Value="{Binding Work.Time}" />
@@ -333,7 +333,7 @@
                 Grid.Row="5"
                 Content="X"
                 Style="{StaticResource ThemedLabelStyle}" />
-              <pu:NumberInput
+              <pu:NumberInput IsSnapToIntervalEnabled="False" 
                 Grid.Row="5"
                 Grid.Column="1"
                 Value="{Binding Work.Left}" />
@@ -341,7 +341,7 @@
                 Grid.Row="6"
                 Content="Y"
                 Style="{StaticResource ThemedLabelStyle}" />
-              <pu:NumberInput
+              <pu:NumberInput IsSnapToIntervalEnabled="False" 
                 Grid.Row="6"
                 Grid.Column="1"
                 Value="{Binding Work.Top}" />
@@ -349,7 +349,7 @@
                 Grid.Row="7"
                 Content="{ll:Str 宽}"
                 Style="{StaticResource ThemedLabelStyle}" />
-              <pu:NumberInput
+              <pu:NumberInput IsSnapToIntervalEnabled="False" 
                 Grid.Row="7"
                 Grid.Column="1"
                 Value="{Binding Work.Width}" />

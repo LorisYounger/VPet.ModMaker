@@ -154,7 +154,7 @@ public partial class FoodAnimeEditVM : DialogViewModel
     private void ResetFoodImage()
     {
         if (FoodImage != DefaultFoodImage)
-            FoodImage?.CloseStream();
+            FoodImage?.CloseStreamWhenNoReference();
         FoodImage = DefaultFoodImage;
     }
 
@@ -168,7 +168,7 @@ public partial class FoodAnimeEditVM : DialogViewModel
         if (openFileDialog is null)
             return;
         if (FoodImage != DefaultFoodImage)
-            FoodImage?.CloseStream();
+            FoodImage?.CloseStreamWhenNoReference();
         var image = HKWImageUtils.LoadImageToMemory(openFileDialog.LocalPath);
         if (image is null)
         {

@@ -90,7 +90,7 @@ public partial class ModEditVM : ViewModelBase
                 {
                     var version = ModUpdataHelper.Updata(ModInfo);
                     DialogService.ShowMessageBoxX(this, "更新成功更新至版本 {0}, 请手动保存".Translate(version));
-                    this.Log().Error("更新成功更新至版本 {version}", version);
+                    this.Log().Info("更新成功更新至版本 {version}", version);
                 }
                 catch (Exception ex)
                 {
@@ -146,6 +146,7 @@ public partial class ModEditVM : ViewModelBase
     public void Close()
     {
         ModInfo.Close();
+        this.Log().Debug("剩余缓存图像数量: {count}", HKWImageUtils.ImageByPath.Count);
     }
 
     /// <summary>

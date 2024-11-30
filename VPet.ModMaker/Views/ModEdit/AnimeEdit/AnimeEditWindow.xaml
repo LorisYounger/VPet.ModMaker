@@ -21,6 +21,7 @@
       x:Key="ListBoxItem_Style"
       BasedOn="{StaticResource {x:Type ListBoxItem}}"
       TargetType="ListBoxItem">
+      <Setter Property="Focusable" Value="False" />
       <Setter Property="HorizontalContentAlignment" Value="Stretch" />
       <Setter Property="VerticalContentAlignment" Value="Stretch" />
     </Style>
@@ -83,7 +84,7 @@
               Height="NaN"
               Margin="10,0,0,0"
               ItemsSource="{Binding DataContext.Anime.AnimatTypes, RelativeSource={RelativeSource AncestorType=Window, Mode=FindAncestor}, Converter={StaticResource EnumsToEnumInfosConverter}}"
-              SelectedItem="{Binding AnimeType}"
+              SelectedItem="{Binding AnimeType, Converter={StaticResource EnumToEnumInfoConverter}}"
               Style="{StaticResource StandardComboBoxStyle}"
               Visibility="{Binding DataContext.HasMultiType, RelativeSource={RelativeSource AncestorType=Window, Mode=FindAncestor}, Converter={StaticResource FalseToCollapsedConverter}}" />
           </Grid>
@@ -99,11 +100,6 @@
           ScrollViewer.VerticalScrollBarVisibility="Hidden"
           SelectedItem="{Binding DataContext.CurrentImageModel, RelativeSource={RelativeSource AncestorType=Window, Mode=FindAncestor}}"
           SelectionChanged="ListBox_SelectionChanged">
-          <ListBox.ItemContainerStyle>
-            <Style BasedOn="{StaticResource {x:Type ListBoxItem}}" TargetType="ListBoxItem">
-              <Setter Property="Focusable" Value="False" />
-            </Style>
-          </ListBox.ItemContainerStyle>
           <ListBox.ItemsPanel>
             <ItemsPanelTemplate>
               <StackPanel Orientation="Horizontal" />
@@ -151,7 +147,10 @@
                     <ColumnDefinition />
                   </Grid.ColumnDefinitions>
                   <Label d:Content="持续时间(ms)" Content="{ll:Str 持续时间(ms)}" />
-                  <pu:NumberInput Grid.Column="1" Value="{Binding DataContext.Duration, RelativeSource={RelativeSource AncestorType=ListBoxItem, Mode=FindAncestor}}" />
+                  <pu:NumberInput
+                    Grid.Column="1"
+                    IsSnapToIntervalEnabled="False"
+                    Value="{Binding DataContext.Duration, RelativeSource={RelativeSource AncestorType=ListBoxItem, Mode=FindAncestor}}" />
                 </Grid>
               </Grid>
             </DataTemplate>

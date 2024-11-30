@@ -25,7 +25,7 @@ public partial class ImageModel : ViewModelBase, ICloneable<ImageModel>
     /// <param name="duration">间隔</param>/>
     public ImageModel(string imageFile, int duration = 100)
     {
-        ImageFile = imageFile;
+        ImageFile = string.Intern(imageFile);
         Duration = duration;
     }
 
@@ -69,7 +69,9 @@ public partial class ImageModel : ViewModelBase, ICloneable<ImageModel>
     /// <returns></returns>
     public ImageModel Clone()
     {
-        var model = new ImageModel(Image ??= HKWImageUtils.LoadImageToMemory(ImageFile)!, Duration);
+        Image ??= HKWImageUtils.LoadImageToMemory(ImageFile)!;
+        var model = new ImageModel(Image, Duration);
+        Image.AddReferenceCount();
         return model;
     }
 
@@ -80,6 +82,6 @@ public partial class ImageModel : ViewModelBase, ICloneable<ImageModel>
     /// </summary>
     public void Close()
     {
-        Image?.CloseStream();
+        Image?.CloseStreamWhenNoReference();
     }
 }

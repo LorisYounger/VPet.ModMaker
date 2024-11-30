@@ -135,6 +135,8 @@ public partial class WorkEditVM : DialogViewModel
                 .ObserveOn(RxApp.MainThreadScheduler)
                 .Subscribe(x => CurrentPet = x);
         }
+        if (newValue is null)
+            CurrentPet = null!;
     }
 
     /// <summary>
@@ -154,8 +156,8 @@ public partial class WorkEditVM : DialogViewModel
         {
             Works.BaseList.BindingList(oldValue.Works, true);
         }
-        Works.AutoFilter = false;
         Works.Clear();
+        Works.AutoFilter = false;
         if (newValue is not null)
         {
             newValue
@@ -310,7 +312,7 @@ public partial class WorkEditVM : DialogViewModel
             );
             return;
         }
-        Image?.CloseStream();
+        Image?.CloseStreamWhenNoReference();
         Image = newImage;
     }
 
@@ -323,7 +325,7 @@ public partial class WorkEditVM : DialogViewModel
         if (CurrentPet is null)
             return;
         var graph = workModel.Graph;
-        Image?.CloseStream();
+        Image?.CloseStreamWhenNoReference();
         Image = null;
         // 随机挑一张图片
         if (
@@ -398,7 +400,7 @@ public partial class WorkEditVM : DialogViewModel
         await DialogService.ShowDialogAsync(this, this);
         if (DialogResult is not true)
         {
-            newModel.I18nResource.ClearCultureData();
+            newModel.I18nResource.ClearCulture();
             newModel.Close();
         }
         else
@@ -455,7 +457,7 @@ public partial class WorkEditVM : DialogViewModel
         Work = null!;
         OldWork = null!;
         DialogResult = false;
-        Image?.CloseStream();
+        Image?.CloseStreamWhenNoReference();
         ModInfo.TempI18nResource.ClearCultureData();
     }
 
@@ -464,7 +466,7 @@ public partial class WorkEditVM : DialogViewModel
     /// </summary>
     public void Close()
     {
-        Image?.CloseStream();
+        Image?.CloseStreamWhenNoReference();
     }
 }
 

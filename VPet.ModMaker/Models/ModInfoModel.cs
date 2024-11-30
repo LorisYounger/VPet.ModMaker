@@ -893,6 +893,9 @@ public partial class ModInfoModel : ViewModelBase
     /// </summary>
     public void Close()
     {
+        I18nResource.PropertyChanged -= I18nResource_PropertyChanged;
+        I18nResource.Cultures.SetChanged -= Cultures_SetChanged;
+        I18nResource.CultureDatas.DictionaryChanged -= CultureDatas_DictionaryChanged;
         Image?.CloseStreamWhenNoReference();
         I18nObject.Close();
         I18nResource.Clear();

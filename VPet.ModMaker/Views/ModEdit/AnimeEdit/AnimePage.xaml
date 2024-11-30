@@ -74,7 +74,7 @@
         AutoGenerateColumns="False"
         CanUserAddRows="False"
         GridLinesVisibility="Horizontal"
-        ItemsSource="{Binding AllAnimes.FilteredList}"
+        ItemsSource="{Binding AllAnimes.FilteredList, IsAsync=True}"
         MouseDoubleClick="DataGrid_MouseDoubleClick"
         RowDetailsVisibilityMode="Visible"
         RowHeight="50"

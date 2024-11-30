@@ -442,7 +442,7 @@
                 <ColumnDefinition />
               </Grid.ColumnDefinitions>
               <Label Background="{x:Null}" Content="X:" />
-              <pu:NumberInput
+              <pu:NumberInput IsSnapToIntervalEnabled="False" 
                 Grid.Column="1"
                 d:Value="100"
                 Value="{Binding Pet.TouchHeadRectangleLocation.X}" />
@@ -450,7 +450,7 @@
                 Grid.Column="2"
                 Background="{x:Null}"
                 Content="Y:" />
-              <pu:NumberInput
+              <pu:NumberInput IsSnapToIntervalEnabled="False" 
                 Grid.Column="3"
                 d:Value="100"
                 Value="{Binding Pet.TouchHeadRectangleLocation.Y, Mode=TwoWay}" />
@@ -458,7 +458,7 @@
                 Grid.Row="1"
                 Background="{x:Null}"
                 Content="W:" />
-              <pu:NumberInput
+              <pu:NumberInput IsSnapToIntervalEnabled="False" 
                 Grid.Row="1"
                 Grid.Column="1"
                 d:Value="100"
@@ -468,7 +468,7 @@
                 Grid.Column="2"
                 Background="{x:Null}"
                 Content="H:" />
-              <pu:NumberInput
+              <pu:NumberInput IsSnapToIntervalEnabled="False" 
                 Grid.Row="1"
                 Grid.Column="3"
                 d:Value="100"
@@ -498,17 +498,17 @@
                 <ColumnDefinition />
               </Grid.ColumnDefinitions>
               <Label Background="{x:Null}" Content="X:" />
-              <pu:NumberInput Grid.Column="1" Value="{Binding Pet.TouchBodyRectangleLocation.X}" />
+              <pu:NumberInput IsSnapToIntervalEnabled="False"  Grid.Column="1" Value="{Binding Pet.TouchBodyRectangleLocation.X}" />
               <Label
                 Grid.Column="2"
                 Background="{x:Null}"
                 Content="Y:" />
-              <pu:NumberInput Grid.Column="3" Value="{Binding Pet.TouchBodyRectangleLocation.Y, Mode=TwoWay}" />
+              <pu:NumberInput IsSnapToIntervalEnabled="False"  Grid.Column="3" Value="{Binding Pet.TouchBodyRectangleLocation.Y, Mode=TwoWay}" />
               <Label
                 Grid.Row="1"
                 Background="{x:Null}"
                 Content="W:" />
-              <pu:NumberInput
+              <pu:NumberInput IsSnapToIntervalEnabled="False" 
                 Grid.Row="1"
                 Grid.Column="1"
                 Value="{Binding Pet.TouchBodyRectangleLocation.Width, Mode=TwoWay}" />
@@ -517,7 +517,7 @@
                 Grid.Column="2"
                 Background="{x:Null}"
                 Content="H:" />
-              <pu:NumberInput
+              <pu:NumberInput IsSnapToIntervalEnabled="False" 
                 Grid.Row="1"
                 Grid.Column="3"
                 Value="{Binding Pet.TouchBodyRectangleLocation.Height, Mode=TwoWay}" />
@@ -554,17 +554,17 @@
                   <ColumnDefinition />
                 </Grid.ColumnDefinitions>
                 <Label Background="{x:Null}" Content="X:" />
-                <pu:NumberInput Grid.Column="1" Value="{Binding Pet.TouchRaisedRectangleLocation.Happy.X, Mode=TwoWay}" />
+                <pu:NumberInput IsSnapToIntervalEnabled="False"  Grid.Column="1" Value="{Binding Pet.TouchRaisedRectangleLocation.Happy.X, Mode=TwoWay}" />
                 <Label
                   Grid.Column="2"
                   Background="{x:Null}"
                   Content="Y:" />
-                <pu:NumberInput Grid.Column="3" Value="{Binding Pet.TouchRaisedRectangleLocation.Happy.Y, Mode=TwoWay}" />
+                <pu:NumberInput IsSnapToIntervalEnabled="False"  Grid.Column="3" Value="{Binding Pet.TouchRaisedRectangleLocation.Happy.Y, Mode=TwoWay}" />
                 <Label
                   Grid.Row="1"
                   Background="{x:Null}"
                   Content="W:" />
-                <pu:NumberInput
+                <pu:NumberInput IsSnapToIntervalEnabled="False" 
                   Grid.Row="1"
                   Grid.Column="1"
                   Value="{Binding Pet.TouchRaisedRectangleLocation.Happy.Width, Mode=TwoWay}" />
@@ -573,7 +573,7 @@
                   Grid.Column="2"
                   Background="{x:Null}"
                   Content="H:" />
-                <pu:NumberInput
+                <pu:NumberInput IsSnapToIntervalEnabled="False" 
                   Grid.Row="1"
                   Grid.Column="3"
                   Value="{Binding Pet.TouchRaisedRectangleLocation.Happy.Height, Mode=TwoWay}" />
@@ -601,17 +601,17 @@
                   <ColumnDefinition />
                 </Grid.ColumnDefinitions>
                 <Label Background="{x:Null}" Content="X:" />
-                <pu:NumberInput Grid.Column="1" Value="{Binding Pet.TouchRaisedRectangleLocation.Nomal.X, Mode=TwoWay}" />
+                <pu:NumberInput IsSnapToIntervalEnabled="False"  Grid.Column="1" Value="{Binding Pet.TouchRaisedRectangleLocation.Nomal.X, Mode=TwoWay}" />
                 <Label
                   Grid.Column="2"
                   Background="{x:Null}"
                   Content="Y:" />
-                <pu:NumberInput Grid.Column="3" Value="{Binding Pet.TouchRaisedRectangleLocation.Nomal.Y, Mode=TwoWay}" />
+                <pu:NumberInput IsSnapToIntervalEnabled="False"  Grid.Column="3" Value="{Binding Pet.TouchRaisedRectangleLocation.Nomal.Y, Mode=TwoWay}" />
                 <Label
                   Grid.Row="1"
                   Background="{x:Null}"
                   Content="W:" />
-                <pu:NumberInput
+                <pu:NumberInput IsSnapToIntervalEnabled="False" 
                   Grid.Row="1"
                   Grid.Column="1"
                   Value="{Binding Pet.TouchRaisedRectangleLocation.Nomal.Width, Mode=TwoWay}" />
@@ -620,7 +620,7 @@
                   Grid.Column="2"
                   Background="{x:Null}"
                   Content="H:" />
-                <pu:NumberInput
+                <pu:NumberInput IsSnapToIntervalEnabled="False" 
                   Grid.Row="1"
                   Grid.Column="3"
                   Value="{Binding Pet.TouchRaisedRectangleLocation.Nomal.Height, Mode=TwoWay}" />
@@ -648,17 +648,17 @@
                   <ColumnDefinition />
                 </Grid.ColumnDefinitions>
                 <Label Background="{x:Null}" Content="X:" />
-                <pu:NumberInput Grid.Column="1" Value="{Binding Pet.TouchRaisedRectangleLocation.PoorCondition.X, Mode=TwoWay}" />
+                <pu:NumberInput IsSnapToIntervalEnabled="False"  Grid.Column="1" Value="{Binding Pet.TouchRaisedRectangleLocation.PoorCondition.X, Mode=TwoWay}" />
                 <Label
                   Grid.Column="2"
                   Background="{x:Null}"
                   Content="Y:" />
-                <pu:NumberInput Grid.Column="3" Value="{Binding Pet.TouchRaisedRectangleLocation.PoorCondition.Y, Mode=TwoWay}" />
+                <pu:NumberInput IsSnapToIntervalEnabled="False"  Grid.Column="3" Value="{Binding Pet.TouchRaisedRectangleLocation.PoorCondition.Y, Mode=TwoWay}" />
                 <Label
                   Grid.Row="1"
                   Background="{x:Null}"
                   Content="W:" />
-                <pu:NumberInput
+                <pu:NumberInput IsSnapToIntervalEnabled="False" 
                   Grid.Row="1"
                   Grid.Column="1"
                   Value="{Binding Pet.TouchRaisedRectangleLocation.PoorCondition.Width, Mode=TwoWay}" />
@@ -667,7 +667,7 @@
                   Grid.Column="2"
                   Background="{x:Null}"
                   Content="H:" />
-                <pu:NumberInput
+                <pu:NumberInput IsSnapToIntervalEnabled="False" 
                   Grid.Row="1"
                   Grid.Column="3"
                   Value="{Binding Pet.TouchRaisedRectangleLocation.PoorCondition.Height, Mode=TwoWay}" />
@@ -695,17 +695,17 @@
                   <ColumnDefinition />
                 </Grid.ColumnDefinitions>
                 <Label Background="{x:Null}" Content="X:" />
-                <pu:NumberInput Grid.Column="1" Value="{Binding Pet.TouchRaisedRectangleLocation.Ill.X, Mode=TwoWay}" />
+                <pu:NumberInput IsSnapToIntervalEnabled="False"  Grid.Column="1" Value="{Binding Pet.TouchRaisedRectangleLocation.Ill.X, Mode=TwoWay}" />
                 <Label
                   Grid.Column="2"
                   Background="{x:Null}"
                   Content="Y:" />
-                <pu:NumberInput Grid.Column="3" Value="{Binding Pet.TouchRaisedRectangleLocation.Ill.Y, Mode=TwoWay}" />
+                <pu:NumberInput IsSnapToIntervalEnabled="False"  Grid.Column="3" Value="{Binding Pet.TouchRaisedRectangleLocation.Ill.Y, Mode=TwoWay}" />
                 <Label
                   Grid.Row="1"
                   Background="{x:Null}"
                   Content="W:" />
-                <pu:NumberInput
+                <pu:NumberInput IsSnapToIntervalEnabled="False" 
                   Grid.Row="1"
                   Grid.Column="1"
                   Value="{Binding Pet.TouchRaisedRectangleLocation.Ill.Width, Mode=TwoWay}" />
@@ -714,7 +714,7 @@
                   Grid.Column="2"
                   Background="{x:Null}"
                   Content="H:" />
-                <pu:NumberInput
+                <pu:NumberInput IsSnapToIntervalEnabled="False" 
                   Grid.Row="1"
                   Grid.Column="3"
                   Value="{Binding Pet.TouchRaisedRectangleLocation.Ill.Height, Mode=TwoWay}" />
@@ -751,12 +751,12 @@
                   <ColumnDefinition />
                 </Grid.ColumnDefinitions>
                 <Label Background="{x:Null}" Content="X:" />
-                <pu:NumberInput Grid.Column="1" Value="{Binding Pet.RaisePoint.Happy.X, Mode=TwoWay}" />
+                <pu:NumberInput IsSnapToIntervalEnabled="False"  Grid.Column="1" Value="{Binding Pet.RaisePoint.Happy.X, Mode=TwoWay}" />
                 <Label
                   Grid.Column="2"
                   Background="{x:Null}"
                   Content="Y:" />
-                <pu:NumberInput Grid.Column="3" Value="{Binding Pet.RaisePoint.Happy.Y, Mode=TwoWay}" />
+                <pu:NumberInput IsSnapToIntervalEnabled="False"  Grid.Column="3" Value="{Binding Pet.RaisePoint.Happy.Y, Mode=TwoWay}" />
               </Grid>
               <ToggleButton
                 x:Name="ToggleButton_RaisePoint_Nomal"
@@ -780,12 +780,12 @@
                   <ColumnDefinition />
                 </Grid.ColumnDefinitions>
                 <Label Background="{x:Null}" Content="X:" />
-                <pu:NumberInput Grid.Column="1" Value="{Binding Pet.RaisePoint.Nomal.X, Mode=TwoWay}" />
+                <pu:NumberInput IsSnapToIntervalEnabled="False"  Grid.Column="1" Value="{Binding Pet.RaisePoint.Nomal.X, Mode=TwoWay}" />
                 <Label
                   Grid.Column="2"
                   Background="{x:Null}"
                   Content="Y:" />
-                <pu:NumberInput Grid.Column="3" Value="{Binding Pet.RaisePoint.Nomal.Y, Mode=TwoWay}" />
+                <pu:NumberInput IsSnapToIntervalEnabled="False"  Grid.Column="3" Value="{Binding Pet.RaisePoint.Nomal.Y, Mode=TwoWay}" />
               </Grid>
               <ToggleButton
                 x:Name="ToggleButton_RaisePoint_PoorCondition"
@@ -809,12 +809,12 @@
                   <ColumnDefinition />
                 </Grid.ColumnDefinitions>
                 <Label Background="{x:Null}" Content="X:" />
-                <pu:NumberInput Grid.Column="1" Value="{Binding Pet.RaisePoint.PoorCondition.X, Mode=TwoWay}" />
+                <pu:NumberInput IsSnapToIntervalEnabled="False"  Grid.Column="1" Value="{Binding Pet.RaisePoint.PoorCondition.X, Mode=TwoWay}" />
                 <Label
                   Grid.Column="2"
                   Background="{x:Null}"
                   Content="Y:" />
-                <pu:NumberInput Grid.Column="3" Value="{Binding Pet.RaisePoint.PoorCondition.Y, Mode=TwoWay}" />
+                <pu:NumberInput IsSnapToIntervalEnabled="False"  Grid.Column="3" Value="{Binding Pet.RaisePoint.PoorCondition.Y, Mode=TwoWay}" />
               </Grid>
               <ToggleButton
                 x:Name="ToggleButton_RaisePoint_Ill"
@@ -838,12 +838,12 @@
                   <ColumnDefinition />
                 </Grid.ColumnDefinitions>
                 <Label Background="{x:Null}" Content="X:" />
-                <pu:NumberInput Grid.Column="1" Value="{Binding Pet.RaisePoint.Ill.X, Mode=TwoWay}" />
+                <pu:NumberInput IsSnapToIntervalEnabled="False"  Grid.Column="1" Value="{Binding Pet.RaisePoint.Ill.X, Mode=TwoWay}" />
                 <Label
                   Grid.Column="2"
                   Background="{x:Null}"
                   Content="Y:" />
-                <pu:NumberInput Grid.Column="3" Value="{Binding Pet.RaisePoint.Ill.Y, Mode=TwoWay}" />
+                <pu:NumberInput IsSnapToIntervalEnabled="False"  Grid.Column="3" Value="{Binding Pet.RaisePoint.Ill.Y, Mode=TwoWay}" />
               </Grid>
             </Grid>
           </Expander>

@@ -142,8 +142,8 @@ public partial class PetEditVM : DialogViewModel
         {
             Pets.BaseList.BindingList(oldValue.Pets, true);
         }
-        Pets.AutoFilter = false;
         Pets.Clear();
+        Pets.AutoFilter = false;
         if (newValue is not null)
         {
             newValue

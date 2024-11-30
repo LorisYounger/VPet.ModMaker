@@ -137,7 +137,7 @@ public partial class PetModel : ViewModelBase
     /// <summary>
     /// 默认宠物
     /// </summary>
-    public static PetModel Default { get; } = new() { I18nResource = new() };
+    public static PetModel Default { get; } = new() { I18nResource = [] };
 
     /// <summary>
     /// 来自本体
@@ -177,43 +177,6 @@ public partial class PetModel : ViewModelBase
     {
         oldValue?.I18nObjects.Remove(I18nObject);
         newValue?.I18nObjects?.Add(I18nObject);
-    }
-
-    /// <summary>
-    /// 初始化I18n资源
-    /// </summary>
-    public void InitializeI18nResource()
-    {
-        foreach (var work in Works)
-            work.I18nResource = I18nResource;
-        if (FromMain)
-        {
-            foreach (var cultureName in LocalizeCore.AvailableCultures)
-            {
-                if (CultureUtils.TryGetCultureInfo(cultureName, out var culture) is false)
-                    continue;
-                if (LocalizeCore.Localizations.TryGetValue(cultureName, out var data) is false)
-                    continue;
-                foreach (var line in data)
-                {
-                    if (line?.Name == ID)
-                    {
-                        I18nResource.AddCultureData(culture, ID, line.Info);
-                    }
-                    else if (line?.Name == PetNameID)
-                    {
-                        I18nResource.AddCultureData(culture, PetNameID, line.Info);
-                    }
-                    else if (line?.Name == DescriptionID)
-                    {
-                        I18nResource.AddCultureData(culture, DescriptionID, line.Info);
-                    }
-                }
-                I18nResource.AddCultureData(culture, ID, ID);
-                I18nResource.AddCultureData(culture, PetNameID, PetNameID);
-                I18nResource.AddCultureData(culture, DescriptionID, DescriptionID);
-            }
-        }
     }
 
     /// <summary>

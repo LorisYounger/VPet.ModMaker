@@ -126,8 +126,8 @@ public partial class ClickTextEditVM : DialogViewModel
         {
             ClickTexts.BaseList.BindingList(oldValue.ClickTexts, true);
         }
-        ClickTexts.AutoFilter = false;
         ClickTexts.Clear();
+        ClickTexts.AutoFilter = false;
         if (newValue is not null)
         {
             newValue

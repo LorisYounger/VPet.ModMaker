@@ -138,7 +138,7 @@
             <RowDefinition Height="Auto" />
           </Grid.RowDefinitions>
           <Label Content="{ll:Str 饱腹值}" Style="{StaticResource ThemedLabelStyle}" />
-          <pu:NumberInput
+          <pu:NumberInput IsSnapToIntervalEnabled="False" 
             x:Name="NumberInput_StrengthFood"
             Grid.Column="1"
             Value="{Binding Food.StrengthFood, Mode=TwoWay}" />
@@ -146,7 +146,7 @@
             Grid.Row="2"
             Content="{ll:Str 口渴值}"
             Style="{StaticResource ThemedLabelStyle}" />
-          <pu:NumberInput
+          <pu:NumberInput IsSnapToIntervalEnabled="False" 
             Grid.Row="2"
             Grid.Column="1"
             Value="{Binding Food.StrengthDrink, Mode=TwoWay}" />
@@ -154,7 +154,7 @@
             Grid.Row="3"
             Content="{ll:Str 健康值}"
             Style="{StaticResource ThemedLabelStyle}" />
-          <pu:NumberInput
+          <pu:NumberInput IsSnapToIntervalEnabled="False" 
             Grid.Row="3"
             Grid.Column="1"
             Value="{Binding Food.Health, Mode=TwoWay}" />
@@ -162,7 +162,7 @@
             Grid.Row="4"
             Content="{ll:Str 体力值}"
             Style="{StaticResource ThemedLabelStyle}" />
-          <pu:NumberInput
+          <pu:NumberInput IsSnapToIntervalEnabled="False" 
             Grid.Row="4"
             Grid.Column="1"
             Value="{Binding Food.Strength, Mode=TwoWay}" />
@@ -170,7 +170,7 @@
             Grid.Row="5"
             Content="{ll:Str 心情值}"
             Style="{StaticResource ThemedLabelStyle}" />
-          <pu:NumberInput
+          <pu:NumberInput IsSnapToIntervalEnabled="False" 
             Grid.Row="5"
             Grid.Column="1"
             Value="{Binding Food.Feeling, Mode=TwoWay}" />
@@ -178,7 +178,7 @@
             Grid.Row="6"
             Content="{ll:Str 好感值}"
             Style="{StaticResource ThemedLabelStyle}" />
-          <pu:NumberInput
+          <pu:NumberInput IsSnapToIntervalEnabled="False" 
             Grid.Row="6"
             Grid.Column="1"
             Value="{Binding Food.Likability, Mode=TwoWay}" />
@@ -186,7 +186,7 @@
             Grid.Row="7"
             Content="{ll:Str 经验值}"
             Style="{StaticResource ThemedLabelStyle}" />
-          <pu:NumberInput
+          <pu:NumberInput IsSnapToIntervalEnabled="False" 
             Grid.Row="7"
             Grid.Column="1"
             Value="{Binding Food.Exp, Mode=TwoWay}" />
@@ -194,7 +194,7 @@
             Grid.Row="8"
             Content="{ll:Str 价格}"
             Style="{StaticResource ThemedLabelStyle}" />
-          <pu:NumberInput
+          <pu:NumberInput IsSnapToIntervalEnabled="False" 
             Grid.Row="8"
             Grid.Column="1"
             Value="{Binding Food.Price, Mode=TwoWay}" />

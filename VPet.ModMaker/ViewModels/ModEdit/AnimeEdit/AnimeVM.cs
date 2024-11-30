@@ -71,10 +71,6 @@ public partial class AnimeVM : ViewModelBase
 
     partial void OnModInfoChanged(ModInfoModel oldValue, ModInfoModel newValue)
     {
-        if (oldValue is not null)
-        {
-            oldValue.PropertyChanged -= ModInfo_PropertyChanged;
-        }
         if (newValue is not null)
         {
             newValue
@@ -84,31 +80,14 @@ public partial class AnimeVM : ViewModelBase
                 .ObserveOn(RxApp.MainThreadScheduler)
                 .Subscribe(x => CurrentPet = x!);
         }
-    }
-
-    private void ModInfo_PropertyChanged(object? sender, PropertyChangedEventArgs e)
-    {
-        if (e.PropertyName == nameof(ModInfoModel.ShowMainPet))
-        {
-            if (CurrentPet?.FromMain is false)
-                CurrentPet = null!;
-        }
+        else if (newValue is null)
+            CurrentPet = null!;
     }
 
     /// <summary>
     /// 所有动画
     /// </summary>
     public FilterListWrapper<object, List<object>, ObservableList<object>> AllAnimes { get; }
-
-    /// <summary>
-    /// 动画
-    /// </summary>
-    public ObservableList<AnimeTypeModel> Animes => CurrentPet.Animes;
-
-    /// <summary>
-    /// 食物动画
-    /// </summary>
-    public ObservableList<FoodAnimeTypeModel> FoodAnimes => CurrentPet.FoodAnimes;
 
     /// <summary>
     /// 当前宠物
@@ -120,24 +99,23 @@ public partial class AnimeVM : ViewModelBase
     {
         if (oldValue is not null)
         {
-            Animes.CollectionChanged -= Animes_CollectionChanged;
-            FoodAnimes.CollectionChanged -= Animes_CollectionChanged;
+            oldValue.Animes.CollectionChanged -= Animes_CollectionChanged;
+            oldValue.FoodAnimes.CollectionChanged -= Animes_CollectionChanged;
         }
-        AllAnimes.AutoFilter = false;
         AllAnimes.Clear();
+        AllAnimes.AutoFilter = false;
         if (newValue is not null)
         {
             AllAnimes.AddRange(newValue.Animes);
             AllAnimes.AddRange(newValue.FoodAnimes);
             Search = string.Empty;
+            newValue.Animes.CollectionChanged -= Animes_CollectionChanged;
+            newValue.Animes.CollectionChanged += Animes_CollectionChanged;
+            newValue.FoodAnimes.CollectionChanged -= Animes_CollectionChanged;
+            newValue.FoodAnimes.CollectionChanged += Animes_CollectionChanged;
         }
         AllAnimes.Refresh();
         AllAnimes.AutoFilter = true;
-
-        Animes.CollectionChanged -= Animes_CollectionChanged;
-        Animes.CollectionChanged += Animes_CollectionChanged;
-        FoodAnimes.CollectionChanged -= Animes_CollectionChanged;
-        FoodAnimes.CollectionChanged += Animes_CollectionChanged;
     }
 
     /// <summary>
@@ -182,7 +160,7 @@ public partial class AnimeVM : ViewModelBase
             );
             if (animeVM.DialogResult is not true)
                 return;
-            FoodAnimes.Add(animeVM.Anime);
+            CurrentPet.FoodAnimes.Add(animeVM.Anime);
         }
         else
         {
@@ -203,7 +181,7 @@ public partial class AnimeVM : ViewModelBase
             );
             if (animeVM.DialogResult is not true)
                 return;
-            Animes.Add(animeVM.Anime);
+            CurrentPet.Animes.Add(animeVM.Anime);
         }
     }
 
@@ -232,7 +210,7 @@ public partial class AnimeVM : ViewModelBase
             else
             {
                 animeVM.OldAnime?.Close();
-                Animes[Animes.IndexOf(animeTypeModel)] = animeVM.Anime;
+                CurrentPet.Animes[CurrentPet.Animes.IndexOf(animeTypeModel)] = animeVM.Anime;
             }
         }
         else if (model is FoodAnimeTypeModel foodAnimeTypeModel)
@@ -252,7 +230,8 @@ public partial class AnimeVM : ViewModelBase
             else
             {
                 animeVM.OldAnime?.Close();
-                FoodAnimes[FoodAnimes.IndexOf(foodAnimeTypeModel)] = animeVM.Anime;
+                CurrentPet.FoodAnimes[CurrentPet.FoodAnimes.IndexOf(foodAnimeTypeModel)] =
+                    animeVM.Anime;
             }
         }
     }
@@ -277,13 +256,18 @@ public partial class AnimeVM : ViewModelBase
         AllAnimes.Remove(model);
         if (model is AnimeTypeModel animeTypeModel)
         {
-            Animes.Remove(animeTypeModel);
+            CurrentPet.Animes.Remove(animeTypeModel);
             animeTypeModel.Close();
         }
         else if (model is FoodAnimeTypeModel foodAnimeTypeModel)
         {
-            FoodAnimes.Remove(foodAnimeTypeModel);
+            CurrentPet.FoodAnimes.Remove(foodAnimeTypeModel);
             foodAnimeTypeModel.Close();
         }
     }
+
+    /// <summary>
+    /// 重置
+    /// </summary>
+    public void Reset() { }
 }

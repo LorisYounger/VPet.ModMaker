@@ -124,8 +124,8 @@ public partial class LowTextEditVM : DialogViewModel
         {
             LowTexts.BaseList.BindingList(oldValue.LowTexts, true);
         }
-        LowTexts.AutoFilter = false;
         LowTexts.Clear();
+        LowTexts.AutoFilter = false;
         if (newValue is not null)
         {
             newValue

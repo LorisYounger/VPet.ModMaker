@@ -127,8 +127,8 @@ public partial class SelectTextEditVM : DialogViewModel
         {
             SelectTexts.BaseList.BindingList(oldValue.SelectTexts, true);
         }
-        SelectTexts.AutoFilter = false;
         SelectTexts.Clear();
+        SelectTexts.AutoFilter = false;
         if (newValue is not null)
         {
             newValue

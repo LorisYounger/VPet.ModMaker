@@ -142,7 +142,7 @@
               Grid.Row="3"
               Content="{ll:Str 移动距离}"
               Style="{StaticResource ThemedLabelStyle}" />
-            <pu:NumberInput
+            <pu:NumberInput IsSnapToIntervalEnabled="False" 
               Grid.Row="3"
               Grid.Column="1"
               Value="{Binding Move.Distance}" />
@@ -150,7 +150,7 @@
               Grid.Row="4"
               Content="{ll:Str 移动间隔(ms)}"
               Style="{StaticResource ThemedLabelStyle}" />
-            <pu:NumberInput
+            <pu:NumberInput IsSnapToIntervalEnabled="False" 
               Grid.Row="4"
               Grid.Column="1"
               Value="{Binding Move.Interval}" />
@@ -158,7 +158,7 @@
               Grid.Row="5"
               Content="{ll:Str 定位长度}"
               Style="{StaticResource ThemedLabelStyle}" />
-            <pu:NumberInput
+            <pu:NumberInput IsSnapToIntervalEnabled="False" 
               Grid.Row="5"
               Grid.Column="1"
               Value="{Binding Move.LocateLength}" />
@@ -181,7 +181,7 @@
                   Grid.Row="0"
                   Content="{ll:Str 左}"
                   Style="{StaticResource ThemedLabelStyle}" />
-                <pu:NumberInput
+                <pu:NumberInput IsSnapToIntervalEnabled="False" 
                   Grid.Row="0"
                   Grid.Column="1"
                   Value="{Binding Move.TriggerLeft}" />
@@ -189,7 +189,7 @@
                   Grid.Row="1"
                   Content="{ll:Str 上}"
                   Style="{StaticResource ThemedLabelStyle}" />
-                <pu:NumberInput
+                <pu:NumberInput IsSnapToIntervalEnabled="False" 
                   Grid.Row="1"
                   Grid.Column="1"
                   Value="{Binding Move.TriggerTop}" />
@@ -197,7 +197,7 @@
                   Grid.Row="2"
                   Content="{ll:Str 右}"
                   Style="{StaticResource ThemedLabelStyle}" />
-                <pu:NumberInput
+                <pu:NumberInput IsSnapToIntervalEnabled="False" 
                   Grid.Row="2"
                   Grid.Column="1"
                   Value="{Binding Move.TriggerRight}" />
@@ -205,7 +205,7 @@
                   Grid.Row="3"
                   Content="{ll:Str 下}"
                   Style="{StaticResource ThemedLabelStyle}" />
-                <pu:NumberInput
+                <pu:NumberInput IsSnapToIntervalEnabled="False" 
                   Grid.Row="3"
                   Grid.Column="1"
                   Value="{Binding Move.TriggerBottom}" />
@@ -230,7 +230,7 @@
                   Grid.Row="0"
                   Content="{ll:Str 左}"
                   Style="{StaticResource ThemedLabelStyle}" />
-                <pu:NumberInput
+                <pu:NumberInput IsSnapToIntervalEnabled="False" 
                   Grid.Row="0"
                   Grid.Column="1"
                   Value="{Binding Move.CheckLeft}" />
@@ -238,7 +238,7 @@
                   Grid.Row="1"
                   Content="{ll:Str 上}"
                   Style="{StaticResource ThemedLabelStyle}" />
-                <pu:NumberInput
+                <pu:NumberInput IsSnapToIntervalEnabled="False" 
                   Grid.Row="1"
                   Grid.Column="1"
                   Value="{Binding Move.CheckTop}" />
@@ -246,7 +246,7 @@
                   Grid.Row="2"
                   Content="{ll:Str 右}"
                   Style="{StaticResource ThemedLabelStyle}" />
-                <pu:NumberInput
+                <pu:NumberInput IsSnapToIntervalEnabled="False" 
                   Grid.Row="2"
                   Grid.Column="1"
                   Value="{Binding Move.CheckRight}" />
@@ -254,7 +254,7 @@
                   Grid.Row="3"
                   Content="{ll:Str 下}"
                   Style="{StaticResource ThemedLabelStyle}" />
-                <pu:NumberInput
+                <pu:NumberInput IsSnapToIntervalEnabled="False" 
                   Grid.Row="3"
                   Grid.Column="1"
                   Value="{Binding Move.CheckBottom}" />

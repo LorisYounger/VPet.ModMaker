@@ -79,7 +79,7 @@
           <ColumnDefinition />
         </Grid.ColumnDefinitions>
         <Label Content="{ll:Str 最小值}" Style="{StaticResource ThemedLabelStyle}" />
-        <pu:NumberInput
+        <pu:NumberInput IsSnapToIntervalEnabled="False" 
           Grid.Column="1"
           ToolTip="{Binding Value, RelativeSource={RelativeSource Mode=Self}}"
           Value="{Binding DataContext.Min, RelativeSource={RelativeSource AncestorType=ListBoxItem}}" />
@@ -87,7 +87,7 @@
           Grid.Row="1"
           Content="{ll:Str 最大值}"
           Style="{StaticResource ThemedLabelStyle}" />
-        <pu:NumberInput
+        <pu:NumberInput IsSnapToIntervalEnabled="False" 
           Grid.Row="1"
           Grid.Column="1"
           ToolTip="{Binding Value, RelativeSource={RelativeSource Mode=Self}}"

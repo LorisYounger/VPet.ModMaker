@@ -49,94 +49,6 @@ public partial class ModEditWindow : WindowX, IPageLocator
     /// </summary>
     public ModEditVM ViewModel => (ModEditVM)DataContext;
 
-    #region Food
-    /// <summary>
-    /// 食物页面
-    /// </summary>
-    public FoodPage FoodPage { get; private set; } = null!;
-
-    /// <summary>
-    /// 食物编辑视图模型
-    /// </summary>
-    public FoodEditVM FoodEditVM { get; private set; } = null!;
-    #endregion
-    #region ClickText
-    /// <summary>
-    /// 点击文本页面
-    /// </summary>
-    public ClickTextPage ClickTextPage { get; private set; } = null!;
-
-    /// <summary>
-    /// 点击文本编辑视图模型
-    /// </summary>
-    public ClickTextEditVM ClickTextEditVM { get; private set; } = null!;
-    #endregion
-    #region LowText
-    /// <summary>
-    /// 低状态文本页面
-    /// </summary>
-    public LowTextPage LowTextPage { get; private set; } = null!;
-
-    /// <summary>
-    /// 低状态文本编辑视图模型
-    /// </summary>
-    public LowTextEditVM LowTextEditVM { get; private set; } = null!;
-    #endregion
-    #region SelectText
-    /// <summary>
-    /// 选择文本页面
-    /// </summary>
-    public SelectTextPage SelectTextPage { get; private set; } = null!;
-
-    /// <summary>
-    /// 选择文本编辑视图模型
-    /// </summary>
-    public SelectTextEditVM SelectTextEditVM { get; private set; } = null!;
-    #endregion
-    #region Pet
-    /// <summary>
-    /// 宠物页面
-    /// </summary>
-    public PetPage PetPage { get; private set; } = null!;
-
-    /// <summary>
-    /// 宠物编辑视图模型
-    /// </summary>
-    public PetEditVM PetEditVM { get; private set; } = null!;
-    #endregion
-    #region Work
-    /// <summary>
-    /// 工作页面
-    /// </summary>
-    public WorkPage WorkPage { get; private set; } = null!;
-
-    /// <summary>
-    /// 工作编辑视图模型
-    /// </summary>
-    public WorkEditVM WorkEditVM { get; private set; } = null!;
-    #endregion
-    #region Move
-    /// <summary>
-    /// 移动页面
-    /// </summary>
-    public MovePage MovePage { get; private set; } = null!;
-
-    /// <summary>
-    /// 移动编辑视图模型
-    /// </summary>
-    public MoveEditVM MoveEditVM { get; private set; } = null!;
-    #endregion
-    #region Anime
-    /// <summary>
-    /// 动画页面
-    /// </summary>
-    public AnimePage AnimePage { get; private set; } = null!;
-
-    /// <summary>
-    /// 动画编辑视图模型
-    /// </summary>
-    public AnimeVM AnimeVM { get; private set; } = null!;
-    #endregion
     //public I18nEditWindow I18nEditWindow { get; } = null!;
 
     //public AddCulturePage AddCultureWindow { get; private set; } = null!;
@@ -203,14 +115,6 @@ public partial class ModEditWindow : WindowX, IPageLocator
         try
         {
             DataContext = null;
-            FoodPage.DataContext = null;
-            LowTextPage.DataContext = null;
-            ClickTextPage.DataContext = null;
-            SelectTextPage.DataContext = null;
-            PetPage.DataContext = null;
-            WorkPage.DataContext = null;
-            MovePage.DataContext = null;
-            AnimePage.DataContext = null;
             //I18nEditWindow.CloseX();
         }
         catch { }
@@ -245,22 +149,37 @@ public partial class ModEditWindow : WindowX, IPageLocator
     /// </summary>
     public void ResetPage()
     {
-        if (FoodEditVM is not null)
-            FoodEditVM.ModInfo = null!;
-        if (ClickTextEditVM is not null)
-            ClickTextEditVM.ModInfo = null!;
-        if (LowTextEditVM is not null)
-            LowTextEditVM.ModInfo = null!;
-        if (SelectTextEditVM is not null)
-            SelectTextEditVM.ModInfo = null!;
-        if (PetEditVM is not null)
-            PetEditVM.ModInfo = null!;
-        if (MoveEditVM is not null)
-            MoveEditVM.ModInfo = null!;
-        if (WorkEditVM is not null)
-            WorkEditVM.ModInfo = null!;
-        if (AnimeVM is not null)
-            AnimeVM.ModInfo = null!;
+        if (ContentControl_Food.Content is FoodPage foodPage)
+            foodPage.ViewModel.ModInfo = null!;
+        ContentControl_Food.Content = null;
+
+        if (ContentControl_ClickText.Content is ClickTextPage clickTextPage)
+            clickTextPage.ViewModel.ModInfo = null!;
+        ContentControl_ClickText.Content = null;
+
+        if (ContentControl_LowText.Content is LowTextPage lowTextPage)
+            lowTextPage.ViewModel.ModInfo = null!;
+        ContentControl_LowText.Content = null;
+
+        if (ContentControl_SelectText.Content is SelectTextPage selectTextPage)
+            selectTextPage.ViewModel.ModInfo = null!;
+        ContentControl_SelectText.Content = null;
+
+        if (ContentControl_Pet.Content is PetPage petPage)
+            petPage.ViewModel.ModInfo = null!;
+        ContentControl_Pet.Content = null;
+
+        if (ContentControl_Move.Content is MovePage movePage)
+            movePage.ViewModel.ModInfo = null!;
+        ContentControl_Move.Content = null;
+
+        if (ContentControl_Work.Content is WorkPage workPage)
+            workPage.ViewModel.ModInfo = null!;
+        ContentControl_Work.Content = null;
+
+        if (ContentControl_Anime.Content is AnimePage animePage)
+            animePage.ViewModel.ModInfo = null!;
+        ContentControl_Anime.Content = null;
     }
 
     private void TabControl_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -289,65 +208,73 @@ public partial class ModEditWindow : WindowX, IPageLocator
 
     private void InitializeFood()
     {
-        FoodEditVM ??= new();
-        FoodEditVM.ModInfo = ViewModel.ModInfo;
-        FoodPage ??= new() { DataContext = FoodEditVM };
-        ContentControl_Food.Content ??= FoodPage;
+        if (ContentControl_Food.Content is not null)
+            return;
+        var vm = new FoodEditVM { ModInfo = ViewModel.ModInfo };
+        var page = new FoodPage() { DataContext = vm };
+        ContentControl_Food.Content = page;
     }
 
     private void InitializeClickText()
     {
-        ClickTextEditVM ??= new();
-        ClickTextEditVM.ModInfo = ViewModel.ModInfo;
-        ClickTextPage ??= new() { DataContext = ClickTextEditVM };
-        ContentControl_ClickText.Content ??= ClickTextPage;
+        if (ContentControl_ClickText.Content is not null)
+            return;
+        var vm = new ClickTextEditVM { ModInfo = ViewModel.ModInfo };
+        var page = new ClickTextPage() { DataContext = vm };
+        ContentControl_ClickText.Content = page;
     }
 
     private void InitializeLowText()
     {
-        LowTextEditVM ??= new();
-        LowTextEditVM.ModInfo = ViewModel.ModInfo;
-        LowTextPage ??= new() { DataContext = LowTextEditVM };
-        ContentControl_LowText.Content ??= LowTextPage;
+        if (ContentControl_LowText.Content is not null)
+            return;
+        var vm = new LowTextEditVM { ModInfo = ViewModel.ModInfo };
+        var page = new LowTextPage() { DataContext = vm };
+        ContentControl_LowText.Content = page;
     }
 
     private void InitializeSelectText()
     {
-        SelectTextEditVM ??= new();
-        SelectTextEditVM.ModInfo = ViewModel.ModInfo;
-        SelectTextPage ??= new() { DataContext = SelectTextEditVM };
-        ContentControl_SelectText.Content ??= SelectTextPage;
+        if (ContentControl_SelectText.Content is not null)
+            return;
+        var vm = new SelectTextEditVM { ModInfo = ViewModel.ModInfo };
+        var page = new SelectTextPage() { DataContext = vm };
+        ContentControl_SelectText.Content = page;
     }
 
     private void InitializePet()
     {
-        PetEditVM ??= new();
-        PetEditVM.ModInfo = ViewModel.ModInfo;
-        PetPage ??= new() { DataContext = PetEditVM };
-        ContentControl_Pet.Content ??= PetPage;
+        if (ContentControl_Pet.Content is not null)
+            return;
+        var vm = new PetEditVM { ModInfo = ViewModel.ModInfo };
+        var page = new PetPage() { DataContext = vm };
+        ContentControl_Pet.Content = page;
     }
 
     private void InitializeWork()
     {
-        WorkEditVM ??= new();
-        WorkEditVM.ModInfo = ViewModel.ModInfo;
-        WorkPage ??= new() { DataContext = WorkEditVM };
-        ContentControl_Work.Content ??= WorkPage;
+        if (ContentControl_Work.Content is not null)
+            return;
+        var vm = new WorkEditVM { ModInfo = ViewModel.ModInfo };
+        var page = new WorkPage() { DataContext = vm };
+        ContentControl_Work.Content = page;
     }
 
     private void InitializeMove()
     {
-        MoveEditVM ??= new();
-        MoveEditVM.ModInfo = ViewModel.ModInfo;
-        MovePage ??= new() { DataContext = MoveEditVM };
-        ContentControl_Move.Content ??= MovePage;
+        if (ContentControl_Move.Content is not null)
+            return;
+        var vm = new MoveEditVM { ModInfo = ViewModel.ModInfo };
+        var page = new MovePage() { DataContext = vm };
+        ContentControl_Move.Content = page;
     }
 
     private void InitializeAnime()
     {
-        AnimeVM ??= new();
-        AnimeVM.ModInfo = ViewModel.ModInfo;
-        AnimePage ??= new() { DataContext = AnimeVM };
-        ContentControl_Anime.Content ??= AnimePage;
+        if (ContentControl_Anime.Content is not null)
+            return;
+        var vm = new AnimeVM { ModInfo = ViewModel.ModInfo };
+        var page = new AnimePage() { DataContext = vm };
+        ContentControl_Anime.Content = page;
     }
 }

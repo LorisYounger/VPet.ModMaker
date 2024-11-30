@@ -25,6 +25,7 @@
         x:Key="ListBoxItem_Style"
         BasedOn="{StaticResource {x:Type ListBoxItem}}"
         TargetType="ListBoxItem">
+        <Setter Property="Focusable" Value="False" />
         <Setter Property="HorizontalContentAlignment" Value="Stretch" />
         <Setter Property="VerticalContentAlignment" Value="Stretch" />
       </Style>
@@ -120,11 +121,6 @@
                 ScrollViewer.VerticalScrollBarVisibility="Hidden"
                 SelectedItem="{Binding DataContext.CurrentFrontImageModel, RelativeSource={RelativeSource AncestorType=Window, Mode=FindAncestor}}"
                 SelectionChanged="ListBox_SelectionChanged">
-                <ListBox.ItemContainerStyle>
-                  <Style BasedOn="{StaticResource {x:Type ListBoxItem}}" TargetType="ListBoxItem">
-                    <Setter Property="Focusable" Value="False" />
-                  </Style>
-                </ListBox.ItemContainerStyle>
                 <ListBox.ItemsPanel>
                   <ItemsPanelTemplate>
                     <StackPanel Orientation="Horizontal" />
@@ -172,7 +168,10 @@
                           <ColumnDefinition />
                         </Grid.ColumnDefinitions>
                         <Label d:Content="持续时间(ms)" Content="{ll:Str 持续时间(ms)}" />
-                        <pu:NumberInput Grid.Column="1" Value="{Binding DataContext.Duration, RelativeSource={RelativeSource AncestorType=ListBoxItem, Mode=FindAncestor}}" />
+                        <pu:NumberInput
+                          Grid.Column="1"
+                          IsSnapToIntervalEnabled="False"
+                          Value="{Binding DataContext.Duration, RelativeSource={RelativeSource AncestorType=ListBoxItem, Mode=FindAncestor}}" />
                       </Grid>
                     </Grid>
                   </DataTemplate>
@@ -277,7 +276,10 @@
                           <ColumnDefinition />
                         </Grid.ColumnDefinitions>
                         <Label d:Content="持续时间(ms)" Content="{ll:Str 持续时间(ms)}" />
-                        <pu:NumberInput Grid.Column="1" Value="{Binding DataContext.Duration, RelativeSource={RelativeSource AncestorType=ListBoxItem, Mode=FindAncestor}}" />
+                        <pu:NumberInput
+                          Grid.Column="1"
+                          IsSnapToIntervalEnabled="False"
+                          Value="{Binding DataContext.Duration, RelativeSource={RelativeSource AncestorType=ListBoxItem, Mode=FindAncestor}}" />
                       </Grid>
                     </Grid>
                   </DataTemplate>
@@ -362,7 +364,10 @@
                         <RowDefinition Height="Auto" />
                       </Grid.RowDefinitions>
                       <Label d:Content="持续时间 (ms)" Content="{ll:Str 持续时间 (ms)}" />
-                      <pu:NumberInput Grid.Column="1" Value="{Binding Duration}" />
+                      <pu:NumberInput
+                        Grid.Column="1"
+                        IsSnapToIntervalEnabled="False"
+                        Value="{Binding Duration}" />
                       <Label
                         Grid.Row="1"
                         d:Content="旋转角度"
@@ -370,6 +375,7 @@
                       <pu:NumberInput
                         Grid.Row="1"
                         Grid.Column="1"
+                        IsSnapToIntervalEnabled="False"
                         Value="{Binding Rotate}" />
                       <Label
                         Grid.Row="2"
@@ -379,6 +385,7 @@
                         Grid.Row="2"
                         Grid.Column="1"
                         Interval="0.1"
+                        IsSnapToIntervalEnabled="False"
                         Maximum="1"
                         Minimum="0"
                         Value="{Binding Opacity}" />
@@ -389,6 +396,7 @@
                       <pu:NumberInput
                         Grid.Row="3"
                         Grid.Column="1"
+                        IsSnapToIntervalEnabled="False"
                         Value="{Binding RectangleLocation.Width}" />
                       <Grid Grid.Row="4" Grid.ColumnSpan="2">
                         <Grid.ColumnDefinitions>
@@ -401,7 +409,10 @@
                             <ColumnDefinition />
                           </Grid.ColumnDefinitions>
                           <Label Content="X:" />
-                          <pu:NumberInput Grid.Column="1" Value="{Binding RectangleLocation.X}" />
+                          <pu:NumberInput
+                            Grid.Column="1"
+                            IsSnapToIntervalEnabled="False"
+                            Value="{Binding RectangleLocation.X}" />
                         </Grid>
                         <Grid Grid.Column="1">
                           <Grid.ColumnDefinitions>
@@ -409,7 +420,10 @@
                             <ColumnDefinition />
                           </Grid.ColumnDefinitions>
                           <Label Content="Y:" />
-                          <pu:NumberInput Grid.Column="1" Value="{Binding RectangleLocation.Y}" />
+                          <pu:NumberInput
+                            Grid.Column="1"
+                            IsSnapToIntervalEnabled="False"
+                            Value="{Binding RectangleLocation.Y}" />
                         </Grid>
                       </Grid>
                     </Grid>
