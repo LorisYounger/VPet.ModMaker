@@ -58,9 +58,9 @@ public partial class ModMakerWindow : WindowX, IPageLocator
                     GC.Collect();
                     this.Hide();
                     ModEditWindow.ShowOrActivate();
+                    ModEditWindow.SetLocationToCenter();
                     ModEditWindow.ViewModel.ModInfo = x;
                     ModEditWindow.ShowTab(0);
-                    ModEditWindow.SetLocationToCenter();
 
 #if !RELEASE
                     //ModEditWindow.InitializePages();
