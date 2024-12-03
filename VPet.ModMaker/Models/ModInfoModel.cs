@@ -128,7 +128,7 @@ public partial class ModInfoModel : ViewModelBase
         LoadPets(loader);
 
         I18nResource.FillDefaultValue();
-        I18nResource.RemoveAllUnreferencedKey();
+        I18nResource.ClearUnreferencedData();
         CurrentPet = Pets.FilteredList.FirstOrDefault()!;
     }
 
@@ -272,7 +272,7 @@ public partial class ModInfoModel : ViewModelBase
     /// <summary>
     /// 名称
     /// </summary>
-    [ReactiveI18nProperty("I18nResource", nameof(I18nObject), nameof(ID), true)]
+    [ReactiveI18nProperty(nameof(I18nResource), nameof(I18nObject), nameof(ID), true)]
     public string Name
     {
         get => I18nResource.GetCurrentCultureDataOrDefault(ID);
@@ -282,7 +282,7 @@ public partial class ModInfoModel : ViewModelBase
     /// <summary>
     /// 详情
     /// </summary>
-    [ReactiveI18nProperty("I18nResource", nameof(I18nObject), nameof(DescriptionID), true)]
+    [ReactiveI18nProperty(nameof(I18nResource), nameof(I18nObject), nameof(DescriptionID), true)]
     public string Description
     {
         get => I18nResource.GetCurrentCultureDataOrDefault(DescriptionID);
@@ -622,7 +622,7 @@ public partial class ModInfoModel : ViewModelBase
         SavePets(path);
         SaveFoods(path);
         SaveText(path);
-        SaveI18nData(path);
+        SaveI18nData(path, I18nResource.Cultures);
         SaveImage(path);
         this.Log().Info("模组保存完毕");
     }
@@ -804,12 +804,14 @@ public partial class ModInfoModel : ViewModelBase
     /// 保存I18n资源
     /// </summary>
     /// <param name="path">路径</param>
-    private void SaveI18nData(string path)
+    /// <param name="cultures">文化</param>
+    private void SaveI18nData(string path, IEnumerable<CultureInfo> cultures)
     {
+        I18nResource.ClearUnreferencedData();
         this.Log().Info("正在保存本地化数据, 文化数量: {count}", I18nResource.Cultures.Count);
         var langPath = Path.Combine(path, "lang");
         Directory.CreateDirectory(langPath);
-        foreach (var culture in I18nResource.Cultures)
+        foreach (var culture in cultures)
         {
             this.Log()
                 .Info(
@@ -866,25 +868,7 @@ public partial class ModInfoModel : ViewModelBase
         // 保存模型信息
         SaveModInfo(path);
         // 保存文化数据
-        var langPath = Path.Combine(path, "lang");
-        Directory.CreateDirectory(langPath);
-        foreach (var culture in cultures)
-        {
-            this.Log()
-                .Info(
-                    "正在保存本地化数据 {cultrue}, 数据数量: {count}",
-                    culture.Name,
-                    I18nResource.CultureDatas.Count
-                );
-            var culturePath = Path.Combine(langPath, culture.Name);
-            Directory.CreateDirectory(culturePath);
-            var cultureFile = Path.Combine(culturePath, $"{culture}.lps");
-            File.Create(cultureFile).Close();
-            var lps = new LPS();
-            foreach (var data in I18nResource.CultureDatas.Values)
-                lps.Add(new Line(data.Key, data[culture]));
-            File.WriteAllText(cultureFile, lps.ToString());
-        }
+        SaveI18nData(path, cultures);
         this.Log().Info("翻译模组保存完毕");
     }
 

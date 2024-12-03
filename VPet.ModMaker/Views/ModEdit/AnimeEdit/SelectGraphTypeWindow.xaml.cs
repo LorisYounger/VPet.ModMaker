@@ -27,15 +27,17 @@ namespace VPet.ModMaker.Views.ModEdit;
 /// </summary>
 public partial class SelectGraphTypeWindow : Window
 {
+    /// <summary>
+    /// 视图模型
+    /// </summary>
     public SelectGraphTypeVM ViewModel => (SelectGraphTypeVM)DataContext;
 
+    /// <inheritdoc/>
     public SelectGraphTypeWindow()
     {
         InitializeComponent();
         DataContext = new SelectGraphTypeVM();
     }
-
-    public bool IsCancel { get; private set; } = true;
 
     private void Button_Cancel_Click(object? sender, RoutedEventArgs e)
     {
@@ -44,7 +46,7 @@ public partial class SelectGraphTypeWindow : Window
 
     private void Button_Yes_Click(object? sender, RoutedEventArgs e)
     {
-        IsCancel = false;
+        ViewModel.DialogResult = true;
         Close();
     }
 }

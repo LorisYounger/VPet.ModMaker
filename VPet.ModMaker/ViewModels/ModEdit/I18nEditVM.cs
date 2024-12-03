@@ -27,6 +27,7 @@ public partial class I18nEditVM : DialogViewModel
     public I18nEditVM(ModInfoModel modInfo)
     {
         ModInfo = modInfo;
+        ModInfo.I18nResource.ClearUnreferencedData();
         SearchTarget = SearchTargets.First();
         PropertyChanged += I18nEditWindowVM_PropertyChanged;
 

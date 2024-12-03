@@ -22,11 +22,15 @@ namespace VPet.ModMaker.Views.ModEdit;
 /// </summary>
 public partial class MovePage : UserControl
 {
+    /// <inheritdoc/>
     public MovePage()
     {
         InitializeComponent();
     }
 
+    /// <summary>
+    /// 视图模型
+    /// </summary>
     public MoveEditVM ViewModel => (MoveEditVM)DataContext;
 
     private void DataGrid_MouseDoubleClick(object? sender, MouseButtonEventArgs e)

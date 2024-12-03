@@ -27,11 +27,15 @@ namespace VPet.ModMaker.Views.ModEdit;
 /// </summary>
 public partial class FoodAnimeEditWindow : Window
 {
+    /// <inheritdoc/>
     public FoodAnimeEditWindow()
     {
         InitializeComponent();
     }
 
+    /// <summary>
+    /// 视图模型
+    /// </summary>
     public FoodAnimeEditVM ViewModel => (FoodAnimeEditVM)DataContext;
 
     private void Button_Cancel_Click(object? sender, RoutedEventArgs e)
@@ -77,7 +81,7 @@ public partial class FoodAnimeEditWindow : Window
         e.Handled = true;
     }
 
-    private object _dropSender;
+    private object _dropSender = null!;
 
     private void ListBox_PreviewMouseMove(object? sender, MouseEventArgs e)
     {

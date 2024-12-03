@@ -21,6 +21,7 @@ namespace VPet.ModMaker.Views.ModEdit;
 /// </summary>
 public partial class SaveTranslationModWindow : WindowX
 {
+    /// <inheritdoc/>
     public SaveTranslationModWindow()
     {
         InitializeComponent();

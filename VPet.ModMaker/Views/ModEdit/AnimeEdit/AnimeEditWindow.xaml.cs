@@ -26,11 +26,15 @@ namespace VPet.ModMaker.Views.ModEdit;
 /// </summary>
 public partial class AnimeEditWindow : Window
 {
+    /// <inheritdoc/>
     public AnimeEditWindow()
     {
         InitializeComponent();
     }
 
+    /// <summary>
+    /// 视图模型
+    /// </summary>
     public AnimeEditVM ViewModel => (AnimeEditVM)DataContext;
 
     private void Button_Cancel_Click(object? sender, RoutedEventArgs e)

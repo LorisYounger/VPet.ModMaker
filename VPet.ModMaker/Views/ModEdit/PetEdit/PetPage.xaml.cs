@@ -22,8 +22,12 @@ namespace VPet.ModMaker.Views.ModEdit;
 /// </summary>
 public partial class PetPage : UserControl
 {
+    /// <summary>
+    /// 视图模型
+    /// </summary>
     public PetEditVM ViewModel => (PetEditVM)DataContext;
 
+    /// <inheritdoc/>
     public PetPage()
     {
         InitializeComponent();

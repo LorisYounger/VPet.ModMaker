@@ -111,7 +111,7 @@ public partial class SelectTextModel : ViewModelBase
     /// 文本
     /// </summary>
     [MapIgnoreProperty]
-    [ReactiveI18nProperty("I18nResource", nameof(I18nObject), nameof(ID))]
+    [ReactiveI18nProperty(nameof(I18nResource), nameof(I18nObject), nameof(ID), true)]
     public string Text
     {
         get => I18nResource.GetCurrentCultureDataOrDefault(ID);
@@ -122,7 +122,7 @@ public partial class SelectTextModel : ViewModelBase
     /// 选择
     /// </summary>
     [MapIgnoreProperty]
-    [ReactiveI18nProperty("I18nResource", nameof(I18nObject), nameof(ChooseID))]
+    [ReactiveI18nProperty(nameof(I18nResource), nameof(I18nObject), nameof(ChooseID), true)]
     public string Choose
     {
         get => I18nResource.GetCurrentCultureDataOrDefault(ChooseID);

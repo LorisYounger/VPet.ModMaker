@@ -25,8 +25,12 @@ namespace VPet.ModMaker.Views.ModEdit;
 /// </summary>
 public partial class LowTextPage : UserControl
 {
+    /// <summary>
+    /// 视图模型
+    /// </summary>
     public LowTextEditVM ViewModel => (LowTextEditVM)DataContext;
 
+    /// <inheritdoc/>
     public LowTextPage()
     {
         InitializeComponent();

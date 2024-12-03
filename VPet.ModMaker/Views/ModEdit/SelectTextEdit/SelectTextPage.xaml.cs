@@ -22,8 +22,12 @@ namespace VPet.ModMaker.Views.ModEdit;
 /// </summary>
 public partial class SelectTextPage : UserControl
 {
+    /// <summary>
+    /// 视图模型
+    /// </summary>
     public SelectTextEditVM ViewModel => (SelectTextEditVM)DataContext;
 
+    /// <inheritdoc/>
     public SelectTextPage()
     {
         InitializeComponent();

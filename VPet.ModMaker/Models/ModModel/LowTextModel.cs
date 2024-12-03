@@ -93,7 +93,7 @@ public partial class LowTextModel : ViewModelBase
     /// 文本
     /// </summary>
     [MapIgnoreProperty]
-    [ReactiveI18nProperty("I18nResource", nameof(I18nObject), nameof(ID))]
+    [ReactiveI18nProperty(nameof(I18nResource), nameof(I18nObject), nameof(ID), true)]
     public string Text
     {
         get => I18nResource.GetCurrentCultureDataOrDefault(ID);

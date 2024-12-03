@@ -90,7 +90,7 @@ public partial class WorkModel : ViewModelBase
     /// 名称
     /// </summary>
     [MapIgnoreProperty]
-    [ReactiveI18nProperty("I18nResource", nameof(I18nObject), nameof(ID))]
+    [ReactiveI18nProperty(nameof(I18nResource), nameof(I18nObject), nameof(ID), true)]
     public string Name
     {
         get => I18nResource.GetCurrentCultureDataOrDefault(ID);

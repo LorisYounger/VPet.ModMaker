@@ -23,11 +23,15 @@ namespace VPet.ModMaker.Views.ModEdit;
 /// </summary>
 public partial class PetEditWindow : WindowX
 {
+    /// <inheritdoc/>
     public PetEditWindow()
     {
         InitializeComponent();
     }
 
+    /// <summary>
+    /// 视图模型
+    /// </summary>
     public PetEditVM ViewModel => (PetEditVM)DataContext;
 
     private void Button_Cancel_Click(object? sender, RoutedEventArgs e)

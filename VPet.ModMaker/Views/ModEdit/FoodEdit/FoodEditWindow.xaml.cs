@@ -27,11 +27,15 @@ namespace VPet.ModMaker.Views.ModEdit;
 /// </summary>
 public partial class FoodEditWindow : WindowX
 {
+    /// <inheritdoc/>
     public FoodEditWindow()
     {
         InitializeComponent();
     }
 
+    /// <summary>
+    /// 视图模型
+    /// </summary>
     public FoodEditVM ViewModel => (FoodEditVM)DataContext;
 
     private void Button_Cancel_Click(object? sender, RoutedEventArgs e)

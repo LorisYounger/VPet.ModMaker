@@ -236,12 +236,21 @@
             </TabItem.Header>
             <ContentControl x:Name="ContentControl_Move" />
           </TabItem>
-          <TabItem Tag="{ll:Str 动画}">
+          <TabItem>
             <TabItem.Header>
-              <MultiBinding Converter="{StaticResource StringFormatConverter}" ConverterParameter="{}{0} ({1})">
-                <Binding Path="Tag" RelativeSource="{RelativeSource Mode=Self}" />
-                <Binding Path="ModInfo.CurrentPet.AnimeCount" />
-              </MultiBinding>
+              <StackPanel Orientation="Horizontal">
+                <TextBlock Foreground="{StaticResource DARKPrimaryText}" Text="{ll:Str 动画}" />
+                <TextBlock Foreground="{StaticResource DARKPrimaryText}" Text=" (" />
+                <TextBlock Foreground="{StaticResource DARKPrimaryText}">
+                  <TextBlock.Text>
+                    <MultiBinding Converter="{StaticResource Int32CalculatorMultiConverter}" ConverterParameter="+">
+                      <Binding Path="ModInfo.CurrentPet.Animes.Count" />
+                      <Binding Path="ModInfo.CurrentPet.FoodAnimes.Count" />
+                    </MultiBinding>
+                  </TextBlock.Text>
+                </TextBlock>
+                <TextBlock Foreground="{StaticResource DARKPrimaryText}" Text=")" />
+              </StackPanel>
             </TabItem.Header>
             <ContentControl x:Name="ContentControl_Anime" />
           </TabItem>

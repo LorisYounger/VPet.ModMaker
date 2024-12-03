@@ -22,8 +22,12 @@ namespace VPet.ModMaker.Views.ModEdit;
 /// </summary>
 public partial class ClickTextPage : UserControl
 {
+    /// <summary>
+    /// 视图模型
+    /// </summary>
     public ClickTextEditVM ViewModel => (ClickTextEditVM)DataContext;
 
+    /// <inheritdoc/>
     public ClickTextPage()
     {
         InitializeComponent();

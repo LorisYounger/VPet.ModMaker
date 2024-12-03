@@ -356,7 +356,10 @@ public partial class PetEditVM : DialogViewModel
             OldPet.Close();
             newModel.I18nResource.CopyDataTo(ModInfo.I18nResource, true);
             newModel.I18nResource = ModInfo.I18nResource;
+            var temp = ModInfo.CurrentPet;
             Pets[Pets.IndexOf(model)] = newModel;
+            if (temp == OldPet)
+                ModInfo.CurrentPet = newModel;
             this.Log().Info("编辑宠物 {oldPet} => {newPet}", OldPet.ID, Pet.ID);
         }
         Reset();

@@ -30,11 +30,7 @@ namespace VPet.ModMaker.Models;
 public partial class PetModel : ViewModelBase
 {
     /// <inheritdoc/>
-    public PetModel()
-    {
-        Animes.PropertyChanged += Animes_PropertyChanged;
-        FoodAnimes.PropertyChanged += FoodAnimes_PropertyChanged;
-    }
+    public PetModel() { }
 
     /// <inheritdoc/>
     /// <param name="model">宠物模型</param>
@@ -47,8 +43,10 @@ public partial class PetModel : ViewModelBase
         TouchBodyRectangleLocation = model.TouchBodyRectangleLocation.Clone();
         TouchRaisedRectangleLocation = model.TouchRaisedRectangleLocation.Clone();
         RaisePoint = model.RaisePoint.Clone();
-        foreach (var work in model.Works)
-            Works.Add(work);
+        Works = model.Works;
+        Moves = model.Moves;
+        Animes = model.Animes;
+        FoodAnimes = model.FoodAnimes;
     }
 
     /// <inheritdoc/>
@@ -189,7 +187,7 @@ public partial class PetModel : ViewModelBase
     /// 名称
     /// </summary>
     [MapIgnoreProperty]
-    [ReactiveI18nProperty("I18nResource", nameof(I18nObject), nameof(ID))]
+    [ReactiveI18nProperty(nameof(I18nResource), nameof(I18nObject), nameof(ID), true)]
     public string Name
     {
         get => I18nResource.GetCurrentCultureDataOrDefault(ID);
@@ -200,7 +198,7 @@ public partial class PetModel : ViewModelBase
     /// 宠物名称
     /// </summary>
     [MapIgnoreProperty]
-    [ReactiveI18nProperty("I18nResource", nameof(I18nObject), nameof(PetNameID))]
+    [ReactiveI18nProperty(nameof(I18nResource), nameof(I18nObject), nameof(PetNameID), true)]
     public string PetName
     {
         get => I18nResource.GetCurrentCultureDataOrDefault(PetNameID);
@@ -211,7 +209,7 @@ public partial class PetModel : ViewModelBase
     /// 详情
     /// </summary>
     [MapIgnoreProperty]
-    [ReactiveI18nProperty("I18nResource", nameof(I18nObject), nameof(DescriptionID))]
+    [ReactiveI18nProperty(nameof(I18nResource), nameof(I18nObject), nameof(DescriptionID), true)]
     public string Description
     {
         get => I18nResource.GetCurrentCultureDataOrDefault(DescriptionID);
@@ -276,22 +274,6 @@ public partial class PetModel : ViewModelBase
     ///食物动画
     /// </summary>
     public ObservableList<FoodAnimeTypeModel> FoodAnimes { get; } = [];
-
-    /// <summary>
-    /// 动画数量
-    /// </summary>
-    [ReactiveProperty]
-    public int AnimeCount { get; set; }
-
-    private void FoodAnimes_PropertyChanged(object? sender, PropertyChangedEventArgs e)
-    {
-        AnimeCount = Animes.Count + FoodAnimes.Count;
-    }
-
-    private void Animes_PropertyChanged(object? sender, PropertyChangedEventArgs e)
-    {
-        AnimeCount = Animes.Count + FoodAnimes.Count;
-    }
 
     #region Save
 

@@ -43,9 +43,6 @@
     <Reference Include="HKW.CommonValueConverters">
       <HintPath>..\..\HKW.CommonValueConverters\HKW.CommonValueConverters\bin\Debug\net8.0\HKW.CommonValueConverters.dll</HintPath>
     </Reference>
-    <Reference Include="HKW.MVVMDialogs">
-      <HintPath>..\..\HKW.MVVMDialogs\HKW.MVVMDialogs\bin\Debug\net8.0\HKW.MVVMDialogs.dll</HintPath>
-    </Reference>
     <Reference Include="HKW.ReactiveUI">
       <HintPath>..\..\HKW.ReactiveUI\HKW.ReactiveUI\bin\Debug\netstandard2.0\HKW.ReactiveUI.dll</HintPath>
     </Reference>
@@ -55,6 +52,9 @@
       <HintPath>..\..\HKW.Mapper\HKW.Mapper\bin\Debug\netstandard2.0\HKW.Mapper.dll</HintPath>
     </Reference>
     <Analyzer Include="..\..\HKW.Mapper\HKW.Mapper\bin\Debug\netstandard2.0\HKW.Mapper.dll" />
+    <Reference Include="HKW.MVVMDialogs">
+      <HintPath>..\..\HKW.MVVMDialogs\HKW.MVVMDialogs\bin\Debug\net8.0\HKW.MVVMDialogs.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup Condition="'$(Configuration)'!='Test'">
     <PackageReference Include="HKW.WPF" Version="1.1.0" />

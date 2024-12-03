@@ -108,7 +108,7 @@ public partial class FoodModel : ViewModelBase
     /// 名称
     /// </summary>
     [MapIgnoreProperty]
-    [ReactiveI18nProperty("I18nResource", nameof(I18nObject), nameof(ID), true)]
+    [ReactiveI18nProperty(nameof(I18nResource), nameof(I18nObject), nameof(ID), true)]
     public string Name
     {
         get => I18nResource.GetCurrentCultureDataOrDefault(ID);
@@ -119,7 +119,7 @@ public partial class FoodModel : ViewModelBase
     /// 详情
     /// </summary>
     [MapIgnoreProperty]
-    [ReactiveI18nProperty("I18nResource", nameof(I18nObject), nameof(DescriptionID), true)]
+    [ReactiveI18nProperty(nameof(I18nResource), nameof(I18nObject), nameof(DescriptionID), true)]
     public string Description
     {
         get => I18nResource.GetCurrentCultureDataOrDefault(DescriptionID);

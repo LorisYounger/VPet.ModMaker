@@ -23,11 +23,15 @@ namespace VPet.ModMaker.Views.ModEdit;
 /// </summary>
 public partial class SelectTextEditWindow : WindowX
 {
+    /// <inheritdoc/>
     public SelectTextEditWindow()
     {
         InitializeComponent();
     }
 
+    /// <summary>
+    /// 视图模型
+    /// </summary>
     public SelectTextEditVM ViewModel => (SelectTextEditVM)DataContext;
 
     private void Button_Cancel_Click(object? sender, RoutedEventArgs e)

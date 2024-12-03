@@ -22,8 +22,12 @@ namespace VPet.ModMaker.Views.ModEdit;
 /// </summary>
 public partial class WorkPage : UserControl
 {
+    /// <summary>
+    /// 视图模型
+    /// </summary>
     public WorkEditVM ViewModel => (WorkEditVM)DataContext;
 
+    /// <inheritdoc/>
     public WorkPage()
     {
         InitializeComponent();

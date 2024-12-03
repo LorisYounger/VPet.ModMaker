@@ -115,7 +115,6 @@ public partial class ModEditWindow : WindowX, IPageLocator
         try
         {
             DataContext = null;
-            //I18nEditWindow.CloseX();
         }
         catch { }
     }
