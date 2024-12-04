@@ -34,7 +34,7 @@
       <ComboBox
         Grid.Column="1"
         ItemsSource="{Binding SearchTargets}"
-        SelectedItem="{Binding SearchTarget}"
+        SelectedItem="{Binding SearchTargets.SelectedItem}"
         Style="{StaticResource StandardComboBoxStyle}" />
     </Grid>
     <DataGrid

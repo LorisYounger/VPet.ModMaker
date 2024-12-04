@@ -20,5 +20,8 @@
   <c:BoolInverteConverter x:Key="BoolInverter" />
   <c:EnumToEnumInfoConverter x:Key="EnumToEnumInfoConverter" />
   <c:EnumsToEnumInfosConverter x:Key="EnumsToEnumInfosConverter" />
-  <c:Int32CalculatorMultiConverter x:Key="Int32CalculatorMultiConverter" ResultToString="True" />
+  <c:Int32CalculatorMultiConverter
+    x:Key="Int32CalculatorMultiConverter"
+    DefaultResult="null"
+    ResultToString="True" />
 </ResourceDictionary>

@@ -7,13 +7,16 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
+using System.Reactive.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using DynamicData.Binding;
 using HKW.HKWReactiveUI;
 using HKW.HKWUtils.Collections;
 using HKW.HKWUtils.Extensions;
 using HKW.HKWUtils.Observable;
 using HKW.MVVMDialogs;
+using ReactiveUI;
 using VPet.ModMaker.Models;
 
 namespace VPet.ModMaker.ViewModels.ModEdit;
@@ -28,8 +31,17 @@ public partial class I18nEditVM : DialogViewModel
     {
         ModInfo = modInfo;
         ModInfo.I18nResource.ClearUnreferencedData();
-        SearchTarget = SearchTargets.First();
-        PropertyChanged += I18nEditWindowVM_PropertyChanged;
+        this.WhenValueChanged(x => x.Search)
+            .Throttle(TimeSpan.FromSeconds(0.5), RxApp.TaskpoolScheduler)
+            .DistinctUntilChanged()
+            .ObserveOn(RxApp.MainThreadScheduler)
+            .Subscribe(_ => I18nDatas.Refresh());
+        SearchTargets
+            .WhenValueChanged(x => x.SelectedItem)
+            .Throttle(TimeSpan.FromSeconds(0.5), RxApp.TaskpoolScheduler)
+            .DistinctUntilChanged()
+            .ObserveOn(RxApp.MainThreadScheduler)
+            .Subscribe(_ => I18nDatas.Refresh());
 
         ModInfo.I18nResource.Cultures.SetChanged -= Cultures_SetChanged;
         ModInfo.I18nResource.Cultures.SetChanged += Cultures_SetChanged;
@@ -80,17 +92,11 @@ public partial class I18nEditVM : DialogViewModel
     /// <summary>
     /// 搜索目标列表
     /// </summary>
-    public ObservableSet<string> SearchTargets { get; } = [nameof(ModInfoModel.ID)];
-
-    /// <summary>
-    /// 搜索目标
-    /// </summary>
-    [ReactiveProperty]
-    public string SearchTarget { get; set; } = string.Empty;
+    public ObservableSelectableList<string, List<string>> SearchTargets { get; } = new(["ID"], 0);
 
     private bool DataFilter(ObservableCultureDataDictionary<string, string> item)
     {
-        if (SearchTarget == nameof(ModInfoModel.ID))
+        if (SearchTargets.SelectedItem == nameof(ModInfoModel.ID))
         {
             // 如果是ID则搜索ID
             return item.Key.Contains(Search, StringComparison.OrdinalIgnoreCase);
@@ -98,7 +104,12 @@ public partial class I18nEditVM : DialogViewModel
         else
         {
             // 如果是I18n数据则搜索对应文化
-            if (item.TryGetValue(CultureInfo.GetCultureInfo(SearchTarget), out var data))
+            if (
+                item.TryGetValue(
+                    CultureInfo.GetCultureInfo(SearchTargets.SelectedItem!),
+                    out var data
+                )
+            )
             {
                 return data.Contains(Search, StringComparison.OrdinalIgnoreCase);
             }
@@ -170,18 +181,6 @@ public partial class I18nEditVM : DialogViewModel
         else if (e.Action is DictionaryChangeAction.Clear)
         {
             I18nDatas.Clear();
-        }
-    }
-
-    private void I18nEditWindowVM_PropertyChanged(object? sender, PropertyChangedEventArgs e)
-    {
-        if (e.PropertyName == nameof(Search))
-        {
-            I18nDatas.Refresh();
-        }
-        else if (e.PropertyName == nameof(SearchTarget))
-        {
-            I18nDatas.Refresh();
         }
     }
 
