@@ -53,7 +53,7 @@ public partial class ModMakerWindow : WindowX, IPageLocator
                     if (string.IsNullOrEmpty(ViewModel.ModInfo?.SourcePath) is false)
                         ViewModel.AddHistory(ViewModel.ModInfo);
                     ModEditWindow.ViewModel.ModInfo = ViewModel.ModInfo = null!;
-                    ModEditWindow.ShowTab(1);
+                    ModEditWindow.ShowTab(-1);
                 }
                 else
                 {

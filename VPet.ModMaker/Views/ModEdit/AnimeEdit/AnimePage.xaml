@@ -51,6 +51,7 @@
           <DataTemplate>
             <StackPanel Orientation="Horizontal">
               <TextBlock Text="{Binding ID}" />
+              <TextBlock Text=" " />
               <TextBlock Text="{ll:Str '(来自本体)'}" Visibility="{Binding FromMain, Converter={StaticResource FalseToCollapsedConverter}}" />
             </StackPanel>
           </DataTemplate>
@@ -70,7 +71,10 @@
       </Grid.Style>
       <DataGrid
         d:ItemsSource="{d:SampleData ItemCount=5}"
+        d:SelectedIndex="0"
         pu:DataGridHelper.ColumnHeaderHorizontalContentAlignment="Center"
+        pu:DataGridHelper.RowSelectedBorderBrush="{StaticResource DARKPrimaryLight}"
+        pu:DataGridHelper.RowSelectedBorderThickness="3"
         AutoGenerateColumns="False"
         CanUserAddRows="False"
         GridLinesVisibility="Horizontal"

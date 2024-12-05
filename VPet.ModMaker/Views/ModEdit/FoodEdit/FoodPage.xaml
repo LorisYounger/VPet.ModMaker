@@ -36,7 +36,10 @@
     <DataGrid
       Grid.Row="1"
       d:ItemsSource="{d:SampleData ItemCount=5}"
+      d:SelectedIndex="0"
       pu:DataGridHelper.ColumnHeaderHorizontalContentAlignment="Center"
+      pu:DataGridHelper.RowSelectedBorderBrush="{StaticResource DARKPrimaryLight}"
+      pu:DataGridHelper.RowSelectedBorderThickness="3"
       AutoGenerateColumns="False"
       CanUserAddRows="False"
       GridLinesVisibility="Horizontal"
