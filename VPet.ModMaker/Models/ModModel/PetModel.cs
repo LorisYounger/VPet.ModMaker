@@ -302,6 +302,8 @@ public partial class PetModel : ViewModelBase
     private void SaveAnime(string path)
     {
         var petAnimePath = Path.Combine(path, ID);
+        if (Directory.Exists(petAnimePath))
+            Directory.Delete(petAnimePath, true);
         foreach (var anime in Animes)
             anime.Save(petAnimePath);
         foreach (var anime in FoodAnimes)

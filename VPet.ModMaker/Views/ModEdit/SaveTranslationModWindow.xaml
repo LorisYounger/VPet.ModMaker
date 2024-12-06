@@ -12,6 +12,7 @@
   Width="500"
   Height="300"
   d:DataContext="{d:DesignInstance Type=vm:SaveTranslationModVM}"
+  pu:WindowXCaption.Buttons="Close"
   WindowStartupLocation="CenterScreen"
   mc:Ignorable="d">
   <Grid>

@@ -163,7 +163,7 @@ public partial class ClickTextEditVM : DialogViewModel
     /// <summary>
     /// 搜索目标
     /// </summary>
-    public ObservableSelectableSet<
+    public ObservableSelectableSetWrapper<
         ClickTextSearchTarget,
         FrozenSet<ClickTextSearchTarget>
     > SearchTargets { get; } = new(EnumInfo<ClickTextSearchTarget>.Values);
@@ -278,7 +278,6 @@ public partial class ClickTextEditVM : DialogViewModel
             model.Close();
             this.Log().Info("删除点击文本 {clickText}", model.ID);
         }
-        Reset();
     }
 
     /// <summary>

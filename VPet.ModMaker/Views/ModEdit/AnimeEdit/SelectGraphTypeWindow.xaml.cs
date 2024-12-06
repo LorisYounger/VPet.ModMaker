@@ -15,6 +15,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using HKW.HKWUtils.Observable;
 using LinePutScript.Localization.WPF;
+using Panuon.WPF.UI;
 using VPet.ModMaker.Models;
 using VPet.ModMaker.Models.ModModel;
 using VPet.ModMaker.ViewModels.ModEdit;
@@ -25,7 +26,7 @@ namespace VPet.ModMaker.Views.ModEdit;
 /// <summary>
 /// SelectGraphTypeWindow.xaml 的交互逻辑
 /// </summary>
-public partial class SelectGraphTypeWindow : Window
+public partial class SelectGraphTypeWindow : WindowX
 {
     /// <summary>
     /// 视图模型

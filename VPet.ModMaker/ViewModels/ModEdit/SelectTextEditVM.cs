@@ -163,7 +163,7 @@ public partial class SelectTextEditVM : DialogViewModel
     /// <summary>
     /// 搜索目标
     /// </summary>
-    public ObservableSelectableSet<
+    public ObservableSelectableSetWrapper<
         SelectTextSearchTarget,
         FrozenSet<SelectTextSearchTarget>
     > SearchTargets { get; } = new(EnumInfo<SelectTextSearchTarget>.Values);
@@ -283,7 +283,6 @@ public partial class SelectTextEditVM : DialogViewModel
             model.Close();
             this.Log().Info("删除选择文本 {selectText}", model.ID);
         }
-        Reset();
     }
 
     /// <summary>

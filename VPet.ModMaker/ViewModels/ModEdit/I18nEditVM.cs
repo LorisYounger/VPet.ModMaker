@@ -92,7 +92,7 @@ public partial class I18nEditVM : DialogViewModel
     /// <summary>
     /// 搜索目标列表
     /// </summary>
-    public ObservableSelectableList<string, List<string>> SearchTargets { get; } = new(["ID"], 0);
+    public ObservableSelectableList<string> SearchTargets { get; } = new(["ID"], 0);
 
     private bool DataFilter(ObservableCultureDataDictionary<string, string> item)
     {

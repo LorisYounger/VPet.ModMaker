@@ -280,7 +280,6 @@ public partial class MoveEditVM : DialogViewModel
             Moves.Remove(model);
             this.Log().Info("删除移动 {move}", model.Graph);
         }
-        Reset();
     }
 
     /// <summary>

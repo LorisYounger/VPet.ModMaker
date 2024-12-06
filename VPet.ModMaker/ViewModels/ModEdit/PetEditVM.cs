@@ -180,7 +180,7 @@ public partial class PetEditVM : DialogViewModel
     /// <summary>
     /// 搜索目标
     /// </summary>
-    public ObservableSelectableSet<
+    public ObservableSelectableSetWrapper<
         PetSearchTarget,
         FrozenSet<PetSearchTarget>
     > SearchTargets { get; } = new(EnumInfo<PetSearchTarget>.Values);
@@ -389,7 +389,6 @@ public partial class PetEditVM : DialogViewModel
             model.Close();
             this.Log().Info("删除宠物 {pet}", model.ID);
         }
-        Reset();
     }
 
     /// <summary>

@@ -14,6 +14,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using HKW.WPF.Extensions;
 using LinePutScript.Localization.WPF;
+using Panuon.WPF.UI;
 using VPet.ModMaker.Models;
 using VPet.ModMaker.Models.ModModel;
 using VPet.ModMaker.ViewModels.ModEdit;
@@ -25,7 +26,7 @@ namespace VPet.ModMaker.Views.ModEdit;
 /// <summary>
 /// AnimeEditWindow.xaml 的交互逻辑
 /// </summary>
-public partial class FoodAnimeEditWindow : Window
+public partial class FoodAnimeEditWindow : WindowX
 {
     /// <inheritdoc/>
     public FoodAnimeEditWindow()

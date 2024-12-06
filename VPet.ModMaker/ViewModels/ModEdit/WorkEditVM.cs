@@ -194,7 +194,7 @@ public partial class WorkEditVM : DialogViewModel
     /// <summary>
     /// 搜索目标
     /// </summary>
-    public ObservableSelectableSet<
+    public ObservableSelectableSetWrapper<
         WorkSearchTarget,
         FrozenSet<WorkSearchTarget>
     > SearchTargets { get; } = new(EnumInfo<WorkSearchTarget>.Values);
@@ -446,7 +446,6 @@ public partial class WorkEditVM : DialogViewModel
             model.Close();
             this.Log().Info("删除工作 {work}", model.ID);
         }
-        Reset();
     }
 
     /// <summary>

@@ -37,6 +37,6 @@ public partial class AnimePage : UserControl
     {
         if (sender is not DataGrid dataGrid || dataGrid.SelectedItem is null)
             return;
-        ViewModel.Edit(dataGrid.SelectedItem);
+        ViewModel.Edit((IAnimeModel)dataGrid.SelectedItem);
     }
 }

@@ -56,7 +56,7 @@ public class ModMaker : MainPlugin
     /// I18n资源
     /// </summary>
     public static I18nResource<string, string> I18nResource { get; } =
-        new() { FillDefaultValueToNewCulture = true, DefaultValue = string.Empty };
+        new() { FillDefaultValueToData = true, DefaultValue = string.Empty };
 
     /// <inheritdoc/>
     public override void Setting()

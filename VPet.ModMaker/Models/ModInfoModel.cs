@@ -255,13 +255,13 @@ public partial class ModInfoModel : ViewModelBase
     /// I18n资源
     /// </summary>
     public I18nResource<string, string> I18nResource { get; } =
-        new() { FillDefaultValueToNewCulture = true, DefaultValue = string.Empty };
+        new() { FillDefaultValueToData = true, DefaultValue = string.Empty };
 
     /// <summary>
     /// 临时I18n资源, 用于新建的项目
     /// </summary>
     public I18nResource<string, string> TempI18nResource { get; } =
-        new() { FillDefaultValueToNewCulture = true, DefaultValue = string.Empty };
+        new() { FillDefaultValueToData = true, DefaultValue = string.Empty };
 
     /// <summary>
     /// I18n对象
@@ -681,17 +681,16 @@ public partial class ModInfoModel : ViewModelBase
         Directory.CreateDirectory(petPath);
         foreach (var pet in Pets)
         {
-            if (pet.FromMain is false)
+            if (pet.FromMain)
+                continue;
+            try
             {
-                try
-                {
-                    pet.Save(petPath);
-                    this.Log().Info("保存宠物成功, ID: {id}, 宠物名称: {petName}", pet.ID, pet.PetName);
-                }
-                catch (Exception ex)
-                {
-                    this.Log().Info(ex, "保存宠物失败, ID: {id}, 宠物名称: {petName}", pet.ID, pet.PetName);
-                }
+                pet.Save(petPath);
+                this.Log().Info("保存宠物成功, ID: {id}, 宠物名称: {petName}", pet.ID, pet.PetName);
+            }
+            catch (Exception ex)
+            {
+                this.Log().Info(ex, "保存宠物失败, ID: {id}, 宠物名称: {petName}", pet.ID, pet.PetName);
             }
         }
         // 如果没有一个完成保存, 则删除文件夹
@@ -843,6 +842,8 @@ public partial class ModInfoModel : ViewModelBase
             return;
         this.Log().Info("正在保存图片, 数量: {count}", Foods.Count(x => x.Image is not null));
         var imagePath = Path.Combine(path, "image");
+        if (Directory.Exists(imagePath))
+            Directory.Delete(imagePath, true);
         Directory.CreateDirectory(imagePath);
         if (Foods.Count > 0)
         {
@@ -867,6 +868,18 @@ public partial class ModInfoModel : ViewModelBase
         this.Log().Info("保存为翻译模组, 路径: {path}, 翻译目标: {cultures}", string.Join(", ", cultures));
         // 保存模型信息
         SaveModInfo(path);
+        var petPath = Path.Combine(path, "pet");
+        if (Directory.Exists(petPath))
+            Directory.Delete(petPath, true);
+        var foodPath = Path.Combine(path, "food");
+        if (Directory.Exists(foodPath))
+            Directory.Delete(foodPath, true);
+        var imagePath = Path.Combine(path, "image");
+        if (Directory.Exists(imagePath))
+            Directory.Delete(imagePath, true);
+        var textPath = Path.Combine(path, "text");
+        if (Directory.Exists(textPath))
+            Directory.Delete(textPath, true);
         // 保存文化数据
         SaveI18nData(path, cultures);
         this.Log().Info("翻译模组保存完毕");

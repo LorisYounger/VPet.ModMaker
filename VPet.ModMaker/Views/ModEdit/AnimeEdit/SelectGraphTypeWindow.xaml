@@ -1,4 +1,4 @@
-﻿<Window
+﻿<pu:WindowX
   x:Class="VPet.ModMaker.Views.ModEdit.SelectGraphTypeWindow"
   xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
   xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
@@ -8,7 +8,7 @@
   xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
   xmlns:pu="https://opensource.panuon.com/wpf-ui"
   xmlns:vm="clr-namespace:VPet.ModMaker.ViewModels.ModEdit"
-  Title="SelectGraphTypeWindow"
+  Title="{ll:Str 选择动画类型}"
   Width="500"
   Height="300"
   WindowStartupLocation="CenterScreen"
@@ -74,4 +74,4 @@
         Style="{StaticResource Button_Cancel}" />
     </Grid>
   </Grid>
-</Window>
+</pu:WindowX>

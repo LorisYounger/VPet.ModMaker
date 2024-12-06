@@ -161,7 +161,7 @@ public partial class LowTextEditVM : DialogViewModel
     /// <summary>
     /// 搜索目标
     /// </summary>
-    public ObservableSelectableSet<
+    public ObservableSelectableSetWrapper<
         LowTextSearchTarget,
         FrozenSet<LowTextSearchTarget>
     > SearchTargets { get; } = new(EnumInfo<LowTextSearchTarget>.Values);
@@ -276,7 +276,6 @@ public partial class LowTextEditVM : DialogViewModel
             model.Close();
             this.Log().Info("删除低状态文本 {lowText}", model.ID);
         }
-        Reset();
     }
 
     /// <summary>

@@ -168,7 +168,7 @@ public partial class FoodEditVM : DialogViewModel
     /// <summary>
     /// 搜索目标
     /// </summary>
-    public ObservableSelectableSet<
+    public ObservableSelectableSetWrapper<
         FoodSearchTarget,
         FrozenSet<FoodSearchTarget>
     > SearchTargets { get; } = new(EnumInfo<FoodSearchTarget>.Values);
@@ -373,7 +373,6 @@ public partial class FoodEditVM : DialogViewModel
             model.Close();
             this.Log().Info("删除食物 {food}", model.ID);
         }
-        Reset();
     }
 
     /// <summary>

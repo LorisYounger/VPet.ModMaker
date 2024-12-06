@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
@@ -190,7 +191,7 @@ public partial class AnimeVM : ViewModelBase
     /// </summary>
     /// <param name="model">模型</param>
     [ReactiveCommand]
-    public async void Edit(object model)
+    public async void Edit(IAnimeModel model)
     {
         //var pendingHandler = PendingBox.Show("载入中".Translate());
         if (model is AnimeTypeModel animeTypeModel)
@@ -239,30 +240,38 @@ public partial class AnimeVM : ViewModelBase
     /// <summary>
     /// 删除
     /// </summary>
-    /// <param name="model">模型</param>
+    /// <param name="list">模型</param>
     [ReactiveCommand]
-    private void Remove(object model)
+    private void Remove(IList list)
     {
+        var models = list.Cast<IAnimeModel>().ToArray();
         if (
             DialogService.ShowMessageBoxX(
-                "确定删除动画 {} 吗".Translate(),
+                this,
+                "确定删除已选中的 {0} 个动画吗".Translate(models.Length),
                 "删除动画".Translate(),
-                MessageBoxButton.YesNo,
-                MessageBoxImage.Warning
+                MessageBoxButton.YesNo
             )
             is not true
         )
             return;
-        AllAnimes.Remove(model);
-        if (model is AnimeTypeModel animeTypeModel)
+        foreach (var model in models)
         {
-            CurrentPet.Animes.Remove(animeTypeModel);
-            animeTypeModel.Close();
-        }
-        else if (model is FoodAnimeTypeModel foodAnimeTypeModel)
-        {
-            CurrentPet.FoodAnimes.Remove(foodAnimeTypeModel);
-            foodAnimeTypeModel.Close();
+            if (model is AnimeTypeModel animeTypeModel)
+            {
+                CurrentPet.Animes.Remove(animeTypeModel);
+            }
+            else if (model is FoodAnimeTypeModel foodAnimeTypeModel)
+            {
+                CurrentPet.FoodAnimes.Remove(foodAnimeTypeModel);
+            }
+            else
+            {
+                this.Log().Warn("未知动画类型 {anime}", model);
+                continue;
+            }
+            model.Close();
+            this.Log().Info("删除动画 {food}", model.ID);
         }
     }
 

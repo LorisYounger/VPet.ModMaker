@@ -1,4 +1,4 @@
-﻿<Window
+﻿<pu:WindowX
   x:Class="VPet.ModMaker.Views.ModEdit.AnimeEditWindow"
   xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
   xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
@@ -337,4 +337,4 @@
       </Grid>
     </Grid>
   </Grid>
-</Window>
+</pu:WindowX>

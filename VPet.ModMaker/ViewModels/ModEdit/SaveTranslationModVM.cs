@@ -34,6 +34,7 @@ public partial class SaveTranslationModVM : DialogViewModel
     {
         ModInfo = modInfo;
         CheckCultures = new(modInfo.I18nResource.Cultures);
+        CheckCultures.Leader.Value = true;
     }
 
     #region Property
@@ -67,13 +68,13 @@ public partial class SaveTranslationModVM : DialogViewModel
                 saveFileDialog.LocalPath,
                 CheckCultures.Where(m => m.IsSelected).Select(m => m.Source)
             );
-            this.Log().Info("保存成功");
-            DialogService.ShowMessageBoxX(this, "保存成功".Translate());
+            this.Log().Info("翻译模组保存成功");
+            DialogService.ShowMessageBoxX(this, "翻译模组保存成功".Translate());
         }
         catch (Exception ex)
         {
-            this.Log().Warn(ex, "保存失败");
-            DialogService.ShowMessageBoxX(this, "保存失败, 详情请查看日志".Translate());
+            this.Log().Warn(ex, "翻译模组保存失败");
+            DialogService.ShowMessageBoxX(this, "翻译模组保存失败, 详情请查看日志".Translate());
         }
     }
 }
