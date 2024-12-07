@@ -247,7 +247,7 @@ public partial class ModEditVM : ViewModelBase
             DialogService.ShowMessageBoxX(
                 this,
                 "源路径为空, 请先保存模组".Translate(),
-                "打开所在文件夹失败".Translate(),
+                "打开所在的文件夹失败".Translate(),
                 icon: MessageBoxImage.Warning
             );
             return;
