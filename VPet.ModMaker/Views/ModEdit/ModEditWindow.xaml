@@ -303,23 +303,22 @@
       </ListBox>
       <StackPanel Grid.Row="2">
         <Button
-          Height="30"
+          Command="{Binding OpenModPathCommand}"
+          Content="{ll:Str 打开所在的文件夹}"
+          Style="{StaticResource MyThemedButtonStyle}" />
+        <Button
           Command="{Binding EditI18nCommand}"
           Content="{ll:Str 编辑多语言内容}"
           Style="{StaticResource MyThemedButtonStyle}" />
         <Button
-          Height="30"
           Command="{Binding SaveCommand}"
           Content="{ll:Str 保存}"
           Style="{StaticResource MyThemedButtonStyle}" />
         <Button
-          Height="30"
           Command="{Binding SaveToCommand}"
           Content="{ll:Str 保存至}"
           Style="{StaticResource MyThemedButtonStyle}" />
-        <!--  TODO  -->
         <Button
-          Height="30"
           Command="{Binding SaveAsTranslationModCommand}"
           Content="{ll:Str 保存为翻译模组}"
           Style="{StaticResource MyThemedButtonStyle}" />

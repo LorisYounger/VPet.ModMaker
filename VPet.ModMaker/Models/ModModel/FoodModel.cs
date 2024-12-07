@@ -11,6 +11,7 @@ using System.Threading.Tasks;
 using System.Windows.Media.Imaging;
 using HKW.HKWMapper;
 using HKW.HKWReactiveUI;
+using HKW.HKWUtils;
 using HKW.HKWUtils.Extensions;
 using HKW.HKWUtils.Observable;
 using HKW.WPF;

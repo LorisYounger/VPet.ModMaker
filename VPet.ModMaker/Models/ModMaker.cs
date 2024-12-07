@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using HKW.HKWUtils;
 using LinePutScript;
 using LinePutScript.Localization.WPF;
 using VPet.ModMaker.Views;

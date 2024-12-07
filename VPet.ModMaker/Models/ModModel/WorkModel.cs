@@ -11,6 +11,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using HKW.HKWMapper;
 using HKW.HKWReactiveUI;
+using HKW.HKWUtils;
 using HKW.HKWUtils.Observable;
 using VPet.ModMaker.ViewModels;
 using VPet_Simulator.Core;

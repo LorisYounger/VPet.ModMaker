@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using HKW.HKWMapper;
 using HKW.HKWReactiveUI;
+using HKW.HKWUtils;
 using HKW.HKWUtils.Observable;
 using VPet.ModMaker.ViewModels;
 using VPet_Simulator.Core;
@@ -45,7 +46,7 @@ public partial class MoveModel : ViewModelBase
     /// 移动类型
     /// </summary>
     public static FrozenSet<GraphHelper.Move.DirectionType> DirectionTypes =>
-        EnumInfo<GraphHelper.Move.DirectionType>.Values;
+        EnumInfo<GraphHelper.Move.DirectionType>.ValidValues;
 
     /// <summary>
     /// 模式类型

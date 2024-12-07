@@ -3,6 +3,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using HKW.HKWReactiveUI;
+using HKW.HKWUtils;
 using HKW.HKWUtils.Extensions;
 using HKW.HKWUtils.Observable;
 using ReactiveUI;

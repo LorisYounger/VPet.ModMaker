@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Xml.Serialization;
 using HKW.HKWMapper;
 using HKW.HKWReactiveUI;
+using HKW.HKWUtils;
 using HKW.HKWUtils.Observable;
 using VPet.ModMaker.ViewModels;
 using VPet_Simulator.Windows.Interface;

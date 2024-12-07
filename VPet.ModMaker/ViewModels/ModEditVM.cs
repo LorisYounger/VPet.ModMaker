@@ -235,6 +235,26 @@ public partial class ModEditVM : ViewModelBase
     #endregion
 
     #region Save
+
+    /// <summary>
+    /// 打开模组所在的文件夹
+    /// </summary>
+    [ReactiveCommand]
+    private void OpenModPath()
+    {
+        if (Path.Exists(ModInfo.SourcePath) is false)
+        {
+            DialogService.ShowMessageBoxX(
+                this,
+                "源路径为空, 请先保存模组".Translate(),
+                "打开所在文件夹失败".Translate(),
+                icon: MessageBoxImage.Warning
+            );
+            return;
+        }
+        NativeUtils.OpenLink(ModInfo.SourcePath);
+    }
+
     /// <summary>
     /// 保存
     /// </summary>
@@ -248,7 +268,8 @@ public partial class ModEditVM : ViewModelBase
             DialogService.ShowMessageBoxX(
                 this,
                 "源路径为空, 请使用 \"保存至\"".Translate(),
-                "保存失败".Translate()
+                "保存失败".Translate(),
+                icon: MessageBoxImage.Warning
             );
             return;
         }

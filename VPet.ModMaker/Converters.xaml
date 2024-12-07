@@ -19,7 +19,7 @@
     TrueValue="Collapsed" />
   <c:BoolInverteConverter x:Key="BoolInverter" />
   <c:EnumToEnumInfoConverter x:Key="EnumToEnumInfoConverter" />
-  <c:EnumsToEnumInfosConverter x:Key="EnumsToEnumInfosConverter" />
+  <c:EnumsToEnumInfosConverter x:Key="EnumsToEnumInfosConverter" OnlyValid="True" />
   <c:Int32CalculatorMultiConverter
     x:Key="Int32CalculatorMultiConverter"
     DefaultResult="null"

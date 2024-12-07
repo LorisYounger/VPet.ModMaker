@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Windows.Media.Imaging;
 
-namespace HKW.HKWUtils;
+namespace VPet.ModMaker;
 
 /// <summary>
 /// 工具
@@ -32,69 +32,6 @@ public static class NativeUtils
     /// 分隔符
     /// </summary>
     public static char[] Separator { get; } = ['_'];
-
-    //public static BitmapImage LoadImageToStream(string imagePath)
-    //{
-    //    BitmapImage bitmapImage = new();
-    //    bitmapImage.BeginInit();
-    //    bitmapImage.DecodePixelWidth = DecodePixelWidth;
-    //    try
-    //    {
-    //        bitmapImage.StreamSource = new StreamReader(imagePath).BaseStream;
-    //    }
-    //    finally
-    //    {
-    //        bitmapImage.EndInit();
-    //    }
-    //    return bitmapImage;
-    //}
-
-    ///// <summary>
-    ///// 载入图片至内存流
-    ///// </summary>
-    ///// <param name="imagePath">图片路径</param>
-    ///// <returns></returns>
-    //public static BitmapImage? LoadImageToMemoryStream(string imagePath)
-    //{
-    //    var bitmapImage = new BitmapImage();
-    //    bitmapImage.BeginInit();
-    //    try
-    //    {
-    //        var bytes = File.ReadAllBytes(imagePath);
-    //        bitmapImage.StreamSource = new MemoryStream(bytes);
-    //        bitmapImage.DecodePixelWidth = DecodePixelWidth;
-    //    }
-    //    catch
-    //    {
-    //        bitmapImage = null!;
-    //    }
-    //    finally
-    //    {
-    //        bitmapImage.EndInit();
-    //    }
-    //    return bitmapImage;
-    //}
-
-    ///// <summary>
-    ///// 载入图片至内存流
-    ///// </summary>
-    ///// <param name="imageStream">图片流</param>
-    ///// <returns></returns>
-    //public static BitmapImage LoadImageToMemoryStream(Stream imageStream)
-    //{
-    //    BitmapImage bitmapImage = new();
-    //    bitmapImage.BeginInit();
-    //    try
-    //    {
-    //        bitmapImage.StreamSource = imageStream;
-    //        bitmapImage.DecodePixelWidth = DecodePixelWidth;
-    //    }
-    //    finally
-    //    {
-    //        bitmapImage.EndInit();
-    //    }
-    //    return bitmapImage;
-    //}
 
     /// <summary>
     /// 打开文件

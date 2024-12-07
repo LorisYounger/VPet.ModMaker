@@ -89,7 +89,7 @@
                   <MenuItem
                     Command="{Binding PlacementTarget.Tag.OpenModPathCommand, RelativeSource={RelativeSource AncestorType=ContextMenu, Mode=FindAncestor}}"
                     CommandParameter="{Binding PlacementTarget.DataContext, RelativeSource={RelativeSource AncestorType=ContextMenu, Mode=FindAncestor}}"
-                    Header="{ll:Str 打开所在文件夹}" />
+                    Header="{ll:Str 打开所在的文件夹}" />
                   <MenuItem
                     Command="{Binding PlacementTarget.Tag.RemoveHistoryCommand, RelativeSource={RelativeSource AncestorType=ContextMenu, Mode=FindAncestor}}"
                     CommandParameter="{Binding PlacementTarget.DataContext, RelativeSource={RelativeSource AncestorType=ContextMenu, Mode=FindAncestor}}"
