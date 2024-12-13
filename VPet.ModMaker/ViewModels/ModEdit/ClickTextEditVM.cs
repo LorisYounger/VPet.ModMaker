@@ -34,8 +34,6 @@ namespace VPet.ModMaker.ViewModels.ModEdit;
 /// </summary>
 public partial class ClickTextEditVM : DialogViewModel
 {
-    private static IDialogService DialogService => Locator.Current.GetService<IDialogService>()!;
-
     /// <inheritdoc/>
     public ClickTextEditVM()
     {
@@ -78,7 +76,7 @@ public partial class ClickTextEditVM : DialogViewModel
             return;
         if (string.IsNullOrWhiteSpace(ClickText.ID))
         {
-            DialogService.ShowMessageBoxX(
+            ModMakerVM.DialogService.ShowMessageBoxX(
                 this,
                 "ID不可为空".Translate(),
                 "数据错误".Translate(),
@@ -89,7 +87,7 @@ public partial class ClickTextEditVM : DialogViewModel
         }
         else if (ClickText.Text is null)
         {
-            DialogService.ShowMessageBoxX(
+            ModMakerVM.DialogService.ShowMessageBoxX(
                 this,
                 "文本不可为空".Translate(),
                 "数据错误".Translate(),
@@ -103,7 +101,7 @@ public partial class ClickTextEditVM : DialogViewModel
             && ModInfo.ClickTexts.Any(i => i.ID == ClickText.ID)
         )
         {
-            DialogService.ShowMessageBoxX(
+            ModMakerVM.DialogService.ShowMessageBoxX(
                 this,
                 "此ID已存在".Translate(),
                 "数据错误".Translate(),
@@ -193,7 +191,7 @@ public partial class ClickTextEditVM : DialogViewModel
     {
         ModInfo.TempI18nResource.ClearCultureData();
         ClickText = new() { I18nResource = ModInfo.TempI18nResource };
-        await DialogService.ShowDialogAsyncX(this, this);
+        await ModMakerVM.DialogService.ShowDialogAsyncX(this, this);
         if (DialogResult is not true)
         {
             ClickText.Close();
@@ -203,10 +201,10 @@ public partial class ClickTextEditVM : DialogViewModel
             ClickText.I18nResource.CopyDataTo(ModInfo.I18nResource, true);
             ClickText.I18nResource = ModInfo.I18nResource;
             ClickTexts.Add(ClickText);
-            if (this.Log().Level is LogLevel.Info)
-                this.Log().Info("添加新点击文本 {clickText}", ClickText.ID);
+            if (this.LogX().Level is LogLevel.Info)
+                this.LogX().Info("添加新点击文本 {clickText}", ClickText.ID);
             else
-                this.Log()
+                this.LogX()
                     .Debug(
                         "添加新点击文本 {$clickText}",
                         LPSConvert.SerializeObjectToLine<Line>(ClickText.ToClickText(), "ClickText")
@@ -226,7 +224,7 @@ public partial class ClickTextEditVM : DialogViewModel
         var newModel = new ClickTextModel(model) { I18nResource = ModInfo.TempI18nResource };
         model.I18nResource.CopyDataTo(newModel.I18nResource, [model.ID], true);
         ClickText = newModel;
-        await DialogService.ShowDialogAsync(this, this);
+        await ModMakerVM.DialogService.ShowDialogAsync(this, this);
         if (DialogResult is not true)
         {
             newModel.I18nResource.ClearCultureData();
@@ -238,11 +236,11 @@ public partial class ClickTextEditVM : DialogViewModel
             newModel.I18nResource.CopyDataTo(ModInfo.I18nResource, true);
             newModel.I18nResource = ModInfo.I18nResource;
             ClickTexts[ClickTexts.IndexOf(model)] = newModel;
-            if (this.Log().Level is LogLevel.Info)
-                this.Log()
+            if (this.LogX().Level is LogLevel.Info)
+                this.LogX()
                     .Info("编辑点击文本 {oldClickText} => {newClickText}", OldClickText.ID, ClickText.ID);
             else
-                this.Log()
+                this.LogX()
                     .Debug(
                         "编辑点击文本\n {$oldClickText} => {$newClickText}",
                         LPSConvert.SerializeObjectToLine<Line>(
@@ -264,7 +262,7 @@ public partial class ClickTextEditVM : DialogViewModel
     {
         var models = list.Cast<ClickTextModel>().ToArray();
         if (
-            DialogService.ShowMessageBoxX(
+            ModMakerVM.DialogService.ShowMessageBoxX(
                 this,
                 "确定删除已选中的 {0} 个点击文本吗".Translate(models.Length),
                 "删除点击文本".Translate(),
@@ -277,7 +275,7 @@ public partial class ClickTextEditVM : DialogViewModel
         {
             ClickTexts.Remove(model);
             model.Close();
-            this.Log().Info("删除点击文本 {clickText}", model.ID);
+            this.LogX().Info("删除点击文本 {clickText}", model.ID);
         }
     }
 

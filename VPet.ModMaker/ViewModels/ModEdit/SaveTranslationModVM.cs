@@ -27,8 +27,6 @@ namespace VPet.ModMaker.ViewModels.ModEdit;
 /// </summary>
 public partial class SaveTranslationModVM : DialogViewModel
 {
-    private static IDialogService DialogService => Locator.Current.GetService<IDialogService>()!;
-
     /// <inheritdoc/>
     public SaveTranslationModVM(ModInfoModel modInfo)
     {
@@ -56,7 +54,7 @@ public partial class SaveTranslationModVM : DialogViewModel
     [ReactiveCommand]
     private void Save()
     {
-        var saveFileDialog = DialogService.ShowOpenFolderDialog(
+        var saveFileDialog = ModMakerVM.DialogService.ShowOpenFolderDialog(
             this,
             new() { Title = "保存模组至文件夹".Translate() }
         );
@@ -68,13 +66,13 @@ public partial class SaveTranslationModVM : DialogViewModel
                 saveFileDialog.LocalPath,
                 CheckCultures.Where(m => m.IsSelected).Select(m => m.Source)
             );
-            this.Log().Info("翻译模组保存成功");
-            DialogService.ShowMessageBoxX(this, "翻译模组保存成功".Translate());
+            this.LogX().Info("翻译模组保存成功");
+            ModMakerVM.DialogService.ShowMessageBoxX(this, "翻译模组保存成功".Translate());
         }
         catch (Exception ex)
         {
-            this.Log().Warn(ex, "翻译模组保存失败");
-            DialogService.ShowMessageBoxX(this, "翻译模组保存失败, 详情请查看日志".Translate());
+            this.LogX().Warn(ex, "翻译模组保存失败");
+            ModMakerVM.DialogService.ShowMessageBoxX(this, "翻译模组保存失败, 详情请查看日志".Translate());
         }
     }
 }

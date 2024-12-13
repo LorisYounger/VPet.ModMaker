@@ -13,6 +13,7 @@ using System.Windows.Input;
 using DynamicData.Binding;
 using HanumanInstitute.MvvmDialogs;
 using HanumanInstitute.MvvmDialogs.FrameworkDialogs;
+using HanumanInstitute.MvvmDialogs.Wpf;
 using HKW.HKWReactiveUI;
 using HKW.HKWUtils;
 using HKW.HKWUtils.Collections;
@@ -27,6 +28,7 @@ using LinePutScript.Localization.WPF;
 using Microsoft.Win32;
 using ReactiveUI;
 using Splat;
+using Splat.NLog;
 using VPet.ModMaker.Models;
 using VPet.ModMaker.Resources;
 using VPet.ModMaker.ViewModels.ModEdit;
@@ -40,15 +42,18 @@ public partial class ModMakerVM : ViewModelBase
 {
     private static bool _isFirst = true;
 
-    private static IDialogService DialogService => Locator.Current.GetService<IDialogService>()!;
+    /// <summary>
+    /// 对话框服务
+    /// </summary>
+    public static IDialogService DialogService { get; private set; } = null!;
 
     /// <inheritdoc/>
     public ModMakerVM()
     {
         Initialize();
-        this.Log().Info("初始化完成".Translate());
+        this.LogX().Info("初始化完成".Translate());
 #if !RELEASE
-        HKWImageUtils.Logger = this.Log();
+        HKWImageUtils.Logger = this.LogX();
         HKWImageUtils.LogStackFrame = true;
 #endif
         Histories = new([], [], f => f.ID.Contains(Search, StringComparison.OrdinalIgnoreCase));
@@ -65,14 +70,16 @@ public partial class ModMakerVM : ViewModelBase
     {
         if (_isFirst is false)
             return;
-        Splat.ModeDetector.OverrideModeDetector(Splat.ModeDetection.Mode.Run);
+        NLog.LogManager.Configuration = new NLog.Config.XmlLoggingConfiguration(
+            Path.Combine(NativeData.ModMakerBaseDirectory, "NLog.config")
+        );
+        var funcLogManager = new FuncLogManager(type => new NLogLogger(LogResolver.Resolve(type)));
+        LogHostX.RegisterLoggerManager(typeof(ViewModelBase), funcLogManager);
 
-        Directory.CreateDirectory(NativeData.ModMakerBaseDirectory);
-        var configPath = Path.Combine(NativeData.ModMakerBaseDirectory, "NLog.config");
-        if (File.Exists(configPath) is false)
-            NativeResources.SaveTo(NativeResources.NLogConfig, configPath);
-
-        DependencyInjection.Initialize();
+        DialogService = new DialogService(
+            new DialogManagerX(viewLocator: new ViewLocator()),
+            viewModelFactory: x => throw new NotImplementedException()
+        );
 
         EnumInfo.DefaultToString = x =>
             x.IsFlagable
@@ -119,7 +126,7 @@ public partial class ModMakerVM : ViewModelBase
     public void RemoveHistory(ModMakeHistory value)
     {
         Histories.Remove(value);
-        this.Log().Info("已删除历史记录 {historyPath}", value.SourcePath);
+        this.LogX().Info("已删除历史记录 {historyPath}", value.SourcePath);
         SaveHistory(NativeData.HistoryBaseFilePath);
     }
 
@@ -130,7 +137,7 @@ public partial class ModMakerVM : ViewModelBase
     {
         if (File.Exists(historyFile) is false)
         {
-            this.Log().Warn("载入历史失败,历史文件 {file} 不存在", historyFile);
+            this.LogX().Warn("载入历史失败,历史文件 {file} 不存在", historyFile);
             return;
         }
         var lps = new LPS(File.ReadAllText(historyFile));
@@ -141,10 +148,10 @@ public partial class ModMakerVM : ViewModelBase
                 continue;
             history.ID ??= string.Empty;
             set.Add(history);
-            this.Log().Debug("添加历史 {history}", history.SourcePath);
+            this.LogX().Debug("添加历史 {history}", history.SourcePath);
         }
         Histories.AddRange(set.OrderByDescending(h => h.LastTime));
-        this.Log().Info("载入历史, 数量: {count}", set.Count);
+        this.LogX().Info("载入历史, 数量: {count}", set.Count);
     }
 
     /// <summary>
@@ -160,7 +167,7 @@ public partial class ModMakerVM : ViewModelBase
         foreach (var history in Histories)
             lps.Add(LPSConvert.SerializeObjectToLine<Line>(history, nameof(history)));
         File.WriteAllText(historyFile, lps.ToString());
-        this.Log().Info("成功保存历史");
+        this.LogX().Info("成功保存历史");
     }
 
     /// <summary>
@@ -178,7 +185,7 @@ public partial class ModMakerVM : ViewModelBase
             history.LastTime = DateTime.Now;
             Histories.Remove(history);
             Histories.Insert(0, history);
-            this.Log().Info("存在相同的历史 {history}, 更新最后修改时间", modInfo.SourcePath);
+            this.LogX().Info("存在相同的历史 {history}, 更新最后修改时间", modInfo.SourcePath);
         }
         else
         {
@@ -190,7 +197,7 @@ public partial class ModMakerVM : ViewModelBase
                     LastTime = DateTime.Now,
                 }
             );
-            this.Log().Info("添加历史 {history}", modInfo.SourcePath);
+            this.LogX().Info("添加历史 {history}", modInfo.SourcePath);
         }
         SaveHistory(NativeData.HistoryBaseFilePath);
     }
@@ -207,7 +214,7 @@ public partial class ModMakerVM : ViewModelBase
             history.LastTime = DateTime.Now;
             Histories.Remove(history);
             Histories.Insert(0, history);
-            this.Log().Info("存在相同的历史 {history}, 更新最后修改时间", modPath);
+            this.LogX().Info("存在相同的历史 {history}, 更新最后修改时间", modPath);
         }
         else
         {
@@ -219,7 +226,7 @@ public partial class ModMakerVM : ViewModelBase
                     LastTime = DateTime.Now,
                 }
             );
-            this.Log().Info("添加历史 {history}", modPath);
+            this.LogX().Info("添加历史 {history}", modPath);
         }
         SaveHistory(NativeData.HistoryBaseFilePath);
     }
@@ -244,7 +251,7 @@ public partial class ModMakerVM : ViewModelBase
         )
             return;
         Histories.Clear();
-        this.Log().Info("历史已清空");
+        this.LogX().Info("历史已清空");
         if (File.Exists(NativeData.HistoryBaseFilePath))
             File.WriteAllText(NativeData.HistoryBaseFilePath, string.Empty);
     }
@@ -324,7 +331,7 @@ public partial class ModMakerVM : ViewModelBase
         }
         catch (Exception ex)
         {
-            this.Log().Error(ex, "模组载入失败, 路径: {path}", directory);
+            this.LogX().Error(ex, "模组载入失败, 路径: {path}", directory);
             DialogService.ShowMessageBoxX(
                 this,
                 "模组载入失败, 详情请查看日志".Translate(),
@@ -343,7 +350,7 @@ public partial class ModMakerVM : ViewModelBase
         {
             ModInfo?.Close();
             ModInfo = null!;
-            this.Log().Error(ex, "模组载入失败, 路径: {path}", directory);
+            this.LogX().Error(ex, "模组载入失败, 路径: {path}", directory);
             DialogService.ShowMessageBoxX(this, "模组载入失败, 详情请查看日志".Translate());
         }
     }

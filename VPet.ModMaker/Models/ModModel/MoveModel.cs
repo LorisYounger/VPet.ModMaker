@@ -65,7 +65,10 @@ public partial class MoveModel : ViewModelBase
     /// 指定动画
     /// </summary>
     [MoveModelMapToMoveProperty(nameof(GraphHelper.Move.Graph))]
-    [MoveModelMapFromMoveProperty(nameof(GraphHelper.Move.Graph))]
+    [MoveModelMapFromMoveProperty(
+        nameof(GraphHelper.Move.Graph),
+        MapWhenRValueNotNullOrDefault = true
+    )]
     [ReactiveProperty]
     public string Graph { get; set; } = string.Empty;
 

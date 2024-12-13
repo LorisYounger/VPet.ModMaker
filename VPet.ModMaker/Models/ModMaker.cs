@@ -5,9 +5,13 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using HanumanInstitute.MvvmDialogs;
+using HKW.HKWReactiveUI;
 using HKW.HKWUtils;
 using LinePutScript;
 using LinePutScript.Localization.WPF;
+using Splat;
+using VPet.ModMaker.ViewModels;
 using VPet.ModMaker.Views;
 using VPet_Simulator.Windows.Interface;
 
@@ -16,7 +20,7 @@ namespace VPet.ModMaker.Models;
 /// <summary>
 /// 模组制作器
 /// </summary>
-public class ModMaker : MainPlugin
+public class ModMaker : MainPlugin, IEnableLogger<ViewModelBase>
 {
     /// <summary>
     /// 名称
@@ -26,7 +30,7 @@ public class ModMaker : MainPlugin
     /// <summary>
     /// 单例
     /// </summary>
-    public ModMakerWindow Maker = null!;
+    public ModMakerWindow ModMakerWindow = null!;
 
     /// <inheritdoc/>
     public ModMaker(IMainWindow mainwin)
@@ -38,7 +42,7 @@ public class ModMaker : MainPlugin
     public override void LoadPlugin()
     {
         //Set = MW.Set.FindLine("ModMaker");
-        MenuItem modset = MW.Main.ToolBar.MenuMODConfig;
+        var modset = MW.Main.ToolBar.MenuMODConfig;
         modset.Visibility = Visibility.Visible;
         var menuset = new MenuItem()
         {
@@ -50,7 +54,12 @@ public class ModMaker : MainPlugin
             Setting();
         };
         modset.Items.Add(menuset);
-        Application.Current.Resources.MergedDictionaries.Add(NativeData.NativeStyles);
+
+        if (
+            Application.Current.Resources.MergedDictionaries.Contains(NativeData.NativeStyles)
+            is false
+        )
+            Application.Current.Resources.MergedDictionaries.Add(NativeData.NativeStyles);
     }
 
     /// <summary>
@@ -62,28 +71,36 @@ public class ModMaker : MainPlugin
     /// <inheritdoc/>
     public override void Setting()
     {
-        if (Maker is null)
+        if (ModMakerWindow is null)
         {
             // 载入ModMaker资源
-            Maker = new ModMakerWindow();
+            ModMakerWindow = new ModMakerWindow();
             // 设置游戏版本
             NativeData.GameVersion = MW.version;
             // 载入本体宠物
             foreach (var pet in MW.Pets)
-                NativeData.MainPets.TryAdd(pet.Name, new(pet, I18nResource, true));
-            //Maker.ModMaker = this;
-            Maker.Show();
-            Maker.Closed += Maker_Closed;
+            {
+                try
+                {
+                    NativeData.MainPets.TryAdd(pet.Name, new(pet, I18nResource, true));
+                }
+                catch (Exception ex)
+                {
+                    this.LogX().Warn(ex, "载入本体宠物错误, PetID: {id}", pet.Name);
+                }
+            }
+            ModMakerWindow.Show();
+            ModMakerWindow.Closed += Maker_Closed;
         }
         else
         {
-            Maker.Activate();
+            ModMakerWindow.Activate();
         }
     }
 
     private void Maker_Closed(object? sender, EventArgs e)
     {
-        Maker.ViewModel.Close();
-        Maker = null!;
+        ModMakerWindow.Closed -= Maker_Closed;
+        ModMakerWindow = null!;
     }
 }

@@ -32,8 +32,6 @@ namespace VPet.ModMaker.ViewModels.ModEdit;
 /// </summary>
 public partial class SelectTextEditVM : DialogViewModel
 {
-    private static IDialogService DialogService => Locator.Current.GetService<IDialogService>()!;
-
     /// <inheritdoc/>
     public SelectTextEditVM()
     {
@@ -79,7 +77,7 @@ public partial class SelectTextEditVM : DialogViewModel
             return;
         if (string.IsNullOrWhiteSpace(SelectText.ID))
         {
-            DialogService.ShowMessageBoxX(
+            ModMakerVM.DialogService.ShowMessageBoxX(
                 this,
                 "ID不可为空".Translate(),
                 "数据错误".Translate(),
@@ -90,7 +88,7 @@ public partial class SelectTextEditVM : DialogViewModel
         }
         else if (SelectText.Text is null)
         {
-            DialogService.ShowMessageBoxX(
+            ModMakerVM.DialogService.ShowMessageBoxX(
                 this,
                 "文本不可为空".Translate(),
                 "数据错误".Translate(),
@@ -104,7 +102,7 @@ public partial class SelectTextEditVM : DialogViewModel
             && ModInfo.SelectTexts.Any(i => i.ID == SelectText.ID)
         )
         {
-            DialogService.ShowMessageBoxX(
+            ModMakerVM.DialogService.ShowMessageBoxX(
                 this,
                 "此ID已存在".Translate(),
                 "数据错误".Translate(),
@@ -188,7 +186,7 @@ public partial class SelectTextEditVM : DialogViewModel
     {
         ModInfo.TempI18nResource.ClearCultureData();
         SelectText = new() { I18nResource = ModInfo.I18nResource };
-        await DialogService.ShowDialogAsyncX(this, this);
+        await ModMakerVM.DialogService.ShowDialogAsyncX(this, this);
         if (DialogResult is not true)
         {
             SelectText.Close();
@@ -198,10 +196,10 @@ public partial class SelectTextEditVM : DialogViewModel
             SelectText.I18nResource.CopyDataTo(ModInfo.I18nResource, true);
             SelectText.I18nResource = ModInfo.I18nResource;
             SelectTexts.Add(SelectText);
-            if (this.Log().Level is LogLevel.Info)
-                this.Log().Info("添加新选择文本 {selectText}", SelectText.ID);
+            if (this.LogX().Level is LogLevel.Info)
+                this.LogX().Info("添加新选择文本 {selectText}", SelectText.ID);
             else
-                this.Log()
+                this.LogX()
                     .Debug(
                         "添加新选择文本 {$selectText}",
                         LPSConvert.SerializeObjectToLine<Line>(
@@ -224,7 +222,7 @@ public partial class SelectTextEditVM : DialogViewModel
         var newModel = new SelectTextModel(model) { I18nResource = ModInfo.TempI18nResource };
         model.I18nResource.CopyDataTo(newModel.I18nResource, [model.ID, model.ChooseID], true);
         SelectText = newModel;
-        await DialogService.ShowDialogAsync(this, this);
+        await ModMakerVM.DialogService.ShowDialogAsync(this, this);
         if (DialogResult is not true)
         {
             newModel.I18nResource.ClearCultureData();
@@ -236,15 +234,15 @@ public partial class SelectTextEditVM : DialogViewModel
             newModel.I18nResource.CopyDataTo(ModInfo.I18nResource, true);
             newModel.I18nResource = ModInfo.I18nResource;
             SelectTexts[SelectTexts.IndexOf(model)] = newModel;
-            if (this.Log().Level is LogLevel.Info)
-                this.Log()
+            if (this.LogX().Level is LogLevel.Info)
+                this.LogX()
                     .Info(
                         "编辑选择文本 {oldSelectText} => {newSelectText}",
                         OldSelectText.ID,
                         SelectText.ID
                     );
             else
-                this.Log()
+                this.LogX()
                     .Debug(
                         "编辑选择文本\n {$oldSelectText} => {$newSelectText}",
                         LPSConvert.SerializeObjectToLine<Line>(
@@ -269,7 +267,7 @@ public partial class SelectTextEditVM : DialogViewModel
     {
         var models = list.Cast<SelectTextModel>().ToArray();
         if (
-            DialogService.ShowMessageBoxX(
+            ModMakerVM.DialogService.ShowMessageBoxX(
                 this,
                 "确定删除已选中的 {0} 个选择文本吗".Translate(models.Length),
                 "删除选择文本".Translate(),
@@ -282,7 +280,7 @@ public partial class SelectTextEditVM : DialogViewModel
         {
             SelectTexts.Remove(model);
             model.Close();
-            this.Log().Info("删除选择文本 {selectText}", model.ID);
+            this.LogX().Info("删除选择文本 {selectText}", model.ID);
         }
     }
 

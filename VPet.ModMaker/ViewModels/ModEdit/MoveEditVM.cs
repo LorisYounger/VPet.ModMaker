@@ -35,8 +35,6 @@ namespace VPet.ModMaker.ViewModels.ModEdit;
 /// </summary>
 public partial class MoveEditVM : DialogViewModel
 {
-    private static IDialogService DialogService => Locator.Current.GetService<IDialogService>()!;
-
     /// <inheritdoc/>
     public MoveEditVM()
     {
@@ -57,7 +55,11 @@ public partial class MoveEditVM : DialogViewModel
             return;
         if (string.IsNullOrWhiteSpace(Move.Graph))
         {
-            DialogService.ShowMessageBoxX(this, "指定动画不可为空".Translate(), "数据错误".Translate());
+            ModMakerVM.DialogService.ShowMessageBoxX(
+                this,
+                "指定动画不可为空".Translate(),
+                "数据错误".Translate()
+            );
             e.Cancel = true;
         }
         DialogResult = e.Cancel is not true;
@@ -162,7 +164,7 @@ public partial class MoveEditVM : DialogViewModel
     [ReactiveCommand]
     private void AddImage()
     {
-        var openFileDialog = DialogService.ShowOpenFileDialog(
+        var openFileDialog = ModMakerVM.DialogService.ShowOpenFileDialog(
             this,
             new()
             {
@@ -175,7 +177,7 @@ public partial class MoveEditVM : DialogViewModel
         var newImage = HKWImageUtils.LoadImageToMemory(openFileDialog.LocalPath);
         if (newImage is null)
         {
-            DialogService.ShowMessageBoxX(
+            ModMakerVM.DialogService.ShowMessageBoxX(
                 this,
                 "图片载入失败, 详情请查看日志".Translate(),
                 "图片载入失败".Translate(),
@@ -192,7 +194,7 @@ public partial class MoveEditVM : DialogViewModel
     [ReactiveCommand]
     private void ChangeImage()
     {
-        var openFileDialog = DialogService.ShowOpenFileDialog(
+        var openFileDialog = ModMakerVM.DialogService.ShowOpenFileDialog(
             this,
             new()
             {
@@ -205,7 +207,7 @@ public partial class MoveEditVM : DialogViewModel
         var newImage = HKWImageUtils.LoadImageToMemory(openFileDialog.LocalPath);
         if (newImage is null)
         {
-            DialogService.ShowMessageBoxX(
+            ModMakerVM.DialogService.ShowMessageBoxX(
                 this,
                 "图片载入失败, 详情请查看日志".Translate(),
                 "图片载入失败".Translate(),
@@ -223,15 +225,15 @@ public partial class MoveEditVM : DialogViewModel
     [ReactiveCommand]
     private async void Add()
     {
-        await DialogService.ShowDialogAsyncX(this, this);
+        await ModMakerVM.DialogService.ShowDialogAsyncX(this, this);
         if (DialogResult is not true)
             return;
 
         Moves.Add(Move);
-        if (this.Log().Level is LogLevel.Info)
-            this.Log().Info("添加新移动 {move}", Move.Graph);
+        if (this.LogX().Level is LogLevel.Info)
+            this.LogX().Info("添加新移动 {move}", Move.Graph);
         else
-            this.Log()
+            this.LogX()
                 .Debug(
                     "添加新移动 {$move}",
                     LPSConvert.SerializeObjectToLine<Line>(Move.MapToMove(new()), "Move")
@@ -249,11 +251,11 @@ public partial class MoveEditVM : DialogViewModel
         OldMove = model;
         var newModel = new MoveModel(model);
         Move = newModel;
-        await DialogService.ShowDialogAsync(this, this);
+        await ModMakerVM.DialogService.ShowDialogAsync(this, this);
         if (DialogResult is not true)
             return;
         Moves[Moves.IndexOf(model)] = newModel;
-        this.Log().Info("编辑移动 {oldMove} => {newMove}", OldMove.Graph, Move.Graph);
+        this.LogX().Info("编辑移动 {oldMove} => {newMove}", OldMove.Graph, Move.Graph);
         Reset();
     }
 
@@ -266,7 +268,7 @@ public partial class MoveEditVM : DialogViewModel
     {
         var models = list.Cast<MoveModel>().ToArray();
         if (
-            DialogService.ShowMessageBoxX(
+            ModMakerVM.DialogService.ShowMessageBoxX(
                 this,
                 "确定删除已选中的 {0} 个移动吗".Translate(models.Length),
                 "删除移动".Translate(),
@@ -278,7 +280,7 @@ public partial class MoveEditVM : DialogViewModel
         foreach (var model in models)
         {
             Moves.Remove(model);
-            this.Log().Info("删除移动 {move}", model.Graph);
+            this.LogX().Info("删除移动 {move}", model.Graph);
         }
     }
 

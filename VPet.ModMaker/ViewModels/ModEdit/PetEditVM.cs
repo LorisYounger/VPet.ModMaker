@@ -36,8 +36,6 @@ namespace VPet.ModMaker.ViewModels.ModEdit;
 /// </summary>
 public partial class PetEditVM : DialogViewModel
 {
-    private static IDialogService DialogService => Locator.Current.GetService<IDialogService>()!;
-
     /// <inheritdoc/>
     public PetEditVM()
     {
@@ -85,7 +83,7 @@ public partial class PetEditVM : DialogViewModel
             return;
         if (string.IsNullOrWhiteSpace(Pet.ID))
         {
-            DialogService.ShowMessageBoxX(
+            ModMakerVM.DialogService.ShowMessageBoxX(
                 this,
                 "ID不可为空".Translate(),
                 "数据错误".Translate(),
@@ -96,7 +94,7 @@ public partial class PetEditVM : DialogViewModel
         }
         else if (Pet.Name is null)
         {
-            DialogService.ShowMessageBoxX(
+            ModMakerVM.DialogService.ShowMessageBoxX(
                 this,
                 "名称不可为空".Translate(),
                 "数据错误".Translate(),
@@ -107,7 +105,7 @@ public partial class PetEditVM : DialogViewModel
         }
         else if (Pet.PetName is null)
         {
-            DialogService.ShowMessageBoxX(
+            ModMakerVM.DialogService.ShowMessageBoxX(
                 this,
                 "宠物名称不可为空".Translate(),
                 "数据错误".Translate(),
@@ -118,7 +116,7 @@ public partial class PetEditVM : DialogViewModel
         }
         else if (OldPet?.ID != Pet.ID && ModInfo.Pets.Any(i => i.ID == Pet.ID))
         {
-            DialogService.ShowMessageBoxX(
+            ModMakerVM.DialogService.ShowMessageBoxX(
                 this,
                 "此ID已存在".Translate(),
                 "数据错误".Translate(),
@@ -240,7 +238,7 @@ public partial class PetEditVM : DialogViewModel
     [ReactiveCommand]
     private void AddImage()
     {
-        var openFileDialog = DialogService.ShowOpenFileDialog(
+        var openFileDialog = ModMakerVM.DialogService.ShowOpenFileDialog(
             this,
             new()
             {
@@ -253,7 +251,7 @@ public partial class PetEditVM : DialogViewModel
         var newImage = HKWImageUtils.LoadImageToMemory(openFileDialog.LocalPath);
         if (newImage is null)
         {
-            DialogService.ShowMessageBoxX(
+            ModMakerVM.DialogService.ShowMessageBoxX(
                 this,
                 "图片载入失败, 详情请查看日志".Translate(),
                 "图片载入失败".Translate(),
@@ -270,7 +268,7 @@ public partial class PetEditVM : DialogViewModel
     [ReactiveCommand]
     private void ChangeImage()
     {
-        var openFileDialog = DialogService.ShowOpenFileDialog(
+        var openFileDialog = ModMakerVM.DialogService.ShowOpenFileDialog(
             this,
             new()
             {
@@ -283,7 +281,7 @@ public partial class PetEditVM : DialogViewModel
         var newImage = HKWImageUtils.LoadImageToMemory(openFileDialog.LocalPath);
         if (newImage is null)
         {
-            DialogService.ShowMessageBoxX(
+            ModMakerVM.DialogService.ShowMessageBoxX(
                 this,
                 "图片载入失败, 详情请查看日志".Translate(),
                 "图片载入失败".Translate(),
@@ -303,7 +301,7 @@ public partial class PetEditVM : DialogViewModel
     {
         ModInfo.TempI18nResource.ClearCultureData();
         Pet = new() { I18nResource = ModInfo.I18nResource };
-        await DialogService.ShowDialogAsyncX(this, this);
+        await ModMakerVM.DialogService.ShowDialogAsyncX(this, this);
         if (DialogResult is not true)
         {
             Pet.Close();
@@ -313,7 +311,7 @@ public partial class PetEditVM : DialogViewModel
             Pet.I18nResource.CopyDataTo(ModInfo.I18nResource, true);
             Pet.I18nResource = ModInfo.I18nResource;
             Pets.Add(Pet);
-            this.Log().Info("添加新宠物 {pet}", Pet.ID);
+            this.LogX().Info("添加新宠物 {pet}", Pet.ID);
         }
         Reset();
     }
@@ -328,7 +326,7 @@ public partial class PetEditVM : DialogViewModel
         if (model.FromMain)
         {
             if (
-                DialogService.ShowMessageBoxX(
+                ModMakerVM.DialogService.ShowMessageBoxX(
                     this,
                     "这是本体自带的宠物, 确定要编辑吗?".Translate(),
                     "编辑".Translate(),
@@ -346,7 +344,7 @@ public partial class PetEditVM : DialogViewModel
             true
         );
         Pet = newModel;
-        await DialogService.ShowDialogAsync(this, this);
+        await ModMakerVM.DialogService.ShowDialogAsync(this, this);
         if (DialogResult is not true)
         {
             newModel.I18nResource.ClearCultureData();
@@ -361,7 +359,7 @@ public partial class PetEditVM : DialogViewModel
             Pets[Pets.IndexOf(model)] = newModel;
             if (temp == OldPet)
                 ModInfo.CurrentPet = newModel;
-            this.Log().Info("编辑宠物 {oldPet} => {newPet}", OldPet.ID, Pet.ID);
+            this.LogX().Info("编辑宠物 {oldPet} => {newPet}", OldPet.ID, Pet.ID);
         }
         Reset();
     }
@@ -375,7 +373,7 @@ public partial class PetEditVM : DialogViewModel
     {
         var models = list.Cast<PetModel>().ToArray();
         if (
-            DialogService.ShowMessageBoxX(
+            ModMakerVM.DialogService.ShowMessageBoxX(
                 this,
                 "确定删除已选中的 {0} 个宠物吗".Translate(models.Length),
                 "删除宠物".Translate(),
@@ -388,7 +386,7 @@ public partial class PetEditVM : DialogViewModel
         {
             Pets.Remove(model);
             model.Close();
-            this.Log().Info("删除宠物 {pet}", model.ID);
+            this.LogX().Info("删除宠物 {pet}", model.ID);
         }
     }
 

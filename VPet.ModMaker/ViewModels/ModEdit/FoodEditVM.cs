@@ -39,8 +39,6 @@ namespace VPet.ModMaker.ViewModels.ModEdit;
 /// </summary>
 public partial class FoodEditVM : DialogViewModel
 {
-    private static IDialogService DialogService => Locator.Current.GetService<IDialogService>()!;
-
     /// <inheritdoc/>
     public FoodEditVM()
     {
@@ -83,7 +81,7 @@ public partial class FoodEditVM : DialogViewModel
             return;
         if (string.IsNullOrWhiteSpace(Food.ID))
         {
-            DialogService.ShowMessageBoxX(
+            ModMakerVM.DialogService.ShowMessageBoxX(
                 this,
                 "ID不可为空".Translate(),
                 "数据错误".Translate(),
@@ -94,7 +92,7 @@ public partial class FoodEditVM : DialogViewModel
         }
         else if (Food.Image is null)
         {
-            DialogService.ShowMessageBoxX(
+            ModMakerVM.DialogService.ShowMessageBoxX(
                 this,
                 "图像不可为空".Translate(),
                 "数据错误".Translate(),
@@ -105,7 +103,7 @@ public partial class FoodEditVM : DialogViewModel
         }
         else if (OldFood?.ID != Food.ID && ModInfo.Foods.Any(i => i.ID == Food.ID))
         {
-            DialogService.ShowMessageBoxX(
+            ModMakerVM.DialogService.ShowMessageBoxX(
                 this,
                 "此ID已存在".Translate(),
                 "数据错误".Translate(),
@@ -211,7 +209,7 @@ public partial class FoodEditVM : DialogViewModel
     private void SetReferencePrice(double value)
     {
         Food.Price = value;
-        this.Log().Info("设置推荐价格 {price}", value);
+        this.LogX().Info("设置推荐价格 {price}", value);
     }
 
     /// <summary>
@@ -220,7 +218,7 @@ public partial class FoodEditVM : DialogViewModel
     [ReactiveCommand]
     private void AddImage()
     {
-        var openFileDialog = DialogService.ShowOpenFileDialog(
+        var openFileDialog = ModMakerVM.DialogService.ShowOpenFileDialog(
             this,
             new()
             {
@@ -233,7 +231,7 @@ public partial class FoodEditVM : DialogViewModel
         var newImage = HKWImageUtils.LoadImageToMemory(openFileDialog.LocalPath);
         if (newImage is null)
         {
-            DialogService.ShowMessageBoxX(
+            ModMakerVM.DialogService.ShowMessageBoxX(
                 this,
                 "图片载入失败, 详情请查看日志".Translate(),
                 "图片载入失败".Translate(),
@@ -250,7 +248,7 @@ public partial class FoodEditVM : DialogViewModel
     [ReactiveCommand]
     private void ChangeImage()
     {
-        var openFileDialog = DialogService.ShowOpenFileDialog(
+        var openFileDialog = ModMakerVM.DialogService.ShowOpenFileDialog(
             this,
             new()
             {
@@ -263,7 +261,7 @@ public partial class FoodEditVM : DialogViewModel
         var newImage = HKWImageUtils.LoadImageToMemory(openFileDialog.LocalPath);
         if (newImage is null)
         {
-            DialogService.ShowMessageBoxX(
+            ModMakerVM.DialogService.ShowMessageBoxX(
                 this,
                 "图片载入失败, 详情请查看日志".Translate(),
                 "图片载入失败".Translate(),
@@ -291,7 +289,7 @@ public partial class FoodEditVM : DialogViewModel
     {
         ModInfo.TempI18nResource.ClearCultureData();
         Food = new() { I18nResource = ModInfo.TempI18nResource };
-        await DialogService.ShowDialogAsyncX(this, this);
+        await ModMakerVM.DialogService.ShowDialogAsyncX(this, this);
         if (DialogResult is not true)
         {
             Food.Close();
@@ -301,10 +299,10 @@ public partial class FoodEditVM : DialogViewModel
             Food.I18nResource.CopyDataTo(ModInfo.I18nResource, true);
             Food.I18nResource = ModInfo.I18nResource;
             Foods.Add(Food);
-            if (this.Log().Level is LogLevel.Info)
-                this.Log().Info("添加新食物 {food}", Food.ID);
+            if (this.LogX().Level is LogLevel.Info)
+                this.LogX().Info("添加新食物 {food}", Food.ID);
             else
-                this.Log()
+                this.LogX()
                     .Debug(
                         "添加新食物 {$food}",
                         LPSConvert.SerializeObjectToLine<Line>(Food.MapToFood(new()), "Food")
@@ -325,7 +323,7 @@ public partial class FoodEditVM : DialogViewModel
         var newModel = new FoodModel(model) { I18nResource = ModInfo.TempI18nResource };
         model.I18nResource.CopyDataTo(newModel.I18nResource, [model.ID, model.DescriptionID], true);
         Food = newModel;
-        await DialogService.ShowDialogAsync(this, this);
+        await ModMakerVM.DialogService.ShowDialogAsync(this, this);
         if (DialogResult is not true)
         {
             newModel.I18nResource.ClearCultureData();
@@ -337,10 +335,10 @@ public partial class FoodEditVM : DialogViewModel
             newModel.I18nResource.CopyDataTo(ModInfo.I18nResource, true);
             newModel.I18nResource = ModInfo.I18nResource;
             Foods[Foods.IndexOf(model)] = newModel;
-            if (this.Log().Level is LogLevel.Info)
-                this.Log().Info("编辑食物 {oldFood} => {newFood}", OldFood.ID, Food.ID);
+            if (this.LogX().Level is LogLevel.Info)
+                this.LogX().Info("编辑食物 {oldFood} => {newFood}", OldFood.ID, Food.ID);
             else
-                this.Log()
+                this.LogX()
                     .Debug(
                         "编辑食物\n {$oldFood} => {$newFood}",
                         LPSConvert.SerializeObjectToLine<Line>(OldFood.MapToFood(new()), "Food"),
@@ -359,7 +357,7 @@ public partial class FoodEditVM : DialogViewModel
     {
         var models = list.Cast<FoodModel>().ToArray();
         if (
-            DialogService.ShowMessageBoxX(
+            ModMakerVM.DialogService.ShowMessageBoxX(
                 this,
                 "确定删除已选中的 {0} 个食物吗".Translate(models.Length),
                 "删除食物".Translate(),
@@ -372,7 +370,7 @@ public partial class FoodEditVM : DialogViewModel
         {
             Foods.Remove(model);
             model.Close();
-            this.Log().Info("删除食物 {food}", model.ID);
+            this.LogX().Info("删除食物 {food}", model.ID);
         }
     }
 

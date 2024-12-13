@@ -62,15 +62,28 @@ public partial class PetModel : ViewModelBase
         : this()
     {
         ID = loader.Name;
+
         if (loader.PetName != PetNameID)
         {
-            if (i18nResource.ReplaceCultureDataKey(loader.PetName, PetNameID, true) is false)
+            if (loader.PetName is null)
+            {
+                i18nResource.SetCurrentCultureData(PetNameID, loader.Name);
+            }
+            else if (i18nResource.ReplaceCultureDataKey(loader.PetName, PetNameID, true) is false)
+            {
                 i18nResource.SetCurrentCultureData(PetNameID, loader.PetName);
+            }
         }
         if (loader.Intor != DescriptionID)
         {
-            if (i18nResource.ReplaceCultureDataKey(loader.Intor, DescriptionID, true) is false)
+            if (loader.Intor is null)
+            {
+                i18nResource.SetCurrentCultureData(PetNameID, loader.Name);
+            }
+            else if (i18nResource.ReplaceCultureDataKey(loader.Intor, DescriptionID, true) is false)
+            {
                 i18nResource.SetCurrentCultureData(DescriptionID, loader.Intor);
+            }
         }
         I18nResource = i18nResource;
 

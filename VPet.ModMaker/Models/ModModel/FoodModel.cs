@@ -60,7 +60,7 @@ public partial class FoodModel : ViewModelBase
         if (File.Exists(food.Image))
             Image = HKWImageUtils.LoadImageToMemory(food.Image);
         else
-            this.Log().Warn("获取食物图像失败, 目标路径: {path}", food.Image);
+            this.LogX().Warn("获取食物图像失败, 目标路径: {path}", food.Image);
     }
 
     /// <summary>
@@ -131,7 +131,7 @@ public partial class FoodModel : ViewModelBase
     /// 指定动画
     /// </summary>
     [FoodModelMapToFoodProperty(nameof(Food.Graph))]
-    [FoodModelMapFromFoodProperty(nameof(Food.Graph))]
+    [FoodModelMapFromFoodProperty(nameof(Food.Graph), MapWhenRValueNotNullOrDefault = true)]
     [ReactiveProperty]
     public string Graph { get; set; } = string.Empty;
 

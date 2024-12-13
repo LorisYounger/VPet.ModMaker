@@ -30,8 +30,6 @@ namespace VPet.ModMaker.ViewModels.ModEdit;
 /// </summary>
 public partial class AddCultureVM : DialogViewModel
 {
-    private static IDialogService DialogService => Locator.Current.GetService<IDialogService>()!;
-
     /// <inheritdoc/>
     public AddCultureVM(ModInfoModel modInfo)
     {
@@ -56,7 +54,7 @@ public partial class AddCultureVM : DialogViewModel
             return;
         if (string.IsNullOrWhiteSpace(CultureName))
         {
-            DialogService.ShowMessageBoxX(
+            ModMakerVM.DialogService.ShowMessageBoxX(
                 this,
                 "文化不可为空".Translate(),
                 "数据错误".Translate(),
@@ -66,7 +64,7 @@ public partial class AddCultureVM : DialogViewModel
         }
         else if (CultureUtils.TryGetCultureInfo(CultureName, out var culture) is false)
         {
-            DialogService.ShowMessageBoxX(
+            ModMakerVM.DialogService.ShowMessageBoxX(
                 this,
                 "不支持的文化".Translate(),
                 "数据错误".Translate(),
@@ -76,7 +74,7 @@ public partial class AddCultureVM : DialogViewModel
         }
         else if (ModInfo.I18nResource.Cultures.Contains(culture))
         {
-            DialogService.ShowMessageBoxX(
+            ModMakerVM.DialogService.ShowMessageBoxX(
                 this,
                 "此文化已存在".Translate(),
                 "数据错误".Translate(),
@@ -159,7 +157,7 @@ public partial class AddCultureVM : DialogViewModel
         catch
         {
             if (
-                DialogService.ShowMessageBoxX(
+                ModMakerVM.DialogService.ShowMessageBoxX(
                     this,
                     "无法打开链接,需要复制自行访问吗".Translate(),
                     "打开链接失败".Translate(),
@@ -170,7 +168,7 @@ public partial class AddCultureVM : DialogViewModel
             )
                 return;
             NativeUtils.ClipboardSetText(CultureLink);
-            DialogService.ShowMessageBoxX(this, "已复制到剪贴板".Translate());
+            ModMakerVM.DialogService.ShowMessageBoxX(this, "已复制到剪贴板".Translate());
         }
     }
 }

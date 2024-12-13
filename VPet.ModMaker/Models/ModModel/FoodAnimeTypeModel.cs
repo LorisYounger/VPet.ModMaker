@@ -188,7 +188,7 @@ public partial class FoodAnimeTypeModel : ViewModelBase, IAnimeModel
         }
         catch (Exception ex)
         {
-            this.Log().Warn(ex, "食物动画信息文件解析失败, 信息文件: {infoFile}, 目标文件夹: {path}", infoFile, path);
+            this.LogX().Warn(ex, "食物动画信息文件解析失败, 信息文件: {infoFile}, 目标文件夹: {path}", infoFile, path);
         }
     }
 
@@ -220,7 +220,7 @@ public partial class FoodAnimeTypeModel : ViewModelBase, IAnimeModel
         }
         catch (Exception ex)
         {
-            this.Log().Warn(ex, "食物动画信息解析失败, 目标文件夹: {path}, 信息行: {$line}", path, line);
+            this.LogX().Warn(ex, "食物动画信息解析失败, 目标文件夹: {path}, 信息行: {$line}", path, line);
         }
     }
 
@@ -312,7 +312,7 @@ public partial class FoodAnimeTypeModel : ViewModelBase, IAnimeModel
         }
         catch (Exception ex)
         {
-            this.Log().Warn(ex, "食物动画保存失败, 目标文件夹: {path}", path);
+            this.LogX().Warn(ex, "食物动画保存失败, 目标文件夹: {path}", path);
         }
     }
 

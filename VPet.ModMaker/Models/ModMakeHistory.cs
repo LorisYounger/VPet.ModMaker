@@ -17,7 +17,7 @@ namespace VPet.ModMaker.Models;
 /// <summary>
 /// 模组制作历史
 /// </summary>
-public class ModMakeHistory : IEquatable<ModMakeHistory>, IEnableLogger
+public class ModMakeHistory : IEquatable<ModMakeHistory>, IEnableLogger<ViewModelBase>
 {
     /// <inheritdoc/>
     public ModMakeHistory() { }
@@ -53,7 +53,7 @@ public class ModMakeHistory : IEquatable<ModMakeHistory>, IEnableLogger
             var imagePath = Path.Combine(_sourcePath, "icon.png");
 
             if (File.Exists(imagePath) is false)
-                this.Log().Warn("目标文件不存在, 路径: {path}", imagePath);
+                this.LogX().Warn("目标文件不存在, 路径: {path}", imagePath);
             else
                 Image = HKWImageUtils.LoadImageToMemory(imagePath);
         }

@@ -116,7 +116,10 @@ public partial class ClickTextModel : ViewModelBase
     /// 指定工作
     /// </summary>
     [ClickTextModelMapToClickTextProperty(nameof(ClickText.Working))]
-    [ClickTextModelMapFromClickTextProperty(nameof(ClickText.Working))]
+    [ClickTextModelMapFromClickTextProperty(
+        nameof(ClickText.Working),
+        MapWhenRValueNotNullOrDefault = true
+    )]
     [ReactiveProperty]
     public string Working { get; set; } = string.Empty;
 

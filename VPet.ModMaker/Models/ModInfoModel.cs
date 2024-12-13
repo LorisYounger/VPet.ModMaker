@@ -72,10 +72,10 @@ public partial class ModInfoModel : ViewModelBase
             if (Pets.All(i => i.ID != pet.Key))
             {
                 Pets.Add(pet.Value);
-                this.Log().Info("载入本体宠物 {pet}", pet.Key);
+                this.LogX().Info("载入本体宠物 {pet}", pet.Key);
             }
             else
-                this.Log().Info("载入本体宠物失败,已存在相同ID的宠物 {pet}", pet.Key);
+                this.LogX().Info("载入本体宠物失败,已存在相同ID的宠物 {pet}", pet.Key);
         }
     }
 
@@ -101,7 +101,7 @@ public partial class ModInfoModel : ViewModelBase
     public ModInfoModel(ModLoader loader)
         : this()
     {
-        this.Log().Info("载入模组, ID: {id}, 路径: {path}", loader.Name, loader.ModPath.FullName);
+        this.LogX().Info("载入模组, ID: {id}, 路径: {path}", loader.Name, loader.ModPath.FullName);
         SourcePath = loader.ModPath.FullName;
 
         LoadI18nDatas(loader);
@@ -134,7 +134,7 @@ public partial class ModInfoModel : ViewModelBase
 
     private void LoadPets(ModLoader loader)
     {
-        this.Log().Info("载入宠物, 数量: {count}", loader.Pets.Count);
+        this.LogX().Info("载入宠物, 数量: {count}", loader.Pets.Count);
         // 载入模组宠物
         foreach (var pet in loader.Pets)
         {
@@ -174,79 +174,79 @@ public partial class ModInfoModel : ViewModelBase
                 Pets.Add(petModel);
                 foreach (var p in pet.path)
                     LoadAnime(petModel, p);
-                this.Log().Debug("添加宠物成功, ID: {id}, 宠物名称: {name}", pet.Name, pet.PetName);
+                this.LogX().Debug("添加宠物成功, ID: {id}, 宠物名称: {name}", pet.Name, pet.PetName);
             }
             catch (Exception ex)
             {
-                this.Log().Warn(ex, "添加宠物失败, ID: {id}, 宠物名称: {name}", pet.Name, pet.PetName);
+                this.LogX().Warn(ex, "添加宠物失败, ID: {id}, 宠物名称: {name}", pet.Name, pet.PetName);
             }
         }
     }
 
     private void LoadSelectTexts(ModLoader loader)
     {
-        this.Log().Info("载入选择文本, 数量: {count}", loader.SelectTexts.Count);
+        this.LogX().Info("载入选择文本, 数量: {count}", loader.SelectTexts.Count);
         foreach (var selectText in loader.SelectTexts)
         {
             try
             {
                 SelectTexts.Add(new(selectText, I18nResource));
-                this.Log().Debug("添加选择文本成功, ID: {id}", selectText.Text);
+                this.LogX().Debug("添加选择文本成功, ID: {id}", selectText.Text);
             }
             catch (Exception ex)
             {
-                this.Log().Warn(ex, "添加选择文本失败, ID: {id}", selectText.Text);
+                this.LogX().Warn(ex, "添加选择文本失败, ID: {id}", selectText.Text);
             }
         }
     }
 
     private void LoadLowTexts(ModLoader loader)
     {
-        this.Log().Info("载入低状态文本, 数量: {count}", loader.LowTexts.Count);
+        this.LogX().Info("载入低状态文本, 数量: {count}", loader.LowTexts.Count);
         foreach (var lowText in loader.LowTexts)
         {
             try
             {
                 LowTexts.Add(new(lowText) { I18nResource = I18nResource });
-                this.Log().Debug("添加低状态文本成功, ID: {id}", lowText.Text);
+                this.LogX().Debug("添加低状态文本成功, ID: {id}", lowText.Text);
             }
             catch (Exception ex)
             {
-                this.Log().Warn(ex, "添加低状态文本失败, ID: {id}", lowText.Text);
+                this.LogX().Warn(ex, "添加低状态文本失败, ID: {id}", lowText.Text);
             }
         }
     }
 
     private void LoadClickTexts(ModLoader loader)
     {
-        this.Log().Info("载入点击文本, 数量: {count}", loader.ClickTexts.Count);
+        this.LogX().Info("载入点击文本, 数量: {count}", loader.ClickTexts.Count);
         foreach (var clickText in loader.ClickTexts)
         {
             try
             {
                 ClickTexts.Add(new(clickText) { I18nResource = I18nResource });
-                this.Log().Debug("添加点击文本成功, ID: {id}", clickText.Text);
+                this.LogX().Debug("添加点击文本成功, ID: {id}", clickText.Text);
             }
             catch (Exception ex)
             {
-                this.Log().Warn(ex, "添加点击文本失败, ID: {id}", clickText.Text);
+                this.LogX().Warn(ex, "添加点击文本失败, ID: {id}", clickText.Text);
             }
         }
     }
 
     private void LoadFoods(ModLoader loader)
     {
-        this.Log().Info("载入食物, 数量: {count}", loader.Foods.Count);
+        this.LogX().Info("载入食物, 数量: {count}", loader.Foods.Count);
         foreach (var food in loader.Foods)
         {
             try
             {
                 Foods.Add(new(food, I18nResource));
-                this.Log().Debug("添加食物成功, ID: {id}", food.Name);
+                this.LogX().Debug("添加食物成功, ID: {id}", food.Name);
             }
             catch (Exception ex)
             {
-                this.Log().Warn(ex, "添加食物失败, ID: {id}", food.Name);
+                this.LogX().Warn(ex, "添加食物失败, ID: {id}", food.Name);
             }
         }
     }
@@ -447,11 +447,11 @@ public partial class ModInfoModel : ViewModelBase
         if (Directory.Exists(path) is false)
             return;
         var directories = Directory.GetDirectories(path);
-        this.Log().Info("载入宠物动画, 数量: {count}, 路径: {path}", directories.Length, path);
+        this.LogX().Info("载入宠物动画, 数量: {count}, 路径: {path}", directories.Length, path);
         foreach (var animeDir in directories)
         {
             var dirName = Path.GetFileName(animeDir);
-            this.Log().Debug("载入动画, 路径: {path}", animeDir);
+            this.LogX().Debug("载入动画, 路径: {path}", animeDir);
             if (Enum.TryParse<GraphInfo.GraphType>(dirName, true, out var graphType))
             {
                 if (graphType.IsHasNameAnime())
@@ -465,7 +465,7 @@ public partial class ModInfoModel : ViewModelBase
                         }
                         catch (Exception ex)
                         {
-                            this.Log()
+                            this.LogX()
                                 .Warn(ex, "{$graphType} 动画载入失败, 目标文件夹: {path}", graphType, dir);
                         }
                     }
@@ -479,7 +479,7 @@ public partial class ModInfoModel : ViewModelBase
                     }
                     catch (Exception ex)
                     {
-                        this.Log()
+                        this.LogX()
                             .Warn(ex, "{$graphType} 动画载入失败, 目标文件夹: {path}", graphType, animeDir);
                     }
                 }
@@ -499,7 +499,7 @@ public partial class ModInfoModel : ViewModelBase
                     }
                     catch (Exception ex)
                     {
-                        this.Log().Warn(ex, "\"Switch\" 动画载入失败, 目标文件夹: {path}", dir);
+                        this.LogX().Warn(ex, "\"Switch\" 动画载入失败, 目标文件夹: {path}", dir);
                     }
                 }
             }
@@ -515,7 +515,7 @@ public partial class ModInfoModel : ViewModelBase
                     }
                     catch (Exception ex)
                     {
-                        this.Log().Warn(ex, "\"Raise\" 动画载入失败, 目标文件夹: {path}", dir);
+                        this.LogX().Warn(ex, "\"Raise\" 动画载入失败, 目标文件夹: {path}", dir);
                     }
                 }
             }
@@ -531,7 +531,7 @@ public partial class ModInfoModel : ViewModelBase
                     }
                     catch (Exception ex)
                     {
-                        this.Log().Warn(ex, "\"State\" 动画载入失败, 目标文件夹: {path}", dir);
+                        this.LogX().Warn(ex, "\"State\" 动画载入失败, 目标文件夹: {path}", dir);
                     }
                 }
             }
@@ -544,7 +544,7 @@ public partial class ModInfoModel : ViewModelBase
                 }
                 catch (Exception ex)
                 {
-                    this.Log().Warn(ex, "\"Music\" 动画载入失败, 目标文件夹: {path}", animeDir);
+                    this.LogX().Warn(ex, "\"Music\" 动画载入失败, 目标文件夹: {path}", animeDir);
                 }
             }
             else if (FoodAnimeTypeModel.FoodAnimeNames.Contains(dirName))
@@ -556,7 +556,7 @@ public partial class ModInfoModel : ViewModelBase
                 }
                 catch (Exception ex)
                 {
-                    this.Log().Warn(ex, "{dirName} 动画载入失败, 目标文件夹: {path}", dirName, animeDir);
+                    this.LogX().Warn(ex, "{dirName} 动画载入失败, 目标文件夹: {path}", dirName, animeDir);
                 }
             }
         }
@@ -571,10 +571,10 @@ public partial class ModInfoModel : ViewModelBase
         {
             I18nResource.AddCulture(CultureInfo.CurrentCulture);
             I18nResource.CurrentCulture = CultureInfo.CurrentCulture;
-            this.Log().Info("模组未包含本地化数据");
+            this.LogX().Info("模组未包含本地化数据");
             return;
         }
-        this.Log().Info("载入本地化数据, 目标文化: {cultrue}", string.Join(", ", modLoader.I18nDatas.Keys));
+        this.LogX().Info("载入本地化数据, 目标文化: {cultrue}", string.Join(", ", modLoader.I18nDatas.Keys));
         foreach (var cultureDatas in modLoader.I18nDatas)
         {
             CultureInfo? culture;
@@ -584,12 +584,12 @@ public partial class ModInfoModel : ViewModelBase
             }
             catch (Exception ex)
             {
-                this.Log().Warn(ex, $"载入文化 {cultureDatas.Key} 错误, 请检查文化名称");
+                this.LogX().Warn(ex, $"载入文化 {cultureDatas.Key} 错误, 请检查文化名称");
                 continue;
             }
             I18nResource.AddCulture(culture);
             I18nResource.SetCultureDatas(culture, cultureDatas.Value);
-            this.Log()
+            this.LogX()
                 .Info(
                     "已载入本地化数据, 文化: {cultrue}, 数据数量: {count}",
                     cultureDatas.Key,
@@ -615,7 +615,7 @@ public partial class ModInfoModel : ViewModelBase
     /// <param name="path">路径</param>
     public void SaveTo(string path)
     {
-        this.Log().Info("正在保存模组, 目标路径: {path}", path);
+        this.LogX().Info("正在保存模组, 目标路径: {path}", path);
         // 保存模型信息
         SaveModInfo(path);
         // 保存模组数据
@@ -624,7 +624,7 @@ public partial class ModInfoModel : ViewModelBase
         SaveText(path);
         SaveI18nData(path, I18nResource.Cultures);
         SaveImage(path);
-        this.Log().Info("模组保存完毕");
+        this.LogX().Info("模组保存完毕");
     }
 
     /// <summary>
@@ -665,7 +665,7 @@ public partial class ModInfoModel : ViewModelBase
         }
         Image?.SaveToPng(Path.Combine(path, "icon.png"));
         File.WriteAllText(modInfoFile, lps.ToString());
-        this.Log().Info("模组信息保存完成, 目标文件: {file}", modInfoFile);
+        this.LogX().Info("模组信息保存完成, 目标文件: {file}", modInfoFile);
     }
 
     private void SavePets(string path)
@@ -677,7 +677,7 @@ public partial class ModInfoModel : ViewModelBase
                 Directory.Delete(petPath, true);
             return;
         }
-        this.Log().Info("正在保存宠物, 数量: {count}", Pets.Count(m => m.FromMain is false));
+        this.LogX().Info("正在保存宠物, 数量: {count}", Pets.Count(m => m.FromMain is false));
         Directory.CreateDirectory(petPath);
         foreach (var pet in Pets)
         {
@@ -686,11 +686,11 @@ public partial class ModInfoModel : ViewModelBase
             try
             {
                 pet.Save(petPath);
-                this.Log().Info("保存宠物成功, ID: {id}, 宠物名称: {petName}", pet.ID, pet.PetName);
+                this.LogX().Info("保存宠物成功, ID: {id}, 宠物名称: {petName}", pet.ID, pet.PetName);
             }
             catch (Exception ex)
             {
-                this.Log().Info(ex, "保存宠物失败, ID: {id}, 宠物名称: {petName}", pet.ID, pet.PetName);
+                this.LogX().Info(ex, "保存宠物失败, ID: {id}, 宠物名称: {petName}", pet.ID, pet.PetName);
             }
         }
         // 如果没有一个完成保存, 则删除文件夹
@@ -711,7 +711,7 @@ public partial class ModInfoModel : ViewModelBase
                 Directory.Delete(foodPath, true);
             return;
         }
-        this.Log().Info("正在保存食物, 数量: {count}", Foods.Count);
+        this.LogX().Info("正在保存食物, 数量: {count}", Foods.Count);
         Directory.CreateDirectory(foodPath);
         var foodFile = Path.Combine(foodPath, "food.lps");
         if (File.Exists(foodFile) is false)
@@ -750,7 +750,7 @@ public partial class ModInfoModel : ViewModelBase
     {
         if (SelectTexts.Count == 0)
             return;
-        this.Log().Info("正在保存选择文本, 数量: {count}", SelectTexts.Count);
+        this.LogX().Info("正在保存选择文本, 数量: {count}", SelectTexts.Count);
         var textFile = Path.Combine(path, "selectText.lps");
         File.Create(textFile).Close();
         var lps = new LPS();
@@ -769,7 +769,7 @@ public partial class ModInfoModel : ViewModelBase
     {
         if (LowTexts.Count == 0)
             return;
-        this.Log().Info("正在保存低状态文本, 数量: {count}", LowTexts.Count);
+        this.LogX().Info("正在保存低状态文本, 数量: {count}", LowTexts.Count);
         var textFile = Path.Combine(path, "lowText.lps");
         File.Create(textFile).Close();
         var lps = new LPS();
@@ -788,7 +788,7 @@ public partial class ModInfoModel : ViewModelBase
     {
         if (ClickTexts.Count == 0)
             return;
-        this.Log().Info("正在保存点击文本, 数量: {count}", ClickTexts.Count);
+        this.LogX().Info("正在保存点击文本, 数量: {count}", ClickTexts.Count);
         var textFile = Path.Combine(path, "clickText.lps");
         File.Create(textFile).Close();
         var lps = new LPS();
@@ -807,12 +807,12 @@ public partial class ModInfoModel : ViewModelBase
     private void SaveI18nData(string path, IEnumerable<CultureInfo> cultures)
     {
         I18nResource.ClearUnreferencedData();
-        this.Log().Info("正在保存本地化数据, 文化数量: {count}", I18nResource.Cultures.Count);
+        this.LogX().Info("正在保存本地化数据, 文化数量: {count}", I18nResource.Cultures.Count);
         var langPath = Path.Combine(path, "lang");
         Directory.CreateDirectory(langPath);
         foreach (var culture in cultures)
         {
-            this.Log()
+            this.LogX()
                 .Info(
                     "正在保存本地化数据 {cultrue}, 数据数量: {count}",
                     culture.Name,
@@ -840,7 +840,7 @@ public partial class ModInfoModel : ViewModelBase
     {
         if (Foods.Count == 0)
             return;
-        this.Log().Info("正在保存图片, 数量: {count}", Foods.Count(x => x.Image is not null));
+        this.LogX().Info("正在保存图片, 数量: {count}", Foods.Count(x => x.Image is not null));
         var imagePath = Path.Combine(path, "image");
         if (Directory.Exists(imagePath))
             Directory.Delete(imagePath, true);
@@ -865,7 +865,7 @@ public partial class ModInfoModel : ViewModelBase
     /// <param name="cultures">指定文化</param>
     public void SaveToTranslationMod(string path, IEnumerable<CultureInfo> cultures)
     {
-        this.Log().Info("保存为翻译模组, 路径: {path}, 翻译目标: {cultures}", string.Join(", ", cultures));
+        this.LogX().Info("保存为翻译模组, 路径: {path}, 翻译目标: {cultures}", string.Join(", ", cultures));
         // 保存模型信息
         SaveModInfo(path);
         var petPath = Path.Combine(path, "pet");
@@ -882,7 +882,7 @@ public partial class ModInfoModel : ViewModelBase
             Directory.Delete(textPath, true);
         // 保存文化数据
         SaveI18nData(path, cultures);
-        this.Log().Info("翻译模组保存完毕");
+        this.LogX().Info("翻译模组保存完毕");
     }
 
     /// <summary>

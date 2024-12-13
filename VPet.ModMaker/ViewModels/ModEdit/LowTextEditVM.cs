@@ -35,8 +35,6 @@ namespace VPet.ModMaker.ViewModels.ModEdit;
 /// </summary>
 public partial class LowTextEditVM : DialogViewModel
 {
-    private static IDialogService DialogService => Locator.Current.GetService<IDialogService>()!;
-
     /// <inheritdoc/>
     public LowTextEditVM()
     {
@@ -79,7 +77,7 @@ public partial class LowTextEditVM : DialogViewModel
             return;
         if (string.IsNullOrWhiteSpace(LowText.ID))
         {
-            DialogService.ShowMessageBoxX(
+            ModMakerVM.DialogService.ShowMessageBoxX(
                 this,
                 "ID不可为空".Translate(),
                 "数据错误".Translate(),
@@ -90,7 +88,7 @@ public partial class LowTextEditVM : DialogViewModel
         }
         else if (LowText.Text is null)
         {
-            DialogService.ShowMessageBoxX(
+            ModMakerVM.DialogService.ShowMessageBoxX(
                 this,
                 "文本不可为空".Translate(),
                 "数据错误".Translate(),
@@ -101,7 +99,7 @@ public partial class LowTextEditVM : DialogViewModel
         }
         else if (OldLowText?.ID != LowText.ID && ModInfo.LowTexts.Any(i => i.ID == LowText.ID))
         {
-            DialogService.ShowMessageBoxX(
+            ModMakerVM.DialogService.ShowMessageBoxX(
                 this,
                 "此ID已存在".Translate(),
                 "数据错误".Translate(),
@@ -186,7 +184,7 @@ public partial class LowTextEditVM : DialogViewModel
     {
         ModInfo.TempI18nResource.ClearCultureData();
         LowText = new() { I18nResource = ModInfo.I18nResource };
-        await DialogService.ShowDialogAsyncX(this, this);
+        await ModMakerVM.DialogService.ShowDialogAsyncX(this, this);
         if (DialogResult is not true)
         {
             LowText.Close();
@@ -196,10 +194,10 @@ public partial class LowTextEditVM : DialogViewModel
             LowText.I18nResource.CopyDataTo(ModInfo.I18nResource, true);
             LowText.I18nResource = ModInfo.I18nResource;
             LowTexts.Add(LowText);
-            if (this.Log().Level is LogLevel.Info)
-                this.Log().Info("添加新低状态文本 {lowText}", LowText.ID);
+            if (this.LogX().Level is LogLevel.Info)
+                this.LogX().Info("添加新低状态文本 {lowText}", LowText.ID);
             else
-                this.Log()
+                this.LogX()
                     .Debug(
                         "添加新低状态文本 {$lowText}",
                         LPSConvert.SerializeObjectToLine<Line>(
@@ -222,7 +220,7 @@ public partial class LowTextEditVM : DialogViewModel
         var newModel = new LowTextModel(model) { I18nResource = ModInfo.TempI18nResource };
         model.I18nResource.CopyDataTo(newModel.I18nResource, [model.ID], true);
         LowText = newModel;
-        await DialogService.ShowDialogAsync(this, this);
+        await ModMakerVM.DialogService.ShowDialogAsync(this, this);
         if (DialogResult is not true)
         {
             newModel.I18nResource.ClearCultureData();
@@ -234,10 +232,10 @@ public partial class LowTextEditVM : DialogViewModel
             newModel.I18nResource.CopyDataTo(ModInfo.I18nResource, true);
             newModel.I18nResource = ModInfo.I18nResource;
             LowTexts[LowTexts.IndexOf(model)] = newModel;
-            if (this.Log().Level is LogLevel.Info)
-                this.Log().Info("编辑低状态文本 {oldLowText} => {newLowText}", OldLowText.ID, LowText.ID);
+            if (this.LogX().Level is LogLevel.Info)
+                this.LogX().Info("编辑低状态文本 {oldLowText} => {newLowText}", OldLowText.ID, LowText.ID);
             else
-                this.Log()
+                this.LogX()
                     .Debug(
                         "编辑低状态文本\n {$oldLowText} => {$newLowText}",
                         LPSConvert.SerializeObjectToLine<Line>(
@@ -262,7 +260,7 @@ public partial class LowTextEditVM : DialogViewModel
     {
         var models = list.Cast<LowTextModel>().ToArray();
         if (
-            DialogService.ShowMessageBoxX(
+            ModMakerVM.DialogService.ShowMessageBoxX(
                 this,
                 "确定删除已选中的 {0} 个低状态文本吗".Translate(models.Length),
                 "删除低状态文本".Translate(),
@@ -275,7 +273,7 @@ public partial class LowTextEditVM : DialogViewModel
         {
             LowTexts.Remove(model);
             model.Close();
-            this.Log().Info("删除低状态文本 {lowText}", model.ID);
+            this.LogX().Info("删除低状态文本 {lowText}", model.ID);
         }
     }
 

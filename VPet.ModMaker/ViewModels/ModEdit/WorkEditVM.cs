@@ -40,8 +40,6 @@ namespace VPet.ModMaker.ViewModels.ModEdit;
 /// </summary>
 public partial class WorkEditVM : DialogViewModel
 {
-    private static IDialogService DialogService => Locator.Current.GetService<IDialogService>()!;
-
     /// <inheritdoc/>
     public WorkEditVM()
     {
@@ -83,7 +81,7 @@ public partial class WorkEditVM : DialogViewModel
             return;
         if (string.IsNullOrWhiteSpace(Work.ID))
         {
-            DialogService.ShowMessageBoxX(
+            ModMakerVM.DialogService.ShowMessageBoxX(
                 this,
                 "ID不可为空".Translate(),
                 "数据错误".Translate(),
@@ -94,7 +92,7 @@ public partial class WorkEditVM : DialogViewModel
         }
         else if (Work.Graph is null)
         {
-            DialogService.ShowMessageBoxX(
+            ModMakerVM.DialogService.ShowMessageBoxX(
                 this,
                 "指定动画不可为空".Translate(),
                 "数据错误".Translate(),
@@ -105,7 +103,7 @@ public partial class WorkEditVM : DialogViewModel
         }
         else if (OldWork?.ID != Work.ID && CurrentPet?.Works.Any(i => i.ID == Work.ID) is true)
         {
-            DialogService.ShowMessageBoxX(
+            ModMakerVM.DialogService.ShowMessageBoxX(
                 this,
                 "此ID已存在".Translate(),
                 "数据错误".Translate(),
@@ -262,7 +260,7 @@ public partial class WorkEditVM : DialogViewModel
     [ReactiveCommand]
     private void AddImage()
     {
-        var openFileDialog = DialogService.ShowOpenFileDialog(
+        var openFileDialog = ModMakerVM.DialogService.ShowOpenFileDialog(
             this,
             new()
             {
@@ -275,7 +273,7 @@ public partial class WorkEditVM : DialogViewModel
         var newImage = HKWImageUtils.LoadImageToMemory(openFileDialog.LocalPath);
         if (newImage is null)
         {
-            DialogService.ShowMessageBoxX(
+            ModMakerVM.DialogService.ShowMessageBoxX(
                 this,
                 "图片载入失败, 详情请查看日志".Translate(),
                 "图片载入失败".Translate(),
@@ -292,7 +290,7 @@ public partial class WorkEditVM : DialogViewModel
     [ReactiveCommand]
     private void ChangeImage()
     {
-        var openFileDialog = DialogService.ShowOpenFileDialog(
+        var openFileDialog = ModMakerVM.DialogService.ShowOpenFileDialog(
             this,
             new()
             {
@@ -305,7 +303,7 @@ public partial class WorkEditVM : DialogViewModel
         var newImage = HKWImageUtils.LoadImageToMemory(openFileDialog.LocalPath);
         if (newImage is null)
         {
-            DialogService.ShowMessageBoxX(
+            ModMakerVM.DialogService.ShowMessageBoxX(
                 this,
                 "图片载入失败, 详情请查看日志".Translate(),
                 "图片载入失败".Translate(),
@@ -365,7 +363,7 @@ public partial class WorkEditVM : DialogViewModel
     {
         ModInfo.TempI18nResource.ClearCultureData();
         Work = new() { I18nResource = ModInfo.I18nResource };
-        await DialogService.ShowDialogAsyncX(this, this);
+        await ModMakerVM.DialogService.ShowDialogAsyncX(this, this);
         if (DialogResult is not true)
         {
             Work.Close();
@@ -375,10 +373,10 @@ public partial class WorkEditVM : DialogViewModel
             Work.I18nResource.CopyDataTo(ModInfo.I18nResource, true);
             Work.I18nResource = ModInfo.I18nResource;
             Works.Add(Work);
-            if (this.Log().Level is LogLevel.Info)
-                this.Log().Info("添加新工作 {work}", Work.ID);
+            if (this.LogX().Level is LogLevel.Info)
+                this.LogX().Info("添加新工作 {work}", Work.ID);
             else
-                this.Log()
+                this.LogX()
                     .Debug(
                         "添加新工作 {$work}",
                         LPSConvert.SerializeObjectToLine<Line>(Work.MapToWork(new()), "Work")
@@ -398,7 +396,7 @@ public partial class WorkEditVM : DialogViewModel
         var newModel = new WorkModel(model) { I18nResource = ModInfo.TempI18nResource };
         model.I18nResource.CopyDataTo(newModel.I18nResource, [model.ID], true);
         Work = newModel;
-        await DialogService.ShowDialogAsync(this, this);
+        await ModMakerVM.DialogService.ShowDialogAsync(this, this);
         if (DialogResult is not true)
         {
             newModel.I18nResource.ClearCulture();
@@ -410,10 +408,10 @@ public partial class WorkEditVM : DialogViewModel
             newModel.I18nResource.CopyDataTo(ModInfo.I18nResource, true);
             newModel.I18nResource = ModInfo.I18nResource;
             Works[Works.IndexOf(model)] = newModel;
-            if (this.Log().Level is LogLevel.Info)
-                this.Log().Info("编辑工作 {oldWork} => {newWork}", OldWork.ID, Work.ID);
+            if (this.LogX().Level is LogLevel.Info)
+                this.LogX().Info("编辑工作 {oldWork} => {newWork}", OldWork.ID, Work.ID);
             else
-                this.Log()
+                this.LogX()
                     .Debug(
                         "编辑工作\n {$oldWork} => {$newWork}",
                         LPSConvert.SerializeObjectToLine<Line>(OldWork.MapToWork(new()), "Work"),
@@ -432,7 +430,7 @@ public partial class WorkEditVM : DialogViewModel
     {
         var models = list.Cast<WorkModel>().ToArray();
         if (
-            DialogService.ShowMessageBoxX(
+            ModMakerVM.DialogService.ShowMessageBoxX(
                 this,
                 "确定删除已选中的 {0} 个工作吗".Translate(models.Length),
                 "删除工作".Translate(),
@@ -445,7 +443,7 @@ public partial class WorkEditVM : DialogViewModel
         {
             Works.Remove(model);
             model.Close();
-            this.Log().Info("删除工作 {work}", model.ID);
+            this.LogX().Info("删除工作 {work}", model.ID);
         }
     }
 

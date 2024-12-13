@@ -102,7 +102,10 @@ public partial class WorkModel : ViewModelBase
     /// 指定动画
     /// </summary>
     [WorkModelMapToWorkProperty(nameof(GraphHelper.Work.Graph))]
-    [WorkModelMapFromWorkProperty(nameof(GraphHelper.Work.Graph))]
+    [WorkModelMapFromWorkProperty(
+        nameof(GraphHelper.Work.Graph),
+        MapWhenRValueNotNullOrDefault = true
+    )]
     [ReactiveProperty]
     public string Graph { get; set; } = string.Empty;
 

@@ -31,8 +31,6 @@ namespace VPet.ModMaker.ViewModels.ModEdit;
 /// </summary>
 public partial class AnimeEditVM : DialogViewModel
 {
-    private static IDialogService DialogService => Locator.Current.GetService<IDialogService>()!;
-
     /// <inheritdoc/>
     public AnimeEditVM(AnimeTypeModel anime)
     {
@@ -132,7 +130,7 @@ public partial class AnimeEditVM : DialogViewModel
     private void RemoveAnime(AnimeModel value)
     {
         if (
-            DialogService.ShowMessageBoxX(
+            ModMakerVM.DialogService.ShowMessageBoxX(
                 this,
                 "确认删除动画 \"{0}\"".Translate(value.ID),
                 "删除动画".Translate(),
@@ -162,7 +160,7 @@ public partial class AnimeEditVM : DialogViewModel
     [ReactiveCommand]
     private void AddImage(AnimeModel value)
     {
-        var openFilesDialog = DialogService.ShowOpenFilesDialog(
+        var openFilesDialog = ModMakerVM.DialogService.ShowOpenFilesDialog(
             this,
             new()
             {
@@ -194,7 +192,7 @@ public partial class AnimeEditVM : DialogViewModel
     [ReactiveCommand]
     private void ChangeImage(AnimeModel value)
     {
-        var openFileDialog = DialogService.ShowOpenFileDialog(
+        var openFileDialog = ModMakerVM.DialogService.ShowOpenFileDialog(
             this,
             new() { Title = "选择图片".Translate(), Filters = [new("图片".Translate(), ["png"])] }
         );
@@ -203,7 +201,7 @@ public partial class AnimeEditVM : DialogViewModel
         var newImage = HKWImageUtils.LoadImageToMemory(openFileDialog.LocalPath);
         if (newImage is null)
         {
-            DialogService.ShowMessageBoxX(
+            ModMakerVM.DialogService.ShowMessageBoxX(
                 this,
                 "图片载入失败, 详情请查看日志".Translate(),
                 "图片载入失败".Translate(),
@@ -223,7 +221,7 @@ public partial class AnimeEditVM : DialogViewModel
     private void ClearImage(AnimeModel value)
     {
         if (
-            DialogService.ShowMessageBoxX(
+            ModMakerVM.DialogService.ShowMessageBoxX(
                 this,
                 "确定清空图像吗".Translate(),
                 "清空图像".Translate(),
@@ -268,7 +266,7 @@ public partial class AnimeEditVM : DialogViewModel
         }
         if (failCount > 0)
         {
-            DialogService.ShowMessageBoxX(
+            ModMakerVM.DialogService.ShowMessageBoxX(
                 this,
                 "图片载入失败, 数量 {0}, 详情请查看日志".Translate(failCount),
                 "图片载入失败".Translate(),
@@ -301,7 +299,7 @@ public partial class AnimeEditVM : DialogViewModel
     {
         if (CurrentAnimeModel is null)
         {
-            DialogService.ShowMessageBoxX(
+            ModMakerVM.DialogService.ShowMessageBoxX(
                 this,
                 "未选中动画".Translate(),
                 "播放失败".Translate(),

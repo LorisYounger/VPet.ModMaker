@@ -34,7 +34,7 @@ namespace VPet.ModMaker.Views;
 /// <summary>
 /// winModMaker.xaml 的交互逻辑
 /// </summary>
-public partial class ModMakerWindow : WindowX, IPageLocator
+public partial class ModMakerWindow : WindowX, IPageLocator, IEnableLogger<ViewModelBase>
 {
     /// <inheritdoc/>
     public ModMakerWindow()
