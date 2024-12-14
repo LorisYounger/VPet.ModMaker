@@ -40,6 +40,7 @@ public partial class ModMakerWindow : WindowX, IPageLocator, IEnableLogger<ViewM
     public ModMakerWindow()
     {
         InitializeComponent();
+        NativeUtils.ClipboardSetText = Clipboard.SetText;
         this.SetViewModel<ModMakerVM>((s, e) => ViewModel.Close());
         MessageBus
             .Current.Listen<ModInfoModel?>()
