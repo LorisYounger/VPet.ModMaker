@@ -79,17 +79,19 @@
           <ColumnDefinition />
         </Grid.ColumnDefinitions>
         <Label Content="{ll:Str 最小值}" Style="{StaticResource ThemedLabelStyle}" />
-        <pu:NumberInput IsSnapToIntervalEnabled="False" 
+        <pu:NumberInput
           Grid.Column="1"
+          IsSnapToIntervalEnabled="False"
           ToolTip="{Binding Value, RelativeSource={RelativeSource Mode=Self}}"
           Value="{Binding DataContext.Min, RelativeSource={RelativeSource AncestorType=ListBoxItem}}" />
         <Label
           Grid.Row="1"
           Content="{ll:Str 最大值}"
           Style="{StaticResource ThemedLabelStyle}" />
-        <pu:NumberInput IsSnapToIntervalEnabled="False" 
+        <pu:NumberInput
           Grid.Row="1"
           Grid.Column="1"
+          IsSnapToIntervalEnabled="False"
           ToolTip="{Binding Value, RelativeSource={RelativeSource Mode=Self}}"
           Value="{Binding DataContext.Max, RelativeSource={RelativeSource AncestorType=ListBoxItem}}" />
       </Grid>
@@ -97,6 +99,7 @@
   </ControlTemplate>
   <ControlTemplate x:Key="ListBox_ShowLangs" TargetType="ListBox">
     <ListBox
+      pu:ListBoxHelper.ItemsHoverBackground="{StaticResource SecondaryLight}"
       ItemsSource="{Binding ModInfo.I18nResource.Cultures}"
       ScrollViewer.VerticalScrollBarVisibility="Auto"
       SelectedItem="{Binding ModInfo.I18nResource.CurrentCulture}"

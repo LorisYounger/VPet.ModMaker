@@ -34,7 +34,7 @@ namespace VPet.ModMaker.ViewModels.ModEdit;
 /// <summary>
 /// 宠物编辑视图模型
 /// </summary>
-public partial class PetEditVM : DialogViewModel
+public partial class PetEditVM : DialogViewModel, IEnableLogger<ViewModelBase>, IDisposable
 {
     /// <inheritdoc/>
     public PetEditVM()
@@ -224,13 +224,6 @@ public partial class PetEditVM : DialogViewModel
     public static double LengthRatio { get; } = 0.5;
     #endregion
 
-    /// <summary>
-    /// 关闭
-    /// </summary>
-    public void Close()
-    {
-        Image?.CloseStreamWhenNoReference();
-    }
 
     /// <summary>
     /// 添加图像
@@ -401,6 +394,20 @@ public partial class PetEditVM : DialogViewModel
         Image?.CloseStreamWhenNoReference();
         Image = null;
         ModInfo.TempI18nResource.ClearCultureData();
+    }
+
+    /// <inheritdoc/>
+    protected override void Dispose(bool disposing)
+    {
+        if (_disposed)
+            return;
+        base.Dispose(disposing);
+        if (disposing)
+        {
+            Image?.CloseStreamWhenNoReference();
+            ModInfo = null!;
+            _disposed = true;
+        }
     }
 }
 

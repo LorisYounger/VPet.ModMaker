@@ -78,7 +78,7 @@ public partial class ModMakerWindow : WindowX, IPageLocator, IEnableLogger<ViewM
     public ModMakerVM ViewModel => (ModMakerVM)DataContext;
 
     /// <inheritdoc/>
-    public Dictionary<Type, Func<Window, UserControl?>>? PageLocatorByType { get; } = null;
+    public Func<Type, FrameworkElement?>? LocatePageByType { get; }
 
     #region ModEditWindow
     [DebuggerBrowsable(DebuggerBrowsableState.Never)]

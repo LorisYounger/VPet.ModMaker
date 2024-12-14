@@ -37,7 +37,7 @@ namespace VPet.ModMaker.ViewModels.ModEdit;
 /// <summary>
 /// 食物编辑视图模型
 /// </summary>
-public partial class FoodEditVM : DialogViewModel
+public partial class FoodEditVM : DialogViewModel, IEnableLogger<ViewModelBase>, IDisposable
 {
     /// <inheritdoc/>
     public FoodEditVM()
@@ -274,14 +274,6 @@ public partial class FoodEditVM : DialogViewModel
     }
 
     /// <summary>
-    /// 关闭
-    /// </summary>
-    public void Close()
-    {
-        Food.Close();
-    }
-
-    /// <summary>
     /// 添加
     /// </summary>
     [ReactiveCommand]
@@ -383,6 +375,19 @@ public partial class FoodEditVM : DialogViewModel
         OldFood = null!;
         DialogResult = false;
         ModInfo.TempI18nResource.ClearCultureData();
+    }
+
+    /// <inheritdoc/>
+    protected override void Dispose(bool disposing)
+    {
+        if (_disposed)
+            return;
+        base.Dispose(disposing);
+        if (disposing)
+        {
+            Food?.Close();
+            ModInfo = null!;
+        }
     }
 }
 

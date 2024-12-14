@@ -38,7 +38,7 @@ namespace VPet.ModMaker.ViewModels.ModEdit;
 /// <summary>
 /// 工作编辑视图模型
 /// </summary>
-public partial class WorkEditVM : DialogViewModel
+public partial class WorkEditVM : DialogViewModel, IEnableLogger<ViewModelBase>, IDisposable
 {
     /// <inheritdoc/>
     public WorkEditVM()
@@ -459,12 +459,17 @@ public partial class WorkEditVM : DialogViewModel
         ModInfo.TempI18nResource.ClearCultureData();
     }
 
-    /// <summary>
-    /// 关闭
-    /// </summary>
-    public void Close()
+    /// <inheritdoc/>
+    protected override void Dispose(bool disposing)
     {
-        Image?.CloseStreamWhenNoReference();
+        if (_disposed)
+            return;
+        base.Dispose(disposing);
+        if (disposing)
+        {
+            Image?.CloseStreamWhenNoReference();
+            ModInfo = null!;
+        }
     }
 }
 

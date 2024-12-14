@@ -162,99 +162,32 @@
         </ScrollViewer>
       </Grid>
       <Grid Grid.Column="1">
-        <TabControl
-          x:Name="TabControl_Main"
-          pu:TabControlHelper.HeaderPanelCornerRadius="4"
-          pu:TabControlHelper.HeaderPanelShadowColor="Aqua"
-          pu:TabControlHelper.ItemsBackground="{StaticResource DARKPrimary}"
-          pu:TabControlHelper.ItemsHoverBackground="{StaticResource DARKPrimaryLight}"
-          pu:TabControlHelper.ItemsSelectedBackground="{StaticResource DARKPrimaryLighter}"
-          Background="White"
-          Foreground="{StaticResource DARKPrimaryText}"
-          SelectedIndex="1"
-          SelectionChanged="TabControl_SelectionChanged">
-          <TabItem Tag="{ll:Str 食物}">
-            <TabItem.Header>
-              <MultiBinding Converter="{StaticResource StringFormatConverter}" ConverterParameter="{}{0} ({1})">
-                <Binding Path="Tag" RelativeSource="{RelativeSource Mode=Self}" />
-                <Binding Path="ModInfo.Foods.Count" />
-              </MultiBinding>
-            </TabItem.Header>
-            <ContentControl x:Name="ContentControl_Food" />
-          </TabItem>
-          <TabItem Tag="{ll:Str 点击文本}">
-            <TabItem.Header>
-              <MultiBinding Converter="{StaticResource StringFormatConverter}" ConverterParameter="{}{0} ({1})">
-                <Binding Path="Tag" RelativeSource="{RelativeSource Mode=Self}" />
-                <Binding Path="ModInfo.ClickTexts.Count" />
-              </MultiBinding>
-            </TabItem.Header>
-            <ContentControl x:Name="ContentControl_ClickText" />
-          </TabItem>
-          <TabItem Tag="{ll:Str 低状态文本}">
-            <TabItem.Header>
-              <MultiBinding Converter="{StaticResource StringFormatConverter}" ConverterParameter="{}{0} ({1})">
-                <Binding Path="Tag" RelativeSource="{RelativeSource Mode=Self}" />
-                <Binding Path="ModInfo.LowTexts.Count" />
-              </MultiBinding>
-            </TabItem.Header>
-            <ContentControl x:Name="ContentControl_LowText" />
-          </TabItem>
-          <TabItem Tag="{ll:Str 选择文本}">
-            <TabItem.Header>
-              <MultiBinding Converter="{StaticResource StringFormatConverter}" ConverterParameter="{}{0} ({1})">
-                <Binding Path="Tag" RelativeSource="{RelativeSource Mode=Self}" />
-                <Binding Path="ModInfo.SelectTexts.Count" />
-              </MultiBinding>
-            </TabItem.Header>
-            <ContentControl x:Name="ContentControl_SelectText" />
-          </TabItem>
-          <TabItem Tag="{ll:Str 宠物}">
-            <TabItem.Header>
-              <MultiBinding Converter="{StaticResource StringFormatConverter}" ConverterParameter="{}{0} ({1})">
-                <Binding Path="Tag" RelativeSource="{RelativeSource Mode=Self}" />
-                <Binding Path="ModInfo.PetDisplayedCount" />
-              </MultiBinding>
-            </TabItem.Header>
-            <ContentControl x:Name="ContentControl_Pet" />
-          </TabItem>
-          <TabItem Tag="{ll:Str 工作}">
-            <TabItem.Header>
-              <MultiBinding Converter="{StaticResource StringFormatConverter}" ConverterParameter="{}{0} ({1})">
-                <Binding Path="Tag" RelativeSource="{RelativeSource Mode=Self}" />
-                <Binding Path="ModInfo.CurrentPet.Works.Count" />
-              </MultiBinding>
-            </TabItem.Header>
-            <ContentControl x:Name="ContentControl_Work" />
-          </TabItem>
-          <TabItem Tag="{ll:Str 移动}">
-            <TabItem.Header>
-              <MultiBinding Converter="{StaticResource StringFormatConverter}" ConverterParameter="{}{0} ({1})">
-                <Binding Path="Tag" RelativeSource="{RelativeSource Mode=Self}" />
-                <Binding Path="ModInfo.CurrentPet.Moves.Count" />
-              </MultiBinding>
-            </TabItem.Header>
-            <ContentControl x:Name="ContentControl_Move" />
-          </TabItem>
-          <TabItem>
-            <TabItem.Header>
-              <StackPanel Orientation="Horizontal">
-                <TextBlock Foreground="{StaticResource DARKPrimaryText}" Text="{ll:Str 动画}" />
-                <TextBlock Foreground="{StaticResource DARKPrimaryText}" Text=" (" />
-                <TextBlock Foreground="{StaticResource DARKPrimaryText}">
-                  <TextBlock.Text>
-                    <MultiBinding Converter="{StaticResource Int32CalculatorMultiConverter}" ConverterParameter="+">
-                      <Binding Path="ModInfo.CurrentPet.Animes.Count" />
-                      <Binding Path="ModInfo.CurrentPet.FoodAnimes.Count" />
-                    </MultiBinding>
-                  </TextBlock.Text>
-                </TextBlock>
-                <TextBlock Foreground="{StaticResource DARKPrimaryText}" Text=")" />
-              </StackPanel>
-            </TabItem.Header>
-            <ContentControl x:Name="ContentControl_Anime" />
-          </TabItem>
-        </TabControl>
+        <Grid.RowDefinitions>
+          <RowDefinition Height="30" />
+          <RowDefinition />
+        </Grid.RowDefinitions>
+        <ListBox
+          x:Name="ListBox_Pages"
+          d:ItemsSource="{d:SampleData ItemCount=5}"
+          pu:ListBoxHelper.ItemsCornerRadius="0"
+          pu:ListBoxHelper.ItemsHoverBackground="{StaticResource SecondaryLight}"
+          pu:ListBoxHelper.ItemsMargin="0"
+          pu:ListBoxHelper.ItemsPadding="5"
+          DisplayMemberPath="DisplayText"
+          PreviewMouseWheel="ListBox_Pages_PreviewMouseWheel"
+          ScrollViewer.HorizontalScrollBarVisibility="Hidden"
+          ScrollViewer.VerticalScrollBarVisibility="Hidden"
+          Style="{StaticResource SideMenuListBoxStyle}">
+          <ListBox.ItemsPanel>
+            <ItemsPanelTemplate>
+              <StackPanel Orientation="Horizontal" />
+            </ItemsPanelTemplate>
+          </ListBox.ItemsPanel>
+        </ListBox>
+        <ContentControl
+          x:Name="ContentControl_Page"
+          Grid.Row="1"
+          Content="{Binding SelectedItem.Control, ElementName=ListBox_Pages}" />
       </Grid>
     </Grid>
     <Grid Grid.Column="1">
@@ -272,6 +205,7 @@
         x:Name="ListBox_Cultures"
         Grid.Row="1"
         d:ItemsSource="{d:SampleData ItemCount=5}"
+        pu:ListBoxHelper.ItemsHoverBackground="{StaticResource SecondaryLight}"
         ItemsSource="{Binding ModInfo.I18nResource.Cultures}"
         ScrollViewer.VerticalScrollBarVisibility="Auto"
         SelectedItem="{Binding ModInfo.I18nResource.CurrentCulture}"
@@ -283,10 +217,6 @@
             <Setter Property="ContextMenu">
               <Setter.Value>
                 <ContextMenu>
-                  <!--<MenuItem
-                    Command="{Binding PlacementTarget.Tag.SetMainCultureCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ContextMenu}}"
-                    CommandParameter="{Binding}"
-                    Header="{ll:Str 设为主要语言}" />-->
                   <MenuItem
                     Command="{Binding PlacementTarget.Tag.EditCultureCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ContextMenu}}"
                     CommandParameter="{Binding}"

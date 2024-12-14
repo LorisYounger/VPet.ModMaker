@@ -33,7 +33,7 @@ namespace VPet.ModMaker.ViewModels.ModEdit;
 /// <summary>
 /// 低状态文本编辑视图模型
 /// </summary>
-public partial class LowTextEditVM : DialogViewModel
+public partial class LowTextEditVM : DialogViewModel, IEnableLogger<ViewModelBase>, IDisposable
 {
     /// <inheritdoc/>
     public LowTextEditVM()
@@ -286,6 +286,18 @@ public partial class LowTextEditVM : DialogViewModel
         OldLowText = null!;
         DialogResult = false;
         ModInfo.TempI18nResource.ClearCultureData();
+    }
+
+    /// <inheritdoc/>
+    protected override void Dispose(bool disposing)
+    {
+        if (_disposed)
+            return;
+        base.Dispose(disposing);
+        if (disposing)
+        {
+            ModInfo = null!;
+        }
     }
 }
 

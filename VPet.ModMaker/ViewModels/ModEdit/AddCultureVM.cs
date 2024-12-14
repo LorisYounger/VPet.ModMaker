@@ -28,7 +28,7 @@ namespace VPet.ModMaker.ViewModels.ModEdit;
 /// <summary>
 /// 添加文化视图模型
 /// </summary>
-public partial class AddCultureVM : DialogViewModel
+public partial class AddCultureVM : DialogViewModel, IEnableLogger<ViewModelBase>
 {
     /// <inheritdoc/>
     public AddCultureVM(ModInfoModel modInfo)

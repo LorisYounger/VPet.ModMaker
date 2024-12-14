@@ -30,7 +30,7 @@ namespace VPet.ModMaker.ViewModels.ModEdit;
 /// <summary>
 /// 选择文本编辑视图模型
 /// </summary>
-public partial class SelectTextEditVM : DialogViewModel
+public partial class SelectTextEditVM : DialogViewModel, IEnableLogger<ViewModelBase>, IDisposable
 {
     /// <inheritdoc/>
     public SelectTextEditVM()
@@ -293,6 +293,18 @@ public partial class SelectTextEditVM : DialogViewModel
         OldSelectText = null!;
         DialogResult = false;
         ModInfo.TempI18nResource.ClearCultureData();
+    }
+
+    /// <inheritdoc/>
+    protected override void Dispose(bool disposing)
+    {
+        if (_disposed)
+            return;
+        base.Dispose(disposing);
+        if (disposing)
+        {
+            ModInfo = null!;
+        }
     }
 }
 

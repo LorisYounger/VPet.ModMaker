@@ -25,7 +25,7 @@ namespace VPet.ModMaker.ViewModels.ModEdit;
 /// <summary>
 /// 保持为翻译模组视图模型
 /// </summary>
-public partial class SaveTranslationModVM : DialogViewModel
+public partial class SaveTranslationModVM : DialogViewModel, IEnableLogger<ViewModelBase>
 {
     /// <inheritdoc/>
     public SaveTranslationModVM(ModInfoModel modInfo)

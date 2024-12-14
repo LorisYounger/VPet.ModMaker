@@ -25,7 +25,7 @@ namespace VPet.ModMaker.ViewModels.ModEdit;
 /// <summary>
 /// I18n编辑
 /// </summary>
-public partial class I18nEditVM : DialogViewModel
+public partial class I18nEditVM : DialogViewModel, IEnableLogger<ViewModelBase>
 {
     /// <inheritdoc/>
     public I18nEditVM(ModInfoModel modInfo)

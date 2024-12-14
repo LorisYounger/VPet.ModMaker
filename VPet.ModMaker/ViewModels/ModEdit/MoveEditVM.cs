@@ -33,7 +33,7 @@ namespace VPet.ModMaker.ViewModels.ModEdit;
 /// <summary>
 /// 移动编辑视图模型
 /// </summary>
-public partial class MoveEditVM : DialogViewModel
+public partial class MoveEditVM : DialogViewModel, IEnableLogger<ViewModelBase>, IDisposable
 {
     /// <inheritdoc/>
     public MoveEditVM()
@@ -149,14 +149,6 @@ public partial class MoveEditVM : DialogViewModel
     /// </summary>
     [ReactiveProperty]
     public BitmapImage? Image { get; set; }
-
-    /// <summary>
-    /// 关闭
-    /// </summary>
-    public void Close()
-    {
-        Image?.CloseStreamWhenNoReference();
-    }
 
     /// <summary>
     /// 添加图片
@@ -293,5 +285,19 @@ public partial class MoveEditVM : DialogViewModel
         OldMove = null!;
         DialogResult = false;
         ModInfo.TempI18nResource.ClearCultureData();
+    }
+
+    /// <inheritdoc/>
+    protected override void Dispose(bool disposing)
+    {
+        if (_disposed)
+            return;
+        base.Dispose(disposing);
+        if (disposing)
+        {
+            Image?.CloseStreamWhenNoReference();
+            ModInfo = null!;
+            CurrentPet = null!;
+        }
     }
 }

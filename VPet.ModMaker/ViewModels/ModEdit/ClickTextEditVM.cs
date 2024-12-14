@@ -32,7 +32,7 @@ namespace VPet.ModMaker.ViewModels.ModEdit;
 /// <summary>
 /// 点击文本视图模型
 /// </summary>
-public partial class ClickTextEditVM : DialogViewModel
+public partial class ClickTextEditVM : DialogViewModel, IEnableLogger<ViewModelBase>, IDisposable
 {
     /// <inheritdoc/>
     public ClickTextEditVM()
@@ -290,14 +290,16 @@ public partial class ClickTextEditVM : DialogViewModel
         ModInfo.TempI18nResource.ClearCultureData();
     }
 
-    /// <summary>
-    /// 关闭
-    /// </summary>
-    public void Close()
+    /// <inheritdoc/>
+    protected override void Dispose(bool disposing)
     {
-        AddCommand.Dispose();
-        RemoveCommand.Dispose();
-        EditCommand.Dispose();
+        if (_disposed)
+            return;
+        base.Dispose(disposing);
+        if (disposing)
+        {
+            ModInfo = null!;
+        }
     }
 }
 
