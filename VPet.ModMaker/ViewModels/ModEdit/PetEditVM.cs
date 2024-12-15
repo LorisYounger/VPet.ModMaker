@@ -1,17 +1,10 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Frozen;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
 using System.Reactive.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Media.Imaging;
 using DynamicData.Binding;
 using HanumanInstitute.MvvmDialogs;
 using HanumanInstitute.MvvmDialogs.FrameworkDialogs;
-using HKW.HKWMapper;
 using HKW.HKWReactiveUI;
 using HKW.HKWUtils;
 using HKW.HKWUtils.Collections;
@@ -21,12 +14,8 @@ using HKW.MVVMDialogs;
 using HKW.WPF;
 using HKW.WPF.Extensions;
 using HKW.WPF.MVVMDialogs;
-using LinePutScript;
-using LinePutScript.Converter;
 using LinePutScript.Localization.WPF;
-using Microsoft.Win32;
 using ReactiveUI;
-using Splat;
 using VPet.ModMaker.Models;
 
 namespace VPet.ModMaker.ViewModels.ModEdit;
@@ -66,13 +55,15 @@ public partial class PetEditVM : DialogViewModel, IEnableLogger<ViewModelBase>, 
             .Throttle(TimeSpan.FromSeconds(0.5), RxApp.TaskpoolScheduler)
             .DistinctUntilChanged()
             .ObserveOn(RxApp.MainThreadScheduler)
-            .Subscribe(_ => Pets.Refresh());
+            .Subscribe(_ => Pets.Refresh())
+            .Record(this);
         SearchTargets
             .WhenValueChanged(x => x.SelectedItem)
             .Throttle(TimeSpan.FromSeconds(0.5), RxApp.TaskpoolScheduler)
             .DistinctUntilChanged()
             .ObserveOn(RxApp.MainThreadScheduler)
-            .Subscribe(_ => Pets.Refresh());
+            .Subscribe(_ => Pets.Refresh())
+            .Record(this);
 
         Closing += PetEditVM_Closing;
     }
@@ -150,7 +141,8 @@ public partial class PetEditVM : DialogViewModel, IEnableLogger<ViewModelBase>, 
                 .Throttle(TimeSpan.FromSeconds(0.5), RxApp.TaskpoolScheduler)
                 .DistinctUntilChanged()
                 .ObserveOn(RxApp.MainThreadScheduler)
-                .Subscribe(_ => Pets.Refresh());
+                .Subscribe(_ => Pets.Refresh())
+                .Record(this);
 
             Pets.AddRange(newValue.Pets);
             Search = string.Empty;
@@ -402,12 +394,10 @@ public partial class PetEditVM : DialogViewModel, IEnableLogger<ViewModelBase>, 
         if (_disposed)
             return;
         base.Dispose(disposing);
-        if (disposing)
-        {
-            Image?.CloseStreamWhenNoReference();
-            ModInfo = null!;
-            _disposed = true;
-        }
+        if (disposing) { }
+        Reset();
+        ModInfo = null!;
+        _disposed = false;
     }
 }
 

@@ -1,37 +1,25 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Collections.Specialized;
-using System.ComponentModel;
-using System.Diagnostics;
+﻿using System.ComponentModel;
 using System.Globalization;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Media.Imaging;
 using HanumanInstitute.MvvmDialogs;
 using HanumanInstitute.MvvmDialogs.FrameworkDialogs;
 using HKW.HKWReactiveUI;
+using HKW.HKWUtils;
 using HKW.HKWUtils.Extensions;
-using HKW.HKWUtils.Observable;
-using HKW.MVVMDialogs;
 using HKW.WPF;
 using HKW.WPF.Extensions;
 using HKW.WPF.MVVMDialogs;
 using LinePutScript.Localization.WPF;
 using Panuon.WPF.UI;
 using ReactiveUI;
-using Splat;
 using VPet.ModMaker.Models;
-using VPet.ModMaker.Views.ModEdit;
 
 namespace VPet.ModMaker.ViewModels.ModEdit;
 
 /// <summary>
 /// 模组编辑视图模型
 /// </summary>
-public partial class ModEditVM : ViewModelBase
+public partial class ModEditVM : ViewModelBase, IResettable
 {
     /// <inheritdoc/>
     public ModEditVM() { }
@@ -139,15 +127,6 @@ public partial class ModEditVM : ViewModelBase
             return;
         vm.Closing -= I18nEdit_Closing;
         I18nEditCanExecute = true;
-    }
-
-    /// <summary>
-    /// 关闭
-    /// </summary>
-    public void Close()
-    {
-        ModInfo.Close();
-        this.LogX().Debug("剩余缓存图像数量: {count}", HKWImageUtils.ImageByPath.Count);
     }
 
     /// <summary>
@@ -369,4 +348,21 @@ public partial class ModEditVM : ViewModelBase
         return true;
     }
     #endregion
+
+    /// <inheritdoc/>
+    protected override void Dispose(bool disposing)
+    {
+        if (_disposed)
+            return;
+        base.Dispose(disposing);
+        Reset();
+    }
+
+    /// <inheritdoc/>
+    public void Reset()
+    {
+        ModInfo.Close();
+        ModInfo = null!;
+        this.LogX().Debug("剩余缓存图像数量: {count}", HKWImageUtils.ImageByPath.Count);
+    }
 }

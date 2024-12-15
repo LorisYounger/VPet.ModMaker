@@ -1,19 +1,10 @@
-﻿using System;
-using System.Collections.Frozen;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Collections.Specialized;
-using System.Diagnostics;
+﻿using System.Collections.Frozen;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using HKW.HKWReactiveUI;
 using HKW.HKWUtils.Extensions;
 using HKW.HKWUtils.Observable;
 using LinePutScript;
 using LinePutScript.Localization.WPF;
-using Splat;
 using VPet.ModMaker.Native;
 using VPet.ModMaker.ViewModels;
 using VPet_Simulator.Core;
@@ -136,19 +127,6 @@ public partial class FoodAnimeTypeModel : ViewModelBase, IAnimeModel
             anime.LoadAnime();
         foreach (var anime in IllAnimes)
             anime.LoadAnime();
-    }
-
-    /// <inheritdoc/>
-    public void Close()
-    {
-        foreach (var anime in HappyAnimes)
-            anime.Close();
-        foreach (var anime in NomalAnimes)
-            anime.Close();
-        foreach (var anime in PoorConditionAnimes)
-            anime.Close();
-        foreach (var anime in IllAnimes)
-            anime.Close();
     }
 
     /// <inheritdoc/>
@@ -416,6 +394,25 @@ public partial class FoodAnimeTypeModel : ViewModelBase, IAnimeModel
         line.Add(new Sub(BackLayName, backLayName));
         lps.Add(line);
         File.WriteAllText(infoFile, lps.ToString());
+    }
+
+    /// <inheritdoc/>
+    protected override void Dispose(bool disposing)
+    {
+        if (_disposed)
+            return;
+        base.Dispose(disposing);
+        if (disposing)
+        {
+            foreach (var anime in HappyAnimes)
+                anime.Dispose();
+            foreach (var anime in NomalAnimes)
+                anime.Dispose();
+            foreach (var anime in PoorConditionAnimes)
+                anime.Dispose();
+            foreach (var anime in IllAnimes)
+                anime.Dispose();
+        }
     }
 }
 

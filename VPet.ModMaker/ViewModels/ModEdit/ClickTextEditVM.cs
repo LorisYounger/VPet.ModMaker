@@ -1,16 +1,8 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Frozen;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Diagnostics;
-using System.Linq;
 using System.Reactive.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using DynamicData.Binding;
-using HanumanInstitute.MvvmDialogs;
 using HanumanInstitute.MvvmDialogs.FrameworkDialogs;
 using HKW.HKWReactiveUI;
 using HKW.HKWUtils;
@@ -25,7 +17,6 @@ using LinePutScript.Localization.WPF;
 using ReactiveUI;
 using Splat;
 using VPet.ModMaker.Models;
-using VPet_Simulator.Windows.Interface;
 
 namespace VPet.ModMaker.ViewModels.ModEdit;
 
@@ -59,13 +50,15 @@ public partial class ClickTextEditVM : DialogViewModel, IEnableLogger<ViewModelB
             .Throttle(TimeSpan.FromSeconds(0.5), RxApp.TaskpoolScheduler)
             .DistinctUntilChanged()
             .ObserveOn(RxApp.MainThreadScheduler)
-            .Subscribe(_ => ClickTexts.Refresh());
+            .Subscribe(_ => ClickTexts.Refresh())
+            .Record(this);
         SearchTargets
             .WhenValueChanged(x => x.SelectedItem)
             .Throttle(TimeSpan.FromSeconds(0.5), RxApp.TaskpoolScheduler)
             .DistinctUntilChanged()
             .ObserveOn(RxApp.MainThreadScheduler)
-            .Subscribe(_ => ClickTexts.Refresh());
+            .Subscribe(_ => ClickTexts.Refresh())
+            .Record(this);
 
         Closing += ClickTextEditVM_Closing;
     }
@@ -134,7 +127,8 @@ public partial class ClickTextEditVM : DialogViewModel, IEnableLogger<ViewModelB
                 .Throttle(TimeSpan.FromSeconds(0.5), RxApp.TaskpoolScheduler)
                 .DistinctUntilChanged()
                 .ObserveOn(RxApp.MainThreadScheduler)
-                .Subscribe(_ => ClickTexts.Refresh());
+                .Subscribe(_ => ClickTexts.Refresh())
+                .Record(this);
             ClickTexts.AddRange(newValue.ClickTexts);
             ClickTexts.BaseList.BindingList(newValue.ClickTexts);
             Search = string.Empty;
@@ -296,10 +290,10 @@ public partial class ClickTextEditVM : DialogViewModel, IEnableLogger<ViewModelB
         if (_disposed)
             return;
         base.Dispose(disposing);
-        if (disposing)
-        {
-            ModInfo = null!;
-        }
+        if (disposing) { }
+        Reset();
+        ModInfo = null!;
+        _disposed = false;
     }
 }
 

@@ -1,14 +1,5 @@
-﻿using System;
-using System.Collections.Frozen;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.ComponentModel;
-using System.Diagnostics;
+﻿using System.Collections.Frozen;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Media.Imaging;
 using HKW.HKWReactiveUI;
 using HKW.HKWUtils;
 using HKW.HKWUtils.Extensions;
@@ -196,21 +187,6 @@ public partial class AnimeTypeModel : ViewModelBase, IAnimeModel
             anime.LoadAnime();
         foreach (var anime in IllAnimes)
             anime.LoadAnime();
-    }
-
-    /// <summary>
-    /// 关闭动画
-    /// </summary>
-    public void Close()
-    {
-        foreach (var anime in HappyAnimes)
-            anime.Close();
-        foreach (var anime in NomalAnimes)
-            anime.Close();
-        foreach (var anime in PoorConditionAnimes)
-            anime.Close();
-        foreach (var anime in IllAnimes)
-            anime.Close();
     }
 
     /// <summary>
@@ -425,8 +401,7 @@ public partial class AnimeTypeModel : ViewModelBase, IAnimeModel
         if (Directory.EnumerateFiles(path).Any())
         {
             // 如果没有文件夹 则载入全部文件
-            var animeModel = new AnimeModel(path);
-            animeModel.AnimeType = animatType;
+            var animeModel = new AnimeModel(path) { AnimeType = animatType };
             collection.Add(animeModel);
         }
         else
@@ -434,8 +409,7 @@ public partial class AnimeTypeModel : ViewModelBase, IAnimeModel
             // 否则遍历文件夹
             foreach (var imagesDir in Directory.EnumerateDirectories(path))
             {
-                var animeModel = new AnimeModel(imagesDir);
-                animeModel.AnimeType = animatType;
+                var animeModel = new AnimeModel(imagesDir) { AnimeType = animatType };
                 collection.Add(animeModel);
             }
         }
@@ -681,4 +655,23 @@ public partial class AnimeTypeModel : ViewModelBase, IAnimeModel
         }
     }
     #endregion
+
+    /// <inheritdoc/>
+    protected override void Dispose(bool disposing)
+    {
+        if (_disposed)
+            return;
+        base.Dispose(disposing);
+        if (disposing)
+        {
+            foreach (var anime in HappyAnimes)
+                anime.Dispose();
+            foreach (var anime in NomalAnimes)
+                anime.Dispose();
+            foreach (var anime in PoorConditionAnimes)
+                anime.Dispose();
+            foreach (var anime in IllAnimes)
+                anime.Dispose();
+        }
+    }
 }

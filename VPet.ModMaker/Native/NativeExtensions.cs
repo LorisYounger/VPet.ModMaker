@@ -1,23 +1,6 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Diagnostics;
-using System.Drawing;
-using System.Drawing.Imaging;
-using System.Globalization;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Media;
+﻿using System.IO;
 using System.Windows.Media.Imaging;
-using HKW.WPF.MVVMDialogs;
-using HKW.WPF.MVVMDialogs.Windows;
 using VPet.ModMaker.Models.ModModel;
-using VPet.ModMaker.ViewModels.ModEdit;
-using VPet.ModMaker.Views.ModEdit;
 using VPet_Simulator.Core;
 
 namespace VPet.ModMaker.Native;

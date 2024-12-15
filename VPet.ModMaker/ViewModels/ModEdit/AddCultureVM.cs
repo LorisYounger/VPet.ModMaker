@@ -1,15 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.ComponentModel;
-using System.Diagnostics;
+﻿using System.ComponentModel;
 using System.Globalization;
-using System.Linq;
 using System.Reactive.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using DynamicData.Binding;
-using HanumanInstitute.MvvmDialogs;
 using HanumanInstitute.MvvmDialogs.FrameworkDialogs;
 using HKW.HKWReactiveUI;
 using HKW.HKWUtils;
@@ -20,7 +12,6 @@ using HKW.MVVMDialogs;
 using HKW.WPF.MVVMDialogs;
 using LinePutScript.Localization.WPF;
 using ReactiveUI;
-using Splat;
 using VPet.ModMaker.Models;
 
 namespace VPet.ModMaker.ViewModels.ModEdit;
@@ -43,7 +34,8 @@ public partial class AddCultureVM : DialogViewModel, IEnableLogger<ViewModelBase
             .Throttle(TimeSpan.FromSeconds(0.5), RxApp.TaskpoolScheduler)
             .DistinctUntilChanged()
             .ObserveOn(RxApp.MainThreadScheduler)
-            .Subscribe(_ => AllCultures.Refresh());
+            .Subscribe(_ => AllCultures.Refresh())
+            .Record(this);
 
         Closing += AddCultureVM_Closing;
     }

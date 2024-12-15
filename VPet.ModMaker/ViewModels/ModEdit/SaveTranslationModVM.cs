@@ -1,23 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.ComponentModel;
-using System.Diagnostics;
-using System.Globalization;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
+﻿using System.Globalization;
 using HanumanInstitute.MvvmDialogs;
 using HKW.HKWReactiveUI;
-using HKW.HKWUtils.Extensions;
 using HKW.HKWUtils.Observable;
 using HKW.MVVMDialogs;
 using HKW.WPF.MVVMDialogs;
 using LinePutScript.Localization.WPF;
-using Microsoft.Win32;
-using Splat;
 using VPet.ModMaker.Models;
 
 namespace VPet.ModMaker.ViewModels.ModEdit;

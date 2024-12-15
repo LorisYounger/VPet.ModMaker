@@ -1,13 +1,7 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Frozen;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Diagnostics;
-using System.Linq;
 using System.Reactive.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Media.Imaging;
 using DynamicData.Binding;
 using HanumanInstitute.MvvmDialogs;
@@ -25,13 +19,10 @@ using HKW.WPF.MVVMDialogs;
 using LinePutScript;
 using LinePutScript.Converter;
 using LinePutScript.Localization.WPF;
-using Microsoft.Win32;
 using ReactiveUI;
 using Splat;
 using VPet.ModMaker.Models;
 using VPet.ModMaker.Models.ModModel;
-using VPet.ModMaker.Native;
-using VPet_Simulator.Windows.Interface;
 
 namespace VPet.ModMaker.ViewModels.ModEdit;
 
@@ -63,14 +54,16 @@ public partial class WorkEditVM : DialogViewModel, IEnableLogger<ViewModelBase>,
             .Throttle(TimeSpan.FromSeconds(0.5), RxApp.TaskpoolScheduler)
             .DistinctUntilChanged()
             .ObserveOn(RxApp.MainThreadScheduler)
-            .Subscribe(_ => Works.Refresh());
+            .Subscribe(_ => Works.Refresh())
+            .Record(this);
 
         SearchTargets
             .WhenValueChanged(x => x.SelectedItem)
             .Throttle(TimeSpan.FromSeconds(0.5), RxApp.TaskpoolScheduler)
             .DistinctUntilChanged()
             .ObserveOn(RxApp.MainThreadScheduler)
-            .Subscribe(_ => Works.Refresh());
+            .Subscribe(_ => Works.Refresh())
+            .Record(this);
 
         Closing += WorkEditVM_Closing;
     }
@@ -132,7 +125,8 @@ public partial class WorkEditVM : DialogViewModel, IEnableLogger<ViewModelBase>,
                 .Throttle(TimeSpan.FromSeconds(0.5), RxApp.TaskpoolScheduler)
                 .DistinctUntilChanged()
                 .ObserveOn(RxApp.MainThreadScheduler)
-                .Subscribe(x => CurrentPet = x);
+                .Subscribe(x => CurrentPet = x)
+                .Record(this);
         }
         if (newValue is null)
             CurrentPet = null!;
@@ -164,7 +158,8 @@ public partial class WorkEditVM : DialogViewModel, IEnableLogger<ViewModelBase>,
                 .Throttle(TimeSpan.FromSeconds(0.5), RxApp.TaskpoolScheduler)
                 .DistinctUntilChanged()
                 .ObserveOn(RxApp.MainThreadScheduler)
-                .Subscribe(_ => Works.Refresh());
+                .Subscribe(_ => Works.Refresh())
+                .Record(this);
 
             Works.AddRange(newValue.Works);
             Works.BaseList.BindingList(newValue.Works);
@@ -339,19 +334,19 @@ public partial class WorkEditVM : DialogViewModel, IEnableLogger<ViewModelBase>,
             return;
         if (anime.HappyAnimes.HasValue())
         {
-            Image = anime.HappyAnimes.Random().Images.Random().Image.CloneStream();
+            Image = anime.HappyAnimes.Random().Images.Random().Clone().Image;
         }
         else if (anime.NomalAnimes.HasValue())
         {
-            Image = anime.NomalAnimes.Random().Images.Random().Image.CloneStream();
+            Image = anime.NomalAnimes.Random().Images.Random().Clone().Image;
         }
         else if (anime.PoorConditionAnimes.HasValue())
         {
-            Image = anime.PoorConditionAnimes.Random().Images.Random().Image.CloneStream();
+            Image = anime.PoorConditionAnimes.Random().Images.Random().Clone().Image;
         }
         else if (anime.IllAnimes.HasValue())
         {
-            Image = anime.IllAnimes.Random().Images.Random().Image.CloneStream();
+            Image = anime.IllAnimes.Random().Images.Random().Clone().Image;
         }
     }
 
@@ -456,6 +451,7 @@ public partial class WorkEditVM : DialogViewModel, IEnableLogger<ViewModelBase>,
         OldWork = null!;
         DialogResult = false;
         Image?.CloseStreamWhenNoReference();
+        Image = null;
         ModInfo.TempI18nResource.ClearCultureData();
     }
 
@@ -465,11 +461,9 @@ public partial class WorkEditVM : DialogViewModel, IEnableLogger<ViewModelBase>,
         if (_disposed)
             return;
         base.Dispose(disposing);
-        if (disposing)
-        {
-            Image?.CloseStreamWhenNoReference();
-            ModInfo = null!;
-        }
+        Reset();
+        ModInfo = null!;
+        _disposed = false;
     }
 }
 

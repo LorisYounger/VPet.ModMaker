@@ -1,17 +1,7 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Frozen;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Diagnostics;
-using System.Linq;
 using System.Reactive.Linq;
-using System.Reactive.Threading.Tasks;
-using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Media.Imaging;
 using DynamicData.Binding;
 using HanumanInstitute.MvvmDialogs;
 using HanumanInstitute.MvvmDialogs.FrameworkDialogs;
@@ -64,13 +54,15 @@ public partial class FoodEditVM : DialogViewModel, IEnableLogger<ViewModelBase>,
             .Throttle(TimeSpan.FromSeconds(0.5), RxApp.TaskpoolScheduler)
             .DistinctUntilChanged()
             .ObserveOn(RxApp.MainThreadScheduler)
-            .Subscribe(_ => Foods.Refresh());
+            .Subscribe(_ => Foods.Refresh())
+            .Record(this);
         SearchTargets
             .WhenValueChanged(x => x.SelectedItem)
             .Throttle(TimeSpan.FromSeconds(0.5), RxApp.TaskpoolScheduler)
             .DistinctUntilChanged()
             .ObserveOn(RxApp.MainThreadScheduler)
-            .Subscribe(_ => Foods.Refresh());
+            .Subscribe(_ => Foods.Refresh())
+            .Record(this);
 
         Closing += FoodEditVM_Closing;
     }
@@ -138,7 +130,8 @@ public partial class FoodEditVM : DialogViewModel, IEnableLogger<ViewModelBase>,
                 .Throttle(TimeSpan.FromSeconds(0.5), RxApp.TaskpoolScheduler)
                 .DistinctUntilChanged()
                 .ObserveOn(RxApp.MainThreadScheduler)
-                .Subscribe(_ => Foods.Refresh());
+                .Subscribe(_ => Foods.Refresh())
+                .Record(this);
 
             Foods.AddRange(newValue.Foods);
             Foods.BaseList.BindingList(newValue.Foods);
@@ -383,11 +376,10 @@ public partial class FoodEditVM : DialogViewModel, IEnableLogger<ViewModelBase>,
         if (_disposed)
             return;
         base.Dispose(disposing);
-        if (disposing)
-        {
-            Food?.Close();
-            ModInfo = null!;
-        }
+        if (disposing) { }
+        Reset();
+        ModInfo = null!;
+        _disposed = false;
     }
 }
 

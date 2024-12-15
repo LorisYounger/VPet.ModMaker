@@ -1,17 +1,8 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Frozen;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Diagnostics;
-using System.Linq;
 using System.Reactive.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using DynamicData.Binding;
-using HanumanInstitute.MvvmDialogs;
 using HanumanInstitute.MvvmDialogs.FrameworkDialogs;
-using HanumanInstitute.MvvmDialogs.Wpf;
 using HKW.HKWMapper;
 using HKW.HKWReactiveUI;
 using HKW.HKWUtils;
@@ -26,7 +17,6 @@ using LinePutScript.Localization.WPF;
 using ReactiveUI;
 using Splat;
 using VPet.ModMaker.Models;
-using VPet_Simulator.Windows.Interface;
 
 namespace VPet.ModMaker.ViewModels.ModEdit;
 
@@ -59,14 +49,16 @@ public partial class LowTextEditVM : DialogViewModel, IEnableLogger<ViewModelBas
             .Throttle(TimeSpan.FromSeconds(0.5), RxApp.TaskpoolScheduler)
             .DistinctUntilChanged()
             .ObserveOn(RxApp.MainThreadScheduler)
-            .Subscribe(_ => LowTexts.Refresh());
+            .Subscribe(_ => LowTexts.Refresh())
+            .Record(this);
 
         SearchTargets
             .WhenValueChanged(x => x.SelectedItem)
             .Throttle(TimeSpan.FromSeconds(0.5), RxApp.TaskpoolScheduler)
             .DistinctUntilChanged()
             .ObserveOn(RxApp.MainThreadScheduler)
-            .Subscribe(_ => LowTexts.Refresh());
+            .Subscribe(_ => LowTexts.Refresh())
+            .Record(this);
 
         Closing += LowTextEditVM_Closing;
     }
@@ -132,7 +124,8 @@ public partial class LowTextEditVM : DialogViewModel, IEnableLogger<ViewModelBas
                 .Throttle(TimeSpan.FromSeconds(0.5), RxApp.TaskpoolScheduler)
                 .DistinctUntilChanged()
                 .ObserveOn(RxApp.MainThreadScheduler)
-                .Subscribe(_ => LowTexts.Refresh());
+                .Subscribe(_ => LowTexts.Refresh())
+                .Record(this);
             LowTexts.AddRange(newValue.LowTexts);
             LowTexts.BaseList.BindingList(newValue.LowTexts);
             Search = string.Empty;
@@ -294,10 +287,10 @@ public partial class LowTextEditVM : DialogViewModel, IEnableLogger<ViewModelBas
         if (_disposed)
             return;
         base.Dispose(disposing);
-        if (disposing)
-        {
-            ModInfo = null!;
-        }
+        if (disposing) { }
+        Reset();
+        ModInfo = null!;
+        _disposed = false;
     }
 }
 

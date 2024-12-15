@@ -1,12 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using HanumanInstitute.MvvmDialogs.Wpf;
-using HKW.WPF.MVVMDialogs;
-using HKW.WPF.MVVMDialogs.Windows;
-using VPet.ModMaker.Native;
+﻿using HKW.WPF.MVVMDialogs;
 using VPet.ModMaker.ViewModels;
 using VPet.ModMaker.ViewModels.ModEdit;
 using VPet.ModMaker.Views;

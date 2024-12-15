@@ -1,12 +1,8 @@
-﻿using System.Collections.ObjectModel;
-using System.Diagnostics;
-using System.IO;
-using System.Linq;
+﻿using System.IO;
 using HKW.HKWReactiveUI;
 using HKW.HKWUtils;
 using HKW.HKWUtils.Extensions;
 using HKW.HKWUtils.Observable;
-using ReactiveUI;
 using VPet.ModMaker.ViewModels;
 using VPet_Simulator.Core;
 
@@ -79,9 +75,15 @@ public partial class AnimeModel : ViewModelBase, ICloneable<AnimeModel>
     object ICloneable.Clone() => Clone();
 
     /// <inheritdoc/>
-    public void Close()
+    protected override void Dispose(bool disposing)
     {
-        foreach (var image in Images)
-            image.Close();
+        if (_disposed)
+            return;
+        base.Dispose(disposing);
+        if (disposing)
+        {
+            foreach (var image in Images)
+                image.Dispose();
+        }
     }
 }

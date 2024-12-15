@@ -1,15 +1,5 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Collections.Specialized;
-using System.ComponentModel;
-using System.Diagnostics;
-using System.Globalization;
-using System.Linq;
+﻿using System.Globalization;
 using System.Reactive.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using DynamicData.Binding;
 using HKW.HKWReactiveUI;
 using HKW.HKWUtils;
@@ -36,13 +26,15 @@ public partial class I18nEditVM : DialogViewModel, IEnableLogger<ViewModelBase>
             .Throttle(TimeSpan.FromSeconds(0.5), RxApp.TaskpoolScheduler)
             .DistinctUntilChanged()
             .ObserveOn(RxApp.MainThreadScheduler)
-            .Subscribe(_ => I18nDatas.Refresh());
+            .Subscribe(_ => I18nDatas.Refresh())
+            .Record(this);
         SearchTargets
             .WhenValueChanged(x => x.SelectedItem)
             .Throttle(TimeSpan.FromSeconds(0.5), RxApp.TaskpoolScheduler)
             .DistinctUntilChanged()
             .ObserveOn(RxApp.MainThreadScheduler)
-            .Subscribe(_ => I18nDatas.Refresh());
+            .Subscribe(_ => I18nDatas.Refresh())
+            .Record(this);
 
         ModInfo.I18nResource.Cultures.SetChanged -= Cultures_SetChanged;
         ModInfo.I18nResource.Cultures.SetChanged += Cultures_SetChanged;

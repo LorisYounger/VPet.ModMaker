@@ -1,30 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.IO;
-using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Diagnostics;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
-using DynamicData.Binding;
 using HKW.HKWReactiveUI;
-using HKW.HKWUtils.Extensions;
-using HKW.MVVMDialogs;
 using HKW.WPF.Extensions;
 using HKW.WPF.MVVMDialogs;
-using LinePutScript;
-using LinePutScript.Localization.WPF;
 using Panuon.WPF.UI;
 using ReactiveUI;
-using Splat;
 using VPet.ModMaker.Models;
 using VPet.ModMaker.ViewModels;
 using VPet.ModMaker.Views.ModEdit;
@@ -41,8 +23,15 @@ public partial class ModMakerWindow : WindowX, IPageLocator, IEnableLogger<ViewM
     {
         InitializeComponent();
         NativeUtils.ClipboardSetText = Clipboard.SetText;
-        this.SetViewModel<ModMakerVM>((s, e) => ViewModel.Close());
-        MessageBus
+        IDisposable? bus = null;
+        this.SetViewModel<ModMakerVM>(
+            (s, e) =>
+            {
+                ViewModel.Close();
+                bus?.Dispose();
+            }
+        );
+        bus = MessageBus
             .Current.Listen<ModInfoModel?>()
             .Subscribe(x =>
             {

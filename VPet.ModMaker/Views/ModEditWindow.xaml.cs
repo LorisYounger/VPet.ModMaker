@@ -1,36 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Collections.Specialized;
-using System.ComponentModel;
-using System.Globalization;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.ComponentModel;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
-using DynamicData.Binding;
 using HKW.HKWReactiveUI;
-using HKW.HKWUtils.Extensions;
 using HKW.WPF.Extensions;
 using HKW.WPF.MVVMDialogs;
 using HKW.WPF.Utils;
 using LinePutScript.Localization.WPF;
-using Microsoft.Win32;
-using Panuon.WPF;
 using Panuon.WPF.UI;
 using ReactiveUI;
 using VPet.ModMaker.Models;
 using VPet.ModMaker.ViewModels.ModEdit;
-using VPet.ModMaker.Views.ModEdit;
-using VPet_Simulator.Windows.Interface;
 
 namespace VPet.ModMaker.Views.ModEdit;
 
@@ -209,9 +189,9 @@ public partial class ModEditWindow : WindowX, IPageLocator, IDisposables
             this.SkipNextClose();
             return;
         }
-        ViewModel.Close();
+        ViewModel.Reset();
         foreach (var page in PageByType.Values)
-            page.Close();
+            page.Reset();
         this.DisposeAll();
         MessageBus.Current.SendMessage<ModInfoModel?>(null);
     }

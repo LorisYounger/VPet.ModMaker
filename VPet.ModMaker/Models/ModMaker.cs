@@ -1,16 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
-using HanumanInstitute.MvvmDialogs;
 using HKW.HKWReactiveUI;
 using HKW.HKWUtils;
-using LinePutScript;
 using LinePutScript.Localization.WPF;
-using Splat;
 using VPet.ModMaker.ViewModels;
 using VPet.ModMaker.Views;
 using VPet_Simulator.Windows.Interface;

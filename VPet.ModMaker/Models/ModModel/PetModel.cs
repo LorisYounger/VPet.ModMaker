@@ -1,23 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.ComponentModel;
-using System.Diagnostics;
-using System.Diagnostics.CodeAnalysis;
-using System.Globalization;
+﻿using System.Diagnostics.CodeAnalysis;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Media.Imaging;
 using HKW.HKWMapper;
 using HKW.HKWReactiveUI;
 using HKW.HKWUtils;
 using HKW.HKWUtils.Observable;
 using LinePutScript;
 using LinePutScript.Converter;
-using LinePutScript.Localization.WPF;
 using VPet.ModMaker.Models.ModModel;
 using VPet.ModMaker.ViewModels;
 using VPet_Simulator.Core;
@@ -481,17 +469,26 @@ public partial class PetModel : ViewModelBase
     }
     #endregion
     #endregion
-    /// <summary>
-    /// 关闭
-    /// </summary>
-    public void Close()
+
+    /// <inheritdoc/>
+    protected override void Dispose(bool disposing)
     {
-        foreach (var anime in Animes)
-            anime.Close();
-        foreach (var anime in FoodAnimes)
-            anime.Close();
-        I18nResource.I18nObjects.Remove(I18nObject);
-        I18nObject.Close();
+        if (_disposed)
+            return;
+        base.Dispose(disposing);
+        if (disposing)
+        {
+            foreach (var move in Moves)
+                move.Dispose();
+            foreach (var work in Works)
+                work.Dispose();
+            foreach (var anime in Animes)
+                anime.Dispose();
+            foreach (var anime in FoodAnimes)
+                anime.Dispose();
+            I18nResource.I18nObjects.Remove(I18nObject);
+            I18nObject.Dispose();
+        }
     }
 }
 

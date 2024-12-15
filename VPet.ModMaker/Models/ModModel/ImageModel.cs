@@ -1,16 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Media.Imaging;
+﻿using System.Windows.Media.Imaging;
 using HKW.HKWReactiveUI;
 using HKW.HKWUtils;
-using HKW.HKWUtils.Observable;
 using HKW.WPF;
 using HKW.WPF.Extensions;
-using VPet.ModMaker.Native;
 using VPet.ModMaker.ViewModels;
 
 namespace VPet.ModMaker.Models.ModModel;
@@ -77,11 +69,15 @@ public partial class ImageModel : ViewModelBase, ICloneable<ImageModel>
 
     object ICloneable.Clone() => Clone();
 
-    /// <summary>
-    /// 关闭
-    /// </summary>
-    public void Close()
+    /// <inheritdoc/>
+    protected override void Dispose(bool disposing)
     {
-        Image?.CloseStreamWhenNoReference();
+        if (_disposed)
+            return;
+        base.Dispose(disposing);
+        if (disposing)
+        {
+            Image?.CloseStreamWhenNoReference();
+        }
     }
 }

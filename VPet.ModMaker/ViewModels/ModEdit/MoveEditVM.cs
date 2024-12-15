@@ -1,12 +1,5 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Diagnostics;
-using System.Linq;
+﻿using System.Collections;
 using System.Reactive.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Media.Imaging;
 using DynamicData.Binding;
 using HanumanInstitute.MvvmDialogs;
@@ -23,7 +16,6 @@ using HKW.WPF.MVVMDialogs;
 using LinePutScript;
 using LinePutScript.Converter;
 using LinePutScript.Localization.WPF;
-using Microsoft.Win32;
 using ReactiveUI;
 using Splat;
 using VPet.ModMaker.Models;
@@ -44,7 +36,8 @@ public partial class MoveEditVM : DialogViewModel, IEnableLogger<ViewModelBase>,
             .Throttle(TimeSpan.FromSeconds(0.5), RxApp.TaskpoolScheduler)
             .DistinctUntilChanged()
             .ObserveOn(RxApp.MainThreadScheduler)
-            .Subscribe(_ => Moves.Refresh());
+            .Subscribe(_ => Moves.Refresh())
+            .Record(this);
 
         Closing += MoveEditVM_Closing;
     }
@@ -81,7 +74,8 @@ public partial class MoveEditVM : DialogViewModel, IEnableLogger<ViewModelBase>,
                 .Throttle(TimeSpan.FromSeconds(0.5), RxApp.TaskpoolScheduler)
                 .DistinctUntilChanged()
                 .ObserveOn(RxApp.MainThreadScheduler)
-                .Subscribe(x => CurrentPet = x);
+                .Subscribe(x => CurrentPet = x)
+                .Record(this);
         }
         if (newValue is null)
             CurrentPet = null;
@@ -117,7 +111,8 @@ public partial class MoveEditVM : DialogViewModel, IEnableLogger<ViewModelBase>,
                 .Throttle(TimeSpan.FromSeconds(0.5), RxApp.TaskpoolScheduler)
                 .DistinctUntilChanged()
                 .ObserveOn(RxApp.MainThreadScheduler)
-                .Subscribe(_ => Moves.Refresh());
+                .Subscribe(_ => Moves.Refresh())
+                .Record(this);
 
             Moves.AddRange(newValue.Moves);
             Moves.BaseList.BindingList(newValue.Moves);
@@ -293,11 +288,10 @@ public partial class MoveEditVM : DialogViewModel, IEnableLogger<ViewModelBase>,
         if (_disposed)
             return;
         base.Dispose(disposing);
-        if (disposing)
-        {
-            Image?.CloseStreamWhenNoReference();
-            ModInfo = null!;
-            CurrentPet = null!;
-        }
+        if (disposing) { }
+        Reset();
+        CurrentPet = null!;
+        ModInfo = null!;
+        _disposed = false;
     }
 }

@@ -1,16 +1,7 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
+﻿using System.Collections;
 using System.Collections.Specialized;
-using System.ComponentModel;
-using System.Diagnostics;
-using System.Linq;
 using System.Reactive.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using DynamicData.Binding;
-using HanumanInstitute.MvvmDialogs;
 using HanumanInstitute.MvvmDialogs.FrameworkDialogs;
 using HKW.HKWReactiveUI;
 using HKW.HKWUtils.Collections;
@@ -19,12 +10,9 @@ using HKW.HKWUtils.Observable;
 using HKW.MVVMDialogs;
 using HKW.WPF.MVVMDialogs;
 using LinePutScript.Localization.WPF;
-using Panuon.WPF.UI;
 using ReactiveUI;
-using Splat;
 using VPet.ModMaker.Models;
 using VPet.ModMaker.Models.ModModel;
-using VPet.ModMaker.Views.ModEdit;
 
 namespace VPet.ModMaker.ViewModels.ModEdit;
 

@@ -1,15 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.ComponentModel;
-using System.Diagnostics;
-using System.Globalization;
-using System.IO;
-using System.Linq;
+﻿using System.IO;
 using System.Reactive.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Input;
 using DynamicData.Binding;
 using HanumanInstitute.MvvmDialogs;
 using HanumanInstitute.MvvmDialogs.FrameworkDialogs;
@@ -25,13 +15,10 @@ using HKW.WPF.MVVMDialogs;
 using LinePutScript;
 using LinePutScript.Converter;
 using LinePutScript.Localization.WPF;
-using Microsoft.Win32;
 using ReactiveUI;
 using Splat;
 using Splat.NLog;
 using VPet.ModMaker.Models;
-using VPet.ModMaker.Resources;
-using VPet.ModMaker.ViewModels.ModEdit;
 
 namespace VPet.ModMaker.ViewModels;
 
@@ -63,7 +50,8 @@ public partial class ModMakerVM : ViewModelBase
             .Throttle(TimeSpan.FromSeconds(0.5), RxApp.TaskpoolScheduler)
             .DistinctUntilChanged()
             .ObserveOn(RxApp.MainThreadScheduler)
-            .Subscribe(_ => Histories.Refresh());
+            .Subscribe(_ => Histories.Refresh())
+            .Record(this);
     }
 
     private static void Initialize()
@@ -423,11 +411,12 @@ public partial class ModMakerVM : ViewModelBase
         }
     }
 
-    /// <summary>
-    /// 关闭
-    /// </summary>
-    public void Close()
+    /// <inheritdoc/>
+    protected override void Dispose(bool disposing)
     {
+        if (_disposed)
+            return;
+        base.Dispose(disposing);
         foreach (var history in Histories)
             history.Image?.CloseStreamWhenNoReference();
         Histories.Clear();

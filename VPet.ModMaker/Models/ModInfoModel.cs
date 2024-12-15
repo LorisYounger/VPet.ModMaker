@@ -1,36 +1,23 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Collections.Specialized;
-using System.ComponentModel;
-using System.Diagnostics;
+﻿using System.ComponentModel;
 using System.Globalization;
 using System.IO;
-using System.Linq;
 using System.Reactive.Linq;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
 using System.Windows.Media.Imaging;
 using DynamicData.Binding;
 using HKW.HKWMapper;
 using HKW.HKWReactiveUI;
 using HKW.HKWUtils;
 using HKW.HKWUtils.Collections;
-using HKW.HKWUtils.Extensions;
 using HKW.HKWUtils.Observable;
 using HKW.WPF;
 using HKW.WPF.Extensions;
 using LinePutScript;
 using LinePutScript.Converter;
-using LinePutScript.Localization.WPF;
 using ReactiveUI;
-using Splat;
 using VPet.ModMaker.Models.ModModel;
 using VPet.ModMaker.Native;
 using VPet.ModMaker.ViewModels;
 using VPet_Simulator.Core;
-using VPet_Simulator.Windows.Interface;
 
 namespace VPet.ModMaker.Models;
 
@@ -885,21 +872,31 @@ public partial class ModInfoModel : ViewModelBase
         this.LogX().Info("翻译模组保存完毕");
     }
 
-    /// <summary>
-    /// 关闭
-    /// </summary>
-    public void Close()
+    /// <inheritdoc/>
+    protected override void Dispose(bool disposing)
     {
-        I18nResource.PropertyChanged -= I18nResource_PropertyChanged;
-        I18nResource.Cultures.SetChanged -= Cultures_SetChanged;
-        I18nResource.CultureDatas.DictionaryChanged -= CultureDatas_DictionaryChanged;
-        Image?.CloseStreamWhenNoReference();
-        I18nObject.Close();
-        I18nResource.Clear();
-        TempI18nResource.Clear();
-        foreach (var food in Foods)
-            food.Close();
-        foreach (var pet in Pets.Where(x => x.FromMain is false))
-            pet.Close();
+        if (_disposed)
+            return;
+        base.Dispose(disposing);
+        if (disposing)
+        {
+            I18nResource.PropertyChanged -= I18nResource_PropertyChanged;
+            I18nResource.Cultures.SetChanged -= Cultures_SetChanged;
+            I18nResource.CultureDatas.DictionaryChanged -= CultureDatas_DictionaryChanged;
+            Image?.CloseStreamWhenNoReference();
+            I18nObject.Close();
+            I18nResource.Clear();
+            TempI18nResource.Clear();
+            foreach (var food in Foods)
+                food.Dispose();
+            foreach (var text in ClickTexts)
+                text.Dispose();
+            foreach (var text in LowTexts)
+                text.Dispose();
+            foreach (var text in SelectTexts)
+                text.Dispose();
+            foreach (var pet in Pets.Where(x => x.FromMain is false))
+                pet.Dispose();
+        }
     }
 }

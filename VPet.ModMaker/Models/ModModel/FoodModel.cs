@@ -1,25 +1,13 @@
-﻿using System;
-using System.Collections.Frozen;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Diagnostics;
+﻿using System.Collections.Frozen;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Media.Imaging;
 using HKW.HKWMapper;
 using HKW.HKWReactiveUI;
 using HKW.HKWUtils;
 using HKW.HKWUtils.Extensions;
-using HKW.HKWUtils.Observable;
 using HKW.WPF;
 using HKW.WPF.Extensions;
-using LinePutScript;
-using LinePutScript.Converter;
-using Splat;
-using VPet.ModMaker.Native;
 using VPet.ModMaker.ViewModels;
 using VPet_Simulator.Windows.Interface;
 
