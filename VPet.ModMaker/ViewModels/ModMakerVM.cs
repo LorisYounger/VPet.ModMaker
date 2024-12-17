@@ -59,11 +59,11 @@ public partial class ModMakerVM : ViewModelBase
     {
         if (_isFirst is false)
             return;
-        if (File.Exists(NativeData.NLogConfigBaseDirectory) is false)
-            NativeResources.SaveTo(NativeResources.NLogConfig, NativeData.NLogConfigBaseDirectory);
+        if (File.Exists(NativeData.NLogConfigBaseFile) is false)
+            NativeResources.SaveTo(NativeResources.NLogConfig, NativeData.NLogConfigBaseFile);
 
         LogResolver.LogFactory.Configuration = new NLog.Config.XmlLoggingConfiguration(
-            Path.Combine(NativeData.NLogConfigBaseDirectory)
+            Path.Combine(NativeData.NLogConfigBaseFile)
         );
         var funcLogManager = new FuncLogManager(type => new NLogLogger(LogResolver.Resolve(type)));
         LogHostX.RegisterLoggerManager(typeof(ViewModelBase), funcLogManager);

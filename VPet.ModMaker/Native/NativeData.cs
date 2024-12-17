@@ -25,7 +25,7 @@ public static class NativeData
     /// <summary>
     /// 日志配置文件基准路径
     /// </summary>
-    public static string NLogConfigBaseDirectory { get; } =
+    public static string NLogConfigBaseFile { get; } =
         Path.Combine(ModMakerBaseDirectory, "NLog.config");
 
     /// <summary>
