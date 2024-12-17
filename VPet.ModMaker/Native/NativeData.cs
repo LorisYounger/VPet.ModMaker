@@ -23,6 +23,12 @@ public static class NativeData
         Path.Combine(BaseDirectory, nameof(ModMaker));
 
     /// <summary>
+    /// 日志配置文件基准路径
+    /// </summary>
+    public static string NLogConfigBaseDirectory { get; } =
+        Path.Combine(ModMakerBaseDirectory, "NLog.config");
+
+    /// <summary>
     /// 历史文件基准目录
     /// </summary>
     public static string HistoryBaseFilePath { get; } =

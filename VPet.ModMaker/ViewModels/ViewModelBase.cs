@@ -1,4 +1,5 @@
 ﻿using HKW.HKWReactiveUI;
+using NLog;
 using Splat;
 
 namespace VPet.ModMaker.ViewModels;
@@ -11,8 +12,10 @@ public partial class ViewModelBase : ReactiveObjectX { }
 internal static class LogResolver
 {
     private const int MaxCacheSize = 16;
-    private static readonly MemoizingMRUCache<Type, global::NLog.Logger> _loggerCache =
-        new((type, _) => global::NLog.LogManager.GetLogger(type.ToString()), MaxCacheSize);
+    public static NLog.LogFactory LogFactory { get; } = new();
 
-    public static global::NLog.Logger Resolve(Type type) => _loggerCache.Get(type, null);
+    private static readonly MemoizingMRUCache<Type, NLog.Logger> _loggerCache =
+        new((type, _) => LogFactory.GetLogger(type.ToString()), MaxCacheSize);
+
+    public static NLog.Logger Resolve(Type type) => _loggerCache.Get(type, null);
 }

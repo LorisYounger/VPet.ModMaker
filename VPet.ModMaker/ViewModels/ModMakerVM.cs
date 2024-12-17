@@ -19,6 +19,7 @@ using ReactiveUI;
 using Splat;
 using Splat.NLog;
 using VPet.ModMaker.Models;
+using VPet.ModMaker.Resources;
 
 namespace VPet.ModMaker.ViewModels;
 
@@ -58,8 +59,11 @@ public partial class ModMakerVM : ViewModelBase
     {
         if (_isFirst is false)
             return;
-        NLog.LogManager.Configuration = new NLog.Config.XmlLoggingConfiguration(
-            Path.Combine(NativeData.ModMakerBaseDirectory, "NLog.config")
+        if (File.Exists(NativeData.NLogConfigBaseDirectory) is false)
+            NativeResources.SaveTo(NativeResources.NLogConfig, NativeData.NLogConfigBaseDirectory);
+
+        LogResolver.LogFactory.Configuration = new NLog.Config.XmlLoggingConfiguration(
+            Path.Combine(NativeData.NLogConfigBaseDirectory)
         );
         var funcLogManager = new FuncLogManager(type => new NLogLogger(LogResolver.Resolve(type)));
         LogHostX.RegisterLoggerManager(typeof(ViewModelBase), funcLogManager);
