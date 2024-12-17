@@ -59,6 +59,7 @@ public partial class ModMakerVM : ViewModelBase
     {
         if (_isFirst is false)
             return;
+        Directory.CreateDirectory(NativeData.ModMakerBaseDirectory);
         if (File.Exists(NativeData.NLogConfigBaseFile) is false)
             NativeResources.SaveTo(NativeResources.NLogConfig, NativeData.NLogConfigBaseFile);
 
