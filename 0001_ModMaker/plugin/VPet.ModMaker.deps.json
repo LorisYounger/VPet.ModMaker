@@ -8,53 +8,146 @@
     ".NETCoreApp,Version=v8.0": {
       "VPet.ModMaker/1.0.0": {
         "dependencies": {
-          "CommunityToolkit.Mvvm": "8.2.2",
-          "HKW.Utils": "1.2.22",
-          "HKW.WPF": "1.0.7",
-          "LinePutScript": "1.11.6",
+          "Fody": "6.9.1",
+          "HKW.MVVMDialogs": "0.1.0",
+          "HKW.Mapper": "0.1.3",
+          "HKW.ReactiveUI": "0.3.5",
+          "HKW.Utils": "1.3.8",
+          "HKW.WPF": "1.1.4",
+          "HanumanInstitute.MvvmDialogs": "2.1.0",
+          "HanumanInstitute.MvvmDialogs.Wpf": "2.1.0",
+          "LinePutScript": "1.11.8",
           "LinePutScript.Localization.WPF": "1.0.7",
-          "Mapster": "7.4.0",
           "Microsoft.CSharp": "4.7.0",
-          "Ookii.Dialogs.Wpf": "5.0.1",
-          "Panuon.WPF": "1.1.0",
-          "Panuon.WPF.UI": "1.2.1.2",
-          "VPet-Simulator.Core": "1.1.0.14-beta",
-          "VPet-Simulator.Windows.Interface": "1.1.0.14-beta"
+          "NLog": "5.3.4",
+          "Panuon.WPF": "1.1.2.2",
+          "Panuon.WPF.UI": "1.2.4.8",
+          "ReactiveUI": "20.1.63",
+          "ReactiveUI.WPF": "20.1.63",
+          "Splat.NLog": "15.2.22",
+          "VPet-Simulator.Core": "1.1.0.40",
+          "VPet-Simulator.Windows.Interface": "1.1.0.40"
         },
         "runtime": {
           "VPet.ModMaker.dll": {}
         }
       },
-      "CommunityToolkit.Mvvm/8.2.2": {
+      "DynamicData/9.0.4": {
+        "dependencies": {
+          "System.Reactive": "6.0.1"
+        },
         "runtime": {
-          "lib/net6.0/CommunityToolkit.Mvvm.dll": {
-            "assemblyVersion": "8.2.0.0",
-            "fileVersion": "8.2.2.1"
+          "lib/net8.0/DynamicData.dll": {
+            "assemblyVersion": "9.0.0.0",
+            "fileVersion": "9.0.4.44987"
           }
         }
       },
-      "HKW.Utils/1.2.22": {
+      "Fody/6.9.1": {},
+      "HanumanInstitute.MvvmDialogs/2.1.0": {
+        "dependencies": {
+          "Microsoft.Bcl.AsyncInterfaces": "8.0.0",
+          "Microsoft.Extensions.Logging.Abstractions": "8.0.0",
+          "System.Runtime": "4.3.1",
+          "System.Runtime.InteropServices": "4.3.0"
+        },
+        "runtime": {
+          "lib/netstandard2.0/HanumanInstitute.MvvmDialogs.dll": {
+            "assemblyVersion": "2.1.0.0",
+            "fileVersion": "2.1.0.0"
+          }
+        }
+      },
+      "HanumanInstitute.MvvmDialogs.Wpf/2.1.0": {
+        "dependencies": {
+          "HanumanInstitute.MvvmDialogs": "2.1.0",
+          "Microsoft.Extensions.Logging.Abstractions": "8.0.0"
+        },
+        "runtime": {
+          "lib/netcoreapp3.1/HanumanInstitute.MvvmDialogs.Wpf.dll": {
+            "assemblyVersion": "2.1.0.0",
+            "fileVersion": "2.1.0.0"
+          }
+        }
+      },
+      "HKW.CommonValueConverters/0.1.2": {
+        "dependencies": {
+          "HKW.Utils": "1.3.8"
+        },
+        "runtime": {
+          "lib/net8.0/HKW.CommonValueConverters.dll": {
+            "assemblyVersion": "0.1.2.0",
+            "fileVersion": "0.1.2.0"
+          }
+        }
+      },
+      "HKW.Mapper/0.1.3": {
+        "runtime": {
+          "lib/netstandard2.0/HKW.Mapper.dll": {
+            "assemblyVersion": "0.1.3.0",
+            "fileVersion": "0.1.3.0"
+          }
+        }
+      },
+      "HKW.MVVMDialogs/0.1.0": {
+        "dependencies": {
+          "HKW.ReactiveUI": "0.3.5",
+          "HKW.Utils": "1.3.8",
+          "HanumanInstitute.MvvmDialogs": "2.1.0",
+          "ReactiveUI": "20.1.63"
+        },
+        "runtime": {
+          "lib/net8.0/HKW.MVVMDialogs.dll": {
+            "assemblyVersion": "0.1.0.0",
+            "fileVersion": "0.1.0.0"
+          }
+        }
+      },
+      "HKW.ReactiveUI/0.3.5": {
+        "dependencies": {
+          "ReactiveUI": "20.1.63"
+        },
+        "runtime": {
+          "lib/netstandard2.0/HKW.ReactiveUI.dll": {
+            "assemblyVersion": "0.3.5.0",
+            "fileVersion": "0.3.5.0"
+          }
+        }
+      },
+      "HKW.Utils/1.3.8": {
+        "dependencies": {
+          "HKW.ReactiveUI": "0.3.5",
+          "ReactiveUI": "20.1.63"
+        },
         "runtime": {
           "lib/net8.0/HKW.Utils.dll": {
-            "assemblyVersion": "1.2.22.0",
-            "fileVersion": "1.2.22.0"
+            "assemblyVersion": "1.3.8.0",
+            "fileVersion": "1.3.8.0"
           }
         }
       },
-      "HKW.WPF/1.0.7": {
+      "HKW.WPF/1.1.4": {
         "dependencies": {
-          "HKW.Utils": "1.2.22",
-          "Microsoft.Extensions.DependencyInjection": "8.0.0",
-          "Microsoft.Xaml.Behaviors.Wpf": "1.1.77"
+          "HKW.CommonValueConverters": "0.1.2",
+          "HKW.MVVMDialogs": "0.1.0",
+          "HKW.ReactiveUI": "0.3.5",
+          "HKW.Utils": "1.3.8",
+          "HanumanInstitute.MvvmDialogs": "2.1.0",
+          "HanumanInstitute.MvvmDialogs.Wpf": "2.1.0",
+          "Microsoft.Extensions.DependencyInjection": "9.0.0",
+          "Microsoft.Xaml.Behaviors.Wpf": "1.1.135",
+          "Panuon.WPF.UI": "1.2.4.8",
+          "ReactiveUI": "20.1.63",
+          "ReactiveUI.WPF": "20.1.63"
         },
         "runtime": {
           "lib/net8.0-windows7.0/HKW.WPF.dll": {
-            "assemblyVersion": "1.0.7.0",
-            "fileVersion": "1.0.7.0"
+            "assemblyVersion": "1.1.4.0",
+            "fileVersion": "1.1.4.0"
           }
         }
       },
-      "LinePutScript/1.11.6": {
+      "LinePutScript/1.11.8": {
         "runtime": {
           "lib/net8.0/LinePutScript.dll": {
             "assemblyVersion": "1.0.0.0",
@@ -64,7 +157,7 @@
       },
       "LinePutScript.Localization.WPF/1.0.7": {
         "dependencies": {
-          "LinePutScript": "1.11.6"
+          "LinePutScript": "1.11.8"
         },
         "runtime": {
           "lib/net6.0/LinePutScript.Localization.WPF.dll": {
@@ -73,85 +166,216 @@
           }
         }
       },
-      "Mapster/7.4.0": {
-        "dependencies": {
-          "Mapster.Core": "1.2.1"
-        },
+      "Microsoft.Bcl.AsyncInterfaces/8.0.0": {
         "runtime": {
-          "lib/net7.0/Mapster.dll": {
-            "assemblyVersion": "7.4.0.0",
-            "fileVersion": "7.4.0.0"
-          }
-        }
-      },
-      "Mapster.Core/1.2.1": {
-        "runtime": {
-          "lib/net7.0/Mapster.Core.dll": {
-            "assemblyVersion": "1.2.1.0",
-            "fileVersion": "1.2.1.0"
+          "lib/netstandard2.1/Microsoft.Bcl.AsyncInterfaces.dll": {
+            "assemblyVersion": "8.0.0.0",
+            "fileVersion": "8.0.23.53103"
           }
         }
       },
       "Microsoft.CSharp/4.7.0": {},
-      "Microsoft.Extensions.DependencyInjection/8.0.0": {
+      "Microsoft.Extensions.DependencyInjection/9.0.0": {
         "dependencies": {
-          "Microsoft.Extensions.DependencyInjection.Abstractions": "8.0.0"
+          "Microsoft.Extensions.DependencyInjection.Abstractions": "9.0.0"
         },
         "runtime": {
           "lib/net8.0/Microsoft.Extensions.DependencyInjection.dll": {
-            "assemblyVersion": "8.0.0.0",
-            "fileVersion": "8.0.23.53103"
+            "assemblyVersion": "9.0.0.0",
+            "fileVersion": "9.0.24.52809"
           }
         }
       },
-      "Microsoft.Extensions.DependencyInjection.Abstractions/8.0.0": {
+      "Microsoft.Extensions.DependencyInjection.Abstractions/9.0.0": {
         "runtime": {
           "lib/net8.0/Microsoft.Extensions.DependencyInjection.Abstractions.dll": {
+            "assemblyVersion": "9.0.0.0",
+            "fileVersion": "9.0.24.52809"
+          }
+        }
+      },
+      "Microsoft.Extensions.Logging.Abstractions/8.0.0": {
+        "dependencies": {
+          "Microsoft.Extensions.DependencyInjection.Abstractions": "9.0.0"
+        },
+        "runtime": {
+          "lib/net8.0/Microsoft.Extensions.Logging.Abstractions.dll": {
             "assemblyVersion": "8.0.0.0",
             "fileVersion": "8.0.23.53103"
           }
         }
       },
-      "Microsoft.Xaml.Behaviors.Wpf/1.1.77": {
+      "Microsoft.NETCore.Platforms/1.1.1": {},
+      "Microsoft.NETCore.Targets/1.1.3": {},
+      "Microsoft.Xaml.Behaviors.Wpf/1.1.135": {
         "runtime": {
           "lib/net6.0-windows7.0/Microsoft.Xaml.Behaviors.dll": {
             "assemblyVersion": "1.1.0.0",
-            "fileVersion": "1.1.77.27830"
+            "fileVersion": "1.1.135.29210"
           }
         }
       },
-      "Ookii.Dialogs.Wpf/5.0.1": {
+      "NLog/5.3.4": {
         "runtime": {
-          "lib/net6.0-windows7.0/Ookii.Dialogs.Wpf.dll": {
+          "lib/netstandard2.0/NLog.dll": {
             "assemblyVersion": "5.0.0.0",
-            "fileVersion": "5.0.1.0"
+            "fileVersion": "5.3.4.2778"
           }
         }
       },
-      "Panuon.WPF/1.1.0": {
+      "Panuon.WPF/1.1.2.2": {
         "runtime": {
           "lib/net8.0-windows/Panuon.WPF.dll": {
-            "assemblyVersion": "1.1.0.0",
-            "fileVersion": "1.1.0.0"
+            "assemblyVersion": "1.1.2.2",
+            "fileVersion": "1.1.2.2"
           }
         }
       },
-      "Panuon.WPF.UI/1.2.1.2": {
+      "Panuon.WPF.UI/1.2.4.8": {
         "dependencies": {
-          "Panuon.WPF": "1.1.0"
+          "Panuon.WPF": "1.1.2.2"
         },
         "runtime": {
           "lib/net8.0-windows/Panuon.WPF.UI.dll": {
-            "assemblyVersion": "1.2.1.2",
-            "fileVersion": "1.2.1.2"
+            "assemblyVersion": "1.2.4.7",
+            "fileVersion": "1.2.4.7"
           }
         }
       },
-      "VPet-Simulator.Core/1.1.0.14-beta": {
+      "ReactiveUI/20.1.63": {
         "dependencies": {
-          "LinePutScript": "1.11.6",
+          "DynamicData": "9.0.4",
+          "Splat": "15.2.22",
+          "System.ComponentModel.Annotations": "5.0.0"
+        },
+        "runtime": {
+          "lib/net8.0/ReactiveUI.dll": {
+            "assemblyVersion": "20.1.0.0",
+            "fileVersion": "20.1.63.39471"
+          }
+        }
+      },
+      "ReactiveUI.WPF/20.1.63": {
+        "dependencies": {
+          "DynamicData": "9.0.4",
+          "ReactiveUI": "20.1.63",
+          "Splat": "15.2.22",
+          "System.ComponentModel.Annotations": "5.0.0",
+          "System.Text.Json": "8.0.4",
+          "System.ValueTuple": "4.5.0"
+        },
+        "runtime": {
+          "lib/net462/ReactiveUI.Wpf.dll": {
+            "assemblyVersion": "20.1.0.0",
+            "fileVersion": "20.1.63.39471"
+          }
+        }
+      },
+      "Splat/15.2.22": {
+        "runtime": {
+          "lib/net8.0/Splat.dll": {
+            "assemblyVersion": "15.2.0.0",
+            "fileVersion": "15.2.22.2189"
+          }
+        }
+      },
+      "Splat.NLog/15.2.22": {
+        "dependencies": {
+          "NLog": "5.3.4",
+          "Splat": "15.2.22",
+          "System.Collections.Immutable": "8.0.0"
+        },
+        "runtime": {
+          "lib/net8.0/Splat.NLog.dll": {
+            "assemblyVersion": "15.2.0.0",
+            "fileVersion": "15.2.22.2189"
+          }
+        }
+      },
+      "System.Collections.Immutable/8.0.0": {},
+      "System.ComponentModel.Annotations/5.0.0": {},
+      "System.IO/4.3.0": {
+        "dependencies": {
+          "Microsoft.NETCore.Platforms": "1.1.1",
+          "Microsoft.NETCore.Targets": "1.1.3",
+          "System.Runtime": "4.3.1",
+          "System.Text.Encoding": "4.3.0",
+          "System.Threading.Tasks": "4.3.0"
+        }
+      },
+      "System.Reactive/6.0.1": {
+        "runtime": {
+          "lib/net6.0/System.Reactive.dll": {
+            "assemblyVersion": "6.0.0.0",
+            "fileVersion": "6.0.1.7420"
+          }
+        }
+      },
+      "System.Reflection/4.3.0": {
+        "dependencies": {
+          "Microsoft.NETCore.Platforms": "1.1.1",
+          "Microsoft.NETCore.Targets": "1.1.3",
+          "System.IO": "4.3.0",
+          "System.Reflection.Primitives": "4.3.0",
+          "System.Runtime": "4.3.1"
+        }
+      },
+      "System.Reflection.Primitives/4.3.0": {
+        "dependencies": {
+          "Microsoft.NETCore.Platforms": "1.1.1",
+          "Microsoft.NETCore.Targets": "1.1.3",
+          "System.Runtime": "4.3.1"
+        }
+      },
+      "System.Runtime/4.3.1": {
+        "dependencies": {
+          "Microsoft.NETCore.Platforms": "1.1.1",
+          "Microsoft.NETCore.Targets": "1.1.3"
+        }
+      },
+      "System.Runtime.Handles/4.3.0": {
+        "dependencies": {
+          "Microsoft.NETCore.Platforms": "1.1.1",
+          "Microsoft.NETCore.Targets": "1.1.3",
+          "System.Runtime": "4.3.1"
+        }
+      },
+      "System.Runtime.InteropServices/4.3.0": {
+        "dependencies": {
+          "Microsoft.NETCore.Platforms": "1.1.1",
+          "Microsoft.NETCore.Targets": "1.1.3",
+          "System.Reflection": "4.3.0",
+          "System.Reflection.Primitives": "4.3.0",
+          "System.Runtime": "4.3.1",
+          "System.Runtime.Handles": "4.3.0"
+        }
+      },
+      "System.Text.Encoding/4.3.0": {
+        "dependencies": {
+          "Microsoft.NETCore.Platforms": "1.1.1",
+          "Microsoft.NETCore.Targets": "1.1.3",
+          "System.Runtime": "4.3.1"
+        }
+      },
+      "System.Text.Encodings.Web/8.0.0": {},
+      "System.Text.Json/8.0.4": {
+        "dependencies": {
+          "System.Text.Encodings.Web": "8.0.0"
+        }
+      },
+      "System.Threading.Tasks/4.3.0": {
+        "dependencies": {
+          "Microsoft.NETCore.Platforms": "1.1.1",
+          "Microsoft.NETCore.Targets": "1.1.3",
+          "System.Runtime": "4.3.1"
+        }
+      },
+      "System.ValueTuple/4.5.0": {},
+      "VPet-Simulator.Core/1.1.0.40": {
+        "dependencies": {
+          "LinePutScript": "1.11.8",
           "LinePutScript.Localization.WPF": "1.0.7",
-          "Panuon.WPF.UI": "1.2.1.2"
+          "Panuon.WPF.UI": "1.2.4.8"
         },
         "runtime": {
           "lib/net8.0/VPet-Simulator.Core.dll": {
@@ -160,9 +384,9 @@
           }
         }
       },
-      "VPet-Simulator.Windows.Interface/1.1.0.14-beta": {
+      "VPet-Simulator.Windows.Interface/1.1.0.40": {
         "dependencies": {
-          "VPet-Simulator.Core": "1.1.0.14-beta"
+          "VPet-Simulator.Core": "1.1.0.40"
         },
         "runtime": {
           "lib/net8.0/VPet-Simulator.Windows.Interface.dll": {
@@ -179,33 +403,82 @@
       "serviceable": false,
       "sha512": ""
     },
-    "CommunityToolkit.Mvvm/8.2.2": {
+    "DynamicData/9.0.4": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-r0g0k9tGYdrnz8R7T3x5UiokDffeevzK/2P/9SBL6fqLgN8B157MIi/bVUWI1KAz6ZorZrK9AdABCWUeXZZsvA==",
-      "path": "communitytoolkit.mvvm/8.2.2",
-      "hashPath": "communitytoolkit.mvvm.8.2.2.nupkg.sha512"
+      "sha512": "sha512-CjJUF3u8V7QseHlumOBajFUYM9YKlI6QhDKz5MMyeckPeU6QyMExDJhGsJqIk6RYYLaPNLsk5qkzxEgDWv/lsg==",
+      "path": "dynamicdata/9.0.4",
+      "hashPath": "dynamicdata.9.0.4.nupkg.sha512"
     },
-    "HKW.Utils/1.2.22": {
+    "Fody/6.9.1": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-tf9f4awOTJ2VHQ/SC8bHrI3d8m8eltxth6RZjHNh9MZtxBeEuXjkFDGgUowxh7HxC2X5Eh67Q+kbwrCEx4a7nw==",
-      "path": "hkw.utils/1.2.22",
-      "hashPath": "hkw.utils.1.2.22.nupkg.sha512"
+      "sha512": "sha512-Y33IOTstqsDaq2+1Cweu4s/V2iAAaRY6bPIANCre3Wlx9REc+ONyYmUdCc67Z12dy0N2Haq3t7QP4ANndsu/HA==",
+      "path": "fody/6.9.1",
+      "hashPath": "fody.6.9.1.nupkg.sha512"
     },
-    "HKW.WPF/1.0.7": {
+    "HanumanInstitute.MvvmDialogs/2.1.0": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-ram4l1C7EllOBVdDCPkplvPYE8Pi7WIF755u6YkbkdidJlsDumRvD7N0faCoDRjIot8ia26DaHYhYfrSE7zH0A==",
-      "path": "hkw.wpf/1.0.7",
-      "hashPath": "hkw.wpf.1.0.7.nupkg.sha512"
+      "sha512": "sha512-YDgorKQDwEU9pWEyfrGOwAfCUApGXV99GvfmuPltjfBVZUQKfysheP/1rOraMfW46HWE0UytxrFdutH12NXurQ==",
+      "path": "hanumaninstitute.mvvmdialogs/2.1.0",
+      "hashPath": "hanumaninstitute.mvvmdialogs.2.1.0.nupkg.sha512"
     },
-    "LinePutScript/1.11.6": {
+    "HanumanInstitute.MvvmDialogs.Wpf/2.1.0": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-2m1AsVxPKKK6Ey/mFt0yEGdrS2LjDX0hKZrKK4LzxNRXePmyWrkiRCUXJK5mSNNZw0OENRAn58jdX9+00jFL+A==",
-      "path": "lineputscript/1.11.6",
-      "hashPath": "lineputscript.1.11.6.nupkg.sha512"
+      "sha512": "sha512-DDvgCGJd7tV5W0rEp0BfOhxE23zR9yKpTjknjz+JsC/uu5D3xpSYsHv6rlBbEZPXZ5ySUNmIpHx6M6IZ7CLWiw==",
+      "path": "hanumaninstitute.mvvmdialogs.wpf/2.1.0",
+      "hashPath": "hanumaninstitute.mvvmdialogs.wpf.2.1.0.nupkg.sha512"
+    },
+    "HKW.CommonValueConverters/0.1.2": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-Y8vHPvkym1HsDEWImlZdMlG057tBuvYcZ1dtxSI6Op1V2IQIBD9pR3HYhGiTn8mxMSBRbV53FJ9dAJB4BBhNkg==",
+      "path": "hkw.commonvalueconverters/0.1.2",
+      "hashPath": "hkw.commonvalueconverters.0.1.2.nupkg.sha512"
+    },
+    "HKW.Mapper/0.1.3": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-tL7/lbFAquanr7UNlgzutL/af5hwVJudYsD200KlW3Mof2pLEq7uusY1kz9rQFChdS5xrKngZ4zWG0ZXLJahIQ==",
+      "path": "hkw.mapper/0.1.3",
+      "hashPath": "hkw.mapper.0.1.3.nupkg.sha512"
+    },
+    "HKW.MVVMDialogs/0.1.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-LwquHAoxcA7DJiRovwT9c5VrbFLz86XZT22gpeXlrwDP8eBqajkrQBB0S6v8Z+PDpvWkAxpBjcBJ3ScywzKNeg==",
+      "path": "hkw.mvvmdialogs/0.1.0",
+      "hashPath": "hkw.mvvmdialogs.0.1.0.nupkg.sha512"
+    },
+    "HKW.ReactiveUI/0.3.5": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-SEDiV5Fhiqi/U1S74Cuway48rs0XQbVfhFCswQ3H9SLMQ8Xds/ASoDZ44FN8Z0dF0/GEVroXf2g6YlAnKhWRQQ==",
+      "path": "hkw.reactiveui/0.3.5",
+      "hashPath": "hkw.reactiveui.0.3.5.nupkg.sha512"
+    },
+    "HKW.Utils/1.3.8": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-X8dpPPUp11B5RMOq63cot+1PgNFEWjjphssQOd/6UMMMt6zmFBfHshwJ1kfcgq5sdJBQMmSPNAfCvGshtvklSQ==",
+      "path": "hkw.utils/1.3.8",
+      "hashPath": "hkw.utils.1.3.8.nupkg.sha512"
+    },
+    "HKW.WPF/1.1.4": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-8vIJXGOVA3lduU2mQ2ntigdGWXeAvkrEQmye3C36zzF5IGxneb77JpDE36zsxmMqr+/Y7bZu5yK3lePz/Fh82g==",
+      "path": "hkw.wpf/1.1.4",
+      "hashPath": "hkw.wpf.1.1.4.nupkg.sha512"
+    },
+    "LinePutScript/1.11.8": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-aFJyf3eIJPcZKl2mgDP1B2iQXIYIhizu80cqgVN30ZnLBz9DiegTEjdsvFDgg7qkoq+5gQr8BEoTIagb+A7NDw==",
+      "path": "lineputscript/1.11.8",
+      "hashPath": "lineputscript.1.11.8.nupkg.sha512"
     },
     "LinePutScript.Localization.WPF/1.0.7": {
       "type": "package",
@@ -214,19 +487,12 @@
       "path": "lineputscript.localization.wpf/1.0.7",
       "hashPath": "lineputscript.localization.wpf.1.0.7.nupkg.sha512"
     },
-    "Mapster/7.4.0": {
+    "Microsoft.Bcl.AsyncInterfaces/8.0.0": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-RYGoDqvS4WTKIq0HDyPBBVIj6N0mluOCXQ1Vk95JKseMHEsbCXSEGKSlP95oL+s42IXAXbqvHj7p0YaRBUcfqg==",
-      "path": "mapster/7.4.0",
-      "hashPath": "mapster.7.4.0.nupkg.sha512"
-    },
-    "Mapster.Core/1.2.1": {
-      "type": "package",
-      "serviceable": true,
-      "sha512": "sha512-11lokmfliBEMMmjeqxFGNpqGXq6tN96zFqpBmfYeahr4Ybk63oDmeJmOflsATjobYkX248g5Y62oQ2NNnZaeww==",
-      "path": "mapster.core/1.2.1",
-      "hashPath": "mapster.core.1.2.1.nupkg.sha512"
+      "sha512": "sha512-3WA9q9yVqJp222P3x1wYIGDAkpjAku0TMUaaQV22g6L67AI0LdOIrVS7Ht2vJfLHGSPVuqN94vIr15qn+HEkHw==",
+      "path": "microsoft.bcl.asyncinterfaces/8.0.0",
+      "hashPath": "microsoft.bcl.asyncinterfaces.8.0.0.nupkg.sha512"
     },
     "Microsoft.CSharp/4.7.0": {
       "type": "package",
@@ -235,61 +501,208 @@
       "path": "microsoft.csharp/4.7.0",
       "hashPath": "microsoft.csharp.4.7.0.nupkg.sha512"
     },
-    "Microsoft.Extensions.DependencyInjection/8.0.0": {
+    "Microsoft.Extensions.DependencyInjection/9.0.0": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-V8S3bsm50ig6JSyrbcJJ8bW2b9QLGouz+G1miK3UTaOWmMtFwNNNzUf4AleyDWUmTrWMLNnFSLEQtxmxgNQnNQ==",
-      "path": "microsoft.extensions.dependencyinjection/8.0.0",
-      "hashPath": "microsoft.extensions.dependencyinjection.8.0.0.nupkg.sha512"
+      "sha512": "sha512-MCPrg7v3QgNMr0vX4vzRXvkNGgLg8vKWX0nKCWUxu2uPyMsaRgiRc1tHBnbTcfJMhMKj2slE/j2M9oGkd25DNw==",
+      "path": "microsoft.extensions.dependencyinjection/9.0.0",
+      "hashPath": "microsoft.extensions.dependencyinjection.9.0.0.nupkg.sha512"
     },
-    "Microsoft.Extensions.DependencyInjection.Abstractions/8.0.0": {
+    "Microsoft.Extensions.DependencyInjection.Abstractions/9.0.0": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-cjWrLkJXK0rs4zofsK4bSdg+jhDLTaxrkXu4gS6Y7MAlCvRyNNgwY/lJi5RDlQOnSZweHqoyvgvbdvQsRIW+hg==",
-      "path": "microsoft.extensions.dependencyinjection.abstractions/8.0.0",
-      "hashPath": "microsoft.extensions.dependencyinjection.abstractions.8.0.0.nupkg.sha512"
+      "sha512": "sha512-+6f2qv2a3dLwd5w6JanPIPs47CxRbnk+ZocMJUhv9NxP88VlOcJYZs9jY+MYSjxvady08bUZn6qgiNh7DadGgg==",
+      "path": "microsoft.extensions.dependencyinjection.abstractions/9.0.0",
+      "hashPath": "microsoft.extensions.dependencyinjection.abstractions.9.0.0.nupkg.sha512"
     },
-    "Microsoft.Xaml.Behaviors.Wpf/1.1.77": {
+    "Microsoft.Extensions.Logging.Abstractions/8.0.0": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-MCu674ZETgU18EbxfwIlRpUPJ02YbZenLsMCXTkpeA7KUBpXfFaOUDlEO+7UWu5AFnUoydg+aQENJkuaZPheMQ==",
-      "path": "microsoft.xaml.behaviors.wpf/1.1.77",
-      "hashPath": "microsoft.xaml.behaviors.wpf.1.1.77.nupkg.sha512"
+      "sha512": "sha512-arDBqTgFCyS0EvRV7O3MZturChstm50OJ0y9bDJvAcmEPJm0FFpFyjU/JLYyStNGGey081DvnQYlncNX5SJJGA==",
+      "path": "microsoft.extensions.logging.abstractions/8.0.0",
+      "hashPath": "microsoft.extensions.logging.abstractions.8.0.0.nupkg.sha512"
     },
-    "Ookii.Dialogs.Wpf/5.0.1": {
+    "Microsoft.NETCore.Platforms/1.1.1": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-iZNnZwqTpK0cfR0vkotncP1c025/PHlIdzc7iEKBYwhVv1V0zXp9/RT/O0kMhsmlwXqRxxbE4pdhfinbJXtjPg==",
-      "path": "ookii.dialogs.wpf/5.0.1",
-      "hashPath": "ookii.dialogs.wpf.5.0.1.nupkg.sha512"
+      "sha512": "sha512-TMBuzAHpTenGbGgk0SMTwyEkyijY/Eae4ZGsFNYJvAr/LDn1ku3Etp3FPxChmDp5HHF3kzJuoaa08N0xjqAJfQ==",
+      "path": "microsoft.netcore.platforms/1.1.1",
+      "hashPath": "microsoft.netcore.platforms.1.1.1.nupkg.sha512"
     },
-    "Panuon.WPF/1.1.0": {
+    "Microsoft.NETCore.Targets/1.1.3": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-NmA0O5qDwVmc1mh97XNL6HBuD0mqeZhbq0uW+R9pZ0AlP0DuR/0bZP/xvDYXfeHx7p8ww4/ZwHK/LRdyCcip+A==",
-      "path": "panuon.wpf/1.1.0",
-      "hashPath": "panuon.wpf.1.1.0.nupkg.sha512"
+      "sha512": "sha512-3Wrmi0kJDzClwAC+iBdUBpEKmEle8FQNsCs77fkiOIw/9oYA07bL1EZNX0kQ2OMN3xpwvl0vAtOCYY3ndDNlhQ==",
+      "path": "microsoft.netcore.targets/1.1.3",
+      "hashPath": "microsoft.netcore.targets.1.1.3.nupkg.sha512"
     },
-    "Panuon.WPF.UI/1.2.1.2": {
+    "Microsoft.Xaml.Behaviors.Wpf/1.1.135": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-Lup+CVZ1ubM1jdbjtb/eJMcFMvLRg6BqvRjMJJwDzGBp1dACC1L5RNS6OuS8mm6N1QbF2q7KaULnAkYH+uzQXg==",
-      "path": "panuon.wpf.ui/1.2.1.2",
-      "hashPath": "panuon.wpf.ui.1.2.1.2.nupkg.sha512"
+      "sha512": "sha512-r8qBEXmQfORso2+MVHnt8PSH4761zJ0SIxgQTSEDVLU97EN2FZdG6/ZCYUPhQy+OrPKgnpYBCAs3PS6Bs7wRsg==",
+      "path": "microsoft.xaml.behaviors.wpf/1.1.135",
+      "hashPath": "microsoft.xaml.behaviors.wpf.1.1.135.nupkg.sha512"
     },
-    "VPet-Simulator.Core/1.1.0.14-beta": {
+    "NLog/5.3.4": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-ZT51h8d0ZPSaWkEB9PG8BC7SWWXQcUmTq1kbn6dDL9o2GKYdE9TiDmWF8cCddMBuhtvmEAAbhy3sWEaNCOptBg==",
-      "path": "vpet-simulator.core/1.1.0.14-beta",
-      "hashPath": "vpet-simulator.core.1.1.0.14-beta.nupkg.sha512"
+      "sha512": "sha512-gLy7+O1hEYJXIlcTr1/VWjGXrZTQFZzYNO18IWasD64pNwz0BreV+nHLxWKXWZzERRzoKnsk2XYtwLkTVk7J1A==",
+      "path": "nlog/5.3.4",
+      "hashPath": "nlog.5.3.4.nupkg.sha512"
     },
-    "VPet-Simulator.Windows.Interface/1.1.0.14-beta": {
+    "Panuon.WPF/1.1.2.2": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-99HtctF8Js2gtzoNgiaFw6NjnIg/8R5IdEPrCLDNk8ZRndZ61nnqwrzQauHLWX/Jce31mEUHxdhhuOWCt5O2AQ==",
-      "path": "vpet-simulator.windows.interface/1.1.0.14-beta",
-      "hashPath": "vpet-simulator.windows.interface.1.1.0.14-beta.nupkg.sha512"
+      "sha512": "sha512-GDoILU32uPeCl6O+Bk/zIMG+dWZ9TyHbTQi9MNyTwNm+BlzDhPzbHkmLFYQ7Q8GhUyAH2DRtYujU/NCAEecEtw==",
+      "path": "panuon.wpf/1.1.2.2",
+      "hashPath": "panuon.wpf.1.1.2.2.nupkg.sha512"
+    },
+    "Panuon.WPF.UI/1.2.4.8": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-7W0dyOpJMNBqHOvnbztuXCTMPInG9dR6ByKCKhPExc7j9fyj3IRPpEJCKB0VRilZvDdMU1VGOchTmOoBQRcvhQ==",
+      "path": "panuon.wpf.ui/1.2.4.8",
+      "hashPath": "panuon.wpf.ui.1.2.4.8.nupkg.sha512"
+    },
+    "ReactiveUI/20.1.63": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-lPrrPDH5dgBZh/vpZGqycTbeRPHWcrLAhmRAOK8rqeAObVuYAzLrhoGusnfRvaljz0ApP5UiPLEdH7lxtfj0Jw==",
+      "path": "reactiveui/20.1.63",
+      "hashPath": "reactiveui.20.1.63.nupkg.sha512"
+    },
+    "ReactiveUI.WPF/20.1.63": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-Jzr2yqPHt/AsX9uVep2YsdDQeYn3GBWB9WamNkmOExQGbOvnlUsuKHutyJgGenk23PBY3OO3tPJAnEIYgNI8NA==",
+      "path": "reactiveui.wpf/20.1.63",
+      "hashPath": "reactiveui.wpf.20.1.63.nupkg.sha512"
+    },
+    "Splat/15.2.22": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-/pWR1fEsosVqdtn7qG+FjEJP/crrK8HQRQyyJKriuZQUKuRBft4/PI6+YTXirgCeuJTsbERo7vGL+z9988oSPw==",
+      "path": "splat/15.2.22",
+      "hashPath": "splat.15.2.22.nupkg.sha512"
+    },
+    "Splat.NLog/15.2.22": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-9yCDL6Pq8zY3kM6WfwsGEE+WTdhn6kiwUQ8/nNPVf3inKxmxX6n8ozWW77PVXzv6r0VJ2btDPyUtXAZKB9eXYw==",
+      "path": "splat.nlog/15.2.22",
+      "hashPath": "splat.nlog.15.2.22.nupkg.sha512"
+    },
+    "System.Collections.Immutable/8.0.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-AurL6Y5BA1WotzlEvVaIDpqzpIPvYnnldxru8oXJU2yFxFUy3+pNXjXd1ymO+RA0rq0+590Q8gaz2l3Sr7fmqg==",
+      "path": "system.collections.immutable/8.0.0",
+      "hashPath": "system.collections.immutable.8.0.0.nupkg.sha512"
+    },
+    "System.ComponentModel.Annotations/5.0.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-dMkqfy2el8A8/I76n2Hi1oBFEbG1SfxD2l5nhwXV3XjlnOmwxJlQbYpJH4W51odnU9sARCSAgv7S3CyAFMkpYg==",
+      "path": "system.componentmodel.annotations/5.0.0",
+      "hashPath": "system.componentmodel.annotations.5.0.0.nupkg.sha512"
+    },
+    "System.IO/4.3.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-3qjaHvxQPDpSOYICjUoTsmoq5u6QJAFRUITgeT/4gqkF1bajbSmb1kwSxEA8AHlofqgcKJcM8udgieRNhaJ5Cg==",
+      "path": "system.io/4.3.0",
+      "hashPath": "system.io.4.3.0.nupkg.sha512"
+    },
+    "System.Reactive/6.0.1": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-rHaWtKDwCi9qJ3ObKo8LHPMuuwv33YbmQi7TcUK1C264V3MFnOr5Im7QgCTdLniztP3GJyeiSg5x8NqYJFqRmg==",
+      "path": "system.reactive/6.0.1",
+      "hashPath": "system.reactive.6.0.1.nupkg.sha512"
+    },
+    "System.Reflection/4.3.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-KMiAFoW7MfJGa9nDFNcfu+FpEdiHpWgTcS2HdMpDvt9saK3y/G4GwprPyzqjFH9NTaGPQeWNHU+iDlDILj96aQ==",
+      "path": "system.reflection/4.3.0",
+      "hashPath": "system.reflection.4.3.0.nupkg.sha512"
+    },
+    "System.Reflection.Primitives/4.3.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-5RXItQz5As4xN2/YUDxdpsEkMhvw3e6aNveFXUn4Hl/udNTCNhnKp8lT9fnc3MhvGKh1baak5CovpuQUXHAlIA==",
+      "path": "system.reflection.primitives/4.3.0",
+      "hashPath": "system.reflection.primitives.4.3.0.nupkg.sha512"
+    },
+    "System.Runtime/4.3.1": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-abhfv1dTK6NXOmu4bgHIONxHyEqFjW8HwXPmpY9gmll+ix9UNo4XDcmzJn6oLooftxNssVHdJC1pGT9jkSynQg==",
+      "path": "system.runtime/4.3.1",
+      "hashPath": "system.runtime.4.3.1.nupkg.sha512"
+    },
+    "System.Runtime.Handles/4.3.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-OKiSUN7DmTWeYb3l51A7EYaeNMnvxwE249YtZz7yooT4gOZhmTjIn48KgSsw2k2lYdLgTKNJw/ZIfSElwDRVgg==",
+      "path": "system.runtime.handles/4.3.0",
+      "hashPath": "system.runtime.handles.4.3.0.nupkg.sha512"
+    },
+    "System.Runtime.InteropServices/4.3.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-uv1ynXqiMK8mp1GM3jDqPCFN66eJ5w5XNomaK2XD+TuCroNTLFGeZ+WCmBMcBDyTFKou3P6cR6J/QsaqDp7fGQ==",
+      "path": "system.runtime.interopservices/4.3.0",
+      "hashPath": "system.runtime.interopservices.4.3.0.nupkg.sha512"
+    },
+    "System.Text.Encoding/4.3.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-BiIg+KWaSDOITze6jGQynxg64naAPtqGHBwDrLaCtixsa5bKiR8dpPOHA7ge3C0JJQizJE+sfkz1wV+BAKAYZw==",
+      "path": "system.text.encoding/4.3.0",
+      "hashPath": "system.text.encoding.4.3.0.nupkg.sha512"
+    },
+    "System.Text.Encodings.Web/8.0.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-yev/k9GHAEGx2Rg3/tU6MQh4HGBXJs70y7j1LaM1i/ER9po+6nnQ6RRqTJn1E7Xu0fbIFK80Nh5EoODxrbxwBQ==",
+      "path": "system.text.encodings.web/8.0.0",
+      "hashPath": "system.text.encodings.web.8.0.0.nupkg.sha512"
+    },
+    "System.Text.Json/8.0.4": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-bAkhgDJ88XTsqczoxEMliSrpijKZHhbJQldhAmObj/RbrN3sU5dcokuXmWJWsdQAhiMJ9bTayWsL1C9fbbCRhw==",
+      "path": "system.text.json/8.0.4",
+      "hashPath": "system.text.json.8.0.4.nupkg.sha512"
+    },
+    "System.Threading.Tasks/4.3.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-LbSxKEdOUhVe8BezB/9uOGGppt+nZf6e1VFyw6v3DN6lqitm0OSn2uXMOdtP0M3W4iMcqcivm2J6UgqiwwnXiA==",
+      "path": "system.threading.tasks/4.3.0",
+      "hashPath": "system.threading.tasks.4.3.0.nupkg.sha512"
+    },
+    "System.ValueTuple/4.5.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-okurQJO6NRE/apDIP23ajJ0hpiNmJ+f0BwOlB/cSqTLQlw5upkf+5+96+iG2Jw40G1fCVCyPz/FhIABUjMR+RQ==",
+      "path": "system.valuetuple/4.5.0",
+      "hashPath": "system.valuetuple.4.5.0.nupkg.sha512"
+    },
+    "VPet-Simulator.Core/1.1.0.40": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-TrtyuT/iOE2FRcFZpd0cfF3Q4Ynvsf1eOOV4tIgkLNJtv1ORdlyac0XEruWU+jUz7/UkFtuklC8ywvJbmyOwEw==",
+      "path": "vpet-simulator.core/1.1.0.40",
+      "hashPath": "vpet-simulator.core.1.1.0.40.nupkg.sha512"
+    },
+    "VPet-Simulator.Windows.Interface/1.1.0.40": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-WB45kdT6/2Ho/6X5ZNuaMyr6Q6K+uokRs0L2B/QQ0qOBHrOV1WLcusAy46VHrKA8Ytag5sXzMe6Dah5rShRjDA==",
+      "path": "vpet-simulator.windows.interface/1.1.0.40",
+      "hashPath": "vpet-simulator.windows.interface.1.1.0.40.nupkg.sha512"
     }
   }
 }

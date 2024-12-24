@@ -1,0 +1,4945 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>VPet.ModMaker</name>
+    </assembly>
+    <members>
+        <member name="T:VPet.ModMaker.App">
+            <summary>
+            Interaction logic for App.xaml
+            </summary>
+            <summary>
+            App
+            </summary>
+        </member>
+        <member name="M:VPet.ModMaker.App.InitializeComponent">
+            <summary>
+            InitializeComponent
+            </summary>
+        </member>
+        <member name="M:VPet.ModMaker.App.Main">
+            <summary>
+            Application Entry Point.
+            </summary>
+        </member>
+        <member name="T:VPet.ModMaker.Models.ModInfoModel">
+            <summary>
+            模组信息模型
+            </summary>
+        </member>
+        <member name="M:VPet.ModMaker.Models.ModInfoModel.#ctor">
+            <inheritdoc/>
+        </member>
+        <member name="M:VPet.ModMaker.Models.ModInfoModel.#ctor(VPet.ModMaker.Models.ModLoader)">
+            <inheritdoc/>
+            <param name="loader">模组载入器</param>
+        </member>
+        <member name="P:VPet.ModMaker.Models.ModInfoModel.I18nResource">
+            <summary>
+            I18n资源
+            </summary>
+        </member>
+        <member name="P:VPet.ModMaker.Models.ModInfoModel.TempI18nResource">
+            <summary>
+            临时I18n资源, 用于新建的项目
+            </summary>
+        </member>
+        <member name="P:VPet.ModMaker.Models.ModInfoModel.I18nObject">
+            <summary>
+            I18n对象
+            </summary>
+        </member>
+        <member name="P:VPet.ModMaker.Models.ModInfoModel.Name">
+            <summary>
+            名称
+            </summary>
+        </member>
+        <member name="P:VPet.ModMaker.Models.ModInfoModel.Description">
+            <summary>
+            详情
+            </summary>
+        </member>
+        <member name="P:VPet.ModMaker.Models.ModInfoModel.AutoSetFoodPrice">
+            <summary>
+            自动设置食物推荐价格
+            </summary>
+        </member>
+        <member name="P:VPet.ModMaker.Models.ModInfoModel.ShowMainPet">
+            <summary>
+            显示本体宠物
+            </summary>
+        </member>
+        <member name="P:VPet.ModMaker.Models.ModInfoModel.AuthorID">
+            <summary>
+            作者ID
+            </summary>
+        </member>
+        <member name="P:VPet.ModMaker.Models.ModInfoModel.ItemID">
+            <summary>
+            项目ID
+            </summary>
+        </member>
+        <member name="P:VPet.ModMaker.Models.ModInfoModel.ID">
+            <summary>
+            ID
+            </summary>
+        </member>
+        <member name="P:VPet.ModMaker.Models.ModInfoModel.DescriptionID">
+            <summary>
+            描述ID
+            </summary>
+        </member>
+        <member name="P:VPet.ModMaker.Models.ModInfoModel.Author">
+            <summary>
+            作者
+            </summary>
+        </member>
+        <member name="P:VPet.ModMaker.Models.ModInfoModel.GameVersion">
+            <summary>
+            支持的游戏版本
+            </summary>
+        </member>
+        <member name="P:VPet.ModMaker.Models.ModInfoModel.ModVersion">
+            <summary>
+            模组版本
+            </summary>
+        </member>
+        <member name="P:VPet.ModMaker.Models.ModInfoModel.Image">
+            <summary>
+            封面
+            </summary>
+        </member>
+        <member name="P:VPet.ModMaker.Models.ModInfoModel.SourcePath">
+            <summary>
+            源路径
+            </summary>
+        </member>
+        <member name="P:VPet.ModMaker.Models.ModInfoModel.Foods">
+            <summary>
+            食物
+            </summary>
+        </member>
+        <member name="P:VPet.ModMaker.Models.ModInfoModel.ClickTexts">
+            <summary>
+            点击文本
+            </summary>
+        </member>
+        <member name="P:VPet.ModMaker.Models.ModInfoModel.LowTexts">
+            <summary>
+            低状态文本
+            </summary>
+        </member>
+        <member name="P:VPet.ModMaker.Models.ModInfoModel.SelectTexts">
+            <summary>
+            选择文本
+            </summary>
+        </member>
+        <member name="P:VPet.ModMaker.Models.ModInfoModel.CurrentPet">
+            <summary>
+            当前宠物
+            </summary>
+        </member>
+        <member name="P:VPet.ModMaker.Models.ModInfoModel.Pets">
+            <summary>
+            宠物
+            </summary>
+        </member>
+        <member name="P:VPet.ModMaker.Models.ModInfoModel.PetDisplayedCount">
+            <summary>
+            宠物显示的数量
+            </summary>
+        </member>
+        <member name="M:VPet.ModMaker.Models.ModInfoModel.LoadAnime(VPet.ModMaker.Models.PetModel,System.String)">
+            <summary>
+            加载宠物动画
+            </summary>
+            <param name="petModel">模型</param>
+            <param name="path">路径</param>
+        </member>
+        <member name="M:VPet.ModMaker.Models.ModInfoModel.LoadI18nDatas(VPet.ModMaker.Models.ModLoader)">
+            <summary>
+            加载本地化数据
+            </summary>
+        </member>
+        <member name="M:VPet.ModMaker.Models.ModInfoModel.Save">
+            <summary>
+            保存
+            </summary>
+        </member>
+        <member name="M:VPet.ModMaker.Models.ModInfoModel.SaveTo(System.String)">
+            <summary>
+            保存至路径
+            </summary>
+            <param name="path">路径</param>
+        </member>
+        <member name="M:VPet.ModMaker.Models.ModInfoModel.SaveModInfo(System.String)">
+            <summary>
+            保存模型信息
+            </summary>
+            <param name="path">路径</param>
+        </member>
+        <member name="M:VPet.ModMaker.Models.ModInfoModel.SaveFoods(System.String)">
+            <summary>
+            保存食物
+            </summary>
+            <param name="path">路径</param>
+        </member>
+        <member name="M:VPet.ModMaker.Models.ModInfoModel.SaveText(System.String)">
+            <summary>
+            保存文本
+            </summary>
+            <param name="path">路径</param>
+        </member>
+        <member name="M:VPet.ModMaker.Models.ModInfoModel.SaveSelectText(System.String)">
+            <summary>
+            保存选择文本
+            </summary>
+            <param name="path">路径</param>
+        </member>
+        <member name="M:VPet.ModMaker.Models.ModInfoModel.SaveLowText(System.String)">
+            <summary>
+            保存低状态文本
+            </summary>
+            <param name="path">路径</param>
+        </member>
+        <member name="M:VPet.ModMaker.Models.ModInfoModel.SaveClickText(System.String)">
+            <summary>
+            保存点击文本
+            </summary>
+            <param name="path">路径</param>
+        </member>
+        <member name="M:VPet.ModMaker.Models.ModInfoModel.SaveI18nData(System.String,System.Collections.Generic.IEnumerable{System.Globalization.CultureInfo})">
+            <summary>
+            保存I18n资源
+            </summary>
+            <param name="path">路径</param>
+            <param name="cultures">文化</param>
+        </member>
+        <member name="M:VPet.ModMaker.Models.ModInfoModel.SaveImage(System.String)">
+            <summary>
+            保存图片
+            </summary>
+            <param name="path">路径</param>
+        </member>
+        <member name="M:VPet.ModMaker.Models.ModInfoModel.SaveToTranslationMod(System.String,System.Collections.Generic.IEnumerable{System.Globalization.CultureInfo})">
+            <summary>
+            保存为翻译模组
+            </summary>
+            <param name="path">路径</param>
+            <param name="cultures">指定文化</param>
+        </member>
+        <member name="M:VPet.ModMaker.Models.ModInfoModel.Dispose(System.Boolean)">
+            <inheritdoc/>
+        </member>
+        <member name="M:VPet.ModMaker.Models.ModInfoModel.InitializeReactiveObject">
+            <inheritdoc/>
+        </member>
+        <member name="T:VPet.ModMaker.Models.ModLoader">
+            <summary>
+            模组加载器
+            </summary>
+        </member>
+        <member name="P:VPet.ModMaker.Models.ModLoader.Name">
+            <summary>
+            名称
+            </summary>
+        </member>
+        <member name="P:VPet.ModMaker.Models.ModLoader.Author">
+            <summary>
+            作者
+            </summary>
+        </member>
+        <member name="P:VPet.ModMaker.Models.ModLoader.AuthorID">
+            <summary>
+            如果是上传至Steam,则为SteamUserID
+            </summary>
+        </member>
+        <member name="P:VPet.ModMaker.Models.ModLoader.ItemID">
+            <summary>
+            上传至Steam的ItemID
+            </summary>
+        </member>
+        <member name="P:VPet.ModMaker.Models.ModLoader.Intro">
+            <summary>
+            简介
+            </summary>
+        </member>
+        <member name="P:VPet.ModMaker.Models.ModLoader.ModPath">
+            <summary>
+            模组路径
+            </summary>
+        </member>
+        <member name="P:VPet.ModMaker.Models.ModLoader.GameVer">
+            <summary>
+            支持的游戏版本
+            </summary>
+        </member>
+        <member name="P:VPet.ModMaker.Models.ModLoader.Ver">
+            <summary>
+            版本
+            </summary>
+        </member>
+        <member name="P:VPet.ModMaker.Models.ModLoader.Tag">
+            <summary>
+            标签
+            </summary>
+        </member>
+        <member name="P:VPet.ModMaker.Models.ModLoader.CacheDate">
+            <summary>
+            缓存数据
+            </summary>
+        </member>
+        <member name="P:VPet.ModMaker.Models.ModLoader.Pets">
+            <summary>
+            宠物列表
+            </summary>
+        </member>
+        <member name="P:VPet.ModMaker.Models.ModLoader.Foods">
+            <summary>
+            食物列表
+            </summary>
+        </member>
+        <member name="P:VPet.ModMaker.Models.ModLoader.LowTexts">
+            <summary>
+            低状态文本列表
+            </summary>
+        </member>
+        <member name="P:VPet.ModMaker.Models.ModLoader.ClickTexts">
+            <summary>
+            点击文本列表
+            </summary>
+        </member>
+        <member name="P:VPet.ModMaker.Models.ModLoader.SelectTexts">
+            <summary>
+            选择文本列表
+            </summary>
+        </member>
+        <member name="P:VPet.ModMaker.Models.ModLoader.I18nDatas">
+            <summary>
+            I18n资源
+            </summary>
+        </member>
+        <member name="T:VPet.ModMaker.Models.ModMakeHistory">
+            <summary>
+            模组制作历史
+            </summary>
+        </member>
+        <member name="M:VPet.ModMaker.Models.ModMakeHistory.#ctor">
+            <inheritdoc/>
+        </member>
+        <member name="P:VPet.ModMaker.Models.ModMakeHistory.Image">
+            <summary>
+            图片
+            </summary>
+        </member>
+        <member name="P:VPet.ModMaker.Models.ModMakeHistory.ID">
+            <summary>
+            Id
+            </summary>
+        </member>
+        <member name="F:VPet.ModMaker.Models.ModMakeHistory._sourcePath">
+            <summary>
+            路径
+            </summary>
+        </member>
+        <member name="P:VPet.ModMaker.Models.ModMakeHistory.SourcePath">
+            <summary>
+            资源路径
+            </summary>
+        </member>
+        <member name="P:VPet.ModMaker.Models.ModMakeHistory.InfoFile">
+            <summary>
+            模组信息文件
+            </summary>
+        </member>
+        <member name="P:VPet.ModMaker.Models.ModMakeHistory.LastTime">
+            <summary>
+            最后编辑时间
+            </summary>
+        </member>
+        <member name="M:VPet.ModMaker.Models.ModMakeHistory.Equals(VPet.ModMaker.Models.ModMakeHistory)">
+            <inheritdoc/>
+        </member>
+        <member name="M:VPet.ModMaker.Models.ModMakeHistory.Equals(System.Object)">
+            <inheritdoc/>
+        </member>
+        <member name="M:VPet.ModMaker.Models.ModMakeHistory.GetHashCode">
+            <inheritdoc/>
+        </member>
+        <member name="T:VPet.ModMaker.Models.DateTimeConverter">
+            <summary>
+            日期时间转换器
+            </summary>
+        </member>
+        <member name="M:VPet.ModMaker.Models.DateTimeConverter.Convert(System.Object)">
+            <inheritdoc/>
+        </member>
+        <member name="M:VPet.ModMaker.Models.DateTimeConverter.ConvertBack(System.String)">
+            <inheritdoc/>
+        </member>
+        <member name="T:VPet.ModMaker.Models.ModMaker">
+            <summary>
+            模组制作器
+            </summary>
+        </member>
+        <member name="P:VPet.ModMaker.Models.ModMaker.PluginName">
+            <summary>
+            名称
+            </summary>
+        </member>
+        <member name="F:VPet.ModMaker.Models.ModMaker.ModMakerWindow">
+            <summary>
+            单例
+            </summary>
+        </member>
+        <member name="M:VPet.ModMaker.Models.ModMaker.#ctor(VPet_Simulator.Windows.Interface.IMainWindow)">
+            <inheritdoc/>
+        </member>
+        <member name="M:VPet.ModMaker.Models.ModMaker.LoadPlugin">
+            <summary>
+            载入插件
+            </summary>
+        </member>
+        <member name="P:VPet.ModMaker.Models.ModMaker.I18nResource">
+            <summary>
+            I18n资源
+            </summary>
+        </member>
+        <member name="M:VPet.ModMaker.Models.ModMaker.Setting">
+            <inheritdoc/>
+        </member>
+        <member name="T:VPet.ModMaker.Models.ModModel.AnimeModel">
+            <summary>
+            动画模型
+            </summary>
+        </member>
+        <member name="M:VPet.ModMaker.Models.ModModel.AnimeModel.#ctor">
+            <inheritdoc/>
+        </member>
+        <member name="M:VPet.ModMaker.Models.ModModel.AnimeModel.#ctor(System.String)">
+            <inheritdoc/>
+            <param name="imagesPath">图像路径</param>
+        </member>
+        <member name="P:VPet.ModMaker.Models.ModModel.AnimeModel.ID">
+            <summary>
+            ID
+            </summary>
+        </member>
+        <member name="P:VPet.ModMaker.Models.ModModel.AnimeModel.AnimeType">
+            <summary>
+            动画类型
+            </summary>
+        </member>
+        <member name="P:VPet.ModMaker.Models.ModModel.AnimeModel.Images">
+            <summary>
+            图像列表
+            </summary>
+        </member>
+        <member name="M:VPet.ModMaker.Models.ModModel.AnimeModel.LoadAnime">
+            <summary>
+            载入动画
+            </summary>
+        </member>
+        <member name="M:VPet.ModMaker.Models.ModModel.AnimeModel.Clone">
+            <summary>
+            复制
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:VPet.ModMaker.Models.ModModel.AnimeModel.Dispose(System.Boolean)">
+            <inheritdoc/>
+        </member>
+        <member name="M:VPet.ModMaker.Models.ModModel.AnimeModel.InitializeReactiveObject">
+            <inheritdoc/>
+        </member>
+        <member name="T:VPet.ModMaker.Models.ModModel.AnimeTypeModel">
+            <summary>
+            多类型动画模型
+            </summary>
+        </member>
+        <member name="M:VPet.ModMaker.Models.ModModel.AnimeTypeModel.#ctor">
+            <inheritdoc/>
+        </member>
+        <member name="M:VPet.ModMaker.Models.ModModel.AnimeTypeModel.#ctor(VPet.ModMaker.Models.ModModel.AnimeTypeModel)">
+            <inheritdoc/>
+            <param name="model">模型</param>
+        </member>
+        <member name="M:VPet.ModMaker.Models.ModModel.AnimeTypeModel.#ctor(VPet_Simulator.Core.GraphInfo.GraphType,System.String)">
+            <inheritdoc/>
+            <param name="graphType">动画类型</param>
+            <param name="path">路径</param>
+        </member>
+        <member name="P:VPet.ModMaker.Models.ModModel.AnimeTypeModel.GraphTypes">
+            <summary>
+            动作类型
+            </summary>
+        </member>
+        <member name="P:VPet.ModMaker.Models.ModModel.AnimeTypeModel.AnimatTypes">
+            <summary>
+            动画类型
+            </summary>
+        </member>
+        <member name="P:VPet.ModMaker.Models.ModModel.AnimeTypeModel.ModeTypes">
+            <summary>
+            模式类型
+            </summary>
+        </member>
+        <member name="P:VPet.ModMaker.Models.ModModel.AnimeTypeModel.HasNameAnimes">
+            <summary>
+            含有名称的动作列表
+            </summary>
+        </member>
+        <member name="P:VPet.ModMaker.Models.ModModel.AnimeTypeModel.HasMultiTypeAnimes">
+            <summary>
+            含有不同动画类型的动作列表
+            </summary>
+        </member>
+        <member name="P:VPet.ModMaker.Models.ModModel.AnimeTypeModel.ID">
+            <summary>
+            ID
+            </summary>
+        </member>
+        <member name="P:VPet.ModMaker.Models.ModModel.AnimeTypeModel.Name">
+            <summary>
+            名称
+            </summary>
+        </member>
+        <member name="P:VPet.ModMaker.Models.ModModel.AnimeTypeModel.GraphType">
+            <summary>
+            动作类型
+            </summary>
+        </member>
+        <member name="P:VPet.ModMaker.Models.ModModel.AnimeTypeModel.HappyAnimes">
+            <summary>
+            开心动画
+            </summary>
+        </member>
+        <member name="P:VPet.ModMaker.Models.ModModel.AnimeTypeModel.NomalAnimes">
+            <summary>
+            普通动画 (默认)
+            </summary>
+        </member>
+        <member name="P:VPet.ModMaker.Models.ModModel.AnimeTypeModel.PoorConditionAnimes">
+            <summary>
+            低状态动画
+            </summary>
+        </member>
+        <member name="P:VPet.ModMaker.Models.ModModel.AnimeTypeModel.IllAnimes">
+            <summary>
+            生病动画
+            </summary>
+        </member>
+        <member name="M:VPet.ModMaker.Models.ModModel.AnimeTypeModel.LoadTypeAnime">
+            <summary>
+            载入动画
+            </summary>
+        </member>
+        <member name="M:VPet.ModMaker.Models.ModModel.AnimeTypeModel.Clear">
+            <summary>
+            清除动画
+            </summary>
+        </member>
+        <member name="M:VPet.ModMaker.Models.ModModel.AnimeTypeModel.LoadDefault(System.String)">
+            <summary>
+            默认载入方式 (只有一个动画类型 <see cref="F:VPet_Simulator.Core.GraphInfo.AnimatType.Single"/>)
+            </summary>
+            <param name="path">路径</param>
+        </member>
+        <member name="M:VPet.ModMaker.Models.ModModel.AnimeTypeModel.LoadMultiType(System.String)">
+            <summary>
+            有多个动画类型的载入方式
+            </summary>
+            <param name="path">路径</param>
+        </member>
+        <member name="M:VPet.ModMaker.Models.ModModel.AnimeTypeModel.AddAnimeForModeType(System.String,VPet_Simulator.Core.IGameSave.ModeType,VPet_Simulator.Core.GraphInfo.AnimatType)">
+            <summary>
+            添加动画到不同模式
+            </summary>
+            <param name="path">路径</param>
+            <param name="modeType">模式类型</param>
+            <param name="animeType">动画类型</param>
+        </member>
+        <member name="M:VPet.ModMaker.Models.ModModel.AnimeTypeModel.AddAnime(HKW.HKWUtils.Observable.ObservableList{VPet.ModMaker.Models.ModModel.AnimeModel},System.String,VPet_Simulator.Core.GraphInfo.AnimatType)">
+            <summary>
+            添加动画至动画列表
+            </summary>
+            <param name="collection">动画列表</param>
+            <param name="path">路径</param>
+            <param name="animatType">动画类型</param>
+        </member>
+        <member name="M:VPet.ModMaker.Models.ModModel.AnimeTypeModel.Save(System.String)">
+            <summary>
+            保存至指定路径
+            </summary>
+            <param name="path">路径</param>
+        </member>
+        <member name="M:VPet.ModMaker.Models.ModModel.AnimeTypeModel.SaveHasNameAnime(System.String)">
+            <summary>
+            保存为带有名称的动画样式
+            </summary>
+            <param name="path">路径</param>
+        </member>
+        <member name="M:VPet.ModMaker.Models.ModModel.AnimeTypeModel.SaveCommon(System.String)">
+            <summary>
+            保存为通用样式
+            </summary>
+            <param name="path">路径</param>
+        </member>
+        <member name="M:VPet.ModMaker.Models.ModModel.AnimeTypeModel.SaveState(System.String)">
+            <summary>
+            保存为 <see cref="F:VPet_Simulator.Core.GraphInfo.GraphType.StateONE"/> 或 <see cref="F:VPet_Simulator.Core.GraphInfo.GraphType.StateTWO"/> 样式
+            </summary>
+            <param name="path">路径</param>
+        </member>
+        <member name="M:VPet.ModMaker.Models.ModModel.AnimeTypeModel.SaveRaised(System.String)">
+            <summary>
+            保存为 <see cref="F:VPet_Simulator.Core.GraphInfo.GraphType.Raised_Dynamic"/> 或 <see cref="F:VPet_Simulator.Core.GraphInfo.GraphType.Raised_Static"/> 样式
+            </summary>
+            <param name="path">路径</param>
+        </member>
+        <member name="M:VPet.ModMaker.Models.ModModel.AnimeTypeModel.SaveSwitch(System.String)">
+            <summary>
+            保存为 <see cref="F:VPet_Simulator.Core.GraphInfo.GraphType.Switch_Up"/> 或 <see cref="F:VPet_Simulator.Core.GraphInfo.GraphType.Switch_Down"/> 或 <see cref="F:VPet_Simulator.Core.GraphInfo.GraphType.Switch_Thirsty"/> 或 <see cref="F:VPet_Simulator.Core.GraphInfo.GraphType.Switch_Hunger"/>
+            </summary>
+            <param name="path">路径</param>
+        </member>
+        <member name="M:VPet.ModMaker.Models.ModModel.AnimeTypeModel.SaveDefault(System.String)">
+            <summary>
+            保存成默认样式
+            </summary>
+            <param name="path"></param>
+        </member>
+        <member name="M:VPet.ModMaker.Models.ModModel.AnimeTypeModel.SaveMultiType(System.String)">
+            <summary>
+            保存成多类型样式
+            </summary>
+            <param name="path"></param>
+        </member>
+        <member name="M:VPet.ModMaker.Models.ModModel.AnimeTypeModel.SaveWithModeType(System.String)">
+            <summary>
+            保存为 Happy/A/0 的路径样式
+            </summary>
+            <param name="path"></param>
+        </member>
+        <member name="M:VPet.ModMaker.Models.ModModel.AnimeTypeModel.SaveWithAnimeType(System.String)">
+            <summary>
+            保存为 Happy/0 的路径样式
+            </summary>
+            <param name="animePath"></param>
+        </member>
+        <member name="M:VPet.ModMaker.Models.ModModel.AnimeTypeModel.SaveImages(System.String,VPet.ModMaker.Models.ModModel.AnimeModel)">
+            <summary>
+            保存图片
+            </summary>
+            <param name="imagesPath"></param>
+            <param name="model"></param>
+        </member>
+        <member name="M:VPet.ModMaker.Models.ModModel.AnimeTypeModel.Dispose(System.Boolean)">
+            <inheritdoc/>
+        </member>
+        <member name="M:VPet.ModMaker.Models.ModModel.AnimeTypeModel.InitializeReactiveObject">
+            <inheritdoc/>
+        </member>
+        <member name="T:VPet.ModMaker.Models.ModModel.FoodAnimeLocationModel">
+            <summary>
+            食物图像位置模型
+            </summary>
+        </member>
+        <member name="M:VPet.ModMaker.Models.ModModel.FoodAnimeLocationModel.#ctor">
+            <inheritdoc/>
+        </member>
+        <member name="P:VPet.ModMaker.Models.ModModel.FoodAnimeLocationModel.Duration">
+            <summary>
+            持续时间(ms)
+            </summary>
+        </member>
+        <member name="P:VPet.ModMaker.Models.ModModel.FoodAnimeLocationModel.RectangleLocation">
+            <summary>
+            矩形位置
+            </summary>
+        </member>
+        <member name="P:VPet.ModMaker.Models.ModModel.FoodAnimeLocationModel.Rotate">
+            <summary>
+            旋转角度
+            </summary>
+        </member>
+        <member name="P:VPet.ModMaker.Models.ModModel.FoodAnimeLocationModel.Opacity">
+            <summary>
+            透明度
+            </summary>
+        </member>
+        <member name="M:VPet.ModMaker.Models.ModModel.FoodAnimeLocationModel.Clone">
+            <inheritdoc/>
+        </member>
+        <member name="M:VPet.ModMaker.Models.ModModel.FoodAnimeLocationModel.ToString">
+            <inheritdoc/>
+        </member>
+        <member name="M:VPet.ModMaker.Models.ModModel.FoodAnimeLocationModel.InitializeReactiveObject">
+            <inheritdoc/>
+        </member>
+        <member name="T:VPet.ModMaker.Models.ModModel.FoodAnimeModel">
+            <summary>
+            食物动画模型
+            </summary>
+        </member>
+        <member name="M:VPet.ModMaker.Models.ModModel.FoodAnimeModel.#ctor">
+            <inheritdoc/>
+        </member>
+        <member name="M:VPet.ModMaker.Models.ModModel.FoodAnimeModel.#ctor(LinePutScript.ILine)">
+            <inheritdoc/>
+            <param name="line">行</param>
+        </member>
+        <member name="P:VPet.ModMaker.Models.ModModel.FoodAnimeModel.ID">
+            <summary>
+            ID
+            </summary>
+        </member>
+        <member name="P:VPet.ModMaker.Models.ModModel.FoodAnimeModel.BackImages">
+            <summary>
+            后图像列表
+            </summary>
+        </member>
+        <member name="P:VPet.ModMaker.Models.ModModel.FoodAnimeModel.FrontImages">
+            <summary>
+            前图像列表
+            </summary>
+        </member>
+        <member name="P:VPet.ModMaker.Models.ModModel.FoodAnimeModel.FoodLocations">
+            <summary>
+            食物定位列表
+            </summary>
+        </member>
+        <member name="M:VPet.ModMaker.Models.ModModel.FoodAnimeModel.LoadAnime">
+            <summary>
+            载入动画
+            </summary>
+        </member>
+        <member name="M:VPet.ModMaker.Models.ModModel.FoodAnimeModel.Clone">
+            <inheritdoc/>
+        </member>
+        <member name="M:VPet.ModMaker.Models.ModModel.FoodAnimeModel.Dispose(System.Boolean)">
+            <inheritdoc/>
+        </member>
+        <member name="M:VPet.ModMaker.Models.ModModel.FoodAnimeModel.InitializeReactiveObject">
+            <inheritdoc/>
+        </member>
+        <member name="T:VPet.ModMaker.Models.ModModel.FoodAnimeTypeModel">
+            <summary>
+            食物多状态动画模型
+            </summary>
+        </member>
+        <member name="M:VPet.ModMaker.Models.ModModel.FoodAnimeTypeModel.#ctor">
+            <inheritdoc/>
+        </member>
+        <member name="M:VPet.ModMaker.Models.ModModel.FoodAnimeTypeModel.#ctor(System.String)">
+            <inheritdoc/>
+            <param name="path">路径</param>
+        </member>
+        <member name="M:VPet.ModMaker.Models.ModModel.FoodAnimeTypeModel.#ctor(VPet.ModMaker.Models.ModModel.FoodAnimeTypeModel)">
+            <inheritdoc/>
+            <param name="model">食物动画类型模型</param>
+        </member>
+        <member name="P:VPet.ModMaker.Models.ModModel.FoodAnimeTypeModel.GraphType">
+            <summary>
+            动作类型
+            </summary>
+        </member>
+        <member name="P:VPet.ModMaker.Models.ModModel.FoodAnimeTypeModel.FoodAnimeNames">
+            <summary>
+            动画名称
+            </summary>
+        </member>
+        <member name="F:VPet.ModMaker.Models.ModModel.FoodAnimeTypeModel.FrontLayName">
+            <summary>
+            顶层名称
+            </summary>
+        </member>
+        <member name="F:VPet.ModMaker.Models.ModModel.FoodAnimeTypeModel.BackLayName">
+            <summary>
+            底层名称
+            </summary>
+        </member>
+        <member name="P:VPet.ModMaker.Models.ModModel.FoodAnimeTypeModel.ID">
+            <summary>
+            ID
+            </summary>
+        </member>
+        <member name="P:VPet.ModMaker.Models.ModModel.FoodAnimeTypeModel.Name">
+            <summary>
+            名称
+            </summary>
+        </member>
+        <member name="P:VPet.ModMaker.Models.ModModel.FoodAnimeTypeModel.HappyAnimes">
+            <summary>
+            开心动画
+            </summary>
+        </member>
+        <member name="P:VPet.ModMaker.Models.ModModel.FoodAnimeTypeModel.NomalAnimes">
+            <summary>
+            普通动画 (默认)
+            </summary>
+        </member>
+        <member name="P:VPet.ModMaker.Models.ModModel.FoodAnimeTypeModel.PoorConditionAnimes">
+            <summary>
+            低状态动画
+            </summary>
+        </member>
+        <member name="P:VPet.ModMaker.Models.ModModel.FoodAnimeTypeModel.IllAnimes">
+            <summary>
+            生病动画
+            </summary>
+        </member>
+        <member name="M:VPet.ModMaker.Models.ModModel.FoodAnimeTypeModel.LoadTypeAnime">
+            <summary>
+            载入多类型动画
+            </summary>
+        </member>
+        <member name="M:VPet.ModMaker.Models.ModModel.FoodAnimeTypeModel.Clear">
+            <inheritdoc/>
+        </member>
+        <member name="M:VPet.ModMaker.Models.ModModel.FoodAnimeTypeModel.ParseInfoFile(System.String,System.String)">
+            <summary>
+            解析信息文件
+            </summary>
+            <param name="path">路径</param>
+            <param name="infoFile">信息文件路径</param>
+            <exception cref="T:System.Exception"></exception>
+        </member>
+        <member name="M:VPet.ModMaker.Models.ModModel.FoodAnimeTypeModel.ParseFoodAnimeInfo(System.String,LinePutScript.ILine,System.Collections.Generic.List{VPet.ModMaker.Models.ModModel.PNGAnimeInfo})">
+            <summary>
+            解析食物动画信息
+            </summary>
+            <param name="path">路径</param>
+            <param name="line">食物动画信息</param>
+            <param name="pngAnimeInfos">PNG动画信息</param>
+        </member>
+        <member name="M:VPet.ModMaker.Models.ModModel.FoodAnimeTypeModel.AddModeAnime(System.String,VPet_Simulator.Core.IGameSave.ModeType,HKW.HKWUtils.Observable.ObservableList{VPet.ModMaker.Models.ModModel.FoodAnimeModel},LinePutScript.ILine,System.Collections.Generic.List{VPet.ModMaker.Models.ModModel.PNGAnimeInfo})">
+            <summary>
+            添加模式动画
+            </summary>
+            <param name="path">路径</param>
+            <param name="mode">模式</param>
+            <param name="foodAnimes">食物动画</param>
+            <param name="line">食物动画信息</param>
+            <param name="pngAnimeInfos">PNG动画信息</param>
+        </member>
+        <member name="M:VPet.ModMaker.Models.ModModel.FoodAnimeTypeModel.Save(System.String)">
+            <summary>
+            保存
+            </summary>
+            <param name="path">路径</param>
+        </member>
+        <member name="M:VPet.ModMaker.Models.ModModel.FoodAnimeTypeModel.SaveAnimeInfo(System.String,HKW.HKWUtils.Observable.ObservableList{VPet.ModMaker.Models.ModModel.FoodAnimeModel},VPet_Simulator.Core.IGameSave.ModeType)">
+            <summary>
+            保存动画信息
+            </summary>
+            <param name="animePath">路径</param>
+            <param name="animes">动画</param>
+            <param name="mode">模式</param>
+        </member>
+        <member name="M:VPet.ModMaker.Models.ModModel.FoodAnimeTypeModel.SaveImages(VPet.ModMaker.Models.ModModel.FoodAnimeModel,System.String)">
+            <summary>
+            保存图片
+            </summary>
+            <param name="anime">动画</param>
+            <param name="indexPath">索引路径</param>
+        </member>
+        <member name="M:VPet.ModMaker.Models.ModModel.FoodAnimeTypeModel.Dispose(System.Boolean)">
+            <inheritdoc/>
+        </member>
+        <member name="M:VPet.ModMaker.Models.ModModel.FoodAnimeTypeModel.InitializeReactiveObject">
+            <inheritdoc/>
+        </member>
+        <member name="T:VPet.ModMaker.Models.ModModel.PNGAnimeInfo">
+            <summary>
+            PNG动画信息
+            </summary>
+            <param name="name">名称</param>
+            <param name="path">路径</param>
+            <param name="mode">模式</param>
+        </member>
+        <member name="M:VPet.ModMaker.Models.ModModel.PNGAnimeInfo.#ctor(System.String,System.String,VPet_Simulator.Core.IGameSave.ModeType)">
+            <summary>
+            PNG动画信息
+            </summary>
+            <param name="name">名称</param>
+            <param name="path">路径</param>
+            <param name="mode">模式</param>
+        </member>
+        <member name="P:VPet.ModMaker.Models.ModModel.PNGAnimeInfo.Name">
+            <summary>
+            名称
+            </summary>
+        </member>
+        <member name="P:VPet.ModMaker.Models.ModModel.PNGAnimeInfo.Path">
+            <summary>
+            路径
+            </summary>
+        </member>
+        <member name="P:VPet.ModMaker.Models.ModModel.PNGAnimeInfo.Mode">
+            <summary>
+            模式
+            </summary>
+        </member>
+        <member name="T:VPet.ModMaker.Models.ModModel.IAnimeModel">
+            <summary>
+            动画模型接口
+            </summary>
+        </member>
+        <member name="P:VPet.ModMaker.Models.ModModel.IAnimeModel.ID">
+            <summary>
+            ID
+            </summary>
+        </member>
+        <member name="P:VPet.ModMaker.Models.ModModel.IAnimeModel.GraphType">
+            <summary>
+            动画类型
+            </summary>
+        </member>
+        <member name="M:VPet.ModMaker.Models.ModModel.IAnimeModel.Clear">
+            <summary>
+            清除
+            </summary>
+        </member>
+        <member name="M:VPet.ModMaker.Models.ModModel.IAnimeModel.Close">
+            <summary>
+            关闭
+            </summary>
+        </member>
+        <member name="M:VPet.ModMaker.Models.ModModel.IAnimeModel.Save(System.String)">
+            <summary>
+            保存
+            </summary>
+            <param name="path"></param>
+        </member>
+        <member name="T:VPet.ModMaker.Models.ModModel.ImageModel">
+            <summary>
+            图像模型
+            </summary>
+        </member>
+        <member name="M:VPet.ModMaker.Models.ModModel.ImageModel.#ctor(System.String,System.Int32)">
+            <inheritdoc/>
+            <param name="imageFile">图像文件</param>
+            <param name="duration">间隔</param>/>
+        </member>
+        <member name="M:VPet.ModMaker.Models.ModModel.ImageModel.#ctor(System.Windows.Media.Imaging.BitmapImage,System.Int32)">
+            <inheritdoc/>
+            <param name="image">图像</param>
+            <param name="duration">间隔</param>/>
+        </member>
+        <member name="P:VPet.ModMaker.Models.ModModel.ImageModel.ImageFile">
+            <summary>
+            图片路径
+            </summary>
+        </member>
+        <member name="P:VPet.ModMaker.Models.ModModel.ImageModel.Image">
+            <summary>
+            图像
+            </summary>
+        </member>
+        <member name="P:VPet.ModMaker.Models.ModModel.ImageModel.Duration">
+            <summary>
+            持续时间
+            </summary>
+        </member>
+        <member name="M:VPet.ModMaker.Models.ModModel.ImageModel.LoadImage">
+            <summary>
+            载入图像
+            </summary>
+        </member>
+        <member name="M:VPet.ModMaker.Models.ModModel.ImageModel.Clone">
+            <summary>
+            克隆图像
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:VPet.ModMaker.Models.ModModel.ImageModel.Dispose(System.Boolean)">
+            <inheritdoc/>
+        </member>
+        <member name="M:VPet.ModMaker.Models.ModModel.ImageModel.InitializeReactiveObject">
+            <inheritdoc/>
+        </member>
+        <member name="T:VPet.ModMaker.Models.ClickTextModel">
+            <summary>
+            点击文本模型
+            </summary>
+        </member>
+        <member name="M:VPet.ModMaker.Models.ClickTextModel.#ctor">
+            <inheritdoc/>
+        </member>
+        <member name="M:VPet.ModMaker.Models.ClickTextModel.#ctor(VPet.ModMaker.Models.ClickTextModel)">
+            <inheritdoc/>
+            <param name="clickText">点击文本模型</param>
+        </member>
+        <member name="M:VPet.ModMaker.Models.ClickTextModel.#ctor(VPet_Simulator.Windows.Interface.ClickText)">
+            <inheritdoc/>
+            <param name="clickText">点击文本</param>
+        </member>
+        <member name="M:VPet.ModMaker.Models.ClickTextModel.ToClickText">
+            <summary>
+            转化为点击文本
+            </summary>
+            <returns>点击文本</returns>
+        </member>
+        <member name="P:VPet.ModMaker.Models.ClickTextModel.ModeTypes">
+            <summary>
+            模式类型
+            </summary>
+        </member>
+        <member name="P:VPet.ModMaker.Models.ClickTextModel.DayTimes">
+            <summary>
+            日期区间
+            </summary>
+        </member>
+        <member name="P:VPet.ModMaker.Models.ClickTextModel.WorkingStates">
+            <summary>
+            工作状态
+            </summary>
+        </member>
+        <member name="P:VPet.ModMaker.Models.ClickTextModel.ID">
+            <summary>
+            ID
+            </summary>
+        </member>
+        <member name="P:VPet.ModMaker.Models.ClickTextModel.I18nResource">
+            <summary>
+            本地化资源
+            </summary>
+        </member>
+        <member name="P:VPet.ModMaker.Models.ClickTextModel.I18nObject">
+            <summary>
+            本地化对象
+            </summary>
+        </member>
+        <member name="P:VPet.ModMaker.Models.ClickTextModel.Text">
+            <summary>
+            点击文本
+            </summary>
+        </member>
+        <member name="P:VPet.ModMaker.Models.ClickTextModel.Working">
+            <summary>
+            指定工作
+            </summary>
+        </member>
+        <member name="P:VPet.ModMaker.Models.ClickTextModel.Mode">
+            <summary>
+            宠物状态
+            </summary>
+        </member>
+        <member name="P:VPet.ModMaker.Models.ClickTextModel.WorkingState">
+            <summary>
+            行动状态
+            </summary>
+        </member>
+        <member name="P:VPet.ModMaker.Models.ClickTextModel.DayTime">
+            <summary>
+            日期区间
+            </summary>
+        </member>
+        <member name="P:VPet.ModMaker.Models.ClickTextModel.Like">
+            <summary>
+            好感度
+            </summary>
+        </member>
+        <member name="P:VPet.ModMaker.Models.ClickTextModel.Health">
+            <summary>
+            健康值
+            </summary>
+        </member>
+        <member name="P:VPet.ModMaker.Models.ClickTextModel.Level">
+            <summary>
+            等级
+            </summary>
+        </member>
+        <member name="P:VPet.ModMaker.Models.ClickTextModel.Money">
+            <summary>
+            金钱
+            </summary>
+        </member>
+        <member name="P:VPet.ModMaker.Models.ClickTextModel.Food">
+            <summary>
+            饱食度
+            </summary>
+        </member>
+        <member name="P:VPet.ModMaker.Models.ClickTextModel.Drink">
+            <summary>
+            口渴度
+            </summary>
+        </member>
+        <member name="P:VPet.ModMaker.Models.ClickTextModel.Feel">
+            <summary>
+            心情
+            </summary>
+        </member>
+        <member name="P:VPet.ModMaker.Models.ClickTextModel.Strength">
+            <summary>
+            体力
+            </summary>
+        </member>
+        <member name="M:VPet.ModMaker.Models.ClickTextModel.Dispose(System.Boolean)">
+            <inheritdoc/>
+        </member>
+        <member name="M:VPet.ModMaker.Models.ClickTextModel.InitializeReactiveObject">
+            <inheritdoc/>
+        </member>
+        <member name="T:VPet.ModMaker.Models.FoodModel">
+            <summary>
+            食物模型
+            </summary>
+        </member>
+        <member name="M:VPet.ModMaker.Models.FoodModel.#ctor">
+            <inheritdoc/>
+        </member>
+        <member name="M:VPet.ModMaker.Models.FoodModel.#ctor(VPet.ModMaker.Models.FoodModel)">
+            <inheritdoc/>
+            <param name="model">食物模型</param>
+        </member>
+        <member name="M:VPet.ModMaker.Models.FoodModel.#ctor(VPet_Simulator.Windows.Interface.Food,HKW.HKWUtils.I18nResource{System.String,System.String})">
+            <inheritdoc/>
+            <param name="food">食物</param>
+            <param name="i18nResource">I18n资源</param>
+        </member>
+        <member name="P:VPet.ModMaker.Models.FoodModel.FoodTypes">
+            <summary>
+            食物类型
+            </summary>
+        </member>
+        <member name="P:VPet.ModMaker.Models.FoodModel.ID">
+            <summary>
+            ID
+            </summary>
+        </member>
+        <member name="P:VPet.ModMaker.Models.FoodModel.DescriptionID">
+            <summary>
+            详情Id
+            </summary>
+        </member>
+        <member name="P:VPet.ModMaker.Models.FoodModel.I18nResource">
+            <summary>
+            I18n资源
+            </summary>
+        </member>
+        <member name="P:VPet.ModMaker.Models.FoodModel.I18nObject">
+            <summary>
+            I18n对象
+            </summary>
+        </member>
+        <member name="P:VPet.ModMaker.Models.FoodModel.Name">
+            <summary>
+            名称
+            </summary>
+        </member>
+        <member name="P:VPet.ModMaker.Models.FoodModel.Description">
+            <summary>
+            详情
+            </summary>
+        </member>
+        <member name="P:VPet.ModMaker.Models.FoodModel.Graph">
+            <summary>
+            指定动画
+            </summary>
+        </member>
+        <member name="P:VPet.ModMaker.Models.FoodModel.Type">
+            <summary>
+            类型
+            </summary>
+        </member>
+        <member name="P:VPet.ModMaker.Models.FoodModel.Strength">
+            <summary>
+            体力
+            </summary>
+        </member>
+        <member name="P:VPet.ModMaker.Models.FoodModel.StrengthFood">
+            <summary>
+            饱食度
+            </summary>
+        </member>
+        <member name="P:VPet.ModMaker.Models.FoodModel.StrengthDrink">
+            <summary>
+            口渴度
+            </summary>
+        </member>
+        <member name="P:VPet.ModMaker.Models.FoodModel.Feeling">
+            <summary>
+            心情
+            </summary>
+        </member>
+        <member name="P:VPet.ModMaker.Models.FoodModel.Health">
+            <summary>
+            健康度
+            </summary>
+        </member>
+        <member name="P:VPet.ModMaker.Models.FoodModel.Likability">
+            <summary>
+            好感度
+            </summary>
+        </member>
+        <member name="P:VPet.ModMaker.Models.FoodModel.Price">
+            <summary>
+            价格
+            </summary>
+        </member>
+        <member name="P:VPet.ModMaker.Models.FoodModel.Exp">
+            <summary>
+            经验
+            </summary>
+        </member>
+        <member name="P:VPet.ModMaker.Models.FoodModel.Image">
+            <summary>
+            图片
+            </summary>
+        </member>
+        <member name="P:VPet.ModMaker.Models.FoodModel.ReferencePrice">
+            <summary>
+            推荐价格
+            </summary>
+        </member>
+        <member name="M:VPet.ModMaker.Models.FoodModel.Dispose(System.Boolean)">
+            <inheritdoc/>
+        </member>
+        <member name="M:VPet.ModMaker.Models.FoodModel.InitializeReactiveObject">
+            <inheritdoc/>
+        </member>
+        <member name="T:VPet.ModMaker.Models.LowTextModel">
+            <summary>
+            低状态文本
+            </summary>
+        </member>
+        <member name="M:VPet.ModMaker.Models.LowTextModel.#ctor">
+            <inheritdoc/>
+        </member>
+        <member name="M:VPet.ModMaker.Models.LowTextModel.#ctor(VPet.ModMaker.Models.LowTextModel)">
+            <inheritdoc/>
+            <param name="lowText">低状态文本模型</param>
+        </member>
+        <member name="M:VPet.ModMaker.Models.LowTextModel.#ctor(VPet_Simulator.Windows.Interface.LowText)">
+            <inheritdoc/>
+            <param name="lowText">低状态文本</param>
+        </member>
+        <member name="P:VPet.ModMaker.Models.LowTextModel.ModeTypes">
+            <summary>
+            状态类型
+            </summary>
+        </member>
+        <member name="P:VPet.ModMaker.Models.LowTextModel.LikeTypes">
+            <summary>
+            好感度类型
+            </summary>
+        </member>
+        <member name="P:VPet.ModMaker.Models.LowTextModel.StrengthTypes">
+            <summary>
+            体力类型
+            </summary>
+        </member>
+        <member name="P:VPet.ModMaker.Models.LowTextModel.ID">
+            <summary>
+            ID
+            </summary>
+        </member>
+        <member name="P:VPet.ModMaker.Models.LowTextModel.I18nResource">
+            <summary>
+            I18n资源
+            </summary>
+        </member>
+        <member name="P:VPet.ModMaker.Models.LowTextModel.I18nObject">
+            <summary>
+            I18n对象
+            </summary>
+        </member>
+        <member name="P:VPet.ModMaker.Models.LowTextModel.Text">
+            <summary>
+            文本
+            </summary>
+        </member>
+        <member name="P:VPet.ModMaker.Models.LowTextModel.Mode">
+            <summary>
+            状态
+            </summary>
+        </member>
+        <member name="P:VPet.ModMaker.Models.LowTextModel.Strength">
+            <summary>
+            体力
+            </summary>
+        </member>
+        <member name="P:VPet.ModMaker.Models.LowTextModel.Like">
+            <summary>
+            好感度
+            </summary>
+        </member>
+        <member name="M:VPet.ModMaker.Models.LowTextModel.Dispose(System.Boolean)">
+            <inheritdoc/>
+        </member>
+        <member name="M:VPet.ModMaker.Models.LowTextModel.InitializeReactiveObject">
+            <inheritdoc/>
+        </member>
+        <member name="T:VPet.ModMaker.Models.MoveModel">
+            <summary>
+            移动模型
+            </summary>
+        </member>
+        <member name="M:VPet.ModMaker.Models.MoveModel.#ctor">
+            <inheritdoc/>
+        </member>
+        <member name="M:VPet.ModMaker.Models.MoveModel.#ctor(VPet.ModMaker.Models.MoveModel)">
+            <inheritdoc/>
+            <param name="model">移动模型</param>
+        </member>
+        <member name="M:VPet.ModMaker.Models.MoveModel.#ctor(VPet_Simulator.Core.GraphHelper.Move)">
+            <inheritdoc/>
+            <param name="move">移动</param>
+        </member>
+        <member name="P:VPet.ModMaker.Models.MoveModel.DirectionTypes">
+            <summary>
+            移动类型
+            </summary>
+        </member>
+        <member name="P:VPet.ModMaker.Models.MoveModel.ModeTypes">
+            <summary>
+            模式类型
+            </summary>
+        </member>
+        <member name="P:VPet.ModMaker.Models.MoveModel.Graph">
+            <summary>
+            指定动画
+            </summary>
+        </member>
+        <member name="P:VPet.ModMaker.Models.MoveModel.Distance">
+            <summary>
+            移动距离
+            </summary>
+        </member>
+        <member name="P:VPet.ModMaker.Models.MoveModel.Interval">
+            <summary>
+            间隔
+            </summary>
+        </member>
+        <member name="P:VPet.ModMaker.Models.MoveModel.LocateLength">
+            <summary>
+            定位长度
+            </summary>
+        </member>
+        <member name="P:VPet.ModMaker.Models.MoveModel.SpeedX">
+            <summary>
+            X速度
+            </summary>
+        </member>
+        <member name="P:VPet.ModMaker.Models.MoveModel.SpeedY">
+            <summary>
+            Y速度
+            </summary>
+        </member>
+        <member name="P:VPet.ModMaker.Models.MoveModel.CheckLeft">
+            <summary>
+            左侧检测距离
+            </summary>
+        </member>
+        <member name="P:VPet.ModMaker.Models.MoveModel.CheckRight">
+            <summary>
+            右侧检测距离
+            </summary>
+        </member>
+        <member name="P:VPet.ModMaker.Models.MoveModel.CheckTop">
+            <summary>
+            上方检测距离
+            </summary>
+        </member>
+        <member name="P:VPet.ModMaker.Models.MoveModel.CheckBottom">
+            <summary>
+            下方检测距离
+            </summary>
+        </member>
+        <member name="P:VPet.ModMaker.Models.MoveModel.TriggerLeft">
+            <summary>
+            左侧触发距离
+            </summary>
+        </member>
+        <member name="P:VPet.ModMaker.Models.MoveModel.TriggerRight">
+            <summary>
+            右侧触发距离
+            </summary>
+        </member>
+        <member name="P:VPet.ModMaker.Models.MoveModel.TriggerTop">
+            <summary>
+            上方触发距离
+            </summary>
+        </member>
+        <member name="P:VPet.ModMaker.Models.MoveModel.TriggerBottom">
+            <summary>
+            下方触发距离
+            </summary>
+        </member>
+        <member name="P:VPet.ModMaker.Models.MoveModel.LocateType">
+            <summary>
+            定位类型
+            </summary>
+        </member>
+        <member name="P:VPet.ModMaker.Models.MoveModel.TriggerType">
+            <summary>
+            触发类型
+            </summary>
+        </member>
+        <member name="P:VPet.ModMaker.Models.MoveModel.ModeType">
+            <summary>
+            模式
+            </summary>
+        </member>
+        <member name="M:VPet.ModMaker.Models.MoveModel.InitializeReactiveObject">
+            <inheritdoc/>
+        </member>
+        <member name="T:VPet.ModMaker.Models.PetModel">
+            <summary>
+            宠物模型
+            </summary>
+        </member>
+        <member name="M:VPet.ModMaker.Models.PetModel.#ctor">
+            <inheritdoc/>
+        </member>
+        <member name="M:VPet.ModMaker.Models.PetModel.#ctor(VPet.ModMaker.Models.PetModel)">
+            <inheritdoc/>
+            <param name="model">宠物模型</param>
+        </member>
+        <member name="M:VPet.ModMaker.Models.PetModel.#ctor(VPet_Simulator.Core.PetLoader,HKW.HKWUtils.I18nResource{System.String,System.String},System.Boolean)">
+            <inheritdoc/>
+            <param name="loader">宠物载入器</param>
+            <param name="i18nResource">I18n资源</param>
+            <param name="fromMain">来自本体</param>
+        </member>
+        <member name="P:VPet.ModMaker.Models.PetModel.Default">
+            <summary>
+            默认宠物
+            </summary>
+        </member>
+        <member name="P:VPet.ModMaker.Models.PetModel.FromMain">
+            <summary>
+            来自本体
+            </summary>
+        </member>
+        <member name="P:VPet.ModMaker.Models.PetModel.ID">
+            <summary>
+            Id
+            </summary>
+        </member>
+        <member name="P:VPet.ModMaker.Models.PetModel.PetNameID">
+            <summary>
+            名称ID
+            </summary>
+        </member>
+        <member name="P:VPet.ModMaker.Models.PetModel.DescriptionID">
+            <summary>
+            描述ID
+            </summary>
+        </member>
+        <member name="P:VPet.ModMaker.Models.PetModel.I18nResource">
+            <summary>
+            I18n资源
+            </summary>
+        </member>
+        <member name="P:VPet.ModMaker.Models.PetModel.I18nObject">
+            <summary>
+            I18n对象
+            </summary>
+        </member>
+        <member name="P:VPet.ModMaker.Models.PetModel.Name">
+            <summary>
+            名称
+            </summary>
+        </member>
+        <member name="P:VPet.ModMaker.Models.PetModel.PetName">
+            <summary>
+            宠物名称
+            </summary>
+        </member>
+        <member name="P:VPet.ModMaker.Models.PetModel.Description">
+            <summary>
+            详情
+            </summary>
+        </member>
+        <member name="P:VPet.ModMaker.Models.PetModel.Tags">
+            <summary>
+            标签
+            </summary>
+        </member>
+        <member name="P:VPet.ModMaker.Models.PetModel.TouchHeadRectangleLocation">
+            <summary>
+            头部点击区域
+            </summary>
+        </member>
+        <member name="P:VPet.ModMaker.Models.PetModel.TouchBodyRectangleLocation">
+            <summary>
+            身体区域
+            </summary>
+        </member>
+        <member name="P:VPet.ModMaker.Models.PetModel.TouchRaisedRectangleLocation">
+            <summary>
+            提起区域
+            </summary>
+        </member>
+        <member name="P:VPet.ModMaker.Models.PetModel.RaisePoint">
+            <summary>
+            提起定位
+            </summary>
+        </member>
+        <member name="P:VPet.ModMaker.Models.PetModel.Works">
+            <summary>
+            工作
+            </summary>
+        </member>
+        <member name="P:VPet.ModMaker.Models.PetModel.Moves">
+            <summary>
+            移动
+            </summary>
+        </member>
+        <member name="P:VPet.ModMaker.Models.PetModel.Animes">
+            <summary>
+            动画
+            </summary>
+        </member>
+        <member name="P:VPet.ModMaker.Models.PetModel.FoodAnimes">
+             <summary>
+            食物动画
+             </summary>
+        </member>
+        <member name="M:VPet.ModMaker.Models.PetModel.Save(System.String)">
+            <summary>
+            保存宠物
+            </summary>
+            <param name="path">路径</param>
+        </member>
+        <member name="M:VPet.ModMaker.Models.PetModel.SaveMoveInfo(LinePutScript.LPS)">
+            <summary>
+            保存移动信息
+            </summary>
+            <param name="lps"></param>
+        </member>
+        <member name="M:VPet.ModMaker.Models.PetModel.SaveWorksInfo(LinePutScript.LPS)">
+            <summary>
+            保存工作信息
+            </summary>
+            <param name="lps"></param>
+        </member>
+        <member name="M:VPet.ModMaker.Models.PetModel.SavePetInfo(LinePutScript.LPS)">
+            <summary>
+            保存宠物信息
+            </summary>
+            <param name="lps"></param>
+        </member>
+        <member name="M:VPet.ModMaker.Models.PetModel.SaveDifferentPetInfo(LinePutScript.LPS,VPet.ModMaker.Models.PetModel)">
+            <summary>
+            保存差异宠物信息
+            <para>
+            用于本体存在同名宠物的情况下
+            </para>
+            </summary>
+            <param name="lps"></param>
+            <param name="mainPet">本体宠物</param>
+        </member>
+        <member name="M:VPet.ModMaker.Models.PetModel.CloseWhenOld">
+            <summary>
+            当作为OldPetModel时关闭
+            </summary>
+        </member>
+        <member name="M:VPet.ModMaker.Models.PetModel.Dispose(System.Boolean)">
+            <inheritdoc/>
+        </member>
+        <member name="M:VPet.ModMaker.Models.PetModel.InitializeReactiveObject">
+            <inheritdoc/>
+        </member>
+        <member name="T:VPet.ModMaker.Models.ObservableMultiStateRectangleLocation">
+            <summary>
+            可观察的多状态矩形位置
+            </summary>
+        </member>
+        <member name="M:VPet.ModMaker.Models.ObservableMultiStateRectangleLocation.#ctor">
+            <inheritdoc/>
+        </member>
+        <member name="M:VPet.ModMaker.Models.ObservableMultiStateRectangleLocation.#ctor(HKW.HKWUtils.Observable.ObservableRectangle{System.Double},HKW.HKWUtils.Observable.ObservableRectangle{System.Double},HKW.HKWUtils.Observable.ObservableRectangle{System.Double},HKW.HKWUtils.Observable.ObservableRectangle{System.Double})">
+            <inheritdoc/>
+        </member>
+        <member name="P:VPet.ModMaker.Models.ObservableMultiStateRectangleLocation.Happy">
+            <summary>
+            开心时的范围
+            </summary>
+        </member>
+        <member name="P:VPet.ModMaker.Models.ObservableMultiStateRectangleLocation.Nomal">
+            <summary>
+            普通时的范围
+            </summary>
+        </member>
+        <member name="P:VPet.ModMaker.Models.ObservableMultiStateRectangleLocation.PoorCondition">
+            <summary>
+            低状态时的范围
+            </summary>
+        </member>
+        <member name="P:VPet.ModMaker.Models.ObservableMultiStateRectangleLocation.Ill">
+            <summary>
+            生病时的范围
+            </summary>
+        </member>
+        <member name="M:VPet.ModMaker.Models.ObservableMultiStateRectangleLocation.Clone">
+            <inheritdoc/>
+        </member>
+        <member name="M:VPet.ModMaker.Models.ObservableMultiStateRectangleLocation.GetHashCode">
+            <inheritdoc/>
+        </member>
+        <member name="M:VPet.ModMaker.Models.ObservableMultiStateRectangleLocation.Equals(System.Object)">
+            <inheritdoc/>
+        </member>
+        <member name="M:VPet.ModMaker.Models.ObservableMultiStateRectangleLocation.Equals(VPet.ModMaker.Models.ObservableMultiStateRectangleLocation)">
+            <inheritdoc/>
+        </member>
+        <member name="M:VPet.ModMaker.Models.ObservableMultiStateRectangleLocation.op_Equality(VPet.ModMaker.Models.ObservableMultiStateRectangleLocation,VPet.ModMaker.Models.ObservableMultiStateRectangleLocation)">
+            <inheritdoc/>
+        </member>
+        <member name="M:VPet.ModMaker.Models.ObservableMultiStateRectangleLocation.op_Inequality(VPet.ModMaker.Models.ObservableMultiStateRectangleLocation,VPet.ModMaker.Models.ObservableMultiStateRectangleLocation)">
+            <inheritdoc/>
+        </member>
+        <member name="M:VPet.ModMaker.Models.ObservableMultiStateRectangleLocation.InitializeReactiveObject">
+            <inheritdoc/>
+        </member>
+        <member name="T:VPet.ModMaker.Models.ObservableMultiStatePoint">
+            <summary>
+            可观察的多状态点位
+            </summary>
+        </member>
+        <member name="M:VPet.ModMaker.Models.ObservableMultiStatePoint.#ctor">
+            <inheritdoc/>
+        </member>
+        <member name="M:VPet.ModMaker.Models.ObservableMultiStatePoint.#ctor(HKW.HKWUtils.Observable.ObservablePoint{System.Double},HKW.HKWUtils.Observable.ObservablePoint{System.Double},HKW.HKWUtils.Observable.ObservablePoint{System.Double},HKW.HKWUtils.Observable.ObservablePoint{System.Double})">
+            <inheritdoc/>
+        </member>
+        <member name="P:VPet.ModMaker.Models.ObservableMultiStatePoint.Happy">
+            <summary>
+            开心时的点位
+            </summary>
+        </member>
+        <member name="P:VPet.ModMaker.Models.ObservableMultiStatePoint.Nomal">
+            <summary>
+            普通时的点位
+            </summary>
+        </member>
+        <member name="P:VPet.ModMaker.Models.ObservableMultiStatePoint.PoorCondition">
+            <summary>
+            低状态时的点位
+            </summary>
+        </member>
+        <member name="P:VPet.ModMaker.Models.ObservableMultiStatePoint.Ill">
+            <summary>
+            生病时的点位
+            </summary>
+        </member>
+        <member name="M:VPet.ModMaker.Models.ObservableMultiStatePoint.Clone">
+            <inheritdoc/>
+        </member>
+        <member name="M:VPet.ModMaker.Models.ObservableMultiStatePoint.GetHashCode">
+            <inheritdoc/>
+        </member>
+        <member name="M:VPet.ModMaker.Models.ObservableMultiStatePoint.Equals(System.Object)">
+            <inheritdoc/>
+        </member>
+        <member name="M:VPet.ModMaker.Models.ObservableMultiStatePoint.Equals(VPet.ModMaker.Models.ObservableMultiStatePoint)">
+            <inheritdoc/>
+        </member>
+        <member name="M:VPet.ModMaker.Models.ObservableMultiStatePoint.op_Equality(VPet.ModMaker.Models.ObservableMultiStatePoint,VPet.ModMaker.Models.ObservableMultiStatePoint)">
+            <inheritdoc/>
+        </member>
+        <member name="M:VPet.ModMaker.Models.ObservableMultiStatePoint.op_Inequality(VPet.ModMaker.Models.ObservableMultiStatePoint,VPet.ModMaker.Models.ObservableMultiStatePoint)">
+            <inheritdoc/>
+        </member>
+        <member name="M:VPet.ModMaker.Models.ObservableMultiStatePoint.InitializeReactiveObject">
+            <inheritdoc/>
+        </member>
+        <member name="T:VPet.ModMaker.Models.SelectTextModel">
+            <summary>
+            选择文本模型
+            </summary>
+        </member>
+        <member name="M:VPet.ModMaker.Models.SelectTextModel.#ctor">
+            <inheritdoc/>
+        </member>
+        <member name="M:VPet.ModMaker.Models.SelectTextModel.#ctor(VPet.ModMaker.Models.SelectTextModel)">
+            <inheritdoc/>
+            <param name="model">选择文本模型</param>
+        </member>
+        <member name="M:VPet.ModMaker.Models.SelectTextModel.#ctor(VPet_Simulator.Windows.Interface.SelectText,HKW.HKWUtils.I18nResource{System.String,System.String})">
+            <inheritdoc/>
+            <param name="text">选择文本</param>
+            <param name="i18nResource">I18n资源</param>
+        </member>
+        <member name="P:VPet.ModMaker.Models.SelectTextModel.ModeTypes">
+            <summary>
+            模式类型
+            </summary>
+        </member>
+        <member name="P:VPet.ModMaker.Models.SelectTextModel.Tags">
+            <summary>
+            标签
+            </summary>
+        </member>
+        <member name="P:VPet.ModMaker.Models.SelectTextModel.ToTags">
+            <summary>
+            跳转标签
+            </summary>
+        </member>
+        <member name="P:VPet.ModMaker.Models.SelectTextModel.ID">
+            <summary>
+            ID
+            </summary>
+        </member>
+        <member name="P:VPet.ModMaker.Models.SelectTextModel.ChooseID">
+            <summary>
+            选择ID
+            </summary>
+        </member>
+        <member name="P:VPet.ModMaker.Models.SelectTextModel.I18nResource">
+            <summary>
+            I18n资源
+            </summary>
+        </member>
+        <member name="P:VPet.ModMaker.Models.SelectTextModel.I18nObject">
+            <summary>
+            I18n对象
+            </summary>
+        </member>
+        <member name="P:VPet.ModMaker.Models.SelectTextModel.Text">
+            <summary>
+            文本
+            </summary>
+        </member>
+        <member name="P:VPet.ModMaker.Models.SelectTextModel.Choose">
+            <summary>
+            选择
+            </summary>
+        </member>
+        <member name="P:VPet.ModMaker.Models.SelectTextModel.Mode">
+            <summary>
+            宠物状态
+            </summary>
+        </member>
+        <member name="P:VPet.ModMaker.Models.SelectTextModel.Like">
+            <summary>
+            好感度
+            </summary>
+        </member>
+        <member name="P:VPet.ModMaker.Models.SelectTextModel.Health">
+            <summary>
+            健康度
+            </summary>
+        </member>
+        <member name="P:VPet.ModMaker.Models.SelectTextModel.Level">
+            <summary>
+            等级
+            </summary>
+        </member>
+        <member name="P:VPet.ModMaker.Models.SelectTextModel.Money">
+            <summary>
+            金钱
+            </summary>
+        </member>
+        <member name="P:VPet.ModMaker.Models.SelectTextModel.Food">
+            <summary>
+            饱食度
+            </summary>
+        </member>
+        <member name="P:VPet.ModMaker.Models.SelectTextModel.Drink">
+            <summary>
+            口渴度
+            </summary>
+        </member>
+        <member name="P:VPet.ModMaker.Models.SelectTextModel.Feel">
+            <summary>
+            心情值
+            </summary>
+        </member>
+        <member name="P:VPet.ModMaker.Models.SelectTextModel.Strength">
+            <summary>
+            体力值
+            </summary>
+        </member>
+        <member name="M:VPet.ModMaker.Models.SelectTextModel.Dispose(System.Boolean)">
+            <inheritdoc/>
+        </member>
+        <member name="M:VPet.ModMaker.Models.SelectTextModel.InitializeReactiveObject">
+            <inheritdoc/>
+        </member>
+        <member name="T:VPet.ModMaker.Models.WorkModel">
+            <summary>
+            工作模型
+            </summary>
+        </member>
+        <member name="M:VPet.ModMaker.Models.WorkModel.#ctor">
+            <inheritdoc/>
+        </member>
+        <member name="M:VPet.ModMaker.Models.WorkModel.#ctor(VPet.ModMaker.Models.WorkModel)">
+            <inheritdoc/>
+            <param name="model">工作模型</param>
+        </member>
+        <member name="M:VPet.ModMaker.Models.WorkModel.#ctor(VPet_Simulator.Core.GraphHelper.Work)">
+            <inheritdoc/>
+            <param name="work">工作</param>
+        </member>
+        <member name="P:VPet.ModMaker.Models.WorkModel.WorkTypes">
+            <summary>
+            工作类型
+            </summary>
+        </member>
+        <member name="P:VPet.ModMaker.Models.WorkModel.ID">
+            <summary>
+            ID
+            </summary>
+        </member>
+        <member name="P:VPet.ModMaker.Models.WorkModel.I18nResource">
+            <summary>
+            I18n资源
+            </summary>
+        </member>
+        <member name="P:VPet.ModMaker.Models.WorkModel.I18nObject">
+            <summary>
+            I18n对象
+            </summary>
+        </member>
+        <member name="P:VPet.ModMaker.Models.WorkModel.Name">
+            <summary>
+            名称
+            </summary>
+        </member>
+        <member name="P:VPet.ModMaker.Models.WorkModel.Graph">
+            <summary>
+            指定动画
+            </summary>
+        </member>
+        <member name="P:VPet.ModMaker.Models.WorkModel.MoneyBase">
+            <summary>
+            收获基础
+            </summary>
+        </member>
+        <member name="P:VPet.ModMaker.Models.WorkModel.StrengthFood">
+            <summary>
+            饱食度消耗
+            </summary>
+        </member>
+        <member name="P:VPet.ModMaker.Models.WorkModel.StrengthDrink">
+            <summary>
+            口渴度消耗
+            </summary>
+        </member>
+        <member name="P:VPet.ModMaker.Models.WorkModel.Feeling">
+            <summary>
+            心情消耗
+            </summary>
+        </member>
+        <member name="P:VPet.ModMaker.Models.WorkModel.LevelLimit">
+            <summary>
+            等级倍率
+            </summary>
+        </member>
+        <member name="P:VPet.ModMaker.Models.WorkModel.Time">
+            <summary>
+            时间
+            </summary>
+        </member>
+        <member name="P:VPet.ModMaker.Models.WorkModel.FinishBonus">
+            <summary>
+            完成奖励倍率
+            </summary>
+        </member>
+        <member name="P:VPet.ModMaker.Models.WorkModel.IsOverLoad">
+            <summary>
+            是否超模
+            </summary>
+        </member>
+        <member name="P:VPet.ModMaker.Models.WorkModel.WorkType">
+            <summary>
+            工作类型
+            </summary>
+        </member>
+        <member name="P:VPet.ModMaker.Models.WorkModel.BorderBrush">
+            <summary>
+            边框颜色
+            </summary>
+        </member>
+        <member name="P:VPet.ModMaker.Models.WorkModel.Background">
+            <summary>
+            背景色
+            </summary>
+        </member>
+        <member name="P:VPet.ModMaker.Models.WorkModel.Foreground">
+            <summary>
+            前景色
+            </summary>
+        </member>
+        <member name="P:VPet.ModMaker.Models.WorkModel.ButtonBackground">
+            <summary>
+            按钮背景色
+            </summary>
+        </member>
+        <member name="P:VPet.ModMaker.Models.WorkModel.ButtonForeground">
+            <summary>
+            按钮前景色
+            </summary>
+        </member>
+        <member name="P:VPet.ModMaker.Models.WorkModel.Left">
+            <summary>
+            X位置
+            </summary>
+        </member>
+        <member name="P:VPet.ModMaker.Models.WorkModel.Top">
+            <summary>
+            Y位置
+            </summary>
+        </member>
+        <member name="P:VPet.ModMaker.Models.WorkModel.Width">
+            <summary>
+            宽度
+            </summary>
+        </member>
+        <member name="M:VPet.ModMaker.Models.WorkModel.FixOverLoad">
+            <summary>
+            修复超模
+            </summary>
+        </member>
+        <member name="M:VPet.ModMaker.Models.WorkModel.Dispose(System.Boolean)">
+            <inheritdoc/>
+        </member>
+        <member name="M:VPet.ModMaker.Models.WorkModel.InitializeReactiveObject">
+            <inheritdoc/>
+        </member>
+        <member name="T:VPet.ModMaker.Models.ModUpdataHelper">
+            <summary>
+            模组升级助手
+            </summary>
+        </member>
+        <member name="P:VPet.ModMaker.Models.ModUpdataHelper.LastGameVersion">
+            <summary>
+            最新游戏版本
+            </summary>
+        </member>
+        <member name="M:VPet.ModMaker.Models.ModUpdataHelper.CanUpdata(VPet.ModMaker.Models.ModInfoModel)">
+            <summary>
+            能否升级模组
+            </summary>
+            <param name="mod">模组</param>
+            <returns>可以升级为 <see langword="true"/> 不可以为 <see langword="false"/></returns>
+        </member>
+        <member name="M:VPet.ModMaker.Models.ModUpdataHelper.Updata(VPet.ModMaker.Models.ModInfoModel)">
+            <summary>
+            升级模组
+            </summary>
+            <param name="mod">模组</param>
+            <returns>更新完成的目标版本</returns>
+        </member>
+        <member name="P:VPet.ModMaker.Models.ModUpdataHelper.UpdataAction">
+            <summary>
+            更新行动
+            </summary>
+        </member>
+        <member name="T:VPet.ModMaker.NativeStyles">
+            <summary>
+            本地样式
+            </summary>
+            <summary>
+            NativeStyles
+            </summary>
+        </member>
+        <member name="M:VPet.ModMaker.NativeStyles.#ctor">
+            <inheritdoc/>
+        </member>
+        <member name="M:VPet.ModMaker.NativeStyles.InitializeComponent">
+            <summary>
+            InitializeComponent
+            </summary>
+        </member>
+        <member name="T:VPet.ModMaker.NativeData">
+            <summary>
+            本地数据
+            </summary>
+        </member>
+        <member name="P:VPet.ModMaker.NativeData.BaseDirectory">
+            <summary>
+            基准目录
+            </summary>
+        </member>
+        <member name="P:VPet.ModMaker.NativeData.ModMakerBaseDirectory">
+            <summary>
+            模组制作器基准目录
+            </summary>
+        </member>
+        <member name="P:VPet.ModMaker.NativeData.NLogConfigBaseFile">
+            <summary>
+            日志配置文件基准路径
+            </summary>
+        </member>
+        <member name="P:VPet.ModMaker.NativeData.HistoryBaseFilePath">
+            <summary>
+            历史文件基准目录
+            </summary>
+        </member>
+        <member name="P:VPet.ModMaker.NativeData.Directory">
+            <summary>
+            模组制作器目录
+            </summary>
+        </member>
+        <member name="P:VPet.ModMaker.NativeData.HistoryFilePath">
+            <summary>
+            历史文件目录
+            </summary>
+        </member>
+        <member name="P:VPet.ModMaker.NativeData.NativeStyles">
+            <summary>
+            本地风格
+            </summary>
+        </member>
+        <member name="F:VPet.ModMaker.NativeData.InfoFileName">
+            <summary>
+            信息文件
+            </summary>
+        </member>
+        <member name="F:VPet.ModMaker.NativeData.HistoryFileName">
+            <summary>
+            历史文件
+            </summary>
+        </member>
+        <member name="P:VPet.ModMaker.NativeData.GameVersion">
+            <summary>
+            游戏版本
+            </summary>
+        </member>
+        <member name="P:VPet.ModMaker.NativeData.MainPets">
+            <summary>
+            本体的宠物
+            <para>
+            (PetID, PetModel)
+            </para>
+            </summary>
+        </member>
+        <member name="T:VPet.ModMaker.Native.NativeExtensions">
+            <summary>
+            拓展
+            </summary>
+        </member>
+        <member name="M:VPet.ModMaker.Native.NativeExtensions.IsHasNameAnime(VPet_Simulator.Core.GraphInfo.GraphType)">
+            <summary>
+            是含有名称的动画
+            </summary>
+            <param name="graphType"></param>
+            <returns></returns>
+        </member>
+        <member name="M:VPet.ModMaker.Native.NativeExtensions.CloneStream(System.Windows.Media.Imaging.BitmapImage)">
+            <summary>
+            图像复制
+            </summary>
+            <param name="image">图像</param>
+            <returns>复制的图像</returns>
+        </member>
+        <member name="M:VPet.ModMaker.Native.NativeExtensions.SaveToPng(System.Windows.Media.Imaging.BitmapImage,System.String)">
+            <summary>
+            保存至Png图片
+            </summary>
+            <param name="image">图片资源</param>
+            <param name="path">路径</param>
+        </member>
+        <member name="M:VPet.ModMaker.Native.NativeExtensions.ContentsEqual(System.IO.Stream,System.IO.Stream,System.Int32)">
+            <summary>
+            流内容对比
+            </summary>
+            <param name="source">原始流</param>
+            <param name="target">目标流</param>
+            <param name="bufferLength">缓冲区大小 (越大速度越快(流内容越大效果越明显), 但会提高内存占用 (bufferSize = bufferLength * sizeof(long) * 2))</param>
+            <returns>内容相同为 <see langword="true"/> 否则为 <see langword="false"/></returns>
+        </member>
+        <member name="T:VPet.ModMaker.NativeUtils">
+            <summary>
+            工具
+            </summary>
+        </member>
+        <member name="P:VPet.ModMaker.NativeUtils.ClipboardSetText">
+            <summary>
+            粘贴板复制文本
+            </summary>
+        </member>
+        <member name="F:VPet.ModMaker.NativeUtils.DecodePixelWidth">
+            <summary>
+            解码像素宽度
+            </summary>
+        </member>
+        <member name="F:VPet.ModMaker.NativeUtils.DecodePixelHeight">
+            <summary>
+            解码像素高度
+            </summary>
+        </member>
+        <member name="P:VPet.ModMaker.NativeUtils.Separator">
+            <summary>
+            分隔符
+            </summary>
+        </member>
+        <member name="M:VPet.ModMaker.NativeUtils.OpenLink(System.String)">
+            <summary>
+            打开文件
+            </summary>
+            <param name="filePath">文件路径</param>
+        </member>
+        <member name="M:VPet.ModMaker.NativeUtils.OpenFileInExplorer(System.String)">
+            <summary>
+            从资源管理器打开文件
+            </summary>
+            <param name="filePath">文件路径</param>
+        </member>
+        <member name="T:VPet.ModMaker.ViewLocator">
+            <summary>
+            视图定位器
+            </summary>
+        </member>
+        <member name="M:VPet.ModMaker.ViewLocator.#ctor">
+            <inheritdoc/>
+        </member>
+        <member name="T:VPet.ModMaker.Properties.Resources">
+            <summary>
+              一个强类型的资源类，用于查找本地化的字符串等。
+            </summary>
+        </member>
+        <member name="P:VPet.ModMaker.Properties.Resources.ResourceManager">
+            <summary>
+              返回此类使用的缓存的 ResourceManager 实例。
+            </summary>
+        </member>
+        <member name="P:VPet.ModMaker.Properties.Resources.Culture">
+            <summary>
+              重写当前线程的 CurrentUICulture 属性，对
+              使用此强类型资源类的所有资源查找执行重写。
+            </summary>
+        </member>
+        <member name="T:VPet.ModMaker.Resources.NativeResources">
+            <summary>
+            本地资源
+            </summary>
+        </member>
+        <member name="F:VPet.ModMaker.Resources.NativeResources.ResourcePath">
+            <summary>
+            资源基路径
+            </summary>
+        </member>
+        <member name="F:VPet.ModMaker.Resources.NativeResources.FoodImage">
+            <summary>
+            食物图片
+            </summary>
+        </member>
+        <member name="F:VPet.ModMaker.Resources.NativeResources.NLogConfig">
+            <summary>
+            NLog配置文件
+            </summary>
+        </member>
+        <member name="M:VPet.ModMaker.Resources.NativeResources.GetStream(System.String)">
+            <summary>
+            获取资源流
+            </summary>
+            <param name="resourceName">资源名</param>
+            <returns>资源流</returns>
+        </member>
+        <member name="M:VPet.ModMaker.Resources.NativeResources.TryGetStream(System.String,System.IO.Stream@)">
+            <summary>
+            尝试获取资源流
+            </summary>
+            <param name="resourceName">资源名</param>
+            <param name="resourceStream">资源流</param>
+            <returns>成功为 <see langword="true"/> 失败为 <see langword="false"/></returns>
+        </member>
+        <member name="M:VPet.ModMaker.Resources.NativeResources.SaveTo(System.String,System.String)">
+            <summary>
+            将流保存至文件
+            </summary>
+            <param name="resourceName">资源名</param>
+            <param name="path">文件路径</param>
+            <returns>成功为 <see langword="true"/> 失败为 <see langword="false"/></returns>
+        </member>
+        <member name="T:VPet.ModMaker.ViewModels.ModEdit.ModEditVM">
+            <summary>
+            模组编辑视图模型
+            </summary>
+        </member>
+        <member name="M:VPet.ModMaker.ViewModels.ModEdit.ModEditVM.#ctor">
+            <inheritdoc/>
+        </member>
+        <member name="P:VPet.ModMaker.ViewModels.ModEdit.ModEditVM.ModInfo">
+            <summary>
+            当前模组信息
+            </summary>
+        </member>
+        <member name="M:VPet.ModMaker.ViewModels.ModEdit.ModEditVM.SaveAsTranslationMod">
+            <summary>
+            保存为翻译模组
+            </summary>
+        </member>
+        <member name="P:VPet.ModMaker.ViewModels.ModEdit.ModEditVM.I18nEditCanExecute">
+            <summary>
+            可以进行I18n编辑
+            </summary>
+        </member>
+        <member name="M:VPet.ModMaker.ViewModels.ModEdit.ModEditVM.EditI18n">
+            <summary>
+            编辑I18n数据
+            </summary>
+        </member>
+        <member name="M:VPet.ModMaker.ViewModels.ModEdit.ModEditVM.ChangeImage">
+            <summary>
+            改变图片
+            </summary>
+        </member>
+        <member name="M:VPet.ModMaker.ViewModels.ModEdit.ModEditVM.AddCulture">
+            <summary>
+            添加文化
+            </summary>
+        </member>
+        <member name="M:VPet.ModMaker.ViewModels.ModEdit.ModEditVM.EditCulture(System.Globalization.CultureInfo)">
+            <summary>
+            编辑文化
+            </summary>
+            <param name="oldCulture">旧文化</param>
+        </member>
+        <member name="M:VPet.ModMaker.ViewModels.ModEdit.ModEditVM.RemoveCulture(System.Globalization.CultureInfo)">
+            <summary>
+            删除文化
+            </summary>
+            <param name="oldCulture">旧文化</param>
+        </member>
+        <member name="M:VPet.ModMaker.ViewModels.ModEdit.ModEditVM.OpenModPath">
+            <summary>
+            打开模组所在的文件夹
+            </summary>
+        </member>
+        <member name="M:VPet.ModMaker.ViewModels.ModEdit.ModEditVM.Save">
+            <summary>
+            保存
+            </summary>
+        </member>
+        <member name="M:VPet.ModMaker.ViewModels.ModEdit.ModEditVM.SaveTo">
+            <summary>
+            保存至
+            </summary>
+        </member>
+        <member name="M:VPet.ModMaker.ViewModels.ModEdit.ModEditVM.SaveTo(System.String)">
+            <summary>
+            保存至
+            </summary>
+            <param name="path">路径</param>
+        </member>
+        <member name="M:VPet.ModMaker.ViewModels.ModEdit.ModEditVM.ValidationData(VPet.ModMaker.Models.ModInfoModel)">
+            <summary>
+            验证数据
+            </summary>
+            <param name="model">模型</param>
+            <returns>成功为 <see langword="true"/> 失败为 <see langword="false"/></returns>
+        </member>
+        <member name="M:VPet.ModMaker.ViewModels.ModEdit.ModEditVM.Dispose(System.Boolean)">
+            <inheritdoc/>
+        </member>
+        <member name="M:VPet.ModMaker.ViewModels.ModEdit.ModEditVM.Reset">
+            <inheritdoc/>
+        </member>
+        <member name="P:VPet.ModMaker.ViewModels.ModEdit.ModEditVM.SaveAsTranslationModCommand">
+            <inheritdoc cref="M:VPet.ModMaker.ViewModels.ModEdit.ModEditVM.SaveAsTranslationMod"/>
+        </member>
+        <member name="P:VPet.ModMaker.ViewModels.ModEdit.ModEditVM.EditI18nCommand">
+            <inheritdoc cref="M:VPet.ModMaker.ViewModels.ModEdit.ModEditVM.EditI18n"/>
+        </member>
+        <member name="P:VPet.ModMaker.ViewModels.ModEdit.ModEditVM.ChangeImageCommand">
+            <inheritdoc cref="M:VPet.ModMaker.ViewModels.ModEdit.ModEditVM.ChangeImage"/>
+        </member>
+        <member name="P:VPet.ModMaker.ViewModels.ModEdit.ModEditVM.AddCultureCommand">
+            <inheritdoc cref="M:VPet.ModMaker.ViewModels.ModEdit.ModEditVM.AddCulture"/>
+        </member>
+        <member name="P:VPet.ModMaker.ViewModels.ModEdit.ModEditVM.EditCultureCommand">
+            <inheritdoc cref="M:VPet.ModMaker.ViewModels.ModEdit.ModEditVM.EditCulture(System.Globalization.CultureInfo)"/>
+        </member>
+        <member name="P:VPet.ModMaker.ViewModels.ModEdit.ModEditVM.RemoveCultureCommand">
+            <inheritdoc cref="M:VPet.ModMaker.ViewModels.ModEdit.ModEditVM.RemoveCulture(System.Globalization.CultureInfo)"/>
+        </member>
+        <member name="P:VPet.ModMaker.ViewModels.ModEdit.ModEditVM.OpenModPathCommand">
+            <inheritdoc cref="M:VPet.ModMaker.ViewModels.ModEdit.ModEditVM.OpenModPath"/>
+        </member>
+        <member name="P:VPet.ModMaker.ViewModels.ModEdit.ModEditVM.SaveCommand">
+            <inheritdoc cref="M:VPet.ModMaker.ViewModels.ModEdit.ModEditVM.Save"/>
+        </member>
+        <member name="P:VPet.ModMaker.ViewModels.ModEdit.ModEditVM.SaveToCommand">
+            <inheritdoc cref="M:VPet.ModMaker.ViewModels.ModEdit.ModEditVM.SaveTo"/>
+        </member>
+        <member name="M:VPet.ModMaker.ViewModels.ModEdit.ModEditVM.InitializeReactiveObject">
+            <inheritdoc/>
+        </member>
+        <member name="T:VPet.ModMaker.ViewModels.ModEdit.AddCultureVM">
+            <summary>
+            添加文化视图模型
+            </summary>
+        </member>
+        <member name="M:VPet.ModMaker.ViewModels.ModEdit.AddCultureVM.#ctor(VPet.ModMaker.Models.ModInfoModel)">
+            <inheritdoc/>
+        </member>
+        <member name="P:VPet.ModMaker.ViewModels.ModEdit.AddCultureVM.ModInfo">
+            <summary>
+            模组信息
+            </summary>
+        </member>
+        <member name="P:VPet.ModMaker.ViewModels.ModEdit.AddCultureVM.AllCultures">
+            <summary>
+            全部文化
+            </summary>
+        </member>
+        <member name="P:VPet.ModMaker.ViewModels.ModEdit.AddCultureVM.CultureName">
+            <summary>
+            文化名称
+            </summary>
+        </member>
+        <member name="P:VPet.ModMaker.ViewModels.ModEdit.AddCultureVM.CultureFullName">
+            <summary>
+            文化全名
+            </summary>
+        </member>
+        <member name="P:VPet.ModMaker.ViewModels.ModEdit.AddCultureVM.Search">
+            <summary>
+            搜索文化
+            </summary>
+        </member>
+        <member name="P:VPet.ModMaker.ViewModels.ModEdit.AddCultureVM.UnknownCulture">
+            <summary>
+            未知文化
+            </summary>
+        </member>
+        <member name="P:VPet.ModMaker.ViewModels.ModEdit.AddCultureVM.CultureLink">
+            <summary>
+            文化链接
+            </summary>
+        </member>
+        <member name="P:VPet.ModMaker.ViewModels.ModEdit.AddCultureVM.OpenCultureLinkCommand">
+            <inheritdoc cref="M:VPet.ModMaker.ViewModels.ModEdit.AddCultureVM.OpenCultureLink"/>
+        </member>
+        <member name="M:VPet.ModMaker.ViewModels.ModEdit.AddCultureVM.InitializeReactiveObject">
+            <inheritdoc/>
+        </member>
+        <member name="T:VPet.ModMaker.ViewModels.ModEdit.AnimeEditVM">
+            <summary>
+            动画编辑视图模型
+            </summary>
+        </member>
+        <member name="M:VPet.ModMaker.ViewModels.ModEdit.AnimeEditVM.#ctor(VPet.ModMaker.Models.ModModel.AnimeTypeModel)">
+            <inheritdoc/>
+        </member>
+        <member name="P:VPet.ModMaker.ViewModels.ModEdit.AnimeEditVM.CurrentPet">
+            <summary>
+            当前宠物
+            </summary>
+        </member>
+        <member name="P:VPet.ModMaker.ViewModels.ModEdit.AnimeEditVM.OldAnime">
+            <summary>
+            旧动画
+            </summary>
+        </member>
+        <member name="P:VPet.ModMaker.ViewModels.ModEdit.AnimeEditVM.Anime">
+            <summary>
+            动画
+            </summary>
+        </member>
+        <member name="P:VPet.ModMaker.ViewModels.ModEdit.AnimeEditVM.CurrentImageModel">
+            <summary>
+            当前图像模型
+            </summary>
+        </member>
+        <member name="P:VPet.ModMaker.ViewModels.ModEdit.AnimeEditVM.CurrentAnimeModel">
+            <summary>
+            当前动画模型
+            </summary>
+        </member>
+        <member name="P:VPet.ModMaker.ViewModels.ModEdit.AnimeEditVM.CurrentMode">
+            <summary>
+            当前模式
+            </summary>
+        </member>
+        <member name="P:VPet.ModMaker.ViewModels.ModEdit.AnimeEditVM.Loop">
+            <summary>
+            循环
+            </summary>
+        </member>
+        <member name="P:VPet.ModMaker.ViewModels.ModEdit.AnimeEditVM.HasMultiType">
+            <summary>
+            含有多个状态
+            </summary>
+        </member>
+        <member name="P:VPet.ModMaker.ViewModels.ModEdit.AnimeEditVM.HasAnimeName">
+            <summary>
+            含有动画名称
+            </summary>
+        </member>
+        <member name="F:VPet.ModMaker.ViewModels.ModEdit.AnimeEditVM._playing">
+            <summary>
+            正在播放
+            </summary>
+        </member>
+        <member name="F:VPet.ModMaker.ViewModels.ModEdit.AnimeEditVM._playerTask">
+            <summary>
+            动画任务
+            </summary>
+        </member>
+        <member name="M:VPet.ModMaker.ViewModels.ModEdit.AnimeEditVM.AddAnime">
+            <summary>
+            添加动画
+            </summary>
+        </member>
+        <member name="M:VPet.ModMaker.ViewModels.ModEdit.AnimeEditVM.RemoveAnime(VPet.ModMaker.Models.ModModel.AnimeModel)">
+            <summary>
+            删除动画
+            </summary>
+            <param name="value">动画模型</param>
+        </member>
+        <member name="M:VPet.ModMaker.ViewModels.ModEdit.AnimeEditVM.AddImage(VPet.ModMaker.Models.ModModel.AnimeModel)">
+            <summary>
+            添加图片
+            </summary>
+            <param name="value">动画模型</param>
+        </member>
+        <member name="M:VPet.ModMaker.ViewModels.ModEdit.AnimeEditVM.RemoveImage(VPet.ModMaker.Models.ModModel.AnimeModel)">
+            <summary>
+            删除图片
+            </summary>
+            <param name="value">动画模型</param>
+        </member>
+        <member name="M:VPet.ModMaker.ViewModels.ModEdit.AnimeEditVM.ChangeImage(VPet.ModMaker.Models.ModModel.AnimeModel)">
+            <summary>
+            替换图片
+            </summary>
+            <param name="value"></param>
+            <exception cref="T:System.NotImplementedException"></exception>
+        </member>
+        <member name="M:VPet.ModMaker.ViewModels.ModEdit.AnimeEditVM.ClearImage(VPet.ModMaker.Models.ModModel.AnimeModel)">
+            <summary>
+            清空图片
+            </summary>
+            <param name="value">动画模型</param>
+        </member>
+        <member name="M:VPet.ModMaker.ViewModels.ModEdit.AnimeEditVM.AddImages(HKW.HKWUtils.Observable.ObservableList{VPet.ModMaker.Models.ModModel.ImageModel},System.Collections.Generic.IEnumerable{System.String})">
+            <summary>
+            添加图片
+            </summary>
+            <param name="images">动画</param>
+            <param name="paths">路径</param>
+        </member>
+        <member name="M:VPet.ModMaker.ViewModels.ModEdit.AnimeEditVM.Stop">
+            <summary>
+            停止播放
+            </summary>
+        </member>
+        <member name="M:VPet.ModMaker.ViewModels.ModEdit.AnimeEditVM.Start">
+            <summary>
+            开始播放
+            </summary>
+        </member>
+        <member name="M:VPet.ModMaker.ViewModels.ModEdit.AnimeEditVM.Play">
+            <summary>
+            播放
+            </summary>
+        </member>
+        <member name="M:VPet.ModMaker.ViewModels.ModEdit.AnimeEditVM.Reset">
+            <summary>
+            重置
+            </summary>
+        </member>
+        <member name="P:VPet.ModMaker.ViewModels.ModEdit.AnimeEditVM.AddAnimeCommand">
+            <inheritdoc cref="M:VPet.ModMaker.ViewModels.ModEdit.AnimeEditVM.AddAnime"/>
+        </member>
+        <member name="P:VPet.ModMaker.ViewModels.ModEdit.AnimeEditVM.RemoveAnimeCommand">
+            <inheritdoc cref="M:VPet.ModMaker.ViewModels.ModEdit.AnimeEditVM.RemoveAnime(VPet.ModMaker.Models.ModModel.AnimeModel)"/>
+        </member>
+        <member name="P:VPet.ModMaker.ViewModels.ModEdit.AnimeEditVM.AddImageCommand">
+            <inheritdoc cref="M:VPet.ModMaker.ViewModels.ModEdit.AnimeEditVM.AddImage(VPet.ModMaker.Models.ModModel.AnimeModel)"/>
+        </member>
+        <member name="P:VPet.ModMaker.ViewModels.ModEdit.AnimeEditVM.RemoveImageCommand">
+            <inheritdoc cref="M:VPet.ModMaker.ViewModels.ModEdit.AnimeEditVM.RemoveImage(VPet.ModMaker.Models.ModModel.AnimeModel)"/>
+        </member>
+        <member name="P:VPet.ModMaker.ViewModels.ModEdit.AnimeEditVM.ChangeImageCommand">
+            <inheritdoc cref="M:VPet.ModMaker.ViewModels.ModEdit.AnimeEditVM.ChangeImage(VPet.ModMaker.Models.ModModel.AnimeModel)"/>
+        </member>
+        <member name="P:VPet.ModMaker.ViewModels.ModEdit.AnimeEditVM.ClearImageCommand">
+            <inheritdoc cref="M:VPet.ModMaker.ViewModels.ModEdit.AnimeEditVM.ClearImage(VPet.ModMaker.Models.ModModel.AnimeModel)"/>
+        </member>
+        <member name="P:VPet.ModMaker.ViewModels.ModEdit.AnimeEditVM.StopCommand">
+            <inheritdoc cref="M:VPet.ModMaker.ViewModels.ModEdit.AnimeEditVM.Stop"/>
+        </member>
+        <member name="P:VPet.ModMaker.ViewModels.ModEdit.AnimeEditVM.StartCommand">
+            <inheritdoc cref="M:VPet.ModMaker.ViewModels.ModEdit.AnimeEditVM.Start"/>
+        </member>
+        <member name="M:VPet.ModMaker.ViewModels.ModEdit.AnimeEditVM.InitializeReactiveObject">
+            <inheritdoc/>
+        </member>
+        <member name="T:VPet.ModMaker.ViewModels.ModEdit.AnimeVM">
+            <summary>
+            动画视图模型
+            </summary>
+        </member>
+        <member name="M:VPet.ModMaker.ViewModels.ModEdit.AnimeVM.#ctor">
+            <inheritdoc/>
+        </member>
+        <member name="P:VPet.ModMaker.ViewModels.ModEdit.AnimeVM.ModInfo">
+            <summary>
+            模组信息
+            </summary>
+        </member>
+        <member name="P:VPet.ModMaker.ViewModels.ModEdit.AnimeVM.AllAnimes">
+            <summary>
+            所有动画
+            </summary>
+        </member>
+        <member name="P:VPet.ModMaker.ViewModels.ModEdit.AnimeVM.CurrentPet">
+            <summary>
+            当前宠物
+            </summary>
+        </member>
+        <member name="P:VPet.ModMaker.ViewModels.ModEdit.AnimeVM.Search">
+            <summary>
+            搜索
+            </summary>
+        </member>
+        <member name="M:VPet.ModMaker.ViewModels.ModEdit.AnimeVM.Add">
+            <summary>
+            添加
+            </summary>
+        </member>
+        <member name="M:VPet.ModMaker.ViewModels.ModEdit.AnimeVM.Edit(VPet.ModMaker.Models.ModModel.IAnimeModel)">
+            <summary>
+            编辑
+            </summary>
+            <param name="model">模型</param>
+        </member>
+        <member name="M:VPet.ModMaker.ViewModels.ModEdit.AnimeVM.Remove(System.Collections.IList)">
+            <summary>
+            删除
+            </summary>
+            <param name="list">模型</param>
+        </member>
+        <member name="M:VPet.ModMaker.ViewModels.ModEdit.AnimeVM.Reset">
+            <summary>
+            重置
+            </summary>
+        </member>
+        <member name="P:VPet.ModMaker.ViewModels.ModEdit.AnimeVM.AddCommand">
+            <inheritdoc cref="M:VPet.ModMaker.ViewModels.ModEdit.AnimeVM.Add"/>
+        </member>
+        <member name="P:VPet.ModMaker.ViewModels.ModEdit.AnimeVM.EditCommand">
+            <inheritdoc cref="M:VPet.ModMaker.ViewModels.ModEdit.AnimeVM.Edit(VPet.ModMaker.Models.ModModel.IAnimeModel)"/>
+        </member>
+        <member name="P:VPet.ModMaker.ViewModels.ModEdit.AnimeVM.RemoveCommand">
+            <inheritdoc cref="M:VPet.ModMaker.ViewModels.ModEdit.AnimeVM.Remove(System.Collections.IList)"/>
+        </member>
+        <member name="M:VPet.ModMaker.ViewModels.ModEdit.AnimeVM.InitializeReactiveObject">
+            <inheritdoc/>
+        </member>
+        <member name="T:VPet.ModMaker.ViewModels.ModEdit.FoodAnimeEditVM">
+            <summary>
+            食物动画编辑视图模型
+            </summary>
+        </member>
+        <member name="M:VPet.ModMaker.ViewModels.ModEdit.FoodAnimeEditVM.#ctor(VPet.ModMaker.Models.ModModel.FoodAnimeTypeModel)">
+            <inheritdoc/>
+        </member>
+        <member name="P:VPet.ModMaker.ViewModels.ModEdit.FoodAnimeEditVM.CurrentPet">
+            <summary>
+            当前宠物
+            </summary>
+        </member>
+        <member name="P:VPet.ModMaker.ViewModels.ModEdit.FoodAnimeEditVM.DefaultFoodImage">
+            <summary>
+            默认食物图片
+            </summary>
+        </member>
+        <member name="P:VPet.ModMaker.ViewModels.ModEdit.FoodAnimeEditVM.FoodImage">
+            <summary>
+            食物图片
+            </summary>
+        </member>
+        <member name="P:VPet.ModMaker.ViewModels.ModEdit.FoodAnimeEditVM.LengthRatio">
+            <summary>
+            比例
+            </summary>
+        </member>
+        <member name="P:VPet.ModMaker.ViewModels.ModEdit.FoodAnimeEditVM.OldAnime">
+            <summary>
+            旧动画
+            </summary>
+        </member>
+        <member name="P:VPet.ModMaker.ViewModels.ModEdit.FoodAnimeEditVM.Anime">
+            <summary>
+            动画
+            </summary>
+        </member>
+        <member name="P:VPet.ModMaker.ViewModels.ModEdit.FoodAnimeEditVM.CurrentFrontImageModel">
+            <summary>
+            当前顶层图像模型
+            </summary>
+        </member>
+        <member name="P:VPet.ModMaker.ViewModels.ModEdit.FoodAnimeEditVM.CurrentBackImageModel">
+            <summary>
+            当前底层图像模型
+            </summary>
+        </member>
+        <member name="P:VPet.ModMaker.ViewModels.ModEdit.FoodAnimeEditVM.CurrentFoodLocationModel">
+            <summary>
+            当前食物定位模型
+            </summary>
+        </member>
+        <member name="P:VPet.ModMaker.ViewModels.ModEdit.FoodAnimeEditVM.CurrentAnimeModel">
+            <summary>
+            当前动画模型
+            </summary>
+        </member>
+        <member name="P:VPet.ModMaker.ViewModels.ModEdit.FoodAnimeEditVM.CurrentMode">
+            <summary>
+            当前模式
+            </summary>
+        </member>
+        <member name="P:VPet.ModMaker.ViewModels.ModEdit.FoodAnimeEditVM.Loop">
+            <summary>
+            循环
+            </summary>
+        </member>
+        <member name="F:VPet.ModMaker.ViewModels.ModEdit.FoodAnimeEditVM._playing">
+            <summary>
+            正在播放
+            </summary>
+        </member>
+        <member name="F:VPet.ModMaker.ViewModels.ModEdit.FoodAnimeEditVM._frontPlayerTask">
+            <summary>
+            顶层动画任务
+            </summary>
+        </member>
+        <member name="F:VPet.ModMaker.ViewModels.ModEdit.FoodAnimeEditVM._backPlayerTask">
+            <summary>
+            底层动画任务
+            </summary>
+        </member>
+        <member name="F:VPet.ModMaker.ViewModels.ModEdit.FoodAnimeEditVM._foodPlayerTask">
+            <summary>
+            食物动画任务
+            </summary>
+        </member>
+        <member name="M:VPet.ModMaker.ViewModels.ModEdit.FoodAnimeEditVM.RemoveAnime(VPet.ModMaker.Models.ModModel.FoodAnimeModel)">
+            <summary>
+            删除动画
+            </summary>
+            <param name="value">动画模型</param>
+        </member>
+        <member name="M:VPet.ModMaker.ViewModels.ModEdit.FoodAnimeEditVM.AddFrontImage(VPet.ModMaker.Models.ModModel.FoodAnimeModel)">
+            <summary>
+            添加顶层图片
+            </summary>
+            <param name="value">动画模型</param>
+        </member>
+        <member name="M:VPet.ModMaker.ViewModels.ModEdit.FoodAnimeEditVM.RemoveFrontImage(VPet.ModMaker.Models.ModModel.FoodAnimeModel)">
+            <summary>
+            删除顶层图片
+            </summary>
+            <param name="value">动画模型</param>
+        </member>
+        <member name="M:VPet.ModMaker.ViewModels.ModEdit.FoodAnimeEditVM.ClearFrontImage(VPet.ModMaker.Models.ModModel.FoodAnimeModel)">
+            <summary>
+            清空顶层图片
+            </summary>
+            <param name="value">动画模型</param>
+        </member>
+        <member name="M:VPet.ModMaker.ViewModels.ModEdit.FoodAnimeEditVM.ChangeFrontImage(VPet.ModMaker.Models.ModModel.FoodAnimeModel)">
+            <summary>
+            替换顶层图片
+            </summary>
+            <param name="value">动画模型</param>
+        </member>
+        <member name="M:VPet.ModMaker.ViewModels.ModEdit.FoodAnimeEditVM.AddBackImage(VPet.ModMaker.Models.ModModel.FoodAnimeModel)">
+            <summary>
+            添加底层图片
+            </summary>
+            <param name="value">动画模型</param>
+        </member>
+        <member name="M:VPet.ModMaker.ViewModels.ModEdit.FoodAnimeEditVM.RemoveBackImage(VPet.ModMaker.Models.ModModel.FoodAnimeModel)">
+            <summary>
+            删除底层图片
+            </summary>
+            <param name="value">动画模型</param>
+        </member>
+        <member name="M:VPet.ModMaker.ViewModels.ModEdit.FoodAnimeEditVM.ClearBackImage(VPet.ModMaker.Models.ModModel.FoodAnimeModel)">
+            <summary>
+            清空底层图片
+            </summary>
+            <param name="value">动画模型</param>
+        </member>
+        <member name="M:VPet.ModMaker.ViewModels.ModEdit.FoodAnimeEditVM.ChangeBackImage(VPet.ModMaker.Models.ModModel.FoodAnimeModel)">
+            <summary>
+            替换底层图片
+            </summary>
+            <param name="value"></param>
+            <exception cref="T:System.NotImplementedException"></exception>
+        </member>
+        <member name="M:VPet.ModMaker.ViewModels.ModEdit.FoodAnimeEditVM.AddImages(HKW.HKWUtils.Observable.ObservableList{VPet.ModMaker.Models.ModModel.ImageModel},System.Collections.Generic.IEnumerable{System.String})">
+            <summary>
+            添加图片
+            </summary>
+            <param name="images">动画</param>
+            <param name="paths">路径</param>
+        </member>
+        <member name="M:VPet.ModMaker.ViewModels.ModEdit.FoodAnimeEditVM.Stop">
+            <summary>
+            停止播放
+            </summary>
+        </member>
+        <member name="M:VPet.ModMaker.ViewModels.ModEdit.FoodAnimeEditVM.Start">
+            <summary>
+            开始播放
+            </summary>
+        </member>
+        <member name="M:VPet.ModMaker.ViewModels.ModEdit.FoodAnimeEditVM.FrontPlay">
+            <summary>
+            顶层播放
+            </summary>
+        </member>
+        <member name="M:VPet.ModMaker.ViewModels.ModEdit.FoodAnimeEditVM.BackPlay">
+            <summary>
+            底层
+            </summary>
+        </member>
+        <member name="M:VPet.ModMaker.ViewModels.ModEdit.FoodAnimeEditVM.FoodPlay">
+            <summary>
+            食物
+            </summary>
+        </member>
+        <member name="M:VPet.ModMaker.ViewModels.ModEdit.FoodAnimeEditVM.Reset">
+            <summary>
+            重置
+            </summary>
+        </member>
+        <member name="P:VPet.ModMaker.ViewModels.ModEdit.FoodAnimeEditVM.ResetFoodImageCommand">
+            <inheritdoc cref="M:VPet.ModMaker.ViewModels.ModEdit.FoodAnimeEditVM.ResetFoodImage"/>
+        </member>
+        <member name="P:VPet.ModMaker.ViewModels.ModEdit.FoodAnimeEditVM.ChangeFoodImageCommand">
+            <inheritdoc cref="M:VPet.ModMaker.ViewModels.ModEdit.FoodAnimeEditVM.ChangeFoodImage"/>
+        </member>
+        <member name="P:VPet.ModMaker.ViewModels.ModEdit.FoodAnimeEditVM.AddAnimeCommand">
+            <inheritdoc cref="M:VPet.ModMaker.ViewModels.ModEdit.FoodAnimeEditVM.AddAnime"/>
+        </member>
+        <member name="P:VPet.ModMaker.ViewModels.ModEdit.FoodAnimeEditVM.RemoveAnimeCommand">
+            <inheritdoc cref="M:VPet.ModMaker.ViewModels.ModEdit.FoodAnimeEditVM.RemoveAnime(VPet.ModMaker.Models.ModModel.FoodAnimeModel)"/>
+        </member>
+        <member name="P:VPet.ModMaker.ViewModels.ModEdit.FoodAnimeEditVM.AddFrontImageCommand">
+            <inheritdoc cref="M:VPet.ModMaker.ViewModels.ModEdit.FoodAnimeEditVM.AddFrontImage(VPet.ModMaker.Models.ModModel.FoodAnimeModel)"/>
+        </member>
+        <member name="P:VPet.ModMaker.ViewModels.ModEdit.FoodAnimeEditVM.RemoveFrontImageCommand">
+            <inheritdoc cref="M:VPet.ModMaker.ViewModels.ModEdit.FoodAnimeEditVM.RemoveFrontImage(VPet.ModMaker.Models.ModModel.FoodAnimeModel)"/>
+        </member>
+        <member name="P:VPet.ModMaker.ViewModels.ModEdit.FoodAnimeEditVM.ClearFrontImageCommand">
+            <inheritdoc cref="M:VPet.ModMaker.ViewModels.ModEdit.FoodAnimeEditVM.ClearFrontImage(VPet.ModMaker.Models.ModModel.FoodAnimeModel)"/>
+        </member>
+        <member name="P:VPet.ModMaker.ViewModels.ModEdit.FoodAnimeEditVM.ChangeFrontImageCommand">
+            <inheritdoc cref="M:VPet.ModMaker.ViewModels.ModEdit.FoodAnimeEditVM.ChangeFrontImage(VPet.ModMaker.Models.ModModel.FoodAnimeModel)"/>
+        </member>
+        <member name="P:VPet.ModMaker.ViewModels.ModEdit.FoodAnimeEditVM.AddBackImageCommand">
+            <inheritdoc cref="M:VPet.ModMaker.ViewModels.ModEdit.FoodAnimeEditVM.AddBackImage(VPet.ModMaker.Models.ModModel.FoodAnimeModel)"/>
+        </member>
+        <member name="P:VPet.ModMaker.ViewModels.ModEdit.FoodAnimeEditVM.RemoveBackImageCommand">
+            <inheritdoc cref="M:VPet.ModMaker.ViewModels.ModEdit.FoodAnimeEditVM.RemoveBackImage(VPet.ModMaker.Models.ModModel.FoodAnimeModel)"/>
+        </member>
+        <member name="P:VPet.ModMaker.ViewModels.ModEdit.FoodAnimeEditVM.ClearBackImageCommand">
+            <inheritdoc cref="M:VPet.ModMaker.ViewModels.ModEdit.FoodAnimeEditVM.ClearBackImage(VPet.ModMaker.Models.ModModel.FoodAnimeModel)"/>
+        </member>
+        <member name="P:VPet.ModMaker.ViewModels.ModEdit.FoodAnimeEditVM.ChangeBackImageCommand">
+            <inheritdoc cref="M:VPet.ModMaker.ViewModels.ModEdit.FoodAnimeEditVM.ChangeBackImage(VPet.ModMaker.Models.ModModel.FoodAnimeModel)"/>
+        </member>
+        <member name="P:VPet.ModMaker.ViewModels.ModEdit.FoodAnimeEditVM.AddeFoodLocationCommand">
+            <inheritdoc cref="M:VPet.ModMaker.ViewModels.ModEdit.FoodAnimeEditVM.AddeFoodLocation(VPet.ModMaker.Models.ModModel.FoodAnimeModel)"/>
+        </member>
+        <member name="P:VPet.ModMaker.ViewModels.ModEdit.FoodAnimeEditVM.RemoveFoodLocationCommand">
+            <inheritdoc cref="M:VPet.ModMaker.ViewModels.ModEdit.FoodAnimeEditVM.RemoveFoodLocation(VPet.ModMaker.Models.ModModel.FoodAnimeModel)"/>
+        </member>
+        <member name="P:VPet.ModMaker.ViewModels.ModEdit.FoodAnimeEditVM.ClearFoodLocationCommand">
+            <inheritdoc cref="M:VPet.ModMaker.ViewModels.ModEdit.FoodAnimeEditVM.ClearFoodLocation(VPet.ModMaker.Models.ModModel.FoodAnimeModel)"/>
+        </member>
+        <member name="P:VPet.ModMaker.ViewModels.ModEdit.FoodAnimeEditVM.StopCommand">
+            <inheritdoc cref="M:VPet.ModMaker.ViewModels.ModEdit.FoodAnimeEditVM.Stop"/>
+        </member>
+        <member name="P:VPet.ModMaker.ViewModels.ModEdit.FoodAnimeEditVM.StartCommand">
+            <inheritdoc cref="M:VPet.ModMaker.ViewModels.ModEdit.FoodAnimeEditVM.Start"/>
+        </member>
+        <member name="M:VPet.ModMaker.ViewModels.ModEdit.FoodAnimeEditVM.InitializeReactiveObject">
+            <inheritdoc/>
+        </member>
+        <member name="T:VPet.ModMaker.ViewModels.ModEdit.SelectGraphTypeVM">
+            <summary>
+            选择图像类型视图模型
+            </summary>
+        </member>
+        <member name="M:VPet.ModMaker.ViewModels.ModEdit.SelectGraphTypeVM.#ctor">
+            <inheritdoc/>
+        </member>
+        <member name="P:VPet.ModMaker.ViewModels.ModEdit.SelectGraphTypeVM.CurrentPet">
+            <summary>
+            当前宠物
+            </summary>
+        </member>
+        <member name="P:VPet.ModMaker.ViewModels.ModEdit.SelectGraphTypeVM.GraphType">
+            <summary>
+            动画类型
+            </summary>
+        </member>
+        <member name="P:VPet.ModMaker.ViewModels.ModEdit.SelectGraphTypeVM.GraphTypes">
+            <summary>
+            动画类型列表
+            </summary>
+        </member>
+        <member name="P:VPet.ModMaker.ViewModels.ModEdit.SelectGraphTypeVM.AnimeName">
+            <summary>
+            动画名称
+            </summary>
+        </member>
+        <member name="P:VPet.ModMaker.ViewModels.ModEdit.SelectGraphTypeVM.HasNameAnime">
+            <summary>
+            具有动画名称
+            </summary>
+        </member>
+        <member name="M:VPet.ModMaker.ViewModels.ModEdit.SelectGraphTypeVM.InitializeReactiveObject">
+            <inheritdoc/>
+        </member>
+        <member name="T:VPet.ModMaker.ViewModels.ModEdit.ClickTextEditVM">
+            <summary>
+            点击文本视图模型
+            </summary>
+        </member>
+        <member name="M:VPet.ModMaker.ViewModels.ModEdit.ClickTextEditVM.#ctor">
+            <inheritdoc/>
+        </member>
+        <member name="P:VPet.ModMaker.ViewModels.ModEdit.ClickTextEditVM.ModInfo">
+            <summary>
+            模组信息
+            </summary>
+        </member>
+        <member name="P:VPet.ModMaker.ViewModels.ModEdit.ClickTextEditVM.ClickTexts">
+            <summary>
+            显示的点击文本
+            </summary>
+        </member>
+        <member name="P:VPet.ModMaker.ViewModels.ModEdit.ClickTextEditVM.Search">
+            <summary>
+            搜索
+            </summary>
+        </member>
+        <member name="P:VPet.ModMaker.ViewModels.ModEdit.ClickTextEditVM.SearchTargets">
+            <summary>
+            搜索目标
+            </summary>
+        </member>
+        <member name="P:VPet.ModMaker.ViewModels.ModEdit.ClickTextEditVM.I18nResource">
+            <summary>
+            I18n资源
+            </summary>
+        </member>
+        <member name="P:VPet.ModMaker.ViewModels.ModEdit.ClickTextEditVM.OldClickText">
+            <summary>
+            旧点击文本
+            </summary>
+        </member>
+        <member name="P:VPet.ModMaker.ViewModels.ModEdit.ClickTextEditVM.ClickText">
+            <summary>
+            点击文本
+            </summary>
+        </member>
+        <member name="M:VPet.ModMaker.ViewModels.ModEdit.ClickTextEditVM.Add">
+            <summary>
+            添加
+            </summary>
+        </member>
+        <member name="M:VPet.ModMaker.ViewModels.ModEdit.ClickTextEditVM.Edit(VPet.ModMaker.Models.ClickTextModel)">
+            <summary>
+            编辑
+            </summary>
+            <param name="model">模型</param>
+        </member>
+        <member name="M:VPet.ModMaker.ViewModels.ModEdit.ClickTextEditVM.Remove(System.Collections.IList)">
+            <summary>
+            删除
+            </summary>
+            <param name="list">列表</param>
+        </member>
+        <member name="M:VPet.ModMaker.ViewModels.ModEdit.ClickTextEditVM.Reset">
+            <summary>
+            重置
+            </summary>
+        </member>
+        <member name="M:VPet.ModMaker.ViewModels.ModEdit.ClickTextEditVM.Dispose(System.Boolean)">
+            <inheritdoc/>
+        </member>
+        <member name="P:VPet.ModMaker.ViewModels.ModEdit.ClickTextEditVM.AddCommand">
+            <inheritdoc cref="M:VPet.ModMaker.ViewModels.ModEdit.ClickTextEditVM.Add"/>
+        </member>
+        <member name="P:VPet.ModMaker.ViewModels.ModEdit.ClickTextEditVM.EditCommand">
+            <inheritdoc cref="M:VPet.ModMaker.ViewModels.ModEdit.ClickTextEditVM.Edit(VPet.ModMaker.Models.ClickTextModel)"/>
+        </member>
+        <member name="P:VPet.ModMaker.ViewModels.ModEdit.ClickTextEditVM.RemoveCommand">
+            <inheritdoc cref="M:VPet.ModMaker.ViewModels.ModEdit.ClickTextEditVM.Remove(System.Collections.IList)"/>
+        </member>
+        <member name="M:VPet.ModMaker.ViewModels.ModEdit.ClickTextEditVM.InitializeReactiveObject">
+            <inheritdoc/>
+        </member>
+        <member name="T:VPet.ModMaker.ViewModels.ModEdit.ClickTextSearchTarget">
+            <summary>
+            点击文本搜索目标
+            </summary>
+        </member>
+        <member name="F:VPet.ModMaker.ViewModels.ModEdit.ClickTextSearchTarget.ID">
+            <summary>
+            ID
+            </summary>
+        </member>
+        <member name="F:VPet.ModMaker.ViewModels.ModEdit.ClickTextSearchTarget.Text">
+            <summary>
+            文本
+            </summary>
+        </member>
+        <member name="F:VPet.ModMaker.ViewModels.ModEdit.ClickTextSearchTarget.Working">
+            <summary>
+            指定工作
+            </summary>
+        </member>
+        <member name="T:VPet.ModMaker.ViewModels.ModEdit.FoodEditVM">
+            <summary>
+            食物编辑视图模型
+            </summary>
+        </member>
+        <member name="M:VPet.ModMaker.ViewModels.ModEdit.FoodEditVM.#ctor">
+            <inheritdoc/>
+        </member>
+        <member name="P:VPet.ModMaker.ViewModels.ModEdit.FoodEditVM.ModInfo">
+            <summary>
+            模组信息
+            </summary>
+        </member>
+        <member name="P:VPet.ModMaker.ViewModels.ModEdit.FoodEditVM.Foods">
+            <summary>
+            食物
+            </summary>
+        </member>
+        <member name="P:VPet.ModMaker.ViewModels.ModEdit.FoodEditVM.Search">
+            <summary>
+            搜索
+            </summary>
+        </member>
+        <member name="P:VPet.ModMaker.ViewModels.ModEdit.FoodEditVM.SearchTargets">
+            <summary>
+            搜索目标
+            </summary>
+        </member>
+        <member name="P:VPet.ModMaker.ViewModels.ModEdit.FoodEditVM.OldFood">
+            <summary>
+            旧食物
+            </summary>
+        </member>
+        <member name="P:VPet.ModMaker.ViewModels.ModEdit.FoodEditVM.Food">
+            <summary>
+            食物
+            </summary>
+        </member>
+        <member name="M:VPet.ModMaker.ViewModels.ModEdit.FoodEditVM.SetReferencePrice(System.Double)">
+            <summary>
+            设置参考价格
+            </summary>
+            <param name="value">价格</param>
+        </member>
+        <member name="M:VPet.ModMaker.ViewModels.ModEdit.FoodEditVM.AddImage">
+            <summary>
+            添加图像
+            </summary>
+        </member>
+        <member name="M:VPet.ModMaker.ViewModels.ModEdit.FoodEditVM.ChangeImage">
+            <summary>
+            改变图像
+            </summary>
+        </member>
+        <member name="M:VPet.ModMaker.ViewModels.ModEdit.FoodEditVM.Add">
+            <summary>
+            添加
+            </summary>
+        </member>
+        <member name="M:VPet.ModMaker.ViewModels.ModEdit.FoodEditVM.Edit(VPet.ModMaker.Models.FoodModel)">
+            <summary>
+            编辑
+            </summary>
+            <param name="model">模型</param>
+        </member>
+        <member name="M:VPet.ModMaker.ViewModels.ModEdit.FoodEditVM.Remove(System.Collections.IList)">
+            <summary>
+            删除
+            </summary>
+            <param name="list">列表</param>
+        </member>
+        <member name="M:VPet.ModMaker.ViewModels.ModEdit.FoodEditVM.Reset">
+            <summary>
+            重置
+            </summary>
+        </member>
+        <member name="M:VPet.ModMaker.ViewModels.ModEdit.FoodEditVM.Dispose(System.Boolean)">
+            <inheritdoc/>
+        </member>
+        <member name="P:VPet.ModMaker.ViewModels.ModEdit.FoodEditVM.SetReferencePriceCommand">
+            <inheritdoc cref="M:VPet.ModMaker.ViewModels.ModEdit.FoodEditVM.SetReferencePrice(System.Double)"/>
+        </member>
+        <member name="P:VPet.ModMaker.ViewModels.ModEdit.FoodEditVM.SetReferencePriceForAllFoodCommand">
+            <inheritdoc cref="M:VPet.ModMaker.ViewModels.ModEdit.FoodEditVM.SetReferencePriceForAllFood"/>
+        </member>
+        <member name="P:VPet.ModMaker.ViewModels.ModEdit.FoodEditVM.AddImageCommand">
+            <inheritdoc cref="M:VPet.ModMaker.ViewModels.ModEdit.FoodEditVM.AddImage"/>
+        </member>
+        <member name="P:VPet.ModMaker.ViewModels.ModEdit.FoodEditVM.ChangeImageCommand">
+            <inheritdoc cref="M:VPet.ModMaker.ViewModels.ModEdit.FoodEditVM.ChangeImage"/>
+        </member>
+        <member name="P:VPet.ModMaker.ViewModels.ModEdit.FoodEditVM.AddCommand">
+            <inheritdoc cref="M:VPet.ModMaker.ViewModels.ModEdit.FoodEditVM.Add"/>
+        </member>
+        <member name="P:VPet.ModMaker.ViewModels.ModEdit.FoodEditVM.EditCommand">
+            <inheritdoc cref="M:VPet.ModMaker.ViewModels.ModEdit.FoodEditVM.Edit(VPet.ModMaker.Models.FoodModel)"/>
+        </member>
+        <member name="P:VPet.ModMaker.ViewModels.ModEdit.FoodEditVM.RemoveCommand">
+            <inheritdoc cref="M:VPet.ModMaker.ViewModels.ModEdit.FoodEditVM.Remove(System.Collections.IList)"/>
+        </member>
+        <member name="M:VPet.ModMaker.ViewModels.ModEdit.FoodEditVM.InitializeReactiveObject">
+            <inheritdoc/>
+        </member>
+        <member name="T:VPet.ModMaker.ViewModels.ModEdit.FoodSearchTarget">
+            <summary>
+            食物搜索目标
+            </summary>
+        </member>
+        <member name="F:VPet.ModMaker.ViewModels.ModEdit.FoodSearchTarget.ID">
+            <summary>
+            ID
+            </summary>
+        </member>
+        <member name="F:VPet.ModMaker.ViewModels.ModEdit.FoodSearchTarget.Name">
+            <summary>
+            名称
+            </summary>
+        </member>
+        <member name="F:VPet.ModMaker.ViewModels.ModEdit.FoodSearchTarget.Graph">
+            <summary>
+            指定动画
+            </summary>
+        </member>
+        <member name="T:VPet.ModMaker.ViewModels.ModEdit.I18nEditVM">
+            <summary>
+            I18n编辑
+            </summary>
+        </member>
+        <member name="M:VPet.ModMaker.ViewModels.ModEdit.I18nEditVM.#ctor(VPet.ModMaker.Models.ModInfoModel)">
+            <inheritdoc/>
+        </member>
+        <member name="P:VPet.ModMaker.ViewModels.ModEdit.I18nEditVM.ModInfo">
+            <summary>
+            模组信息
+            </summary>
+        </member>
+        <member name="P:VPet.ModMaker.ViewModels.ModEdit.I18nEditVM.CellEdit">
+            <summary>
+            单元格编辑
+            </summary>
+        </member>
+        <member name="P:VPet.ModMaker.ViewModels.ModEdit.I18nEditVM.Search">
+            <summary>
+            搜索
+            </summary>
+        </member>
+        <member name="P:VPet.ModMaker.ViewModels.ModEdit.I18nEditVM.I18nDatas">
+            <summary>
+            全部I18n资源
+            <para>
+            (ID, (CultureName, Value))
+            </para>
+            </summary>
+        </member>
+        <member name="P:VPet.ModMaker.ViewModels.ModEdit.I18nEditVM.SearchTargets">
+            <summary>
+            搜索目标列表
+            </summary>
+        </member>
+        <member name="E:VPet.ModMaker.ViewModels.ModEdit.I18nEditVM.CultureChanged">
+            <summary>
+            文化改变事件
+            </summary>
+        </member>
+        <member name="M:VPet.ModMaker.ViewModels.ModEdit.I18nEditVM.InitializeReactiveObject">
+            <inheritdoc/>
+        </member>
+        <member name="T:VPet.ModMaker.ViewModels.ModEdit.CultureChangedEventHandler">
+            <summary>
+            文化改变
+            </summary>
+            <param name="oldCulture">旧文化</param>
+            <param name="newCulture">新文化</param>
+        </member>
+        <member name="T:VPet.ModMaker.ViewModels.ModEdit.LowTextEditVM">
+            <summary>
+            低状态文本编辑视图模型
+            </summary>
+        </member>
+        <member name="M:VPet.ModMaker.ViewModels.ModEdit.LowTextEditVM.#ctor">
+            <inheritdoc/>
+        </member>
+        <member name="P:VPet.ModMaker.ViewModels.ModEdit.LowTextEditVM.ModInfo">
+            <summary>
+            模组信息
+            </summary>
+        </member>
+        <member name="P:VPet.ModMaker.ViewModels.ModEdit.LowTextEditVM.LowTexts">
+            <summary>
+            低状态文本
+            </summary>
+        </member>
+        <member name="P:VPet.ModMaker.ViewModels.ModEdit.LowTextEditVM.Search">
+            <summary>
+            搜索
+            </summary>
+        </member>
+        <member name="P:VPet.ModMaker.ViewModels.ModEdit.LowTextEditVM.SearchTargets">
+            <summary>
+            搜索目标
+            </summary>
+        </member>
+        <member name="P:VPet.ModMaker.ViewModels.ModEdit.LowTextEditVM.OldLowText">
+            <summary>
+            旧低状态文本
+            </summary>
+        </member>
+        <member name="P:VPet.ModMaker.ViewModels.ModEdit.LowTextEditVM.LowText">
+            <summary>
+            低状态文本
+            </summary>
+        </member>
+        <member name="M:VPet.ModMaker.ViewModels.ModEdit.LowTextEditVM.Add">
+            <summary>
+            添加
+            </summary>
+        </member>
+        <member name="M:VPet.ModMaker.ViewModels.ModEdit.LowTextEditVM.Edit(VPet.ModMaker.Models.LowTextModel)">
+            <summary>
+            编辑
+            </summary>
+            <param name="model">模型</param>
+        </member>
+        <member name="M:VPet.ModMaker.ViewModels.ModEdit.LowTextEditVM.Remove(System.Collections.IList)">
+            <summary>
+            删除
+            </summary>
+            <param name="list">列表</param>
+        </member>
+        <member name="M:VPet.ModMaker.ViewModels.ModEdit.LowTextEditVM.Reset">
+            <summary>
+            重置
+            </summary>
+        </member>
+        <member name="M:VPet.ModMaker.ViewModels.ModEdit.LowTextEditVM.Dispose(System.Boolean)">
+            <inheritdoc/>
+        </member>
+        <member name="P:VPet.ModMaker.ViewModels.ModEdit.LowTextEditVM.AddCommand">
+            <inheritdoc cref="M:VPet.ModMaker.ViewModels.ModEdit.LowTextEditVM.Add"/>
+        </member>
+        <member name="P:VPet.ModMaker.ViewModels.ModEdit.LowTextEditVM.EditCommand">
+            <inheritdoc cref="M:VPet.ModMaker.ViewModels.ModEdit.LowTextEditVM.Edit(VPet.ModMaker.Models.LowTextModel)"/>
+        </member>
+        <member name="P:VPet.ModMaker.ViewModels.ModEdit.LowTextEditVM.RemoveCommand">
+            <inheritdoc cref="M:VPet.ModMaker.ViewModels.ModEdit.LowTextEditVM.Remove(System.Collections.IList)"/>
+        </member>
+        <member name="M:VPet.ModMaker.ViewModels.ModEdit.LowTextEditVM.InitializeReactiveObject">
+            <inheritdoc/>
+        </member>
+        <member name="T:VPet.ModMaker.ViewModels.ModEdit.LowTextSearchTarget">
+            <summary>
+            低状态文本搜索目标
+            </summary>
+        </member>
+        <member name="F:VPet.ModMaker.ViewModels.ModEdit.LowTextSearchTarget.ID">
+            <summary>
+            ID
+            </summary>
+        </member>
+        <member name="F:VPet.ModMaker.ViewModels.ModEdit.LowTextSearchTarget.Text">
+            <summary>
+            文本
+            </summary>
+        </member>
+        <member name="T:VPet.ModMaker.ViewModels.ModEdit.MoveEditVM">
+            <summary>
+            移动编辑视图模型
+            </summary>
+        </member>
+        <member name="M:VPet.ModMaker.ViewModels.ModEdit.MoveEditVM.#ctor">
+            <inheritdoc/>
+        </member>
+        <member name="P:VPet.ModMaker.ViewModels.ModEdit.MoveEditVM.ModInfo">
+            <summary>
+            模组信息
+            </summary>
+        </member>
+        <member name="P:VPet.ModMaker.ViewModels.ModEdit.MoveEditVM.Moves">
+            <summary>
+            全部移动
+            </summary>
+        </member>
+        <member name="P:VPet.ModMaker.ViewModels.ModEdit.MoveEditVM.CurrentPet">
+            <summary>
+            当前宠物
+            </summary>
+        </member>
+        <member name="P:VPet.ModMaker.ViewModels.ModEdit.MoveEditVM.Search">
+            <summary>
+            搜索
+            </summary>
+        </member>
+        <member name="P:VPet.ModMaker.ViewModels.ModEdit.MoveEditVM.OldMove">
+            <summary>
+            旧移动
+            </summary>
+        </member>
+        <member name="P:VPet.ModMaker.ViewModels.ModEdit.MoveEditVM.Move">
+            <summary>
+            移动
+            </summary>
+        </member>
+        <member name="P:VPet.ModMaker.ViewModels.ModEdit.MoveEditVM.Image">
+            <summary>
+            图像
+            </summary>
+        </member>
+        <member name="M:VPet.ModMaker.ViewModels.ModEdit.MoveEditVM.AddImage">
+            <summary>
+            添加图片
+            </summary>
+        </member>
+        <member name="M:VPet.ModMaker.ViewModels.ModEdit.MoveEditVM.ChangeImage">
+            <summary>
+            改变图片
+            </summary>
+        </member>
+        <member name="M:VPet.ModMaker.ViewModels.ModEdit.MoveEditVM.Add">
+            <summary>
+            添加
+            </summary>
+        </member>
+        <member name="M:VPet.ModMaker.ViewModels.ModEdit.MoveEditVM.Edit(VPet.ModMaker.Models.MoveModel)">
+            <summary>
+            编辑
+            </summary>
+            <param name="model">模型</param>
+        </member>
+        <member name="M:VPet.ModMaker.ViewModels.ModEdit.MoveEditVM.Remove(System.Collections.IList)">
+            <summary>
+            删除
+            </summary>
+            <param name="list">列表</param>
+        </member>
+        <member name="M:VPet.ModMaker.ViewModels.ModEdit.MoveEditVM.Reset">
+            <summary>
+            重置
+            </summary>
+        </member>
+        <member name="M:VPet.ModMaker.ViewModels.ModEdit.MoveEditVM.Dispose(System.Boolean)">
+            <inheritdoc/>
+        </member>
+        <member name="P:VPet.ModMaker.ViewModels.ModEdit.MoveEditVM.AddImageCommand">
+            <inheritdoc cref="M:VPet.ModMaker.ViewModels.ModEdit.MoveEditVM.AddImage"/>
+        </member>
+        <member name="P:VPet.ModMaker.ViewModels.ModEdit.MoveEditVM.ChangeImageCommand">
+            <inheritdoc cref="M:VPet.ModMaker.ViewModels.ModEdit.MoveEditVM.ChangeImage"/>
+        </member>
+        <member name="P:VPet.ModMaker.ViewModels.ModEdit.MoveEditVM.AddCommand">
+            <inheritdoc cref="M:VPet.ModMaker.ViewModels.ModEdit.MoveEditVM.Add"/>
+        </member>
+        <member name="P:VPet.ModMaker.ViewModels.ModEdit.MoveEditVM.EditCommand">
+            <inheritdoc cref="M:VPet.ModMaker.ViewModels.ModEdit.MoveEditVM.Edit(VPet.ModMaker.Models.MoveModel)"/>
+        </member>
+        <member name="P:VPet.ModMaker.ViewModels.ModEdit.MoveEditVM.RemoveCommand">
+            <inheritdoc cref="M:VPet.ModMaker.ViewModels.ModEdit.MoveEditVM.Remove(System.Collections.IList)"/>
+        </member>
+        <member name="M:VPet.ModMaker.ViewModels.ModEdit.MoveEditVM.InitializeReactiveObject">
+            <inheritdoc/>
+        </member>
+        <member name="T:VPet.ModMaker.ViewModels.ModEdit.PetEditVM">
+            <summary>
+            宠物编辑视图模型
+            </summary>
+        </member>
+        <member name="M:VPet.ModMaker.ViewModels.ModEdit.PetEditVM.#ctor">
+            <inheritdoc/>
+        </member>
+        <member name="P:VPet.ModMaker.ViewModels.ModEdit.PetEditVM.ModInfo">
+            <summary>
+            模组信息
+            </summary>
+        </member>
+        <member name="P:VPet.ModMaker.ViewModels.ModEdit.PetEditVM.Pets">
+            <summary>
+            宠物
+            </summary>
+        </member>
+        <member name="P:VPet.ModMaker.ViewModels.ModEdit.PetEditVM.Search">
+            <summary>
+            搜索
+            </summary>
+        </member>
+        <member name="P:VPet.ModMaker.ViewModels.ModEdit.PetEditVM.SearchTargets">
+            <summary>
+            搜索目标
+            </summary>
+        </member>
+        <member name="P:VPet.ModMaker.ViewModels.ModEdit.PetEditVM.ShowMainPet">
+            <summary>
+            显示本体宠物
+            </summary>
+        </member>
+        <member name="P:VPet.ModMaker.ViewModels.ModEdit.PetEditVM.I18nResource">
+            <summary>
+            I18n资源
+            </summary>
+        </member>
+        <member name="P:VPet.ModMaker.ViewModels.ModEdit.PetEditVM.OldPet">
+            <summary>
+            旧宠物
+            </summary>
+        </member>
+        <member name="P:VPet.ModMaker.ViewModels.ModEdit.PetEditVM.Pet">
+            <summary>
+            宠物
+            </summary>
+        </member>
+        <member name="P:VPet.ModMaker.ViewModels.ModEdit.PetEditVM.Image">
+            <summary>
+            图像
+            </summary>
+        </member>
+        <member name="P:VPet.ModMaker.ViewModels.ModEdit.PetEditVM.LengthRatio">
+            <summary>
+            比例
+            </summary>
+        </member>
+        <member name="M:VPet.ModMaker.ViewModels.ModEdit.PetEditVM.AddImage">
+            <summary>
+            添加图像
+            </summary>
+        </member>
+        <member name="M:VPet.ModMaker.ViewModels.ModEdit.PetEditVM.ChangeImage">
+            <summary>
+            改变图像
+            </summary>
+        </member>
+        <member name="M:VPet.ModMaker.ViewModels.ModEdit.PetEditVM.Add">
+            <summary>
+            添加
+            </summary>
+        </member>
+        <member name="M:VPet.ModMaker.ViewModels.ModEdit.PetEditVM.Edit(VPet.ModMaker.Models.PetModel)">
+            <summary>
+            编辑
+            </summary>
+            <param name="model">模型</param>
+        </member>
+        <member name="M:VPet.ModMaker.ViewModels.ModEdit.PetEditVM.Remove(System.Collections.IList)">
+            <summary>
+            删除
+            </summary>
+            <param name="list">列表</param>
+        </member>
+        <member name="M:VPet.ModMaker.ViewModels.ModEdit.PetEditVM.Reset">
+            <summary>
+            重置
+            </summary>
+        </member>
+        <member name="M:VPet.ModMaker.ViewModels.ModEdit.PetEditVM.Dispose(System.Boolean)">
+            <inheritdoc/>
+        </member>
+        <member name="P:VPet.ModMaker.ViewModels.ModEdit.PetEditVM.AddImageCommand">
+            <inheritdoc cref="M:VPet.ModMaker.ViewModels.ModEdit.PetEditVM.AddImage"/>
+        </member>
+        <member name="P:VPet.ModMaker.ViewModels.ModEdit.PetEditVM.ChangeImageCommand">
+            <inheritdoc cref="M:VPet.ModMaker.ViewModels.ModEdit.PetEditVM.ChangeImage"/>
+        </member>
+        <member name="P:VPet.ModMaker.ViewModels.ModEdit.PetEditVM.AddCommand">
+            <inheritdoc cref="M:VPet.ModMaker.ViewModels.ModEdit.PetEditVM.Add"/>
+        </member>
+        <member name="P:VPet.ModMaker.ViewModels.ModEdit.PetEditVM.EditCommand">
+            <inheritdoc cref="M:VPet.ModMaker.ViewModels.ModEdit.PetEditVM.Edit(VPet.ModMaker.Models.PetModel)"/>
+        </member>
+        <member name="P:VPet.ModMaker.ViewModels.ModEdit.PetEditVM.RemoveCommand">
+            <inheritdoc cref="M:VPet.ModMaker.ViewModels.ModEdit.PetEditVM.Remove(System.Collections.IList)"/>
+        </member>
+        <member name="M:VPet.ModMaker.ViewModels.ModEdit.PetEditVM.InitializeReactiveObject">
+            <inheritdoc/>
+        </member>
+        <member name="T:VPet.ModMaker.ViewModels.ModEdit.PetSearchTarget">
+            <summary>
+            宠物搜索目标
+            </summary>
+        </member>
+        <member name="F:VPet.ModMaker.ViewModels.ModEdit.PetSearchTarget.ID">
+            <summary>
+            ID
+            </summary>
+        </member>
+        <member name="F:VPet.ModMaker.ViewModels.ModEdit.PetSearchTarget.Name">
+            <summary>
+            名称
+            </summary>
+        </member>
+        <member name="F:VPet.ModMaker.ViewModels.ModEdit.PetSearchTarget.PetName">
+            <summary>
+            宠物名称
+            </summary>
+        </member>
+        <member name="F:VPet.ModMaker.ViewModels.ModEdit.PetSearchTarget.Description">
+            <summary>
+            描述
+            </summary>
+        </member>
+        <member name="F:VPet.ModMaker.ViewModels.ModEdit.PetSearchTarget.Tags">
+            <summary>
+            标签
+            </summary>
+        </member>
+        <member name="T:VPet.ModMaker.ViewModels.ModEdit.SaveTranslationModVM">
+            <summary>
+            保持为翻译模组视图模型
+            </summary>
+        </member>
+        <member name="M:VPet.ModMaker.ViewModels.ModEdit.SaveTranslationModVM.#ctor(VPet.ModMaker.Models.ModInfoModel)">
+            <inheritdoc/>
+        </member>
+        <member name="P:VPet.ModMaker.ViewModels.ModEdit.SaveTranslationModVM.CheckCultures">
+            <summary>
+            文化选择组
+            </summary>
+        </member>
+        <member name="P:VPet.ModMaker.ViewModels.ModEdit.SaveTranslationModVM.ModInfo">
+            <summary>
+            模组信息
+            </summary>
+        </member>
+        <member name="M:VPet.ModMaker.ViewModels.ModEdit.SaveTranslationModVM.Save">
+            <summary>
+            保存
+            </summary>
+        </member>
+        <member name="P:VPet.ModMaker.ViewModels.ModEdit.SaveTranslationModVM.SaveCommand">
+            <inheritdoc cref="M:VPet.ModMaker.ViewModels.ModEdit.SaveTranslationModVM.Save"/>
+        </member>
+        <member name="M:VPet.ModMaker.ViewModels.ModEdit.SaveTranslationModVM.InitializeReactiveObject">
+            <inheritdoc/>
+        </member>
+        <member name="T:VPet.ModMaker.ViewModels.ModEdit.SelectTextEditVM">
+            <summary>
+            选择文本编辑视图模型
+            </summary>
+        </member>
+        <member name="M:VPet.ModMaker.ViewModels.ModEdit.SelectTextEditVM.#ctor">
+            <inheritdoc/>
+        </member>
+        <member name="P:VPet.ModMaker.ViewModels.ModEdit.SelectTextEditVM.ModInfo">
+            <summary>
+            模组信息
+            </summary>
+        </member>
+        <member name="P:VPet.ModMaker.ViewModels.ModEdit.SelectTextEditVM.SelectTexts">
+            <summary>
+            全部选择文本
+            </summary>
+        </member>
+        <member name="P:VPet.ModMaker.ViewModels.ModEdit.SelectTextEditVM.Search">
+            <summary>
+            搜索
+            </summary>
+        </member>
+        <member name="P:VPet.ModMaker.ViewModels.ModEdit.SelectTextEditVM.SearchTargets">
+            <summary>
+            搜索目标
+            </summary>
+        </member>
+        <member name="P:VPet.ModMaker.ViewModels.ModEdit.SelectTextEditVM.OldSelectText">
+            <summary>
+            旧选择文本
+            </summary>
+        </member>
+        <member name="P:VPet.ModMaker.ViewModels.ModEdit.SelectTextEditVM.SelectText">
+            <summary>
+            选择文本
+            </summary>
+        </member>
+        <member name="M:VPet.ModMaker.ViewModels.ModEdit.SelectTextEditVM.Add">
+            <summary>
+            添加
+            </summary>
+        </member>
+        <member name="M:VPet.ModMaker.ViewModels.ModEdit.SelectTextEditVM.Edit(VPet.ModMaker.Models.SelectTextModel)">
+            <summary>
+            编辑
+            </summary>
+            <param name="model">模型</param>
+        </member>
+        <member name="M:VPet.ModMaker.ViewModels.ModEdit.SelectTextEditVM.Remove(System.Collections.IList)">
+            <summary>
+            删除
+            </summary>
+            <param name="list">列表</param>
+        </member>
+        <member name="M:VPet.ModMaker.ViewModels.ModEdit.SelectTextEditVM.Reset">
+            <summary>
+            重置
+            </summary>
+        </member>
+        <member name="M:VPet.ModMaker.ViewModels.ModEdit.SelectTextEditVM.Dispose(System.Boolean)">
+            <inheritdoc/>
+        </member>
+        <member name="P:VPet.ModMaker.ViewModels.ModEdit.SelectTextEditVM.AddCommand">
+            <inheritdoc cref="M:VPet.ModMaker.ViewModels.ModEdit.SelectTextEditVM.Add"/>
+        </member>
+        <member name="P:VPet.ModMaker.ViewModels.ModEdit.SelectTextEditVM.EditCommand">
+            <inheritdoc cref="M:VPet.ModMaker.ViewModels.ModEdit.SelectTextEditVM.Edit(VPet.ModMaker.Models.SelectTextModel)"/>
+        </member>
+        <member name="P:VPet.ModMaker.ViewModels.ModEdit.SelectTextEditVM.RemoveCommand">
+            <inheritdoc cref="M:VPet.ModMaker.ViewModels.ModEdit.SelectTextEditVM.Remove(System.Collections.IList)"/>
+        </member>
+        <member name="M:VPet.ModMaker.ViewModels.ModEdit.SelectTextEditVM.InitializeReactiveObject">
+            <inheritdoc/>
+        </member>
+        <member name="T:VPet.ModMaker.ViewModels.ModEdit.SelectTextSearchTarget">
+            <summary>
+            选择文本搜索目标
+            </summary>
+        </member>
+        <member name="F:VPet.ModMaker.ViewModels.ModEdit.SelectTextSearchTarget.ID">
+            <summary>
+            ID
+            </summary>
+        </member>
+        <member name="F:VPet.ModMaker.ViewModels.ModEdit.SelectTextSearchTarget.Text">
+            <summary>
+            文本
+            </summary>
+        </member>
+        <member name="F:VPet.ModMaker.ViewModels.ModEdit.SelectTextSearchTarget.Tags">
+            <summary>
+            标记
+            </summary>
+        </member>
+        <member name="F:VPet.ModMaker.ViewModels.ModEdit.SelectTextSearchTarget.ToTags">
+            <summary>
+            目标标记
+            </summary>
+        </member>
+        <member name="T:VPet.ModMaker.ViewModels.ModEdit.WorkEditVM">
+            <summary>
+            工作编辑视图模型
+            </summary>
+        </member>
+        <member name="M:VPet.ModMaker.ViewModels.ModEdit.WorkEditVM.#ctor">
+            <inheritdoc/>
+        </member>
+        <member name="P:VPet.ModMaker.ViewModels.ModEdit.WorkEditVM.ModInfo">
+            <summary>
+            模组信息
+            </summary>
+        </member>
+        <member name="P:VPet.ModMaker.ViewModels.ModEdit.WorkEditVM.I18nResource">
+            <summary>
+            I18n资源
+            </summary>
+        </member>
+        <member name="P:VPet.ModMaker.ViewModels.ModEdit.WorkEditVM.CurrentPet">
+            <summary>
+            当前宠物
+            </summary>
+        </member>
+        <member name="P:VPet.ModMaker.ViewModels.ModEdit.WorkEditVM.Works">
+            <summary>
+            全部工作
+            </summary>
+        </member>
+        <member name="P:VPet.ModMaker.ViewModels.ModEdit.WorkEditVM.Search">
+            <summary>
+            搜索
+            </summary>
+        </member>
+        <member name="P:VPet.ModMaker.ViewModels.ModEdit.WorkEditVM.SearchTargets">
+            <summary>
+            搜索目标
+            </summary>
+        </member>
+        <member name="P:VPet.ModMaker.ViewModels.ModEdit.WorkEditVM.OldWork">
+            <summary>
+            旧工作
+            </summary>
+        </member>
+        <member name="P:VPet.ModMaker.ViewModels.ModEdit.WorkEditVM.Work">
+            <summary>
+            工作
+            </summary>
+        </member>
+        <member name="P:VPet.ModMaker.ViewModels.ModEdit.WorkEditVM.LengthRatio">
+            <summary>
+            比例
+            </summary>
+        </member>
+        <member name="P:VPet.ModMaker.ViewModels.ModEdit.WorkEditVM.Image">
+            <summary>
+            图片
+            </summary>
+        </member>
+        <member name="M:VPet.ModMaker.ViewModels.ModEdit.WorkEditVM.FixOverLoad">
+            <summary>
+            修复超模
+            </summary>
+        </member>
+        <member name="M:VPet.ModMaker.ViewModels.ModEdit.WorkEditVM.FixOverLoadForAllWork">
+            <summary>
+            为所有工作修复超模
+            </summary>
+        </member>
+        <member name="M:VPet.ModMaker.ViewModels.ModEdit.WorkEditVM.AddImage">
+            <summary>
+            添加图像
+            </summary>
+        </member>
+        <member name="M:VPet.ModMaker.ViewModels.ModEdit.WorkEditVM.ChangeImage">
+            <summary>
+            改变图像
+            </summary>
+        </member>
+        <member name="M:VPet.ModMaker.ViewModels.ModEdit.WorkEditVM.SetGraphImage(VPet.ModMaker.Models.WorkModel)">
+            <summary>
+            设置图片
+            </summary>
+            <param name="workModel">工作模型</param>
+        </member>
+        <member name="M:VPet.ModMaker.ViewModels.ModEdit.WorkEditVM.Add">
+            <summary>
+            添加
+            </summary>
+        </member>
+        <member name="M:VPet.ModMaker.ViewModels.ModEdit.WorkEditVM.Edit(VPet.ModMaker.Models.WorkModel)">
+            <summary>
+            编辑
+            </summary>
+            <param name="model">模型</param>
+        </member>
+        <member name="M:VPet.ModMaker.ViewModels.ModEdit.WorkEditVM.Remove(System.Collections.IList)">
+            <summary>
+            删除
+            </summary>
+            <param name="list">列表</param>
+        </member>
+        <member name="M:VPet.ModMaker.ViewModels.ModEdit.WorkEditVM.Reset">
+            <summary>
+            重置
+            </summary>
+        </member>
+        <member name="M:VPet.ModMaker.ViewModels.ModEdit.WorkEditVM.Dispose(System.Boolean)">
+            <inheritdoc/>
+        </member>
+        <member name="P:VPet.ModMaker.ViewModels.ModEdit.WorkEditVM.FixOverLoadCommand">
+            <inheritdoc cref="M:VPet.ModMaker.ViewModels.ModEdit.WorkEditVM.FixOverLoad"/>
+        </member>
+        <member name="P:VPet.ModMaker.ViewModels.ModEdit.WorkEditVM.FixOverLoadForAllWorkCommand">
+            <inheritdoc cref="M:VPet.ModMaker.ViewModels.ModEdit.WorkEditVM.FixOverLoadForAllWork"/>
+        </member>
+        <member name="P:VPet.ModMaker.ViewModels.ModEdit.WorkEditVM.AddImageCommand">
+            <inheritdoc cref="M:VPet.ModMaker.ViewModels.ModEdit.WorkEditVM.AddImage"/>
+        </member>
+        <member name="P:VPet.ModMaker.ViewModels.ModEdit.WorkEditVM.ChangeImageCommand">
+            <inheritdoc cref="M:VPet.ModMaker.ViewModels.ModEdit.WorkEditVM.ChangeImage"/>
+        </member>
+        <member name="P:VPet.ModMaker.ViewModels.ModEdit.WorkEditVM.AddCommand">
+            <inheritdoc cref="M:VPet.ModMaker.ViewModels.ModEdit.WorkEditVM.Add"/>
+        </member>
+        <member name="P:VPet.ModMaker.ViewModels.ModEdit.WorkEditVM.EditCommand">
+            <inheritdoc cref="M:VPet.ModMaker.ViewModels.ModEdit.WorkEditVM.Edit(VPet.ModMaker.Models.WorkModel)"/>
+        </member>
+        <member name="P:VPet.ModMaker.ViewModels.ModEdit.WorkEditVM.RemoveCommand">
+            <inheritdoc cref="M:VPet.ModMaker.ViewModels.ModEdit.WorkEditVM.Remove(System.Collections.IList)"/>
+        </member>
+        <member name="M:VPet.ModMaker.ViewModels.ModEdit.WorkEditVM.InitializeReactiveObject">
+            <inheritdoc/>
+        </member>
+        <member name="T:VPet.ModMaker.ViewModels.ModEdit.WorkSearchTarget">
+            <summary>
+            工作搜索目标
+            </summary>
+        </member>
+        <member name="F:VPet.ModMaker.ViewModels.ModEdit.WorkSearchTarget.ID">
+            <summary>
+            ID
+            </summary>
+        </member>
+        <member name="F:VPet.ModMaker.ViewModels.ModEdit.WorkSearchTarget.Graph">
+            <summary>
+            指定图像
+            </summary>
+        </member>
+        <member name="T:VPet.ModMaker.ViewModels.ModMakerVM">
+            <summary>
+            模组制作器视图模型
+            </summary>
+        </member>
+        <member name="P:VPet.ModMaker.ViewModels.ModMakerVM.DialogService">
+            <summary>
+            对话框服务
+            </summary>
+        </member>
+        <member name="M:VPet.ModMaker.ViewModels.ModMakerVM.#ctor">
+            <inheritdoc/>
+        </member>
+        <member name="P:VPet.ModMaker.ViewModels.ModMakerVM.ModInfo">
+            <summary>
+            当前模组
+            </summary>
+        </member>
+        <member name="P:VPet.ModMaker.ViewModels.ModMakerVM.Search">
+            <summary>
+            历史搜索文本
+            </summary>
+        </member>
+        <member name="P:VPet.ModMaker.ViewModels.ModMakerVM.Histories">
+            <summary>
+            历史
+            </summary>
+        </member>
+        <member name="M:VPet.ModMaker.ViewModels.ModMakerVM.RemoveHistory(VPet.ModMaker.Models.ModMakeHistory)">
+            <summary>
+            删除历史
+            </summary>
+            <param name="value">历史</param>
+        </member>
+        <member name="M:VPet.ModMaker.ViewModels.ModMakerVM.LoadHistory(System.String)">
+            <summary>
+            载入历史
+            </summary>
+        </member>
+        <member name="M:VPet.ModMaker.ViewModels.ModMakerVM.SaveHistory(System.String)">
+            <summary>
+            保存历史
+            </summary>
+        </member>
+        <member name="M:VPet.ModMaker.ViewModels.ModMakerVM.AddHistory(VPet.ModMaker.Models.ModInfoModel)">
+            <summary>
+            添加历史
+            </summary>
+            <param name="modInfo">模组信息</param>
+        </member>
+        <member name="M:VPet.ModMaker.ViewModels.ModMakerVM.AddHistory(System.String)">
+            <summary>
+            添加历史
+            </summary>
+            <param name="modPath">模组路径</param>
+        </member>
+        <member name="M:VPet.ModMaker.ViewModels.ModMakerVM.CreateNewMod">
+            <summary>
+            创建新模组
+            </summary>
+        </member>
+        <member name="M:VPet.ModMaker.ViewModels.ModMakerVM.EditMod(VPet.ModMaker.Models.ModInfoModel)">
+            <summary>
+            编辑模组
+            </summary>
+            <param name="modInfo">模组信息</param>
+        </member>
+        <member name="M:VPet.ModMaker.ViewModels.ModMakerVM.LoadModFromPath">
+            <summary>
+            从文件载入模组
+            </summary>
+        </member>
+        <member name="M:VPet.ModMaker.ViewModels.ModMakerVM.LoadHistory(VPet.ModMaker.Models.ModMakeHistory)">
+            <summary>
+            载入历史
+            </summary>
+            <param name="history">历史</param>
+        </member>
+        <member name="M:VPet.ModMaker.ViewModels.ModMakerVM.LoadMod(System.String)">
+            <summary>
+            载入模组
+            </summary>
+            <param name="directory">目录</param>
+        </member>
+        <member name="M:VPet.ModMaker.ViewModels.ModMakerVM.OpenModPath(VPet.ModMaker.Models.ModMakeHistory)">
+            <summary>
+            打开模组文件夹
+            </summary>
+            <param name="history"></param>
+        </member>
+        <member name="M:VPet.ModMaker.ViewModels.ModMakerVM.OpenModMakerPath(VPet.ModMaker.Models.ModMakeHistory)">
+            <summary>
+            打开模组文件夹
+            </summary>
+            <param name="history"></param>
+        </member>
+        <member name="F:VPet.ModMaker.ViewModels.ModMakerVM.WikiLink">
+            <summary>
+            Wiki链接
+            </summary>
+        </member>
+        <member name="M:VPet.ModMaker.ViewModels.ModMakerVM.Dispose(System.Boolean)">
+            <inheritdoc/>
+        </member>
+        <member name="P:VPet.ModMaker.ViewModels.ModMakerVM.RemoveHistoryCommand">
+            <inheritdoc cref="M:VPet.ModMaker.ViewModels.ModMakerVM.RemoveHistory(VPet.ModMaker.Models.ModMakeHistory)"/>
+        </member>
+        <member name="P:VPet.ModMaker.ViewModels.ModMakerVM.ClearHistoryCommand">
+            <inheritdoc cref="M:VPet.ModMaker.ViewModels.ModMakerVM.ClearHistory"/>
+        </member>
+        <member name="P:VPet.ModMaker.ViewModels.ModMakerVM.CreateNewModCommand">
+            <inheritdoc cref="M:VPet.ModMaker.ViewModels.ModMakerVM.CreateNewMod"/>
+        </member>
+        <member name="P:VPet.ModMaker.ViewModels.ModMakerVM.LoadModFromPathCommand">
+            <inheritdoc cref="M:VPet.ModMaker.ViewModels.ModMakerVM.LoadModFromPath"/>
+        </member>
+        <member name="P:VPet.ModMaker.ViewModels.ModMakerVM.OpenModPathCommand">
+            <inheritdoc cref="M:VPet.ModMaker.ViewModels.ModMakerVM.OpenModPath(VPet.ModMaker.Models.ModMakeHistory)"/>
+        </member>
+        <member name="P:VPet.ModMaker.ViewModels.ModMakerVM.OpenModMakerPathCommand">
+            <inheritdoc cref="M:VPet.ModMaker.ViewModels.ModMakerVM.OpenModMakerPath(VPet.ModMaker.Models.ModMakeHistory)"/>
+        </member>
+        <member name="P:VPet.ModMaker.ViewModels.ModMakerVM.OpenWikiLinkCommand">
+            <inheritdoc cref="M:VPet.ModMaker.ViewModels.ModMakerVM.OpenWikiLink"/>
+        </member>
+        <member name="M:VPet.ModMaker.ViewModels.ModMakerVM.InitializeReactiveObject">
+            <inheritdoc/>
+        </member>
+        <member name="T:VPet.ModMaker.ViewModels.ViewModelBase">
+            <summary>
+            视图模型基类
+            </summary>
+        </member>
+        <member name="M:VPet.ModMaker.ViewModels.ViewModelBase.InitializeReactiveObject">
+            <inheritdoc/>
+        </member>
+        <member name="T:VPet.ModMaker.Views.ModEdit.ModEditWindow">
+            <summary>
+            winModInfo.xaml 的交互逻辑
+            </summary>
+            <summary>
+            ModEditWindow
+            </summary>
+        </member>
+        <member name="M:VPet.ModMaker.Views.ModEdit.ModEditWindow.#ctor">
+            <inheritdoc/>
+        </member>
+        <member name="P:VPet.ModMaker.Views.ModEdit.ModEditWindow.Disposables">
+            <summary>
+            处理列表
+            </summary>
+        </member>
+        <member name="P:VPet.ModMaker.Views.ModEdit.ModEditWindow.ViewModel">
+            <summary>
+            视图模型
+            </summary>
+        </member>
+        <member name="P:VPet.ModMaker.Views.ModEdit.ModEditWindow.LocatePageByType">
+            <inheritdoc/>
+        </member>
+        <member name="P:VPet.ModMaker.Views.ModEdit.ModEditWindow.PageByType">
+            <inheritdoc/>
+        </member>
+        <member name="M:VPet.ModMaker.Views.ModEdit.ModEditWindow.ShowTab(System.Int32)">
+            <summary>
+            显示页面
+            </summary>
+            <param name="index">索引值</param>
+        </member>
+        <member name="M:VPet.ModMaker.Views.ModEdit.ModEditWindow.InitializeComponent">
+            <summary>
+            InitializeComponent
+            </summary>
+        </member>
+        <member name="T:VPet.ModMaker.Views.ModEdit.AddCultureWindow">
+            <summary>
+            Window_AddLang.xaml 的交互逻辑
+            </summary>
+            <summary>
+            AddCultureWindow
+            </summary>
+        </member>
+        <member name="P:VPet.ModMaker.Views.ModEdit.AddCultureWindow.ViewModel">
+            <summary>
+            视图模型
+            </summary>
+        </member>
+        <member name="M:VPet.ModMaker.Views.ModEdit.AddCultureWindow.#ctor">
+            <inheritdoc/>
+        </member>
+        <member name="M:VPet.ModMaker.Views.ModEdit.AddCultureWindow.InitializeComponent">
+            <summary>
+            InitializeComponent
+            </summary>
+        </member>
+        <member name="T:VPet.ModMaker.Views.ModEdit.AnimeEditWindow">
+            <summary>
+            AnimeEditWindow.xaml 的交互逻辑
+            </summary>
+            <summary>
+            AnimeEditWindow
+            </summary>
+        </member>
+        <member name="M:VPet.ModMaker.Views.ModEdit.AnimeEditWindow.#ctor">
+            <inheritdoc/>
+        </member>
+        <member name="P:VPet.ModMaker.Views.ModEdit.AnimeEditWindow.ViewModel">
+            <summary>
+            视图模型
+            </summary>
+        </member>
+        <member name="M:VPet.ModMaker.Views.ModEdit.AnimeEditWindow.InitializeComponent">
+            <summary>
+            InitializeComponent
+            </summary>
+        </member>
+        <member name="T:VPet.ModMaker.Views.ModEdit.AnimePage">
+            <summary>
+            AnimePage.xaml 的交互逻辑
+            </summary>
+            <summary>
+            AnimePage
+            </summary>
+        </member>
+        <member name="M:VPet.ModMaker.Views.ModEdit.AnimePage.#ctor">
+            <inheritdoc/>
+        </member>
+        <member name="P:VPet.ModMaker.Views.ModEdit.AnimePage.ViewModel">
+            <summary>
+            视图模型
+            </summary>
+        </member>
+        <member name="M:VPet.ModMaker.Views.ModEdit.AnimePage.InitializeComponent">
+            <summary>
+            InitializeComponent
+            </summary>
+        </member>
+        <member name="T:VPet.ModMaker.Views.ModEdit.FoodAnimeEditWindow">
+            <summary>
+            AnimeEditWindow.xaml 的交互逻辑
+            </summary>
+            <summary>
+            FoodAnimeEditWindow
+            </summary>
+        </member>
+        <member name="M:VPet.ModMaker.Views.ModEdit.FoodAnimeEditWindow.#ctor">
+            <inheritdoc/>
+        </member>
+        <member name="P:VPet.ModMaker.Views.ModEdit.FoodAnimeEditWindow.ViewModel">
+            <summary>
+            视图模型
+            </summary>
+        </member>
+        <member name="M:VPet.ModMaker.Views.ModEdit.FoodAnimeEditWindow.InitializeComponent">
+            <summary>
+            InitializeComponent
+            </summary>
+        </member>
+        <member name="T:VPet.ModMaker.Views.ModEdit.SelectGraphTypeWindow">
+            <summary>
+            SelectGraphTypeWindow.xaml 的交互逻辑
+            </summary>
+            <summary>
+            SelectGraphTypeWindow
+            </summary>
+        </member>
+        <member name="P:VPet.ModMaker.Views.ModEdit.SelectGraphTypeWindow.ViewModel">
+            <summary>
+            视图模型
+            </summary>
+        </member>
+        <member name="M:VPet.ModMaker.Views.ModEdit.SelectGraphTypeWindow.#ctor">
+            <inheritdoc/>
+        </member>
+        <member name="M:VPet.ModMaker.Views.ModEdit.SelectGraphTypeWindow.InitializeComponent">
+            <summary>
+            InitializeComponent
+            </summary>
+        </member>
+        <member name="T:VPet.ModMaker.Views.ModEdit.ClickTextEditWindow">
+            <summary>
+            ClickTextWindow.xaml 的交互逻辑
+            </summary>
+            <summary>
+            ClickTextEditWindow
+            </summary>
+        </member>
+        <member name="M:VPet.ModMaker.Views.ModEdit.ClickTextEditWindow.#ctor">
+            <inheritdoc/>
+        </member>
+        <member name="P:VPet.ModMaker.Views.ModEdit.ClickTextEditWindow.ViewModel">
+            <summary>
+            视图模型
+            </summary>
+        </member>
+        <member name="M:VPet.ModMaker.Views.ModEdit.ClickTextEditWindow.InitializeComponent">
+            <summary>
+            InitializeComponent
+            </summary>
+        </member>
+        <member name="T:VPet.ModMaker.Views.ModEdit.ClickTextPage">
+            <summary>
+            ClickTextPage.xaml 的交互逻辑
+            </summary>
+            <summary>
+            ClickTextPage
+            </summary>
+        </member>
+        <member name="P:VPet.ModMaker.Views.ModEdit.ClickTextPage.ViewModel">
+            <summary>
+            视图模型
+            </summary>
+        </member>
+        <member name="M:VPet.ModMaker.Views.ModEdit.ClickTextPage.#ctor">
+            <inheritdoc/>
+        </member>
+        <member name="M:VPet.ModMaker.Views.ModEdit.ClickTextPage.InitializeComponent">
+            <summary>
+            InitializeComponent
+            </summary>
+        </member>
+        <member name="T:VPet.ModMaker.Views.ModEdit.FoodEditWindow">
+            <summary>
+            AddFoodWindow.xaml 的交互逻辑
+            </summary>
+            <summary>
+            FoodEditWindow
+            </summary>
+        </member>
+        <member name="M:VPet.ModMaker.Views.ModEdit.FoodEditWindow.#ctor">
+            <inheritdoc/>
+        </member>
+        <member name="P:VPet.ModMaker.Views.ModEdit.FoodEditWindow.ViewModel">
+            <summary>
+            视图模型
+            </summary>
+        </member>
+        <member name="M:VPet.ModMaker.Views.ModEdit.FoodEditWindow.InitializeComponent">
+            <summary>
+            InitializeComponent
+            </summary>
+        </member>
+        <member name="T:VPet.ModMaker.Views.ModEdit.FoodPage">
+            <summary>
+            Page_Food.xaml 的交互逻辑
+            </summary>
+            <summary>
+            FoodPage
+            </summary>
+        </member>
+        <member name="P:VPet.ModMaker.Views.ModEdit.FoodPage.ViewModel">
+            <summary>
+            视图模型
+            </summary>
+        </member>
+        <member name="M:VPet.ModMaker.Views.ModEdit.FoodPage.#ctor">
+            <inheritdoc/>
+        </member>
+        <member name="M:VPet.ModMaker.Views.ModEdit.FoodPage.InitializeComponent">
+            <summary>
+            InitializeComponent
+            </summary>
+        </member>
+        <member name="T:VPet.ModMaker.Views.ModEdit.I18nEditWindow">
+            <summary>
+            I18nEditWindow.xaml 的交互逻辑
+            </summary>
+            <summary>
+            I18nEditWindow
+            </summary>
+        </member>
+        <member name="P:VPet.ModMaker.Views.ModEdit.I18nEditWindow.ViewModel">
+            <summary>
+            视图模型
+            </summary>
+        </member>
+        <member name="M:VPet.ModMaker.Views.ModEdit.I18nEditWindow.#ctor">
+            <inheritdoc/>
+        </member>
+        <member name="F:VPet.ModMaker.Views.ModEdit.I18nEditWindow._dataGridI18nColumns">
+            <summary>
+            (culture, Column)
+            </summary>
+        </member>
+        <member name="M:VPet.ModMaker.Views.ModEdit.I18nEditWindow.AddCulture(System.String)">
+            <summary>
+            添加文化列
+            </summary>
+            <param name="cultureName">文化名称</param>
+        </member>
+        <member name="M:VPet.ModMaker.Views.ModEdit.I18nEditWindow.RemoveCulture(System.String)">
+            <summary>
+            删除文化列
+            </summary>
+            <param name="cultureName">文化名称</param>
+        </member>
+        <member name="M:VPet.ModMaker.Views.ModEdit.I18nEditWindow.ReplaceCulture(System.String,System.String)">
+            <summary>
+            替换文化列
+            </summary>
+            <param name="oldCultureName">旧文化</param>
+            <param name="newCultureName">新文化</param>
+        </member>
+        <member name="M:VPet.ModMaker.Views.ModEdit.I18nEditWindow.InitializeComponent">
+            <summary>
+            InitializeComponent
+            </summary>
+        </member>
+        <member name="T:VPet.ModMaker.Views.ModEdit.LowTextEditWindow">
+            <summary>
+            Window_AddLowText.xaml 的交互逻辑
+            </summary>
+            <summary>
+            LowTextEditWindow
+            </summary>
+        </member>
+        <member name="M:VPet.ModMaker.Views.ModEdit.LowTextEditWindow.#ctor">
+            <inheritdoc/>
+        </member>
+        <member name="P:VPet.ModMaker.Views.ModEdit.LowTextEditWindow.ViewModel">
+            <summary>
+            视图模型
+            </summary>
+        </member>
+        <member name="M:VPet.ModMaker.Views.ModEdit.LowTextEditWindow.InitializeComponent">
+            <summary>
+            InitializeComponent
+            </summary>
+        </member>
+        <member name="T:VPet.ModMaker.Views.ModEdit.LowTextPage">
+            <summary>
+            Page_LowText.xaml 的交互逻辑
+            </summary>
+            <summary>
+            LowTextPage
+            </summary>
+        </member>
+        <member name="P:VPet.ModMaker.Views.ModEdit.LowTextPage.ViewModel">
+            <summary>
+            视图模型
+            </summary>
+        </member>
+        <member name="M:VPet.ModMaker.Views.ModEdit.LowTextPage.#ctor">
+            <inheritdoc/>
+        </member>
+        <member name="M:VPet.ModMaker.Views.ModEdit.LowTextPage.InitializeComponent">
+            <summary>
+            InitializeComponent
+            </summary>
+        </member>
+        <member name="T:VPet.ModMaker.Views.ModEdit.MoveEditWindow">
+            <summary>
+            MoveEditWindow.xaml 的交互逻辑
+            </summary>
+            <summary>
+            MoveEditWindow
+            </summary>
+        </member>
+        <member name="M:VPet.ModMaker.Views.ModEdit.MoveEditWindow.#ctor">
+            <inheritdoc/>
+        </member>
+        <member name="P:VPet.ModMaker.Views.ModEdit.MoveEditWindow.ViewModel">
+            <summary>
+            视图模型
+            </summary>
+        </member>
+        <member name="M:VPet.ModMaker.Views.ModEdit.MoveEditWindow.InitializeComponent">
+            <summary>
+            InitializeComponent
+            </summary>
+        </member>
+        <member name="T:VPet.ModMaker.Views.ModEdit.MovePage">
+            <summary>
+            MovePage.xaml 的交互逻辑
+            </summary>
+            <summary>
+            MovePage
+            </summary>
+        </member>
+        <member name="M:VPet.ModMaker.Views.ModEdit.MovePage.#ctor">
+            <inheritdoc/>
+        </member>
+        <member name="P:VPet.ModMaker.Views.ModEdit.MovePage.ViewModel">
+            <summary>
+            视图模型
+            </summary>
+        </member>
+        <member name="M:VPet.ModMaker.Views.ModEdit.MovePage.InitializeComponent">
+            <summary>
+            InitializeComponent
+            </summary>
+        </member>
+        <member name="T:VPet.ModMaker.Views.ModEdit.PetEditWindow">
+            <summary>
+            PetEditWindow.xaml 的交互逻辑
+            </summary>
+            <summary>
+            PetEditWindow
+            </summary>
+        </member>
+        <member name="M:VPet.ModMaker.Views.ModEdit.PetEditWindow.#ctor">
+            <inheritdoc/>
+        </member>
+        <member name="P:VPet.ModMaker.Views.ModEdit.PetEditWindow.ViewModel">
+            <summary>
+            视图模型
+            </summary>
+        </member>
+        <member name="M:VPet.ModMaker.Views.ModEdit.PetEditWindow.InitializeComponent">
+            <summary>
+            InitializeComponent
+            </summary>
+        </member>
+        <member name="T:VPet.ModMaker.Views.ModEdit.PetPage">
+            <summary>
+            PetPage.xaml 的交互逻辑
+            </summary>
+            <summary>
+            PetPage
+            </summary>
+        </member>
+        <member name="P:VPet.ModMaker.Views.ModEdit.PetPage.ViewModel">
+            <summary>
+            视图模型
+            </summary>
+        </member>
+        <member name="M:VPet.ModMaker.Views.ModEdit.PetPage.#ctor">
+            <inheritdoc/>
+        </member>
+        <member name="M:VPet.ModMaker.Views.ModEdit.PetPage.InitializeComponent">
+            <summary>
+            InitializeComponent
+            </summary>
+        </member>
+        <member name="T:VPet.ModMaker.Views.ModEdit.SaveTranslationModWindow">
+            <summary>
+            SaveTranslationModWindow.xaml 的交互逻辑
+            </summary>
+            <summary>
+            SaveTranslationModWindow
+            </summary>
+        </member>
+        <member name="M:VPet.ModMaker.Views.ModEdit.SaveTranslationModWindow.#ctor">
+            <inheritdoc/>
+        </member>
+        <member name="M:VPet.ModMaker.Views.ModEdit.SaveTranslationModWindow.InitializeComponent">
+            <summary>
+            InitializeComponent
+            </summary>
+        </member>
+        <member name="T:VPet.ModMaker.Views.ModEdit.SelectTextEditWindow">
+            <summary>
+            SelectTextWindow.xaml 的交互逻辑
+            </summary>
+            <summary>
+            SelectTextEditWindow
+            </summary>
+        </member>
+        <member name="M:VPet.ModMaker.Views.ModEdit.SelectTextEditWindow.#ctor">
+            <inheritdoc/>
+        </member>
+        <member name="P:VPet.ModMaker.Views.ModEdit.SelectTextEditWindow.ViewModel">
+            <summary>
+            视图模型
+            </summary>
+        </member>
+        <member name="M:VPet.ModMaker.Views.ModEdit.SelectTextEditWindow.InitializeComponent">
+            <summary>
+            InitializeComponent
+            </summary>
+        </member>
+        <member name="T:VPet.ModMaker.Views.ModEdit.SelectTextPage">
+            <summary>
+            SelectTextPage.xaml 的交互逻辑
+            </summary>
+            <summary>
+            SelectTextPage
+            </summary>
+        </member>
+        <member name="P:VPet.ModMaker.Views.ModEdit.SelectTextPage.ViewModel">
+            <summary>
+            视图模型
+            </summary>
+        </member>
+        <member name="M:VPet.ModMaker.Views.ModEdit.SelectTextPage.#ctor">
+            <inheritdoc/>
+        </member>
+        <member name="M:VPet.ModMaker.Views.ModEdit.SelectTextPage.InitializeComponent">
+            <summary>
+            InitializeComponent
+            </summary>
+        </member>
+        <member name="T:VPet.ModMaker.Views.ModEdit.WorkEditWindow">
+            <summary>
+            WorkEditWindow.xaml 的交互逻辑
+            </summary>
+            <summary>
+            WorkEditWindow
+            </summary>
+        </member>
+        <member name="M:VPet.ModMaker.Views.ModEdit.WorkEditWindow.#ctor">
+            <inheritdoc/>
+        </member>
+        <member name="P:VPet.ModMaker.Views.ModEdit.WorkEditWindow.ViewModel">
+            <summary>
+            视图模型
+            </summary>
+        </member>
+        <member name="M:VPet.ModMaker.Views.ModEdit.WorkEditWindow.InitializeComponent">
+            <summary>
+            InitializeComponent
+            </summary>
+        </member>
+        <member name="T:VPet.ModMaker.Views.ModEdit.WorkPage">
+            <summary>
+            WorkPage.xaml 的交互逻辑
+            </summary>
+            <summary>
+            WorkPage
+            </summary>
+        </member>
+        <member name="P:VPet.ModMaker.Views.ModEdit.WorkPage.ViewModel">
+            <summary>
+            视图模型
+            </summary>
+        </member>
+        <member name="M:VPet.ModMaker.Views.ModEdit.WorkPage.#ctor">
+            <inheritdoc/>
+        </member>
+        <member name="M:VPet.ModMaker.Views.ModEdit.WorkPage.InitializeComponent">
+            <summary>
+            InitializeComponent
+            </summary>
+        </member>
+        <member name="T:VPet.ModMaker.Views.ModMakerWindow">
+            <summary>
+            winModMaker.xaml 的交互逻辑
+            </summary>
+            <summary>
+            ModMakerWindow
+            </summary>
+        </member>
+        <member name="M:VPet.ModMaker.Views.ModMakerWindow.#ctor">
+            <inheritdoc/>
+        </member>
+        <member name="P:VPet.ModMaker.Views.ModMakerWindow.ViewModel">
+            <summary>
+            视图模型
+            </summary>
+        </member>
+        <member name="P:VPet.ModMaker.Views.ModMakerWindow.LocatePageByType">
+            <inheritdoc/>
+        </member>
+        <member name="P:VPet.ModMaker.Views.ModMakerWindow.ModEditWindow">
+            <summary>
+            单例窗口
+            </summary>
+        </member>
+        <member name="M:VPet.ModMaker.Views.ModMakerWindow.InitializeComponent">
+            <summary>
+            InitializeComponent
+            </summary>
+        </member>
+        <member name="T:HKW.HKWMapper.ClickTextModelMapToClickTextPropertyAttribute">
+            <summary>
+            ClickTextModelMapToClickTextPropertyAttribute
+            <para>This attribute is only used in <c>ClickTextModelMapToClickText</c></para>
+            </summary>
+        </member>
+        <member name="M:HKW.HKWMapper.ClickTextModelMapToClickTextPropertyAttribute.#ctor(System.String)">
+            <inheritdoc/>
+        </member>
+        <member name="M:HKW.HKWMapper.ClickTextModelMapToClickTextPropertyAttribute.#ctor(System.Type)">
+            <inheritdoc/>
+        </member>
+        <member name="P:HKW.HKWMapper.ClickTextModelMapToClickTextPropertyAttribute.PropertyName">
+            <summary>
+            PropertyName
+            <para>Default is current property name</para>
+            </summary>
+        </member>
+        <member name="P:HKW.HKWMapper.ClickTextModelMapToClickTextPropertyAttribute.ConverterType">
+            <summary>
+            ConverterType
+            </summary>
+        </member>
+        <member name="P:HKW.HKWMapper.ClickTextModelMapToClickTextPropertyAttribute.MapWhenRValueNotNullOrDefault">
+            <summary>
+            MapWhenRValueNotNullOrDefault
+            </summary>
+        </member>
+        <member name="P:HKW.HKWMapper.ClickTextModelMapToClickTextPropertyAttribute.MapWhenLValueNullOrDefault">
+            <summary>
+            MapWhenLValueNullOrDefault
+            </summary>
+        </member>
+        <member name="T:HKW.HKWMapper.ClickTextModelMapFromClickTextPropertyAttribute">
+            <summary>
+            ClickTextModelMapFromClickTextPropertyAttribute
+            <para>This attribute is only used in <c>ClickTextModelMapFromClickText</c></para>
+            </summary>
+        </member>
+        <member name="M:HKW.HKWMapper.ClickTextModelMapFromClickTextPropertyAttribute.#ctor(System.String)">
+            <inheritdoc/>
+        </member>
+        <member name="M:HKW.HKWMapper.ClickTextModelMapFromClickTextPropertyAttribute.#ctor(System.Type)">
+            <inheritdoc/>
+        </member>
+        <member name="P:HKW.HKWMapper.ClickTextModelMapFromClickTextPropertyAttribute.PropertyName">
+            <summary>
+            PropertyName
+            <para>Default is current property name</para>
+            </summary>
+        </member>
+        <member name="P:HKW.HKWMapper.ClickTextModelMapFromClickTextPropertyAttribute.ConverterType">
+            <summary>
+            ConverterType
+            </summary>
+        </member>
+        <member name="P:HKW.HKWMapper.ClickTextModelMapFromClickTextPropertyAttribute.MapWhenRValueNotNullOrDefault">
+            <summary>
+            MapWhenRValueNotNullOrDefault
+            </summary>
+        </member>
+        <member name="P:HKW.HKWMapper.ClickTextModelMapFromClickTextPropertyAttribute.MapWhenLValueNullOrDefault">
+            <summary>
+            MapWhenLValueNullOrDefault
+            </summary>
+        </member>
+        <member name="T:HKW.HKWMapper.ClickTextModelMapFromClickTextModelPropertyAttribute">
+            <summary>
+            ClickTextModelMapFromClickTextModelPropertyAttribute
+            <para>This attribute is only used in <c>ClickTextModelMapFromClickTextModel</c></para>
+            </summary>
+        </member>
+        <member name="M:HKW.HKWMapper.ClickTextModelMapFromClickTextModelPropertyAttribute.#ctor(System.String)">
+            <inheritdoc/>
+        </member>
+        <member name="M:HKW.HKWMapper.ClickTextModelMapFromClickTextModelPropertyAttribute.#ctor(System.Type)">
+            <inheritdoc/>
+        </member>
+        <member name="P:HKW.HKWMapper.ClickTextModelMapFromClickTextModelPropertyAttribute.PropertyName">
+            <summary>
+            PropertyName
+            <para>Default is current property name</para>
+            </summary>
+        </member>
+        <member name="P:HKW.HKWMapper.ClickTextModelMapFromClickTextModelPropertyAttribute.ConverterType">
+            <summary>
+            ConverterType
+            </summary>
+        </member>
+        <member name="P:HKW.HKWMapper.ClickTextModelMapFromClickTextModelPropertyAttribute.MapWhenRValueNotNullOrDefault">
+            <summary>
+            MapWhenRValueNotNullOrDefault
+            </summary>
+        </member>
+        <member name="P:HKW.HKWMapper.ClickTextModelMapFromClickTextModelPropertyAttribute.MapWhenLValueNullOrDefault">
+            <summary>
+            MapWhenLValueNullOrDefault
+            </summary>
+        </member>
+        <member name="T:HKW.HKWMapper.FoodModelMapToFoodPropertyAttribute">
+            <summary>
+            FoodModelMapToFoodPropertyAttribute
+            <para>This attribute is only used in <c>FoodModelMapToFood</c></para>
+            </summary>
+        </member>
+        <member name="M:HKW.HKWMapper.FoodModelMapToFoodPropertyAttribute.#ctor(System.String)">
+            <inheritdoc/>
+        </member>
+        <member name="M:HKW.HKWMapper.FoodModelMapToFoodPropertyAttribute.#ctor(System.Type)">
+            <inheritdoc/>
+        </member>
+        <member name="P:HKW.HKWMapper.FoodModelMapToFoodPropertyAttribute.PropertyName">
+            <summary>
+            PropertyName
+            <para>Default is current property name</para>
+            </summary>
+        </member>
+        <member name="P:HKW.HKWMapper.FoodModelMapToFoodPropertyAttribute.ConverterType">
+            <summary>
+            ConverterType
+            </summary>
+        </member>
+        <member name="P:HKW.HKWMapper.FoodModelMapToFoodPropertyAttribute.MapWhenRValueNotNullOrDefault">
+            <summary>
+            MapWhenRValueNotNullOrDefault
+            </summary>
+        </member>
+        <member name="P:HKW.HKWMapper.FoodModelMapToFoodPropertyAttribute.MapWhenLValueNullOrDefault">
+            <summary>
+            MapWhenLValueNullOrDefault
+            </summary>
+        </member>
+        <member name="T:HKW.HKWMapper.FoodModelMapFromFoodPropertyAttribute">
+            <summary>
+            FoodModelMapFromFoodPropertyAttribute
+            <para>This attribute is only used in <c>FoodModelMapFromFood</c></para>
+            </summary>
+        </member>
+        <member name="M:HKW.HKWMapper.FoodModelMapFromFoodPropertyAttribute.#ctor(System.String)">
+            <inheritdoc/>
+        </member>
+        <member name="M:HKW.HKWMapper.FoodModelMapFromFoodPropertyAttribute.#ctor(System.Type)">
+            <inheritdoc/>
+        </member>
+        <member name="P:HKW.HKWMapper.FoodModelMapFromFoodPropertyAttribute.PropertyName">
+            <summary>
+            PropertyName
+            <para>Default is current property name</para>
+            </summary>
+        </member>
+        <member name="P:HKW.HKWMapper.FoodModelMapFromFoodPropertyAttribute.ConverterType">
+            <summary>
+            ConverterType
+            </summary>
+        </member>
+        <member name="P:HKW.HKWMapper.FoodModelMapFromFoodPropertyAttribute.MapWhenRValueNotNullOrDefault">
+            <summary>
+            MapWhenRValueNotNullOrDefault
+            </summary>
+        </member>
+        <member name="P:HKW.HKWMapper.FoodModelMapFromFoodPropertyAttribute.MapWhenLValueNullOrDefault">
+            <summary>
+            MapWhenLValueNullOrDefault
+            </summary>
+        </member>
+        <member name="T:HKW.HKWMapper.FoodModelMapFromFoodModelPropertyAttribute">
+            <summary>
+            FoodModelMapFromFoodModelPropertyAttribute
+            <para>This attribute is only used in <c>FoodModelMapFromFoodModel</c></para>
+            </summary>
+        </member>
+        <member name="M:HKW.HKWMapper.FoodModelMapFromFoodModelPropertyAttribute.#ctor(System.String)">
+            <inheritdoc/>
+        </member>
+        <member name="M:HKW.HKWMapper.FoodModelMapFromFoodModelPropertyAttribute.#ctor(System.Type)">
+            <inheritdoc/>
+        </member>
+        <member name="P:HKW.HKWMapper.FoodModelMapFromFoodModelPropertyAttribute.PropertyName">
+            <summary>
+            PropertyName
+            <para>Default is current property name</para>
+            </summary>
+        </member>
+        <member name="P:HKW.HKWMapper.FoodModelMapFromFoodModelPropertyAttribute.ConverterType">
+            <summary>
+            ConverterType
+            </summary>
+        </member>
+        <member name="P:HKW.HKWMapper.FoodModelMapFromFoodModelPropertyAttribute.MapWhenRValueNotNullOrDefault">
+            <summary>
+            MapWhenRValueNotNullOrDefault
+            </summary>
+        </member>
+        <member name="P:HKW.HKWMapper.FoodModelMapFromFoodModelPropertyAttribute.MapWhenLValueNullOrDefault">
+            <summary>
+            MapWhenLValueNullOrDefault
+            </summary>
+        </member>
+        <member name="T:HKW.HKWMapper.LowTextModelMapToLowTextPropertyAttribute">
+            <summary>
+            LowTextModelMapToLowTextPropertyAttribute
+            <para>This attribute is only used in <c>LowTextModelMapToLowText</c></para>
+            </summary>
+        </member>
+        <member name="M:HKW.HKWMapper.LowTextModelMapToLowTextPropertyAttribute.#ctor(System.String)">
+            <inheritdoc/>
+        </member>
+        <member name="M:HKW.HKWMapper.LowTextModelMapToLowTextPropertyAttribute.#ctor(System.Type)">
+            <inheritdoc/>
+        </member>
+        <member name="P:HKW.HKWMapper.LowTextModelMapToLowTextPropertyAttribute.PropertyName">
+            <summary>
+            PropertyName
+            <para>Default is current property name</para>
+            </summary>
+        </member>
+        <member name="P:HKW.HKWMapper.LowTextModelMapToLowTextPropertyAttribute.ConverterType">
+            <summary>
+            ConverterType
+            </summary>
+        </member>
+        <member name="P:HKW.HKWMapper.LowTextModelMapToLowTextPropertyAttribute.MapWhenRValueNotNullOrDefault">
+            <summary>
+            MapWhenRValueNotNullOrDefault
+            </summary>
+        </member>
+        <member name="P:HKW.HKWMapper.LowTextModelMapToLowTextPropertyAttribute.MapWhenLValueNullOrDefault">
+            <summary>
+            MapWhenLValueNullOrDefault
+            </summary>
+        </member>
+        <member name="T:HKW.HKWMapper.LowTextModelMapFromLowTextPropertyAttribute">
+            <summary>
+            LowTextModelMapFromLowTextPropertyAttribute
+            <para>This attribute is only used in <c>LowTextModelMapFromLowText</c></para>
+            </summary>
+        </member>
+        <member name="M:HKW.HKWMapper.LowTextModelMapFromLowTextPropertyAttribute.#ctor(System.String)">
+            <inheritdoc/>
+        </member>
+        <member name="M:HKW.HKWMapper.LowTextModelMapFromLowTextPropertyAttribute.#ctor(System.Type)">
+            <inheritdoc/>
+        </member>
+        <member name="P:HKW.HKWMapper.LowTextModelMapFromLowTextPropertyAttribute.PropertyName">
+            <summary>
+            PropertyName
+            <para>Default is current property name</para>
+            </summary>
+        </member>
+        <member name="P:HKW.HKWMapper.LowTextModelMapFromLowTextPropertyAttribute.ConverterType">
+            <summary>
+            ConverterType
+            </summary>
+        </member>
+        <member name="P:HKW.HKWMapper.LowTextModelMapFromLowTextPropertyAttribute.MapWhenRValueNotNullOrDefault">
+            <summary>
+            MapWhenRValueNotNullOrDefault
+            </summary>
+        </member>
+        <member name="P:HKW.HKWMapper.LowTextModelMapFromLowTextPropertyAttribute.MapWhenLValueNullOrDefault">
+            <summary>
+            MapWhenLValueNullOrDefault
+            </summary>
+        </member>
+        <member name="T:HKW.HKWMapper.LowTextModelMapFromLowTextModelPropertyAttribute">
+            <summary>
+            LowTextModelMapFromLowTextModelPropertyAttribute
+            <para>This attribute is only used in <c>LowTextModelMapFromLowTextModel</c></para>
+            </summary>
+        </member>
+        <member name="M:HKW.HKWMapper.LowTextModelMapFromLowTextModelPropertyAttribute.#ctor(System.String)">
+            <inheritdoc/>
+        </member>
+        <member name="M:HKW.HKWMapper.LowTextModelMapFromLowTextModelPropertyAttribute.#ctor(System.Type)">
+            <inheritdoc/>
+        </member>
+        <member name="P:HKW.HKWMapper.LowTextModelMapFromLowTextModelPropertyAttribute.PropertyName">
+            <summary>
+            PropertyName
+            <para>Default is current property name</para>
+            </summary>
+        </member>
+        <member name="P:HKW.HKWMapper.LowTextModelMapFromLowTextModelPropertyAttribute.ConverterType">
+            <summary>
+            ConverterType
+            </summary>
+        </member>
+        <member name="P:HKW.HKWMapper.LowTextModelMapFromLowTextModelPropertyAttribute.MapWhenRValueNotNullOrDefault">
+            <summary>
+            MapWhenRValueNotNullOrDefault
+            </summary>
+        </member>
+        <member name="P:HKW.HKWMapper.LowTextModelMapFromLowTextModelPropertyAttribute.MapWhenLValueNullOrDefault">
+            <summary>
+            MapWhenLValueNullOrDefault
+            </summary>
+        </member>
+        <member name="T:HKW.HKWMapper.MoveModelMapToMovePropertyAttribute">
+            <summary>
+            MoveModelMapToMovePropertyAttribute
+            <para>This attribute is only used in <c>MoveModelMapToMove</c></para>
+            </summary>
+        </member>
+        <member name="M:HKW.HKWMapper.MoveModelMapToMovePropertyAttribute.#ctor(System.String)">
+            <inheritdoc/>
+        </member>
+        <member name="M:HKW.HKWMapper.MoveModelMapToMovePropertyAttribute.#ctor(System.Type)">
+            <inheritdoc/>
+        </member>
+        <member name="P:HKW.HKWMapper.MoveModelMapToMovePropertyAttribute.PropertyName">
+            <summary>
+            PropertyName
+            <para>Default is current property name</para>
+            </summary>
+        </member>
+        <member name="P:HKW.HKWMapper.MoveModelMapToMovePropertyAttribute.ConverterType">
+            <summary>
+            ConverterType
+            </summary>
+        </member>
+        <member name="P:HKW.HKWMapper.MoveModelMapToMovePropertyAttribute.MapWhenRValueNotNullOrDefault">
+            <summary>
+            MapWhenRValueNotNullOrDefault
+            </summary>
+        </member>
+        <member name="P:HKW.HKWMapper.MoveModelMapToMovePropertyAttribute.MapWhenLValueNullOrDefault">
+            <summary>
+            MapWhenLValueNullOrDefault
+            </summary>
+        </member>
+        <member name="T:HKW.HKWMapper.MoveModelMapFromMovePropertyAttribute">
+            <summary>
+            MoveModelMapFromMovePropertyAttribute
+            <para>This attribute is only used in <c>MoveModelMapFromMove</c></para>
+            </summary>
+        </member>
+        <member name="M:HKW.HKWMapper.MoveModelMapFromMovePropertyAttribute.#ctor(System.String)">
+            <inheritdoc/>
+        </member>
+        <member name="M:HKW.HKWMapper.MoveModelMapFromMovePropertyAttribute.#ctor(System.Type)">
+            <inheritdoc/>
+        </member>
+        <member name="P:HKW.HKWMapper.MoveModelMapFromMovePropertyAttribute.PropertyName">
+            <summary>
+            PropertyName
+            <para>Default is current property name</para>
+            </summary>
+        </member>
+        <member name="P:HKW.HKWMapper.MoveModelMapFromMovePropertyAttribute.ConverterType">
+            <summary>
+            ConverterType
+            </summary>
+        </member>
+        <member name="P:HKW.HKWMapper.MoveModelMapFromMovePropertyAttribute.MapWhenRValueNotNullOrDefault">
+            <summary>
+            MapWhenRValueNotNullOrDefault
+            </summary>
+        </member>
+        <member name="P:HKW.HKWMapper.MoveModelMapFromMovePropertyAttribute.MapWhenLValueNullOrDefault">
+            <summary>
+            MapWhenLValueNullOrDefault
+            </summary>
+        </member>
+        <member name="T:HKW.HKWMapper.MoveModelMapFromMoveModelPropertyAttribute">
+            <summary>
+            MoveModelMapFromMoveModelPropertyAttribute
+            <para>This attribute is only used in <c>MoveModelMapFromMoveModel</c></para>
+            </summary>
+        </member>
+        <member name="M:HKW.HKWMapper.MoveModelMapFromMoveModelPropertyAttribute.#ctor(System.String)">
+            <inheritdoc/>
+        </member>
+        <member name="M:HKW.HKWMapper.MoveModelMapFromMoveModelPropertyAttribute.#ctor(System.Type)">
+            <inheritdoc/>
+        </member>
+        <member name="P:HKW.HKWMapper.MoveModelMapFromMoveModelPropertyAttribute.PropertyName">
+            <summary>
+            PropertyName
+            <para>Default is current property name</para>
+            </summary>
+        </member>
+        <member name="P:HKW.HKWMapper.MoveModelMapFromMoveModelPropertyAttribute.ConverterType">
+            <summary>
+            ConverterType
+            </summary>
+        </member>
+        <member name="P:HKW.HKWMapper.MoveModelMapFromMoveModelPropertyAttribute.MapWhenRValueNotNullOrDefault">
+            <summary>
+            MapWhenRValueNotNullOrDefault
+            </summary>
+        </member>
+        <member name="P:HKW.HKWMapper.MoveModelMapFromMoveModelPropertyAttribute.MapWhenLValueNullOrDefault">
+            <summary>
+            MapWhenLValueNullOrDefault
+            </summary>
+        </member>
+        <member name="T:HKW.HKWMapper.SelectTextModelMapToSelectTextPropertyAttribute">
+            <summary>
+            SelectTextModelMapToSelectTextPropertyAttribute
+            <para>This attribute is only used in <c>SelectTextModelMapToSelectText</c></para>
+            </summary>
+        </member>
+        <member name="M:HKW.HKWMapper.SelectTextModelMapToSelectTextPropertyAttribute.#ctor(System.String)">
+            <inheritdoc/>
+        </member>
+        <member name="M:HKW.HKWMapper.SelectTextModelMapToSelectTextPropertyAttribute.#ctor(System.Type)">
+            <inheritdoc/>
+        </member>
+        <member name="P:HKW.HKWMapper.SelectTextModelMapToSelectTextPropertyAttribute.PropertyName">
+            <summary>
+            PropertyName
+            <para>Default is current property name</para>
+            </summary>
+        </member>
+        <member name="P:HKW.HKWMapper.SelectTextModelMapToSelectTextPropertyAttribute.ConverterType">
+            <summary>
+            ConverterType
+            </summary>
+        </member>
+        <member name="P:HKW.HKWMapper.SelectTextModelMapToSelectTextPropertyAttribute.MapWhenRValueNotNullOrDefault">
+            <summary>
+            MapWhenRValueNotNullOrDefault
+            </summary>
+        </member>
+        <member name="P:HKW.HKWMapper.SelectTextModelMapToSelectTextPropertyAttribute.MapWhenLValueNullOrDefault">
+            <summary>
+            MapWhenLValueNullOrDefault
+            </summary>
+        </member>
+        <member name="T:HKW.HKWMapper.SelectTextModelMapFromSelectTextPropertyAttribute">
+            <summary>
+            SelectTextModelMapFromSelectTextPropertyAttribute
+            <para>This attribute is only used in <c>SelectTextModelMapFromSelectText</c></para>
+            </summary>
+        </member>
+        <member name="M:HKW.HKWMapper.SelectTextModelMapFromSelectTextPropertyAttribute.#ctor(System.String)">
+            <inheritdoc/>
+        </member>
+        <member name="M:HKW.HKWMapper.SelectTextModelMapFromSelectTextPropertyAttribute.#ctor(System.Type)">
+            <inheritdoc/>
+        </member>
+        <member name="P:HKW.HKWMapper.SelectTextModelMapFromSelectTextPropertyAttribute.PropertyName">
+            <summary>
+            PropertyName
+            <para>Default is current property name</para>
+            </summary>
+        </member>
+        <member name="P:HKW.HKWMapper.SelectTextModelMapFromSelectTextPropertyAttribute.ConverterType">
+            <summary>
+            ConverterType
+            </summary>
+        </member>
+        <member name="P:HKW.HKWMapper.SelectTextModelMapFromSelectTextPropertyAttribute.MapWhenRValueNotNullOrDefault">
+            <summary>
+            MapWhenRValueNotNullOrDefault
+            </summary>
+        </member>
+        <member name="P:HKW.HKWMapper.SelectTextModelMapFromSelectTextPropertyAttribute.MapWhenLValueNullOrDefault">
+            <summary>
+            MapWhenLValueNullOrDefault
+            </summary>
+        </member>
+        <member name="T:HKW.HKWMapper.SelectTextModelMapFromSelectTextModelPropertyAttribute">
+            <summary>
+            SelectTextModelMapFromSelectTextModelPropertyAttribute
+            <para>This attribute is only used in <c>SelectTextModelMapFromSelectTextModel</c></para>
+            </summary>
+        </member>
+        <member name="M:HKW.HKWMapper.SelectTextModelMapFromSelectTextModelPropertyAttribute.#ctor(System.String)">
+            <inheritdoc/>
+        </member>
+        <member name="M:HKW.HKWMapper.SelectTextModelMapFromSelectTextModelPropertyAttribute.#ctor(System.Type)">
+            <inheritdoc/>
+        </member>
+        <member name="P:HKW.HKWMapper.SelectTextModelMapFromSelectTextModelPropertyAttribute.PropertyName">
+            <summary>
+            PropertyName
+            <para>Default is current property name</para>
+            </summary>
+        </member>
+        <member name="P:HKW.HKWMapper.SelectTextModelMapFromSelectTextModelPropertyAttribute.ConverterType">
+            <summary>
+            ConverterType
+            </summary>
+        </member>
+        <member name="P:HKW.HKWMapper.SelectTextModelMapFromSelectTextModelPropertyAttribute.MapWhenRValueNotNullOrDefault">
+            <summary>
+            MapWhenRValueNotNullOrDefault
+            </summary>
+        </member>
+        <member name="P:HKW.HKWMapper.SelectTextModelMapFromSelectTextModelPropertyAttribute.MapWhenLValueNullOrDefault">
+            <summary>
+            MapWhenLValueNullOrDefault
+            </summary>
+        </member>
+        <member name="T:HKW.HKWMapper.WorkModelMapToWorkPropertyAttribute">
+            <summary>
+            WorkModelMapToWorkPropertyAttribute
+            <para>This attribute is only used in <c>WorkModelMapToWork</c></para>
+            </summary>
+        </member>
+        <member name="M:HKW.HKWMapper.WorkModelMapToWorkPropertyAttribute.#ctor(System.String)">
+            <inheritdoc/>
+        </member>
+        <member name="M:HKW.HKWMapper.WorkModelMapToWorkPropertyAttribute.#ctor(System.Type)">
+            <inheritdoc/>
+        </member>
+        <member name="P:HKW.HKWMapper.WorkModelMapToWorkPropertyAttribute.PropertyName">
+            <summary>
+            PropertyName
+            <para>Default is current property name</para>
+            </summary>
+        </member>
+        <member name="P:HKW.HKWMapper.WorkModelMapToWorkPropertyAttribute.ConverterType">
+            <summary>
+            ConverterType
+            </summary>
+        </member>
+        <member name="P:HKW.HKWMapper.WorkModelMapToWorkPropertyAttribute.MapWhenRValueNotNullOrDefault">
+            <summary>
+            MapWhenRValueNotNullOrDefault
+            </summary>
+        </member>
+        <member name="P:HKW.HKWMapper.WorkModelMapToWorkPropertyAttribute.MapWhenLValueNullOrDefault">
+            <summary>
+            MapWhenLValueNullOrDefault
+            </summary>
+        </member>
+        <member name="T:HKW.HKWMapper.WorkModelMapFromWorkPropertyAttribute">
+            <summary>
+            WorkModelMapFromWorkPropertyAttribute
+            <para>This attribute is only used in <c>WorkModelMapFromWork</c></para>
+            </summary>
+        </member>
+        <member name="M:HKW.HKWMapper.WorkModelMapFromWorkPropertyAttribute.#ctor(System.String)">
+            <inheritdoc/>
+        </member>
+        <member name="M:HKW.HKWMapper.WorkModelMapFromWorkPropertyAttribute.#ctor(System.Type)">
+            <inheritdoc/>
+        </member>
+        <member name="P:HKW.HKWMapper.WorkModelMapFromWorkPropertyAttribute.PropertyName">
+            <summary>
+            PropertyName
+            <para>Default is current property name</para>
+            </summary>
+        </member>
+        <member name="P:HKW.HKWMapper.WorkModelMapFromWorkPropertyAttribute.ConverterType">
+            <summary>
+            ConverterType
+            </summary>
+        </member>
+        <member name="P:HKW.HKWMapper.WorkModelMapFromWorkPropertyAttribute.MapWhenRValueNotNullOrDefault">
+            <summary>
+            MapWhenRValueNotNullOrDefault
+            </summary>
+        </member>
+        <member name="P:HKW.HKWMapper.WorkModelMapFromWorkPropertyAttribute.MapWhenLValueNullOrDefault">
+            <summary>
+            MapWhenLValueNullOrDefault
+            </summary>
+        </member>
+        <member name="T:HKW.HKWMapper.WorkModelMapFromWorkModelPropertyAttribute">
+            <summary>
+            WorkModelMapFromWorkModelPropertyAttribute
+            <para>This attribute is only used in <c>WorkModelMapFromWorkModel</c></para>
+            </summary>
+        </member>
+        <member name="M:HKW.HKWMapper.WorkModelMapFromWorkModelPropertyAttribute.#ctor(System.String)">
+            <inheritdoc/>
+        </member>
+        <member name="M:HKW.HKWMapper.WorkModelMapFromWorkModelPropertyAttribute.#ctor(System.Type)">
+            <inheritdoc/>
+        </member>
+        <member name="P:HKW.HKWMapper.WorkModelMapFromWorkModelPropertyAttribute.PropertyName">
+            <summary>
+            PropertyName
+            <para>Default is current property name</para>
+            </summary>
+        </member>
+        <member name="P:HKW.HKWMapper.WorkModelMapFromWorkModelPropertyAttribute.ConverterType">
+            <summary>
+            ConverterType
+            </summary>
+        </member>
+        <member name="P:HKW.HKWMapper.WorkModelMapFromWorkModelPropertyAttribute.MapWhenRValueNotNullOrDefault">
+            <summary>
+            MapWhenRValueNotNullOrDefault
+            </summary>
+        </member>
+        <member name="P:HKW.HKWMapper.WorkModelMapFromWorkModelPropertyAttribute.MapWhenLValueNullOrDefault">
+            <summary>
+            MapWhenLValueNullOrDefault
+            </summary>
+        </member>
+        <member name="T:HKW.HKWMapper.MapperExtensions">
+            <summary>MapperExtensions</summary>
+            <summary>MapperExtensions</summary>
+            <summary>MapperExtensions</summary>
+            <summary>MapperExtensions</summary>
+            <summary>MapperExtensions</summary>
+            <summary>MapperExtensions</summary>
+        </member>
+    </members>
+</doc>
