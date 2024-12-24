@@ -1,0 +1,40 @@
+从文件夹中载入模组#Loading Modules from a Folder:|
+打开模组制作器目录#Open the Module Maker directory:|
+初始化完成#Initialization is complete:|
+打开所在的文件夹#Open the folder:|
+删除历史#Delete history:|
+搜索目标#Searching for a target:|
+FoodSearchTarget_ID#Search_for_food_id:|
+FoodSearchTarget_Name#Search_Food_Name:|
+FoodSearchTarget_Graph#Search_Animation:|
+FoodType_Meal#Food_type_staple:|
+FoodType_Drink#Food_type_drink:|
+FoodType_Snack#food_type_snacks:|
+FoodType_Food#Food Type_Food:|
+FoodType_Star#Food Type_Collection:|
+FoodType_Functional#Food Type_Functional:|
+FoodType_Drug#Food Type_Pharmaceuticals:|
+FoodType_Gift#Food Type_Gifts:|
+LowTextSearchTarget_ID#Search_Low_Status_Text_ID:|
+LowTextSearchTarget_Text#Search_Low_Status_Text_Content:|
+ClickTextSearchTarget_ID#Search_Click_Speak ID:|
+ClickTextSearchTarget_Text#Search_Click_Speaking_Text:|
+ClickTextSearchTarget_Working#Search_Click_Speaking_Text_Content:|
+SelectTextSearchTarget_ID#Search_Select_Speaking_ID:|
+SelectTextSearchTarget_Tags#Search_Select_Speaking_Label:|
+SelectTextSearchTarget_ToTags#Search_Select_Speaking_Jump_Label:|
+PetSearchTarget_ID#Search_Pet_ID:|
+PetSearchTarget_Name#Search_Pet_Name:|
+PetSearchTarget_PetName#Search_Pet_Name:|
+PetSearchTarget_Description#Search_Pet_Description:|
+PetSearchTarget_Tags#Search_Pet_Tag:|
+(来自本体)#(from ontology):|
+WorkSearchTarget_ID#Search_Job_ID:|
+WorkSearchTarget_Graph#Search_Job_Animation:|
+WorkType_Study#Job_Type_Study:|
+WorkType_Work#Job_Type_Work:|
+WorkType_Play#Job_Type_Play:|
+AnimatType_A_Start#Animation_Type_A_Start:|
+AnimatType_B_Loop#Animation Type_B_Loop:|
+AnimatType_C_End#Animation Type_C_End:|
+选择文化#Select Culture:|
