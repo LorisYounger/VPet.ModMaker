@@ -21,6 +21,7 @@
       <Grid.ColumnDefinitions>
         <ColumnDefinition />
         <ColumnDefinition Width="Auto" MinWidth="200" />
+        <ColumnDefinition Width="Auto" MinWidth="100" />
       </Grid.ColumnDefinitions>
       <TextBox
         pu:TextBoxHelper.Watermark="{ll:Str 搜索}"
@@ -32,6 +33,11 @@
         SelectedItem="{Binding SearchTargets.SelectedItem, Converter={StaticResource EnumToEnumInfoConverter}}"
         Style="{StaticResource StandardComboBoxStyle}"
         ToolTip="{ll:Str 搜索目标}" />
+      <Button
+        Grid.Column="2"
+        Command="{Binding SetReferencePriceForAllFoodCommand}"
+        Content="{ll:Str 设置推荐价格}"
+        Style="{StaticResource MyThemedButtonStyle}" />
     </Grid>
     <DataGrid
       Grid.Row="1"

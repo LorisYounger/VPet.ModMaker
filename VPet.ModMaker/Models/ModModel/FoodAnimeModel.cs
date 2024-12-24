@@ -95,14 +95,18 @@ public partial class FoodAnimeModel : ViewModelBase, ICloneable<FoodAnimeModel>
 
     object ICloneable.Clone() => Clone();
 
-    /// <summary>
-    /// 关闭
-    /// </summary>
-    public void Close()
+    /// <inheritdoc/>
+    protected override void Dispose(bool disposing)
     {
-        foreach (var image in FrontImages)
-            image.Close();
-        foreach (var image in BackImages)
-            image.Close();
+        if (_disposed)
+            return;
+        base.Dispose(disposing);
+        if (disposing)
+        {
+            foreach (var image in FrontImages)
+                image.Close();
+            foreach (var image in BackImages)
+                image.Close();
+        }
     }
 }

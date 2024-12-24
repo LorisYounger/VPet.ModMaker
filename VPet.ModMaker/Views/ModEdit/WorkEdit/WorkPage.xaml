@@ -3,6 +3,7 @@
   xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
   xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
   xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+  xmlns:h="https://hkw.com/wpf"
   xmlns:ll="clr-namespace:LinePutScript.Localization.WPF;assembly=LinePutScript.Localization.WPF"
   xmlns:local="clr-namespace:VPet.ModMaker.Views.ModEdit"
   xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
@@ -25,6 +26,7 @@
         <ColumnDefinition />
         <ColumnDefinition Width="Auto" MinWidth="150" />
         <ColumnDefinition Width="Auto" MinWidth="150" />
+        <ColumnDefinition Width="Auto" MinWidth="100" />
       </Grid.ColumnDefinitions>
       <TextBox pu:TextBoxHelper.Watermark="{ll:Str 搜索}" Text="{Binding Search, UpdateSourceTrigger=PropertyChanged}">
         <TextBox.Style>
@@ -67,6 +69,11 @@
           </DataTemplate>
         </ComboBox.ItemTemplate>
       </ComboBox>
+      <Button
+        Grid.Column="3"
+        Command="{Binding FixOverLoadForAllWorkCommand}"
+        Content="{ll:Str 修复超模}"
+        Style="{StaticResource MyThemedButtonStyle}" />
     </Grid>
     <Grid Grid.Row="1">
       <Grid.Style>

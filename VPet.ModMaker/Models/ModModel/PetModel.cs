@@ -470,6 +470,15 @@ public partial class PetModel : ViewModelBase
     #endregion
     #endregion
 
+    /// <summary>
+    /// 当作为OldPetModel时关闭
+    /// </summary>
+    public void CloseWhenOld()
+    {
+        I18nResource.I18nObjects.Remove(I18nObject);
+        I18nObject.Dispose();
+    }
+
     /// <inheritdoc/>
     protected override void Dispose(bool disposing)
     {

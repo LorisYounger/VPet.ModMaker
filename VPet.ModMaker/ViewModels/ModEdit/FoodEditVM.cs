@@ -195,14 +195,48 @@ public partial class FoodEditVM : DialogViewModel, IEnableLogger<ViewModelBase>,
     #endregion
 
     /// <summary>
-    /// 设置推荐价格
+    /// 设置参考价格
     /// </summary>
     /// <param name="value">价格</param>
     [ReactiveCommand]
     private void SetReferencePrice(double value)
     {
+        if (Food.Price != Food.ReferencePrice)
+            this.LogX().Info("食物 {food} 设置参考价格 {oldPrice} -> {price}", Food.ID, Food.Price, value);
         Food.Price = value;
-        this.LogX().Info("设置推荐价格 {price}", value);
+    }
+
+    [ReactiveCommand]
+    private void SetReferencePriceForAllFood()
+    {
+        if (
+            ModMakerVM.DialogService.ShowMessageBoxX(
+                this,
+                "将所有食物设置为参考价格,你确定吗?".Translate(),
+                "设置全部食物为参考价格".Translate(),
+                MessageBoxButton.YesNo,
+                MessageBoxImage.Information
+            )
+            is not true
+        )
+            return;
+        var count = 0;
+        foreach (var food in Foods)
+        {
+            if (food.Price == food.ReferencePrice)
+                continue;
+
+            this.LogX()
+                .Debug(
+                    "食物 {food} 设置参考价格 {oldPrice} -> {price}",
+                    food.ID,
+                    food.Price,
+                    food.ReferencePrice
+                );
+            food.Price = food.ReferencePrice;
+            count++;
+        }
+        this.LogX().Info("已为 {count} 个食物 {food} 设置参考价格", count);
     }
 
     /// <summary>

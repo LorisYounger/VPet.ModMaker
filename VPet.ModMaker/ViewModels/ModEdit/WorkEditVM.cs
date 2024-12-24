@@ -250,6 +250,30 @@ public partial class WorkEditVM : DialogViewModel, IEnableLogger<ViewModelBase>,
     }
 
     /// <summary>
+    /// 为所有工作修复超模
+    /// </summary>
+    [ReactiveCommand]
+    private void FixOverLoadForAllWork()
+    {
+        if (
+            ModMakerVM.DialogService.ShowMessageBoxX(
+                this,
+                "将为所有工作进行超模修复,你确定吗?".Translate(),
+                "修复所有工作超模".Translate(),
+                MessageBoxButton.YesNo,
+                MessageBoxImage.Information
+            )
+            is not true
+        )
+            return;
+        foreach (var work in Works)
+        {
+            work.FixOverLoad();
+        }
+        this.LogX().Info("已为 {count} 个工作修复超模", Works.Count);
+    }
+
+    /// <summary>
     /// 添加图像
     /// </summary>
     [ReactiveCommand]

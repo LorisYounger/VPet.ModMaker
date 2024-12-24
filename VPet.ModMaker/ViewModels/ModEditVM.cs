@@ -361,7 +361,7 @@ public partial class ModEditVM : ViewModelBase, IResettable
     /// <inheritdoc/>
     public void Reset()
     {
-        ModInfo.Close();
+        ModInfo?.Close();
         ModInfo = null!;
         this.LogX().Debug("剩余缓存图像数量: {count}", HKWImageUtils.ImageByPath.Count);
     }

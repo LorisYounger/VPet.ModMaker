@@ -24,4 +24,5 @@
     x:Key="Int32CalculatorMultiConverter"
     DefaultResult="null"
     ResultToString="True" />
+  <c:CollectionCountCompareConverter x:Key="GreaterThanOrEqualConverter" ComparisonType="GreaterThanOrEqual" />
 </ResourceDictionary>

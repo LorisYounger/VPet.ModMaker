@@ -333,11 +333,11 @@ public partial class PetEditVM : DialogViewModel, IEnableLogger<ViewModelBase>, 
         if (DialogResult is not true)
         {
             newModel.I18nResource.ClearCultureData();
-            newModel.Close();
+            newModel.CloseWhenOld();
         }
         else
         {
-            OldPet.Close();
+            OldPet.CloseWhenOld();
             newModel.I18nResource.CopyDataTo(ModInfo.I18nResource, true);
             newModel.I18nResource = ModInfo.I18nResource;
             var temp = ModInfo.CurrentPet;

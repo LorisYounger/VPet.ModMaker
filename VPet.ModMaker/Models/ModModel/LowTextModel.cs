@@ -116,12 +116,16 @@ public partial class LowTextModel : ViewModelBase
     [ReactiveProperty]
     public LowText.LikeType Like { get; set; }
 
-    /// <summary>
-    /// 关闭
-    /// </summary>
-    public void Close()
+    /// <inheritdoc/>
+    protected override void Dispose(bool disposing)
     {
-        I18nResource.I18nObjects.Remove(I18nObject);
-        I18nObject.Close();
+        if (_disposed)
+            return;
+        base.Dispose(disposing);
+        if (disposing)
+        {
+            I18nResource.I18nObjects.Remove(I18nObject);
+            I18nObject.Close();
+        }
     }
 }

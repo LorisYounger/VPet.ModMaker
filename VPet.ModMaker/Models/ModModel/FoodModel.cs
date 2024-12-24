@@ -224,13 +224,17 @@ public partial class FoodModel : ViewModelBase
 
     private static readonly Food _food = new() { Image = string.Empty };
 
-    /// <summary>
-    /// 关闭
-    /// </summary>
-    public void Close()
+    /// <inheritdoc/>
+    protected override void Dispose(bool disposing)
     {
-        Image?.CloseStreamWhenNoReference();
-        I18nResource.I18nObjects.Remove(I18nObject);
-        I18nObject.Close();
+        if (_disposed)
+            return;
+        base.Dispose(disposing);
+        if (disposing)
+        {
+            Image?.CloseStreamWhenNoReference();
+            I18nResource.I18nObjects.Remove(I18nObject);
+            I18nObject.Close();
+        }
     }
 }
