@@ -5,12 +5,17 @@ namespace VPet.ModMaker.Models.ModModel;
 /// <summary>
 /// 动画模型接口
 /// </summary>
-public interface IAnimeModel
+public interface IAnimeModel : IDisposable
 {
     /// <summary>
     /// ID
     /// </summary>
     string ID { get; set; }
+
+    /// <summary>
+    /// 动画名称
+    /// </summary>
+    string Name { get; set; }
 
     /// <summary>
     /// 动画类型

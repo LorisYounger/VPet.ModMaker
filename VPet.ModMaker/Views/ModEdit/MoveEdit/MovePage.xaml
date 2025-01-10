@@ -83,7 +83,7 @@
         RowDetailsVisibilityMode="Visible"
         RowHeight="50"
         VirtualizingStackPanel.IsVirtualizing="True"
-        VirtualizingStackPanel.VirtualizationMode="Recycling">
+        VirtualizingStackPanel.VirtualizationMode="Recycling" CanUserDeleteRows="False">
         <DataGrid.RowStyle>
           <Style BasedOn="{StaticResource {x:Type DataGridRow}}" TargetType="DataGridRow">
             <Setter Property="Height" Value="50" />

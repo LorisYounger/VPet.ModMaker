@@ -26,10 +26,11 @@ namespace VPet.ModMaker.ViewModels.ModEdit;
 public partial class LowTextEditVM : DialogViewModel, IEnableLogger<ViewModelBase>, IDisposable
 {
     /// <inheritdoc/>
-    public LowTextEditVM()
+    public LowTextEditVM(ModInfoModel modInfo)
     {
+        ModInfo = modInfo;
         LowTexts = new(
-            [],
+            modInfo.LowTexts,
             [],
             f =>
             {
@@ -45,15 +46,11 @@ public partial class LowTextEditVM : DialogViewModel, IEnableLogger<ViewModelBas
             }
         );
 
-        this.WhenValueChanged(x => x.Search)
-            .Throttle(TimeSpan.FromSeconds(0.5), RxApp.TaskpoolScheduler)
-            .DistinctUntilChanged()
-            .ObserveOn(RxApp.MainThreadScheduler)
-            .Subscribe(_ => LowTexts.Refresh())
-            .Record(this);
-
-        SearchTargets
-            .WhenValueChanged(x => x.SelectedItem)
+        this.WhenAnyValue(
+                x => x.Search,
+                x => x.SearchTargets.SelectedItem,
+                x => x.ModInfo.I18nResource.CurrentCulture
+            )
             .Throttle(TimeSpan.FromSeconds(0.5), RxApp.TaskpoolScheduler)
             .DistinctUntilChanged()
             .ObserveOn(RxApp.MainThreadScheduler)
@@ -106,34 +103,7 @@ public partial class LowTextEditVM : DialogViewModel, IEnableLogger<ViewModelBas
     /// <summary>
     /// 模组信息
     /// </summary>
-    [ReactiveProperty]
     public ModInfoModel ModInfo { get; set; } = null!;
-
-    partial void OnModInfoChanged(ModInfoModel oldValue, ModInfoModel newValue)
-    {
-        if (oldValue is not null)
-        {
-            LowTexts.BaseList.BindingList(oldValue.LowTexts, true);
-        }
-        LowTexts.Clear();
-        LowTexts.AutoFilter = false;
-        if (newValue is not null)
-        {
-            newValue
-                .I18nResource.WhenValueChanged(x => x.CurrentCulture)
-                .Throttle(TimeSpan.FromSeconds(0.5), RxApp.TaskpoolScheduler)
-                .DistinctUntilChanged()
-                .ObserveOn(RxApp.MainThreadScheduler)
-                .Subscribe(_ => LowTexts.Refresh())
-                .Record(this);
-            LowTexts.AddRange(newValue.LowTexts);
-            LowTexts.BaseList.BindingList(newValue.LowTexts);
-            Search = string.Empty;
-            SearchTargets.SelectedItem = LowTextSearchTarget.ID;
-        }
-        LowTexts.Refresh();
-        LowTexts.AutoFilter = true;
-    }
 
     /// <summary>
     /// 低状态文本

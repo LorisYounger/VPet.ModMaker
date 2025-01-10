@@ -20,6 +20,7 @@ using Splat;
 using Splat.NLog;
 using VPet.ModMaker.Models;
 using VPet.ModMaker.Resources;
+using VPet.ModMaker.ViewModels.ModEdit;
 
 namespace VPet.ModMaker.ViewModels;
 
@@ -86,12 +87,6 @@ public partial class ModMakerVM : ViewModelBase
     }
 
     #region Property
-
-    /// <summary>
-    /// 当前模组
-    /// </summary>
-    [ReactiveProperty]
-    public ModInfoModel ModInfo { get; set; } = null!;
 
     /// <summary>
     /// 历史搜索文本
@@ -257,8 +252,7 @@ public partial class ModMakerVM : ViewModelBase
     [ReactiveCommand]
     public void CreateNewMod()
     {
-        ModInfo = new() { GameVersion = ModUpdataHelper.LastGameVersion };
-        MessageBus.Current.SendMessage(ModInfo);
+        EditMod(new() { GameVersion = ModUpdataHelper.LastGameVersion });
     }
 
     /// <summary>
@@ -267,8 +261,11 @@ public partial class ModMakerVM : ViewModelBase
     /// <param name="modInfo">模组信息</param>
     public void EditMod(ModInfoModel modInfo)
     {
-        ModInfo = modInfo;
-        MessageBus.Current.SendMessage(ModInfo);
+        var view = DialogService.DialogManager.FindViewByViewModel(this)!;
+        view.Hide();
+        var vm = new ModEditVM(modInfo);
+        DialogService.Show(vm).ShowViewOnSelfClose(view);
+        vm.CheckModInfo();
     }
 
     /// <summary>
@@ -341,8 +338,6 @@ public partial class ModMakerVM : ViewModelBase
         }
         catch (Exception ex)
         {
-            ModInfo?.Close();
-            ModInfo = null!;
             this.LogX().Error(ex, "模组载入失败, 路径: {path}", directory);
             DialogService.ShowMessageBoxX(this, "模组载入失败, 详情请查看日志".Translate());
         }

@@ -30,10 +30,11 @@ namespace VPet.ModMaker.ViewModels.ModEdit;
 public partial class FoodEditVM : DialogViewModel, IEnableLogger<ViewModelBase>, IDisposable
 {
     /// <inheritdoc/>
-    public FoodEditVM()
+    public FoodEditVM(ModInfoModel modInfo)
     {
+        ModInfo = modInfo;
         Foods = new(
-            [],
+            modInfo.Foods,
             [],
             f =>
             {
@@ -50,14 +51,11 @@ public partial class FoodEditVM : DialogViewModel, IEnableLogger<ViewModelBase>,
             }
         );
 
-        this.WhenValueChanged(x => x.Search)
-            .Throttle(TimeSpan.FromSeconds(0.5), RxApp.TaskpoolScheduler)
-            .DistinctUntilChanged()
-            .ObserveOn(RxApp.MainThreadScheduler)
-            .Subscribe(_ => Foods.Refresh())
-            .Record(this);
-        SearchTargets
-            .WhenValueChanged(x => x.SelectedItem)
+        this.WhenAnyValue(
+                x => x.Search,
+                x => x.SearchTargets.SelectedItem,
+                x => x.ModInfo.I18nResource.CurrentCulture
+            )
             .Throttle(TimeSpan.FromSeconds(0.5), RxApp.TaskpoolScheduler)
             .DistinctUntilChanged()
             .ObserveOn(RxApp.MainThreadScheduler)
@@ -112,35 +110,7 @@ public partial class FoodEditVM : DialogViewModel, IEnableLogger<ViewModelBase>,
     /// <summary>
     /// 模组信息
     /// </summary>
-    [ReactiveProperty]
     public ModInfoModel ModInfo { get; set; } = null!;
-
-    partial void OnModInfoChanged(ModInfoModel oldValue, ModInfoModel newValue)
-    {
-        if (oldValue is not null)
-        {
-            Foods.BaseList.BindingList(oldValue.Foods, true);
-        }
-        Foods.Clear();
-        Foods.AutoFilter = false;
-        if (newValue is not null)
-        {
-            newValue
-                .I18nResource.WhenValueChanged(x => x.CurrentCulture)
-                .Throttle(TimeSpan.FromSeconds(0.5), RxApp.TaskpoolScheduler)
-                .DistinctUntilChanged()
-                .ObserveOn(RxApp.MainThreadScheduler)
-                .Subscribe(_ => Foods.Refresh())
-                .Record(this);
-
-            Foods.AddRange(newValue.Foods);
-            Foods.BaseList.BindingList(newValue.Foods);
-            Search = string.Empty;
-            SearchTargets.SelectedItem = FoodSearchTarget.ID;
-        }
-        Foods.Refresh();
-        Foods.AutoFilter = true;
-    }
 
     /// <summary>
     /// 食物
@@ -236,7 +206,7 @@ public partial class FoodEditVM : DialogViewModel, IEnableLogger<ViewModelBase>,
             food.Price = food.ReferencePrice;
             count++;
         }
-        this.LogX().Info("已为 {count} 个食物 {food} 设置参考价格", count);
+        this.LogX().Info("已为 {count} 个食物设置参考价格", count);
     }
 
     /// <summary>

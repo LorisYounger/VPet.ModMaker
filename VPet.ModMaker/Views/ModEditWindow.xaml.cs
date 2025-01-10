@@ -17,21 +17,35 @@ namespace VPet.ModMaker.Views.ModEdit;
 /// <summary>
 /// winModInfo.xaml 的交互逻辑
 /// </summary>
-public partial class ModEditWindow : WindowX, IPageLocator, IDisposables
+public partial class ModEditWindow : WindowX, IPageLocator, IDisposableTracker
 {
     /// <inheritdoc/>
     public ModEditWindow()
     {
         InitializeComponent();
-        this.SetViewModel<ModEditVM>();
         ListBox_Pages.ItemsSource = PageByType.Values;
-        Closing += ModEditWindow_Closing;
+        Loaded += ModEditWindow_Loaded;
+        Closed += ModEditWindow_Closed;
+    }
+
+    private void ModEditWindow_Closed(object? sender, EventArgs e)
+    {
+        this.DisposeAll();
+        foreach (var page in PageByType.Values)
+            page.Close();
+    }
+
+    private void ModEditWindow_Loaded(object sender, RoutedEventArgs e)
+    {
+        foreach (var page in PageByType.Values)
+            page.RefreshDisplayText();
+        ListBox_Pages.SelectedIndex = 0;
     }
 
     /// <summary>
     /// 处理列表
     /// </summary>
-    public List<IDisposable> Disposables { get; private set; } = [];
+    public List<IDisposable> DisposableList { get; private set; } = [];
 
     /// <summary>
     /// 视图模型
@@ -52,7 +66,7 @@ public partial class ModEditWindow : WindowX, IPageLocator, IDisposables
         {
             [typeof(FoodPage)] = new(w =>
             {
-                var vm = new FoodEditVM() { ModInfo = ViewModel.ModInfo };
+                var vm = new FoodEditVM(ViewModel.ModInfo);
                 var page = new FoodPage() { DataContext = vm };
 
                 ViewModel
@@ -66,7 +80,7 @@ public partial class ModEditWindow : WindowX, IPageLocator, IDisposables
             },
             [typeof(ClickTextPage)] = new(w =>
             {
-                var vm = new ClickTextEditVM() { ModInfo = ViewModel.ModInfo };
+                var vm = new ClickTextEditVM(ViewModel.ModInfo);
                 var page = new ClickTextPage() { DataContext = vm };
 
                 ViewModel
@@ -81,7 +95,7 @@ public partial class ModEditWindow : WindowX, IPageLocator, IDisposables
             },
             [typeof(LowTextPage)] = new(w =>
             {
-                var vm = new LowTextEditVM() { ModInfo = ViewModel.ModInfo };
+                var vm = new LowTextEditVM(ViewModel.ModInfo);
                 var page = new LowTextPage() { DataContext = vm };
 
                 ViewModel
@@ -96,7 +110,7 @@ public partial class ModEditWindow : WindowX, IPageLocator, IDisposables
             },
             [typeof(SelectTextPage)] = new(w =>
             {
-                var vm = new SelectTextEditVM() { ModInfo = ViewModel.ModInfo };
+                var vm = new SelectTextEditVM(ViewModel.ModInfo);
                 var page = new SelectTextPage() { DataContext = vm };
 
                 ViewModel
@@ -111,7 +125,7 @@ public partial class ModEditWindow : WindowX, IPageLocator, IDisposables
             },
             [typeof(PetPage)] = new(w =>
             {
-                var vm = new PetEditVM() { ModInfo = ViewModel.ModInfo };
+                var vm = new PetEditVM(ViewModel.ModInfo);
                 var page = new PetPage() { DataContext = vm };
 
                 ViewModel
@@ -126,7 +140,7 @@ public partial class ModEditWindow : WindowX, IPageLocator, IDisposables
             },
             [typeof(MovePage)] = new(w =>
             {
-                var vm = new MoveEditVM() { ModInfo = ViewModel.ModInfo };
+                var vm = new MoveEditVM(ViewModel.ModInfo);
                 var page = new MovePage() { DataContext = vm };
 
                 ViewModel
@@ -142,7 +156,7 @@ public partial class ModEditWindow : WindowX, IPageLocator, IDisposables
             },
             [typeof(WorkPage)] = new(w =>
             {
-                var vm = new WorkEditVM() { ModInfo = ViewModel.ModInfo };
+                var vm = new WorkEditVM(ViewModel.ModInfo);
                 var page = new WorkPage() { DataContext = vm };
 
                 ViewModel
@@ -158,14 +172,11 @@ public partial class ModEditWindow : WindowX, IPageLocator, IDisposables
             },
             [typeof(AnimePage)] = new(w =>
             {
-                var vm = new AnimeVM() { ModInfo = ViewModel.ModInfo };
+                var vm = new AnimeVM(ViewModel.ModInfo);
                 var page = new AnimePage() { DataContext = vm };
 
                 ViewModel
-                    .ModInfo.WhenAnyValue(
-                        x => x.CurrentPet!.Animes.Count,
-                        x => x.CurrentPet!.FoodAnimes.Count
-                    )
+                    .ModInfo.WhenAnyValue(x => x.CurrentPet!.Animes.Count)
                     .Subscribe(x => w.RefreshDisplayText())
                     .Record(this);
                 return page;
@@ -173,42 +184,9 @@ public partial class ModEditWindow : WindowX, IPageLocator, IDisposables
             {
                 DisplayTextAction = _ =>
                     "动画".Translate()
-                    + $" ({(ViewModel.ModInfo.CurrentPet is null ? "null" : ViewModel.ModInfo.CurrentPet.Animes.Count + ViewModel.ModInfo.CurrentPet.FoodAnimes.Count)})"
+                    + $" ({(ViewModel.ModInfo.CurrentPet is null ? "null" : ViewModel.ModInfo.CurrentPet.Animes.Count)})"
             },
         };
-
-    private void ModEditWindow_Closing(object? sender, CancelEventArgs e)
-    {
-        if (ViewModel.ModInfo is null)
-            return;
-        if (
-            MessageBoxX.Show("确认退出吗?".Translate(), "退出编辑".Translate(), MessageBoxButton.YesNo)
-            is not MessageBoxResult.Yes
-        )
-        {
-            this.SkipNextClose();
-            return;
-        }
-        ViewModel.Reset();
-        foreach (var page in PageByType.Values)
-            page.Reset();
-        this.DisposeAll();
-        MessageBus.Current.SendMessage<ModInfoModel?>(null);
-    }
-
-    /// <summary>
-    /// 显示页面
-    /// </summary>
-    /// <param name="index">索引值</param>
-    public void ShowTab(int index)
-    {
-        ListBox_Pages.SelectedIndex = index;
-        if (index == 0)
-        {
-            foreach (var page in PageByType.Values)
-                page.RefreshDisplayText();
-        }
-    }
 
     private void ListBox_Pages_PreviewMouseWheel(object sender, MouseWheelEventArgs e)
     {

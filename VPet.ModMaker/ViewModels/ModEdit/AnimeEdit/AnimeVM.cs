@@ -22,31 +22,25 @@ namespace VPet.ModMaker.ViewModels.ModEdit;
 public partial class AnimeVM : ViewModelBase
 {
     /// <inheritdoc/>
-    public AnimeVM()
+    public AnimeVM(ModInfoModel modInfo)
     {
-        AllAnimes = new(
-            [],
-            [],
-            (f) =>
-            {
-                if (f is AnimeTypeModel animeModel)
-                {
-                    return animeModel.ID.Contains(Search, StringComparison.OrdinalIgnoreCase);
-                }
-                else if (f is FoodAnimeTypeModel foodAnimeModel)
-                {
-                    return foodAnimeModel.ID.Contains(Search, StringComparison.OrdinalIgnoreCase);
-                }
-                else
-                    return false;
-            }
-        );
+        ModInfo = modInfo;
+        Animes = new([], [], (f) => f.ID.Contains(Search, StringComparison.OrdinalIgnoreCase));
 
-        this.WhenValueChanged(x => x.Search)
+        this.WhenAnyValue(x => x.Search)
             .Throttle(TimeSpan.FromSeconds(0.5), RxApp.TaskpoolScheduler)
             .DistinctUntilChanged()
             .ObserveOn(RxApp.MainThreadScheduler)
-            .Subscribe(_ => AllAnimes.Refresh());
+            .Subscribe(_ => Animes.Refresh())
+            .Record(this);
+
+        modInfo
+            .WhenAnyValue(x => x.CurrentPet)
+            .Throttle(TimeSpan.FromSeconds(0.5), RxApp.TaskpoolScheduler)
+            .DistinctUntilChanged()
+            .ObserveOn(RxApp.MainThreadScheduler)
+            .Subscribe(x => CurrentPet = x!)
+            .Record(this);
     }
 
     #region Property
@@ -74,7 +68,11 @@ public partial class AnimeVM : ViewModelBase
     /// <summary>
     /// 所有动画
     /// </summary>
-    public FilterListWrapper<object, List<object>, ObservableList<object>> AllAnimes { get; }
+    public FilterListWrapper<
+        IAnimeModel,
+        ObservableList<IAnimeModel>,
+        ObservableList<IAnimeModel>
+    > Animes { get; }
 
     /// <summary>
     /// 当前宠物
@@ -86,23 +84,18 @@ public partial class AnimeVM : ViewModelBase
     {
         if (oldValue is not null)
         {
-            oldValue.Animes.CollectionChanged -= Animes_CollectionChanged;
-            oldValue.FoodAnimes.CollectionChanged -= Animes_CollectionChanged;
+            Animes.BaseList.BindingList(newValue.Animes, true);
         }
-        AllAnimes.Clear();
-        AllAnimes.AutoFilter = false;
+        Animes.Clear();
+        Animes.AutoFilter = false;
         if (newValue is not null)
         {
-            AllAnimes.AddRange(newValue.Animes);
-            AllAnimes.AddRange(newValue.FoodAnimes);
+            Animes.AddRange(newValue.Animes);
+            Animes.BaseList.BindingList(newValue.Animes);
             Search = string.Empty;
-            newValue.Animes.CollectionChanged -= Animes_CollectionChanged;
-            newValue.Animes.CollectionChanged += Animes_CollectionChanged;
-            newValue.FoodAnimes.CollectionChanged -= Animes_CollectionChanged;
-            newValue.FoodAnimes.CollectionChanged += Animes_CollectionChanged;
         }
-        AllAnimes.Refresh();
-        AllAnimes.AutoFilter = true;
+        Animes.Refresh();
+        Animes.AutoFilter = true;
     }
 
     /// <summary>
@@ -111,16 +104,6 @@ public partial class AnimeVM : ViewModelBase
     [ReactiveProperty]
     public string Search { get; set; } = string.Empty;
     #endregion
-
-    private void Animes_CollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
-    {
-        if (e.Action is NotifyCollectionChangedAction.Add)
-            AllAnimes.Add(e.NewItems![0]!);
-        else if (e.Action is NotifyCollectionChangedAction.Remove)
-            AllAnimes.Remove(e.OldItems![0]!);
-        else if (e.Action is NotifyCollectionChangedAction.Replace)
-            AllAnimes[AllAnimes.IndexOf(e.OldItems![0]!)] = e.NewItems![0]!;
-    }
 
     /// <summary>
     /// 添加
@@ -147,7 +130,7 @@ public partial class AnimeVM : ViewModelBase
             );
             if (animeVM.DialogResult is not true)
                 return;
-            CurrentPet.FoodAnimes.Add(animeVM.Anime);
+            CurrentPet.Animes.Add(animeVM.Anime);
         }
         else
         {
@@ -217,8 +200,7 @@ public partial class AnimeVM : ViewModelBase
             else
             {
                 animeVM.OldAnime?.Close();
-                CurrentPet.FoodAnimes[CurrentPet.FoodAnimes.IndexOf(foodAnimeTypeModel)] =
-                    animeVM.Anime;
+                CurrentPet.Animes[CurrentPet.Animes.IndexOf(foodAnimeTypeModel)] = animeVM.Anime;
             }
         }
     }
@@ -243,26 +225,8 @@ public partial class AnimeVM : ViewModelBase
             return;
         foreach (var model in models)
         {
-            if (model is AnimeTypeModel animeTypeModel)
-            {
-                CurrentPet.Animes.Remove(animeTypeModel);
-            }
-            else if (model is FoodAnimeTypeModel foodAnimeTypeModel)
-            {
-                CurrentPet.FoodAnimes.Remove(foodAnimeTypeModel);
-            }
-            else
-            {
-                this.LogX().Warn("未知动画类型 {anime}", model);
-                continue;
-            }
-            model.Close();
+            CurrentPet.Animes.Remove(model);
             this.LogX().Info("删除动画 {food}", model.ID);
         }
     }
-
-    /// <summary>
-    /// 重置
-    /// </summary>
-    public void Reset() { }
 }

@@ -23,42 +23,12 @@ public partial class ModMakerWindow : WindowX, IPageLocator, IEnableLogger<ViewM
     {
         InitializeComponent();
         NativeUtils.ClipboardSetText = Clipboard.SetText;
-        IDisposable? bus = null;
         this.SetViewModel<ModMakerVM>(
             (s, e) =>
             {
                 ViewModel.Close();
-                bus?.Dispose();
             }
         );
-        bus = MessageBus
-            .Current.Listen<ModInfoModel?>()
-            .Subscribe(x =>
-            {
-                if (x is null)
-                {
-                    GC.Collect();
-                    this.ShowOrActivate();
-                    ModEditWindow.Hide();
-                    if (string.IsNullOrEmpty(ViewModel.ModInfo?.SourcePath) is false)
-                        ViewModel.AddHistory(ViewModel.ModInfo);
-                    ModEditWindow.ViewModel.ModInfo = ViewModel.ModInfo = null!;
-                    ModEditWindow.ShowTab(-1);
-                }
-                else
-                {
-                    GC.Collect();
-                    this.Hide();
-                    ModEditWindow.ShowOrActivate();
-                    ModEditWindow.SetLocationToCenter();
-                    ModEditWindow.ViewModel.ModInfo = x;
-                    ModEditWindow.ShowTab(0);
-
-#if !RELEASE
-                    //ModEditWindow.InitializePages();
-#endif
-                }
-            });
     }
 
     /// <summary>
@@ -68,16 +38,6 @@ public partial class ModMakerWindow : WindowX, IPageLocator, IEnableLogger<ViewM
 
     /// <inheritdoc/>
     public Func<Type, FrameworkElement?>? LocatePageByType { get; }
-
-    #region ModEditWindow
-    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-    private ModEditWindow? _modEditWindow;
-
-    /// <summary>
-    /// 单例窗口
-    /// </summary>
-    public ModEditWindow ModEditWindow => _modEditWindow ??= new ModEditWindow().MaskClose(this);
-    #endregion
 
     private void ListBoxItem_MouseDoubleClick(object sender, MouseButtonEventArgs e)
     {

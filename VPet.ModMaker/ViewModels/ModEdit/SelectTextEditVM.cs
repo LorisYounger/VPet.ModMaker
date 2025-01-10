@@ -26,10 +26,11 @@ namespace VPet.ModMaker.ViewModels.ModEdit;
 public partial class SelectTextEditVM : DialogViewModel, IEnableLogger<ViewModelBase>, IDisposable
 {
     /// <inheritdoc/>
-    public SelectTextEditVM()
+    public SelectTextEditVM(ModInfoModel modInfo)
     {
+        ModInfo = modInfo;
         SelectTexts = new(
-            [],
+            modInfo.SelectTexts,
             [],
             f =>
             {
@@ -48,15 +49,11 @@ public partial class SelectTextEditVM : DialogViewModel, IEnableLogger<ViewModel
             }
         );
 
-        this.WhenValueChanged(x => x.Search)
-            .Throttle(TimeSpan.FromSeconds(0.5), RxApp.TaskpoolScheduler)
-            .DistinctUntilChanged()
-            .ObserveOn(RxApp.MainThreadScheduler)
-            .Subscribe(_ => SelectTexts.Refresh())
-            .Record(this);
-
-        SearchTargets
-            .WhenValueChanged(x => x.SelectedItem)
+        this.WhenAnyValue(
+                x => x.Search,
+                x => x.SearchTargets.SelectedItem,
+                x => x.ModInfo.I18nResource.CurrentCulture
+            )
             .Throttle(TimeSpan.FromSeconds(0.5), RxApp.TaskpoolScheduler)
             .DistinctUntilChanged()
             .ObserveOn(RxApp.MainThreadScheduler)
@@ -112,33 +109,7 @@ public partial class SelectTextEditVM : DialogViewModel, IEnableLogger<ViewModel
     /// <summary>
     /// 模组信息
     /// </summary>
-    [ReactiveProperty]
     public ModInfoModel ModInfo { get; set; } = null!;
-
-    partial void OnModInfoChanged(ModInfoModel oldValue, ModInfoModel newValue)
-    {
-        if (oldValue is not null)
-        {
-            SelectTexts.BaseList.BindingList(oldValue.SelectTexts, true);
-        }
-        SelectTexts.Clear();
-        SelectTexts.AutoFilter = false;
-        if (newValue is not null)
-        {
-            newValue
-                .I18nResource.WhenValueChanged(x => x.CurrentCulture)
-                .Throttle(TimeSpan.FromSeconds(0.5), RxApp.TaskpoolScheduler)
-                .DistinctUntilChanged()
-                .ObserveOn(RxApp.MainThreadScheduler)
-                .Subscribe(_ => SelectTexts.Refresh())
-                .Record(this);
-            SelectTexts.AddRange(newValue.SelectTexts);
-            Search = string.Empty;
-            SearchTargets.SelectedItem = SelectTextSearchTarget.ID;
-            SelectTexts.Refresh();
-            SelectTexts.AutoFilter = true;
-        }
-    }
 
     /// <summary>
     /// 全部选择文本

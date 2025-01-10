@@ -26,10 +26,11 @@ namespace VPet.ModMaker.ViewModels.ModEdit;
 public partial class ClickTextEditVM : DialogViewModel, IEnableLogger<ViewModelBase>, IDisposable
 {
     /// <inheritdoc/>
-    public ClickTextEditVM()
+    public ClickTextEditVM(ModInfoModel modInfo)
     {
+        ModInfo = modInfo;
         ClickTexts = new(
-            [],
+            modInfo.ClickTexts,
             [],
             f =>
             {
@@ -46,14 +47,11 @@ public partial class ClickTextEditVM : DialogViewModel, IEnableLogger<ViewModelB
             }
         );
 
-        this.WhenValueChanged(x => x.Search)
-            .Throttle(TimeSpan.FromSeconds(0.5), RxApp.TaskpoolScheduler)
-            .DistinctUntilChanged()
-            .ObserveOn(RxApp.MainThreadScheduler)
-            .Subscribe(_ => ClickTexts.Refresh())
-            .Record(this);
-        SearchTargets
-            .WhenValueChanged(x => x.SelectedItem)
+        this.WhenAnyValue(
+                x => x.Search,
+                x => x.SearchTargets.SelectedItem,
+                x => x.ModInfo.I18nResource.CurrentCulture
+            )
             .Throttle(TimeSpan.FromSeconds(0.5), RxApp.TaskpoolScheduler)
             .DistinctUntilChanged()
             .ObserveOn(RxApp.MainThreadScheduler)
@@ -109,34 +107,7 @@ public partial class ClickTextEditVM : DialogViewModel, IEnableLogger<ViewModelB
     /// <summary>
     /// 模组信息
     /// </summary>
-    [ReactiveProperty]
     public ModInfoModel ModInfo { get; set; } = null!;
-
-    partial void OnModInfoChanged(ModInfoModel oldValue, ModInfoModel newValue)
-    {
-        if (oldValue is not null)
-        {
-            ClickTexts.BaseList.BindingList(oldValue.ClickTexts, true);
-        }
-        ClickTexts.Clear();
-        ClickTexts.AutoFilter = false;
-        if (newValue is not null)
-        {
-            newValue
-                .I18nResource.WhenValueChanged(x => x.CurrentCulture)
-                .Throttle(TimeSpan.FromSeconds(0.5), RxApp.TaskpoolScheduler)
-                .DistinctUntilChanged()
-                .ObserveOn(RxApp.MainThreadScheduler)
-                .Subscribe(_ => ClickTexts.Refresh())
-                .Record(this);
-            ClickTexts.AddRange(newValue.ClickTexts);
-            ClickTexts.BaseList.BindingList(newValue.ClickTexts);
-            Search = string.Empty;
-            SearchTargets.SelectedItem = ClickTextSearchTarget.ID;
-        }
-        ClickTexts.Refresh();
-        ClickTexts.AutoFilter = true;
-    }
 
     /// <summary>
     /// 显示的点击文本
@@ -160,11 +131,6 @@ public partial class ClickTextEditVM : DialogViewModel, IEnableLogger<ViewModelB
         ClickTextSearchTarget,
         FrozenSet<ClickTextSearchTarget>
     > SearchTargets { get; } = new(EnumInfo<ClickTextSearchTarget>.Values);
-
-    /// <summary>
-    /// I18n资源
-    /// </summary>
-    public I18nResource<string, string> I18nResource => ModInfo.I18nResource;
 
     /// <summary>
     /// 旧点击文本

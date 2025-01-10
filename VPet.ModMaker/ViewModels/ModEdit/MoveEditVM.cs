@@ -28,15 +28,24 @@ namespace VPet.ModMaker.ViewModels.ModEdit;
 public partial class MoveEditVM : DialogViewModel, IEnableLogger<ViewModelBase>, IDisposable
 {
     /// <inheritdoc/>
-    public MoveEditVM()
+    public MoveEditVM(ModInfoModel modInfo)
     {
+        ModInfo = modInfo;
         Moves = new([], [], f => f.Graph.Contains(Search, StringComparison.OrdinalIgnoreCase));
 
-        this.WhenValueChanged(x => x.Search)
+        this.WhenAnyValue(x => x.Search)
             .Throttle(TimeSpan.FromSeconds(0.5), RxApp.TaskpoolScheduler)
             .DistinctUntilChanged()
             .ObserveOn(RxApp.MainThreadScheduler)
             .Subscribe(_ => Moves.Refresh())
+            .Record(this);
+
+        modInfo
+            .WhenAnyValue(x => x.CurrentPet)
+            .Throttle(TimeSpan.FromSeconds(0.5), RxApp.TaskpoolScheduler)
+            .DistinctUntilChanged()
+            .ObserveOn(RxApp.MainThreadScheduler)
+            .Subscribe(x => CurrentPet = x)
             .Record(this);
 
         Closing += MoveEditVM_Closing;
@@ -61,25 +70,7 @@ public partial class MoveEditVM : DialogViewModel, IEnableLogger<ViewModelBase>,
     /// <summary>
     /// 模组信息
     /// </summary>
-    [ReactiveProperty]
     public ModInfoModel ModInfo { get; set; } = null!;
-
-    partial void OnModInfoChanged(ModInfoModel oldValue, ModInfoModel newValue)
-    {
-        if (oldValue is not null) { }
-        if (newValue is not null)
-        {
-            newValue
-                .WhenValueChanged(x => x.CurrentPet)
-                .Throttle(TimeSpan.FromSeconds(0.5), RxApp.TaskpoolScheduler)
-                .DistinctUntilChanged()
-                .ObserveOn(RxApp.MainThreadScheduler)
-                .Subscribe(x => CurrentPet = x)
-                .Record(this);
-        }
-        if (newValue is null)
-            CurrentPet = null;
-    }
 
     /// <summary>
     /// 全部移动
@@ -106,20 +97,12 @@ public partial class MoveEditVM : DialogViewModel, IEnableLogger<ViewModelBase>,
         Moves.AutoFilter = false;
         if (newValue is not null)
         {
-            newValue
-                .I18nResource.WhenValueChanged(x => x.CurrentCulture)
-                .Throttle(TimeSpan.FromSeconds(0.5), RxApp.TaskpoolScheduler)
-                .DistinctUntilChanged()
-                .ObserveOn(RxApp.MainThreadScheduler)
-                .Subscribe(_ => Moves.Refresh())
-                .Record(this);
-
             Moves.AddRange(newValue.Moves);
             Moves.BaseList.BindingList(newValue.Moves);
             Search = string.Empty;
-            Moves.Refresh();
-            Moves.AutoFilter = true;
         }
+        Moves.Refresh();
+        Moves.AutoFilter = true;
     }
 
     /// <summary>

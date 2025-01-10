@@ -48,6 +48,7 @@
       pu:DataGridHelper.RowSelectedBorderThickness="3"
       AutoGenerateColumns="False"
       CanUserAddRows="False"
+      CanUserDeleteRows="False"
       GridLinesVisibility="Horizontal"
       ItemsSource="{Binding Foods.FilteredList}"
       MouseDoubleClick="DataGrid_MouseDoubleClick"

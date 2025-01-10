@@ -26,10 +26,11 @@ namespace VPet.ModMaker.ViewModels.ModEdit;
 public partial class PetEditVM : DialogViewModel, IEnableLogger<ViewModelBase>, IDisposable
 {
     /// <inheritdoc/>
-    public PetEditVM()
+    public PetEditVM(ModInfoModel modInfo)
     {
+        ModInfo = modInfo;
         Pets = new(
-            [],
+            modInfo.Pets.BaseList,
             [],
             f =>
             {
@@ -51,14 +52,11 @@ public partial class PetEditVM : DialogViewModel, IEnableLogger<ViewModelBase>, 
             }
         );
 
-        this.WhenValueChanged(x => x.Search)
-            .Throttle(TimeSpan.FromSeconds(0.5), RxApp.TaskpoolScheduler)
-            .DistinctUntilChanged()
-            .ObserveOn(RxApp.MainThreadScheduler)
-            .Subscribe(_ => Pets.Refresh())
-            .Record(this);
-        SearchTargets
-            .WhenValueChanged(x => x.SelectedItem)
+        this.WhenAnyValue(
+                x => x.Search,
+                x => x.SearchTargets.SelectedItem,
+                x => x.ModInfo.I18nResource.CurrentCulture
+            )
             .Throttle(TimeSpan.FromSeconds(0.5), RxApp.TaskpoolScheduler)
             .DistinctUntilChanged()
             .ObserveOn(RxApp.MainThreadScheduler)
@@ -123,35 +121,7 @@ public partial class PetEditVM : DialogViewModel, IEnableLogger<ViewModelBase>, 
     /// <summary>
     /// 模组信息
     /// </summary>
-    [ReactiveProperty]
     public ModInfoModel ModInfo { get; set; } = null!;
-
-    partial void OnModInfoChanged(ModInfoModel oldValue, ModInfoModel newValue)
-    {
-        if (oldValue is not null)
-        {
-            Pets.BaseList.BindingList(oldValue.Pets, true);
-        }
-        Pets.Clear();
-        Pets.AutoFilter = false;
-        if (newValue is not null)
-        {
-            newValue
-                .I18nResource.WhenValueChanged(x => x.CurrentCulture)
-                .Throttle(TimeSpan.FromSeconds(0.5), RxApp.TaskpoolScheduler)
-                .DistinctUntilChanged()
-                .ObserveOn(RxApp.MainThreadScheduler)
-                .Subscribe(_ => Pets.Refresh())
-                .Record(this);
-
-            Pets.AddRange(newValue.Pets);
-            Search = string.Empty;
-            SearchTargets.SelectedItem = PetSearchTarget.ID;
-            Pets.Refresh();
-            Pets.BaseList.BindingList(newValue.Pets);
-            Pets.AutoFilter = true;
-        }
-    }
 
     /// <summary>
     /// 宠物

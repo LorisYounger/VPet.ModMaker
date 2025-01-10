@@ -34,7 +34,6 @@ public partial class PetModel : ViewModelBase
         Works = model.Works;
         Moves = model.Moves;
         Animes = model.Animes;
-        FoodAnimes = model.FoodAnimes;
     }
 
     /// <inheritdoc/>
@@ -269,12 +268,12 @@ public partial class PetModel : ViewModelBase
     /// <summary>
     /// 动画
     /// </summary>
-    public ObservableList<AnimeTypeModel> Animes { get; } = [];
+    public ObservableList<IAnimeModel> Animes { get; } = [];
 
-    /// <summary>
-    ///食物动画
-    /// </summary>
-    public ObservableList<FoodAnimeTypeModel> FoodAnimes { get; } = [];
+    ///// <summary>
+    /////食物动画
+    ///// </summary>
+    //public ObservableList<FoodAnimeTypeModel> FoodAnimes { get; } = [];
 
     #region Save
 
@@ -306,8 +305,6 @@ public partial class PetModel : ViewModelBase
         if (Directory.Exists(petAnimePath))
             Directory.Delete(petAnimePath, true);
         foreach (var anime in Animes)
-            anime.Save(petAnimePath);
-        foreach (var anime in FoodAnimes)
             anime.Save(petAnimePath);
     }
 
@@ -492,8 +489,6 @@ public partial class PetModel : ViewModelBase
             foreach (var work in Works)
                 work.Dispose();
             foreach (var anime in Animes)
-                anime.Dispose();
-            foreach (var anime in FoodAnimes)
                 anime.Dispose();
             I18nResource.I18nObjects.Remove(I18nObject);
             I18nObject.Dispose();

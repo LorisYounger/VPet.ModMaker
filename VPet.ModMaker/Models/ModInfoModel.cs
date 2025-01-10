@@ -539,7 +539,7 @@ public partial class ModInfoModel : ViewModelBase
                 try
                 {
                     var anime = new FoodAnimeTypeModel(animeDir);
-                    petModel.FoodAnimes.Add(anime);
+                    petModel.Animes.Add(anime);
                 }
                 catch (Exception ex)
                 {

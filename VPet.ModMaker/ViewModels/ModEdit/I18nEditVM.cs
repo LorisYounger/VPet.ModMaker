@@ -22,14 +22,7 @@ public partial class I18nEditVM : DialogViewModel, IEnableLogger<ViewModelBase>
     {
         ModInfo = modInfo;
         ModInfo.I18nResource.ClearUnreferencedData();
-        this.WhenValueChanged(x => x.Search)
-            .Throttle(TimeSpan.FromSeconds(0.5), RxApp.TaskpoolScheduler)
-            .DistinctUntilChanged()
-            .ObserveOn(RxApp.MainThreadScheduler)
-            .Subscribe(_ => I18nDatas.Refresh())
-            .Record(this);
-        SearchTargets
-            .WhenValueChanged(x => x.SelectedItem)
+        this.WhenAnyValue(x => x.Search, x => x.SearchTargets.SelectedItem)
             .Throttle(TimeSpan.FromSeconds(0.5), RxApp.TaskpoolScheduler)
             .DistinctUntilChanged()
             .ObserveOn(RxApp.MainThreadScheduler)

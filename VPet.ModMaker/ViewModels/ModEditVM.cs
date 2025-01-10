@@ -6,6 +6,7 @@ using HanumanInstitute.MvvmDialogs.FrameworkDialogs;
 using HKW.HKWReactiveUI;
 using HKW.HKWUtils;
 using HKW.HKWUtils.Extensions;
+using HKW.MVVMDialogs;
 using HKW.WPF;
 using HKW.WPF.Extensions;
 using HKW.WPF.MVVMDialogs;
@@ -19,78 +20,111 @@ namespace VPet.ModMaker.ViewModels.ModEdit;
 /// <summary>
 /// 模组编辑视图模型
 /// </summary>
-public partial class ModEditVM : ViewModelBase, IResettable
+public partial class ModEditVM : DialogViewModel, IEnableLogger<ViewModelBase>
 {
     /// <inheritdoc/>
-    public ModEditVM() { }
+    public ModEditVM(ModInfoModel modInfo)
+    {
+        Closing += ModEditVM_Closing;
+        Closed += ModEditVM_Closed;
+        ModInfo = modInfo;
+    }
+
+    private void ModEditVM_Closed(object? sender, EventArgs e)
+    {
+        Close();
+    }
 
     #region Property
     /// <summary>
     /// 当前模组信息
     /// </summary>
-    [ReactiveProperty]
     public ModInfoModel ModInfo { get; set; } = null!;
 
-    partial void OnModInfoChanged(ModInfoModel oldValue, ModInfoModel newValue)
+    #endregion
+
+    /// <summary>
+    /// 模组信息
+    /// </summary>
+    public void CheckModInfo()
     {
-        if (newValue is not null)
+        if (ModInfo.I18nResource.Cultures.Count == 0)
         {
+            ModMakerVM.DialogService.ShowMessageBoxX(
+                this,
+                "未添加任何文化,请添加文化".Translate(),
+                "缺少文化".Translate(),
+                icon: MessageBoxImage.Information
+            );
+            AddCulture();
             if (ModInfo.I18nResource.Cultures.Count == 0)
             {
                 ModMakerVM.DialogService.ShowMessageBoxX(
                     this,
-                    "未添加任何文化,请添加文化".Translate(),
-                    "缺少文化".Translate(),
-                    icon: MessageBoxImage.Information
+                    "未设置文化, 将退出编辑".Translate(),
+                    "数据错误".Translate(),
+                    icon: MessageBoxImage.Warning
                 );
-                AddCulture();
-                if (ModInfo.I18nResource.Cultures.Count == 0)
-                {
-                    ModMakerVM.DialogService.ShowMessageBoxX(
-                        this,
-                        "未设置文化, 将退出编辑".Translate(),
-                        "数据错误".Translate(),
-                        icon: MessageBoxImage.Warning
-                    );
-                    MessageBus.Current.SendMessage<ModInfoModel?>(null);
-                    return;
-                }
-            }
-            // 更新模组
-            if (ModUpdataHelper.CanUpdata(ModInfo) is false)
+                DialogResult = false;
+                ModMakerVM.DialogService.DialogManager.FindViewByViewModel(this)?.Close();
                 return;
-            if (
+            }
+        }
+        // 更新模组
+        if (ModUpdataHelper.CanUpdata(ModInfo) is false)
+            return;
+        if (
+            ModMakerVM.DialogService.ShowMessageBoxX(
+                this,
+                "是否更新模组\n当前版本: {0}\n最新版本: {1}".Translate(
+                    ModInfo.ModVersion,
+                    ModUpdataHelper.LastGameVersion
+                ),
+                "更新模组".Translate(),
+                MessageBoxButton.YesNo
+            )
+            is true
+        )
+        {
+            try
+            {
+                var version = ModUpdataHelper.Updata(ModInfo);
                 ModMakerVM.DialogService.ShowMessageBoxX(
                     this,
-                    "是否更新模组\n当前版本: {0}\n最新版本: {1}".Translate(
-                        ModInfo.ModVersion,
-                        ModUpdataHelper.LastGameVersion
-                    ),
-                    "更新模组".Translate(),
-                    MessageBoxButton.YesNo
-                )
-                is true
-            )
+                    "更新成功更新至版本 {0}, 请手动保存".Translate(version)
+                );
+                this.LogX().Info("更新成功更新至版本 {version}", version);
+            }
+            catch (Exception ex)
             {
-                try
-                {
-                    var version = ModUpdataHelper.Updata(ModInfo);
-                    ModMakerVM.DialogService.ShowMessageBoxX(
-                        this,
-                        "更新成功更新至版本 {0}, 请手动保存".Translate(version)
-                    );
-                    this.LogX().Info("更新成功更新至版本 {version}", version);
-                }
-                catch (Exception ex)
-                {
-                    ModMakerVM.DialogService.ShowMessageBoxX(this, "模组更新失败, 详情请查看日志".Translate());
-                    this.LogX().Error(ex, "模组更新失败");
-                }
+                ModMakerVM.DialogService.ShowMessageBoxX(this, "模组更新失败, 详情请查看日志".Translate());
+                this.LogX().Error(ex, "模组更新失败");
             }
         }
     }
-    #endregion
 
+    private void ModEditVM_Closing(object? sender, CancelEventArgs e)
+    {
+        if (DialogResult is not null)
+            return;
+        //if (ModInfo is null)
+        //    return;
+        if (
+            ModMakerVM.DialogService.ShowMessageBoxX(
+                this,
+                "确认退出吗?".Translate(),
+                "退出编辑".Translate(),
+                MessageBoxButton.YesNo,
+                MessageBoxImage.Warning
+            )
+            is not true
+        )
+        {
+            e.Cancel = true;
+        }
+    }
+
+    #region Command
     /// <summary>
     /// 保存为翻译模组
     /// </summary>
@@ -282,7 +316,7 @@ public partial class ModEditVM : ViewModelBase, IResettable
             return;
         SaveTo(saveFileDialog.LocalPath);
     }
-
+    #endregion
     /// <summary>
     /// 保存至
     /// </summary>
@@ -355,14 +389,7 @@ public partial class ModEditVM : ViewModelBase, IResettable
         if (_disposed)
             return;
         base.Dispose(disposing);
-        Reset();
-    }
-
-    /// <inheritdoc/>
-    public void Reset()
-    {
         ModInfo?.Close();
         ModInfo = null!;
-        this.LogX().Debug("剩余缓存图像数量: {count}", HKWImageUtils.ImageByPath.Count);
     }
 }

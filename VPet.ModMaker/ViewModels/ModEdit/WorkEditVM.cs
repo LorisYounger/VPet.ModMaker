@@ -32,8 +32,9 @@ namespace VPet.ModMaker.ViewModels.ModEdit;
 public partial class WorkEditVM : DialogViewModel, IEnableLogger<ViewModelBase>, IDisposable
 {
     /// <inheritdoc/>
-    public WorkEditVM()
+    public WorkEditVM(ModInfoModel modInfo)
     {
+        ModInfo = modInfo;
         Works = new(
             [],
             [],
@@ -50,15 +51,15 @@ public partial class WorkEditVM : DialogViewModel, IEnableLogger<ViewModelBase>,
             }
         );
 
-        this.WhenValueChanged(x => x.Search)
+        modInfo
+            .WhenValueChanged(x => x.CurrentPet)
             .Throttle(TimeSpan.FromSeconds(0.5), RxApp.TaskpoolScheduler)
             .DistinctUntilChanged()
             .ObserveOn(RxApp.MainThreadScheduler)
-            .Subscribe(_ => Works.Refresh())
+            .Subscribe(x => CurrentPet = x)
             .Record(this);
 
-        SearchTargets
-            .WhenValueChanged(x => x.SelectedItem)
+        this.WhenAnyValue(x => x.Search, x => x.SearchTargets.SelectedItem)
             .Throttle(TimeSpan.FromSeconds(0.5), RxApp.TaskpoolScheduler)
             .DistinctUntilChanged()
             .ObserveOn(RxApp.MainThreadScheduler)
@@ -109,33 +110,11 @@ public partial class WorkEditVM : DialogViewModel, IEnableLogger<ViewModelBase>,
     }
 
     #region Property
+
     /// <summary>
     /// 模组信息
     /// </summary>
-    [ReactiveProperty]
     public ModInfoModel ModInfo { get; set; } = null!;
-
-    partial void OnModInfoChanged(ModInfoModel oldValue, ModInfoModel newValue)
-    {
-        if (oldValue is not null) { }
-        if (newValue is not null)
-        {
-            newValue
-                .WhenValueChanged(x => x.CurrentPet)
-                .Throttle(TimeSpan.FromSeconds(0.5), RxApp.TaskpoolScheduler)
-                .DistinctUntilChanged()
-                .ObserveOn(RxApp.MainThreadScheduler)
-                .Subscribe(x => CurrentPet = x)
-                .Record(this);
-        }
-        if (newValue is null)
-            CurrentPet = null!;
-    }
-
-    /// <summary>
-    /// I18n资源
-    /// </summary>
-    public I18nResource<string, string> I18nResource => ModInfo.I18nResource;
 
     /// <summary>
     /// 当前宠物
@@ -153,14 +132,6 @@ public partial class WorkEditVM : DialogViewModel, IEnableLogger<ViewModelBase>,
         Works.AutoFilter = false;
         if (newValue is not null)
         {
-            newValue
-                .I18nResource.WhenValueChanged(x => x.CurrentCulture)
-                .Throttle(TimeSpan.FromSeconds(0.5), RxApp.TaskpoolScheduler)
-                .DistinctUntilChanged()
-                .ObserveOn(RxApp.MainThreadScheduler)
-                .Subscribe(_ => Works.Refresh())
-                .Record(this);
-
             Works.AddRange(newValue.Works);
             Works.BaseList.BindingList(newValue.Works);
             Search = string.Empty;
@@ -487,7 +458,6 @@ public partial class WorkEditVM : DialogViewModel, IEnableLogger<ViewModelBase>,
         base.Dispose(disposing);
         Reset();
         ModInfo = null!;
-        _disposed = false;
     }
 }
 
