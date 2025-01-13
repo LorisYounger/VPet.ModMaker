@@ -84,7 +84,7 @@ public partial class AnimeVM : ViewModelBase
     {
         if (oldValue is not null)
         {
-            Animes.BaseList.BindingList(newValue.Animes, true);
+            Animes.BaseList.BindingList(oldValue.Animes, true);
         }
         Animes.Clear();
         Animes.AutoFilter = false;
@@ -228,5 +228,14 @@ public partial class AnimeVM : ViewModelBase
             CurrentPet.Animes.Remove(model);
             this.LogX().Info("删除动画 {food}", model.ID);
         }
+    }
+
+    /// <inheritdoc/>
+    protected override void Dispose(bool disposing)
+    {
+        if (_disposed)
+            return;
+        base.Dispose(disposing);
+        CurrentPet = null!;
     }
 }

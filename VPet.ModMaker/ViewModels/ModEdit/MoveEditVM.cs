@@ -271,7 +271,6 @@ public partial class MoveEditVM : DialogViewModel, IEnableLogger<ViewModelBase>,
         if (_disposed)
             return;
         base.Dispose(disposing);
-        if (disposing) { }
         Reset();
         CurrentPet = null!;
         ModInfo = null!;
