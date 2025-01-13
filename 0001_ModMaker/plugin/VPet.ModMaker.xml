@@ -891,6 +891,11 @@
             ID
             </summary>
         </member>
+        <member name="P:VPet.ModMaker.Models.ModModel.IAnimeModel.Name">
+            <summary>
+            动画名称
+            </summary>
+        </member>
         <member name="P:VPet.ModMaker.Models.ModModel.IAnimeModel.GraphType">
             <summary>
             动画类型
@@ -1494,11 +1499,6 @@
             动画
             </summary>
         </member>
-        <member name="P:VPet.ModMaker.Models.PetModel.FoodAnimes">
-             <summary>
-            食物动画
-             </summary>
-        </member>
         <member name="M:VPet.ModMaker.Models.PetModel.Save(System.String)">
             <summary>
             保存宠物
@@ -1932,6 +1932,446 @@
             更新行动
             </summary>
         </member>
+        <member name="T:VPet.ModMaker.Models.ClickTextModelMapToClickTextPropertyAttribute">
+            <summary>
+            ClickTextModelMapToClickTextPropertyAttribute
+            <para>This attribute is only used in <see cref="M:VPet.ModMaker.Models.MapperExtensions.MapToClickText(VPet.ModMaker.Models.ClickTextModel,VPet_Simulator.Windows.Interface.ClickText)"/></para>
+            </summary>
+        </member>
+        <member name="M:VPet.ModMaker.Models.ClickTextModelMapToClickTextPropertyAttribute.#ctor(System.String)">
+            <inheritdoc/>
+        </member>
+        <member name="M:VPet.ModMaker.Models.ClickTextModelMapToClickTextPropertyAttribute.#ctor(System.Type)">
+            <inheritdoc/>
+        </member>
+        <member name="P:VPet.ModMaker.Models.ClickTextModelMapToClickTextPropertyAttribute.PropertyName">
+            <inheritdoc cref="P:HKW.HKWMapper.MapPropertyAttribute.PropertyName"/>
+        </member>
+        <member name="P:VPet.ModMaker.Models.ClickTextModelMapToClickTextPropertyAttribute.ConverterType">
+            <inheritdoc cref="P:HKW.HKWMapper.MapPropertyAttribute.ConverterType"/>
+        </member>
+        <member name="P:VPet.ModMaker.Models.ClickTextModelMapToClickTextPropertyAttribute.MapWhenRValueNotNullOrDefault">
+            <inheritdoc cref="P:HKW.HKWMapper.MapPropertyAttribute.MapWhenRValueNotNullOrDefault"/>
+        </member>
+        <member name="P:VPet.ModMaker.Models.ClickTextModelMapToClickTextPropertyAttribute.MapWhenLValueNullOrDefault">
+            <inheritdoc cref="P:HKW.HKWMapper.MapPropertyAttribute.MapWhenLValueNullOrDefault"/>
+        </member>
+        <member name="T:VPet.ModMaker.Models.ClickTextModelMapFromClickTextPropertyAttribute">
+            <summary>
+            ClickTextModelMapFromClickTextPropertyAttribute
+            <para>This attribute is only used in <see cref="M:VPet.ModMaker.Models.MapperExtensions.MapFromClickText(VPet.ModMaker.Models.ClickTextModel,VPet_Simulator.Windows.Interface.ClickText)"/></para>
+            </summary>
+        </member>
+        <member name="M:VPet.ModMaker.Models.ClickTextModelMapFromClickTextPropertyAttribute.#ctor(System.String)">
+            <inheritdoc/>
+        </member>
+        <member name="M:VPet.ModMaker.Models.ClickTextModelMapFromClickTextPropertyAttribute.#ctor(System.Type)">
+            <inheritdoc/>
+        </member>
+        <member name="P:VPet.ModMaker.Models.ClickTextModelMapFromClickTextPropertyAttribute.PropertyName">
+            <inheritdoc cref="P:HKW.HKWMapper.MapPropertyAttribute.PropertyName"/>
+        </member>
+        <member name="P:VPet.ModMaker.Models.ClickTextModelMapFromClickTextPropertyAttribute.ConverterType">
+            <inheritdoc cref="P:HKW.HKWMapper.MapPropertyAttribute.ConverterType"/>
+        </member>
+        <member name="P:VPet.ModMaker.Models.ClickTextModelMapFromClickTextPropertyAttribute.MapWhenRValueNotNullOrDefault">
+            <inheritdoc cref="P:HKW.HKWMapper.MapPropertyAttribute.MapWhenRValueNotNullOrDefault"/>
+        </member>
+        <member name="P:VPet.ModMaker.Models.ClickTextModelMapFromClickTextPropertyAttribute.MapWhenLValueNullOrDefault">
+            <inheritdoc cref="P:HKW.HKWMapper.MapPropertyAttribute.MapWhenLValueNullOrDefault"/>
+        </member>
+        <member name="T:VPet.ModMaker.Models.ClickTextModelMapFromClickTextModelPropertyAttribute">
+            <summary>
+            ClickTextModelMapFromClickTextModelPropertyAttribute
+            <para>This attribute is only used in <see cref="M:VPet.ModMaker.Models.MapperExtensions.MapFromClickTextModel(VPet.ModMaker.Models.ClickTextModel,VPet.ModMaker.Models.ClickTextModel)"/></para>
+            </summary>
+        </member>
+        <member name="M:VPet.ModMaker.Models.ClickTextModelMapFromClickTextModelPropertyAttribute.#ctor(System.String)">
+            <inheritdoc/>
+        </member>
+        <member name="M:VPet.ModMaker.Models.ClickTextModelMapFromClickTextModelPropertyAttribute.#ctor(System.Type)">
+            <inheritdoc/>
+        </member>
+        <member name="P:VPet.ModMaker.Models.ClickTextModelMapFromClickTextModelPropertyAttribute.PropertyName">
+            <inheritdoc cref="P:HKW.HKWMapper.MapPropertyAttribute.PropertyName"/>
+        </member>
+        <member name="P:VPet.ModMaker.Models.ClickTextModelMapFromClickTextModelPropertyAttribute.ConverterType">
+            <inheritdoc cref="P:HKW.HKWMapper.MapPropertyAttribute.ConverterType"/>
+        </member>
+        <member name="P:VPet.ModMaker.Models.ClickTextModelMapFromClickTextModelPropertyAttribute.MapWhenRValueNotNullOrDefault">
+            <inheritdoc cref="P:HKW.HKWMapper.MapPropertyAttribute.MapWhenRValueNotNullOrDefault"/>
+        </member>
+        <member name="P:VPet.ModMaker.Models.ClickTextModelMapFromClickTextModelPropertyAttribute.MapWhenLValueNullOrDefault">
+            <inheritdoc cref="P:HKW.HKWMapper.MapPropertyAttribute.MapWhenLValueNullOrDefault"/>
+        </member>
+        <member name="T:VPet.ModMaker.Models.FoodModelMapToFoodPropertyAttribute">
+            <summary>
+            FoodModelMapToFoodPropertyAttribute
+            <para>This attribute is only used in <see cref="M:VPet.ModMaker.Models.MapperExtensions.MapToFood(VPet.ModMaker.Models.FoodModel,VPet_Simulator.Windows.Interface.Food)"/></para>
+            </summary>
+        </member>
+        <member name="M:VPet.ModMaker.Models.FoodModelMapToFoodPropertyAttribute.#ctor(System.String)">
+            <inheritdoc/>
+        </member>
+        <member name="M:VPet.ModMaker.Models.FoodModelMapToFoodPropertyAttribute.#ctor(System.Type)">
+            <inheritdoc/>
+        </member>
+        <member name="P:VPet.ModMaker.Models.FoodModelMapToFoodPropertyAttribute.PropertyName">
+            <inheritdoc cref="P:HKW.HKWMapper.MapPropertyAttribute.PropertyName"/>
+        </member>
+        <member name="P:VPet.ModMaker.Models.FoodModelMapToFoodPropertyAttribute.ConverterType">
+            <inheritdoc cref="P:HKW.HKWMapper.MapPropertyAttribute.ConverterType"/>
+        </member>
+        <member name="P:VPet.ModMaker.Models.FoodModelMapToFoodPropertyAttribute.MapWhenRValueNotNullOrDefault">
+            <inheritdoc cref="P:HKW.HKWMapper.MapPropertyAttribute.MapWhenRValueNotNullOrDefault"/>
+        </member>
+        <member name="P:VPet.ModMaker.Models.FoodModelMapToFoodPropertyAttribute.MapWhenLValueNullOrDefault">
+            <inheritdoc cref="P:HKW.HKWMapper.MapPropertyAttribute.MapWhenLValueNullOrDefault"/>
+        </member>
+        <member name="T:VPet.ModMaker.Models.FoodModelMapFromFoodPropertyAttribute">
+            <summary>
+            FoodModelMapFromFoodPropertyAttribute
+            <para>This attribute is only used in <see cref="M:VPet.ModMaker.Models.MapperExtensions.MapFromFood(VPet.ModMaker.Models.FoodModel,VPet_Simulator.Windows.Interface.Food)"/></para>
+            </summary>
+        </member>
+        <member name="M:VPet.ModMaker.Models.FoodModelMapFromFoodPropertyAttribute.#ctor(System.String)">
+            <inheritdoc/>
+        </member>
+        <member name="M:VPet.ModMaker.Models.FoodModelMapFromFoodPropertyAttribute.#ctor(System.Type)">
+            <inheritdoc/>
+        </member>
+        <member name="P:VPet.ModMaker.Models.FoodModelMapFromFoodPropertyAttribute.PropertyName">
+            <inheritdoc cref="P:HKW.HKWMapper.MapPropertyAttribute.PropertyName"/>
+        </member>
+        <member name="P:VPet.ModMaker.Models.FoodModelMapFromFoodPropertyAttribute.ConverterType">
+            <inheritdoc cref="P:HKW.HKWMapper.MapPropertyAttribute.ConverterType"/>
+        </member>
+        <member name="P:VPet.ModMaker.Models.FoodModelMapFromFoodPropertyAttribute.MapWhenRValueNotNullOrDefault">
+            <inheritdoc cref="P:HKW.HKWMapper.MapPropertyAttribute.MapWhenRValueNotNullOrDefault"/>
+        </member>
+        <member name="P:VPet.ModMaker.Models.FoodModelMapFromFoodPropertyAttribute.MapWhenLValueNullOrDefault">
+            <inheritdoc cref="P:HKW.HKWMapper.MapPropertyAttribute.MapWhenLValueNullOrDefault"/>
+        </member>
+        <member name="T:VPet.ModMaker.Models.FoodModelMapFromFoodModelPropertyAttribute">
+            <summary>
+            FoodModelMapFromFoodModelPropertyAttribute
+            <para>This attribute is only used in <see cref="M:VPet.ModMaker.Models.MapperExtensions.MapFromFoodModel(VPet.ModMaker.Models.FoodModel,VPet.ModMaker.Models.FoodModel)"/></para>
+            </summary>
+        </member>
+        <member name="M:VPet.ModMaker.Models.FoodModelMapFromFoodModelPropertyAttribute.#ctor(System.String)">
+            <inheritdoc/>
+        </member>
+        <member name="M:VPet.ModMaker.Models.FoodModelMapFromFoodModelPropertyAttribute.#ctor(System.Type)">
+            <inheritdoc/>
+        </member>
+        <member name="P:VPet.ModMaker.Models.FoodModelMapFromFoodModelPropertyAttribute.PropertyName">
+            <inheritdoc cref="P:HKW.HKWMapper.MapPropertyAttribute.PropertyName"/>
+        </member>
+        <member name="P:VPet.ModMaker.Models.FoodModelMapFromFoodModelPropertyAttribute.ConverterType">
+            <inheritdoc cref="P:HKW.HKWMapper.MapPropertyAttribute.ConverterType"/>
+        </member>
+        <member name="P:VPet.ModMaker.Models.FoodModelMapFromFoodModelPropertyAttribute.MapWhenRValueNotNullOrDefault">
+            <inheritdoc cref="P:HKW.HKWMapper.MapPropertyAttribute.MapWhenRValueNotNullOrDefault"/>
+        </member>
+        <member name="P:VPet.ModMaker.Models.FoodModelMapFromFoodModelPropertyAttribute.MapWhenLValueNullOrDefault">
+            <inheritdoc cref="P:HKW.HKWMapper.MapPropertyAttribute.MapWhenLValueNullOrDefault"/>
+        </member>
+        <member name="T:VPet.ModMaker.Models.LowTextModelMapToLowTextPropertyAttribute">
+            <summary>
+            LowTextModelMapToLowTextPropertyAttribute
+            <para>This attribute is only used in <see cref="M:VPet.ModMaker.Models.MapperExtensions.MapToLowText(VPet.ModMaker.Models.LowTextModel,VPet_Simulator.Windows.Interface.LowText)"/></para>
+            </summary>
+        </member>
+        <member name="M:VPet.ModMaker.Models.LowTextModelMapToLowTextPropertyAttribute.#ctor(System.String)">
+            <inheritdoc/>
+        </member>
+        <member name="M:VPet.ModMaker.Models.LowTextModelMapToLowTextPropertyAttribute.#ctor(System.Type)">
+            <inheritdoc/>
+        </member>
+        <member name="P:VPet.ModMaker.Models.LowTextModelMapToLowTextPropertyAttribute.PropertyName">
+            <inheritdoc cref="P:HKW.HKWMapper.MapPropertyAttribute.PropertyName"/>
+        </member>
+        <member name="P:VPet.ModMaker.Models.LowTextModelMapToLowTextPropertyAttribute.ConverterType">
+            <inheritdoc cref="P:HKW.HKWMapper.MapPropertyAttribute.ConverterType"/>
+        </member>
+        <member name="P:VPet.ModMaker.Models.LowTextModelMapToLowTextPropertyAttribute.MapWhenRValueNotNullOrDefault">
+            <inheritdoc cref="P:HKW.HKWMapper.MapPropertyAttribute.MapWhenRValueNotNullOrDefault"/>
+        </member>
+        <member name="P:VPet.ModMaker.Models.LowTextModelMapToLowTextPropertyAttribute.MapWhenLValueNullOrDefault">
+            <inheritdoc cref="P:HKW.HKWMapper.MapPropertyAttribute.MapWhenLValueNullOrDefault"/>
+        </member>
+        <member name="T:VPet.ModMaker.Models.LowTextModelMapFromLowTextPropertyAttribute">
+            <summary>
+            LowTextModelMapFromLowTextPropertyAttribute
+            <para>This attribute is only used in <see cref="M:VPet.ModMaker.Models.MapperExtensions.MapFromLowText(VPet.ModMaker.Models.LowTextModel,VPet_Simulator.Windows.Interface.LowText)"/></para>
+            </summary>
+        </member>
+        <member name="M:VPet.ModMaker.Models.LowTextModelMapFromLowTextPropertyAttribute.#ctor(System.String)">
+            <inheritdoc/>
+        </member>
+        <member name="M:VPet.ModMaker.Models.LowTextModelMapFromLowTextPropertyAttribute.#ctor(System.Type)">
+            <inheritdoc/>
+        </member>
+        <member name="P:VPet.ModMaker.Models.LowTextModelMapFromLowTextPropertyAttribute.PropertyName">
+            <inheritdoc cref="P:HKW.HKWMapper.MapPropertyAttribute.PropertyName"/>
+        </member>
+        <member name="P:VPet.ModMaker.Models.LowTextModelMapFromLowTextPropertyAttribute.ConverterType">
+            <inheritdoc cref="P:HKW.HKWMapper.MapPropertyAttribute.ConverterType"/>
+        </member>
+        <member name="P:VPet.ModMaker.Models.LowTextModelMapFromLowTextPropertyAttribute.MapWhenRValueNotNullOrDefault">
+            <inheritdoc cref="P:HKW.HKWMapper.MapPropertyAttribute.MapWhenRValueNotNullOrDefault"/>
+        </member>
+        <member name="P:VPet.ModMaker.Models.LowTextModelMapFromLowTextPropertyAttribute.MapWhenLValueNullOrDefault">
+            <inheritdoc cref="P:HKW.HKWMapper.MapPropertyAttribute.MapWhenLValueNullOrDefault"/>
+        </member>
+        <member name="T:VPet.ModMaker.Models.LowTextModelMapFromLowTextModelPropertyAttribute">
+            <summary>
+            LowTextModelMapFromLowTextModelPropertyAttribute
+            <para>This attribute is only used in <see cref="M:VPet.ModMaker.Models.MapperExtensions.MapFromLowTextModel(VPet.ModMaker.Models.LowTextModel,VPet.ModMaker.Models.LowTextModel)"/></para>
+            </summary>
+        </member>
+        <member name="M:VPet.ModMaker.Models.LowTextModelMapFromLowTextModelPropertyAttribute.#ctor(System.String)">
+            <inheritdoc/>
+        </member>
+        <member name="M:VPet.ModMaker.Models.LowTextModelMapFromLowTextModelPropertyAttribute.#ctor(System.Type)">
+            <inheritdoc/>
+        </member>
+        <member name="P:VPet.ModMaker.Models.LowTextModelMapFromLowTextModelPropertyAttribute.PropertyName">
+            <inheritdoc cref="P:HKW.HKWMapper.MapPropertyAttribute.PropertyName"/>
+        </member>
+        <member name="P:VPet.ModMaker.Models.LowTextModelMapFromLowTextModelPropertyAttribute.ConverterType">
+            <inheritdoc cref="P:HKW.HKWMapper.MapPropertyAttribute.ConverterType"/>
+        </member>
+        <member name="P:VPet.ModMaker.Models.LowTextModelMapFromLowTextModelPropertyAttribute.MapWhenRValueNotNullOrDefault">
+            <inheritdoc cref="P:HKW.HKWMapper.MapPropertyAttribute.MapWhenRValueNotNullOrDefault"/>
+        </member>
+        <member name="P:VPet.ModMaker.Models.LowTextModelMapFromLowTextModelPropertyAttribute.MapWhenLValueNullOrDefault">
+            <inheritdoc cref="P:HKW.HKWMapper.MapPropertyAttribute.MapWhenLValueNullOrDefault"/>
+        </member>
+        <member name="T:VPet.ModMaker.Models.MoveModelMapToMovePropertyAttribute">
+            <summary>
+            MoveModelMapToMovePropertyAttribute
+            <para>This attribute is only used in <see cref="M:VPet.ModMaker.Models.MapperExtensions.MapToMove(VPet.ModMaker.Models.MoveModel,VPet_Simulator.Core.GraphHelper.Move)"/></para>
+            </summary>
+        </member>
+        <member name="M:VPet.ModMaker.Models.MoveModelMapToMovePropertyAttribute.#ctor(System.String)">
+            <inheritdoc/>
+        </member>
+        <member name="M:VPet.ModMaker.Models.MoveModelMapToMovePropertyAttribute.#ctor(System.Type)">
+            <inheritdoc/>
+        </member>
+        <member name="P:VPet.ModMaker.Models.MoveModelMapToMovePropertyAttribute.PropertyName">
+            <inheritdoc cref="P:HKW.HKWMapper.MapPropertyAttribute.PropertyName"/>
+        </member>
+        <member name="P:VPet.ModMaker.Models.MoveModelMapToMovePropertyAttribute.ConverterType">
+            <inheritdoc cref="P:HKW.HKWMapper.MapPropertyAttribute.ConverterType"/>
+        </member>
+        <member name="P:VPet.ModMaker.Models.MoveModelMapToMovePropertyAttribute.MapWhenRValueNotNullOrDefault">
+            <inheritdoc cref="P:HKW.HKWMapper.MapPropertyAttribute.MapWhenRValueNotNullOrDefault"/>
+        </member>
+        <member name="P:VPet.ModMaker.Models.MoveModelMapToMovePropertyAttribute.MapWhenLValueNullOrDefault">
+            <inheritdoc cref="P:HKW.HKWMapper.MapPropertyAttribute.MapWhenLValueNullOrDefault"/>
+        </member>
+        <member name="T:VPet.ModMaker.Models.MoveModelMapFromMovePropertyAttribute">
+            <summary>
+            MoveModelMapFromMovePropertyAttribute
+            <para>This attribute is only used in <see cref="M:VPet.ModMaker.Models.MapperExtensions.MapFromMove(VPet.ModMaker.Models.MoveModel,VPet_Simulator.Core.GraphHelper.Move)"/></para>
+            </summary>
+        </member>
+        <member name="M:VPet.ModMaker.Models.MoveModelMapFromMovePropertyAttribute.#ctor(System.String)">
+            <inheritdoc/>
+        </member>
+        <member name="M:VPet.ModMaker.Models.MoveModelMapFromMovePropertyAttribute.#ctor(System.Type)">
+            <inheritdoc/>
+        </member>
+        <member name="P:VPet.ModMaker.Models.MoveModelMapFromMovePropertyAttribute.PropertyName">
+            <inheritdoc cref="P:HKW.HKWMapper.MapPropertyAttribute.PropertyName"/>
+        </member>
+        <member name="P:VPet.ModMaker.Models.MoveModelMapFromMovePropertyAttribute.ConverterType">
+            <inheritdoc cref="P:HKW.HKWMapper.MapPropertyAttribute.ConverterType"/>
+        </member>
+        <member name="P:VPet.ModMaker.Models.MoveModelMapFromMovePropertyAttribute.MapWhenRValueNotNullOrDefault">
+            <inheritdoc cref="P:HKW.HKWMapper.MapPropertyAttribute.MapWhenRValueNotNullOrDefault"/>
+        </member>
+        <member name="P:VPet.ModMaker.Models.MoveModelMapFromMovePropertyAttribute.MapWhenLValueNullOrDefault">
+            <inheritdoc cref="P:HKW.HKWMapper.MapPropertyAttribute.MapWhenLValueNullOrDefault"/>
+        </member>
+        <member name="T:VPet.ModMaker.Models.MoveModelMapFromMoveModelPropertyAttribute">
+            <summary>
+            MoveModelMapFromMoveModelPropertyAttribute
+            <para>This attribute is only used in <see cref="M:VPet.ModMaker.Models.MapperExtensions.MapFromMoveModel(VPet.ModMaker.Models.MoveModel,VPet.ModMaker.Models.MoveModel)"/></para>
+            </summary>
+        </member>
+        <member name="M:VPet.ModMaker.Models.MoveModelMapFromMoveModelPropertyAttribute.#ctor(System.String)">
+            <inheritdoc/>
+        </member>
+        <member name="M:VPet.ModMaker.Models.MoveModelMapFromMoveModelPropertyAttribute.#ctor(System.Type)">
+            <inheritdoc/>
+        </member>
+        <member name="P:VPet.ModMaker.Models.MoveModelMapFromMoveModelPropertyAttribute.PropertyName">
+            <inheritdoc cref="P:HKW.HKWMapper.MapPropertyAttribute.PropertyName"/>
+        </member>
+        <member name="P:VPet.ModMaker.Models.MoveModelMapFromMoveModelPropertyAttribute.ConverterType">
+            <inheritdoc cref="P:HKW.HKWMapper.MapPropertyAttribute.ConverterType"/>
+        </member>
+        <member name="P:VPet.ModMaker.Models.MoveModelMapFromMoveModelPropertyAttribute.MapWhenRValueNotNullOrDefault">
+            <inheritdoc cref="P:HKW.HKWMapper.MapPropertyAttribute.MapWhenRValueNotNullOrDefault"/>
+        </member>
+        <member name="P:VPet.ModMaker.Models.MoveModelMapFromMoveModelPropertyAttribute.MapWhenLValueNullOrDefault">
+            <inheritdoc cref="P:HKW.HKWMapper.MapPropertyAttribute.MapWhenLValueNullOrDefault"/>
+        </member>
+        <member name="T:VPet.ModMaker.Models.SelectTextModelMapToSelectTextPropertyAttribute">
+            <summary>
+            SelectTextModelMapToSelectTextPropertyAttribute
+            <para>This attribute is only used in <see cref="M:VPet.ModMaker.Models.MapperExtensions.MapToSelectText(VPet.ModMaker.Models.SelectTextModel,VPet_Simulator.Windows.Interface.SelectText)"/></para>
+            </summary>
+        </member>
+        <member name="M:VPet.ModMaker.Models.SelectTextModelMapToSelectTextPropertyAttribute.#ctor(System.String)">
+            <inheritdoc/>
+        </member>
+        <member name="M:VPet.ModMaker.Models.SelectTextModelMapToSelectTextPropertyAttribute.#ctor(System.Type)">
+            <inheritdoc/>
+        </member>
+        <member name="P:VPet.ModMaker.Models.SelectTextModelMapToSelectTextPropertyAttribute.PropertyName">
+            <inheritdoc cref="P:HKW.HKWMapper.MapPropertyAttribute.PropertyName"/>
+        </member>
+        <member name="P:VPet.ModMaker.Models.SelectTextModelMapToSelectTextPropertyAttribute.ConverterType">
+            <inheritdoc cref="P:HKW.HKWMapper.MapPropertyAttribute.ConverterType"/>
+        </member>
+        <member name="P:VPet.ModMaker.Models.SelectTextModelMapToSelectTextPropertyAttribute.MapWhenRValueNotNullOrDefault">
+            <inheritdoc cref="P:HKW.HKWMapper.MapPropertyAttribute.MapWhenRValueNotNullOrDefault"/>
+        </member>
+        <member name="P:VPet.ModMaker.Models.SelectTextModelMapToSelectTextPropertyAttribute.MapWhenLValueNullOrDefault">
+            <inheritdoc cref="P:HKW.HKWMapper.MapPropertyAttribute.MapWhenLValueNullOrDefault"/>
+        </member>
+        <member name="T:VPet.ModMaker.Models.SelectTextModelMapFromSelectTextPropertyAttribute">
+            <summary>
+            SelectTextModelMapFromSelectTextPropertyAttribute
+            <para>This attribute is only used in <see cref="M:VPet.ModMaker.Models.MapperExtensions.MapFromSelectText(VPet.ModMaker.Models.SelectTextModel,VPet_Simulator.Windows.Interface.SelectText)"/></para>
+            </summary>
+        </member>
+        <member name="M:VPet.ModMaker.Models.SelectTextModelMapFromSelectTextPropertyAttribute.#ctor(System.String)">
+            <inheritdoc/>
+        </member>
+        <member name="M:VPet.ModMaker.Models.SelectTextModelMapFromSelectTextPropertyAttribute.#ctor(System.Type)">
+            <inheritdoc/>
+        </member>
+        <member name="P:VPet.ModMaker.Models.SelectTextModelMapFromSelectTextPropertyAttribute.PropertyName">
+            <inheritdoc cref="P:HKW.HKWMapper.MapPropertyAttribute.PropertyName"/>
+        </member>
+        <member name="P:VPet.ModMaker.Models.SelectTextModelMapFromSelectTextPropertyAttribute.ConverterType">
+            <inheritdoc cref="P:HKW.HKWMapper.MapPropertyAttribute.ConverterType"/>
+        </member>
+        <member name="P:VPet.ModMaker.Models.SelectTextModelMapFromSelectTextPropertyAttribute.MapWhenRValueNotNullOrDefault">
+            <inheritdoc cref="P:HKW.HKWMapper.MapPropertyAttribute.MapWhenRValueNotNullOrDefault"/>
+        </member>
+        <member name="P:VPet.ModMaker.Models.SelectTextModelMapFromSelectTextPropertyAttribute.MapWhenLValueNullOrDefault">
+            <inheritdoc cref="P:HKW.HKWMapper.MapPropertyAttribute.MapWhenLValueNullOrDefault"/>
+        </member>
+        <member name="T:VPet.ModMaker.Models.SelectTextModelMapFromSelectTextModelPropertyAttribute">
+            <summary>
+            SelectTextModelMapFromSelectTextModelPropertyAttribute
+            <para>This attribute is only used in <see cref="M:VPet.ModMaker.Models.MapperExtensions.MapFromSelectTextModel(VPet.ModMaker.Models.SelectTextModel,VPet.ModMaker.Models.SelectTextModel)"/></para>
+            </summary>
+        </member>
+        <member name="M:VPet.ModMaker.Models.SelectTextModelMapFromSelectTextModelPropertyAttribute.#ctor(System.String)">
+            <inheritdoc/>
+        </member>
+        <member name="M:VPet.ModMaker.Models.SelectTextModelMapFromSelectTextModelPropertyAttribute.#ctor(System.Type)">
+            <inheritdoc/>
+        </member>
+        <member name="P:VPet.ModMaker.Models.SelectTextModelMapFromSelectTextModelPropertyAttribute.PropertyName">
+            <inheritdoc cref="P:HKW.HKWMapper.MapPropertyAttribute.PropertyName"/>
+        </member>
+        <member name="P:VPet.ModMaker.Models.SelectTextModelMapFromSelectTextModelPropertyAttribute.ConverterType">
+            <inheritdoc cref="P:HKW.HKWMapper.MapPropertyAttribute.ConverterType"/>
+        </member>
+        <member name="P:VPet.ModMaker.Models.SelectTextModelMapFromSelectTextModelPropertyAttribute.MapWhenRValueNotNullOrDefault">
+            <inheritdoc cref="P:HKW.HKWMapper.MapPropertyAttribute.MapWhenRValueNotNullOrDefault"/>
+        </member>
+        <member name="P:VPet.ModMaker.Models.SelectTextModelMapFromSelectTextModelPropertyAttribute.MapWhenLValueNullOrDefault">
+            <inheritdoc cref="P:HKW.HKWMapper.MapPropertyAttribute.MapWhenLValueNullOrDefault"/>
+        </member>
+        <member name="T:VPet.ModMaker.Models.WorkModelMapToWorkPropertyAttribute">
+            <summary>
+            WorkModelMapToWorkPropertyAttribute
+            <para>This attribute is only used in <see cref="M:VPet.ModMaker.Models.MapperExtensions.MapToWork(VPet.ModMaker.Models.WorkModel,VPet_Simulator.Core.GraphHelper.Work)"/></para>
+            </summary>
+        </member>
+        <member name="M:VPet.ModMaker.Models.WorkModelMapToWorkPropertyAttribute.#ctor(System.String)">
+            <inheritdoc/>
+        </member>
+        <member name="M:VPet.ModMaker.Models.WorkModelMapToWorkPropertyAttribute.#ctor(System.Type)">
+            <inheritdoc/>
+        </member>
+        <member name="P:VPet.ModMaker.Models.WorkModelMapToWorkPropertyAttribute.PropertyName">
+            <inheritdoc cref="P:HKW.HKWMapper.MapPropertyAttribute.PropertyName"/>
+        </member>
+        <member name="P:VPet.ModMaker.Models.WorkModelMapToWorkPropertyAttribute.ConverterType">
+            <inheritdoc cref="P:HKW.HKWMapper.MapPropertyAttribute.ConverterType"/>
+        </member>
+        <member name="P:VPet.ModMaker.Models.WorkModelMapToWorkPropertyAttribute.MapWhenRValueNotNullOrDefault">
+            <inheritdoc cref="P:HKW.HKWMapper.MapPropertyAttribute.MapWhenRValueNotNullOrDefault"/>
+        </member>
+        <member name="P:VPet.ModMaker.Models.WorkModelMapToWorkPropertyAttribute.MapWhenLValueNullOrDefault">
+            <inheritdoc cref="P:HKW.HKWMapper.MapPropertyAttribute.MapWhenLValueNullOrDefault"/>
+        </member>
+        <member name="T:VPet.ModMaker.Models.WorkModelMapFromWorkPropertyAttribute">
+            <summary>
+            WorkModelMapFromWorkPropertyAttribute
+            <para>This attribute is only used in <see cref="M:VPet.ModMaker.Models.MapperExtensions.MapFromWork(VPet.ModMaker.Models.WorkModel,VPet_Simulator.Core.GraphHelper.Work)"/></para>
+            </summary>
+        </member>
+        <member name="M:VPet.ModMaker.Models.WorkModelMapFromWorkPropertyAttribute.#ctor(System.String)">
+            <inheritdoc/>
+        </member>
+        <member name="M:VPet.ModMaker.Models.WorkModelMapFromWorkPropertyAttribute.#ctor(System.Type)">
+            <inheritdoc/>
+        </member>
+        <member name="P:VPet.ModMaker.Models.WorkModelMapFromWorkPropertyAttribute.PropertyName">
+            <inheritdoc cref="P:HKW.HKWMapper.MapPropertyAttribute.PropertyName"/>
+        </member>
+        <member name="P:VPet.ModMaker.Models.WorkModelMapFromWorkPropertyAttribute.ConverterType">
+            <inheritdoc cref="P:HKW.HKWMapper.MapPropertyAttribute.ConverterType"/>
+        </member>
+        <member name="P:VPet.ModMaker.Models.WorkModelMapFromWorkPropertyAttribute.MapWhenRValueNotNullOrDefault">
+            <inheritdoc cref="P:HKW.HKWMapper.MapPropertyAttribute.MapWhenRValueNotNullOrDefault"/>
+        </member>
+        <member name="P:VPet.ModMaker.Models.WorkModelMapFromWorkPropertyAttribute.MapWhenLValueNullOrDefault">
+            <inheritdoc cref="P:HKW.HKWMapper.MapPropertyAttribute.MapWhenLValueNullOrDefault"/>
+        </member>
+        <member name="T:VPet.ModMaker.Models.WorkModelMapFromWorkModelPropertyAttribute">
+            <summary>
+            WorkModelMapFromWorkModelPropertyAttribute
+            <para>This attribute is only used in <see cref="M:VPet.ModMaker.Models.MapperExtensions.MapFromWorkModel(VPet.ModMaker.Models.WorkModel,VPet.ModMaker.Models.WorkModel)"/></para>
+            </summary>
+        </member>
+        <member name="M:VPet.ModMaker.Models.WorkModelMapFromWorkModelPropertyAttribute.#ctor(System.String)">
+            <inheritdoc/>
+        </member>
+        <member name="M:VPet.ModMaker.Models.WorkModelMapFromWorkModelPropertyAttribute.#ctor(System.Type)">
+            <inheritdoc/>
+        </member>
+        <member name="P:VPet.ModMaker.Models.WorkModelMapFromWorkModelPropertyAttribute.PropertyName">
+            <inheritdoc cref="P:HKW.HKWMapper.MapPropertyAttribute.PropertyName"/>
+        </member>
+        <member name="P:VPet.ModMaker.Models.WorkModelMapFromWorkModelPropertyAttribute.ConverterType">
+            <inheritdoc cref="P:HKW.HKWMapper.MapPropertyAttribute.ConverterType"/>
+        </member>
+        <member name="P:VPet.ModMaker.Models.WorkModelMapFromWorkModelPropertyAttribute.MapWhenRValueNotNullOrDefault">
+            <inheritdoc cref="P:HKW.HKWMapper.MapPropertyAttribute.MapWhenRValueNotNullOrDefault"/>
+        </member>
+        <member name="P:VPet.ModMaker.Models.WorkModelMapFromWorkModelPropertyAttribute.MapWhenLValueNullOrDefault">
+            <inheritdoc cref="P:HKW.HKWMapper.MapPropertyAttribute.MapWhenLValueNullOrDefault"/>
+        </member>
+        <member name="T:VPet.ModMaker.Models.MapperExtensions">
+            <summary>MapperExtensions</summary>
+            <summary>MapperExtensions</summary>
+            <summary>MapperExtensions</summary>
+            <summary>MapperExtensions</summary>
+            <summary>MapperExtensions</summary>
+            <summary>MapperExtensions</summary>
+        </member>
         <member name="T:VPet.ModMaker.NativeStyles">
             <summary>
             本地样式
@@ -2051,19 +2491,14 @@
             工具
             </summary>
         </member>
+        <member name="P:VPet.ModMaker.NativeUtils.DialogService">
+            <summary>
+            对话框服务
+            </summary>
+        </member>
         <member name="P:VPet.ModMaker.NativeUtils.ClipboardSetText">
             <summary>
             粘贴板复制文本
-            </summary>
-        </member>
-        <member name="F:VPet.ModMaker.NativeUtils.DecodePixelWidth">
-            <summary>
-            解码像素宽度
-            </summary>
-        </member>
-        <member name="F:VPet.ModMaker.NativeUtils.DecodePixelHeight">
-            <summary>
-            解码像素高度
             </summary>
         </member>
         <member name="P:VPet.ModMaker.NativeUtils.Separator">
@@ -2155,12 +2590,17 @@
             模组编辑视图模型
             </summary>
         </member>
-        <member name="M:VPet.ModMaker.ViewModels.ModEdit.ModEditVM.#ctor">
+        <member name="M:VPet.ModMaker.ViewModels.ModEdit.ModEditVM.#ctor(VPet.ModMaker.Models.ModInfoModel)">
             <inheritdoc/>
         </member>
         <member name="P:VPet.ModMaker.ViewModels.ModEdit.ModEditVM.ModInfo">
             <summary>
             当前模组信息
+            </summary>
+        </member>
+        <member name="M:VPet.ModMaker.ViewModels.ModEdit.ModEditVM.CheckModInfo">
+            <summary>
+            模组信息
             </summary>
         </member>
         <member name="M:VPet.ModMaker.ViewModels.ModEdit.ModEditVM.SaveAsTranslationMod">
@@ -2229,9 +2669,6 @@
             <returns>成功为 <see langword="true"/> 失败为 <see langword="false"/></returns>
         </member>
         <member name="M:VPet.ModMaker.ViewModels.ModEdit.ModEditVM.Dispose(System.Boolean)">
-            <inheritdoc/>
-        </member>
-        <member name="M:VPet.ModMaker.ViewModels.ModEdit.ModEditVM.Reset">
             <inheritdoc/>
         </member>
         <member name="P:VPet.ModMaker.ViewModels.ModEdit.ModEditVM.SaveAsTranslationModCommand">
@@ -2471,7 +2908,7 @@
             动画视图模型
             </summary>
         </member>
-        <member name="M:VPet.ModMaker.ViewModels.ModEdit.AnimeVM.#ctor">
+        <member name="M:VPet.ModMaker.ViewModels.ModEdit.AnimeVM.#ctor(VPet.ModMaker.Models.ModInfoModel)">
             <inheritdoc/>
         </member>
         <member name="P:VPet.ModMaker.ViewModels.ModEdit.AnimeVM.ModInfo">
@@ -2479,7 +2916,7 @@
             模组信息
             </summary>
         </member>
-        <member name="P:VPet.ModMaker.ViewModels.ModEdit.AnimeVM.AllAnimes">
+        <member name="P:VPet.ModMaker.ViewModels.ModEdit.AnimeVM.Animes">
             <summary>
             所有动画
             </summary>
@@ -2510,11 +2947,6 @@
             删除
             </summary>
             <param name="list">模型</param>
-        </member>
-        <member name="M:VPet.ModMaker.ViewModels.ModEdit.AnimeVM.Reset">
-            <summary>
-            重置
-            </summary>
         </member>
         <member name="P:VPet.ModMaker.ViewModels.ModEdit.AnimeVM.AddCommand">
             <inheritdoc cref="M:VPet.ModMaker.ViewModels.ModEdit.AnimeVM.Add"/>
@@ -2803,7 +3235,7 @@
             点击文本视图模型
             </summary>
         </member>
-        <member name="M:VPet.ModMaker.ViewModels.ModEdit.ClickTextEditVM.#ctor">
+        <member name="M:VPet.ModMaker.ViewModels.ModEdit.ClickTextEditVM.#ctor(VPet.ModMaker.Models.ModInfoModel)">
             <inheritdoc/>
         </member>
         <member name="P:VPet.ModMaker.ViewModels.ModEdit.ClickTextEditVM.ModInfo">
@@ -2824,11 +3256,6 @@
         <member name="P:VPet.ModMaker.ViewModels.ModEdit.ClickTextEditVM.SearchTargets">
             <summary>
             搜索目标
-            </summary>
-        </member>
-        <member name="P:VPet.ModMaker.ViewModels.ModEdit.ClickTextEditVM.I18nResource">
-            <summary>
-            I18n资源
             </summary>
         </member>
         <member name="P:VPet.ModMaker.ViewModels.ModEdit.ClickTextEditVM.OldClickText">
@@ -2903,7 +3330,7 @@
             食物编辑视图模型
             </summary>
         </member>
-        <member name="M:VPet.ModMaker.ViewModels.ModEdit.FoodEditVM.#ctor">
+        <member name="M:VPet.ModMaker.ViewModels.ModEdit.FoodEditVM.#ctor(VPet.ModMaker.Models.ModInfoModel)">
             <inheritdoc/>
         </member>
         <member name="P:VPet.ModMaker.ViewModels.ModEdit.FoodEditVM.ModInfo">
@@ -3077,7 +3504,7 @@
             低状态文本编辑视图模型
             </summary>
         </member>
-        <member name="M:VPet.ModMaker.ViewModels.ModEdit.LowTextEditVM.#ctor">
+        <member name="M:VPet.ModMaker.ViewModels.ModEdit.LowTextEditVM.#ctor(VPet.ModMaker.Models.ModInfoModel)">
             <inheritdoc/>
         </member>
         <member name="P:VPet.ModMaker.ViewModels.ModEdit.LowTextEditVM.ModInfo">
@@ -3167,7 +3594,7 @@
             移动编辑视图模型
             </summary>
         </member>
-        <member name="M:VPet.ModMaker.ViewModels.ModEdit.MoveEditVM.#ctor">
+        <member name="M:VPet.ModMaker.ViewModels.ModEdit.MoveEditVM.#ctor(VPet.ModMaker.Models.ModInfoModel)">
             <inheritdoc/>
         </member>
         <member name="P:VPet.ModMaker.ViewModels.ModEdit.MoveEditVM.ModInfo">
@@ -3263,7 +3690,7 @@
             宠物编辑视图模型
             </summary>
         </member>
-        <member name="M:VPet.ModMaker.ViewModels.ModEdit.PetEditVM.#ctor">
+        <member name="M:VPet.ModMaker.ViewModels.ModEdit.PetEditVM.#ctor(VPet.ModMaker.Models.ModInfoModel)">
             <inheritdoc/>
         </member>
         <member name="P:VPet.ModMaker.ViewModels.ModEdit.PetEditVM.ModInfo">
@@ -3433,7 +3860,7 @@
             选择文本编辑视图模型
             </summary>
         </member>
-        <member name="M:VPet.ModMaker.ViewModels.ModEdit.SelectTextEditVM.#ctor">
+        <member name="M:VPet.ModMaker.ViewModels.ModEdit.SelectTextEditVM.#ctor(VPet.ModMaker.Models.ModInfoModel)">
             <inheritdoc/>
         </member>
         <member name="P:VPet.ModMaker.ViewModels.ModEdit.SelectTextEditVM.ModInfo">
@@ -3533,17 +3960,12 @@
             工作编辑视图模型
             </summary>
         </member>
-        <member name="M:VPet.ModMaker.ViewModels.ModEdit.WorkEditVM.#ctor">
+        <member name="M:VPet.ModMaker.ViewModels.ModEdit.WorkEditVM.#ctor(VPet.ModMaker.Models.ModInfoModel)">
             <inheritdoc/>
         </member>
         <member name="P:VPet.ModMaker.ViewModels.ModEdit.WorkEditVM.ModInfo">
             <summary>
             模组信息
-            </summary>
-        </member>
-        <member name="P:VPet.ModMaker.ViewModels.ModEdit.WorkEditVM.I18nResource">
-            <summary>
-            I18n资源
             </summary>
         </member>
         <member name="P:VPet.ModMaker.ViewModels.ModEdit.WorkEditVM.CurrentPet">
@@ -3681,18 +4103,8 @@
             模组制作器视图模型
             </summary>
         </member>
-        <member name="P:VPet.ModMaker.ViewModels.ModMakerVM.DialogService">
-            <summary>
-            对话框服务
-            </summary>
-        </member>
         <member name="M:VPet.ModMaker.ViewModels.ModMakerVM.#ctor">
             <inheritdoc/>
-        </member>
-        <member name="P:VPet.ModMaker.ViewModels.ModMakerVM.ModInfo">
-            <summary>
-            当前模组
-            </summary>
         </member>
         <member name="P:VPet.ModMaker.ViewModels.ModMakerVM.Search">
             <summary>
@@ -3823,7 +4235,7 @@
         <member name="M:VPet.ModMaker.Views.ModEdit.ModEditWindow.#ctor">
             <inheritdoc/>
         </member>
-        <member name="P:VPet.ModMaker.Views.ModEdit.ModEditWindow.Disposables">
+        <member name="P:VPet.ModMaker.Views.ModEdit.ModEditWindow.DisposableList">
             <summary>
             处理列表
             </summary>
@@ -3838,12 +4250,6 @@
         </member>
         <member name="P:VPet.ModMaker.Views.ModEdit.ModEditWindow.PageByType">
             <inheritdoc/>
-        </member>
-        <member name="M:VPet.ModMaker.Views.ModEdit.ModEditWindow.ShowTab(System.Int32)">
-            <summary>
-            显示页面
-            </summary>
-            <param name="index">索引值</param>
         </member>
         <member name="M:VPet.ModMaker.Views.ModEdit.ModEditWindow.InitializeComponent">
             <summary>
@@ -4329,617 +4735,10 @@
         <member name="P:VPet.ModMaker.Views.ModMakerWindow.LocatePageByType">
             <inheritdoc/>
         </member>
-        <member name="P:VPet.ModMaker.Views.ModMakerWindow.ModEditWindow">
-            <summary>
-            单例窗口
-            </summary>
-        </member>
         <member name="M:VPet.ModMaker.Views.ModMakerWindow.InitializeComponent">
             <summary>
             InitializeComponent
             </summary>
-        </member>
-        <member name="T:HKW.HKWMapper.ClickTextModelMapToClickTextPropertyAttribute">
-            <summary>
-            ClickTextModelMapToClickTextPropertyAttribute
-            <para>This attribute is only used in <c>ClickTextModelMapToClickText</c></para>
-            </summary>
-        </member>
-        <member name="M:HKW.HKWMapper.ClickTextModelMapToClickTextPropertyAttribute.#ctor(System.String)">
-            <inheritdoc/>
-        </member>
-        <member name="M:HKW.HKWMapper.ClickTextModelMapToClickTextPropertyAttribute.#ctor(System.Type)">
-            <inheritdoc/>
-        </member>
-        <member name="P:HKW.HKWMapper.ClickTextModelMapToClickTextPropertyAttribute.PropertyName">
-            <summary>
-            PropertyName
-            <para>Default is current property name</para>
-            </summary>
-        </member>
-        <member name="P:HKW.HKWMapper.ClickTextModelMapToClickTextPropertyAttribute.ConverterType">
-            <summary>
-            ConverterType
-            </summary>
-        </member>
-        <member name="P:HKW.HKWMapper.ClickTextModelMapToClickTextPropertyAttribute.MapWhenRValueNotNullOrDefault">
-            <summary>
-            MapWhenRValueNotNullOrDefault
-            </summary>
-        </member>
-        <member name="P:HKW.HKWMapper.ClickTextModelMapToClickTextPropertyAttribute.MapWhenLValueNullOrDefault">
-            <summary>
-            MapWhenLValueNullOrDefault
-            </summary>
-        </member>
-        <member name="T:HKW.HKWMapper.ClickTextModelMapFromClickTextPropertyAttribute">
-            <summary>
-            ClickTextModelMapFromClickTextPropertyAttribute
-            <para>This attribute is only used in <c>ClickTextModelMapFromClickText</c></para>
-            </summary>
-        </member>
-        <member name="M:HKW.HKWMapper.ClickTextModelMapFromClickTextPropertyAttribute.#ctor(System.String)">
-            <inheritdoc/>
-        </member>
-        <member name="M:HKW.HKWMapper.ClickTextModelMapFromClickTextPropertyAttribute.#ctor(System.Type)">
-            <inheritdoc/>
-        </member>
-        <member name="P:HKW.HKWMapper.ClickTextModelMapFromClickTextPropertyAttribute.PropertyName">
-            <summary>
-            PropertyName
-            <para>Default is current property name</para>
-            </summary>
-        </member>
-        <member name="P:HKW.HKWMapper.ClickTextModelMapFromClickTextPropertyAttribute.ConverterType">
-            <summary>
-            ConverterType
-            </summary>
-        </member>
-        <member name="P:HKW.HKWMapper.ClickTextModelMapFromClickTextPropertyAttribute.MapWhenRValueNotNullOrDefault">
-            <summary>
-            MapWhenRValueNotNullOrDefault
-            </summary>
-        </member>
-        <member name="P:HKW.HKWMapper.ClickTextModelMapFromClickTextPropertyAttribute.MapWhenLValueNullOrDefault">
-            <summary>
-            MapWhenLValueNullOrDefault
-            </summary>
-        </member>
-        <member name="T:HKW.HKWMapper.ClickTextModelMapFromClickTextModelPropertyAttribute">
-            <summary>
-            ClickTextModelMapFromClickTextModelPropertyAttribute
-            <para>This attribute is only used in <c>ClickTextModelMapFromClickTextModel</c></para>
-            </summary>
-        </member>
-        <member name="M:HKW.HKWMapper.ClickTextModelMapFromClickTextModelPropertyAttribute.#ctor(System.String)">
-            <inheritdoc/>
-        </member>
-        <member name="M:HKW.HKWMapper.ClickTextModelMapFromClickTextModelPropertyAttribute.#ctor(System.Type)">
-            <inheritdoc/>
-        </member>
-        <member name="P:HKW.HKWMapper.ClickTextModelMapFromClickTextModelPropertyAttribute.PropertyName">
-            <summary>
-            PropertyName
-            <para>Default is current property name</para>
-            </summary>
-        </member>
-        <member name="P:HKW.HKWMapper.ClickTextModelMapFromClickTextModelPropertyAttribute.ConverterType">
-            <summary>
-            ConverterType
-            </summary>
-        </member>
-        <member name="P:HKW.HKWMapper.ClickTextModelMapFromClickTextModelPropertyAttribute.MapWhenRValueNotNullOrDefault">
-            <summary>
-            MapWhenRValueNotNullOrDefault
-            </summary>
-        </member>
-        <member name="P:HKW.HKWMapper.ClickTextModelMapFromClickTextModelPropertyAttribute.MapWhenLValueNullOrDefault">
-            <summary>
-            MapWhenLValueNullOrDefault
-            </summary>
-        </member>
-        <member name="T:HKW.HKWMapper.FoodModelMapToFoodPropertyAttribute">
-            <summary>
-            FoodModelMapToFoodPropertyAttribute
-            <para>This attribute is only used in <c>FoodModelMapToFood</c></para>
-            </summary>
-        </member>
-        <member name="M:HKW.HKWMapper.FoodModelMapToFoodPropertyAttribute.#ctor(System.String)">
-            <inheritdoc/>
-        </member>
-        <member name="M:HKW.HKWMapper.FoodModelMapToFoodPropertyAttribute.#ctor(System.Type)">
-            <inheritdoc/>
-        </member>
-        <member name="P:HKW.HKWMapper.FoodModelMapToFoodPropertyAttribute.PropertyName">
-            <summary>
-            PropertyName
-            <para>Default is current property name</para>
-            </summary>
-        </member>
-        <member name="P:HKW.HKWMapper.FoodModelMapToFoodPropertyAttribute.ConverterType">
-            <summary>
-            ConverterType
-            </summary>
-        </member>
-        <member name="P:HKW.HKWMapper.FoodModelMapToFoodPropertyAttribute.MapWhenRValueNotNullOrDefault">
-            <summary>
-            MapWhenRValueNotNullOrDefault
-            </summary>
-        </member>
-        <member name="P:HKW.HKWMapper.FoodModelMapToFoodPropertyAttribute.MapWhenLValueNullOrDefault">
-            <summary>
-            MapWhenLValueNullOrDefault
-            </summary>
-        </member>
-        <member name="T:HKW.HKWMapper.FoodModelMapFromFoodPropertyAttribute">
-            <summary>
-            FoodModelMapFromFoodPropertyAttribute
-            <para>This attribute is only used in <c>FoodModelMapFromFood</c></para>
-            </summary>
-        </member>
-        <member name="M:HKW.HKWMapper.FoodModelMapFromFoodPropertyAttribute.#ctor(System.String)">
-            <inheritdoc/>
-        </member>
-        <member name="M:HKW.HKWMapper.FoodModelMapFromFoodPropertyAttribute.#ctor(System.Type)">
-            <inheritdoc/>
-        </member>
-        <member name="P:HKW.HKWMapper.FoodModelMapFromFoodPropertyAttribute.PropertyName">
-            <summary>
-            PropertyName
-            <para>Default is current property name</para>
-            </summary>
-        </member>
-        <member name="P:HKW.HKWMapper.FoodModelMapFromFoodPropertyAttribute.ConverterType">
-            <summary>
-            ConverterType
-            </summary>
-        </member>
-        <member name="P:HKW.HKWMapper.FoodModelMapFromFoodPropertyAttribute.MapWhenRValueNotNullOrDefault">
-            <summary>
-            MapWhenRValueNotNullOrDefault
-            </summary>
-        </member>
-        <member name="P:HKW.HKWMapper.FoodModelMapFromFoodPropertyAttribute.MapWhenLValueNullOrDefault">
-            <summary>
-            MapWhenLValueNullOrDefault
-            </summary>
-        </member>
-        <member name="T:HKW.HKWMapper.FoodModelMapFromFoodModelPropertyAttribute">
-            <summary>
-            FoodModelMapFromFoodModelPropertyAttribute
-            <para>This attribute is only used in <c>FoodModelMapFromFoodModel</c></para>
-            </summary>
-        </member>
-        <member name="M:HKW.HKWMapper.FoodModelMapFromFoodModelPropertyAttribute.#ctor(System.String)">
-            <inheritdoc/>
-        </member>
-        <member name="M:HKW.HKWMapper.FoodModelMapFromFoodModelPropertyAttribute.#ctor(System.Type)">
-            <inheritdoc/>
-        </member>
-        <member name="P:HKW.HKWMapper.FoodModelMapFromFoodModelPropertyAttribute.PropertyName">
-            <summary>
-            PropertyName
-            <para>Default is current property name</para>
-            </summary>
-        </member>
-        <member name="P:HKW.HKWMapper.FoodModelMapFromFoodModelPropertyAttribute.ConverterType">
-            <summary>
-            ConverterType
-            </summary>
-        </member>
-        <member name="P:HKW.HKWMapper.FoodModelMapFromFoodModelPropertyAttribute.MapWhenRValueNotNullOrDefault">
-            <summary>
-            MapWhenRValueNotNullOrDefault
-            </summary>
-        </member>
-        <member name="P:HKW.HKWMapper.FoodModelMapFromFoodModelPropertyAttribute.MapWhenLValueNullOrDefault">
-            <summary>
-            MapWhenLValueNullOrDefault
-            </summary>
-        </member>
-        <member name="T:HKW.HKWMapper.LowTextModelMapToLowTextPropertyAttribute">
-            <summary>
-            LowTextModelMapToLowTextPropertyAttribute
-            <para>This attribute is only used in <c>LowTextModelMapToLowText</c></para>
-            </summary>
-        </member>
-        <member name="M:HKW.HKWMapper.LowTextModelMapToLowTextPropertyAttribute.#ctor(System.String)">
-            <inheritdoc/>
-        </member>
-        <member name="M:HKW.HKWMapper.LowTextModelMapToLowTextPropertyAttribute.#ctor(System.Type)">
-            <inheritdoc/>
-        </member>
-        <member name="P:HKW.HKWMapper.LowTextModelMapToLowTextPropertyAttribute.PropertyName">
-            <summary>
-            PropertyName
-            <para>Default is current property name</para>
-            </summary>
-        </member>
-        <member name="P:HKW.HKWMapper.LowTextModelMapToLowTextPropertyAttribute.ConverterType">
-            <summary>
-            ConverterType
-            </summary>
-        </member>
-        <member name="P:HKW.HKWMapper.LowTextModelMapToLowTextPropertyAttribute.MapWhenRValueNotNullOrDefault">
-            <summary>
-            MapWhenRValueNotNullOrDefault
-            </summary>
-        </member>
-        <member name="P:HKW.HKWMapper.LowTextModelMapToLowTextPropertyAttribute.MapWhenLValueNullOrDefault">
-            <summary>
-            MapWhenLValueNullOrDefault
-            </summary>
-        </member>
-        <member name="T:HKW.HKWMapper.LowTextModelMapFromLowTextPropertyAttribute">
-            <summary>
-            LowTextModelMapFromLowTextPropertyAttribute
-            <para>This attribute is only used in <c>LowTextModelMapFromLowText</c></para>
-            </summary>
-        </member>
-        <member name="M:HKW.HKWMapper.LowTextModelMapFromLowTextPropertyAttribute.#ctor(System.String)">
-            <inheritdoc/>
-        </member>
-        <member name="M:HKW.HKWMapper.LowTextModelMapFromLowTextPropertyAttribute.#ctor(System.Type)">
-            <inheritdoc/>
-        </member>
-        <member name="P:HKW.HKWMapper.LowTextModelMapFromLowTextPropertyAttribute.PropertyName">
-            <summary>
-            PropertyName
-            <para>Default is current property name</para>
-            </summary>
-        </member>
-        <member name="P:HKW.HKWMapper.LowTextModelMapFromLowTextPropertyAttribute.ConverterType">
-            <summary>
-            ConverterType
-            </summary>
-        </member>
-        <member name="P:HKW.HKWMapper.LowTextModelMapFromLowTextPropertyAttribute.MapWhenRValueNotNullOrDefault">
-            <summary>
-            MapWhenRValueNotNullOrDefault
-            </summary>
-        </member>
-        <member name="P:HKW.HKWMapper.LowTextModelMapFromLowTextPropertyAttribute.MapWhenLValueNullOrDefault">
-            <summary>
-            MapWhenLValueNullOrDefault
-            </summary>
-        </member>
-        <member name="T:HKW.HKWMapper.LowTextModelMapFromLowTextModelPropertyAttribute">
-            <summary>
-            LowTextModelMapFromLowTextModelPropertyAttribute
-            <para>This attribute is only used in <c>LowTextModelMapFromLowTextModel</c></para>
-            </summary>
-        </member>
-        <member name="M:HKW.HKWMapper.LowTextModelMapFromLowTextModelPropertyAttribute.#ctor(System.String)">
-            <inheritdoc/>
-        </member>
-        <member name="M:HKW.HKWMapper.LowTextModelMapFromLowTextModelPropertyAttribute.#ctor(System.Type)">
-            <inheritdoc/>
-        </member>
-        <member name="P:HKW.HKWMapper.LowTextModelMapFromLowTextModelPropertyAttribute.PropertyName">
-            <summary>
-            PropertyName
-            <para>Default is current property name</para>
-            </summary>
-        </member>
-        <member name="P:HKW.HKWMapper.LowTextModelMapFromLowTextModelPropertyAttribute.ConverterType">
-            <summary>
-            ConverterType
-            </summary>
-        </member>
-        <member name="P:HKW.HKWMapper.LowTextModelMapFromLowTextModelPropertyAttribute.MapWhenRValueNotNullOrDefault">
-            <summary>
-            MapWhenRValueNotNullOrDefault
-            </summary>
-        </member>
-        <member name="P:HKW.HKWMapper.LowTextModelMapFromLowTextModelPropertyAttribute.MapWhenLValueNullOrDefault">
-            <summary>
-            MapWhenLValueNullOrDefault
-            </summary>
-        </member>
-        <member name="T:HKW.HKWMapper.MoveModelMapToMovePropertyAttribute">
-            <summary>
-            MoveModelMapToMovePropertyAttribute
-            <para>This attribute is only used in <c>MoveModelMapToMove</c></para>
-            </summary>
-        </member>
-        <member name="M:HKW.HKWMapper.MoveModelMapToMovePropertyAttribute.#ctor(System.String)">
-            <inheritdoc/>
-        </member>
-        <member name="M:HKW.HKWMapper.MoveModelMapToMovePropertyAttribute.#ctor(System.Type)">
-            <inheritdoc/>
-        </member>
-        <member name="P:HKW.HKWMapper.MoveModelMapToMovePropertyAttribute.PropertyName">
-            <summary>
-            PropertyName
-            <para>Default is current property name</para>
-            </summary>
-        </member>
-        <member name="P:HKW.HKWMapper.MoveModelMapToMovePropertyAttribute.ConverterType">
-            <summary>
-            ConverterType
-            </summary>
-        </member>
-        <member name="P:HKW.HKWMapper.MoveModelMapToMovePropertyAttribute.MapWhenRValueNotNullOrDefault">
-            <summary>
-            MapWhenRValueNotNullOrDefault
-            </summary>
-        </member>
-        <member name="P:HKW.HKWMapper.MoveModelMapToMovePropertyAttribute.MapWhenLValueNullOrDefault">
-            <summary>
-            MapWhenLValueNullOrDefault
-            </summary>
-        </member>
-        <member name="T:HKW.HKWMapper.MoveModelMapFromMovePropertyAttribute">
-            <summary>
-            MoveModelMapFromMovePropertyAttribute
-            <para>This attribute is only used in <c>MoveModelMapFromMove</c></para>
-            </summary>
-        </member>
-        <member name="M:HKW.HKWMapper.MoveModelMapFromMovePropertyAttribute.#ctor(System.String)">
-            <inheritdoc/>
-        </member>
-        <member name="M:HKW.HKWMapper.MoveModelMapFromMovePropertyAttribute.#ctor(System.Type)">
-            <inheritdoc/>
-        </member>
-        <member name="P:HKW.HKWMapper.MoveModelMapFromMovePropertyAttribute.PropertyName">
-            <summary>
-            PropertyName
-            <para>Default is current property name</para>
-            </summary>
-        </member>
-        <member name="P:HKW.HKWMapper.MoveModelMapFromMovePropertyAttribute.ConverterType">
-            <summary>
-            ConverterType
-            </summary>
-        </member>
-        <member name="P:HKW.HKWMapper.MoveModelMapFromMovePropertyAttribute.MapWhenRValueNotNullOrDefault">
-            <summary>
-            MapWhenRValueNotNullOrDefault
-            </summary>
-        </member>
-        <member name="P:HKW.HKWMapper.MoveModelMapFromMovePropertyAttribute.MapWhenLValueNullOrDefault">
-            <summary>
-            MapWhenLValueNullOrDefault
-            </summary>
-        </member>
-        <member name="T:HKW.HKWMapper.MoveModelMapFromMoveModelPropertyAttribute">
-            <summary>
-            MoveModelMapFromMoveModelPropertyAttribute
-            <para>This attribute is only used in <c>MoveModelMapFromMoveModel</c></para>
-            </summary>
-        </member>
-        <member name="M:HKW.HKWMapper.MoveModelMapFromMoveModelPropertyAttribute.#ctor(System.String)">
-            <inheritdoc/>
-        </member>
-        <member name="M:HKW.HKWMapper.MoveModelMapFromMoveModelPropertyAttribute.#ctor(System.Type)">
-            <inheritdoc/>
-        </member>
-        <member name="P:HKW.HKWMapper.MoveModelMapFromMoveModelPropertyAttribute.PropertyName">
-            <summary>
-            PropertyName
-            <para>Default is current property name</para>
-            </summary>
-        </member>
-        <member name="P:HKW.HKWMapper.MoveModelMapFromMoveModelPropertyAttribute.ConverterType">
-            <summary>
-            ConverterType
-            </summary>
-        </member>
-        <member name="P:HKW.HKWMapper.MoveModelMapFromMoveModelPropertyAttribute.MapWhenRValueNotNullOrDefault">
-            <summary>
-            MapWhenRValueNotNullOrDefault
-            </summary>
-        </member>
-        <member name="P:HKW.HKWMapper.MoveModelMapFromMoveModelPropertyAttribute.MapWhenLValueNullOrDefault">
-            <summary>
-            MapWhenLValueNullOrDefault
-            </summary>
-        </member>
-        <member name="T:HKW.HKWMapper.SelectTextModelMapToSelectTextPropertyAttribute">
-            <summary>
-            SelectTextModelMapToSelectTextPropertyAttribute
-            <para>This attribute is only used in <c>SelectTextModelMapToSelectText</c></para>
-            </summary>
-        </member>
-        <member name="M:HKW.HKWMapper.SelectTextModelMapToSelectTextPropertyAttribute.#ctor(System.String)">
-            <inheritdoc/>
-        </member>
-        <member name="M:HKW.HKWMapper.SelectTextModelMapToSelectTextPropertyAttribute.#ctor(System.Type)">
-            <inheritdoc/>
-        </member>
-        <member name="P:HKW.HKWMapper.SelectTextModelMapToSelectTextPropertyAttribute.PropertyName">
-            <summary>
-            PropertyName
-            <para>Default is current property name</para>
-            </summary>
-        </member>
-        <member name="P:HKW.HKWMapper.SelectTextModelMapToSelectTextPropertyAttribute.ConverterType">
-            <summary>
-            ConverterType
-            </summary>
-        </member>
-        <member name="P:HKW.HKWMapper.SelectTextModelMapToSelectTextPropertyAttribute.MapWhenRValueNotNullOrDefault">
-            <summary>
-            MapWhenRValueNotNullOrDefault
-            </summary>
-        </member>
-        <member name="P:HKW.HKWMapper.SelectTextModelMapToSelectTextPropertyAttribute.MapWhenLValueNullOrDefault">
-            <summary>
-            MapWhenLValueNullOrDefault
-            </summary>
-        </member>
-        <member name="T:HKW.HKWMapper.SelectTextModelMapFromSelectTextPropertyAttribute">
-            <summary>
-            SelectTextModelMapFromSelectTextPropertyAttribute
-            <para>This attribute is only used in <c>SelectTextModelMapFromSelectText</c></para>
-            </summary>
-        </member>
-        <member name="M:HKW.HKWMapper.SelectTextModelMapFromSelectTextPropertyAttribute.#ctor(System.String)">
-            <inheritdoc/>
-        </member>
-        <member name="M:HKW.HKWMapper.SelectTextModelMapFromSelectTextPropertyAttribute.#ctor(System.Type)">
-            <inheritdoc/>
-        </member>
-        <member name="P:HKW.HKWMapper.SelectTextModelMapFromSelectTextPropertyAttribute.PropertyName">
-            <summary>
-            PropertyName
-            <para>Default is current property name</para>
-            </summary>
-        </member>
-        <member name="P:HKW.HKWMapper.SelectTextModelMapFromSelectTextPropertyAttribute.ConverterType">
-            <summary>
-            ConverterType
-            </summary>
-        </member>
-        <member name="P:HKW.HKWMapper.SelectTextModelMapFromSelectTextPropertyAttribute.MapWhenRValueNotNullOrDefault">
-            <summary>
-            MapWhenRValueNotNullOrDefault
-            </summary>
-        </member>
-        <member name="P:HKW.HKWMapper.SelectTextModelMapFromSelectTextPropertyAttribute.MapWhenLValueNullOrDefault">
-            <summary>
-            MapWhenLValueNullOrDefault
-            </summary>
-        </member>
-        <member name="T:HKW.HKWMapper.SelectTextModelMapFromSelectTextModelPropertyAttribute">
-            <summary>
-            SelectTextModelMapFromSelectTextModelPropertyAttribute
-            <para>This attribute is only used in <c>SelectTextModelMapFromSelectTextModel</c></para>
-            </summary>
-        </member>
-        <member name="M:HKW.HKWMapper.SelectTextModelMapFromSelectTextModelPropertyAttribute.#ctor(System.String)">
-            <inheritdoc/>
-        </member>
-        <member name="M:HKW.HKWMapper.SelectTextModelMapFromSelectTextModelPropertyAttribute.#ctor(System.Type)">
-            <inheritdoc/>
-        </member>
-        <member name="P:HKW.HKWMapper.SelectTextModelMapFromSelectTextModelPropertyAttribute.PropertyName">
-            <summary>
-            PropertyName
-            <para>Default is current property name</para>
-            </summary>
-        </member>
-        <member name="P:HKW.HKWMapper.SelectTextModelMapFromSelectTextModelPropertyAttribute.ConverterType">
-            <summary>
-            ConverterType
-            </summary>
-        </member>
-        <member name="P:HKW.HKWMapper.SelectTextModelMapFromSelectTextModelPropertyAttribute.MapWhenRValueNotNullOrDefault">
-            <summary>
-            MapWhenRValueNotNullOrDefault
-            </summary>
-        </member>
-        <member name="P:HKW.HKWMapper.SelectTextModelMapFromSelectTextModelPropertyAttribute.MapWhenLValueNullOrDefault">
-            <summary>
-            MapWhenLValueNullOrDefault
-            </summary>
-        </member>
-        <member name="T:HKW.HKWMapper.WorkModelMapToWorkPropertyAttribute">
-            <summary>
-            WorkModelMapToWorkPropertyAttribute
-            <para>This attribute is only used in <c>WorkModelMapToWork</c></para>
-            </summary>
-        </member>
-        <member name="M:HKW.HKWMapper.WorkModelMapToWorkPropertyAttribute.#ctor(System.String)">
-            <inheritdoc/>
-        </member>
-        <member name="M:HKW.HKWMapper.WorkModelMapToWorkPropertyAttribute.#ctor(System.Type)">
-            <inheritdoc/>
-        </member>
-        <member name="P:HKW.HKWMapper.WorkModelMapToWorkPropertyAttribute.PropertyName">
-            <summary>
-            PropertyName
-            <para>Default is current property name</para>
-            </summary>
-        </member>
-        <member name="P:HKW.HKWMapper.WorkModelMapToWorkPropertyAttribute.ConverterType">
-            <summary>
-            ConverterType
-            </summary>
-        </member>
-        <member name="P:HKW.HKWMapper.WorkModelMapToWorkPropertyAttribute.MapWhenRValueNotNullOrDefault">
-            <summary>
-            MapWhenRValueNotNullOrDefault
-            </summary>
-        </member>
-        <member name="P:HKW.HKWMapper.WorkModelMapToWorkPropertyAttribute.MapWhenLValueNullOrDefault">
-            <summary>
-            MapWhenLValueNullOrDefault
-            </summary>
-        </member>
-        <member name="T:HKW.HKWMapper.WorkModelMapFromWorkPropertyAttribute">
-            <summary>
-            WorkModelMapFromWorkPropertyAttribute
-            <para>This attribute is only used in <c>WorkModelMapFromWork</c></para>
-            </summary>
-        </member>
-        <member name="M:HKW.HKWMapper.WorkModelMapFromWorkPropertyAttribute.#ctor(System.String)">
-            <inheritdoc/>
-        </member>
-        <member name="M:HKW.HKWMapper.WorkModelMapFromWorkPropertyAttribute.#ctor(System.Type)">
-            <inheritdoc/>
-        </member>
-        <member name="P:HKW.HKWMapper.WorkModelMapFromWorkPropertyAttribute.PropertyName">
-            <summary>
-            PropertyName
-            <para>Default is current property name</para>
-            </summary>
-        </member>
-        <member name="P:HKW.HKWMapper.WorkModelMapFromWorkPropertyAttribute.ConverterType">
-            <summary>
-            ConverterType
-            </summary>
-        </member>
-        <member name="P:HKW.HKWMapper.WorkModelMapFromWorkPropertyAttribute.MapWhenRValueNotNullOrDefault">
-            <summary>
-            MapWhenRValueNotNullOrDefault
-            </summary>
-        </member>
-        <member name="P:HKW.HKWMapper.WorkModelMapFromWorkPropertyAttribute.MapWhenLValueNullOrDefault">
-            <summary>
-            MapWhenLValueNullOrDefault
-            </summary>
-        </member>
-        <member name="T:HKW.HKWMapper.WorkModelMapFromWorkModelPropertyAttribute">
-            <summary>
-            WorkModelMapFromWorkModelPropertyAttribute
-            <para>This attribute is only used in <c>WorkModelMapFromWorkModel</c></para>
-            </summary>
-        </member>
-        <member name="M:HKW.HKWMapper.WorkModelMapFromWorkModelPropertyAttribute.#ctor(System.String)">
-            <inheritdoc/>
-        </member>
-        <member name="M:HKW.HKWMapper.WorkModelMapFromWorkModelPropertyAttribute.#ctor(System.Type)">
-            <inheritdoc/>
-        </member>
-        <member name="P:HKW.HKWMapper.WorkModelMapFromWorkModelPropertyAttribute.PropertyName">
-            <summary>
-            PropertyName
-            <para>Default is current property name</para>
-            </summary>
-        </member>
-        <member name="P:HKW.HKWMapper.WorkModelMapFromWorkModelPropertyAttribute.ConverterType">
-            <summary>
-            ConverterType
-            </summary>
-        </member>
-        <member name="P:HKW.HKWMapper.WorkModelMapFromWorkModelPropertyAttribute.MapWhenRValueNotNullOrDefault">
-            <summary>
-            MapWhenRValueNotNullOrDefault
-            </summary>
-        </member>
-        <member name="P:HKW.HKWMapper.WorkModelMapFromWorkModelPropertyAttribute.MapWhenLValueNullOrDefault">
-            <summary>
-            MapWhenLValueNullOrDefault
-            </summary>
-        </member>
-        <member name="T:HKW.HKWMapper.MapperExtensions">
-            <summary>MapperExtensions</summary>
-            <summary>MapperExtensions</summary>
-            <summary>MapperExtensions</summary>
-            <summary>MapperExtensions</summary>
-            <summary>MapperExtensions</summary>
-            <summary>MapperExtensions</summary>
         </member>
     </members>
 </doc>
