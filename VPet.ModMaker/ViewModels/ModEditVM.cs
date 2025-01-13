@@ -50,7 +50,7 @@ public partial class ModEditVM : DialogViewModel, IEnableLogger<ViewModelBase>
     {
         if (ModInfo.I18nResource.Cultures.Count == 0)
         {
-            ModMakerVM.DialogService.ShowMessageBoxX(
+            NativeUtils.DialogService.ShowMessageBoxX(
                 this,
                 "未添加任何文化,请添加文化".Translate(),
                 "缺少文化".Translate(),
@@ -59,14 +59,14 @@ public partial class ModEditVM : DialogViewModel, IEnableLogger<ViewModelBase>
             AddCulture();
             if (ModInfo.I18nResource.Cultures.Count == 0)
             {
-                ModMakerVM.DialogService.ShowMessageBoxX(
+                NativeUtils.DialogService.ShowMessageBoxX(
                     this,
                     "未设置文化, 将退出编辑".Translate(),
                     "数据错误".Translate(),
                     icon: MessageBoxImage.Warning
                 );
                 DialogResult = false;
-                ModMakerVM.DialogService.DialogManager.FindViewByViewModel(this)?.Close();
+                NativeUtils.DialogService.DialogManager.FindViewByViewModel(this)?.Close();
                 return;
             }
         }
@@ -74,7 +74,7 @@ public partial class ModEditVM : DialogViewModel, IEnableLogger<ViewModelBase>
         if (ModUpdataHelper.CanUpdata(ModInfo) is false)
             return;
         if (
-            ModMakerVM.DialogService.ShowMessageBoxX(
+            NativeUtils.DialogService.ShowMessageBoxX(
                 this,
                 "是否更新模组\n当前版本: {0}\n最新版本: {1}".Translate(
                     ModInfo.ModVersion,
@@ -89,7 +89,7 @@ public partial class ModEditVM : DialogViewModel, IEnableLogger<ViewModelBase>
             try
             {
                 var version = ModUpdataHelper.Updata(ModInfo);
-                ModMakerVM.DialogService.ShowMessageBoxX(
+                NativeUtils.DialogService.ShowMessageBoxX(
                     this,
                     "更新成功更新至版本 {0}, 请手动保存".Translate(version)
                 );
@@ -97,7 +97,7 @@ public partial class ModEditVM : DialogViewModel, IEnableLogger<ViewModelBase>
             }
             catch (Exception ex)
             {
-                ModMakerVM.DialogService.ShowMessageBoxX(this, "模组更新失败, 详情请查看日志".Translate());
+                NativeUtils.DialogService.ShowMessageBoxX(this, "模组更新失败, 详情请查看日志".Translate());
                 this.LogX().Error(ex, "模组更新失败");
             }
         }
@@ -110,7 +110,7 @@ public partial class ModEditVM : DialogViewModel, IEnableLogger<ViewModelBase>
         //if (ModInfo is null)
         //    return;
         if (
-            ModMakerVM.DialogService.ShowMessageBoxX(
+            NativeUtils.DialogService.ShowMessageBoxX(
                 this,
                 "确认退出吗?".Translate(),
                 "退出编辑".Translate(),
@@ -131,7 +131,7 @@ public partial class ModEditVM : DialogViewModel, IEnableLogger<ViewModelBase>
     [ReactiveCommand]
     private async void SaveAsTranslationMod()
     {
-        await ModMakerVM.DialogService.ShowDialogAsync<SaveTranslationModVM>(
+        await NativeUtils.DialogService.ShowDialogAsync<SaveTranslationModVM>(
             this,
             new SaveTranslationModVM(ModInfo)
         );
@@ -150,7 +150,7 @@ public partial class ModEditVM : DialogViewModel, IEnableLogger<ViewModelBase>
     private void EditI18n()
     {
         var vm = new I18nEditVM(ModInfo);
-        ModMakerVM.DialogService.Show<I18nEditVM>(null, vm);
+        NativeUtils.DialogService.Show<I18nEditVM>(null, vm);
         vm.Closing += I18nEdit_Closing;
         I18nEditCanExecute = false;
     }
@@ -169,7 +169,7 @@ public partial class ModEditVM : DialogViewModel, IEnableLogger<ViewModelBase>
     [ReactiveCommand]
     private void ChangeImage()
     {
-        var openFileDialog = ModMakerVM.DialogService.ShowOpenFileDialog(
+        var openFileDialog = NativeUtils.DialogService.ShowOpenFileDialog(
             this,
             new()
             {
@@ -182,7 +182,7 @@ public partial class ModEditVM : DialogViewModel, IEnableLogger<ViewModelBase>
         var newImage = HKWImageUtils.LoadImageToMemory(openFileDialog.LocalPath);
         if (newImage is null)
         {
-            ModMakerVM.DialogService.ShowMessageBoxX(
+            NativeUtils.DialogService.ShowMessageBoxX(
                 this,
                 "图片载入失败, 详情请查看日志".Translate(),
                 "图片载入失败".Translate(),
@@ -201,7 +201,7 @@ public partial class ModEditVM : DialogViewModel, IEnableLogger<ViewModelBase>
     [ReactiveCommand]
     public void AddCulture()
     {
-        var vm = ModMakerVM.DialogService.ShowDialogX(this, new AddCultureVM(ModInfo));
+        var vm = NativeUtils.DialogService.ShowDialogX(this, new AddCultureVM(ModInfo));
         if (vm.DialogResult is not true)
             return;
         ModInfo.I18nResource.AddCulture(vm.CultureName);
@@ -216,7 +216,7 @@ public partial class ModEditVM : DialogViewModel, IEnableLogger<ViewModelBase>
     [ReactiveCommand]
     private void EditCulture(CultureInfo oldCulture)
     {
-        var vm = ModMakerVM.DialogService.ShowDialogX(
+        var vm = NativeUtils.DialogService.ShowDialogX(
             this,
             new AddCultureVM(ModInfo) { CultureName = oldCulture.Name }
         );
@@ -234,7 +234,7 @@ public partial class ModEditVM : DialogViewModel, IEnableLogger<ViewModelBase>
     private void RemoveCulture(CultureInfo oldCulture)
     {
         if (
-            ModMakerVM.DialogService.ShowMessageBoxX(
+            NativeUtils.DialogService.ShowMessageBoxX(
                 this,
                 "确定删除文化 \"{0}\" 吗".Translate(oldCulture),
                 "删除文化".Translate(),
@@ -258,7 +258,7 @@ public partial class ModEditVM : DialogViewModel, IEnableLogger<ViewModelBase>
     {
         if (Path.Exists(ModInfo.SourcePath) is false)
         {
-            ModMakerVM.DialogService.ShowMessageBoxX(
+            NativeUtils.DialogService.ShowMessageBoxX(
                 this,
                 "源路径为空, 请先保存模组".Translate(),
                 "打开所在的文件夹失败".Translate(),
@@ -279,7 +279,7 @@ public partial class ModEditVM : DialogViewModel, IEnableLogger<ViewModelBase>
             return;
         if (string.IsNullOrEmpty(ModInfo.SourcePath))
         {
-            ModMakerVM.DialogService.ShowMessageBoxX(
+            NativeUtils.DialogService.ShowMessageBoxX(
                 this,
                 "源路径为空, 请使用 \"保存至\"".Translate(),
                 "保存失败".Translate(),
@@ -288,7 +288,7 @@ public partial class ModEditVM : DialogViewModel, IEnableLogger<ViewModelBase>
             return;
         }
         if (
-            ModMakerVM.DialogService.ShowMessageBoxX(
+            NativeUtils.DialogService.ShowMessageBoxX(
                 this,
                 "确定保存吗".Translate(),
                 "保存".Translate(),
@@ -308,7 +308,7 @@ public partial class ModEditVM : DialogViewModel, IEnableLogger<ViewModelBase>
     {
         if (ValidationData(ModInfo) is false)
             return;
-        var saveFileDialog = ModMakerVM.DialogService.ShowOpenFolderDialog(
+        var saveFileDialog = NativeUtils.DialogService.ShowOpenFolderDialog(
             this,
             new() { Title = "选择保存的文件夹".Translate(), }
         );
@@ -330,13 +330,13 @@ public partial class ModEditVM : DialogViewModel, IEnableLogger<ViewModelBase>
             if (string.IsNullOrWhiteSpace(ModInfo.SourcePath))
                 ModInfo.SourcePath = path;
             pending.Close();
-            ModMakerVM.DialogService.ShowMessageBoxX(this, "保存成功".Translate());
+            NativeUtils.DialogService.ShowMessageBoxX(this, "保存成功".Translate());
             this.LogX().Info("成功保存至 {path}", path);
         }
         catch (Exception ex)
         {
             pending.Close();
-            ModMakerVM.DialogService.ShowMessageBoxX(this, "保存失败, 详情请查看日志".Translate());
+            NativeUtils.DialogService.ShowMessageBoxX(this, "保存失败, 详情请查看日志".Translate());
             this.LogX().Error(ex, "保存失败");
             return;
         }
@@ -351,7 +351,7 @@ public partial class ModEditVM : DialogViewModel, IEnableLogger<ViewModelBase>
     {
         if (ModInfo.I18nResource.CultureDatas.HasValue() is false)
         {
-            ModMakerVM.DialogService.ShowMessageBoxX(
+            NativeUtils.DialogService.ShowMessageBoxX(
                 this,
                 "未添加任何语言".Translate(),
                 "数据错误".Translate(),
@@ -361,7 +361,7 @@ public partial class ModEditVM : DialogViewModel, IEnableLogger<ViewModelBase>
         }
         if (string.IsNullOrWhiteSpace(model.ID))
         {
-            ModMakerVM.DialogService.ShowMessageBoxX(
+            NativeUtils.DialogService.ShowMessageBoxX(
                 this,
                 "ID不可为空".Translate(),
                 "数据错误".Translate(),
@@ -371,7 +371,7 @@ public partial class ModEditVM : DialogViewModel, IEnableLogger<ViewModelBase>
         }
         if (string.IsNullOrWhiteSpace(model.Author))
         {
-            ModMakerVM.DialogService.ShowMessageBoxX(
+            NativeUtils.DialogService.ShowMessageBoxX(
                 this,
                 "作者不可为空".Translate(),
                 "数据错误".Translate(),

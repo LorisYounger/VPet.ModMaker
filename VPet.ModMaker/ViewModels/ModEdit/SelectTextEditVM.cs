@@ -69,7 +69,7 @@ public partial class SelectTextEditVM : DialogViewModel, IEnableLogger<ViewModel
             return;
         if (string.IsNullOrWhiteSpace(SelectText.ID))
         {
-            ModMakerVM.DialogService.ShowMessageBoxX(
+            NativeUtils.DialogService.ShowMessageBoxX(
                 this,
                 "ID不可为空".Translate(),
                 "数据错误".Translate(),
@@ -80,7 +80,7 @@ public partial class SelectTextEditVM : DialogViewModel, IEnableLogger<ViewModel
         }
         else if (SelectText.Text is null)
         {
-            ModMakerVM.DialogService.ShowMessageBoxX(
+            NativeUtils.DialogService.ShowMessageBoxX(
                 this,
                 "文本不可为空".Translate(),
                 "数据错误".Translate(),
@@ -94,7 +94,7 @@ public partial class SelectTextEditVM : DialogViewModel, IEnableLogger<ViewModel
             && ModInfo.SelectTexts.Any(i => i.ID == SelectText.ID)
         )
         {
-            ModMakerVM.DialogService.ShowMessageBoxX(
+            NativeUtils.DialogService.ShowMessageBoxX(
                 this,
                 "此ID已存在".Translate(),
                 "数据错误".Translate(),
@@ -153,7 +153,7 @@ public partial class SelectTextEditVM : DialogViewModel, IEnableLogger<ViewModel
     {
         ModInfo.TempI18nResource.ClearCultureData();
         SelectText = new() { I18nResource = ModInfo.I18nResource };
-        await ModMakerVM.DialogService.ShowDialogAsyncX(this, this);
+        await NativeUtils.DialogService.ShowDialogAsyncX(this, this);
         if (DialogResult is not true)
         {
             SelectText.Close();
@@ -189,7 +189,7 @@ public partial class SelectTextEditVM : DialogViewModel, IEnableLogger<ViewModel
         var newModel = new SelectTextModel(model) { I18nResource = ModInfo.TempI18nResource };
         model.I18nResource.CopyDataTo(newModel.I18nResource, [model.ID, model.ChooseID], true);
         SelectText = newModel;
-        await ModMakerVM.DialogService.ShowDialogAsync(this, this);
+        await NativeUtils.DialogService.ShowDialogAsync(this, this);
         if (DialogResult is not true)
         {
             newModel.I18nResource.ClearCultureData();
@@ -234,7 +234,7 @@ public partial class SelectTextEditVM : DialogViewModel, IEnableLogger<ViewModel
     {
         var models = list.Cast<SelectTextModel>().ToArray();
         if (
-            ModMakerVM.DialogService.ShowMessageBoxX(
+            NativeUtils.DialogService.ShowMessageBoxX(
                 this,
                 "确定删除已选中的 {0} 个选择文本吗".Translate(models.Length),
                 "删除选择文本".Translate(),

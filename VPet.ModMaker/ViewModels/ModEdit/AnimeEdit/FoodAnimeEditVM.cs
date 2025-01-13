@@ -150,7 +150,7 @@ public partial class FoodAnimeEditVM : DialogViewModel
     [ReactiveCommand]
     private void ChangeFoodImage()
     {
-        var openFileDialog = ModMakerVM.DialogService.ShowOpenFileDialog(
+        var openFileDialog = NativeUtils.DialogService.ShowOpenFileDialog(
             this,
             new() { Title = "选择图片".Translate(), Filters = [new("图片".Translate(), ["png"])] }
         );
@@ -161,7 +161,7 @@ public partial class FoodAnimeEditVM : DialogViewModel
         var image = HKWImageUtils.LoadImageToMemory(openFileDialog.LocalPath);
         if (image is null)
         {
-            ModMakerVM.DialogService.ShowMessageBoxX(
+            NativeUtils.DialogService.ShowMessageBoxX(
                 this,
                 "图片载入失败, 详情请查看日志".Translate(),
                 "图片载入失败".Translate(),
@@ -195,7 +195,7 @@ public partial class FoodAnimeEditVM : DialogViewModel
     private void RemoveAnime(FoodAnimeModel value)
     {
         if (
-            ModMakerVM.DialogService.ShowMessageBoxX(
+            NativeUtils.DialogService.ShowMessageBoxX(
                 this,
                 "确定删除动画 \"{0}\"".Translate(value.ID),
                 "删除动画".Translate(),
@@ -225,7 +225,7 @@ public partial class FoodAnimeEditVM : DialogViewModel
     [ReactiveCommand]
     private void AddFrontImage(FoodAnimeModel value)
     {
-        var openFilesDialog = ModMakerVM.DialogService.ShowOpenFilesDialog(
+        var openFilesDialog = NativeUtils.DialogService.ShowOpenFilesDialog(
             this,
             new() { Title = "选择图片".Translate(), Filters = [new("图片".Translate(), ["png"])] }
         );
@@ -253,7 +253,7 @@ public partial class FoodAnimeEditVM : DialogViewModel
     private void ClearFrontImage(FoodAnimeModel value)
     {
         if (
-            ModMakerVM.DialogService.ShowMessageBoxX(
+            NativeUtils.DialogService.ShowMessageBoxX(
                 this,
                 "确定清空吗".Translate(),
                 "清空图像".Translate(),
@@ -274,7 +274,7 @@ public partial class FoodAnimeEditVM : DialogViewModel
     [ReactiveCommand]
     private void ChangeFrontImage(FoodAnimeModel value)
     {
-        var openFileDialog = ModMakerVM.DialogService.ShowOpenFileDialog(
+        var openFileDialog = NativeUtils.DialogService.ShowOpenFileDialog(
             this,
             new() { Title = "选择图片".Translate(), Filters = [new("图片".Translate(), ["png"])] }
         );
@@ -283,7 +283,7 @@ public partial class FoodAnimeEditVM : DialogViewModel
         var newImage = HKWImageUtils.LoadImageToMemory(openFileDialog.LocalPath);
         if (newImage is null)
         {
-            ModMakerVM.DialogService.ShowMessageBoxX(
+            NativeUtils.DialogService.ShowMessageBoxX(
                 this,
                 "图片载入失败, 详情请查看日志".Translate(),
                 "图片载入失败".Translate(),
@@ -304,7 +304,7 @@ public partial class FoodAnimeEditVM : DialogViewModel
     [ReactiveCommand]
     private void AddBackImage(FoodAnimeModel value)
     {
-        var openFilesDialog = ModMakerVM.DialogService.ShowOpenFilesDialog(
+        var openFilesDialog = NativeUtils.DialogService.ShowOpenFilesDialog(
             this,
             new() { Title = "选择图片".Translate(), Filters = [new("图片".Translate(), ["png"])] }
         );
@@ -332,7 +332,7 @@ public partial class FoodAnimeEditVM : DialogViewModel
     private void ClearBackImage(FoodAnimeModel value)
     {
         if (
-            ModMakerVM.DialogService.ShowMessageBoxX(
+            NativeUtils.DialogService.ShowMessageBoxX(
                 this,
                 "确定清空图片吗".Translate(),
                 "清空图片".Translate(),
@@ -354,7 +354,7 @@ public partial class FoodAnimeEditVM : DialogViewModel
     [ReactiveCommand]
     private void ChangeBackImage(FoodAnimeModel value)
     {
-        var openFileDialog = ModMakerVM.DialogService.ShowOpenFileDialog(
+        var openFileDialog = NativeUtils.DialogService.ShowOpenFileDialog(
             this,
             new() { Title = "选择图片".Translate(), Filters = [new("图片".Translate(), ["png"])] }
         );
@@ -363,7 +363,7 @@ public partial class FoodAnimeEditVM : DialogViewModel
         var newImage = HKWImageUtils.LoadImageToMemory(openFileDialog.LocalPath);
         if (newImage is null)
         {
-            ModMakerVM.DialogService.ShowMessageBoxX(
+            NativeUtils.DialogService.ShowMessageBoxX(
                 this,
                 "图片载入失败, 详情请查看日志".Translate(),
                 "图片载入失败".Translate(),
@@ -408,7 +408,7 @@ public partial class FoodAnimeEditVM : DialogViewModel
         }
         if (failCount > 0)
         {
-            ModMakerVM.DialogService.ShowMessageBoxX(
+            NativeUtils.DialogService.ShowMessageBoxX(
                 this,
                 "图片载入失败, 数量 {0}, 详情请查看日志".Translate(failCount),
                 "图片载入失败".Translate(),
@@ -435,7 +435,7 @@ public partial class FoodAnimeEditVM : DialogViewModel
     private void ClearFoodLocation(FoodAnimeModel value)
     {
         if (
-            ModMakerVM.DialogService.ShowMessageBoxX(
+            NativeUtils.DialogService.ShowMessageBoxX(
                 this,
                 "确定清空图像吗".Translate(),
                 "清空图像".Translate(),
@@ -471,7 +471,7 @@ public partial class FoodAnimeEditVM : DialogViewModel
     {
         if (CurrentAnimeModel is null)
         {
-            ModMakerVM.DialogService.ShowMessageBoxX(
+            NativeUtils.DialogService.ShowMessageBoxX(
                 this,
                 "未选中动画".Translate(),
                 "播放失败".Translate(),

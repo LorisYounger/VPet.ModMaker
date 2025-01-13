@@ -41,7 +41,7 @@ public partial class SaveTranslationModVM : DialogViewModel, IEnableLogger<ViewM
     [ReactiveCommand]
     private void Save()
     {
-        var saveFileDialog = ModMakerVM.DialogService.ShowOpenFolderDialog(
+        var saveFileDialog = NativeUtils.DialogService.ShowOpenFolderDialog(
             this,
             new() { Title = "保存模组至文件夹".Translate() }
         );
@@ -54,12 +54,12 @@ public partial class SaveTranslationModVM : DialogViewModel, IEnableLogger<ViewM
                 CheckCultures.Where(m => m.IsSelected).Select(m => m.Source)
             );
             this.LogX().Info("翻译模组保存成功");
-            ModMakerVM.DialogService.ShowMessageBoxX(this, "翻译模组保存成功".Translate());
+            NativeUtils.DialogService.ShowMessageBoxX(this, "翻译模组保存成功".Translate());
         }
         catch (Exception ex)
         {
             this.LogX().Warn(ex, "翻译模组保存失败");
-            ModMakerVM.DialogService.ShowMessageBoxX(this, "翻译模组保存失败, 详情请查看日志".Translate());
+            NativeUtils.DialogService.ShowMessageBoxX(this, "翻译模组保存失败, 详情请查看日志".Translate());
         }
     }
 }

@@ -31,20 +31,15 @@ public partial class ModMakerVM : ViewModelBase
 {
     private static bool _isFirst = true;
 
-    /// <summary>
-    /// 对话框服务
-    /// </summary>
-    public static IDialogService DialogService { get; private set; } = null!;
-
     /// <inheritdoc/>
     public ModMakerVM()
     {
         Initialize();
         this.LogX().Info("初始化完成".Translate());
-#if !RELEASE
-        HKWImageUtils.Logger = this.LogX();
-        HKWImageUtils.LogStackFrame = true;
-#endif
+        //#if !RELEASE
+        //        HKWImageUtils.Logger = this.LogX();
+        //        HKWImageUtils.LogStackFrame = true;
+        //#endif
         Histories = new([], [], f => f.ID.Contains(Search, StringComparison.OrdinalIgnoreCase));
         LoadHistory(NativeData.HistoryBaseFilePath);
 
@@ -70,7 +65,7 @@ public partial class ModMakerVM : ViewModelBase
         var funcLogManager = new FuncLogManager(type => new NLogLogger(LogResolver.Resolve(type)));
         LogHostX.RegisterLoggerManager(typeof(ViewModelBase), funcLogManager);
 
-        DialogService = new DialogService(
+        NativeUtils.DialogService = new DialogService(
             new DialogManagerX(viewLocator: new ViewLocator()),
             viewModelFactory: x => throw new NotImplementedException()
         );
@@ -224,12 +219,12 @@ public partial class ModMakerVM : ViewModelBase
     {
         if (Histories.HasValue() is false)
         {
-            DialogService.ShowMessageBoxX(this, "历史为空,不需要清空");
+            NativeUtils.DialogService.ShowMessageBoxX(this, "历史为空,不需要清空");
             return;
         }
 
         if (
-            DialogService.ShowMessageBoxX(
+            NativeUtils.DialogService.ShowMessageBoxX(
                 this,
                 "确定要清空吗?".Translate(),
                 button: MessageBoxButton.YesNo,
@@ -261,10 +256,10 @@ public partial class ModMakerVM : ViewModelBase
     /// <param name="modInfo">模组信息</param>
     public void EditMod(ModInfoModel modInfo)
     {
-        var view = DialogService.DialogManager.FindViewByViewModel(this)!;
+        var view = NativeUtils.DialogService.DialogManager.FindViewByViewModel(this)!;
         view.Hide();
         var vm = new ModEditVM(modInfo);
-        DialogService.Show(vm).ShowViewOnSelfClose(view);
+        NativeUtils.DialogService.Show(vm).ShowViewOnSelfClose(view);
         vm.CheckModInfo();
     }
 
@@ -274,7 +269,7 @@ public partial class ModMakerVM : ViewModelBase
     [ReactiveCommand]
     public void LoadModFromPath()
     {
-        var openFileDialog = DialogService.ShowOpenFolderDialog(
+        var openFileDialog = NativeUtils.DialogService.ShowOpenFolderDialog(
             this,
             new() { Title = "模组信息文件夹".Translate() }
         );
@@ -293,7 +288,7 @@ public partial class ModMakerVM : ViewModelBase
         if (Directory.Exists(history.SourcePath) is false)
         {
             if (
-                DialogService.ShowMessageBoxX(
+                NativeUtils.DialogService.ShowMessageBoxX(
                     this,
                     $"历史路径不存在, 是否删除?".Translate(),
                     "数据错误".Translate(),
@@ -322,7 +317,7 @@ public partial class ModMakerVM : ViewModelBase
         catch (Exception ex)
         {
             this.LogX().Error(ex, "模组载入失败, 路径: {path}", directory);
-            DialogService.ShowMessageBoxX(
+            NativeUtils.DialogService.ShowMessageBoxX(
                 this,
                 "模组载入失败, 详情请查看日志".Translate(),
                 icon: MessageBoxImage.Error
@@ -339,7 +334,7 @@ public partial class ModMakerVM : ViewModelBase
         catch (Exception ex)
         {
             this.LogX().Error(ex, "模组载入失败, 路径: {path}", directory);
-            DialogService.ShowMessageBoxX(this, "模组载入失败, 详情请查看日志".Translate());
+            NativeUtils.DialogService.ShowMessageBoxX(this, "模组载入失败, 详情请查看日志".Translate());
         }
     }
 
@@ -353,7 +348,7 @@ public partial class ModMakerVM : ViewModelBase
         if (Directory.Exists(history.SourcePath) is false)
         {
             if (
-                DialogService.ShowMessageBoxX(
+                NativeUtils.DialogService.ShowMessageBoxX(
                     this,
                     $"历史路径不存在, 是否删除?".Translate(),
                     "数据错误".Translate(),
@@ -396,7 +391,7 @@ public partial class ModMakerVM : ViewModelBase
         catch
         {
             if (
-                DialogService.ShowMessageBoxX(
+                NativeUtils.DialogService.ShowMessageBoxX(
                     this,
                     "无法打开链接,需要复制自行访问吗".Translate(),
                     "打开链接失败".Translate(),
@@ -407,7 +402,7 @@ public partial class ModMakerVM : ViewModelBase
             )
                 return;
             NativeUtils.ClipboardSetText(WikiLink);
-            DialogService.ShowMessageBoxX(this, "已复制到剪贴板".Translate());
+            NativeUtils.DialogService.ShowMessageBoxX(this, "已复制到剪贴板".Translate());
         }
     }
 

@@ -1,26 +1,22 @@
 ﻿using System.IO;
+using HanumanInstitute.MvvmDialogs;
 
 namespace VPet.ModMaker;
 
 /// <summary>
 /// 工具
 /// </summary>
-public static class NativeUtils
+internal static class NativeUtils
 {
+    /// <summary>
+    /// 对话框服务
+    /// </summary>
+    public static IDialogService DialogService { get; set; } = null!;
+
     /// <summary>
     /// 粘贴板复制文本
     /// </summary>
     public static Action<string> ClipboardSetText { get; set; } = null!;
-
-    /// <summary>
-    /// 解码像素宽度
-    /// </summary>
-    public const int DecodePixelWidth = 250;
-
-    /// <summary>
-    /// 解码像素高度
-    /// </summary>
-    public const int DecodePixelHeight = 250;
 
     /// <summary>
     /// 分隔符

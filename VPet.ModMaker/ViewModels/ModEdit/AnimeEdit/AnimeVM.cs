@@ -111,7 +111,7 @@ public partial class AnimeVM : ViewModelBase
     [ReactiveCommand]
     private async void Add()
     {
-        var vm = await ModMakerVM.DialogService.ShowDialogAsyncX(
+        var vm = await NativeUtils.DialogService.ShowDialogAsyncX(
             this,
             new SelectGraphTypeVM() { CurrentPet = CurrentPet, }
         );
@@ -124,7 +124,7 @@ public partial class AnimeVM : ViewModelBase
             && FoodAnimeTypeModel.FoodAnimeNames.Contains(animeName)
         )
         {
-            var animeVM = await ModMakerVM.DialogService.ShowDialogAsyncX(
+            var animeVM = await NativeUtils.DialogService.ShowDialogAsyncX(
                 this,
                 new FoodAnimeEditVM(new() { Name = animeName }) { CurrentPet = CurrentPet }
             );
@@ -134,7 +134,7 @@ public partial class AnimeVM : ViewModelBase
         }
         else
         {
-            var animeVM = await ModMakerVM.DialogService.ShowDialogAsyncX(
+            var animeVM = await NativeUtils.DialogService.ShowDialogAsyncX(
                 this,
                 new AnimeEditVM(
                     new()
@@ -165,7 +165,7 @@ public partial class AnimeVM : ViewModelBase
         //var pendingHandler = PendingBox.Show("载入中".Translate());
         if (model is AnimeTypeModel animeTypeModel)
         {
-            var animeVM = await ModMakerVM.DialogService.ShowDialogAsyncX(
+            var animeVM = await NativeUtils.DialogService.ShowDialogAsyncX(
                 this,
                 new AnimeEditVM(new(animeTypeModel))
                 {
@@ -185,7 +185,7 @@ public partial class AnimeVM : ViewModelBase
         }
         else if (model is FoodAnimeTypeModel foodAnimeTypeModel)
         {
-            var animeVM = await ModMakerVM.DialogService.ShowDialogAsyncX(
+            var animeVM = await NativeUtils.DialogService.ShowDialogAsyncX(
                 this,
                 new FoodAnimeEditVM(new(foodAnimeTypeModel))
                 {
@@ -214,7 +214,7 @@ public partial class AnimeVM : ViewModelBase
     {
         var models = list.Cast<IAnimeModel>().ToArray();
         if (
-            ModMakerVM.DialogService.ShowMessageBoxX(
+            NativeUtils.DialogService.ShowMessageBoxX(
                 this,
                 "确定删除已选中的 {0} 个动画吗".Translate(models.Length),
                 "删除动画".Translate(),

@@ -546,6 +546,18 @@ public partial class ModInfoModel : ViewModelBase
                     this.LogX().Warn(ex, "{dirName} 动画载入失败, 目标文件夹: {path}", dirName, animeDir);
                 }
             }
+            else
+            {
+                try
+                {
+                    var anime = new AnimeTypeModel(GraphInfo.GraphType.Common, animeDir);
+                    petModel.Animes.Add(anime);
+                }
+                catch (Exception ex)
+                {
+                    this.LogX().Warn(ex, "{anime} 动画载入失败, 目标文件夹: {path}", dirName, animeDir);
+                }
+            }
         }
     }
 

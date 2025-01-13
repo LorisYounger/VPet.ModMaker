@@ -46,7 +46,7 @@ public partial class AddCultureVM : DialogViewModel, IEnableLogger<ViewModelBase
             return;
         if (string.IsNullOrWhiteSpace(CultureName))
         {
-            ModMakerVM.DialogService.ShowMessageBoxX(
+            NativeUtils.DialogService.ShowMessageBoxX(
                 this,
                 "文化不可为空".Translate(),
                 "数据错误".Translate(),
@@ -56,7 +56,7 @@ public partial class AddCultureVM : DialogViewModel, IEnableLogger<ViewModelBase
         }
         else if (CultureUtils.TryGetCultureInfo(CultureName, out var culture) is false)
         {
-            ModMakerVM.DialogService.ShowMessageBoxX(
+            NativeUtils.DialogService.ShowMessageBoxX(
                 this,
                 "不支持的文化".Translate(),
                 "数据错误".Translate(),
@@ -66,7 +66,7 @@ public partial class AddCultureVM : DialogViewModel, IEnableLogger<ViewModelBase
         }
         else if (ModInfo.I18nResource.Cultures.Contains(culture))
         {
-            ModMakerVM.DialogService.ShowMessageBoxX(
+            NativeUtils.DialogService.ShowMessageBoxX(
                 this,
                 "此文化已存在".Translate(),
                 "数据错误".Translate(),
@@ -149,7 +149,7 @@ public partial class AddCultureVM : DialogViewModel, IEnableLogger<ViewModelBase
         catch
         {
             if (
-                ModMakerVM.DialogService.ShowMessageBoxX(
+                NativeUtils.DialogService.ShowMessageBoxX(
                     this,
                     "无法打开链接,需要复制自行访问吗".Translate(),
                     "打开链接失败".Translate(),
@@ -160,7 +160,7 @@ public partial class AddCultureVM : DialogViewModel, IEnableLogger<ViewModelBase
             )
                 return;
             NativeUtils.ClipboardSetText(CultureLink);
-            ModMakerVM.DialogService.ShowMessageBoxX(this, "已复制到剪贴板".Translate());
+            NativeUtils.DialogService.ShowMessageBoxX(this, "已复制到剪贴板".Translate());
         }
     }
 }

@@ -66,7 +66,7 @@ public partial class LowTextEditVM : DialogViewModel, IEnableLogger<ViewModelBas
             return;
         if (string.IsNullOrWhiteSpace(LowText.ID))
         {
-            ModMakerVM.DialogService.ShowMessageBoxX(
+            NativeUtils.DialogService.ShowMessageBoxX(
                 this,
                 "ID不可为空".Translate(),
                 "数据错误".Translate(),
@@ -77,7 +77,7 @@ public partial class LowTextEditVM : DialogViewModel, IEnableLogger<ViewModelBas
         }
         else if (LowText.Text is null)
         {
-            ModMakerVM.DialogService.ShowMessageBoxX(
+            NativeUtils.DialogService.ShowMessageBoxX(
                 this,
                 "文本不可为空".Translate(),
                 "数据错误".Translate(),
@@ -88,7 +88,7 @@ public partial class LowTextEditVM : DialogViewModel, IEnableLogger<ViewModelBas
         }
         else if (OldLowText?.ID != LowText.ID && ModInfo.LowTexts.Any(i => i.ID == LowText.ID))
         {
-            ModMakerVM.DialogService.ShowMessageBoxX(
+            NativeUtils.DialogService.ShowMessageBoxX(
                 this,
                 "此ID已存在".Translate(),
                 "数据错误".Translate(),
@@ -147,7 +147,7 @@ public partial class LowTextEditVM : DialogViewModel, IEnableLogger<ViewModelBas
     {
         ModInfo.TempI18nResource.ClearCultureData();
         LowText = new() { I18nResource = ModInfo.I18nResource };
-        await ModMakerVM.DialogService.ShowDialogAsyncX(this, this);
+        await NativeUtils.DialogService.ShowDialogAsyncX(this, this);
         if (DialogResult is not true)
         {
             LowText.Close();
@@ -183,7 +183,7 @@ public partial class LowTextEditVM : DialogViewModel, IEnableLogger<ViewModelBas
         var newModel = new LowTextModel(model) { I18nResource = ModInfo.TempI18nResource };
         model.I18nResource.CopyDataTo(newModel.I18nResource, [model.ID], true);
         LowText = newModel;
-        await ModMakerVM.DialogService.ShowDialogAsync(this, this);
+        await NativeUtils.DialogService.ShowDialogAsync(this, this);
         if (DialogResult is not true)
         {
             newModel.I18nResource.ClearCultureData();
@@ -223,7 +223,7 @@ public partial class LowTextEditVM : DialogViewModel, IEnableLogger<ViewModelBas
     {
         var models = list.Cast<LowTextModel>().ToArray();
         if (
-            ModMakerVM.DialogService.ShowMessageBoxX(
+            NativeUtils.DialogService.ShowMessageBoxX(
                 this,
                 "确定删除已选中的 {0} 个低状态文本吗".Translate(models.Length),
                 "删除低状态文本".Translate(),

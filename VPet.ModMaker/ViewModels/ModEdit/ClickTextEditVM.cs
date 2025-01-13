@@ -67,7 +67,7 @@ public partial class ClickTextEditVM : DialogViewModel, IEnableLogger<ViewModelB
             return;
         if (string.IsNullOrWhiteSpace(ClickText.ID))
         {
-            ModMakerVM.DialogService.ShowMessageBoxX(
+            NativeUtils.DialogService.ShowMessageBoxX(
                 this,
                 "ID不可为空".Translate(),
                 "数据错误".Translate(),
@@ -78,7 +78,7 @@ public partial class ClickTextEditVM : DialogViewModel, IEnableLogger<ViewModelB
         }
         else if (ClickText.Text is null)
         {
-            ModMakerVM.DialogService.ShowMessageBoxX(
+            NativeUtils.DialogService.ShowMessageBoxX(
                 this,
                 "文本不可为空".Translate(),
                 "数据错误".Translate(),
@@ -92,7 +92,7 @@ public partial class ClickTextEditVM : DialogViewModel, IEnableLogger<ViewModelB
             && ModInfo.ClickTexts.Any(i => i.ID == ClickText.ID)
         )
         {
-            ModMakerVM.DialogService.ShowMessageBoxX(
+            NativeUtils.DialogService.ShowMessageBoxX(
                 this,
                 "此ID已存在".Translate(),
                 "数据错误".Translate(),
@@ -151,7 +151,7 @@ public partial class ClickTextEditVM : DialogViewModel, IEnableLogger<ViewModelB
     {
         ModInfo.TempI18nResource.ClearCultureData();
         ClickText = new() { I18nResource = ModInfo.TempI18nResource };
-        await ModMakerVM.DialogService.ShowDialogAsyncX(this, this);
+        await NativeUtils.DialogService.ShowDialogAsyncX(this, this);
         if (DialogResult is not true)
         {
             ClickText.Close();
@@ -184,7 +184,7 @@ public partial class ClickTextEditVM : DialogViewModel, IEnableLogger<ViewModelB
         var newModel = new ClickTextModel(model) { I18nResource = ModInfo.TempI18nResource };
         model.I18nResource.CopyDataTo(newModel.I18nResource, [model.ID], true);
         ClickText = newModel;
-        await ModMakerVM.DialogService.ShowDialogAsync(this, this);
+        await NativeUtils.DialogService.ShowDialogAsync(this, this);
         if (DialogResult is not true)
         {
             newModel.I18nResource.ClearCultureData();
@@ -222,7 +222,7 @@ public partial class ClickTextEditVM : DialogViewModel, IEnableLogger<ViewModelB
     {
         var models = list.Cast<ClickTextModel>().ToArray();
         if (
-            ModMakerVM.DialogService.ShowMessageBoxX(
+            NativeUtils.DialogService.ShowMessageBoxX(
                 this,
                 "确定删除已选中的 {0} 个点击文本吗".Translate(models.Length),
                 "删除点击文本".Translate(),

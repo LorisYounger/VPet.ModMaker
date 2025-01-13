@@ -57,7 +57,7 @@ public partial class MoveEditVM : DialogViewModel, IEnableLogger<ViewModelBase>,
             return;
         if (string.IsNullOrWhiteSpace(Move.Graph))
         {
-            ModMakerVM.DialogService.ShowMessageBoxX(
+            NativeUtils.DialogService.ShowMessageBoxX(
                 this,
                 "指定动画不可为空".Translate(),
                 "数据错误".Translate()
@@ -134,7 +134,7 @@ public partial class MoveEditVM : DialogViewModel, IEnableLogger<ViewModelBase>,
     [ReactiveCommand]
     private void AddImage()
     {
-        var openFileDialog = ModMakerVM.DialogService.ShowOpenFileDialog(
+        var openFileDialog = NativeUtils.DialogService.ShowOpenFileDialog(
             this,
             new()
             {
@@ -147,7 +147,7 @@ public partial class MoveEditVM : DialogViewModel, IEnableLogger<ViewModelBase>,
         var newImage = HKWImageUtils.LoadImageToMemory(openFileDialog.LocalPath);
         if (newImage is null)
         {
-            ModMakerVM.DialogService.ShowMessageBoxX(
+            NativeUtils.DialogService.ShowMessageBoxX(
                 this,
                 "图片载入失败, 详情请查看日志".Translate(),
                 "图片载入失败".Translate(),
@@ -164,7 +164,7 @@ public partial class MoveEditVM : DialogViewModel, IEnableLogger<ViewModelBase>,
     [ReactiveCommand]
     private void ChangeImage()
     {
-        var openFileDialog = ModMakerVM.DialogService.ShowOpenFileDialog(
+        var openFileDialog = NativeUtils.DialogService.ShowOpenFileDialog(
             this,
             new()
             {
@@ -177,7 +177,7 @@ public partial class MoveEditVM : DialogViewModel, IEnableLogger<ViewModelBase>,
         var newImage = HKWImageUtils.LoadImageToMemory(openFileDialog.LocalPath);
         if (newImage is null)
         {
-            ModMakerVM.DialogService.ShowMessageBoxX(
+            NativeUtils.DialogService.ShowMessageBoxX(
                 this,
                 "图片载入失败, 详情请查看日志".Translate(),
                 "图片载入失败".Translate(),
@@ -195,7 +195,7 @@ public partial class MoveEditVM : DialogViewModel, IEnableLogger<ViewModelBase>,
     [ReactiveCommand]
     private async void Add()
     {
-        await ModMakerVM.DialogService.ShowDialogAsyncX(this, this);
+        await NativeUtils.DialogService.ShowDialogAsyncX(this, this);
         if (DialogResult is not true)
             return;
 
@@ -221,7 +221,7 @@ public partial class MoveEditVM : DialogViewModel, IEnableLogger<ViewModelBase>,
         OldMove = model;
         var newModel = new MoveModel(model);
         Move = newModel;
-        await ModMakerVM.DialogService.ShowDialogAsync(this, this);
+        await NativeUtils.DialogService.ShowDialogAsync(this, this);
         if (DialogResult is not true)
             return;
         Moves[Moves.IndexOf(model)] = newModel;
@@ -238,7 +238,7 @@ public partial class MoveEditVM : DialogViewModel, IEnableLogger<ViewModelBase>,
     {
         var models = list.Cast<MoveModel>().ToArray();
         if (
-            ModMakerVM.DialogService.ShowMessageBoxX(
+            NativeUtils.DialogService.ShowMessageBoxX(
                 this,
                 "确定删除已选中的 {0} 个移动吗".Translate(models.Length),
                 "删除移动".Translate(),

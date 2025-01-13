@@ -75,7 +75,7 @@ public partial class WorkEditVM : DialogViewModel, IEnableLogger<ViewModelBase>,
             return;
         if (string.IsNullOrWhiteSpace(Work.ID))
         {
-            ModMakerVM.DialogService.ShowMessageBoxX(
+            NativeUtils.DialogService.ShowMessageBoxX(
                 this,
                 "ID不可为空".Translate(),
                 "数据错误".Translate(),
@@ -86,7 +86,7 @@ public partial class WorkEditVM : DialogViewModel, IEnableLogger<ViewModelBase>,
         }
         else if (Work.Graph is null)
         {
-            ModMakerVM.DialogService.ShowMessageBoxX(
+            NativeUtils.DialogService.ShowMessageBoxX(
                 this,
                 "指定动画不可为空".Translate(),
                 "数据错误".Translate(),
@@ -97,7 +97,7 @@ public partial class WorkEditVM : DialogViewModel, IEnableLogger<ViewModelBase>,
         }
         else if (OldWork?.ID != Work.ID && CurrentPet?.Works.Any(i => i.ID == Work.ID) is true)
         {
-            ModMakerVM.DialogService.ShowMessageBoxX(
+            NativeUtils.DialogService.ShowMessageBoxX(
                 this,
                 "此ID已存在".Translate(),
                 "数据错误".Translate(),
@@ -227,7 +227,7 @@ public partial class WorkEditVM : DialogViewModel, IEnableLogger<ViewModelBase>,
     private void FixOverLoadForAllWork()
     {
         if (
-            ModMakerVM.DialogService.ShowMessageBoxX(
+            NativeUtils.DialogService.ShowMessageBoxX(
                 this,
                 "将为所有工作进行超模修复,你确定吗?".Translate(),
                 "修复所有工作超模".Translate(),
@@ -250,7 +250,7 @@ public partial class WorkEditVM : DialogViewModel, IEnableLogger<ViewModelBase>,
     [ReactiveCommand]
     private void AddImage()
     {
-        var openFileDialog = ModMakerVM.DialogService.ShowOpenFileDialog(
+        var openFileDialog = NativeUtils.DialogService.ShowOpenFileDialog(
             this,
             new()
             {
@@ -263,7 +263,7 @@ public partial class WorkEditVM : DialogViewModel, IEnableLogger<ViewModelBase>,
         var newImage = HKWImageUtils.LoadImageToMemory(openFileDialog.LocalPath);
         if (newImage is null)
         {
-            ModMakerVM.DialogService.ShowMessageBoxX(
+            NativeUtils.DialogService.ShowMessageBoxX(
                 this,
                 "图片载入失败, 详情请查看日志".Translate(),
                 "图片载入失败".Translate(),
@@ -280,7 +280,7 @@ public partial class WorkEditVM : DialogViewModel, IEnableLogger<ViewModelBase>,
     [ReactiveCommand]
     private void ChangeImage()
     {
-        var openFileDialog = ModMakerVM.DialogService.ShowOpenFileDialog(
+        var openFileDialog = NativeUtils.DialogService.ShowOpenFileDialog(
             this,
             new()
             {
@@ -293,7 +293,7 @@ public partial class WorkEditVM : DialogViewModel, IEnableLogger<ViewModelBase>,
         var newImage = HKWImageUtils.LoadImageToMemory(openFileDialog.LocalPath);
         if (newImage is null)
         {
-            ModMakerVM.DialogService.ShowMessageBoxX(
+            NativeUtils.DialogService.ShowMessageBoxX(
                 this,
                 "图片载入失败, 详情请查看日志".Translate(),
                 "图片载入失败".Translate(),
@@ -317,31 +317,27 @@ public partial class WorkEditVM : DialogViewModel, IEnableLogger<ViewModelBase>,
         Image?.CloseStreamWhenNoReference();
         Image = null;
         // 随机挑一张图片
-        if (
-            CurrentPet.Animes.FirstOrDefault(
-                a =>
-                    a.GraphType is VPet_Simulator.Core.GraphInfo.GraphType.Work
-                    && a.Name.Equals(graph, StringComparison.OrdinalIgnoreCase),
-                null!
-            )
-            is not AnimeTypeModel anime
-        )
+        var anime = CurrentPet.Animes.FirstOrDefault(
+            a => a.Name.Equals(graph, StringComparison.OrdinalIgnoreCase),
+            null!
+        );
+        if (anime is not AnimeTypeModel animeType)
             return;
-        if (anime.HappyAnimes.HasValue())
+        if (animeType.HappyAnimes.HasValue())
         {
-            Image = anime.HappyAnimes.Random().Images.Random().Clone().Image;
+            Image = animeType.HappyAnimes.Random().Images.Random().Clone().Image;
         }
-        else if (anime.NomalAnimes.HasValue())
+        else if (animeType.NomalAnimes.HasValue())
         {
-            Image = anime.NomalAnimes.Random().Images.Random().Clone().Image;
+            Image = animeType.NomalAnimes.Random().Images.Random().Clone().Image;
         }
-        else if (anime.PoorConditionAnimes.HasValue())
+        else if (animeType.PoorConditionAnimes.HasValue())
         {
-            Image = anime.PoorConditionAnimes.Random().Images.Random().Clone().Image;
+            Image = animeType.PoorConditionAnimes.Random().Images.Random().Clone().Image;
         }
-        else if (anime.IllAnimes.HasValue())
+        else if (animeType.IllAnimes.HasValue())
         {
-            Image = anime.IllAnimes.Random().Images.Random().Clone().Image;
+            Image = animeType.IllAnimes.Random().Images.Random().Clone().Image;
         }
     }
 
@@ -353,7 +349,7 @@ public partial class WorkEditVM : DialogViewModel, IEnableLogger<ViewModelBase>,
     {
         ModInfo.TempI18nResource.ClearCultureData();
         Work = new() { I18nResource = ModInfo.I18nResource };
-        await ModMakerVM.DialogService.ShowDialogAsyncX(this, this);
+        await NativeUtils.DialogService.ShowDialogAsyncX(this, this);
         if (DialogResult is not true)
         {
             Work.Close();
@@ -386,7 +382,7 @@ public partial class WorkEditVM : DialogViewModel, IEnableLogger<ViewModelBase>,
         var newModel = new WorkModel(model) { I18nResource = ModInfo.TempI18nResource };
         model.I18nResource.CopyDataTo(newModel.I18nResource, [model.ID], true);
         Work = newModel;
-        await ModMakerVM.DialogService.ShowDialogAsync(this, this);
+        await NativeUtils.DialogService.ShowDialogAsync(this, this);
         if (DialogResult is not true)
         {
             newModel.I18nResource.ClearCulture();
@@ -420,7 +416,7 @@ public partial class WorkEditVM : DialogViewModel, IEnableLogger<ViewModelBase>,
     {
         var models = list.Cast<WorkModel>().ToArray();
         if (
-            ModMakerVM.DialogService.ShowMessageBoxX(
+            NativeUtils.DialogService.ShowMessageBoxX(
                 this,
                 "确定删除已选中的 {0} 个工作吗".Translate(models.Length),
                 "删除工作".Translate(),
