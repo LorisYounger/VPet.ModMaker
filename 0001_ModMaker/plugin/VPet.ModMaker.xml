@@ -2948,6 +2948,9 @@
             </summary>
             <param name="list">模型</param>
         </member>
+        <member name="M:VPet.ModMaker.ViewModels.ModEdit.AnimeVM.Dispose(System.Boolean)">
+            <inheritdoc/>
+        </member>
         <member name="P:VPet.ModMaker.ViewModels.ModEdit.AnimeVM.AddCommand">
             <inheritdoc cref="M:VPet.ModMaker.ViewModels.ModEdit.AnimeVM.Add"/>
         </member>
