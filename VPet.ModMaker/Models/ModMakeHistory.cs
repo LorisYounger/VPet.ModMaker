@@ -61,7 +61,7 @@ public class ModMakeHistory : IEquatable<ModMakeHistory>, IEnableLogger<ViewMode
     /// <summary>
     /// 最后编辑时间
     /// </summary>
-    [Line(ignoreCase: true, Converter = typeof(DateTimeConverter))]
+    [Line(ignoreCase: true)]
     public DateTime LastTime { get; set; } = DateTime.Now;
 
     #region IEquatable
@@ -83,24 +83,4 @@ public class ModMakeHistory : IEquatable<ModMakeHistory>, IEnableLogger<ViewMode
         return SourcePath.GetHashCode();
     }
     #endregion
-}
-
-/// <summary>
-/// 日期时间转换器
-/// </summary>
-public class DateTimeConverter : LPSConvert.ConvertFunction
-{
-    /// <inheritdoc/>
-    public override string Convert(dynamic value)
-    {
-        return value.ToString("G");
-    }
-
-    /// <inheritdoc/>
-    public override dynamic ConvertBack(string info)
-    {
-        if (DateTime.TryParse(info, out var dt) is false)
-            dt = new DateTime(long.Parse(info));
-        return dt;
-    }
 }
