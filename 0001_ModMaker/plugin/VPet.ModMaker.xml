@@ -366,17 +366,6 @@
         <member name="M:VPet.ModMaker.Models.ModMakeHistory.GetHashCode">
             <inheritdoc/>
         </member>
-        <member name="T:VPet.ModMaker.Models.DateTimeConverter">
-            <summary>
-            日期时间转换器
-            </summary>
-        </member>
-        <member name="M:VPet.ModMaker.Models.DateTimeConverter.Convert(System.Object)">
-            <inheritdoc/>
-        </member>
-        <member name="M:VPet.ModMaker.Models.DateTimeConverter.ConvertBack(System.String)">
-            <inheritdoc/>
-        </member>
         <member name="T:VPet.ModMaker.Models.ModMaker">
             <summary>
             模组制作器
