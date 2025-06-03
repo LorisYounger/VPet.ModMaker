@@ -382,7 +382,10 @@ public partial class ModInfoModel : ViewModelBase
     /// <summary>
     /// 宠物显示的数量
     /// </summary>
-    [NotifyPropertyChangeFrom(false, nameof(ShowMainPet))]
+    [NotifyPropertyChangeFrom(
+        nameof(ShowMainPet),
+        CacheMode = NotifyPropertyChangeFromAttribute.CacheModeEnum.EnableAfterInitialize
+    )]
     public int PetDisplayedCount =>
         ShowMainPet ? Pets.Count : Pets.Count - Pets.Count(m => m.FromMain);
 

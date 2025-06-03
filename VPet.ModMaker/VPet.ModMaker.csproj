@@ -57,9 +57,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup Condition="'$(Configuration)'!='Test'">
-    <PackageReference Include="HKW.WPF" Version="1.1.5" />
-    <PackageReference Include="HKW.Utils" Version="1.3.8" />
-    <PackageReference Include="HKW.ReactiveUI" Version="0.3.6" />
+    <PackageReference Include="HKW.WPF" Version="1.1.6" />
+    <PackageReference Include="HKW.Utils" Version="1.3.10" />
+    <PackageReference Include="HKW.ReactiveUI" Version="0.3.8" />
     <PackageReference Include="HKW.MVVMDialogs" Version="0.1.2" />
     <PackageReference Include="HKW.Mapper" Version="0.1.4" />
   </ItemGroup>
@@ -68,13 +68,13 @@
 		<PackageReference Include="VPet-Simulator.Windows.Interface" Version="1.1.0.50" />
 	</ItemGroup>
 	<ItemGroup>
-    <PackageReference Include="ReactiveUI" Version="20.1.63" />
-    <PackageReference Include="ReactiveUI.WPF" Version="20.1.63" />
-    <PackageReference Include="Fody" Version="6.9.1" PrivateAssets="all" />
+    <PackageReference Include="ReactiveUI" Version="20.3.1" />
+    <PackageReference Include="ReactiveUI.WPF" Version="20.3.1" />
+    <PackageReference Include="Fody" Version="6.9.2" PrivateAssets="all" />
     <PackageReference Include="HanumanInstitute.MvvmDialogs" Version="2.1.0" />
     <PackageReference Include="HanumanInstitute.MvvmDialogs.Wpf" Version="2.1.0" />
-    <PackageReference Include="NLog" Version="5.3.4" />
-    <PackageReference Include="Splat.NLog" Version="15.2.22" />
+    <PackageReference Include="NLog" Version="5.5.0" />
+    <PackageReference Include="Splat.NLog" Version="15.3.1" />
 	</ItemGroup>
 	<ItemGroup>
 	  <Compile Update="Properties\Settings.Designer.cs">
