@@ -219,7 +219,7 @@ public partial class ModMakerVM : ViewModelBase
     {
         if (Histories.HasValue() is false)
         {
-            NativeUtils.DialogService.ShowMessageBoxX(this, "历史为空,不需要清空");
+            NativeUtils.DialogService.ShowMessageBoxX(this, "历史为空,不需要清空".Translate());
             return;
         }
 
