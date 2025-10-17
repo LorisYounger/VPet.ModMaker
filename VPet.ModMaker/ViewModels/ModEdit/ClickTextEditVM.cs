@@ -23,7 +23,7 @@ namespace VPet.ModMaker.ViewModels.ModEdit;
 /// <summary>
 /// 点击文本视图模型
 /// </summary>
-public partial class ClickTextEditVM : DialogViewModel, IEnableLogger<ViewModelBase>, IDisposable
+public partial class ClickTextEditVM : DialogViewModel, IEnableLogger<ViewModelBase>
 {
     /// <inheritdoc/>
     public ClickTextEditVM(ModInfoModel modInfo)
@@ -147,7 +147,7 @@ public partial class ClickTextEditVM : DialogViewModel, IEnableLogger<ViewModelB
     /// 添加
     /// </summary>
     [ReactiveCommand]
-    private async void Add()
+    private async Task Add()
     {
         ModInfo.TempI18nResource.ClearCultureData();
         ClickText = new() { I18nResource = ModInfo.TempI18nResource };
@@ -178,7 +178,7 @@ public partial class ClickTextEditVM : DialogViewModel, IEnableLogger<ViewModelB
     /// </summary>
     /// <param name="model">模型</param>
     [ReactiveCommand]
-    public async void Edit(ClickTextModel model)
+    public async Task Edit(ClickTextModel model)
     {
         OldClickText = model;
         var newModel = new ClickTextModel(model) { I18nResource = ModInfo.TempI18nResource };

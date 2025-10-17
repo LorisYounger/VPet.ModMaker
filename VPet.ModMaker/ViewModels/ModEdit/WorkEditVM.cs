@@ -29,7 +29,7 @@ namespace VPet.ModMaker.ViewModels.ModEdit;
 /// <summary>
 /// 工作编辑视图模型
 /// </summary>
-public partial class WorkEditVM : DialogViewModel, IEnableLogger<ViewModelBase>, IDisposable
+public partial class WorkEditVM : DialogViewModel, IEnableLogger<ViewModelBase>
 {
     /// <inheritdoc/>
     public WorkEditVM(ModInfoModel modInfo)
@@ -122,7 +122,7 @@ public partial class WorkEditVM : DialogViewModel, IEnableLogger<ViewModelBase>,
     [ReactiveProperty]
     public PetModel? CurrentPet { get; set; }
 
-    partial void OnCurrentPetChanged(PetModel oldValue, PetModel newValue)
+    partial void OnCurrentPetChanged(PetModel? oldValue, PetModel? newValue)
     {
         if (oldValue is not null)
         {
@@ -345,7 +345,7 @@ public partial class WorkEditVM : DialogViewModel, IEnableLogger<ViewModelBase>,
     /// 添加
     /// </summary>
     [ReactiveCommand]
-    private async void Add()
+    private async Task Add()
     {
         ModInfo.TempI18nResource.ClearCultureData();
         Work = new() { I18nResource = ModInfo.I18nResource };
@@ -376,7 +376,7 @@ public partial class WorkEditVM : DialogViewModel, IEnableLogger<ViewModelBase>,
     /// </summary>
     /// <param name="model">模型</param>
     [ReactiveCommand]
-    public async void Edit(WorkModel model)
+    public async Task Edit(WorkModel model)
     {
         OldWork = model;
         var newModel = new WorkModel(model) { I18nResource = ModInfo.TempI18nResource };

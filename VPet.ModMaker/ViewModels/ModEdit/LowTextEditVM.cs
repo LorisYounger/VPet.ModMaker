@@ -23,7 +23,7 @@ namespace VPet.ModMaker.ViewModels.ModEdit;
 /// <summary>
 /// 低状态文本编辑视图模型
 /// </summary>
-public partial class LowTextEditVM : DialogViewModel, IEnableLogger<ViewModelBase>, IDisposable
+public partial class LowTextEditVM : DialogViewModel, IEnableLogger<ViewModelBase>
 {
     /// <inheritdoc/>
     public LowTextEditVM(ModInfoModel modInfo)
@@ -42,7 +42,6 @@ public partial class LowTextEditVM : DialogViewModel, IEnableLogger<ViewModelBas
                         => f.Text.Contains(Search, StringComparison.OrdinalIgnoreCase),
                     _ => false
                 };
-                ;
             }
         );
 
@@ -143,7 +142,7 @@ public partial class LowTextEditVM : DialogViewModel, IEnableLogger<ViewModelBas
     /// 添加
     /// </summary>
     [ReactiveCommand]
-    private async void Add()
+    private async Task Add()
     {
         ModInfo.TempI18nResource.ClearCultureData();
         LowText = new() { I18nResource = ModInfo.I18nResource };
@@ -177,7 +176,7 @@ public partial class LowTextEditVM : DialogViewModel, IEnableLogger<ViewModelBas
     /// </summary>
     /// <param name="model">模型</param>
     [ReactiveCommand]
-    public async void Edit(LowTextModel model)
+    public async Task Edit(LowTextModel model)
     {
         OldLowText = model;
         var newModel = new LowTextModel(model) { I18nResource = ModInfo.TempI18nResource };

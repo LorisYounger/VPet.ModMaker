@@ -129,20 +129,20 @@ public partial class ModEditWindow : WindowX, IPageLocator, IDisposableTracker
                 var page = new PetPage() { DataContext = vm };
 
                 ViewModel
-                    .ModInfo.WhenAnyValue(x => x.Pets.FilteredList.Count)
+                    .ModInfo.WhenAnyValue(x => x.PetDisplayedCount)
                     .Subscribe(x => w.RefreshDisplayText())
                     .Record(this);
                 return page;
             })
             {
                 DisplayTextAction = _ =>
-                    "宠物".Translate() + $" ({ViewModel.ModInfo.Pets.FilteredList.Count})"
+                    "宠物".Translate() + $" ({ViewModel.ModInfo.PetDisplayedCount})"
             },
             [typeof(MovePage)] = new(w =>
             {
                 var vm = new MoveEditVM(ViewModel.ModInfo);
                 var page = new MovePage() { DataContext = vm };
-
+                ViewModel.ModInfo.Pets.Refresh();
                 ViewModel
                     .ModInfo.WhenAnyValue(x => x.CurrentPet!.Moves.Count)
                     .Subscribe(x => w.RefreshDisplayText())
@@ -158,7 +158,7 @@ public partial class ModEditWindow : WindowX, IPageLocator, IDisposableTracker
             {
                 var vm = new WorkEditVM(ViewModel.ModInfo);
                 var page = new WorkPage() { DataContext = vm };
-
+                ViewModel.ModInfo.Pets.Refresh();
                 ViewModel
                     .ModInfo.WhenAnyValue(x => x.CurrentPet!.Works.Count)
                     .Subscribe(x => w.RefreshDisplayText())
@@ -174,7 +174,7 @@ public partial class ModEditWindow : WindowX, IPageLocator, IDisposableTracker
             {
                 var vm = new AnimeVM(ViewModel.ModInfo);
                 var page = new AnimePage() { DataContext = vm };
-
+                ViewModel.ModInfo.Pets.Refresh();
                 ViewModel
                     .ModInfo.WhenAnyValue(x => x.CurrentPet!.Animes.Count)
                     .Subscribe(x => w.RefreshDisplayText())

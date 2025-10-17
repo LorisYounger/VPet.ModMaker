@@ -252,7 +252,7 @@ public partial class PetEditVM : DialogViewModel, IEnableLogger<ViewModelBase>, 
     /// 添加
     /// </summary>
     [ReactiveCommand]
-    private async void Add()
+    private async Task Add()
     {
         ModInfo.TempI18nResource.ClearCultureData();
         Pet = new() { I18nResource = ModInfo.I18nResource };
@@ -276,21 +276,19 @@ public partial class PetEditVM : DialogViewModel, IEnableLogger<ViewModelBase>, 
     /// </summary>
     /// <param name="model">模型</param>
     [ReactiveCommand]
-    public async void Edit(PetModel model)
+    public async Task Edit(PetModel model)
     {
-        if (model.FromMain)
-        {
-            if (
-                NativeUtils.DialogService.ShowMessageBoxX(
-                    this,
-                    "这是本体自带的宠物, 确定要编辑吗?".Translate(),
-                    "编辑".Translate(),
-                    MessageBoxButton.YesNo
-                )
-                is not true
+        if (
+            model.FromMain
+            && NativeUtils.DialogService.ShowMessageBoxX(
+                this,
+                "这是本体自带的宠物, 确定要编辑吗?".Translate(),
+                "编辑".Translate(),
+                MessageBoxButton.YesNo
             )
-                return;
-        }
+                is not true
+        )
+            return;
         OldPet = model;
         var newModel = new PetModel(model) { I18nResource = ModInfo.TempI18nResource };
         model.I18nResource.CopyDataTo(

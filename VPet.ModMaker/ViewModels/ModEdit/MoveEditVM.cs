@@ -25,7 +25,7 @@ namespace VPet.ModMaker.ViewModels.ModEdit;
 /// <summary>
 /// 移动编辑视图模型
 /// </summary>
-public partial class MoveEditVM : DialogViewModel, IEnableLogger<ViewModelBase>, IDisposable
+public partial class MoveEditVM : DialogViewModel, IEnableLogger<ViewModelBase>
 {
     /// <inheritdoc/>
     public MoveEditVM(ModInfoModel modInfo)
@@ -87,7 +87,7 @@ public partial class MoveEditVM : DialogViewModel, IEnableLogger<ViewModelBase>,
     [ReactiveProperty]
     public PetModel? CurrentPet { get; set; }
 
-    partial void OnCurrentPetChanged(PetModel oldValue, PetModel newValue)
+    partial void OnCurrentPetChanged(PetModel? oldValue, PetModel? newValue)
     {
         if (oldValue is not null)
         {
@@ -193,7 +193,7 @@ public partial class MoveEditVM : DialogViewModel, IEnableLogger<ViewModelBase>,
     /// 添加
     /// </summary>
     [ReactiveCommand]
-    private async void Add()
+    private async Task Add()
     {
         await NativeUtils.DialogService.ShowDialogAsyncX(this, this);
         if (DialogResult is not true)
@@ -216,7 +216,7 @@ public partial class MoveEditVM : DialogViewModel, IEnableLogger<ViewModelBase>,
     /// </summary>
     /// <param name="model">模型</param>
     [ReactiveCommand]
-    public async void Edit(MoveModel model)
+    public async Task Edit(MoveModel model)
     {
         OldMove = model;
         var newModel = new MoveModel(model);

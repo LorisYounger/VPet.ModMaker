@@ -27,7 +27,7 @@ namespace VPet.ModMaker.ViewModels.ModEdit;
 /// <summary>
 /// 食物编辑视图模型
 /// </summary>
-public partial class FoodEditVM : DialogViewModel, IEnableLogger<ViewModelBase>, IDisposable
+public partial class FoodEditVM : DialogViewModel, IEnableLogger<ViewModelBase>
 {
     /// <inheritdoc/>
     public FoodEditVM(ModInfoModel modInfo)
@@ -156,11 +156,8 @@ public partial class FoodEditVM : DialogViewModel, IEnableLogger<ViewModelBase>,
 
     private void Food_PropertyChanged(object? sender, PropertyChangedEventArgs e)
     {
-        if (e.PropertyName == nameof(FoodModel.ReferencePrice))
-        {
-            if (ModInfo.AutoSetFoodPrice)
-                SetReferencePrice(Food.ReferencePrice);
-        }
+        if (e.PropertyName == nameof(FoodModel.ReferencePrice) && ModInfo.AutoSetFoodPrice)
+            SetReferencePrice(Food.ReferencePrice);
     }
     #endregion
 
@@ -274,7 +271,7 @@ public partial class FoodEditVM : DialogViewModel, IEnableLogger<ViewModelBase>,
     /// 添加
     /// </summary>
     [ReactiveCommand]
-    private async void Add()
+    private async Task Add()
     {
         ModInfo.TempI18nResource.ClearCultureData();
         Food = new() { I18nResource = ModInfo.TempI18nResource };
@@ -305,7 +302,7 @@ public partial class FoodEditVM : DialogViewModel, IEnableLogger<ViewModelBase>,
     /// </summary>
     /// <param name="model">模型</param>
     [ReactiveCommand]
-    public async void Edit(FoodModel model)
+    public async Task Edit(FoodModel model)
     {
         OldFood = model;
         ModInfo.TempI18nResource.ClearCultureData();

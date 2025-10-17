@@ -23,7 +23,7 @@ namespace VPet.ModMaker.ViewModels.ModEdit;
 /// <summary>
 /// 选择文本编辑视图模型
 /// </summary>
-public partial class SelectTextEditVM : DialogViewModel, IEnableLogger<ViewModelBase>, IDisposable
+public partial class SelectTextEditVM : DialogViewModel, IEnableLogger<ViewModelBase>
 {
     /// <inheritdoc/>
     public SelectTextEditVM(ModInfoModel modInfo)
@@ -149,7 +149,7 @@ public partial class SelectTextEditVM : DialogViewModel, IEnableLogger<ViewModel
     /// 添加
     /// </summary>
     [ReactiveCommand]
-    private async void Add()
+    private async Task Add()
     {
         ModInfo.TempI18nResource.ClearCultureData();
         SelectText = new() { I18nResource = ModInfo.I18nResource };
@@ -183,7 +183,7 @@ public partial class SelectTextEditVM : DialogViewModel, IEnableLogger<ViewModel
     /// </summary>
     /// <param name="model">模型</param>
     [ReactiveCommand]
-    public async void Edit(SelectTextModel model)
+    public async Task Edit(SelectTextModel model)
     {
         OldSelectText = model;
         var newModel = new SelectTextModel(model) { I18nResource = ModInfo.TempI18nResource };

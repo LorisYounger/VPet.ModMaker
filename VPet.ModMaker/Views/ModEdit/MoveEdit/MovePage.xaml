@@ -77,13 +77,14 @@
         pu:DataGridHelper.RowSelectedBorderThickness="3"
         AutoGenerateColumns="False"
         CanUserAddRows="False"
+        CanUserDeleteRows="False"
         GridLinesVisibility="Horizontal"
         ItemsSource="{Binding Moves.FilteredList}"
         MouseDoubleClick="DataGrid_MouseDoubleClick"
         RowDetailsVisibilityMode="Visible"
         RowHeight="50"
         VirtualizingStackPanel.IsVirtualizing="True"
-        VirtualizingStackPanel.VirtualizationMode="Recycling" CanUserDeleteRows="False">
+        VirtualizingStackPanel.VirtualizationMode="Recycling">
         <DataGrid.RowStyle>
           <Style BasedOn="{StaticResource {x:Type DataGridRow}}" TargetType="DataGridRow">
             <Setter Property="Height" Value="50" />

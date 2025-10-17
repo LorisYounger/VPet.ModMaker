@@ -43,7 +43,7 @@ public partial class ModInfoModel : ViewModelBase
                 Pets.Refresh();
                 if (CurrentPet is null)
                 {
-                    if (oldPet.FromMain is false)
+                    if (oldPet?.FromMain is false)
                         CurrentPet = oldPet;
                     else
                         CurrentPet = Pets.FilteredList.FirstOrDefault();
@@ -73,13 +73,12 @@ public partial class ModInfoModel : ViewModelBase
     {
         if (e.Action is DictionaryChangeAction.Add)
         {
-            if (e.TryGetNewPair(out var pair) && I18nResource.CurrentCulture is not null)
-            {
-                var value = I18nResource.GetCurrentCultureDataOrDefault(pair.Key);
-                if (string.IsNullOrWhiteSpace(value) is false)
-                    return;
-                I18nResource.SetCurrentCultureData(pair.Key, pair.Key);
-            }
+            if (!e.TryGetNewPair(out var pair) || I18nResource.CurrentCulture is null)
+                return;
+            var value = I18nResource.GetCurrentCultureDataOrDefault(pair.Key);
+            if (string.IsNullOrWhiteSpace(value) is false)
+                return;
+            I18nResource.SetCurrentCultureData(pair.Key, pair.Key);
         }
     }
 
@@ -94,11 +93,11 @@ public partial class ModInfoModel : ViewModelBase
         LoadI18nDatas(loader);
 
         ID = loader.Name;
-        if (loader.Intro != DescriptionID)
-        {
-            if (I18nResource.ReplaceCultureDataKey(loader.Intro, DescriptionID, true) is false)
-                I18nResource.SetCurrentCultureData(DescriptionID, loader.Intro);
-        }
+        if (
+            loader.Intro != DescriptionID
+            && I18nResource.ReplaceCultureDataKey(loader.Intro, DescriptionID, true) is false
+        )
+            I18nResource.SetCurrentCultureData(DescriptionID, loader.Intro);
 
         Author = loader.Author;
         GameVersion = loader.GameVer;
@@ -825,10 +824,10 @@ public partial class ModInfoModel : ViewModelBase
             var cultureFile = Path.Combine(culturePath, $"{culture.Name}.lps");
             File.Create(cultureFile).Close();
             var lps = new LPS();
-            foreach (var datas in I18nResource.CultureDatas)
+            foreach (var key in I18nResource.CultureDatas.Keys)
             {
-                if (I18nResource.TryGetCultureData(culture, datas.Key, out var data))
-                    lps.Add(new Line(datas.Key, data));
+                if (I18nResource.TryGetCultureData(culture, key, out var data))
+                    lps.Add(new Line(key, data));
             }
             File.WriteAllText(cultureFile, lps.ToString());
         }

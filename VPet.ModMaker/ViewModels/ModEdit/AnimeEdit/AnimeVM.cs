@@ -109,7 +109,7 @@ public partial class AnimeVM : ViewModelBase
     /// 添加
     /// </summary>
     [ReactiveCommand]
-    private async void Add()
+    private async Task Add()
     {
         var vm = await NativeUtils.DialogService.ShowDialogAsyncX(
             this,
@@ -130,7 +130,7 @@ public partial class AnimeVM : ViewModelBase
             );
             if (animeVM.DialogResult is not true)
                 return;
-            CurrentPet.Animes.Add(animeVM.Anime);
+            Animes.Add(animeVM.Anime);
         }
         else
         {
@@ -151,7 +151,7 @@ public partial class AnimeVM : ViewModelBase
             );
             if (animeVM.DialogResult is not true)
                 return;
-            CurrentPet.Animes.Add(animeVM.Anime);
+            Animes.Add(animeVM.Anime);
         }
     }
 
@@ -160,7 +160,7 @@ public partial class AnimeVM : ViewModelBase
     /// </summary>
     /// <param name="model">模型</param>
     [ReactiveCommand]
-    public async void Edit(IAnimeModel model)
+    public async Task Edit(IAnimeModel model)
     {
         //var pendingHandler = PendingBox.Show("载入中".Translate());
         if (model is AnimeTypeModel animeTypeModel)
@@ -180,7 +180,7 @@ public partial class AnimeVM : ViewModelBase
             else
             {
                 animeVM.OldAnime?.Close();
-                CurrentPet.Animes[CurrentPet.Animes.IndexOf(animeTypeModel)] = animeVM.Anime;
+                Animes[Animes.IndexOf(animeTypeModel)] = animeVM.Anime;
             }
         }
         else if (model is FoodAnimeTypeModel foodAnimeTypeModel)
@@ -200,7 +200,7 @@ public partial class AnimeVM : ViewModelBase
             else
             {
                 animeVM.OldAnime?.Close();
-                CurrentPet.Animes[CurrentPet.Animes.IndexOf(foodAnimeTypeModel)] = animeVM.Anime;
+                Animes[Animes.IndexOf(foodAnimeTypeModel)] = animeVM.Anime;
             }
         }
     }
@@ -225,7 +225,7 @@ public partial class AnimeVM : ViewModelBase
             return;
         foreach (var model in models)
         {
-            CurrentPet.Animes.Remove(model);
+            Animes.Remove(model);
             this.LogX().Info("删除动画 {food}", model.ID);
         }
     }

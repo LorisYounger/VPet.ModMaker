@@ -36,10 +36,10 @@ public partial class I18nEditVM : DialogViewModel, IEnableLogger<ViewModelBase>
         ModInfo.I18nResource.CultureDatas.DictionaryChanged += CultureDatas_DictionaryChanged;
 
         I18nDatas = new([], [], DataFilter);
-        foreach (var pair in ModInfo.I18nResource.CultureDatas)
+        foreach (var value in ModInfo.I18nResource.CultureDatas.Values)
         {
-            I18nDatas.Add(pair.Value);
-            pair.Value.DictionaryChanged += Data_DictionaryChanged;
+            I18nDatas.Add(value);
+            value.DictionaryChanged += Data_DictionaryChanged;
         }
         foreach (var culture in ModInfo.I18nResource.Cultures)
         {

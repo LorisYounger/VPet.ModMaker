@@ -89,6 +89,7 @@
               <RowDefinition Height="Auto" />
               <RowDefinition Height="Auto" />
               <RowDefinition Height="Auto" />
+              <RowDefinition Height="Auto" />
               <RowDefinition />
             </Grid.RowDefinitions>
             <Label Content="ID" Style="{StaticResource Label_Left}" />
@@ -142,14 +143,13 @@
               Text="{Binding ModInfo.Name, UpdateSourceTrigger=PropertyChanged}" />
             <Label
               Grid.Row="5"
-              Height="NaN"
-              VerticalContentAlignment="Top"
+              Grid.ColumnSpan="2"
               Content="{ll:Str 模组介绍}"
               Style="{StaticResource Label_Left}" />
             <TextBox
               x:Name="TextBox_Description"
-              Grid.Row="5"
-              Grid.Column="1"
+              Grid.Row="6"
+              Grid.ColumnSpan="2"
               Height="NaN"
               HorizontalContentAlignment="Left"
               VerticalContentAlignment="Top"

@@ -129,7 +129,7 @@ public partial class ModEditVM : DialogViewModel, IEnableLogger<ViewModelBase>
     /// 保存为翻译模组
     /// </summary>
     [ReactiveCommand]
-    private async void SaveAsTranslationMod()
+    private async Task SaveAsTranslationMod()
     {
         await NativeUtils.DialogService.ShowDialogAsync<SaveTranslationModVM>(
             this,
@@ -338,7 +338,6 @@ public partial class ModEditVM : DialogViewModel, IEnableLogger<ViewModelBase>
             pending.Close();
             NativeUtils.DialogService.ShowMessageBoxX(this, "保存失败, 详情请查看日志".Translate());
             this.LogX().Error(ex, "保存失败");
-            return;
         }
     }
 
