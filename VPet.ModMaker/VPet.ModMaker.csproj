@@ -64,8 +64,8 @@
     <PackageReference Include="HKW.Mapper" Version="0.1.4" />
   </ItemGroup>
 	<ItemGroup>
-		<PackageReference Include="VPet-Simulator.Core" Version="1.1.0.50" />
-		<PackageReference Include="VPet-Simulator.Windows.Interface" Version="1.1.0.50" />
+		<PackageReference Include="VPet-Simulator.Core" Version="1.1.0.52" />
+		<PackageReference Include="VPet-Simulator.Windows.Interface" Version="1.1.0.52" />
 	</ItemGroup>
 	<ItemGroup>
     <PackageReference Include="ReactiveUI" Version="20.3.1" />
