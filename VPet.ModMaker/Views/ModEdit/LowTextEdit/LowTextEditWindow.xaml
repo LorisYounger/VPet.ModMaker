@@ -16,9 +16,6 @@
   d:Width="800"
   WindowStartupLocation="CenterScreen"
   mc:Ignorable="d">
-  <Window.Resources>
-    <ResourceDictionary Source="/VPet-Simulator.Windows.Interface;component/ResourceStyle.xaml" />
-  </Window.Resources>
   <Grid>
     <Grid.ColumnDefinitions>
       <ColumnDefinition MinWidth="300" />
