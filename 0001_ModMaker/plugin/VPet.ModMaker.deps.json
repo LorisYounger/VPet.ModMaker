@@ -20,8 +20,8 @@
           "ReactiveUI": "20.3.1",
           "ReactiveUI.WPF": "20.3.1",
           "Splat.NLog": "15.3.1",
-          "VPet-Simulator.Core": "1.1.0.52",
-          "VPet-Simulator.Windows.Interface": "1.1.0.52"
+          "VPet-Simulator.Core": "1.1.0.66",
+          "VPet-Simulator.Windows.Interface": "1.1.0.66"
         },
         "runtime": {
           "VPet.ModMaker.dll": {}
@@ -433,7 +433,7 @@
         }
       },
       "System.ValueTuple/4.6.1": {},
-      "VPet-Simulator.Core/1.1.0.52": {
+      "VPet-Simulator.Core/1.1.0.66": {
         "dependencies": {
           "LinePutScript": "1.11.9",
           "LinePutScript.Localization.WPF": "1.0.7",
@@ -447,9 +447,9 @@
           }
         }
       },
-      "VPet-Simulator.Windows.Interface/1.1.0.52": {
+      "VPet-Simulator.Windows.Interface/1.1.0.66": {
         "dependencies": {
-          "VPet-Simulator.Core": "1.1.0.52"
+          "VPet-Simulator.Core": "1.1.0.66"
         },
         "runtime": {
           "lib/net8.0/VPet-Simulator.Windows.Interface.dll": {
@@ -767,19 +767,19 @@
       "path": "system.valuetuple/4.6.1",
       "hashPath": "system.valuetuple.4.6.1.nupkg.sha512"
     },
-    "VPet-Simulator.Core/1.1.0.52": {
+    "VPet-Simulator.Core/1.1.0.66": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-Y6FYrUiv6R0IXdlxeHKJWTEuHifAsaY/md5yjbu0tglhAD9QXzBpdA53/HNx99WLUv17xRLCeKtRZOVyDd5r3w==",
-      "path": "vpet-simulator.core/1.1.0.52",
-      "hashPath": "vpet-simulator.core.1.1.0.52.nupkg.sha512"
+      "sha512": "sha512-+f4dwkRYwgqmPG/W52keBS/KEs2TLD5cx7sZcetqdfqXIAMFy6VrQqadvkSDvuqCeVft3MTPyDJCCimC5Wq7eA==",
+      "path": "vpet-simulator.core/1.1.0.66",
+      "hashPath": "vpet-simulator.core.1.1.0.66.nupkg.sha512"
     },
-    "VPet-Simulator.Windows.Interface/1.1.0.52": {
+    "VPet-Simulator.Windows.Interface/1.1.0.66": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-AaoQxsiUJs0yyz6ebDVDW5gDhg5gHgbOGS452358V94XzTSU+m31MSvfbra6OPOgD4aDuQZa5rY/xyLOg4s7FQ==",
-      "path": "vpet-simulator.windows.interface/1.1.0.52",
-      "hashPath": "vpet-simulator.windows.interface.1.1.0.52.nupkg.sha512"
+      "sha512": "sha512-5Lg9CDmSv5VH9tpyclCNxxYNJgbJ2zFNYudPX4uaTPMdw343/ZWPcC3YCyIwSRK1lsW5TqdZtOQKYvuBtr3BYg==",
+      "path": "vpet-simulator.windows.interface/1.1.0.66",
+      "hashPath": "vpet-simulator.windows.interface.1.1.0.66.nupkg.sha512"
     }
   }
 }
