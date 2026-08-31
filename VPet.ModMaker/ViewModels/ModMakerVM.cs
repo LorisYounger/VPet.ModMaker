@@ -334,7 +334,10 @@ public partial class ModMakerVM : ViewModelBase
         catch (Exception ex)
         {
             this.LogX().Error(ex, "模组载入失败, 路径: {path}", directory);
-            NativeUtils.DialogService.ShowMessageBoxX(this, "模组载入失败, 详情请查看日志".Translate());
+            NativeUtils.DialogService.ShowMessageBoxX(
+                this,
+                "模组载入失败, 详情请查看日志".Translate()
+            );
         }
     }
 

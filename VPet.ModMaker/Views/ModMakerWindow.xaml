@@ -48,7 +48,7 @@
           Margin="5,5,0,5"
           pu:TextBoxHelper.Watermark="{ll:Str 搜索}"
           Style="{StaticResource StandardTextBoxStyle}"
-          Text="{Binding Search}" />
+          Text="{Binding Search, UpdateSourceTrigger=PropertyChanged}" />
         <Button
           x:Name="Button_ClearHistory"
           Grid.Column="1"
