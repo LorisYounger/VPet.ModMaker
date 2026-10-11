@@ -1,21 +1,22 @@
 ﻿<pu:WindowX
-  x:Class="VPet.ModMaker.Views.ModEdit.I18nEditWindow"
+  x:Class="VPet.ModMaker.Views.I18nEditWindow"
   xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
   xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
   xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
   xmlns:ll="clr-namespace:LinePutScript.Localization.WPF;assembly=LinePutScript.Localization.WPF"
-  xmlns:local="clr-namespace:VPet.ModMaker.Views.ModEdit"
+  xmlns:local="clr-namespace:VPet.ModMaker.Views"
   xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
   xmlns:pu="https://opensource.panuon.com/wpf-ui"
-  xmlns:vm="clr-namespace:VPet.ModMaker.ViewModels.ModEdit"
+  xmlns:vm="clr-namespace:VPet.ModMaker.ViewModels"
   Title="{ll:Str 多语言编辑器}"
   Width="1280"
   Height="720"
-  d:DataContext="{d:DesignInstance Type=vm:I18nEditVM}"
+  d:DataContext="{d:DesignInstance Type=vm:I18nEditViewModel}"
   d:Height="500"
   d:Width="800"
   WindowStartupLocation="CenterScreen"
-  mc:Ignorable="d">
+  mc:Ignorable="d"
+>
   <Window.Resources />
   <Grid>
     <Grid.RowDefinitions>
@@ -30,12 +31,14 @@
       <TextBox
         pu:TextBoxHelper.Watermark="{ll:Str 搜索}"
         Style="{StaticResource StandardTextBoxStyle}"
-        Text="{Binding Search, UpdateSourceTrigger=PropertyChanged}" />
+        Text="{Binding Search, UpdateSourceTrigger=PropertyChanged}"
+      />
       <ComboBox
         Grid.Column="1"
         ItemsSource="{Binding SearchTargets}"
         SelectedItem="{Binding SearchTargets.SelectedItem}"
-        Style="{StaticResource StandardComboBoxStyle}" />
+        Style="{StaticResource StandardComboBoxStyle}"
+      />
     </Grid>
     <DataGrid
       x:Name="DataGrid_Datas"
@@ -45,10 +48,12 @@
       CanUserAddRows="False"
       CanUserDeleteRows="False"
       CanUserReorderColumns="False"
+      CanUserResizeRows="False"
       CellEditEnding="DataGrid_Datas_CellEditEnding"
       ItemsSource="{Binding I18nDatas.FilteredList}"
       ScrollViewer.IsDeferredScrollingEnabled="True"
-      VirtualizingStackPanel.VirtualizationMode="Recycling">
+      VirtualizingStackPanel.VirtualizationMode="Recycling"
+    >
       <DataGrid.Columns>
         <DataGridTextColumn
           Width="300"
@@ -59,7 +64,8 @@
           ElementStyle="{StaticResource TextBlock_Wrap}"
           Header="ID"
           IsReadOnly="True"
-          SortMemberPath="Key" />
+          SortMemberPath="Key"
+        />
       </DataGrid.Columns>
     </DataGrid>
   </Grid>

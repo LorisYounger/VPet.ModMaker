@@ -1,6 +1,6 @@
 ﻿using Panuon.WPF.UI;
 
-namespace VPet.ModMaker.Views.ModEdit;
+namespace VPet.ModMaker.Views;
 
 /// <summary>
 /// SaveTranslationModWindow.xaml 的交互逻辑

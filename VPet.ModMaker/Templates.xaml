@@ -3,7 +3,8 @@
   xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
   xmlns:ll="clr-namespace:LinePutScript.Localization.WPF;assembly=LinePutScript.Localization.WPF"
   xmlns:pu="https://opensource.panuon.com/wpf-ui"
-  xmlns:vm="clr-namespace:VPet.ModMaker.ViewModels.ModEdit">
+  xmlns:vm="clr-namespace:VPet.ModMaker.ViewModels"
+>
   <ControlTemplate x:Key="Grid_EnumCommand" TargetType="Control">
     <Grid>
       <Grid.ColumnDefinitions>
@@ -16,48 +17,54 @@
         Margin="5"
         FontSize="12"
         Style="{StaticResource TextBlock_LeftCenter}"
-        Text="{Binding Value, Converter={StaticResource EnumToEnumInfoConverter}}"
-        ToolTip="{Binding Value, Converter={StaticResource EnumToEnumInfoConverter}}" />
+        Text="{Binding Info}"
+        ToolTip="{Binding Info}"
+      />
       <ComboBox
-        x:Name="ComboBox_TriggerType"
+        x:Name="Enums"
         Grid.Column="1"
-        ItemsSource="{Binding Tag, RelativeSource={RelativeSource AncestorType=Control}, Converter={StaticResource EnumsToEnumInfosConverter}}"
+        ItemsSource="{Binding Info.Infos}"
         SelectedIndex="0"
         Style="{StaticResource StandardComboBoxStyle}"
-        ToolTip="{ll:Str 选择枚举}" />
+        ToolTip="{ll:Str 选择枚举}"
+      />
       <Button
         Grid.Column="2"
         Width="20"
         Height="30"
         Padding="0,0,0,3"
-        Command="{Binding AddFlagInfoCommand}"
-        CommandParameter="{Binding SelectedItem, ElementName=ComboBox_TriggerType}"
+        Command="{Binding AddFlagCommand}"
+        CommandParameter="{Binding SelectedItem.Value, ElementName=Enums}"
         Content="+"
         FontSize="20"
         Style="{StaticResource MyThemedButtonStyle}"
-        ToolTip="{ll:Str 添加枚举}" />
+        ToolTip="{ll:Str 添加枚举}"
+      />
       <Button
         Grid.Column="3"
         Width="20"
         Height="30"
         Padding="0,0,0,3"
-        Command="{Binding RemoveFlagInfoCommand}"
-        CommandParameter="{Binding SelectedItem, ElementName=ComboBox_TriggerType}"
+        Command="{Binding RemoveFlagCommand}"
+        CommandParameter="{Binding SelectedItem.Value, ElementName=Enums}"
         Content="-"
         FontSize="20"
         Style="{StaticResource MyThemedButtonStyle}"
-        ToolTip="{ll:Str 去除枚举}" />
+        ToolTip="{ll:Str 去除枚举}"
+      />
     </Grid>
   </ControlTemplate>
   <ContextMenu x:Key="ContextMenu_DataGridRow" x:Shared="false">
     <MenuItem
       Command="{Binding DataContext.EditCommand, RelativeSource={RelativeSource AncestorType=UserControl, Mode=FindAncestor}}"
       CommandParameter="{Binding DataContext, RelativeSource={RelativeSource AncestorType=DataGridRow, Mode=FindAncestor}}"
-      Header="{ll:Str 修改}" />
+      Header="{ll:Str 修改}"
+    />
     <MenuItem
       Command="{Binding DataContext.RemoveCommand, RelativeSource={RelativeSource AncestorType=UserControl, Mode=FindAncestor}}"
       CommandParameter="{Binding SelectedItems, RelativeSource={RelativeSource AncestorType=DataGrid, Mode=FindAncestor}}"
-      Header="{ll:Str 删除}" />
+      Header="{ll:Str 删除}"
+    />
   </ContextMenu>
   <ControlTemplate x:Key="ListBoxItem_RangeData" TargetType="ListBoxItem">
     <Grid>
@@ -68,7 +75,8 @@
       <Label
         HorizontalContentAlignment="Center"
         Content="{Binding Tag, RelativeSource={RelativeSource AncestorType=ListBoxItem, Mode=FindAncestor}}"
-        Style="{StaticResource ThemedLabelStyle}" />
+        Style="{StaticResource ThemedLabelStyle}"
+      />
       <Grid Grid.Row="1">
         <Grid.RowDefinitions>
           <RowDefinition Height="Auto" />
@@ -83,27 +91,27 @@
           Grid.Column="1"
           IsSnapToIntervalEnabled="False"
           ToolTip="{Binding Value, RelativeSource={RelativeSource Mode=Self}}"
-          Value="{Binding DataContext.Min, RelativeSource={RelativeSource AncestorType=ListBoxItem}}" />
-        <Label
-          Grid.Row="1"
-          Content="{ll:Str 最大值}"
-          Style="{StaticResource ThemedLabelStyle}" />
+          Value="{Binding DataContext.Min, RelativeSource={RelativeSource AncestorType=ListBoxItem}}"
+        />
+        <Label Grid.Row="1" Content="{ll:Str 最大值}" Style="{StaticResource ThemedLabelStyle}" />
         <pu:NumberInput
           Grid.Row="1"
           Grid.Column="1"
           IsSnapToIntervalEnabled="False"
           ToolTip="{Binding Value, RelativeSource={RelativeSource Mode=Self}}"
-          Value="{Binding DataContext.Max, RelativeSource={RelativeSource AncestorType=ListBoxItem}}" />
+          Value="{Binding DataContext.Max, RelativeSource={RelativeSource AncestorType=ListBoxItem}}"
+        />
       </Grid>
     </Grid>
   </ControlTemplate>
   <ControlTemplate x:Key="ListBox_ShowLangs" TargetType="ListBox">
     <ListBox
       pu:ListBoxHelper.ItemsHoverBackground="{StaticResource SecondaryLight}"
-      ItemsSource="{Binding ModInfo.I18nResource.Cultures}"
+      ItemsSource="{Binding ModInfo.I18nResource.ObservableCultures}"
       ScrollViewer.VerticalScrollBarVisibility="Auto"
       SelectedItem="{Binding ModInfo.I18nResource.CurrentCulture}"
-      Style="{StaticResource SideMenuListBoxStyle}">
+      Style="{StaticResource SideMenuListBoxStyle}"
+    >
       <ListBox.ItemContainerStyle>
         <Style BasedOn="{StaticResource {x:Type ListBoxItem}}" TargetType="ListBoxItem">
           <Setter Property="Content" Value="{Binding}" />

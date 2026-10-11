@@ -1,19 +1,20 @@
 ﻿using System.Collections.Frozen;
-using HKW.HKWMapper;
-using HKW.HKWReactiveUI;
+using System.Collections.Immutable;
+using CommunityToolkit.Mvvm.ComponentModel;
 using HKW.HKWUtils;
-using VPet.ModMaker.ViewModels;
+using HKW.Mapper;
+using HKW.MVVM;
 using VPet_Simulator.Windows.Interface;
+using VPet.ModMaker.ViewModels;
 
 namespace VPet.ModMaker.Models;
 
 /// <summary>
 /// 低状态文本
 /// </summary>
-[MapTo(typeof(LowText))]
-[MapFrom(typeof(LowText))]
-[MapFrom(typeof(LowTextModel))]
-public partial class LowTextModel : ViewModelBase
+[MapTarget(typeof(LowText))]
+[MapTarget(typeof(LowTextModel))]
+public sealed partial class LowTextModel : ObservableModelBase, IDisposable
 {
     /// <inheritdoc/>
     public LowTextModel() { }
@@ -23,7 +24,7 @@ public partial class LowTextModel : ViewModelBase
     public LowTextModel(LowTextModel lowText)
         : this()
     {
-        this.MapFromLowTextModel(lowText);
+        this.MapFrom(lowText);
     }
 
     /// <inheritdoc/>
@@ -31,101 +32,87 @@ public partial class LowTextModel : ViewModelBase
     public LowTextModel(LowText lowText)
         : this()
     {
-        this.MapFromLowText(lowText);
+        this.MapFrom(lowText);
     }
 
     /// <summary>
     /// 状态类型
     /// </summary>
-    public static FrozenSet<LowText.ModeType> ModeTypes => EnumInfo<LowText.ModeType>.Values;
+    public static ImmutableArray<LowText.ModeType> ModeTypes =>
+        EnumInfo<LowText.ModeType>.StaticValues;
 
     /// <summary>
     /// 好感度类型
     /// </summary>
-    public static FrozenSet<LowText.LikeType> LikeTypes => EnumInfo<LowText.LikeType>.Values;
+    public static ImmutableArray<LowText.LikeType> LikeTypes =>
+        EnumInfo<LowText.LikeType>.StaticValues;
 
     /// <summary>
     /// 体力类型
     /// </summary>
-    public static FrozenSet<LowText.StrengthType> StrengthTypes =>
-        EnumInfo<LowText.StrengthType>.Values;
+    public static ImmutableArray<LowText.StrengthType> StrengthTypes =>
+        EnumInfo<LowText.StrengthType>.StaticValues;
 
     /// <summary>
     /// ID
     /// </summary>
-    [LowTextModelMapToLowTextProperty(nameof(LowText.Text))]
-    [LowTextModelMapFromLowTextProperty(nameof(LowText.Text))]
-    [ReactiveProperty]
+    [ObservableProperty]
+    [MapProperty(typeof(LowText), nameof(LowText.Text))]
     public string ID { get; set; } = string.Empty;
 
     /// <summary>
     /// I18n资源
     /// </summary>
     [MapIgnoreProperty]
-    [ReactiveProperty]
-    public required I18nResource<string, string> I18nResource { get; set; }
+    [ObservableProperty]
+    public required ObservableI18nResource<string, string> I18nResource { get; set; }
 
     partial void OnI18nResourceChanged(
-        I18nResource<string, string> oldValue,
-        I18nResource<string, string> newValue
+        ObservableI18nResource<string, string> oldValue,
+        ObservableI18nResource<string, string> newValue
     )
     {
-        oldValue?.I18nObjects.Remove(I18nObject);
-        newValue?.I18nObjects?.Add(I18nObject);
+        I18nObserver.Resource = newValue;
     }
 
-    /// <summary>
-    /// I18n对象
-    /// </summary>
     [MapIgnoreProperty]
-    [NotifyPropertyChangeFrom("")]
-    public I18nObject<string, string> I18nObject => new(this);
+    public I18nObserver<LowTextModel, string, string> I18nObserver =>
+        field ??= new(I18nResource, this, (s, p) => s.OnPropertyChanged(p))
+        {
+            new(s => s.ID, nameof(Text)),
+        };
 
     /// <summary>
-    /// 文本
+    /// 点击文本
     /// </summary>
     [MapIgnoreProperty]
-    [ReactiveI18nProperty(nameof(I18nResource), nameof(I18nObject), nameof(ID), true)]
     public string Text
     {
-        get => I18nResource.GetCurrentCultureDataOrDefault(ID);
-        set => I18nResource.SetCurrentCultureData(ID, value);
+        get => I18nObserver.GetDataOrDefault(ID);
+        set => I18nObserver.SetData(ID, value);
     }
 
     /// <summary>
     /// 状态
     /// </summary>
-    [LowTextModelMapToLowTextProperty(nameof(LowText.Mode))]
-    [LowTextModelMapFromLowTextProperty(nameof(LowText.Mode))]
-    [ReactiveProperty]
+    [ObservableProperty]
     public LowText.ModeType Mode { get; set; }
 
     /// <summary>
     /// 体力
     /// </summary>
-    [LowTextModelMapToLowTextProperty(nameof(LowText.Strength))]
-    [LowTextModelMapFromLowTextProperty(nameof(LowText.Strength))]
-    [ReactiveProperty]
+    [ObservableProperty]
     public LowText.StrengthType Strength { get; set; }
 
     /// <summary>
     /// 好感度
     /// </summary>
-    [LowTextModelMapToLowTextProperty(nameof(LowText.Like))]
-    [LowTextModelMapFromLowTextProperty(nameof(LowText.Like))]
-    [ReactiveProperty]
+    [ObservableProperty]
     public LowText.LikeType Like { get; set; }
 
     /// <inheritdoc/>
-    protected override void Dispose(bool disposing)
+    public void Dispose()
     {
-        if (_disposed)
-            return;
-        base.Dispose(disposing);
-        if (disposing)
-        {
-            I18nResource.I18nObjects.Remove(I18nObject);
-            I18nObject.Close();
-        }
+        I18nObserver?.Dispose();
     }
 }

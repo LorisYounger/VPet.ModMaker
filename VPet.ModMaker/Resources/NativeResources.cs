@@ -7,7 +7,7 @@ namespace VPet.ModMaker.Resources;
 /// <summary>
 /// 本地资源
 /// </summary>
-internal class NativeResources
+internal static class NativeResources
 {
     /// <summary>
     /// 资源基路径

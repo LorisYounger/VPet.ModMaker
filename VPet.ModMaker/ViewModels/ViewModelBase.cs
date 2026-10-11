@@ -1,21 +1,15 @@
-﻿using HKW.HKWReactiveUI;
-using NLog;
-using Splat;
+﻿using HanumanInstitute.MvvmDialogs;
+using HKW.MVVM;
+using HKW.MVVM.SourceGenerator;
+using Microsoft.Extensions.Logging;
 
 namespace VPet.ModMaker.ViewModels;
 
 /// <summary>
 /// 视图模型基类
 /// </summary>
-public partial class ViewModelBase : ReactiveObjectX { }
-
-internal static class LogResolver
+public abstract partial class ViewModelBase : ObservableObjectEx, IEnableLogger
 {
-    private const int MaxCacheSize = 16;
-    public static NLog.LogFactory LogFactory { get; } = new();
-
-    private static readonly MemoizingMRUCache<Type, NLog.Logger> _loggerCache =
-        new((type, _) => LogFactory.GetLogger(type.ToString()), MaxCacheSize);
-
-    public static NLog.Logger Resolve(Type type) => _loggerCache.Get(type, null);
+    [DIProperty]
+    public required IDialogService DialogService { get; init; }
 }

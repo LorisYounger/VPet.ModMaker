@@ -1,7 +1,7 @@
 ﻿using System.IO;
 using System.Windows.Media.Imaging;
-using VPet.ModMaker.Models.ModModel;
 using VPet_Simulator.Core;
+using VPet.ModMaker.Models;
 
 namespace VPet.ModMaker.Native;
 

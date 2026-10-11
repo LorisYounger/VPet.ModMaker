@@ -1,10 +1,12 @@
 ﻿<ResourceDictionary
   xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
   xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-  xmlns:c="https://hkw.com/wpf">
+  xmlns:c="https://hkw.com/wpf/converters"
+  xmlns:local="clr-namespace:VPet.ModMaker"
+>
   <c:MarginMultiConverter x:Key="MarginConverter" />
   <c:MarginMultiConverter x:Key="RatioMarginConverter" HasRatio="True" />
-  <c:DoubleCalculatorMultiConverter x:Key="CalculatorConverter" />
+  <c:CalculatorMultiConverter NumberType="Double" x:Key="DoubleCalculatorConverter" />
   <c:StringFormatMultiConverter x:Key="StringFormatConverter" ReplaceUnsetValue="null" />
   <c:SolidColorBrushToMediaColorConverter x:Key="SolidColorBrushToMediaColorConverter" />
   <!--<c:MaxConverter x:Key="MaxConverter" />-->
@@ -16,13 +18,16 @@
     x:Key="AllTrueToCollapsedConverter"
     DefaultResult="Collapsed"
     FalseValue="Visible"
-    TrueValue="Collapsed" />
+    TrueValue="Collapsed"
+  />
   <c:BoolInverteConverter x:Key="BoolInverter" />
   <c:EnumToEnumInfoConverter x:Key="EnumToEnumInfoConverter" />
   <c:EnumsToEnumInfosConverter x:Key="EnumsToEnumInfosConverter" OnlyValid="True" />
-  <c:Int32CalculatorMultiConverter
+  <c:CalculatorMultiConverter
+    NumberType="Int32"
     x:Key="Int32CalculatorMultiConverter"
-    DefaultResult="null"
-    ResultToString="True" />
-  <c:CollectionCountCompareConverter x:Key="GreaterThanOrEqualConverter" ComparisonType="GreaterThanOrEqual" />
+    DefaultResult="{x:Null}"
+    ResultToString="True"
+  />
+  <c:CollectionCountCompareByConverter x:Key="CollectionCountCompareByConverter" />
 </ResourceDictionary>

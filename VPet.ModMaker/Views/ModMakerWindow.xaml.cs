@@ -2,42 +2,31 @@
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
-using HKW.HKWReactiveUI;
 using HKW.WPF.Extensions;
 using HKW.WPF.MVVMDialogs;
 using Panuon.WPF.UI;
-using ReactiveUI;
 using VPet.ModMaker.Models;
 using VPet.ModMaker.ViewModels;
-using VPet.ModMaker.Views.ModEdit;
+using VPet.ModMaker.Views;
 
 namespace VPet.ModMaker.Views;
 
 /// <summary>
-/// winModMaker.xaml 的交互逻辑
+/// ModMakerWindow.xaml 的交互逻辑
 /// </summary>
-public partial class ModMakerWindow : WindowX, IPageLocator, IEnableLogger<ViewModelBase>
+public partial class ModMakerWindow : WindowX
 {
+    /// <summary>
+    /// 视图模型
+    /// </summary>
+    public ModMakerViewModel ViewModel => (ModMakerViewModel)DataContext;
+
     /// <inheritdoc/>
     public ModMakerWindow()
     {
         InitializeComponent();
-        NativeUtils.ClipboardSetText = Clipboard.SetText;
-        this.SetViewModel<ModMakerVM>(
-            (s, e) =>
-            {
-                ViewModel.Close();
-            }
-        );
+        //NativeUtils.ClipboardSetText = Clipboard.SetText;
     }
-
-    /// <summary>
-    /// 视图模型
-    /// </summary>
-    public ModMakerVM ViewModel => (ModMakerVM)DataContext;
-
-    /// <inheritdoc/>
-    public Func<Type, FrameworkElement?>? LocatePageByType { get; }
 
     private void ListBoxItem_MouseDoubleClick(object sender, MouseButtonEventArgs e)
     {
@@ -48,10 +37,10 @@ public partial class ModMakerWindow : WindowX, IPageLocator, IEnableLogger<ViewM
         ViewModel.LoadHistory(history);
     }
 
-    private void Label_MouseDoubleClick(object sender, MouseButtonEventArgs e)
-    {
-#if !RELEASE
-        GC.Collect();
-#endif
-    }
+    //    private void Label_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+    //    {
+    //#if !RELEASE
+    //        GC.Collect();
+    //#endif
+    //    }
 }

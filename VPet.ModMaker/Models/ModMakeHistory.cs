@@ -1,9 +1,10 @@
 ﻿using System.IO;
 using System.Windows.Media.Imaging;
-using HKW.HKWReactiveUI;
+using HKW.MVVM;
 using HKW.WPF;
 using HKW.WPF.Extensions;
 using LinePutScript.Converter;
+using Microsoft.Extensions.Logging;
 using VPet.ModMaker.ViewModels;
 
 namespace VPet.ModMaker.Models;
@@ -11,7 +12,7 @@ namespace VPet.ModMaker.Models;
 /// <summary>
 /// 模组制作历史
 /// </summary>
-public class ModMakeHistory : IEquatable<ModMakeHistory>, IEnableLogger<ViewModelBase>
+public sealed class ModMakeHistory : IEquatable<ModMakeHistory>, IEnableLogger
 {
     /// <inheritdoc/>
     public ModMakeHistory() { }
@@ -42,14 +43,14 @@ public class ModMakeHistory : IEquatable<ModMakeHistory>, IEnableLogger<ViewMode
         set
         {
             if (string.IsNullOrWhiteSpace(_sourcePath) is false)
-                Image?.CloseStreamWhenNoReference();
+                Image?.CloseStream();
             _sourcePath = value;
             var imagePath = Path.Combine(_sourcePath, "icon.png");
 
-            if (File.Exists(imagePath) is false)
-                this.LogX().Warn("目标文件不存在, 路径: {path}", imagePath);
-            else
+            if (File.Exists(imagePath))
                 Image = HKWImageUtils.LoadImageToMemory(imagePath);
+            else
+                this.LogIfEnabled(LogLevel.Warning)?.Log("目标文件不存在, 路径: {path}", imagePath);
         }
     }
 

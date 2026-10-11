@@ -1,16 +1,18 @@
-﻿using System.Windows.Media.Imaging;
-using HKW.HKWReactiveUI;
+﻿using System.ComponentModel;
+using System.Windows.Media.Imaging;
+using CommunityToolkit.Mvvm.ComponentModel;
 using HKW.HKWUtils;
+using HKW.MVVM;
 using HKW.WPF;
 using HKW.WPF.Extensions;
 using VPet.ModMaker.ViewModels;
 
-namespace VPet.ModMaker.Models.ModModel;
+namespace VPet.ModMaker.Models;
 
 /// <summary>
 /// 图像模型
 /// </summary>
-public partial class ImageModel : ViewModelBase, ICloneable<ImageModel>
+public sealed partial class ImageModel : ObservableObjectEx, ICloneable<ImageModel>, IDisposable
 {
     /// <inheritdoc/>
     /// <param name="imageFile">图像文件</param>
@@ -38,21 +40,22 @@ public partial class ImageModel : ViewModelBase, ICloneable<ImageModel>
     /// <summary>
     /// 图像
     /// </summary>
-    [ReactiveProperty]
+    [ObservableProperty]
     public BitmapImage Image { get; set; } = null!;
 
     /// <summary>
-    /// 持续时间
+    /// 持续时间 (ms)
     /// </summary>
-    [ReactiveProperty]
-    public int Duration { get; set; } = 100;
+    [DefaultValue(100)]
+    [ObservableProperty]
+    public int Duration { get; set; }
 
     /// <summary>
     /// 载入图像
     /// </summary>
-    public void LoadImage()
+    public BitmapImage LoadImage()
     {
-        Image = HKWImageUtils.LoadImageToMemory(ImageFile)!;
+        return Image ??= HKWImageUtils.LoadImageToMemory(ImageFile)!;
     }
 
     /// <summary>
@@ -61,23 +64,22 @@ public partial class ImageModel : ViewModelBase, ICloneable<ImageModel>
     /// <returns></returns>
     public ImageModel Clone()
     {
-        Image ??= HKWImageUtils.LoadImageToMemory(ImageFile)!;
-        var model = new ImageModel(Image, Duration);
-        Image.AddReferenceCount();
-        return model;
+        if (Image is not null)
+        {
+            return new ImageModel(Image.Clone(), Duration);
+        }
+        else
+        {
+            return new(HKWImageUtils.LoadImageToMemory(ImageFile)!, Duration);
+        }
     }
 
     object ICloneable.Clone() => Clone();
 
     /// <inheritdoc/>
-    protected override void Dispose(bool disposing)
+    public void Dispose()
     {
-        if (_disposed)
-            return;
-        base.Dispose(disposing);
-        if (disposing)
-        {
-            Image?.CloseStreamWhenNoReference();
-        }
+        Image?.CloseStream();
+        Image = null!;
     }
 }

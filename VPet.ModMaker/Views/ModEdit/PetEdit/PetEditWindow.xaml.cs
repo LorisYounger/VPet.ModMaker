@@ -1,8 +1,8 @@
 ﻿using System.Windows;
 using Panuon.WPF.UI;
-using VPet.ModMaker.ViewModels.ModEdit;
+using VPet.ModMaker.ViewModels;
 
-namespace VPet.ModMaker.Views.ModEdit;
+namespace VPet.ModMaker.Views;
 
 /// <summary>
 /// PetEditWindow.xaml 的交互逻辑
@@ -18,7 +18,7 @@ public partial class PetEditWindow : WindowX
     /// <summary>
     /// 视图模型
     /// </summary>
-    public PetEditVM ViewModel => (PetEditVM)DataContext;
+    public PetEditViewModel ViewModel => (PetEditViewModel)DataContext;
 
     private void Button_Cancel_Click(object? sender, RoutedEventArgs e)
     {

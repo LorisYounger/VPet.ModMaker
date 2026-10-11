@@ -1,84 +1,89 @@
-﻿using System.ComponentModel;
+﻿using System.Collections.Specialized;
+using System.ComponentModel;
 using System.Globalization;
 using System.IO;
-using System.Reactive.Linq;
 using System.Windows.Media.Imaging;
-using DynamicData.Binding;
-using HKW.HKWMapper;
-using HKW.HKWReactiveUI;
+using CommunityToolkit.Mvvm.ComponentModel;
 using HKW.HKWUtils;
 using HKW.HKWUtils.Collections;
+using HKW.HKWUtils.Extensions;
 using HKW.HKWUtils.Observable;
+using HKW.Mapper;
+using HKW.MVVM;
+using HKW.MVVM.SourceGenerator;
 using HKW.WPF;
 using HKW.WPF.Extensions;
 using LinePutScript;
 using LinePutScript.Converter;
-using ReactiveUI;
-using VPet.ModMaker.Models.ModModel;
+using Microsoft.Extensions.Logging;
+using VPet_Simulator.Core;
+using VPet_Simulator.Windows.Interface;
 using VPet.ModMaker.Native;
 using VPet.ModMaker.ViewModels;
-using VPet_Simulator.Core;
 
 namespace VPet.ModMaker.Models;
 
 /// <summary>
 /// 模组信息模型
 /// </summary>
-public partial class ModInfoModel : ViewModelBase
+public sealed partial class ModInfoModel : ObservableModelBase, IDisposable
 {
     /// <inheritdoc/>
     public ModInfoModel()
     {
         Pets = new([], [], m => m.FromMain is false || ShowMainPet);
-        Pets.BaseList.WhenPropertyChanged(x => x.Count)
-            .Subscribe(x => RaisePetDisplayedCountChange());
 
-        this.WhenValueChanged(x => x.ShowMainPet, false)
-            .Throttle(TimeSpan.FromSeconds(0.5), RxApp.TaskpoolScheduler)
-            .DistinctUntilChanged()
-            .ObserveOn(RxApp.MainThreadScheduler)
-            .Subscribe(_ =>
-            {
-                var oldPet = CurrentPet;
-                Pets.Refresh();
-                if (CurrentPet is null)
-                {
-                    if (oldPet?.FromMain is false)
-                        CurrentPet = oldPet;
-                    else
-                        CurrentPet = Pets.FilteredList.FirstOrDefault();
-                }
-            });
-
-        I18nResource.PropertyChanged += I18nResource_PropertyChanged;
-        I18nResource.Cultures.SetChanged += Cultures_SetChanged;
-        I18nResource.CultureDatas.DictionaryChanged += CultureDatas_DictionaryChanged;
-        foreach (var pet in NativeData.MainPets)
+        I18nResource
+            .WhenAnyValue(x => x.CurrentCulture)
+            .Skip(1)
+            .Subscribe(c =>
+                ModMaker.I18nResource.CurrentCulture = TempI18nResource.CurrentCulture = c
+            )
+            .DisposeWith(Disposables);
+        I18nResource.ObservableCultures.CollectionChanged += ObservableCultures_CollectionChanged;
+        foreach (var pet in ModMaker.MainPets)
         {
             // 确保ID不重复
             if (Pets.All(i => i.ID != pet.Key))
             {
                 Pets.Add(pet.Value);
-                this.LogX().Info("载入本体宠物 {pet}", pet.Key);
+                this.LogIfEnabled(LogLevel.Information)?.Log("载入本体宠物 {pet}", pet.Key);
             }
             else
-                this.LogX().Info("载入本体宠物失败,已存在相同ID的宠物 {pet}", pet.Key);
+            {
+                this.LogIfEnabled(LogLevel.Warning)
+                    ?.Log("载入本体宠物失败,已存在相同ID的宠物 {pet}", pet.Key);
+            }
         }
     }
 
-    private void CultureDatas_DictionaryChanged(
-        IObservableDictionary<string, ObservableCultureDataDictionary<string, string>> sender,
-        NotifyDictionaryChangeEventArgs<string, ObservableCultureDataDictionary<string, string>> e
+    private void ObservableCultures_CollectionChanged(
+        object? sender,
+        NotifyCollectionChangedEventArgs e
     )
     {
-        if (e.Action is DictionaryChangeAction.Add)
+        if (e.Action is NotifyCollectionChangedAction.Add)
         {
-            if (!e.TryGetNewPair(out var pair) || I18nResource.CurrentCulture is null)
-                return;
-            var value = I18nResource.GetCurrentCultureDataOrDefault(pair.Key);
-            if (string.IsNullOrWhiteSpace(value) is false)
-                return;
-            I18nResource.SetCurrentCultureData(pair.Key, pair.Key);
+            foreach (var c in e.NewItems!.OfType<CultureInfo>())
+            {
+                ModMaker.I18nResource.AddCulture(c);
+                TempI18nResource.AddCulture(c);
+            }
+        }
+        else if (e.Action is NotifyCollectionChangedAction.Remove)
+        {
+            foreach (var c in e.OldItems!.OfType<CultureInfo>())
+            {
+                ModMaker.I18nResource.AddCulture(c);
+                TempI18nResource.AddCulture(c);
+            }
+        }
+        else if (e.Action is NotifyCollectionChangedAction.Replace)
+        {
+            var oldC = e.OldItems!.OfType<CultureInfo>().First();
+            var newC = e.NewItems!.OfType<CultureInfo>().First();
+            ModMaker.I18nResource.ReplaceCulture(oldC, newC);
+            TempI18nResource.ReplaceCulture(oldC, newC);
         }
     }
 
@@ -87,17 +92,19 @@ public partial class ModInfoModel : ViewModelBase
     public ModInfoModel(ModLoader loader)
         : this()
     {
-        this.LogX().Info("载入模组, ID: {id}, 路径: {path}", loader.Name, loader.ModPath.FullName);
+        this.LogIfEnabled(LogLevel.Information)
+            ?.Log("载入模组, ID: {id}, 路径: {path}", loader.Name, loader.ModPath.FullName);
         SourcePath = loader.ModPath.FullName;
 
         LoadI18nDatas(loader);
 
         ID = loader.Name;
         if (
-            loader.Intro != DescriptionID
-            && I18nResource.ReplaceCultureDataKey(loader.Intro, DescriptionID, true) is false
+            loader.Intro is not null
+            && loader.Intro != DescriptionID
+            && I18nResource.RenameKey(loader.Intro, DescriptionID) is false
         )
-            I18nResource.SetCurrentCultureData(DescriptionID, loader.Intro);
+            I18nResource.SetData(DescriptionID, loader.Intro);
 
         Author = loader.Author;
         GameVersion = loader.GameVer;
@@ -113,179 +120,68 @@ public partial class ModInfoModel : ViewModelBase
         LoadSelectTexts(loader);
         LoadPets(loader);
 
-        I18nResource.FillDefaultValue();
-        I18nResource.ClearUnreferencedData();
         CurrentPet = Pets.FilteredList.FirstOrDefault()!;
-    }
-
-    private void LoadPets(ModLoader loader)
-    {
-        this.LogX().Info("载入宠物, 数量: {count}", loader.Pets.Count);
-        // 载入模组宠物
-        foreach (var pet in loader.Pets)
-        {
-            try
-            {
-                var petModel = new PetModel(pet, I18nResource);
-                // 如果检测到本体存在同名宠物
-                if (NativeData.MainPets.TryGetValue(petModel.ID, out var mainPet))
-                {
-                    // 若宠物的值为默认值并且本体同名宠物不为默认值, 则把本体宠物的值作为模组宠物的默认值
-                    if (
-                        petModel.TouchHeadRectangleLocation
-                            == PetModel.Default.TouchHeadRectangleLocation
-                        && petModel.TouchHeadRectangleLocation != mainPet.TouchHeadRectangleLocation
-                    )
-                        petModel.TouchHeadRectangleLocation = mainPet.TouchHeadRectangleLocation;
-                    if (
-                        petModel.TouchBodyRectangleLocation
-                            == PetModel.Default.TouchBodyRectangleLocation
-                        && petModel.TouchBodyRectangleLocation != mainPet.TouchBodyRectangleLocation
-                    )
-                        petModel.TouchBodyRectangleLocation = mainPet.TouchBodyRectangleLocation;
-                    if (
-                        petModel.TouchRaisedRectangleLocation
-                            == PetModel.Default.TouchRaisedRectangleLocation
-                        && petModel.TouchRaisedRectangleLocation
-                            != mainPet.TouchRaisedRectangleLocation
-                    )
-                        petModel.TouchRaisedRectangleLocation =
-                            mainPet.TouchRaisedRectangleLocation;
-                    if (
-                        petModel.RaisePoint == PetModel.Default.RaisePoint
-                        && petModel.RaisePoint != mainPet.RaisePoint
-                    )
-                        petModel.RaisePoint = mainPet.RaisePoint;
-                }
-                Pets.Add(petModel);
-                foreach (var p in pet.path)
-                    LoadAnime(petModel, p);
-                this.LogX().Debug("添加宠物成功, ID: {id}, 宠物名称: {name}", pet.Name, pet.PetName);
-            }
-            catch (Exception ex)
-            {
-                this.LogX().Warn(ex, "添加宠物失败, ID: {id}, 宠物名称: {name}", pet.Name, pet.PetName);
-            }
-        }
-    }
-
-    private void LoadSelectTexts(ModLoader loader)
-    {
-        this.LogX().Info("载入选择文本, 数量: {count}", loader.SelectTexts.Count);
-        foreach (var selectText in loader.SelectTexts)
-        {
-            try
-            {
-                SelectTexts.Add(new(selectText, I18nResource));
-                this.LogX().Debug("添加选择文本成功, ID: {id}", selectText.Text);
-            }
-            catch (Exception ex)
-            {
-                this.LogX().Warn(ex, "添加选择文本失败, ID: {id}", selectText.Text);
-            }
-        }
-    }
-
-    private void LoadLowTexts(ModLoader loader)
-    {
-        this.LogX().Info("载入低状态文本, 数量: {count}", loader.LowTexts.Count);
-        foreach (var lowText in loader.LowTexts)
-        {
-            try
-            {
-                LowTexts.Add(new(lowText) { I18nResource = I18nResource });
-                this.LogX().Debug("添加低状态文本成功, ID: {id}", lowText.Text);
-            }
-            catch (Exception ex)
-            {
-                this.LogX().Warn(ex, "添加低状态文本失败, ID: {id}", lowText.Text);
-            }
-        }
-    }
-
-    private void LoadClickTexts(ModLoader loader)
-    {
-        this.LogX().Info("载入点击文本, 数量: {count}", loader.ClickTexts.Count);
-        foreach (var clickText in loader.ClickTexts)
-        {
-            try
-            {
-                ClickTexts.Add(new(clickText) { I18nResource = I18nResource });
-                this.LogX().Debug("添加点击文本成功, ID: {id}", clickText.Text);
-            }
-            catch (Exception ex)
-            {
-                this.LogX().Warn(ex, "添加点击文本失败, ID: {id}", clickText.Text);
-            }
-        }
-    }
-
-    private void LoadFoods(ModLoader loader)
-    {
-        this.LogX().Info("载入食物, 数量: {count}", loader.Foods.Count);
-        foreach (var food in loader.Foods)
-        {
-            try
-            {
-                Foods.Add(new(food, I18nResource));
-                this.LogX().Debug("添加食物成功, ID: {id}", food.Name);
-            }
-            catch (Exception ex)
-            {
-                this.LogX().Warn(ex, "添加食物失败, ID: {id}", food.Name);
-            }
-        }
     }
 
     /// <summary>
     /// I18n资源
     /// </summary>
-    public I18nResource<string, string> I18nResource { get; } =
-        new() { FillDefaultValueToData = true, DefaultValue = string.Empty };
+    public ObservableI18nResource<string, string> I18nResource { get; } =
+        new("Main") { GetDefaultValue = (s, _) => s };
+    public I18nObserver<ModInfoModel, string, string> I18nObserver =>
+        field ??= new(I18nResource, this, (s, p) => s.OnPropertyChanged(p))
+        {
+            new(s => s.ID, nameof(Name)),
+            new(s => s.DescriptionID, nameof(Description)),
+        };
 
     /// <summary>
     /// 临时I18n资源, 用于新建的项目
     /// </summary>
-    public I18nResource<string, string> TempI18nResource { get; } =
-        new() { FillDefaultValueToData = true, DefaultValue = string.Empty };
+    public ObservableI18nResource<string, string> TempI18nResource =>
+        field ??= new("Temp") { GetDefaultValue = (s, _) => s };
 
-    /// <summary>
-    /// I18n对象
-    /// </summary>
-    [NotifyPropertyChangeFrom("")]
-    public I18nObject<string, string> I18nObject => new(this);
+    //partial OnD
 
     /// <summary>
     /// 名称
     /// </summary>
-    [ReactiveI18nProperty(nameof(I18nResource), nameof(I18nObject), nameof(ID), true)]
     public string Name
     {
-        get => I18nResource.GetCurrentCultureDataOrDefault(ID);
-        set => I18nResource.SetCurrentCultureData(ID, value);
+        get => I18nObserver.GetDataOrDefault(ID);
+        set => I18nObserver.SetData(ID, value);
     }
 
     /// <summary>
     /// 详情
     /// </summary>
-    [ReactiveI18nProperty(nameof(I18nResource), nameof(I18nObject), nameof(DescriptionID), true)]
     public string Description
     {
-        get => I18nResource.GetCurrentCultureDataOrDefault(DescriptionID);
-        set => I18nResource.SetCurrentCultureData(DescriptionID, value);
+        get => I18nObserver.GetDataOrDefault(DescriptionID);
+        set => I18nObserver.SetData(DescriptionID, value);
     }
 
     /// <summary>
     /// 自动设置食物推荐价格
     /// </summary>
-    [ReactiveProperty]
+    [ObservableProperty]
     public bool AutoSetFoodPrice { get; set; }
 
     /// <summary>
     /// 显示本体宠物
     /// </summary>
-    [ReactiveProperty]
+    [ObservableProperty]
     public bool ShowMainPet { get; set; }
+
+    partial void OnShowMainPetChanged(bool oldValue, bool newValue)
+    {
+        var oldPet = CurrentPet;
+        Pets.Refresh();
+        if (oldPet?.FromMain is false)
+        {
+            CurrentPet = oldPet;
+        }
+    }
 
     #region ModInfo
     /// <summary>
@@ -301,7 +197,7 @@ public partial class ModInfoModel : ViewModelBase
     /// <summary>
     /// ID
     /// </summary>
-    [ReactiveProperty]
+    [ObservableProperty]
     public string ID { get; set; } = string.Empty;
 
     /// <summary>
@@ -313,31 +209,31 @@ public partial class ModInfoModel : ViewModelBase
     /// <summary>
     /// 作者
     /// </summary>
-    [ReactiveProperty]
+    [ObservableProperty]
     public string Author { get; set; } = string.Empty;
 
     /// <summary>
     /// 支持的游戏版本
     /// </summary>
-    [ReactiveProperty]
+    [ObservableProperty]
     public int GameVersion { get; set; }
 
     /// <summary>
     /// 模组版本
     /// </summary>
-    [ReactiveProperty]
+    [ObservableProperty]
     public int ModVersion { get; set; }
 
     /// <summary>
     /// 封面
     /// </summary>
-    [ReactiveProperty]
+    [ObservableProperty]
     public BitmapImage? Image { get; set; }
 
     /// <summary>
     /// 源路径
     /// </summary>
-    [ReactiveProperty]
+    [ObservableProperty]
     public string SourcePath { get; set; } = string.Empty;
 
     #endregion
@@ -366,13 +262,13 @@ public partial class ModInfoModel : ViewModelBase
     /// <summary>
     /// 当前宠物
     /// </summary>
-    [ReactiveProperty]
+    [ObservableProperty]
     public PetModel? CurrentPet { get; set; } = null!;
 
     /// <summary>
     /// 宠物
     /// </summary>
-    public FilterListWrapper<
+    public FilteredListWrapper<
         PetModel,
         ObservableList<PetModel>,
         ObservableList<PetModel>
@@ -381,51 +277,147 @@ public partial class ModInfoModel : ViewModelBase
     /// <summary>
     /// 宠物显示的数量
     /// </summary>
-    [NotifyPropertyChangeFrom(
-        nameof(ShowMainPet),
-        CacheMode = NotifyPropertyChangeFromAttribute.CacheModeEnum.EnableAfterInitialize
-    )]
+    [NotifyPropertyChangeFrom(nameof(ShowMainPet))]
     public int PetDisplayedCount =>
         ShowMainPet ? Pets.Count : Pets.Count - Pets.Count(m => m.FromMain);
 
     #endregion
-    private void I18nResource_PropertyChanged(object? sender, PropertyChangedEventArgs e)
-    {
-        if (e.PropertyName == nameof(I18nResource.CurrentCulture))
-        {
-            TempI18nResource.CurrentCulture = I18nResource.CurrentCulture;
-        }
-    }
-
-    private void Cultures_SetChanged(
-        IObservableSet<CultureInfo> sender,
-        NotifySetChangeEventArgs<CultureInfo> e
-    )
-    {
-        if (e.Action is SetChangeAction.Clear)
-        {
-            TempI18nResource.ClearCulture();
-        }
-        else
-        {
-            if (e.OldItems is not null)
-            {
-                foreach (var item in e.OldItems)
-                {
-                    TempI18nResource.RemoveCulture(item);
-                }
-            }
-            if (e.NewItems is not null)
-            {
-                foreach (var item in e.NewItems)
-                {
-                    TempI18nResource.AddCulture(item);
-                }
-            }
-        }
-    }
 
     #region Load
+
+    private void LoadPets(ModLoader loader)
+    {
+        this.LogIfEnabled(LogLevel.Information)?.Log("载入宠物, 数量: {count}", loader.Pets.Count);
+        //载入模组宠物
+        foreach (var pet in loader.Pets)
+        {
+            try
+            {
+                var petModel = new PetModel(pet, I18nResource);
+                // 如果检测到本体存在同名宠物
+                CheckPetIsMainPet(petModel);
+                Pets.Add(petModel);
+                foreach (var p in pet.path)
+                    LoadAnime(petModel, p);
+                this.LogIfEnabled(LogLevel.Information)
+                    ?.Log("添加宠物成功, ID: {id}, 宠物名称: {name}", pet.Name, pet.PetName);
+            }
+            catch (Exception ex)
+            {
+                this.LogIfEnabled(LogLevel.Warning)
+                    ?.Log(ex, "添加宠物失败, ID: {id}, 宠物名称: {name}", pet.Name, pet.PetName);
+            }
+        }
+
+        static void CheckPetIsMainPet(PetModel petModel)
+        {
+            if (ModMaker.MainPets.TryGetValue(petModel.ID, out var mainPet))
+            {
+                // 若宠物的值为默认值并且本体同名宠物不为默认值, 则把本体宠物的值作为模组宠物的默认值
+                if (
+                    petModel.TouchHeadRectangleLocation
+                        == PetModel.DefaultTouchHeadRectangleLocation
+                    && petModel.TouchHeadRectangleLocation != mainPet.TouchHeadRectangleLocation
+                )
+                    petModel.TouchHeadRectangleLocation = mainPet.TouchHeadRectangleLocation;
+                if (
+                    petModel.TouchBodyRectangleLocation
+                        == PetModel.DefaultTouchBodyRectangleLocation
+                    && petModel.TouchBodyRectangleLocation != mainPet.TouchBodyRectangleLocation
+                )
+                    petModel.TouchBodyRectangleLocation = mainPet.TouchBodyRectangleLocation;
+                if (
+                    petModel.TouchRaisedRectangleLocation
+                        == PetModel.DefaultTouchRaisedRectangleLocation
+                    && petModel.TouchRaisedRectangleLocation != mainPet.TouchRaisedRectangleLocation
+                )
+                    petModel.TouchRaisedRectangleLocation = mainPet.TouchRaisedRectangleLocation;
+                if (
+                    petModel.RaisePoint == PetModel.DefaultRaisePoint
+                    && petModel.RaisePoint != mainPet.RaisePoint
+                )
+                    petModel.RaisePoint = mainPet.RaisePoint;
+            }
+        }
+    }
+
+    private void LoadSelectTexts(ModLoader loader)
+    {
+        this.LogIfEnabled(LogLevel.Information)
+            ?.Log("载入选择文本, 数量: {count}", loader.SelectTexts.Count);
+        foreach (var selectText in loader.SelectTexts.Where(x => x.Text is not null))
+        {
+            try
+            {
+                SelectTexts.Add(new(selectText, I18nResource));
+                this.LogIfEnabled(LogLevel.Debug)
+                    ?.Log("添加选择文本成功, ID: {id}", selectText.Text);
+            }
+            catch (Exception ex)
+            {
+                this.LogIfEnabled(LogLevel.Warning)
+                    ?.Log(ex, "添加选择文本失败, ID: {id}", selectText.Text);
+            }
+        }
+    }
+
+    private void LoadLowTexts(ModLoader loader)
+    {
+        this.LogIfEnabled(LogLevel.Information)
+            ?.Log("载入低状态文本, 数量: {count}", loader.LowTexts.Count);
+        foreach (var lowText in loader.LowTexts.Where(x => x.Text is not null))
+        {
+            try
+            {
+                LowTexts.Add(new(lowText) { I18nResource = I18nResource });
+                this.LogIfEnabled(LogLevel.Debug)
+                    ?.Log("添加低状态文本成功, ID: {id}", lowText.Text);
+            }
+            catch (Exception ex)
+            {
+                this.LogIfEnabled(LogLevel.Warning)
+                    ?.Log(ex, "添加低状态文本失败, ID: {id}", lowText.Text);
+            }
+        }
+    }
+
+    private void LoadClickTexts(ModLoader loader)
+    {
+        this.LogIfEnabled(LogLevel.Information)
+            ?.Log("载入点击文本, 数量: {count}", loader.ClickTexts.Count);
+        foreach (var clickText in loader.ClickTexts.Where(x => x.Text is not null))
+        {
+            try
+            {
+                ClickTexts.Add(new(clickText) { I18nResource = I18nResource });
+                this.LogIfEnabled(LogLevel.Debug)
+                    ?.Log("添加点击文本成功, ID: {id}", clickText.Text);
+            }
+            catch (Exception ex)
+            {
+                this.LogIfEnabled(LogLevel.Warning)
+                    ?.Log(ex, "添加点击文本失败, ID: {id}", clickText.Text);
+            }
+        }
+    }
+
+    private void LoadFoods(ModLoader loader)
+    {
+        this.LogIfEnabled(LogLevel.Information)?.Log("载入食物, 数量: {count}", loader.Foods.Count);
+        foreach (var food in loader.Foods)
+        {
+            try
+            {
+                Foods.Add(new(food, I18nResource));
+                this.LogIfEnabled(LogLevel.Debug)?.Log("添加食物成功, ID: {id}", food.Name);
+            }
+            catch (Exception ex)
+            {
+                this.LogIfEnabled(LogLevel.Warning)?.Log(ex, "添加食物失败, ID: {id}", food.Name);
+            }
+        }
+    }
+
     /// <summary>
     /// 加载宠物动画
     /// </summary>
@@ -436,11 +428,12 @@ public partial class ModInfoModel : ViewModelBase
         if (Directory.Exists(path) is false)
             return;
         var directories = Directory.GetDirectories(path);
-        this.LogX().Info("载入宠物动画, 数量: {count}, 路径: {path}", directories.Length, path);
+        this.LogIfEnabled(LogLevel.Information)
+            ?.Log("载入宠物动画, 数量: {count}, 路径: {path}", directories.Length, path);
         foreach (var animeDir in directories)
         {
             var dirName = Path.GetFileName(animeDir);
-            this.LogX().Debug("载入动画, 路径: {path}", animeDir);
+            this.LogIfEnabled(LogLevel.Debug)?.Log("载入动画, 路径: {path}", animeDir);
             if (Enum.TryParse<GraphInfo.GraphType>(dirName, true, out var graphType))
             {
                 if (graphType.IsHasNameAnime())
@@ -454,8 +447,13 @@ public partial class ModInfoModel : ViewModelBase
                         }
                         catch (Exception ex)
                         {
-                            this.LogX()
-                                .Warn(ex, "{$graphType} 动画载入失败, 目标文件夹: {path}", graphType, dir);
+                            this.LogIfEnabled(LogLevel.Warning)
+                                ?.Log(
+                                    ex,
+                                    "{$graphType} 动画载入失败, 目标文件夹: {path}",
+                                    graphType,
+                                    dir
+                                );
                         }
                     }
                 }
@@ -468,8 +466,13 @@ public partial class ModInfoModel : ViewModelBase
                     }
                     catch (Exception ex)
                     {
-                        this.LogX()
-                            .Warn(ex, "{$graphType} 动画载入失败, 目标文件夹: {path}", graphType, animeDir);
+                        this.LogIfEnabled(LogLevel.Warning)
+                            ?.Log(
+                                ex,
+                                "{$graphType} 动画载入失败, 目标文件夹: {path}",
+                                graphType,
+                                animeDir
+                            );
                     }
                 }
             }
@@ -488,7 +491,8 @@ public partial class ModInfoModel : ViewModelBase
                     }
                     catch (Exception ex)
                     {
-                        this.LogX().Warn(ex, "\"Switch\" 动画载入失败, 目标文件夹: {path}", dir);
+                        this.LogIfEnabled(LogLevel.Warning)
+                            ?.Log(ex, "'Switch' 动画载入失败, 目标文件夹: {path}", dir);
                     }
                 }
             }
@@ -504,7 +508,8 @@ public partial class ModInfoModel : ViewModelBase
                     }
                     catch (Exception ex)
                     {
-                        this.LogX().Warn(ex, "\"Raise\" 动画载入失败, 目标文件夹: {path}", dir);
+                        this.LogIfEnabled(LogLevel.Warning)
+                            ?.Log(ex, "'Raise' 动画载入失败, 目标文件夹: {path}", dir);
                     }
                 }
             }
@@ -520,7 +525,8 @@ public partial class ModInfoModel : ViewModelBase
                     }
                     catch (Exception ex)
                     {
-                        this.LogX().Warn(ex, "\"State\" 动画载入失败, 目标文件夹: {path}", dir);
+                        this.LogIfEnabled(LogLevel.Warning)
+                            ?.Log(ex, "'State' 动画载入失败, 目标文件夹: {path}", dir);
                     }
                 }
             }
@@ -533,7 +539,8 @@ public partial class ModInfoModel : ViewModelBase
                 }
                 catch (Exception ex)
                 {
-                    this.LogX().Warn(ex, "\"Music\" 动画载入失败, 目标文件夹: {path}", animeDir);
+                    this.LogIfEnabled(LogLevel.Warning)
+                        ?.Log(ex, "'Music' 动画载入失败, 目标文件夹: {path}", animeDir);
                 }
             }
             else if (FoodAnimeTypeModel.FoodAnimeNames.Contains(dirName))
@@ -545,7 +552,8 @@ public partial class ModInfoModel : ViewModelBase
                 }
                 catch (Exception ex)
                 {
-                    this.LogX().Warn(ex, "{dirName} 动画载入失败, 目标文件夹: {path}", dirName, animeDir);
+                    this.LogIfEnabled(LogLevel.Warning)
+                        ?.Log(ex, "{dirName} 动画载入失败, 目标文件夹: {path}", dirName, animeDir);
                 }
             }
             else
@@ -557,7 +565,8 @@ public partial class ModInfoModel : ViewModelBase
                 }
                 catch (Exception ex)
                 {
-                    this.LogX().Warn(ex, "{anime} 动画载入失败, 目标文件夹: {path}", dirName, animeDir);
+                    this.LogIfEnabled(LogLevel.Warning)
+                        ?.Log(ex, "{anime} 动画载入失败, 目标文件夹: {path}", dirName, animeDir);
                 }
             }
         }
@@ -572,10 +581,14 @@ public partial class ModInfoModel : ViewModelBase
         {
             I18nResource.AddCulture(CultureInfo.CurrentCulture);
             I18nResource.CurrentCulture = CultureInfo.CurrentCulture;
-            this.LogX().Info("模组未包含本地化数据");
+            this.LogIfEnabled(LogLevel.Information)?.Log("模组未包含本地化数据");
             return;
         }
-        this.LogX().Info("载入本地化数据, 目标文化: {cultrue}", string.Join(", ", modLoader.I18nDatas.Keys));
+        this.LogIfEnabled(LogLevel.Information)
+            ?.Log(
+                "载入本地化数据, 目标文化: {cultrue}",
+                string.Join(", ", modLoader.I18nDatas.Keys)
+            );
         foreach (var cultureDatas in modLoader.I18nDatas)
         {
             CultureInfo? culture;
@@ -585,20 +598,21 @@ public partial class ModInfoModel : ViewModelBase
             }
             catch (Exception ex)
             {
-                this.LogX().Warn(ex, $"载入文化 {cultureDatas.Key} 错误, 请检查文化名称");
+                this.LogIfEnabled(LogLevel.Warning)
+                    ?.Log(ex, $"载入文化 {cultureDatas.Key} 错误, 请检查文化名称");
                 continue;
             }
             I18nResource.AddCulture(culture);
-            I18nResource.SetCultureDatas(culture, cultureDatas.Value);
-            this.LogX()
-                .Info(
+            TempI18nResource.AddCulture(culture);
+            I18nResource.SetDatas(cultureDatas.Value, culture);
+            this.LogIfEnabled(LogLevel.Information)
+                ?.Log(
                     "已载入本地化数据, 文化: {cultrue}, 数据数量: {count}",
                     cultureDatas.Key,
                     cultureDatas.Value.Count
                 );
         }
-        if (I18nResource.SetCurrentCulture(CultureInfo.CurrentCulture) is false)
-            I18nResource.SetCurrentCulture(I18nResource.Cultures.First());
+        I18nResource.CurrentCulture = I18nResource.Cultures.First();
     }
     #endregion
     #region Save
@@ -616,16 +630,14 @@ public partial class ModInfoModel : ViewModelBase
     /// <param name="path">路径</param>
     public void SaveTo(string path)
     {
-        this.LogX().Info("正在保存模组, 目标路径: {path}", path);
-        // 保存模型信息
+        this.LogIfEnabled(LogLevel.Information)?.Log("正在保存模组, 目标路径: {path}", path);
         SaveModInfo(path);
-        // 保存模组数据
-        SavePets(path);
         SaveFoods(path);
         SaveText(path);
-        SaveI18nData(path, I18nResource.Cultures);
+        SavePets(path);
         SaveImage(path);
-        this.LogX().Info("模组保存完毕");
+        SaveI18nData(path, I18nResource.Cultures);
+        this.LogIfEnabled(LogLevel.Information)?.Log("模组保存完毕");
     }
 
     /// <summary>
@@ -634,7 +646,7 @@ public partial class ModInfoModel : ViewModelBase
     /// <param name="path">路径</param>
     private void SaveModInfo(string path)
     {
-        var modInfoFile = Path.Combine(path, NativeData.InfoFileName);
+        var modInfoFile = Path.Combine(path, ModMaker.InfoFileName);
         if (File.Exists(modInfoFile) is false)
             File.Create(modInfoFile).Close();
 
@@ -644,29 +656,30 @@ public partial class ModInfoModel : ViewModelBase
             {
                 new Sub("author", Author),
                 new Sub("gamever", GameVersion),
-                new Sub("ver", ModVersion)
+                new Sub("ver", ModVersion),
             },
             new Line("intro", DescriptionID),
             new Line("authorid", AuthorID.ToString()),
             new Line("itemid", ItemID.ToString()),
-            new Line("cachedate", DateTime.Now.Date.ToString("s"))
+            new Line("cachedate", DateTime.Now.Date.ToString("s")),
         };
         foreach (var culture in I18nResource.Cultures)
         {
             lps.Add(
                 new Line("cultureDatas", culture.Name)
                 {
-                    new Sub(ID, I18nResource.GetCultureDataOrDefault(culture, ID, string.Empty)),
+                    new Sub(ID, I18nResource.GetDataOrDefault(ID, string.Empty, culture)),
                     new Sub(
                         DescriptionID,
-                        I18nResource.GetCultureDataOrDefault(culture, DescriptionID, string.Empty)
+                        I18nResource.GetDataOrDefault(DescriptionID, string.Empty, culture)
                     ),
                 }
             );
         }
         Image?.SaveToPng(Path.Combine(path, "icon.png"));
         File.WriteAllText(modInfoFile, lps.ToString());
-        this.LogX().Info("模组信息保存完成, 目标文件: {file}", modInfoFile);
+        this.LogIfEnabled(LogLevel.Information)
+            ?.Log("模组信息保存完成, 目标文件: {file}", modInfoFile);
     }
 
     private void SavePets(string path)
@@ -678,7 +691,8 @@ public partial class ModInfoModel : ViewModelBase
                 Directory.Delete(petPath, true);
             return;
         }
-        this.LogX().Info("正在保存宠物, 数量: {count}", Pets.Count(m => m.FromMain is false));
+        this.LogIfEnabled(LogLevel.Information)
+            ?.Log("正在保存宠物, 数量: {count}", Pets.Count(m => m.FromMain is false));
         Directory.CreateDirectory(petPath);
         foreach (var pet in Pets)
         {
@@ -687,17 +701,21 @@ public partial class ModInfoModel : ViewModelBase
             try
             {
                 pet.Save(petPath);
-                this.LogX().Info("保存宠物成功, ID: {id}, 宠物名称: {petName}", pet.ID, pet.PetName);
+                this.LogIfEnabled(LogLevel.Information)
+                    ?.Log("保存宠物成功, ID: {id}, 宠物名称: {petName}", pet.ID, pet.PetName);
             }
             catch (Exception ex)
             {
-                this.LogX().Info(ex, "保存宠物失败, ID: {id}, 宠物名称: {petName}", pet.ID, pet.PetName);
+                this.LogIfEnabled(LogLevel.Information)
+                    ?.Log(ex, "保存宠物失败, ID: {id}, 宠物名称: {petName}", pet.ID, pet.PetName);
             }
         }
         // 如果没有一个完成保存, 则删除文件夹
         if (Directory.EnumerateFiles(petPath).Any() is false)
             Directory.Delete(petPath);
     }
+
+    private static readonly Food _food = new();
 
     /// <summary>
     /// 保存食物
@@ -712,14 +730,16 @@ public partial class ModInfoModel : ViewModelBase
                 Directory.Delete(foodPath, true);
             return;
         }
-        this.LogX().Info("正在保存食物, 数量: {count}", Foods.Count);
+        this.LogIfEnabled(LogLevel.Information)?.Log("正在保存食物, 数量: {count}", Foods.Count);
         Directory.CreateDirectory(foodPath);
         var foodFile = Path.Combine(foodPath, "food.lps");
         if (File.Exists(foodFile) is false)
             File.Create(foodFile).Close();
         var lps = new LPS();
         foreach (var food in Foods)
-            lps.Add(LPSConvert.SerializeObjectToLine<Line>(food.MapToFood(new()), "food"));
+        {
+            lps.Add(LPSConvert.SerializeObjectToLine<Line>(food.MapTo(_food), "food"));
+        }
         File.WriteAllText(foodFile, lps.ToString());
     }
 
@@ -743,6 +763,8 @@ public partial class ModInfoModel : ViewModelBase
         SaveSelectText(textPath);
     }
 
+    private static readonly SelectText _selectText = new();
+
     /// <summary>
     /// 保存选择文本
     /// </summary>
@@ -751,16 +773,17 @@ public partial class ModInfoModel : ViewModelBase
     {
         if (SelectTexts.Count == 0)
             return;
-        this.LogX().Info("正在保存选择文本, 数量: {count}", SelectTexts.Count);
+        this.LogIfEnabled(LogLevel.Information)
+            ?.Log("正在保存选择文本, 数量: {count}", SelectTexts.Count);
         var textFile = Path.Combine(path, "selectText.lps");
         File.Create(textFile).Close();
         var lps = new LPS();
         foreach (var text in SelectTexts)
-            lps.Add(
-                LPSConvert.SerializeObjectToLine<Line>(text.MapToSelectText(new()), "SelectText")
-            );
+            lps.Add(LPSConvert.SerializeObjectToLine<Line>(text.MapTo(_selectText), "SelectText"));
         File.WriteAllText(textFile, lps.ToString());
     }
+
+    private static readonly LowText _lowText = new();
 
     /// <summary>
     /// 保存低状态文本
@@ -770,16 +793,17 @@ public partial class ModInfoModel : ViewModelBase
     {
         if (LowTexts.Count == 0)
             return;
-        this.LogX().Info("正在保存低状态文本, 数量: {count}", LowTexts.Count);
+        this.LogIfEnabled(LogLevel.Information)
+            ?.Log("正在保存低状态文本, 数量: {count}", LowTexts.Count);
         var textFile = Path.Combine(path, "lowText.lps");
         File.Create(textFile).Close();
         var lps = new LPS();
         foreach (var text in LowTexts)
-            lps.Add(
-                LPSConvert.SerializeObjectToLine<Line>(text.MapToLowText(new()), "lowfoodtext")
-            );
+            lps.Add(LPSConvert.SerializeObjectToLine<Line>(text.MapTo(_lowText), "lowfoodtext"));
         File.WriteAllText(textFile, lps.ToString());
     }
+
+    private static readonly ClickText _clickText = new();
 
     /// <summary>
     /// 保存点击文本
@@ -789,14 +813,15 @@ public partial class ModInfoModel : ViewModelBase
     {
         if (ClickTexts.Count == 0)
             return;
-        this.LogX().Info("正在保存点击文本, 数量: {count}", ClickTexts.Count);
+        this.LogIfEnabled(LogLevel.Information)
+            ?.Log("正在保存点击文本, 数量: {count}", ClickTexts.Count);
         var textFile = Path.Combine(path, "clickText.lps");
         File.Create(textFile).Close();
         var lps = new LPS();
         foreach (var text in ClickTexts)
-            lps.Add(
-                LPSConvert.SerializeObjectToLine<Line>(text.MapToClickText(new()), "clicktext")
-            );
+        {
+            lps.Add(LPSConvert.SerializeObjectToLine<Line>(text.MapTo(_clickText), "clicktext"));
+        }
         File.WriteAllText(textFile, lps.ToString());
     }
     #endregion
@@ -807,27 +832,26 @@ public partial class ModInfoModel : ViewModelBase
     /// <param name="cultures">文化</param>
     private void SaveI18nData(string path, IEnumerable<CultureInfo> cultures)
     {
-        I18nResource.ClearUnreferencedData();
-        this.LogX().Info("正在保存本地化数据, 文化数量: {count}", I18nResource.Cultures.Count);
+        this.LogIfEnabled(LogLevel.Information)
+            ?.Log("正在保存本地化数据, 文化数量: {count}", I18nResource.Cultures.Count);
         var langPath = Path.Combine(path, "lang");
         Directory.CreateDirectory(langPath);
         foreach (var culture in cultures)
         {
-            this.LogX()
-                .Info(
+            this.LogIfEnabled(LogLevel.Information)
+                ?.Log(
                     "正在保存本地化数据 {cultrue}, 数据数量: {count}",
                     culture.Name,
-                    I18nResource.CultureDatas.Count
+                    I18nResource.DatasByKey.Count
                 );
             var culturePath = Path.Combine(langPath, culture.Name);
             Directory.CreateDirectory(culturePath);
             var cultureFile = Path.Combine(culturePath, $"{culture.Name}.lps");
             File.Create(cultureFile).Close();
             var lps = new LPS();
-            foreach (var key in I18nResource.CultureDatas.Keys)
+            foreach (var key in I18nResource.DatasByKey.Keys)
             {
-                if (I18nResource.TryGetCultureData(culture, key, out var data))
-                    lps.Add(new Line(key, data));
+                lps.Add(new Line(key, I18nResource.GetDataOrDefault(key, string.Empty, culture)));
             }
             File.WriteAllText(cultureFile, lps.ToString());
         }
@@ -841,7 +865,8 @@ public partial class ModInfoModel : ViewModelBase
     {
         if (Foods.Count == 0)
             return;
-        this.LogX().Info("正在保存图片, 数量: {count}", Foods.Count(x => x.Image is not null));
+        this.LogIfEnabled(LogLevel.Information)
+            ?.Log("正在保存图片, 数量: {count}", Foods.Count(x => x.Image is not null));
         var imagePath = Path.Combine(path, "image");
         if (Directory.Exists(imagePath))
             Directory.Delete(imagePath, true);
@@ -866,8 +891,11 @@ public partial class ModInfoModel : ViewModelBase
     /// <param name="cultures">指定文化</param>
     public void SaveToTranslationMod(string path, IEnumerable<CultureInfo> cultures)
     {
-        this.LogX().Info("保存为翻译模组, 路径: {path}, 翻译目标: {cultures}", string.Join(", ", cultures));
-        // 保存模型信息
+        this.LogIfEnabled(LogLevel.Information)
+            ?.Log(
+                "保存为翻译模组, 路径: {path}, 翻译目标: {cultures}",
+                string.Join(", ", cultures)
+            );
         SaveModInfo(path);
         var petPath = Path.Combine(path, "pet");
         if (Directory.Exists(petPath))
@@ -883,24 +911,34 @@ public partial class ModInfoModel : ViewModelBase
             Directory.Delete(textPath, true);
         // 保存文化数据
         SaveI18nData(path, cultures);
-        this.LogX().Info("翻译模组保存完毕");
+        this.LogIfEnabled(LogLevel.Information)?.Log("保存完毕");
+    }
+
+    public MultipleDisposable Disposables { get; } = [];
+    #region Dispose
+    private bool _disposed;
+
+    /// <inheritdoc/>
+    ~ModInfoModel() => Dispose(false);
+
+    /// <inheritdoc/>
+    public void Dispose()
+    {
+        Dispose(true);
+        GC.SuppressFinalize(this);
     }
 
     /// <inheritdoc/>
-    protected override void Dispose(bool disposing)
+    private void Dispose(bool disposing)
     {
         if (_disposed)
             return;
-        base.Dispose(disposing);
         if (disposing)
         {
-            I18nResource.PropertyChanged -= I18nResource_PropertyChanged;
-            I18nResource.Cultures.SetChanged -= Cultures_SetChanged;
-            I18nResource.CultureDatas.DictionaryChanged -= CultureDatas_DictionaryChanged;
-            Image?.CloseStreamWhenNoReference();
-            I18nObject.Close();
-            I18nResource.Clear();
-            TempI18nResource.Clear();
+            Disposables.DisposeAndClear();
+            I18nResource.ObservableCultures.CollectionChanged -=
+                ObservableCultures_CollectionChanged;
+            Image?.CloseStream();
             foreach (var food in Foods)
                 food.Dispose();
             foreach (var text in ClickTexts)
@@ -910,7 +948,13 @@ public partial class ModInfoModel : ViewModelBase
             foreach (var text in SelectTexts)
                 text.Dispose();
             foreach (var pet in Pets.Where(x => x.FromMain is false))
-                pet.Dispose();
+                pet.DisposeAll();
+            I18nObserver.Dispose();
+            I18nResource.Dispose();
+            TempI18nResource.Dispose();
         }
+        _disposed = true;
     }
+
+    #endregion
 }

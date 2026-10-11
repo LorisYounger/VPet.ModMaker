@@ -1,28 +1,20 @@
 ﻿<ResourceDictionary
   xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
   xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-  xmlns:pu="https://opensource.panuon.com/wpf-ui">
-  <Style
-    x:Key="ThemedLabelStyle"
-    BasedOn="{StaticResource {x:Type Label}}"
-    TargetType="Label">
+  xmlns:pu="https://opensource.panuon.com/wpf-ui"
+>
+  <Style x:Key="ThemedLabelStyle" BasedOn="{StaticResource {x:Type Label}}" TargetType="Label">
     <Setter Property="Height" Value="30" />
     <Setter Property="FontSize" Value="14" />
     <Setter Property="Background" Value="{StaticResource PrimaryDarker}" />
     <Setter Property="Foreground" Value="{StaticResource DARKPrimaryText}" />
     <Setter Property="pu:LabelHelper.CornerRadius" Value="4" />
   </Style>
-  <Style
-    x:Key="Label_Left"
-    BasedOn="{StaticResource ThemedLabelStyle}"
-    TargetType="Label">
+  <Style x:Key="Label_Left" BasedOn="{StaticResource ThemedLabelStyle}" TargetType="Label">
     <Setter Property="HorizontalContentAlignment" Value="Left" />
     <Setter Property="VerticalContentAlignment" Value="Center" />
   </Style>
-  <Style
-    x:Key="AddButton"
-    BasedOn="{StaticResource {x:Type Button}}"
-    TargetType="Button">
+  <Style x:Key="AddButton" BasedOn="{StaticResource {x:Type Button}}" TargetType="Button">
     <Setter Property="Background" Value="{StaticResource PrimaryDarker}" />
     <Setter Property="Foreground" Value="{StaticResource DARKPrimaryText}" />
     <Setter Property="pu:ButtonHelper.ShadowColor" Value="{StaticResource ShadowColor}" />
@@ -34,7 +26,8 @@
   <Style
     x:Key="MyThemedButtonStyle"
     BasedOn="{StaticResource ThemedButtonStyle}"
-    TargetType="{x:Type Button}">
+    TargetType="{x:Type Button}"
+  >
     <Setter Property="Height" Value="30" />
     <Setter Property="Background" Value="{StaticResource DARKPrimary}" />
     <Setter Property="Foreground" Value="{StaticResource DARKPrimaryText}" />
@@ -43,20 +36,21 @@
     <Setter Property="BorderThickness" Value="0.5" />
     <Setter Property="BorderBrush" Value="{StaticResource DARKPrimaryLighter}" />
   </Style>
-  <Style
-    x:Key="Button_Cancel"
-    BasedOn="{StaticResource MyThemedButtonStyle}"
-    TargetType="Button">
+  <Style x:Key="Button_Cancel" BasedOn="{StaticResource MyThemedButtonStyle}" TargetType="Button">
     <Setter Property="Background" Value="{StaticResource PrimaryLight}" />
     <Setter Property="Foreground" Value="{StaticResource SecondaryText}" />
   </Style>
   <Style
     x:Key="Button_HiddenOnTagNull"
     BasedOn="{StaticResource MyThemedButtonStyle}"
-    TargetType="Button">
+    TargetType="Button"
+  >
     <Setter Property="Visibility" Value="Hidden" />
     <Style.Triggers>
-      <DataTrigger Binding="{Binding Tag, RelativeSource={RelativeSource Mode=Self}}" Value="{x:Null}">
+      <DataTrigger
+        Binding="{Binding Tag, RelativeSource={RelativeSource Mode=Self}}"
+        Value="{x:Null}"
+      >
         <Setter Property="Visibility" Value="Visible" />
       </DataTrigger>
     </Style.Triggers>
@@ -64,10 +58,14 @@
   <Style
     x:Key="Button_CollapsedOnTagNull"
     BasedOn="{StaticResource MyThemedButtonStyle}"
-    TargetType="Button">
+    TargetType="Button"
+  >
     <Setter Property="Visibility" Value="Collapsed" />
     <Style.Triggers>
-      <DataTrigger Binding="{Binding Tag, RelativeSource={RelativeSource Mode=Self}}" Value="{x:Null}">
+      <DataTrigger
+        Binding="{Binding Tag, RelativeSource={RelativeSource Mode=Self}}"
+        Value="{x:Null}"
+      >
         <Setter Property="Visibility" Value="Visible" />
       </DataTrigger>
     </Style.Triggers>
@@ -75,14 +73,16 @@
   <Style
     x:Key="TextBlock_Wrap"
     BasedOn="{StaticResource {x:Type TextBlock}}"
-    TargetType="TextBlock">
+    TargetType="TextBlock"
+  >
     <Setter Property="TextWrapping" Value="Wrap" />
     <Setter Property="ToolTip" Value="{Binding Text, RelativeSource={RelativeSource Mode=Self}}" />
   </Style>
   <Style
     x:Key="TextBlock_Center"
     BasedOn="{StaticResource {x:Type TextBlock}}"
-    TargetType="TextBlock">
+    TargetType="TextBlock"
+  >
     <Setter Property="VerticalAlignment" Value="Center" />
     <Setter Property="HorizontalAlignment" Value="Center" />
     <Setter Property="ToolTip" Value="{Binding Text, RelativeSource={RelativeSource Mode=Self}}" />
@@ -90,15 +90,13 @@
   <Style
     x:Key="TextBlock_LeftCenter"
     BasedOn="{StaticResource {x:Type TextBlock}}"
-    TargetType="TextBlock">
+    TargetType="TextBlock"
+  >
     <Setter Property="VerticalAlignment" Value="Center" />
     <Setter Property="HorizontalAlignment" Value="Left" />
     <Setter Property="ToolTip" Value="{Binding Text, RelativeSource={RelativeSource Mode=Self}}" />
   </Style>
-  <Style
-    x:Key="TextBox_Wrap"
-    BasedOn="{StaticResource {x:Type TextBox}}"
-    TargetType="TextBox">
+  <Style x:Key="TextBox_Wrap" BasedOn="{StaticResource {x:Type TextBox}}" TargetType="TextBox">
     <Setter Property="TextWrapping" Value="Wrap" />
     <Setter Property="HorizontalContentAlignment" Value="Left" />
     <Setter Property="VerticalContentAlignment" Value="Top" />
@@ -107,17 +105,15 @@
   <Style
     x:Key="StandardTextBoxWrapStyle"
     BasedOn="{StaticResource StandardTextBoxStyle}"
-    TargetType="TextBox">
+    TargetType="TextBox"
+  >
     <Setter Property="HorizontalContentAlignment" Value="Left" />
     <Setter Property="VerticalContentAlignment" Value="Top" />
     <Setter Property="Height" Value="NaN" />
     <Setter Property="TextWrapping" Value="Wrap" />
     <Setter Property="ToolTip" Value="{Binding Text, RelativeSource={RelativeSource Mode=Self}}" />
   </Style>
-  <Style
-    x:Key="TextBox_Center"
-    BasedOn="{StaticResource {x:Type TextBox}}"
-    TargetType="TextBox">
+  <Style x:Key="TextBox_Center" BasedOn="{StaticResource {x:Type TextBox}}" TargetType="TextBox">
     <Setter Property="VerticalAlignment" Value="Center" />
     <Setter Property="HorizontalAlignment" Value="Center" />
     <Setter Property="ToolTip" Value="{Binding Text, RelativeSource={RelativeSource Mode=Self}}" />
@@ -125,7 +121,8 @@
   <Style
     x:Key="TextBox_LeftCenter"
     BasedOn="{StaticResource {x:Type TextBox}}"
-    TargetType="TextBox">
+    TargetType="TextBox"
+  >
     <Setter Property="VerticalAlignment" Value="Center" />
     <Setter Property="HorizontalAlignment" Value="Left" />
     <Setter Property="ToolTip" Value="{Binding Text, RelativeSource={RelativeSource Mode=Self}}" />
@@ -137,7 +134,8 @@
   <Style
     x:Key="Menu_Style"
     BasedOn="{StaticResource {x:Static pu:StyleKeys.MenuStyle}}"
-    TargetType="Menu">
+    TargetType="Menu"
+  >
     <Setter Property="Height" Value="NaN" />
     <Setter Property="Margin" Value="0" />
     <Setter Property="BorderThickness" Value="0" />
@@ -152,7 +150,10 @@
     <Setter Property="pu:MenuHelper.TopLevelItemsMargin" Value="0" />
     <Setter Property="pu:MenuHelper.TopLevelItemsHorizontalContentAlignment" Value="Center" />
     <Setter Property="pu:MenuHelper.TopLevelItemsBackground" Value="{StaticResource DARKPrimary}" />
-    <Setter Property="pu:MenuHelper.TopLevelItemsForeground" Value="{StaticResource DARKPrimaryText}" />
+    <Setter
+      Property="pu:MenuHelper.TopLevelItemsForeground"
+      Value="{StaticResource DARKPrimaryText}"
+    />
     <!--    -->
     <Setter Property="pu:MenuHelper.SubmenuItemsBorderThickness" Value="0" />
     <Setter Property="pu:MenuHelper.SubmenuItemsBorderBrush" Value="{StaticResource DARKPrimary}" />
@@ -162,7 +163,10 @@
     <Setter Property="pu:MenuHelper.SubmenuItemsMargin" Value="0" />
     <!--<Setter Property="pu:MenuHelper.SubmenuItemsCornerRadius" Value="4" />-->
     <Setter Property="pu:MenuHelper.SubmenuItemsBackground" Value="{StaticResource DARKPrimary}" />
-    <Setter Property="pu:MenuHelper.SubmenuItemsForeground" Value="{StaticResource DARKPrimaryText}" />
+    <Setter
+      Property="pu:MenuHelper.SubmenuItemsForeground"
+      Value="{StaticResource DARKPrimaryText}"
+    />
     <!--<Setter Property="Width" Value="NaN" />
     <Setter Property="Height" Value="NaN" />
     <Setter Property="Padding" Value="5" />

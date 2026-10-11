@@ -1,9 +1,9 @@
-﻿using System.Collections.Frozen;
-using HKW.HKWMapper;
-using HKW.HKWReactiveUI;
+﻿using System.Collections.Immutable;
+using System.Numerics;
+using CommunityToolkit.Mvvm.ComponentModel;
 using HKW.HKWUtils;
 using HKW.HKWUtils.Observable;
-using VPet.ModMaker.ViewModels;
+using HKW.Mapper;
 using VPet_Simulator.Windows.Interface;
 
 namespace VPet.ModMaker.Models;
@@ -11,10 +11,9 @@ namespace VPet.ModMaker.Models;
 /// <summary>
 /// 点击文本模型
 /// </summary>
-[MapTo(typeof(ClickText), MapperConfig = typeof(ClickTextModelMapToClickTextConfig))]
-[MapFrom(typeof(ClickText), MapperConfig = typeof(ClickTextModelMapFromClickTextConfig))]
-[MapFrom(typeof(ClickTextModel), MapperConfig = typeof(ClickTextModelMapFromClickTextModelConfig))]
-public partial class ClickTextModel : ViewModelBase
+[MapTarget(typeof(ClickText))]
+[MapTarget(typeof(ClickTextModel))]
+public sealed partial class ClickTextModel : ObservableModelBase, IDisposable
 {
     /// <inheritdoc/>
     public ClickTextModel() { }
@@ -24,7 +23,7 @@ public partial class ClickTextModel : ViewModelBase
     public ClickTextModel(ClickTextModel clickText)
         : this()
     {
-        this.MapFromClickTextModel(clickText);
+        this.MapFrom(clickText);
     }
 
     /// <inheritdoc/>
@@ -32,91 +31,76 @@ public partial class ClickTextModel : ViewModelBase
     public ClickTextModel(ClickText clickText)
         : this()
     {
-        this.MapFromClickText(clickText);
-    }
-
-    private readonly ClickText _clickText = new();
-
-    /// <summary>
-    /// 转化为点击文本
-    /// </summary>
-    /// <returns>点击文本</returns>
-    public ClickText ToClickText()
-    {
-        return this.MapToClickText(_clickText);
+        this.MapFrom(clickText);
     }
 
     /// <summary>
     /// 模式类型
     /// </summary>
-    public static FrozenSet<ClickText.ModeType> ModeTypes => EnumInfo<ClickText.ModeType>.Values;
+    public static ImmutableArray<ClickText.ModeType> ModeTypes =>
+        EnumInfo<ClickText.ModeType>.StaticValues;
 
     /// <summary>
     /// 日期区间
     /// </summary>
-    public static FrozenSet<ClickText.DayTime> DayTimes => EnumInfo<ClickText.DayTime>.Values;
+    public static ImmutableArray<ClickText.DayTime> DayTimes =>
+        EnumInfo<ClickText.DayTime>.StaticValues;
 
     /// <summary>
     /// 工作状态
     /// </summary>
-    public static FrozenSet<VPet_Simulator.Core.Main.WorkingState> WorkingStates =>
-        EnumInfo<VPet_Simulator.Core.Main.WorkingState>.Values;
+    public static ImmutableArray<VPet_Simulator.Core.Main.WorkingState> WorkingStates =>
+        EnumInfo<VPet_Simulator.Core.Main.WorkingState>.StaticValues;
 
     /// <summary>
     /// ID
     /// </summary>
-    [ClickTextModelMapToClickTextProperty(nameof(ClickText.Text))]
-    [ClickTextModelMapFromClickTextProperty(nameof(ClickText.Text))]
-    [ReactiveProperty]
+    [ObservableProperty]
+    [MapProperty(typeof(ClickText), nameof(ClickText.Text))]
     public string ID { get; set; } = string.Empty;
 
     /// <summary>
-    /// 本地化资源
+    /// I18n资源
     /// </summary>
     [MapIgnoreProperty]
-    [ReactiveProperty]
-    public required I18nResource<string, string> I18nResource { get; set; }
+    [ObservableProperty]
+    public required ObservableI18nResource<string, string> I18nResource { get; set; }
 
     partial void OnI18nResourceChanged(
-        I18nResource<string, string> oldValue,
-        I18nResource<string, string> newValue
+        ObservableI18nResource<string, string> oldValue,
+        ObservableI18nResource<string, string> newValue
     )
     {
-        oldValue?.I18nObjects.Remove(I18nObject);
-        newValue?.I18nObjects.Add(I18nObject);
+        I18nObserver.Resource = newValue;
     }
 
-    /// <summary>
-    /// 本地化对象
-    /// </summary>
-    [NotifyPropertyChangeFrom("")]
-    public I18nObject<string, string> I18nObject => new(this);
+    [MapIgnoreProperty]
+    public I18nObserver<ClickTextModel, string, string> I18nObserver =>
+        field ??= new(I18nResource, this, (s, p) => s.OnPropertyChanged(p))
+        {
+            new(s => s.ID, nameof(Text)),
+        };
 
     /// <summary>
     /// 点击文本
     /// </summary>
     [MapIgnoreProperty]
-    [ReactiveI18nProperty(nameof(I18nResource), nameof(I18nObject), nameof(ID), true)]
     public string Text
     {
-        get => I18nResource.GetCurrentCultureDataOrDefault(ID);
-        set => I18nResource.SetCurrentCultureData(ID, value);
+        get => I18nObserver.GetDataOrDefault(ID);
+        set => I18nObserver.SetData(ID, value);
     }
 
     /// <summary>
     /// 指定工作
     /// </summary>
-    [ClickTextModelMapToClickTextProperty(nameof(ClickText.Working))]
-    [ClickTextModelMapFromClickTextProperty(
-        nameof(ClickText.Working),
-        MapWhenRValueNotNullOrDefault = true
-    )]
-    [ReactiveProperty]
+    [ObservableProperty]
     public string Working { get; set; } = string.Empty;
 
     /// <summary>
     /// 宠物状态
     /// </summary>
+    [MapProperty(typeof(ClickText), typeof(ObservableEnumConverter))]
     public ObservableEnum<ClickText.ModeType> Mode { get; set; } =
         new(
             ClickText.ModeType.Happy
@@ -128,14 +112,14 @@ public partial class ClickTextModel : ViewModelBase
     /// <summary>
     /// 行动状态
     /// </summary>
-    [ClickTextModelMapToClickTextProperty(nameof(ClickText.State))]
-    [ClickTextModelMapFromClickTextProperty(nameof(ClickText.State))]
-    [ReactiveProperty]
+    [ObservableProperty]
+    [MapProperty(typeof(ClickText), nameof(ClickText.State))]
     public VPet_Simulator.Core.Main.WorkingState WorkingState { get; set; }
 
     /// <summary>
     /// 日期区间
     /// </summary>
+    [MapIgnoreProperty]
     public ObservableEnum<ClickText.DayTime> DayTime { get; set; } =
         new(
             ClickText.DayTime.Morning
@@ -147,272 +131,112 @@ public partial class ClickTextModel : ViewModelBase
     /// <summary>
     /// 好感度
     /// </summary>
-    public ObservableRange<double> Like { get; } = new(0, int.MaxValue);
+    [MapCompositeProperty(
+        typeof(ClickText),
+        typeof(ObservableRangeConverter<double>),
+        nameof(ClickText.LikeMin),
+        nameof(ClickText.LikeMax)
+    )]
+    public ObservableRange<double> Like { get; set; } = new(0, int.MaxValue);
 
     /// <summary>
     /// 健康值
     /// </summary>
-    public ObservableRange<double> Health { get; } = new(0, int.MaxValue);
+    [MapCompositeProperty(
+        typeof(ClickText),
+        typeof(ObservableRangeConverter<double>),
+        nameof(ClickText.HealthMin),
+        nameof(ClickText.HealthMax)
+    )]
+    public ObservableRange<double> Health { get; set; } = new(0, int.MaxValue);
 
     /// <summary>
     /// 等级
     /// </summary>
-    public ObservableRange<double> Level { get; } = new(0, int.MaxValue);
+    [MapCompositeProperty(
+        typeof(ClickText),
+        typeof(ObservableRangeConverter<double>),
+        nameof(ClickText.LevelMin),
+        nameof(ClickText.LevelMax)
+    )]
+    public ObservableRange<double> Level { get; set; } = new(0, int.MaxValue);
 
     /// <summary>
     /// 金钱
     /// </summary>
-    public ObservableRange<double> Money { get; } = new(int.MinValue, int.MaxValue);
+    [MapCompositeProperty(
+        typeof(ClickText),
+        typeof(ObservableRangeConverter<double>),
+        nameof(ClickText.MoneyMin),
+        nameof(ClickText.MoneyMax)
+    )]
+    public ObservableRange<double> Money { get; set; } = new(int.MinValue, int.MaxValue);
 
     /// <summary>
     /// 饱食度
     /// </summary>
-    public ObservableRange<double> Food { get; } = new(0, int.MaxValue);
+    [MapCompositeProperty(
+        typeof(ClickText),
+        typeof(ObservableRangeConverter<double>),
+        nameof(ClickText.FoodMin),
+        nameof(ClickText.FoodMax)
+    )]
+    public ObservableRange<double> Food { get; set; } = new(0, int.MaxValue);
 
     /// <summary>
     /// 口渴度
     /// </summary>
-    public ObservableRange<double> Drink { get; } = new(0, int.MaxValue);
+    [MapCompositeProperty(
+        typeof(ClickText),
+        typeof(ObservableRangeConverter<double>),
+        nameof(ClickText.DrinkMin),
+        nameof(ClickText.DrinkMax)
+    )]
+    public ObservableRange<double> Drink { get; set; } = new(0, int.MaxValue);
 
     /// <summary>
     /// 心情
     /// </summary>
-    public ObservableRange<double> Feel { get; } = new(0, int.MaxValue);
+    [MapCompositeProperty(
+        typeof(ClickText),
+        typeof(ObservableRangeConverter<double>),
+        nameof(ClickText.FeelMin),
+        nameof(ClickText.FeelMax)
+    )]
+    public ObservableRange<double> Feel { get; set; } = new(0, int.MaxValue);
 
     /// <summary>
     /// 体力
     /// </summary>
-    public ObservableRange<double> Strength { get; } = new(0, int.MaxValue);
+    [MapCompositeProperty(
+        typeof(ClickText),
+        typeof(ObservableRangeConverter<double>),
+        nameof(ClickText.StrengthMin),
+        nameof(ClickText.StrengthMax)
+    )]
+    public ObservableRange<double> Strength { get; set; } = new(0, int.MaxValue);
 
     /// <inheritdoc/>
-    protected override void Dispose(bool disposing)
+    public void Dispose()
     {
-        if (_disposed)
-            return;
-        base.Dispose(disposing);
-        if (disposing)
-        {
-            I18nResource.I18nObjects.Remove(I18nObject);
-            I18nObject.Close();
-        }
+        I18nObserver?.Dispose();
     }
 }
 
-internal class ClickTextModelMapFromClickTextModelConfig
-    : MapperConfig<ClickTextModel, ClickTextModel>
+public sealed class ObservableRangeConverter<T>
+    : ICompositeMapConverter<ObservableRange<T>, (T Min, T Max)>
+    where T : struct, INumber<T>
 {
-    public ClickTextModelMapFromClickTextModelConfig()
-    {
-        AddMap(
-            x => x.Mode,
-            (s, t) =>
-            {
-                s.Mode = t.Mode.Clone();
-            }
-        );
-        AddMap(
-            x => x.Like,
-            (s, t) =>
-            {
-                s.Like.SetValue(t.Like);
-            }
-        );
-        AddMap(
-            x => x.Health,
-            (s, t) =>
-            {
-                s.Health.SetValue(t.Health);
-            }
-        );
-        AddMap(
-            x => x.Level,
-            (s, t) =>
-            {
-                s.Level.SetValue(t.Level);
-            }
-        );
-        AddMap(
-            x => x.Money,
-            (s, t) =>
-            {
-                s.Money.SetValue(t.Money);
-            }
-        );
-        AddMap(
-            x => x.Food,
-            (s, t) =>
-            {
-                s.Food.SetValue(t.Food);
-            }
-        );
-        AddMap(
-            x => x.Drink,
-            (s, t) =>
-            {
-                s.Drink.SetValue(t.Drink);
-            }
-        );
-        AddMap(
-            x => x.Feel,
-            (s, t) =>
-            {
-                s.Feel.SetValue(t.Feel);
-            }
-        );
-        AddMap(
-            x => x.Strength,
-            (s, t) =>
-            {
-                s.Strength.SetValue(t.Strength);
-            }
-        );
-    }
+    public (T Min, T Max) Convert(object source, ObservableRange<T> value) =>
+        (value.Min, value.Max);
+
+    public ObservableRange<T> ConvertBack(object target, (T Min, T Max) values) =>
+        new(values.Min, values.Max);
 }
 
-internal class ClickTextModelMapToClickTextConfig : MapperConfig<ClickTextModel, ClickText>
+public sealed class ObservableEnumConverter : IMapConverter<IObservableEnum, Enum>
 {
-    public ClickTextModelMapToClickTextConfig()
-    {
-        AddMap(
-            x => x.Mode,
-            (s, t) =>
-            {
-                t.Mode = s.Mode.Value;
-            }
-        );
-        AddMap(
-            x => x.Like,
-            (s, t) =>
-            {
-                t.LikeMax = s.Like.Max;
-                t.LikeMin = s.Like.Min;
-            }
-        );
-        AddMap(
-            x => x.Health,
-            (s, t) =>
-            {
-                t.HealthMax = s.Health.Max;
-                t.HealthMin = s.Health.Min;
-            }
-        );
-        AddMap(
-            x => x.Level,
-            (s, t) =>
-            {
-                t.LevelMax = s.Level.Max;
-                t.LevelMin = s.Level.Min;
-            }
-        );
-        AddMap(
-            x => x.Money,
-            (s, t) =>
-            {
-                t.MoneyMax = s.Money.Max;
-                t.MoneyMin = s.Money.Min;
-            }
-        );
-        AddMap(
-            x => x.Food,
-            (s, t) =>
-            {
-                t.FoodMax = s.Food.Max;
-                t.FoodMin = s.Food.Min;
-            }
-        );
-        AddMap(
-            x => x.Drink,
-            (s, t) =>
-            {
-                t.DrinkMax = s.Drink.Max;
-                t.DrinkMin = s.Drink.Min;
-            }
-        );
-        AddMap(
-            x => x.Feel,
-            (s, t) =>
-            {
-                t.FeelMax = s.Feel.Max;
-                t.FeelMin = s.Feel.Min;
-            }
-        );
-        AddMap(
-            x => x.Strength,
-            (s, t) =>
-            {
-                t.StrengthMax = s.Strength.Max;
-                t.StrengthMin = s.Strength.Min;
-            }
-        );
-    }
-}
+    public Enum Convert(object source, IObservableEnum value) => value.Value;
 
-internal class ClickTextModelMapFromClickTextConfig : MapperConfig<ClickTextModel, ClickText>
-{
-    public ClickTextModelMapFromClickTextConfig()
-    {
-        AddMap(
-            x => x.Mode,
-            (s, t) =>
-            {
-                s.Mode = new(t.Mode);
-            }
-        );
-        AddMap(
-            x => x.Like,
-            (s, t) =>
-            {
-                s.Like.SetValue(t.LikeMin, t.LikeMax);
-            }
-        );
-        AddMap(
-            x => x.Health,
-            (s, t) =>
-            {
-                s.Health.SetValue(t.HealthMin, t.HealthMax);
-            }
-        );
-        AddMap(
-            x => x.Level,
-            (s, t) =>
-            {
-                s.Level.SetValue(t.LevelMin, t.LevelMax);
-            }
-        );
-        AddMap(
-            x => x.Money,
-            (s, t) =>
-            {
-                s.Money.SetValue(t.MoneyMin, t.MoneyMax);
-            }
-        );
-        AddMap(
-            x => x.Food,
-            (s, t) =>
-            {
-                s.Food.SetValue(t.FoodMin, t.FoodMax);
-            }
-        );
-        AddMap(
-            x => x.Drink,
-            (s, t) =>
-            {
-                s.Drink.SetValue(t.DrinkMin, t.DrinkMax);
-            }
-        );
-        AddMap(
-            x => x.Feel,
-            (s, t) =>
-            {
-                s.Feel.SetValue(t.FeelMin, t.FeelMax);
-            }
-        );
-        AddMap(
-            x => x.Strength,
-            (s, t) =>
-            {
-                s.Strength.SetValue(t.StrengthMin, t.StrengthMax);
-            }
-        );
-    }
+    public IObservableEnum ConvertBack(object target, Enum value) => ObservableEnum.Create(value);
 }

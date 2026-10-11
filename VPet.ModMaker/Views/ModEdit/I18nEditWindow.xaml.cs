@@ -1,10 +1,13 @@
-﻿using System.Windows;
+﻿using System.Collections.Specialized;
+using System.Globalization;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
+using HKW.HKWUtils.Extensions;
 using Panuon.WPF.UI;
-using VPet.ModMaker.ViewModels.ModEdit;
+using VPet.ModMaker.ViewModels;
 
-namespace VPet.ModMaker.Views.ModEdit;
+namespace VPet.ModMaker.Views;
 
 /// <summary>
 /// I18nEditWindow.xaml 的交互逻辑
@@ -14,7 +17,7 @@ public partial class I18nEditWindow : WindowX
     /// <summary>
     /// 视图模型
     /// </summary>
-    public I18nEditVM ViewModel => (I18nEditVM)DataContext;
+    public I18nEditViewModel ViewModel => (I18nEditViewModel)DataContext;
 
     /// <inheritdoc/>
     public I18nEditWindow()
@@ -23,24 +26,45 @@ public partial class I18nEditWindow : WindowX
         DataContextChanged += I18nEditWindow_DataContextChanged;
     }
 
+    protected override void OnClosed(EventArgs e)
+    {
+        ViewModel.ModInfo.I18nResource.ObservableCultures.CollectionChanged -=
+            ObservableCultures_CulturesChanged;
+        base.OnClosed(e);
+    }
+
     private void I18nEditWindow_DataContextChanged(
         object sender,
         DependencyPropertyChangedEventArgs e
     )
     {
-        foreach (var culture in ViewModel.ModInfo.I18nResource.Cultures)
-            AddCulture(culture.Name);
-        ViewModel.CultureChanged += ViewModel_CultureChanged;
+        foreach (var culture in ViewModel.ModInfo.I18nResource.IndexByCulture.Keys)
+            AddCulture(culture);
+        ViewModel.ModInfo.I18nResource.ObservableCultures.CollectionChanged +=
+            ObservableCultures_CulturesChanged;
     }
 
-    private void ViewModel_CultureChanged(string oldCultureName, string newCultureName)
+    private void ObservableCultures_CulturesChanged(
+        object? sender,
+        NotifyCollectionChangedEventArgs e
+    )
     {
-        if (string.IsNullOrEmpty(oldCultureName))
-            AddCulture(newCultureName);
-        else if (string.IsNullOrEmpty(newCultureName))
-            RemoveCulture(oldCultureName);
-        else
-            ReplaceCulture(oldCultureName, newCultureName);
+        if (e.Action is NotifyCollectionChangedAction.Add)
+        {
+            foreach (var c in e.NewItems!.Cast<CultureInfo>())
+                AddCulture(c);
+        }
+        else if (e.Action is NotifyCollectionChangedAction.Remove)
+        {
+            foreach (var c in e.OldItems!.Cast<CultureInfo>())
+                RemoveCulture(c);
+        }
+        else if (e.Action is NotifyCollectionChangedAction.Replace)
+        {
+            var oldItem = e.OldItems!.Cast<CultureInfo>().First();
+            var newItem = e.NewItems!.Cast<CultureInfo>().First();
+            ReplaceCulture(oldItem, newItem);
+        }
     }
 
     #region CultureEdit
@@ -49,34 +73,39 @@ public partial class I18nEditWindow : WindowX
     /// <summary>
     /// (culture, Column)
     /// </summary>
-    private readonly Dictionary<string, DataGridTextColumn> _dataGridI18nColumns = [];
+    private readonly Dictionary<CultureInfo, DataGridTextColumn> _dataGridI18nColumns = [];
 
     /// <summary>
     /// 添加文化列
     /// </summary>
-    /// <param name="cultureName">文化名称</param>
-    public void AddCulture(string cultureName)
+    /// <param name="culture">文化</param>
+    public void AddCulture(CultureInfo culture)
     {
-        var dataPath = string.Format(ValueBindingFormat, cultureName);
+        var index = ViewModel.ModInfo.I18nResource.GetIndexByCulture(culture);
+        var dataPath = string.Format(ValueBindingFormat, index);
         // 文化数据列
-        var column = CreateColumn(cultureName, dataPath);
+        var column = CreateColumn(culture.Name, dataPath);
         DataGrid_Datas.Columns.Add(column);
-        _dataGridI18nColumns.Add(cultureName, column);
+        _dataGridI18nColumns.Add(culture, column);
     }
 
     /// <summary>
     /// 删除文化列
     /// </summary>
-    /// <param name="cultureName">文化名称</param>
-    public void RemoveCulture(string cultureName)
+    /// <param name="culture">文化</param>
+    public void RemoveCulture(CultureInfo culture)
     {
-        DataGrid_Datas.Columns.Remove(_dataGridI18nColumns[cultureName]);
-        _dataGridI18nColumns.Remove(cultureName);
-        foreach (var columnData in _dataGridI18nColumns)
+        DataGrid_Datas.Columns.Remove(_dataGridI18nColumns[culture]);
+        _dataGridI18nColumns.Remove(culture);
+        foreach (
+            var (column, index) in _dataGridI18nColumns.Values.Zip(
+                ViewModel.ModInfo.I18nResource.IndexByCulture.Values
+            )
+        )
         {
-            var dataPath = string.Format(ValueBindingFormat, cultureName);
-            columnData.Value.Binding = new Binding(dataPath) { Mode = BindingMode.TwoWay };
-            columnData.Value.SortMemberPath = dataPath;
+            var dataPath = string.Format(ValueBindingFormat, index);
+            column.Binding = new Binding(dataPath) { Mode = BindingMode.TwoWay };
+            column.SortMemberPath = dataPath;
         }
     }
 
@@ -85,12 +114,10 @@ public partial class I18nEditWindow : WindowX
     /// </summary>
     /// <param name="oldCultureName">旧文化</param>
     /// <param name="newCultureName">新文化</param>
-    public void ReplaceCulture(string oldCultureName, string newCultureName)
+    public void ReplaceCulture(CultureInfo oldCulture, CultureInfo newCulture)
     {
-        var column = _dataGridI18nColumns[oldCultureName];
-        column.Header = newCultureName;
-        _dataGridI18nColumns.Remove(oldCultureName);
-        _dataGridI18nColumns.Add(newCultureName, column);
+        var column = _dataGridI18nColumns[oldCulture];
+        column.Header = newCulture;
     }
 
     private static DataGridTextColumn CreateColumn(string header, string dataPath)
@@ -102,9 +129,9 @@ public partial class I18nEditWindow : WindowX
             MaxWidth = 500,
             Header = header,
             Binding = new Binding(dataPath) { Mode = BindingMode.TwoWay },
-            ElementStyle = (Style)NativeData.NativeStyles["TextBlock_Wrap"],
+            ElementStyle = (Style)ModMaker.NativeStyles["TextBlock_Wrap"],
             SortMemberPath = dataPath,
-            CanUserSort = true
+            CanUserSort = true,
         };
     }
 

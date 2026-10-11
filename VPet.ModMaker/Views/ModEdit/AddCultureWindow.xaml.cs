@@ -1,18 +1,18 @@
 ﻿using System.Windows;
 using Panuon.WPF.UI;
-using VPet.ModMaker.ViewModels.ModEdit;
+using VPet.ModMaker.ViewModels;
 
-namespace VPet.ModMaker.Views.ModEdit;
+namespace VPet.ModMaker.Views;
 
 /// <summary>
-/// Window_AddLang.xaml 的交互逻辑
+/// AddCultureWindow.xaml 的交互逻辑
 /// </summary>
 public partial class AddCultureWindow : WindowX
 {
     /// <summary>
     /// 视图模型
     /// </summary>
-    public AddCultureVM ViewModel => (AddCultureVM)DataContext;
+    public AddCultureViewModel ViewModel => (AddCultureViewModel)DataContext;
 
     /// <inheritdoc/>
     public AddCultureWindow()
