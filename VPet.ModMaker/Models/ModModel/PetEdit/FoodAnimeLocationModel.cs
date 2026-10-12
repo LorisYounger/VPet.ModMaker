@@ -45,12 +45,7 @@ public partial class FoodAnimeLocationModel
         var model = new FoodAnimeLocationModel
         {
             Duration = Duration,
-            RectangleLocation = new(
-                RectangleLocation.X,
-                RectangleLocation.Y,
-                RectangleLocation.Width,
-                RectangleLocation.Width
-            ),
+            RectangleLocation = RectangleLocation.Clone(),
             Rotate = Rotate,
             Opacity = Opacity,
         };

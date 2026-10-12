@@ -90,7 +90,7 @@ public sealed partial class FoodAnimeEditViewModel
 
     partial void OnCurrentAnimeModelChanged(FoodAnimeModel oldValue, FoodAnimeModel newValue)
     {
-        Stop();
+        _ = Reset();
         if (oldValue is not null)
         {
             oldValue.FrontImages.CollectionChanged -= Images_CollectionChanged;

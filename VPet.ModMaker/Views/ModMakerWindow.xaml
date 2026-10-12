@@ -156,6 +156,7 @@
         Content="{ll:Str 开始使用}"
         FontSize="20"
         FontWeight="Bold"
+        MouseDoubleClick="Label_MouseDoubleClick"
         Style="{StaticResource Label_Left}"
       />
       <StackPanel Grid.Row="1">

@@ -343,7 +343,7 @@ public sealed partial class ModEditViewModel
                 ModInfo.SourcePath = path;
             pending.Close();
             DialogService.ShowMessageBox(this, "保存成功".Translate());
-            this.LogIfEnabled(LogLevel.Information)?.Log("成功保存至 {path}", path);
+            this.LogIfEnabled(LogLevel.Information)?.Log("成功保存至 '{path}'", path);
         }
         catch (Exception ex)
         {

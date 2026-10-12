@@ -1,5 +1,4 @@
 ﻿using System.Collections.Specialized;
-using System.ComponentModel;
 using System.Globalization;
 using System.IO;
 using System.Windows.Media.Imaging;
@@ -19,7 +18,6 @@ using Microsoft.Extensions.Logging;
 using VPet_Simulator.Core;
 using VPet_Simulator.Windows.Interface;
 using VPet.ModMaker.Native;
-using VPet.ModMaker.ViewModels;
 
 namespace VPet.ModMaker.Models;
 
@@ -93,7 +91,7 @@ public sealed partial class ModInfoModel : ObservableModelBase, IDisposable
         : this()
     {
         this.LogIfEnabled(LogLevel.Information)
-            ?.Log("载入模组, ID: {id}, 路径: {path}", loader.Name, loader.ModPath.FullName);
+            ?.Log("载入模组, ID: '{id}', 路径: '{path}'", loader.Name, loader.ModPath.FullName);
         SourcePath = loader.ModPath.FullName;
 
         LoadI18nDatas(loader);
@@ -429,39 +427,26 @@ public sealed partial class ModInfoModel : ObservableModelBase, IDisposable
             return;
         var directories = Directory.GetDirectories(path);
         this.LogIfEnabled(LogLevel.Information)
-            ?.Log("载入宠物动画, 数量: {count}, 路径: {path}", directories.Length, path);
+            ?.Log("载入宠物动画, 数量: {count}, 路径: '{path}'", directories.Length, path);
         foreach (var animeDir in directories)
         {
             var dirName = Path.GetFileName(animeDir);
-            this.LogIfEnabled(LogLevel.Debug)?.Log("载入动画, 路径: {path}", animeDir);
-            if (Enum.TryParse<GraphInfo.GraphType>(dirName, true, out var graphType))
+            this.LogIfEnabled(LogLevel.Debug)?.Log("载入动画, 路径: '{path}'", animeDir);
+            LoadAnimeDirectory(petModel, animeDir, dirName);
+        }
+    }
+
+    private void LoadAnimeDirectory(PetModel petModel, string animeDir, string dirName)
+    {
+        if (Enum.TryParse<GraphInfo.GraphType>(dirName, true, out var graphType))
+        {
+            if (graphType.IsHasNameAnime())
             {
-                if (graphType.IsHasNameAnime())
-                {
-                    foreach (var dir in Directory.EnumerateDirectories(animeDir))
-                    {
-                        try
-                        {
-                            var anime = new AnimeTypeModel(graphType, Path.Combine(animeDir, dir));
-                            petModel.Animes.Add(anime);
-                        }
-                        catch (Exception ex)
-                        {
-                            this.LogIfEnabled(LogLevel.Warning)
-                                ?.Log(
-                                    ex,
-                                    "{$graphType} 动画载入失败, 目标文件夹: {path}",
-                                    graphType,
-                                    dir
-                                );
-                        }
-                    }
-                }
-                else
+                foreach (var dir in Directory.EnumerateDirectories(animeDir))
                 {
                     try
                     {
-                        var anime = new AnimeTypeModel(graphType, animeDir);
+                        var anime = new AnimeTypeModel(graphType, Path.Combine(animeDir, dir));
                         petModel.Animes.Add(anime);
                     }
                     catch (Exception ex)
@@ -469,105 +454,123 @@ public sealed partial class ModInfoModel : ObservableModelBase, IDisposable
                         this.LogIfEnabled(LogLevel.Warning)
                             ?.Log(
                                 ex,
-                                "{$graphType} 动画载入失败, 目标文件夹: {path}",
+                                "{$graphType} 动画载入失败, 目标文件夹: '{path}'",
                                 graphType,
-                                animeDir
+                                dir
                             );
                     }
-                }
-            }
-            else if (dirName.Equals("Switch", StringComparison.InvariantCultureIgnoreCase))
-            {
-                foreach (var dir in Directory.EnumerateDirectories(animeDir))
-                {
-                    try
-                    {
-                        var type = Enum.Parse<GraphInfo.GraphType>(
-                            $"{dirName}_{Path.GetFileName(dir)}",
-                            true
-                        );
-                        var anime = new AnimeTypeModel(type, Path.Combine(animeDir, dir));
-                        petModel.Animes.Add(anime);
-                    }
-                    catch (Exception ex)
-                    {
-                        this.LogIfEnabled(LogLevel.Warning)
-                            ?.Log(ex, "'Switch' 动画载入失败, 目标文件夹: {path}", dir);
-                    }
-                }
-            }
-            else if (dirName.Equals("Raise", StringComparison.InvariantCultureIgnoreCase))
-            {
-                foreach (var dir in Directory.EnumerateDirectories(animeDir))
-                {
-                    try
-                    {
-                        var type = Enum.Parse<GraphInfo.GraphType>(Path.GetFileName(dir), true);
-                        var anime = new AnimeTypeModel(type, Path.Combine(animeDir, dir));
-                        petModel.Animes.Add(anime);
-                    }
-                    catch (Exception ex)
-                    {
-                        this.LogIfEnabled(LogLevel.Warning)
-                            ?.Log(ex, "'Raise' 动画载入失败, 目标文件夹: {path}", dir);
-                    }
-                }
-            }
-            else if (dirName.Equals("State", StringComparison.InvariantCultureIgnoreCase))
-            {
-                foreach (var dir in Directory.EnumerateDirectories(animeDir))
-                {
-                    try
-                    {
-                        var type = Enum.Parse<GraphInfo.GraphType>(Path.GetFileName(dir), true);
-                        var anime = new AnimeTypeModel(type, Path.Combine(animeDir, dir));
-                        petModel.Animes.Add(anime);
-                    }
-                    catch (Exception ex)
-                    {
-                        this.LogIfEnabled(LogLevel.Warning)
-                            ?.Log(ex, "'State' 动画载入失败, 目标文件夹: {path}", dir);
-                    }
-                }
-            }
-            else if (dirName.Equals("Music", StringComparison.InvariantCultureIgnoreCase))
-            {
-                try
-                {
-                    var anime = new AnimeTypeModel(GraphInfo.GraphType.Common, animeDir);
-                    petModel.Animes.Add(anime);
-                }
-                catch (Exception ex)
-                {
-                    this.LogIfEnabled(LogLevel.Warning)
-                        ?.Log(ex, "'Music' 动画载入失败, 目标文件夹: {path}", animeDir);
-                }
-            }
-            else if (FoodAnimeTypeModel.FoodAnimeNames.Contains(dirName))
-            {
-                try
-                {
-                    var anime = new FoodAnimeTypeModel(animeDir);
-                    petModel.Animes.Add(anime);
-                }
-                catch (Exception ex)
-                {
-                    this.LogIfEnabled(LogLevel.Warning)
-                        ?.Log(ex, "{dirName} 动画载入失败, 目标文件夹: {path}", dirName, animeDir);
                 }
             }
             else
             {
                 try
                 {
-                    var anime = new AnimeTypeModel(GraphInfo.GraphType.Common, animeDir);
+                    var anime = new AnimeTypeModel(graphType, animeDir);
                     petModel.Animes.Add(anime);
                 }
                 catch (Exception ex)
                 {
                     this.LogIfEnabled(LogLevel.Warning)
-                        ?.Log(ex, "{anime} 动画载入失败, 目标文件夹: {path}", dirName, animeDir);
+                        ?.Log(
+                            ex,
+                            "{$graphType} 动画载入失败, 目标文件夹: '{path}'",
+                            graphType,
+                            animeDir
+                        );
                 }
+            }
+        }
+        else if (dirName.Equals("Switch", StringComparison.CurrentCultureIgnoreCase))
+        {
+            foreach (var dir in Directory.EnumerateDirectories(animeDir))
+            {
+                try
+                {
+                    var type = Enum.Parse<GraphInfo.GraphType>(
+                        $"{dirName}_{Path.GetFileName(dir)}",
+                        true
+                    );
+                    var anime = new AnimeTypeModel(type, Path.Combine(animeDir, dir));
+                    petModel.Animes.Add(anime);
+                }
+                catch (Exception ex)
+                {
+                    this.LogIfEnabled(LogLevel.Warning)
+                        ?.Log(ex, "'Switch' 动画载入失败, 目标文件夹: '{path}'", dir);
+                }
+            }
+        }
+        else if (dirName.Equals("Raise", StringComparison.CurrentCultureIgnoreCase))
+        {
+            foreach (var dir in Directory.EnumerateDirectories(animeDir))
+            {
+                try
+                {
+                    var type = Enum.Parse<GraphInfo.GraphType>(Path.GetFileName(dir), true);
+                    var anime = new AnimeTypeModel(type, Path.Combine(animeDir, dir));
+                    petModel.Animes.Add(anime);
+                }
+                catch (Exception ex)
+                {
+                    this.LogIfEnabled(LogLevel.Warning)
+                        ?.Log(ex, "'Raise' 动画载入失败, 目标文件夹: '{path}'", dir);
+                }
+            }
+        }
+        else if (dirName.Equals("State", StringComparison.CurrentCultureIgnoreCase))
+        {
+            foreach (var dir in Directory.EnumerateDirectories(animeDir))
+            {
+                try
+                {
+                    var type = Enum.Parse<GraphInfo.GraphType>(Path.GetFileName(dir), true);
+                    var anime = new AnimeTypeModel(type, Path.Combine(animeDir, dir));
+                    petModel.Animes.Add(anime);
+                }
+                catch (Exception ex)
+                {
+                    this.LogIfEnabled(LogLevel.Warning)
+                        ?.Log(ex, "'State' 动画载入失败, 目标文件夹: '{path}'", dir);
+                }
+            }
+        }
+        else if (dirName.Equals("Music", StringComparison.CurrentCultureIgnoreCase))
+        {
+            try
+            {
+                var anime = new AnimeTypeModel(GraphInfo.GraphType.Common, animeDir);
+                petModel.Animes.Add(anime);
+            }
+            catch (Exception ex)
+            {
+                this.LogIfEnabled(LogLevel.Warning)
+                    ?.Log(ex, "'Music' 动画载入失败, 目标文件夹: '{path}'", animeDir);
+            }
+        }
+        else if (FoodAnimeTypeModel.FoodAnimeNames.Contains(dirName))
+        {
+            try
+            {
+                var anime = new FoodAnimeTypeModel(animeDir);
+                petModel.Animes.Add(anime);
+            }
+            catch (Exception ex)
+            {
+                this.LogIfEnabled(LogLevel.Warning)
+                    ?.Log(ex, "{dirName} 动画载入失败, 目标文件夹: '{path}'", dirName, animeDir);
+            }
+        }
+        else
+        {
+            try
+            {
+                var anime = new AnimeTypeModel(GraphInfo.GraphType.Common, animeDir);
+                petModel.Animes.Add(anime);
+            }
+            catch (Exception ex)
+            {
+                this.LogIfEnabled(LogLevel.Warning)
+                    ?.Log(ex, "{anime} 动画载入失败, 目标文件夹: '{path}'", dirName, animeDir);
             }
         }
     }
@@ -630,7 +633,7 @@ public sealed partial class ModInfoModel : ObservableModelBase, IDisposable
     /// <param name="path">路径</param>
     public void SaveTo(string path)
     {
-        this.LogIfEnabled(LogLevel.Information)?.Log("正在保存模组, 目标路径: {path}", path);
+        this.LogIfEnabled(LogLevel.Information)?.Log("正在保存模组, 目标路径: '{path}'", path);
         SaveModInfo(path);
         SaveFoods(path);
         SaveText(path);
@@ -893,7 +896,7 @@ public sealed partial class ModInfoModel : ObservableModelBase, IDisposable
     {
         this.LogIfEnabled(LogLevel.Information)
             ?.Log(
-                "保存为翻译模组, 路径: {path}, 翻译目标: {cultures}",
+                "保存为翻译模组, 路径: '{path}', 翻译目标: '{cultures}'",
                 string.Join(", ", cultures)
             );
         SaveModInfo(path);

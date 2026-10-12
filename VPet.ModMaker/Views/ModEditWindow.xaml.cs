@@ -37,4 +37,11 @@ public partial class ModEditWindow : WindowX
         s.ScrollToHorizontalOffset(s.HorizontalOffset - e.Delta);
         e.Handled = true;
     }
+
+    private void Label_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+    {
+#if DEBUG
+        GC.Collect();
+#endif
+    }
 }

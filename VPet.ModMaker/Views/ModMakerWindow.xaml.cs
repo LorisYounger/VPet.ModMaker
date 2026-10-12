@@ -37,10 +37,10 @@ public partial class ModMakerWindow : WindowX
         ViewModel.LoadHistory(history);
     }
 
-    //    private void Label_MouseDoubleClick(object sender, MouseButtonEventArgs e)
-    //    {
-    //#if !RELEASE
-    //        GC.Collect();
-    //#endif
-    //    }
+    private void Label_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+    {
+#if DEBUG
+        GC.Collect();
+#endif
+    }
 }

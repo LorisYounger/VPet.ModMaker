@@ -294,7 +294,7 @@ public partial class ModMakerViewModel : ViewModelBase
         }
         catch (Exception ex)
         {
-            this.LogIfEnabled(LogLevel.Error)?.Log(ex, "模组载入失败, 路径: {path}", directory);
+            this.LogIfEnabled(LogLevel.Error)?.Log(ex, "模组载入失败, 路径: '{path}'", directory);
             DialogService.ShowMessageBox(
                 this,
                 "模组载入失败, 详情请查看日志".Translate(),
@@ -311,7 +311,7 @@ public partial class ModMakerViewModel : ViewModelBase
         }
         catch (Exception ex)
         {
-            this.LogIfEnabled(LogLevel.Error)?.Log(ex, "模组载入失败, 路径: {path}", directory);
+            this.LogIfEnabled(LogLevel.Error)?.Log(ex, "模组载入失败, 路径: '{path}'", directory);
             DialogService.ShowMessageBox(this, "模组载入失败, 详情请查看日志".Translate());
         }
         if (modInfo is null)
@@ -323,7 +323,7 @@ public partial class ModMakerViewModel : ViewModelBase
         catch (Exception ex)
         {
             this.LogIfEnabled(LogLevel.Error)
-                ?.Log(ex, "模组编辑时出现错误, 路径: {path}", directory);
+                ?.Log(ex, "模组编辑时出现错误, 路径: '{path}'", directory);
             DialogService.ShowMessageBox(this, "模组编辑时出现错误, 详情请查看日志".Translate());
         }
     }

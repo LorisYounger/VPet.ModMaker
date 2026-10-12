@@ -147,6 +147,7 @@
               Grid.Row="5"
               Grid.ColumnSpan="2"
               Content="{ll:Str 模组介绍}"
+              MouseDoubleClick="Label_MouseDoubleClick"
               Style="{StaticResource Label_Left}"
             />
             <TextBox

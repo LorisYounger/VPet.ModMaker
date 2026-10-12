@@ -94,7 +94,7 @@ public partial class AnimeEditWindow : WindowX
             ViewModel.AddImages(((AnimeModel)listBox.DataContext).Images, array.Cast<string>());
         if (_dropSender is not null && sender.Equals(_dropSender) is false)
         {
-            MessageBox.Show("无法移动不同动画的图片".Translate());
+            MessageBoxX.Show(this, "无法移动不同动画的图片".Translate());
             return;
         }
         var pos = e.GetPosition(listBox);
@@ -118,18 +118,21 @@ public partial class AnimeEditWindow : WindowX
         (list[targetIndex], list[sourceIndex]) = (list[sourceIndex], list[targetIndex]);
     }
 
-    private void ListBox_SelectionChanged(object? sender, SelectionChangedEventArgs e)
+    private ListBox _lastListBox;
+
+    private void ListBox_Images_SelectionChanged(object? sender, SelectionChangedEventArgs e)
     {
-        if (sender is not ListBox listBox)
+        if (sender is not ListBox listBox || listBox.SelectedItem is null)
             return;
+        if (listBox != _lastListBox)
+        {
+            _lastListBox?.SelectedItem = null;
+            _lastListBox = listBox;
+            _lastListBox?.SelectedItem = e.AddedItems[0];
+        }
         if (listBox.DataContext is AnimeModel model)
             ViewModel.CurrentAnimeModel = model;
         listBox.ScrollIntoView(listBox.SelectedItem);
-        e.Handled = true;
-    }
-
-    private void ListBox_Animes_SelectionChanged(object? sender, SelectionChangedEventArgs e)
-    {
         e.Handled = true;
     }
 }

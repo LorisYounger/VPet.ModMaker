@@ -91,10 +91,10 @@ public sealed partial class FoodAnimeTypeModel : ObservableModelBase, IAnimeMode
     [ObservableProperty]
     public string Name { get; set; } = string.Empty;
 
-    //partial void OnNameChanged(string oldValue, string newValue)
-    //{
-    //    ID = $"{GraphType}_{Name}";
-    //}
+    partial void OnNameChanged(string oldValue, string newValue)
+    {
+        ID = $"{GraphType}_{Name}";
+    }
 
     /// <summary>
     /// 开心动画
@@ -174,7 +174,7 @@ public sealed partial class FoodAnimeTypeModel : ObservableModelBase, IAnimeMode
             this.LogIfEnabled(LogLevel.Warning)
                 ?.Log(
                     ex,
-                    "食物动画信息文件解析失败, 信息文件: {infoFile}, 目标文件夹: {path}",
+                    "食物动画信息文件解析失败, 信息文件: '{infoFile}', 目标文件夹: '{path}'",
                     infoFile,
                     path
                 );
@@ -210,7 +210,12 @@ public sealed partial class FoodAnimeTypeModel : ObservableModelBase, IAnimeMode
         catch (Exception ex)
         {
             this.LogIfEnabled(LogLevel.Warning)
-                ?.Log(ex, "食物动画信息解析失败, 目标文件夹: {path}, 信息行: {$line}", path, line);
+                ?.Log(
+                    ex,
+                    "食物动画信息解析失败, 目标文件夹: '{path}', 信息行: '{$line}'",
+                    path,
+                    line
+                );
         }
     }
 
@@ -303,7 +308,7 @@ public sealed partial class FoodAnimeTypeModel : ObservableModelBase, IAnimeMode
         catch (Exception ex)
         {
             this.LogIfEnabled(LogLevel.Warning)
-                ?.Log(ex, "食物动画保存失败, 目标文件夹: {path}", path);
+                ?.Log(ex, "食物动画保存失败, 目标文件夹: '{path}'", path);
         }
     }
 

@@ -74,12 +74,16 @@ public sealed partial class AnimeTypeModel : ObservableModelBase, IAnimeModel
                 or GraphInfo.GraphType.Raised_Static
                 or GraphInfo.GraphType.StateONE
                 or GraphInfo.GraphType.StateTWO
+                or GraphInfo.GraphType.SideHide_Left_Main
+                or GraphInfo.GraphType.SideHide_Left_Rise
+                or GraphInfo.GraphType.SideHide_Right_Main
+                or GraphInfo.GraphType.SideHide_Right_Rise
         )
             LoadMultiType(path);
         else if (graphType.IsHasNameAnime())
             LoadMultiType(path);
         else
-            throw new ArgumentException("未知动画类型, 目标路径 {0}".Translate(path));
+            throw new ArgumentException("未知动画类型");
     }
 
     /// <summary>

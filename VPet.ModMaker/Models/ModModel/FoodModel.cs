@@ -54,7 +54,7 @@ public sealed partial class FoodModel : ObservableModelBase, IDisposable
             Image = HKWImageUtils.LoadImageToMemory(food.Image);
         else
             this.LogIfEnabled(LogLevel.Warning)
-                ?.Log("获取食物图像失败, 目标路径: {path}", food.Image);
+                ?.Log("获取食物图像失败, 目标路径: '{path}'", food.Image);
     }
 
     /// <summary>

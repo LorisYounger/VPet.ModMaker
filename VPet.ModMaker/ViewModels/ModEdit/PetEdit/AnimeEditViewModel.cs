@@ -50,7 +50,7 @@ public sealed partial class AnimeEditViewModel : ViewModelBase, IModalDialogView
 
     partial void OnCurrentAnimeModelChanged(AnimeModel oldValue, AnimeModel newValue)
     {
-        Stop();
+        _ = Reset();
         if (oldValue is not null)
             oldValue.Images.CollectionChanged -= Images_CollectionChanged;
         if (newValue is not null)
