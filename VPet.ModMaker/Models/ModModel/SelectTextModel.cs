@@ -38,12 +38,6 @@ public sealed partial class SelectTextModel : ObservableModelBase, IDisposable
         : this()
     {
         this.MapFrom(text);
-        if (
-            text.Choose is not null
-            && text.Choose != ChooseID
-            && i18nResource.RenameKey(text.Choose, ChooseID, true) is false
-        )
-            i18nResource.SetData(ChooseID, text.Choose);
         I18nResource = i18nResource;
     }
 
@@ -77,9 +71,9 @@ public sealed partial class SelectTextModel : ObservableModelBase, IDisposable
     /// <summary>
     /// 选择ID
     /// </summary>
-    [MapIgnoreProperty]
-    [NotifyPropertyChangeFrom(nameof(ID))]
-    public string ChooseID => $"{ID}_Choose";
+    [ObservableProperty]
+    [MapProperty(typeof(SelectText), nameof(SelectText.Choose))]
+    public string ChooseID { get; set; } = string.Empty;
 
     /// <summary>
     /// I18n资源

@@ -239,8 +239,8 @@ public partial class ModMakerViewModel : ViewModelBase
     /// <param name="modInfo">模组信息</param>
     public void EditMod(ModInfoModel modInfo)
     {
+        DialogService.Show(this, ModEditViewModel);
         ModEditViewModel.ModInfo = modInfo;
-        DialogService.ShowDialog(this, ModEditViewModel);
     }
 
     /// <summary>

@@ -71,12 +71,12 @@ public sealed partial class AnimeEditViewModel : ViewModelBase, IModalDialogView
     /// <summary>
     /// 含有多个状态
     /// </summary>
-    public bool HasMultiType => AnimeTypeModel.HasMultiTypeAnimes.Contains(Anime.GraphType);
+    public bool HasMultiType => Anime?.GraphType.IsMultiTypeGraph() is true;
 
     /// <summary>
     /// 含有动画名称
     /// </summary>
-    public bool HasAnimeName => AnimeTypeModel.HasNameAnimes.Contains(Anime.GraphType);
+    public bool HasAnimeName => Anime?.GraphType.IsNamedGraph() is true;
     public bool? DialogResult { get; set; }
 
     #region AnimeCommand

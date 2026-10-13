@@ -5,7 +5,6 @@ using HKW.HKWUtils.Observable;
 using HKW.MVVM.SourceGenerator;
 using VPet_Simulator.Core;
 using VPet.ModMaker.Models;
-using VPet.ModMaker.Native;
 
 namespace VPet.ModMaker.ViewModels;
 
@@ -28,7 +27,7 @@ public partial class SelectGraphTypeViewModel : ViewModelBase, IModalDialogViewM
                 AnimeTypeModel.GraphTypes.Except(CurrentPet.Animes.Select(m => m.GraphType))
             );
             // 可添加多个项的类型
-            GraphTypes.AddRange(AnimeTypeModel.HasNameAnimes);
+            GraphTypes.AddRange(AnimeTypeModel.NamedAnimes);
         }
     }
 
@@ -54,7 +53,7 @@ public partial class SelectGraphTypeViewModel : ViewModelBase, IModalDialogViewM
     /// 具有动画名称
     /// </summary>
     [NotifyPropertyChangeFrom(nameof(GraphType))]
-    public bool HasNameAnime => GraphType.IsHasNameAnime();
+    public bool HasNameAnime => GraphType.IsNamedGraph();
 
     public bool? DialogResult { get; set; }
 }

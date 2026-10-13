@@ -17,7 +17,6 @@ using LinePutScript.Converter;
 using Microsoft.Extensions.Logging;
 using VPet_Simulator.Core;
 using VPet_Simulator.Windows.Interface;
-using VPet.ModMaker.Native;
 
 namespace VPet.ModMaker.Models;
 
@@ -440,7 +439,7 @@ public sealed partial class ModInfoModel : ObservableModelBase, IDisposable
     {
         if (Enum.TryParse<GraphInfo.GraphType>(dirName, true, out var graphType))
         {
-            if (graphType.IsHasNameAnime())
+            if (graphType.IsNamedGraph())
             {
                 foreach (var dir in Directory.EnumerateDirectories(animeDir))
                 {

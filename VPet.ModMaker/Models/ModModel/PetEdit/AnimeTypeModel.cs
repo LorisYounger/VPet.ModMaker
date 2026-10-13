@@ -8,7 +8,6 @@ using HKW.HKWUtils.Observable;
 using HKW.MVVM;
 using LinePutScript.Localization.WPF;
 using VPet_Simulator.Core;
-using VPet.ModMaker.Native;
 using VPet.ModMaker.ViewModels;
 using static VPet_Simulator.Core.GraphInfo;
 using static VPet_Simulator.Core.IGameSave;
@@ -47,40 +46,12 @@ public sealed partial class AnimeTypeModel : ObservableModelBase, IAnimeModel
     /// <param name="path">路径</param>
     public AnimeTypeModel(GraphInfo.GraphType graphType, string path)
     {
-        Name = Path.GetFileName(path);
-        // 为带有名字的类型设置ID
-        if (graphType.IsHasNameAnime())
-            ID = $"{graphType}_{Name}";
-        else
-            ID = graphType.ToString();
         GraphType = graphType;
-        if (
-            graphType
-            is GraphInfo.GraphType.Default
-                or GraphInfo.GraphType.Shutdown
-                or GraphInfo.GraphType.StartUP
-                or GraphInfo.GraphType.Switch_Up
-                or GraphInfo.GraphType.Switch_Down
-                or GraphInfo.GraphType.Switch_Thirsty
-                or GraphInfo.GraphType.Switch_Hunger
-                or GraphInfo.GraphType.Raised_Dynamic
-        )
+        Name = Path.GetFileName(path);
+
+        if (graphType.IsSingleTypeGraph())
             LoadDefault(path);
-        else if (
-            graphType
-            is GraphInfo.GraphType.Touch_Head
-                or GraphInfo.GraphType.Touch_Body
-                or GraphInfo.GraphType.Sleep
-                or GraphInfo.GraphType.Raised_Static
-                or GraphInfo.GraphType.StateONE
-                or GraphInfo.GraphType.StateTWO
-                or GraphInfo.GraphType.SideHide_Left_Main
-                or GraphInfo.GraphType.SideHide_Left_Rise
-                or GraphInfo.GraphType.SideHide_Right_Main
-                or GraphInfo.GraphType.SideHide_Right_Rise
-        )
-            LoadMultiType(path);
-        else if (graphType.IsHasNameAnime())
+        else if (graphType.IsMultiTypeGraph())
             LoadMultiType(path);
         else
             throw new ArgumentException("未知动画类型");
@@ -104,28 +75,10 @@ public sealed partial class AnimeTypeModel : ObservableModelBase, IAnimeModel
     public static ImmutableArray<ModeType> ModeTypes => EnumInfo<ModeType>.StaticValues;
 
     /// <summary>
-    /// 含有名称的动作列表
+    /// 含有名称的动画列表, 即能命名的动画类型, 例如 Work_Read, Work_Clean
     /// </summary>
-    public static FrozenSet<GraphInfo.GraphType> HasNameAnimes { get; } =
+    public static FrozenSet<GraphInfo.GraphType> NamedAnimes { get; } =
         FrozenSet.ToFrozenSet([
-            GraphInfo.GraphType.Common,
-            GraphInfo.GraphType.Work,
-            GraphInfo.GraphType.Idel,
-            GraphInfo.GraphType.Move,
-            GraphInfo.GraphType.Say,
-        ]);
-
-    /// <summary>
-    /// 含有不同动画类型的动作列表
-    /// </summary>
-    public static FrozenSet<GraphInfo.GraphType> HasMultiTypeAnimes { get; } =
-        FrozenSet.ToFrozenSet([
-            GraphInfo.GraphType.Touch_Head,
-            GraphInfo.GraphType.Touch_Body,
-            GraphInfo.GraphType.Sleep,
-            GraphInfo.GraphType.Raised_Static,
-            GraphInfo.GraphType.StateONE,
-            GraphInfo.GraphType.StateTWO,
             GraphInfo.GraphType.Common,
             GraphInfo.GraphType.Work,
             GraphInfo.GraphType.Idel,
@@ -148,7 +101,10 @@ public sealed partial class AnimeTypeModel : ObservableModelBase, IAnimeModel
 
     partial void OnNameChanged(string oldValue, string newValue)
     {
-        ID = $"{GraphType}_{Name}";
+        if (GraphType.IsNamedGraph())
+            ID = $"{GraphType}_{Name}";
+        else
+            ID = GraphType.ToString();
     }
 
     /// <summary>
@@ -450,7 +406,7 @@ public sealed partial class AnimeTypeModel : ObservableModelBase, IAnimeModel
             SaveState(path);
         else if (GraphType is GraphInfo.GraphType.Common)
             SaveCommon(path);
-        else if (GraphType.IsHasNameAnime())
+        else if (GraphType.IsNamedGraph())
             SaveHasNameAnime(path);
     }
 

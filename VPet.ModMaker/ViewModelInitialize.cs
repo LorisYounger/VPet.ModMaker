@@ -36,6 +36,8 @@ internal partial class AppServices : DIConfigurationBase
 
     public AppServices()
     {
+        Directory.CreateDirectory(ModMaker.ModMakerBaseDirectory);
+
         EnumInfo.DefaultToString = x =>
         {
             if (x.IsFlaggable is false || x.IsNone)

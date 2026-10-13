@@ -39,7 +39,7 @@
   <ItemGroup>
     <PackageReference Include="HanumanInstitute.MvvmDialogs" Version="2.4.0" />
     <PackageReference Include="HanumanInstitute.MvvmDialogs.Wpf" Version="2.4.0" />
-    <PackageReference Include="HKW.Mapper" Version="0.2.6" />
+    <PackageReference Include="HKW.Mapper" Version="0.2.7" />
     <PackageReference Include="HKW.Utils" Version="1.4.1" />
     <PackageReference Include="HKW.CommonValueConverters" Version="0.2.0" />
     <PackageReference Include="HKW.WPF" Version="1.2.1" />
@@ -54,10 +54,7 @@
   </ItemGroup>
   <Target Name="DisableMvvmToolkitSourceGenerators" BeforeTargets="CoreCompile">
     <ItemGroup>
-      <_MvvmToolkitAnalyzers
-        Include="@(Analyzer)"
-        Condition="$([System.String]::Copy('%(Analyzer.Filename)').Contains('CommunityToolkit.Mvvm.SourceGenerators'))"
-      />
+      <_MvvmToolkitAnalyzers Include="@(Analyzer)" Condition="$([System.String]::Copy('%(Analyzer.Filename)').Contains('CommunityToolkit.Mvvm.SourceGenerators'))" />
 
       <Analyzer Remove="@(_MvvmToolkitAnalyzers)" />
     </ItemGroup>

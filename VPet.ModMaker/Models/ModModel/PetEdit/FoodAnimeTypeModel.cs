@@ -8,7 +8,6 @@ using LinePutScript;
 using LinePutScript.Localization.WPF;
 using Microsoft.Extensions.Logging;
 using VPet_Simulator.Core;
-using VPet.ModMaker.Native;
 using VPet.ModMaker.ViewModels;
 using static VPet_Simulator.Core.IGameSave;
 

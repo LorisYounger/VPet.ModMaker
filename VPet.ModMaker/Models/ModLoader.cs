@@ -62,7 +62,7 @@ public class ModLoader
     /// <summary>
     /// 缓存数据
     /// </summary>
-    public DateTime CacheDate { get; } = DateTime.MinValue;
+    public DateTime CacheDate { get; }
 
     /// <summary>
     /// 宠物列表
@@ -88,6 +88,10 @@ public class ModLoader
     /// 选择文本列表
     /// </summary>
     public List<SelectText> SelectTexts { get; } = [];
+
+    public List<IFont> Fonts { get; } = [];
+
+    public List<Theme> Themes { get; } = [];
 
     /// <summary>
     /// I18n资源
@@ -132,6 +136,51 @@ public class ModLoader
         {
             switch (di.Name.ToLower())
             {
+                case "theme":
+                    Tag.Add("theme");
+                    if (Directory.Exists(di.FullName + @"\fonts"))
+                        foreach (
+                            var str in Directory.EnumerateFiles(di.FullName + @"\fonts", "*.ttf")
+                        )
+                        {
+                            Fonts.Add(new IFont(new FileInfo(str)));
+                        }
+
+                    foreach (FileInfo fi in di.EnumerateFiles("*.lps"))
+                    {
+                        var tmp = new Theme(new LpsDocument(File.ReadAllText(fi.FullName)));
+                        Themes.Add(tmp);
+                        //加载图片包
+                        DirectoryInfo tmpdi = new DirectoryInfo(di.FullName + '\\' + tmp.Image);
+                        if (tmpdi.Exists)
+                        {
+                            foreach (FileInfo tmpfi in tmpdi.EnumerateFiles("*.png"))
+                            {
+                                tmp.Images.AddSource(
+                                    tmpfi
+                                        .Name.ToLowerInvariant()
+                                        .Substring(0, tmpfi.Name.Length - 4),
+                                    tmpfi.FullName
+                                );
+                            }
+                            foreach (DirectoryInfo fordi in tmpdi.EnumerateDirectories())
+                            {
+                                foreach (FileInfo tmpfi in fordi.EnumerateFiles("*.png"))
+                                {
+                                    tmp.Images.AddSource(
+                                        fordi.Name
+                                            + '_'
+                                            + tmpfi
+                                                .Name.ToLowerInvariant()
+                                                .Substring(0, tmpfi.Name.Length - 4),
+                                        tmpfi.FullName
+                                    );
+                                }
+                            }
+                        }
+                    }
+                    break;
+
                 case "pet":
                     //宠物模型
                     Tag.Add("pet");
