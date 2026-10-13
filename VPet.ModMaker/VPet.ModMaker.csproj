@@ -31,12 +31,12 @@
     <EmbeddedResource Include="Resources\NLog.config" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="NLog" Version="6.2.1" />
-    <PackageReference Include="NLog.Extensions.Logging" Version="6.2.1" />
-    <PackageReference Include="VPet-Simulator.Core" Version="1.1.0.66" />
-    <PackageReference Include="VPet-Simulator.Windows.Interface" Version="1.1.0.66" />
+    <PackageReference Include="VPet-Simulator.Core" Version="1.1.0.71" />
+    <PackageReference Include="VPet-Simulator.Windows.Interface" Version="1.1.0.71" />
   </ItemGroup>
   <ItemGroup>
+    <PackageReference Include="NLog" Version="6.2.1" />
+    <PackageReference Include="NLog.Extensions.Logging" Version="6.2.1" />
     <PackageReference Include="HanumanInstitute.MvvmDialogs" Version="2.4.0" />
     <PackageReference Include="HanumanInstitute.MvvmDialogs.Wpf" Version="2.4.0" />
     <PackageReference Include="HKW.Mapper" Version="0.2.7" />
@@ -54,7 +54,10 @@
   </ItemGroup>
   <Target Name="DisableMvvmToolkitSourceGenerators" BeforeTargets="CoreCompile">
     <ItemGroup>
-      <_MvvmToolkitAnalyzers Include="@(Analyzer)" Condition="$([System.String]::Copy('%(Analyzer.Filename)').Contains('CommunityToolkit.Mvvm.SourceGenerators'))" />
+      <_MvvmToolkitAnalyzers
+        Include="@(Analyzer)"
+        Condition="$([System.String]::Copy('%(Analyzer.Filename)').Contains('CommunityToolkit.Mvvm.SourceGenerators'))"
+      />
 
       <Analyzer Remove="@(_MvvmToolkitAnalyzers)" />
     </ItemGroup>

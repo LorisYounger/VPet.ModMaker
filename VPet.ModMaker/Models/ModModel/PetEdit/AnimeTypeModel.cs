@@ -18,7 +18,6 @@ namespace VPet.ModMaker.Models;
 /// 多类型动画模型
 /// </summary>
 public sealed partial class AnimeTypeModel : ObservableModelBase, IAnimeModel
-//, IAnimeModel
 {
     /// <inheritdoc/>
     public AnimeTypeModel() { }
@@ -230,7 +229,7 @@ public sealed partial class AnimeTypeModel : ObservableModelBase, IAnimeModel
                 var typeName = dirInfo[0];
                 var modeName = dirInfo[2];
                 var type = GetAnimatType(typeName[0]);
-                var mode = (ModeType)Enum.Parse(typeof(ModeType), Path.GetFileName(modeName), true);
+                var mode = Enum.Parse<ModeType>(Path.GetFileName(modeName), true);
                 AddAnimeForModeType(dir, mode, type);
             }
             else if (dirInfo.Length == 2)
@@ -407,14 +406,14 @@ public sealed partial class AnimeTypeModel : ObservableModelBase, IAnimeModel
         else if (GraphType is GraphInfo.GraphType.Common)
             SaveCommon(path);
         else if (GraphType.IsNamedGraph())
-            SaveHasNameAnime(path);
+            SaveNamedAnime(path);
     }
 
     /// <summary>
     /// 保存为带有名称的动画样式
     /// </summary>
     /// <param name="path">路径</param>
-    void SaveHasNameAnime(string path)
+    void SaveNamedAnime(string path)
     {
         var animeTypePath = Path.Combine(path, GraphType.ToString());
         Directory.CreateDirectory(animeTypePath);

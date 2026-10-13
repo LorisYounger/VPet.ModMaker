@@ -92,6 +92,7 @@ public class ModLoader
     public List<IFont> Fonts { get; } = [];
 
     public List<Theme> Themes { get; } = [];
+    public List<Photo> Photos { get; } = [];
 
     /// <summary>
     /// I18n资源
@@ -139,19 +140,21 @@ public class ModLoader
                 case "theme":
                     Tag.Add("theme");
                     if (Directory.Exists(di.FullName + @"\fonts"))
+                    {
                         foreach (
                             var str in Directory.EnumerateFiles(di.FullName + @"\fonts", "*.ttf")
                         )
                         {
                             Fonts.Add(new IFont(new FileInfo(str)));
                         }
+                    }
 
-                    foreach (FileInfo fi in di.EnumerateFiles("*.lps"))
+                    foreach (var fi in di.EnumerateFiles("*.lps"))
                     {
                         var tmp = new Theme(new LpsDocument(File.ReadAllText(fi.FullName)));
                         Themes.Add(tmp);
                         //加载图片包
-                        DirectoryInfo tmpdi = new DirectoryInfo(di.FullName + '\\' + tmp.Image);
+                        var tmpdi = new DirectoryInfo(di.FullName + '\\' + tmp.Image);
                         if (tmpdi.Exists)
                         {
                             foreach (FileInfo tmpfi in tmpdi.EnumerateFiles("*.png"))
@@ -163,9 +166,9 @@ public class ModLoader
                                     tmpfi.FullName
                                 );
                             }
-                            foreach (DirectoryInfo fordi in tmpdi.EnumerateDirectories())
+                            foreach (var fordi in tmpdi.EnumerateDirectories())
                             {
-                                foreach (FileInfo tmpfi in fordi.EnumerateFiles("*.png"))
+                                foreach (var tmpfi in fordi.EnumerateFiles("*.png"))
                                 {
                                     tmp.Images.AddSource(
                                         fordi.Name
@@ -180,7 +183,19 @@ public class ModLoader
                         }
                     }
                     break;
-
+                case "photo":
+                    Tag.Add("photo");
+                    foreach (FileInfo fi in di.EnumerateFiles("*.lps"))
+                    {
+                        var tmp = new LPS(File.ReadAllText(fi.FullName));
+                        foreach (Line li in tmp)
+                        {
+                            if (li.Name != "photo")
+                                continue;
+                            Photos.Add(new Photo(li));
+                        }
+                    }
+                    break;
                 case "pet":
                     //宠物模型
                     Tag.Add("pet");
@@ -252,28 +267,36 @@ public class ModLoader
                 case "lang":
                     Tag.Add("lang");
                     langDirectory = di;
-                    foreach (FileInfo fi in di.EnumerateFiles("*.lps"))
-                    {
-                        LocalizeCore.AddCulture(
-                            Path.GetFileNameWithoutExtension(fi.Name),
-                            new LPS_D(File.ReadAllText(fi.FullName))
-                        );
-                    }
-                    foreach (DirectoryInfo dis in di.EnumerateDirectories())
-                    {
-                        foreach (FileInfo fi in dis.EnumerateFiles("*.lps"))
-                        {
-                            LocalizeCore.AddCulture(
-                                dis.Name,
-                                new LPS_D(File.ReadAllText(fi.FullName))
-                            );
-                        }
-                    }
+                    //foreach (FileInfo fi in di.EnumerateFiles("*.lps"))
+                    //{
+                    //    LocalizeCore.AddCulture(
+                    //        Path.GetFileNameWithoutExtension(fi.Name),
+                    //        new LPS_D(File.ReadAllText(fi.FullName))
+                    //    );
+                    //}
+                    //foreach (DirectoryInfo dis in di.EnumerateDirectories())
+                    //{
+                    //    foreach (FileInfo fi in dis.EnumerateFiles("*.lps"))
+                    //    {
+                    //        LocalizeCore.AddCulture(
+                    //            dis.Name,
+                    //            new LPS_D(File.ReadAllText(fi.FullName))
+                    //        );
+                    //    }
+                    //}
                     break;
             }
         }
         if (langDirectory is null)
             return;
+        foreach (FileInfo fi in langDirectory.EnumerateFiles("*.lps"))
+        {
+            var name = Path.GetFileNameWithoutExtension(fi.Name);
+            I18nDatas.TryAdd(name, []);
+            var lps = new LPS(File.ReadAllText(fi.FullName));
+            foreach (var item in lps)
+                I18nDatas[name].TryAdd(item.Name, item.Info);
+        }
         foreach (var dis in langDirectory.EnumerateDirectories())
         {
             I18nDatas.TryAdd(dis.Name, []);

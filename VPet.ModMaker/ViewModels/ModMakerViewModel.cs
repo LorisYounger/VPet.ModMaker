@@ -102,8 +102,8 @@ public partial class ModMakerViewModel : ViewModelBase
     {
         if (File.Exists(historyFile) is false)
         {
-            //this.LogIfEnabled(LogLevel.Warning)
-            //    ?.Log("载入历史失败,历史文件 {file} 不存在", historyFile);
+            this.LogIfEnabled(LogLevel.Warning)
+                ?.Log("载入历史失败,历史文件 {file} 不存在", historyFile);
             File.Create(historyFile).Close();
             return;
         }
@@ -115,10 +115,10 @@ public partial class ModMakerViewModel : ViewModelBase
                 continue;
             history.ID ??= string.Empty;
             set.Add(history);
-            //this.LogIfEnabled(LogLevel.Debug)?.Log("添加历史 {history}", history.SourcePath);
+            this.LogIfEnabled(LogLevel.Debug)?.Log("添加历史 {history}", history.SourcePath);
         }
         Histories.AddRange(set.OrderByDescending(h => h.LastTime));
-        //this.LogIfEnabled(LogLevel.Information)?.Log("载入历史, 数量: {count}", set.Count);
+        this.LogIfEnabled(LogLevel.Information)?.Log("载入历史, 数量: {count}", set.Count);
     }
 
     /// <summary>
@@ -379,35 +379,5 @@ public partial class ModMakerViewModel : ViewModelBase
     private static void OpenWikiLink()
     {
         NativeUtils.OpenLink(WikiLink);
-        //try
-        //{
-        //}
-        //catch
-        //{
-        //    if (
-        //        DialogService.ShowMessageBox(
-        //            this,
-        //            "无法打开链接,需要复制自行访问吗".Translate(),
-        //            "打开链接失败".Translate(),
-        //            MessageBoxButton.YesNo,
-        //            icon: MessageBoxImage.Warning
-        //        )
-        //        is not true
-        //    )
-        //        return;
-        //    ClipboardSetText(WikiLink);
-        //    DialogService.ShowMessageBox(this, "已复制到剪贴板".Translate());
-        //}
     }
-
-    ///// <inheritdoc/>
-    //protected override void Dispose(bool disposing)
-    //{
-    //    if (_disposed)
-    //        return;
-    //    base.Dispose(disposing);
-    //    foreach (var history in Histories)
-    //        history.Image?.CloseStreamWhenNoReference();
-    //    Histories.Clear();
-    //}
 }
