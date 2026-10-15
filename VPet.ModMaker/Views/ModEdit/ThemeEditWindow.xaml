@@ -1,0 +1,316 @@
+﻿<pu:WindowX
+  x:Class="VPet.ModMaker.Views.ThemeEditWindow"
+  xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+  xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+  xmlns:ll="clr-namespace:LinePutScript.Localization.WPF;assembly=LinePutScript.Localization.WPF"
+  xmlns:pu="https://opensource.panuon.com/wpf-ui"
+  xmlns:vm="clr-namespace:VPet.ModMaker.ViewModels"
+  xmlns:local="clr-namespace:VPet.ModMaker.Views"
+  mc:Ignorable="d"
+  Title="ThemeEditWindow"
+  d:DataContext="{d:DesignInstance vm:ThemeEditViewModel}"
+  Height="450"
+  Width="800"
+  WindowStartupLocation="CenterScreen"
+>
+  <Grid ColumnDefinitions="*,Auto">
+    <Grid RowDefinitions="*,Auto">
+      <ScrollViewer VerticalScrollBarVisibility="Auto">
+        <StackPanel>
+          <Grid Height="30" ColumnDefinitions="Auto,*">
+            <TextBlock Style="{DynamicResource TextBlock_LeftCenter}" Text="{ll:Str ID}" />
+            <TextBox
+              Style="{DynamicResource StandardTextBoxStyle}"
+              HorizontalAlignment="Right"
+              Width="200"
+              Grid.Column="1"
+              Text="{Binding Theme.ID}"
+            />
+          </Grid>
+          <Grid Height="30" ColumnDefinitions="Auto,*">
+            <TextBlock Style="{DynamicResource TextBlock_LeftCenter}" Text="{ll:Str Name}" />
+            <TextBox
+              Style="{DynamicResource StandardTextBoxStyle}"
+              HorizontalAlignment="Right"
+              Width="200"
+              Grid.Column="1"
+              Text="{Binding Theme.Name}"
+            />
+          </Grid>
+          <Grid Height="30" ColumnDefinitions="Auto,*">
+            <TextBlock Style="{DynamicResource TextBlock_LeftCenter}" Text="{ll:Str Primary}" />
+            <pu:ColorPicker
+              Width="200"
+              HorizontalAlignment="Right"
+              Grid.Column="1"
+              Grid.Row="2"
+              ColorChannels="RGB"
+              SelectedColor="{Binding Theme.Primary, Converter={StaticResource SolidColorBrushToMediaColorConverter}}"
+            />
+          </Grid>
+          <Grid Height="30" ColumnDefinitions="Auto,*">
+            <TextBlock
+              Style="{DynamicResource TextBlock_LeftCenter}"
+              Text="{ll:Str PrimaryLight}"
+            />
+            <pu:ColorPicker
+              Width="200"
+              HorizontalAlignment="Right"
+              Grid.Column="1"
+              Grid.Row="2"
+              ColorChannels="RGB"
+              SelectedColor="{Binding Theme.PrimaryLight, Converter={StaticResource SolidColorBrushToMediaColorConverter}}"
+            />
+          </Grid>
+          <Grid Height="30" ColumnDefinitions="Auto,*">
+            <TextBlock
+              Style="{DynamicResource TextBlock_LeftCenter}"
+              Text="{ll:Str PrimaryLighter}"
+            />
+            <pu:ColorPicker
+              Width="200"
+              HorizontalAlignment="Right"
+              Grid.Column="1"
+              Grid.Row="2"
+              ColorChannels="RGB"
+              SelectedColor="{Binding Theme.PrimaryLighter, Converter={StaticResource SolidColorBrushToMediaColorConverter}}"
+            />
+          </Grid>
+          <Grid Height="30" ColumnDefinitions="Auto,*">
+            <TextBlock Style="{DynamicResource TextBlock_LeftCenter}" Text="{ll:Str PrimaryDark}" />
+            <pu:ColorPicker
+              Width="200"
+              HorizontalAlignment="Right"
+              Grid.Column="1"
+              Grid.Row="2"
+              ColorChannels="RGB"
+              SelectedColor="{Binding Theme.PrimaryDark, Converter={StaticResource SolidColorBrushToMediaColorConverter}}"
+            />
+          </Grid>
+          <Grid Height="30" ColumnDefinitions="Auto,*">
+            <TextBlock
+              Style="{DynamicResource TextBlock_LeftCenter}"
+              Text="{ll:Str PrimaryDarker}"
+            />
+            <pu:ColorPicker
+              Width="200"
+              HorizontalAlignment="Right"
+              Grid.Column="1"
+              Grid.Row="2"
+              ColorChannels="RGB"
+              SelectedColor="{Binding Theme.PrimaryDarker, Converter={StaticResource SolidColorBrushToMediaColorConverter}}"
+            />
+          </Grid>
+          <Grid Height="30" ColumnDefinitions="Auto,*">
+            <TextBlock Style="{DynamicResource TextBlock_LeftCenter}" Text="{ll:Str PrimaryText}" />
+            <pu:ColorPicker
+              Width="200"
+              HorizontalAlignment="Right"
+              Grid.Column="1"
+              Grid.Row="2"
+              ColorChannels="RGB"
+              SelectedColor="{Binding Theme.PrimaryText, Converter={StaticResource SolidColorBrushToMediaColorConverter}}"
+            />
+          </Grid>
+          <Grid Height="30" ColumnDefinitions="Auto,*">
+            <TextBlock Style="{DynamicResource TextBlock_LeftCenter}" Text="{ll:Str Secondary}" />
+            <pu:ColorPicker
+              Width="200"
+              HorizontalAlignment="Right"
+              Grid.Column="1"
+              Grid.Row="2"
+              ColorChannels="RGB"
+              SelectedColor="{Binding Theme.Secondary, Converter={StaticResource SolidColorBrushToMediaColorConverter}}"
+            />
+          </Grid>
+          <Grid Height="30" ColumnDefinitions="Auto,*">
+            <TextBlock
+              Style="{DynamicResource TextBlock_LeftCenter}"
+              Text="{ll:Str SecondaryLight}"
+            />
+            <pu:ColorPicker
+              Width="200"
+              HorizontalAlignment="Right"
+              Grid.Column="1"
+              Grid.Row="2"
+              ColorChannels="RGB"
+              SelectedColor="{Binding Theme.SecondaryLight, Converter={StaticResource SolidColorBrushToMediaColorConverter}}"
+            />
+          </Grid>
+          <Grid Height="30" ColumnDefinitions="Auto,*">
+            <TextBlock
+              Style="{DynamicResource TextBlock_LeftCenter}"
+              Text="{ll:Str SecondaryLighter}"
+            />
+            <pu:ColorPicker
+              Width="200"
+              HorizontalAlignment="Right"
+              Grid.Column="1"
+              Grid.Row="2"
+              ColorChannels="RGB"
+              SelectedColor="{Binding Theme.SecondaryLighter, Converter={StaticResource SolidColorBrushToMediaColorConverter}}"
+            />
+          </Grid>
+          <Grid Height="30" ColumnDefinitions="Auto,*">
+            <TextBlock
+              Style="{DynamicResource TextBlock_LeftCenter}"
+              Text="{ll:Str SecondaryDark}"
+            />
+            <pu:ColorPicker
+              Width="200"
+              HorizontalAlignment="Right"
+              Grid.Column="1"
+              Grid.Row="2"
+              ColorChannels="RGB"
+              SelectedColor="{Binding Theme.SecondaryDark, Converter={StaticResource SolidColorBrushToMediaColorConverter}}"
+            />
+          </Grid>
+          <Grid Height="30" ColumnDefinitions="Auto,*">
+            <TextBlock
+              Style="{DynamicResource TextBlock_LeftCenter}"
+              Text="{ll:Str SecondaryDarker}"
+            />
+            <pu:ColorPicker
+              Width="200"
+              HorizontalAlignment="Right"
+              Grid.Column="1"
+              Grid.Row="2"
+              ColorChannels="RGB"
+              SelectedColor="{Binding Theme.SecondaryDarker, Converter={StaticResource SolidColorBrushToMediaColorConverter}}"
+            />
+          </Grid>
+          <Grid Height="30" ColumnDefinitions="Auto,*">
+            <TextBlock
+              Style="{DynamicResource TextBlock_LeftCenter}"
+              Text="{ll:Str SecondaryText}"
+            />
+            <pu:ColorPicker
+              Width="200"
+              HorizontalAlignment="Right"
+              Grid.Column="1"
+              Grid.Row="2"
+              ColorChannels="RGB"
+              SelectedColor="{Binding Theme.SecondaryText, Converter={StaticResource SolidColorBrushToMediaColorConverter}}"
+            />
+          </Grid>
+          <Grid Height="30" ColumnDefinitions="Auto,*">
+            <TextBlock Style="{DynamicResource TextBlock_LeftCenter}" Text="{ll:Str DARKPrimary}" />
+            <pu:ColorPicker
+              Width="200"
+              HorizontalAlignment="Right"
+              Grid.Column="1"
+              Grid.Row="2"
+              ColorChannels="RGB"
+              SelectedColor="{Binding Theme.DARKPrimary, Converter={StaticResource SolidColorBrushToMediaColorConverter}}"
+            />
+          </Grid>
+          <Grid Height="30" ColumnDefinitions="Auto,*">
+            <TextBlock
+              Style="{DynamicResource TextBlock_LeftCenter}"
+              Text="{ll:Str DARKPrimaryLight}"
+            />
+            <pu:ColorPicker
+              Width="200"
+              HorizontalAlignment="Right"
+              Grid.Column="1"
+              Grid.Row="2"
+              ColorChannels="RGB"
+              SelectedColor="{Binding Theme.DARKPrimaryLight, Converter={StaticResource SolidColorBrushToMediaColorConverter}}"
+            />
+          </Grid>
+          <Grid Height="30" ColumnDefinitions="Auto,*">
+            <TextBlock
+              Style="{DynamicResource TextBlock_LeftCenter}"
+              Text="{ll:Str DARKPrimaryLighter}"
+            />
+            <pu:ColorPicker
+              Width="200"
+              HorizontalAlignment="Right"
+              Grid.Column="1"
+              Grid.Row="2"
+              ColorChannels="RGB"
+              SelectedColor="{Binding Theme.DARKPrimaryLighter, Converter={StaticResource SolidColorBrushToMediaColorConverter}}"
+            />
+          </Grid>
+          <Grid Height="30" ColumnDefinitions="Auto,*">
+            <TextBlock
+              Style="{DynamicResource TextBlock_LeftCenter}"
+              Text="{ll:Str DARKPrimaryDark}"
+            />
+            <pu:ColorPicker
+              Width="200"
+              HorizontalAlignment="Right"
+              Grid.Column="1"
+              Grid.Row="2"
+              ColorChannels="RGB"
+              SelectedColor="{Binding Theme.DARKPrimaryDark, Converter={StaticResource SolidColorBrushToMediaColorConverter}}"
+            />
+          </Grid>
+          <Grid Height="30" ColumnDefinitions="Auto,*">
+            <TextBlock
+              Style="{DynamicResource TextBlock_LeftCenter}"
+              Text="{ll:Str DARKPrimaryDarker}"
+            />
+            <pu:ColorPicker
+              Width="200"
+              HorizontalAlignment="Right"
+              Grid.Column="1"
+              Grid.Row="2"
+              ColorChannels="RGB"
+              SelectedColor="{Binding Theme.DARKPrimaryDarker, Converter={StaticResource SolidColorBrushToMediaColorConverter}}"
+            />
+          </Grid>
+          <Grid Height="30" ColumnDefinitions="Auto,*">
+            <TextBlock
+              Style="{DynamicResource TextBlock_LeftCenter}"
+              Text="{ll:Str DARKPrimaryText}"
+            />
+            <pu:ColorPicker
+              Width="200"
+              HorizontalAlignment="Right"
+              Grid.Column="1"
+              Grid.Row="2"
+              ColorChannels="RGB"
+              SelectedColor="{Binding Theme.DARKPrimaryText, Converter={StaticResource SolidColorBrushToMediaColorConverter}}"
+            />
+          </Grid>
+          <Grid Height="30" ColumnDefinitions="Auto,*">
+            <TextBlock Style="{DynamicResource TextBlock_LeftCenter}" Text="{ll:Str ShadowColor}" />
+            <pu:ColorPicker
+              Width="200"
+              HorizontalAlignment="Right"
+              Grid.Column="1"
+              Grid.Row="2"
+              ColorChannels="RGB"
+              SelectedColor="{Binding Theme.ShadowColor, Converter={StaticResource SolidColorBrushToMediaColorConverter}}"
+            />
+          </Grid>
+        </StackPanel>
+      </ScrollViewer>
+      <Grid Grid.Row="1">
+        <Grid.ColumnDefinitions>
+          <ColumnDefinition />
+          <ColumnDefinition />
+        </Grid.ColumnDefinitions>
+        <Button
+          x:Name="Button_Yes"
+          Margin="10"
+          Click="Button_Yes_Click"
+          Content="{ll:Str 确定}"
+          Style="{StaticResource MyThemedButtonStyle}"
+        />
+        <Button
+          x:Name="Button_Cancel"
+          Grid.Column="1"
+          Margin="10"
+          Click="Button_Cancel_Click"
+          Content="{ll:Str 取消}"
+          Style="{StaticResource Button_Cancel}"
+        />
+      </Grid>
+    </Grid>
+    <ListBox Grid.Column="1" Template="{StaticResource ListBox_ShowLangs}" />
+  </Grid>
+</pu:WindowX>

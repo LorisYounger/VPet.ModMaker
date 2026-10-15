@@ -224,19 +224,20 @@ public sealed partial class ClickTextModel : ObservableModelBase, IDisposable
 }
 
 public sealed class ObservableRangeConverter<T>
-    : ICompositeMapConverter<ObservableRange<T>, (T Min, T Max)>
+    : IMapCompositeConverter<ObservableRange<T>, (T Min, T Max)>
     where T : struct, INumber<T>
 {
-    public (T Min, T Max) Convert(object source, ObservableRange<T> value) =>
+    public (T Min, T Max) Convert(ObservableRange<T> value, MapCompositeConvertArgs args) =>
         (value.Min, value.Max);
 
-    public ObservableRange<T> ConvertBack(object target, (T Min, T Max) values) =>
+    public ObservableRange<T> ConvertBack((T Min, T Max) values, MapCompositeConvertArgs args) =>
         new(values.Min, values.Max);
 }
 
 public sealed class ObservableEnumConverter : IMapConverter<IObservableEnum, Enum>
 {
-    public Enum Convert(object source, IObservableEnum value) => value.Value;
+    public Enum Convert(IObservableEnum value, MapConvertArgs args) => value.Value;
 
-    public IObservableEnum ConvertBack(object target, Enum value) => ObservableEnum.Create(value);
+    public IObservableEnum ConvertBack(Enum value, MapConvertArgs args) =>
+        ObservableEnum.Create(value);
 }

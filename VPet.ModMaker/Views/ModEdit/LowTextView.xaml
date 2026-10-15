@@ -37,7 +37,6 @@
       />
     </Grid>
     <DataGrid
-      x:Name="DataGrid_LowText"
       Grid.Row="1"
       d:ItemsSource="{d:SampleData ItemCount=5}"
       d:SelectedIndex="0"
@@ -51,7 +50,7 @@
       CanUserResizeRows="False"
       GridLinesVisibility="Horizontal"
       ItemsSource="{Binding LowTexts.FilteredList}"
-      MouseDoubleClick="DataGrid_LowText_MouseDoubleClick"
+      MouseDoubleClick="DataGrid_MouseDoubleClick"
       RowDetailsVisibilityMode="Visible"
       RowHeight="64"
       VirtualizingStackPanel.IsVirtualizing="True"

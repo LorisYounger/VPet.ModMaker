@@ -39,14 +39,14 @@
     <PackageReference Include="NLog.Extensions.Logging" Version="6.2.1" />
     <PackageReference Include="HanumanInstitute.MvvmDialogs" Version="2.4.0" />
     <PackageReference Include="HanumanInstitute.MvvmDialogs.Wpf" Version="2.4.0" />
-    <PackageReference Include="HKW.Mapper" Version="0.2.7" />
+    <PackageReference Include="HKW.Mapper" Version="0.3.1" />
     <PackageReference Include="HKW.Utils" Version="1.4.1" />
     <PackageReference Include="HKW.CommonValueConverters" Version="0.2.0" />
     <PackageReference Include="HKW.WPF" Version="1.2.1" />
     <PackageReference Include="HKW.MVVM" Version="0.1.4" />
     <PackageReference Include="HKW.MVVM.SourceGenerator" Version="0.1.10" />
     <PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.2" />
-    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="10.0.12" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="10.0.13" />
     <PackageReference Include="Fody" Version="6.9.3">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
@@ -54,10 +54,7 @@
   </ItemGroup>
   <Target Name="DisableMvvmToolkitSourceGenerators" BeforeTargets="CoreCompile">
     <ItemGroup>
-      <_MvvmToolkitAnalyzers
-        Include="@(Analyzer)"
-        Condition="$([System.String]::Copy('%(Analyzer.Filename)').Contains('CommunityToolkit.Mvvm.SourceGenerators'))"
-      />
+      <_MvvmToolkitAnalyzers Include="@(Analyzer)" Condition="$([System.String]::Copy('%(Analyzer.Filename)').Contains('CommunityToolkit.Mvvm.SourceGenerators'))" />
 
       <Analyzer Remove="@(_MvvmToolkitAnalyzers)" />
     </ItemGroup>

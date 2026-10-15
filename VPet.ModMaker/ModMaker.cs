@@ -164,6 +164,8 @@ public class ModMaker : MainPlugin
 
     public static ReadOnlyList<string> PngExtensions { get; } = new(["png"]);
 
+    public static ReadOnlyList<string> FontExtensions { get; } = new(["ttf"]);
+
     /// <summary>
     /// 本体的宠物
     /// <para>

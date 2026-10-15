@@ -153,34 +153,34 @@ public class ModLoader
                     {
                         var tmp = new Theme(new LpsDocument(File.ReadAllText(fi.FullName)));
                         Themes.Add(tmp);
-                        //加载图片包
-                        var tmpdi = new DirectoryInfo(di.FullName + '\\' + tmp.Image);
-                        if (tmpdi.Exists)
-                        {
-                            foreach (FileInfo tmpfi in tmpdi.EnumerateFiles("*.png"))
-                            {
-                                tmp.Images.AddSource(
-                                    tmpfi
-                                        .Name.ToLowerInvariant()
-                                        .Substring(0, tmpfi.Name.Length - 4),
-                                    tmpfi.FullName
-                                );
-                            }
-                            foreach (var fordi in tmpdi.EnumerateDirectories())
-                            {
-                                foreach (var tmpfi in fordi.EnumerateFiles("*.png"))
-                                {
-                                    tmp.Images.AddSource(
-                                        fordi.Name
-                                            + '_'
-                                            + tmpfi
-                                                .Name.ToLowerInvariant()
-                                                .Substring(0, tmpfi.Name.Length - 4),
-                                        tmpfi.FullName
-                                    );
-                                }
-                            }
-                        }
+                        ////加载图片包
+                        //var tmpdi = new DirectoryInfo(di.FullName + '\\' + tmp.Image);
+                        //if (tmpdi.Exists)
+                        //{
+                        //    foreach (FileInfo tmpfi in tmpdi.EnumerateFiles("*.png"))
+                        //    {
+                        //        tmp.Images.AddSource(
+                        //            tmpfi
+                        //                .Name.ToLowerInvariant()
+                        //                .Substring(0, tmpfi.Name.Length - 4),
+                        //            tmpfi.FullName
+                        //        );
+                        //    }
+                        //    foreach (var fordi in tmpdi.EnumerateDirectories())
+                        //    {
+                        //        foreach (var tmpfi in fordi.EnumerateFiles("*.png"))
+                        //        {
+                        //            tmp.Images.AddSource(
+                        //                fordi.Name
+                        //                    + '_'
+                        //                    + tmpfi
+                        //                        .Name.ToLowerInvariant()
+                        //                        .Substring(0, tmpfi.Name.Length - 4),
+                        //                tmpfi.FullName
+                        //            );
+                        //        }
+                        //    }
+                        //}
                     }
                     break;
                 case "photo":
@@ -223,7 +223,7 @@ public class ModLoader
                         foreach (ILine li in tmp)
                         {
                             var food = LPSConvert.DeserializeObject<Food>(li);
-                            if (food.Name is null)
+                            if (string.IsNullOrWhiteSpace(food.Name))
                                 break;
                             var imagePath =
                                 $"{path.FullName}\\image\\food\\{(string.IsNullOrWhiteSpace(food.Image) ? food.Name : food.Image)}.png";

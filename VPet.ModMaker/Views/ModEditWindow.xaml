@@ -199,10 +199,12 @@
           <v:ClickTextView DataContext="{Binding ViewModels[1]}" Visibility="Hidden" />
           <v:LowTextView DataContext="{Binding ViewModels[2]}" Visibility="Hidden" />
           <v:SelectTextView DataContext="{Binding ViewModels[3]}" Visibility="Hidden" />
-          <v:PetView DataContext="{Binding ViewModels[4]}" Visibility="Hidden" />
-          <v:WorkView DataContext="{Binding ViewModels[5]}" Visibility="Hidden" />
-          <v:MoveView DataContext="{Binding ViewModels[6]}" Visibility="Hidden" />
-          <v:AnimeView DataContext="{Binding ViewModels[7]}" Visibility="Hidden" />
+          <v:ThemeView DataContext="{Binding ViewModels[4]}" Visibility="Hidden" />
+          <v:FontView DataContext="{Binding ViewModels[5]}" Visibility="Hidden" />
+          <v:PetView DataContext="{Binding ViewModels[6]}" Visibility="Hidden" />
+          <v:WorkView DataContext="{Binding ViewModels[7]}" Visibility="Hidden" />
+          <v:MoveView DataContext="{Binding ViewModels[8]}" Visibility="Hidden" />
+          <v:AnimeView DataContext="{Binding ViewModels[9]}" Visibility="Hidden" />
         </Grid>
       </Grid>
     </Grid>

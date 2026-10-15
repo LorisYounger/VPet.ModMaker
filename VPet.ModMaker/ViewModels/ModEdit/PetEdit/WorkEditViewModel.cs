@@ -289,7 +289,7 @@ public sealed partial class WorkEditViewModel
             Work.I18nResource.CopyDataTo(ModInfo.I18nResource);
             Work.I18nResource = ModInfo.I18nResource;
             Works.Add(Work);
-            this.LogIfEnabled(LogLevel.Information)?.Log("添加新工作 {work}", Work.ID);
+            this.LogIfEnabled(LogLevel.Information)?.Log("添加新工作 '{id}'", Work.ID);
             //if (this.LogX().Level is LogLevel.Info)
             //else
             //    this.LogX()
@@ -357,7 +357,7 @@ public sealed partial class WorkEditViewModel
         {
             Works.Remove(model);
             model.Dispose();
-            this.LogIfEnabled(LogLevel.Information)?.Log("删除工作 {work}", model.ID);
+            this.LogIfEnabled(LogLevel.Information)?.Log("删除工作 '{id}'", model.ID);
         }
     }
 

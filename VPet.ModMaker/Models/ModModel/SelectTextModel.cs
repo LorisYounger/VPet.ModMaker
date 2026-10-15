@@ -227,14 +227,14 @@ public sealed partial class SelectTextModel : ObservableModelBase, IDisposable
 
 public sealed class StringSpiltToListConverter : IMapConverter<string, List<string>>
 {
-    public List<string> Convert(object source, string value)
+    public List<string> Convert(string value, MapConvertArgs args)
     {
         return value
             .Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries)
             .ToList();
     }
 
-    public string ConvertBack(object target, List<string> value)
+    public string ConvertBack(List<string> value, MapConvertArgs args)
     {
         return string.Join(", ", value);
     }

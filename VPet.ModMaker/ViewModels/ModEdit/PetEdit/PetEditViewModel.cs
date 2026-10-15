@@ -208,7 +208,7 @@ public partial class PetEditViewModel
             Pet.I18nResource = ModInfo.I18nResource;
             Pets.Add(Pet);
             ModInfo.Pets.Refresh();
-            this.LogIfEnabled(LogLevel.Information)?.Log("添加新宠物 {pet}", Pet.ID);
+            this.LogIfEnabled(LogLevel.Information)?.Log("添加新宠物 '{id}'", Pet.ID);
         }
         Reset();
     }
@@ -280,7 +280,7 @@ public partial class PetEditViewModel
         {
             Pets.Remove(model);
             model.DisposeAll();
-            this.LogIfEnabled(LogLevel.Information)?.Log("删除宠物 {pet}", model.ID);
+            this.LogIfEnabled(LogLevel.Information)?.Log("删除宠物 '{id}'", model.ID);
         }
     }
 

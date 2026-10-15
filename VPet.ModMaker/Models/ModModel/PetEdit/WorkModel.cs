@@ -249,12 +249,12 @@ public sealed partial class WorkModel : ObservableModelBase, IDisposable
 
 public sealed class BrushToBrushConverter : IMapConverter<SolidColorBrush, SolidColorBrush>
 {
-    public SolidColorBrush Convert(object source, SolidColorBrush value)
+    public SolidColorBrush Convert(SolidColorBrush value, MapConvertArgs args)
     {
         return value.Clone();
     }
 
-    public SolidColorBrush ConvertBack(object target, SolidColorBrush value)
+    public SolidColorBrush ConvertBack(SolidColorBrush value, MapConvertArgs args)
     {
         return value.Clone();
     }

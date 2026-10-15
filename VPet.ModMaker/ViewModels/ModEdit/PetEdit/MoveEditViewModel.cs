@@ -161,7 +161,7 @@ public sealed partial class MoveEditViewModel
             return;
 
         Moves.Add(Move);
-        this.LogIfEnabled(LogLevel.Information)?.Log("添加新移动 {move}", Move.Graph);
+        this.LogIfEnabled(LogLevel.Information)?.Log("添加新移动 '{id}'", Move.Graph);
         //if (this.LogX().Level is LogLevel.Info)
         //else
         //    this.LogX()
@@ -210,7 +210,7 @@ public sealed partial class MoveEditViewModel
         foreach (var model in models)
         {
             Moves.Remove(model);
-            this.LogIfEnabled(LogLevel.Information)?.Log("删除移动 {move}", model.Graph);
+            this.LogIfEnabled(LogLevel.Information)?.Log("删除移动 '{id}'", model.Graph);
         }
     }
 

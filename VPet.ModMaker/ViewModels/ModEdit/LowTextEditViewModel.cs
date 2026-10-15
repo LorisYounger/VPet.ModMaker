@@ -84,6 +84,7 @@ public partial class LowTextEditViewModel
     /// <summary>
     /// 低状态文本
     /// </summary>
+    [ObservableProperty]
     public FilteredListWrapper<
         LowTextModel,
         ObservableList<LowTextModel>,
@@ -134,7 +135,7 @@ public partial class LowTextEditViewModel
             LowText.I18nResource.CopyDataTo(ModInfo.I18nResource);
             LowText.I18nResource = ModInfo.I18nResource;
             LowTexts.Add(LowText);
-            this.LogIfEnabled(LogLevel.Information)?.Log("添加新低状态文本 {lowText}", LowText.ID);
+            this.LogIfEnabled(LogLevel.Information)?.Log("添加低状态文本 '{id}'", LowText.ID);
             //if (this.LogX().Level is LogLevel.Info)
             //else
             //    this.LogX()
@@ -211,7 +212,7 @@ public partial class LowTextEditViewModel
         {
             LowTexts.Remove(model);
             model.Dispose();
-            this.LogIfEnabled(LogLevel.Information)?.Log("删除低状态文本 {lowText}", model.ID);
+            this.LogIfEnabled(LogLevel.Information)?.Log("删除低状态文本 '{id}'", model.ID);
         }
     }
 

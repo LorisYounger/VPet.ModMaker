@@ -109,6 +109,8 @@ public sealed partial class ModEditViewModel
             DialogService.CreateViewModel<ClickTextEditViewModel>(),
             DialogService.CreateViewModel<LowTextEditViewModel>(),
             DialogService.CreateViewModel<SelectTextEditViewModel>(),
+            DialogService.CreateViewModel<ThemeEditViewModel>(),
+            DialogService.CreateViewModel<FontEditViewModel>(),
             DialogService.CreateViewModel<PetEditViewModel>(),
             DialogService.CreateViewModel<WorkEditViewModel>(),
             DialogService.CreateViewModel<MoveEditViewModel>(),

@@ -186,7 +186,7 @@ public partial class FoodEditViewModel
             new()
             {
                 Title = "选择图片".Translate(),
-                Filters = [new("图片".Translate(), ["jpg", "jpeg", "png", "bmp"])],
+                Filters = [new("图片".Translate(), ModMaker.ImageExtensions)],
             }
         );
         if (openFileDialog is null)
@@ -216,7 +216,7 @@ public partial class FoodEditViewModel
             new()
             {
                 Title = "选择图片".Translate(),
-                Filters = [new("图片".Translate(), ["jpg", "jpeg", "png", "bmp"])],
+                Filters = [new("图片".Translate(), ModMaker.ImageExtensions)],
             }
         );
         if (openFileDialog is null)
@@ -255,7 +255,7 @@ public partial class FoodEditViewModel
             Food.I18nResource.CopyDataTo(ModInfo.I18nResource);
             Food.I18nResource = ModInfo.I18nResource;
             Foods.Add(Food);
-            this.LogIfEnabled(LogLevel.Information)?.Log("添加新食物 {food}", Food.ID);
+            this.LogIfEnabled(LogLevel.Information)?.Log("添加新食物 '{id}'", Food.ID);
         }
         Reset();
     }
@@ -315,7 +315,7 @@ public partial class FoodEditViewModel
             Foods.Remove(model);
             model.Image?.CloseStream();
             model.I18nObserver.Dispose();
-            this.LogIfEnabled(LogLevel.Information)?.Log("删除食物 {food}", model.ID);
+            this.LogIfEnabled(LogLevel.Information)?.Log("删除食物 '{id}'", model.ID);
         }
     }
 

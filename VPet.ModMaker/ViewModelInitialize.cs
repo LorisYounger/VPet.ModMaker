@@ -85,6 +85,8 @@ internal partial class AppServices : DIConfigurationBase
         RegisterMVVM<ClickTextEditViewModel, ClickTextEditWindow>();
         RegisterMVVM<LowTextEditViewModel, LowTextEditWindow>();
         RegisterMVVM<SelectTextEditViewModel, SelectTextEditWindow>();
+        RegisterMVVM<ThemeEditViewModel, ThemeEditWindow>();
+        Register<FontEditViewModel>();
 
         RegisterMVVM<PetEditViewModel, PetEditWindow>();
         RegisterMVVM<WorkEditViewModel, WorkEditWindow>();

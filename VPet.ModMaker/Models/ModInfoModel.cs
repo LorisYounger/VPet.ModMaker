@@ -1,6 +1,7 @@
 ﻿using System.Collections.Specialized;
 using System.Globalization;
 using System.IO;
+using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using CommunityToolkit.Mvvm.ComponentModel;
 using HKW.HKWUtils;
@@ -115,6 +116,7 @@ public sealed partial class ModInfoModel : ObservableModelBase, IDisposable
         LoadClickTexts(loader);
         LoadLowTexts(loader);
         LoadSelectTexts(loader);
+        LoadTheme(loader);
         LoadPets(loader);
 
         CurrentPet = Pets.FilteredList.FirstOrDefault()!;
@@ -257,6 +259,16 @@ public sealed partial class ModInfoModel : ObservableModelBase, IDisposable
     public ObservableList<SelectTextModel> SelectTexts { get; } = [];
 
     /// <summary>
+    /// 主题
+    /// </summary>
+    public ObservableList<ThemeModel> Themes { get; } = [];
+
+    /// <summary>
+    /// 字体
+    /// </summary>
+    public ObservableList<FontModel> Fonts { get; } = [];
+
+    /// <summary>
     /// 当前宠物
     /// </summary>
     [ObservableProperty]
@@ -281,6 +293,38 @@ public sealed partial class ModInfoModel : ObservableModelBase, IDisposable
     #endregion
 
     #region Load
+
+    private void LoadTheme(ModLoader loader)
+    {
+        this.LogIfEnabled(LogLevel.Information)
+            ?.Log("载入主题, 数量: {count}", loader.Themes.Count);
+        foreach (var theme in loader.Themes)
+        {
+            try
+            {
+                Themes.Add(new(theme) { I18nResource = I18nResource });
+                this.LogIfEnabled(LogLevel.Debug)?.Log("添加主题成功, ID: {id}", theme.Name);
+            }
+            catch (Exception ex)
+            {
+                this.LogIfEnabled(LogLevel.Warning)?.Log(ex, "添加主题失败, ID: {id}", theme.Name);
+            }
+        }
+
+        this.LogIfEnabled(LogLevel.Information)?.Log("载入字体, 数量: {count}", loader.Fonts.Count);
+        foreach (var font in loader.Fonts)
+        {
+            try
+            {
+                Fonts.Add(new(font));
+                this.LogIfEnabled(LogLevel.Debug)?.Log("添加字体成功, ID: {id}", font.Name);
+            }
+            catch (Exception ex)
+            {
+                this.LogIfEnabled(LogLevel.Warning)?.Log(ex, "添加字体失败, ID: {id}", font.Name);
+            }
+        }
+    }
 
     private void LoadPets(ModLoader loader)
     {

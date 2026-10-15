@@ -24,7 +24,7 @@ namespace VPet.ModMaker.ViewModels;
 /// <summary>
 /// 点击文本视图模型
 /// </summary>
-public partial class ClickTextEditViewModel
+public sealed partial class ClickTextEditViewModel
     : ViewModelBase,
         IEditViewModel,
         IModalDialogViewModel,
@@ -139,8 +139,7 @@ public partial class ClickTextEditViewModel
             ClickText.I18nResource.CopyDataTo(ModInfo.I18nResource);
             ClickText.I18nResource = ModInfo.I18nResource;
             ClickTexts.Add(ClickText);
-            this.LogIfEnabled(LogLevel.Information)
-                ?.Log("添加新点击文本 {clickText}", ClickText.ID);
+            this.LogIfEnabled(LogLevel.Information)?.Log("添加新点击文本 '{id}'", ClickText.ID);
         }
         Reset();
     }
@@ -208,7 +207,7 @@ public partial class ClickTextEditViewModel
         {
             ClickTexts.Remove(model);
             model.Dispose();
-            this.LogIfEnabled(LogLevel.Information)?.Log("删除点击文本 {clickText}", model.ID);
+            this.LogIfEnabled(LogLevel.Information)?.Log("删除点击文本 '{id}'", model.ID);
         }
     }
 

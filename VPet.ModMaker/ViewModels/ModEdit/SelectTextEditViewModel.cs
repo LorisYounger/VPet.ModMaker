@@ -97,7 +97,7 @@ public partial class SelectTextEditViewModel
         SelectTextModel,
         ObservableList<SelectTextModel>,
         ObservableList<SelectTextModel>
-    > SelectTexts { get; set; }
+    > SelectTexts { get; set; } = null!;
 
     /// <summary>
     /// 搜索
@@ -145,8 +145,7 @@ public partial class SelectTextEditViewModel
             SelectText.I18nResource.CopyDataTo(ModInfo.I18nResource);
             SelectText.I18nResource = ModInfo.I18nResource;
             SelectTexts.Add(SelectText);
-            this.LogIfEnabled(LogLevel.Information)
-                ?.Log("添加新选择文本 {selectText}", SelectText.ID);
+            this.LogIfEnabled(LogLevel.Information)?.Log("添加新选择文本 '{id}'", SelectText.ID);
             //if (this.LogX().Level is LogLevel.Info)
             //else
             //    this.LogX()
@@ -227,7 +226,7 @@ public partial class SelectTextEditViewModel
         {
             SelectTexts.Remove(model);
             model.Dispose();
-            this.LogIfEnabled(LogLevel.Information)?.Log("删除选择文本 {selectText}", model.ID);
+            this.LogIfEnabled(LogLevel.Information)?.Log("删除选择文本 '{id}'", model.ID);
         }
     }
 
