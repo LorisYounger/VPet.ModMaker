@@ -53,6 +53,7 @@
       ItemsSource="{Binding I18nDatas.FilteredList}"
       ScrollViewer.IsDeferredScrollingEnabled="True"
       VirtualizingStackPanel.VirtualizationMode="Recycling"
+      FrozenColumnCount="1"
     >
       <DataGrid.Columns>
         <DataGridTextColumn

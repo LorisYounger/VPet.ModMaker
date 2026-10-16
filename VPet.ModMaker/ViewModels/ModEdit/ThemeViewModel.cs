@@ -29,6 +29,25 @@ public sealed partial class ThemeEditViewModel
     /// <inheritdoc/>
     public ThemeEditViewModel()
     {
+        Themes = new(
+            [],
+            [],
+            x =>
+            {
+                return CurrentSearchTarget.Value switch
+                {
+                    ThemeSearchTarget.ID => x.ID.Contains(
+                        Search,
+                        StringComparison.CurrentCultureIgnoreCase
+                    ),
+                    ThemeSearchTarget.Name => x.Name.Contains(
+                        Search,
+                        StringComparison.CurrentCultureIgnoreCase
+                    ),
+                    _ => false,
+                };
+            }
+        );
         this.WhenAnyValue(x => x.Search, x => x.CurrentSearchTarget)
             .Throttle(TimeSpan.FromSeconds(0.5), ObservableSchedulers.ThreadPool)
             .DistinctUntilChanged()
@@ -47,28 +66,10 @@ public sealed partial class ThemeEditViewModel
 
     partial void OnModInfoChanged(ModInfoModel oldValue, ModInfoModel newValue)
     {
-        Themes = null!;
+        Themes.SourceList = null!;
         if (newValue is not null)
         {
-            Themes = new(
-                newValue.Themes,
-                [],
-                x =>
-                {
-                    return CurrentSearchTarget.Value switch
-                    {
-                        ThemeSearchTarget.ID => x.ID.Contains(
-                            Search,
-                            StringComparison.CurrentCultureIgnoreCase
-                        ),
-                        ThemeSearchTarget.Name => x.Name.Contains(
-                            Search,
-                            StringComparison.CurrentCultureIgnoreCase
-                        ),
-                        _ => false,
-                    };
-                }
-            );
+            Themes.SourceList = newValue.Themes;
             newValue
                 .Themes.WhenAnyValue(x => x.Count)
                 .Subscribe(_ => OnPropertyChanged(nameof(DisplayText)))
@@ -76,12 +77,11 @@ public sealed partial class ThemeEditViewModel
         }
     }
 
-    [ObservableProperty]
-    public FilteredListWrapper<
+    public ObservableFilteredListWrapper<
         ThemeModel,
         ObservableList<ThemeModel>,
         ObservableList<ThemeModel>
-    > Themes { get; set; } = null!;
+    > Themes { get; }
 
     /// <summary>
     /// 搜索

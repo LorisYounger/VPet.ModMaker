@@ -36,6 +36,30 @@ public partial class FoodEditViewModel
     /// <inheritdoc/>
     public FoodEditViewModel()
     {
+        Foods = new(
+            [],
+            [],
+            x =>
+            {
+                return CurrentSearchTarget?.Value switch
+                {
+                    FoodSearchTarget.ID => x.ID.Contains(
+                        Search,
+                        StringComparison.CurrentCultureIgnoreCase
+                    ),
+                    FoodSearchTarget.Name => x.Name.Contains(
+                        Search,
+                        StringComparison.CurrentCultureIgnoreCase
+                    ),
+                    FoodSearchTarget.Graph => x.Graph.Contains(
+                        Search,
+                        StringComparison.CurrentCultureIgnoreCase
+                    ),
+                    _ => false,
+                };
+            }
+        );
+
         this.WhenAnyValue(x => x.Search, x => x.CurrentSearchTarget)
             .Throttle(TimeSpan.FromSeconds(0.5), ObservableSchedulers.ThreadPool)
             .DistinctUntilChanged()
@@ -56,32 +80,10 @@ public partial class FoodEditViewModel
 
     partial void OnModInfoChanged(ModInfoModel oldValue, ModInfoModel newValue)
     {
-        Foods = null!;
+        Foods.SourceList = null!;
         if (newValue is not null)
         {
-            Foods = new(
-                newValue.Foods,
-                [],
-                x =>
-                {
-                    return CurrentSearchTarget?.Value switch
-                    {
-                        FoodSearchTarget.ID => x.ID.Contains(
-                            Search,
-                            StringComparison.CurrentCultureIgnoreCase
-                        ),
-                        FoodSearchTarget.Name => x.Name.Contains(
-                            Search,
-                            StringComparison.CurrentCultureIgnoreCase
-                        ),
-                        FoodSearchTarget.Graph => x.Graph.Contains(
-                            Search,
-                            StringComparison.CurrentCultureIgnoreCase
-                        ),
-                        _ => false,
-                    };
-                }
-            );
+            Foods.SourceList = newValue.Foods;
             newValue
                 .Foods.WhenAnyValue(x => x.Count)
                 .Subscribe(_ => OnPropertyChanged(nameof(DisplayText)))
@@ -92,12 +94,11 @@ public partial class FoodEditViewModel
     /// <summary>
     /// 食物
     /// </summary>
-    [ObservableProperty]
-    public FilteredListWrapper<
+    public ObservableFilteredListWrapper<
         FoodModel,
         ObservableList<FoodModel>,
         ObservableList<FoodModel>
-    > Foods { get; private set; }
+    > Foods { get; }
 
     /// <summary>
     /// 搜索

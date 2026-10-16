@@ -22,6 +22,7 @@ public sealed partial class AnimeViewModel : ViewModelBase, IEditViewModel, IDis
     /// <inheritdoc/>
     public AnimeViewModel()
     {
+        Animes = new([], [], f => f.ID.Contains(Search, StringComparison.CurrentCultureIgnoreCase));
         this.WhenAnyValue(x => x.Search)
             .Throttle(TimeSpan.FromSeconds(0.5), ObservableSchedulers.ThreadPool)
             .DistinctUntilChanged()
@@ -56,12 +57,11 @@ public sealed partial class AnimeViewModel : ViewModelBase, IEditViewModel, IDis
     /// <summary>
     /// 所有动画
     /// </summary>
-    [ObservableProperty]
-    public FilteredListWrapper<
+    public ObservableFilteredListWrapper<
         IAnimeModel,
         ObservableList<IAnimeModel>,
         ObservableList<IAnimeModel>
-    > Animes { get; set; }
+    > Animes { get; }
 
     /// <summary>
     /// 当前宠物
@@ -71,14 +71,10 @@ public sealed partial class AnimeViewModel : ViewModelBase, IEditViewModel, IDis
 
     partial void OnCurrentPetChanged(PetModel? oldValue, PetModel? newValue)
     {
-        Animes = null!;
+        Animes.SourceList = null!;
         if (newValue is not null)
         {
-            Animes = new(
-                newValue.Animes,
-                [],
-                (f) => f.ID.Contains(Search, StringComparison.CurrentCultureIgnoreCase)
-            );
+            Animes.SourceList = newValue.Animes;
         }
     }
 

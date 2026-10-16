@@ -126,7 +126,7 @@ public sealed partial class ModInfoModel : ObservableModelBase, IDisposable
     /// I18n资源
     /// </summary>
     public ObservableI18nResource<string, string> I18nResource { get; } =
-        new("Main") { GetDefaultValue = (s, _) => s };
+        new("Main") { GetDefaultValue = (_, _) => string.Empty };
     public I18nObserver<ModInfoModel, string, string> I18nObserver =>
         field ??= new(I18nResource, this, (s, p) => s.OnPropertyChanged(p))
         {
@@ -138,7 +138,7 @@ public sealed partial class ModInfoModel : ObservableModelBase, IDisposable
     /// 临时I18n资源, 用于新建的项目
     /// </summary>
     public ObservableI18nResource<string, string> TempI18nResource =>
-        field ??= new("Temp") { GetDefaultValue = (s, _) => s };
+        field ??= new("Temp") { GetDefaultValue = (_, _) => string.Empty };
 
     //partial OnD
 
@@ -312,16 +312,18 @@ public sealed partial class ModInfoModel : ObservableModelBase, IDisposable
         }
 
         this.LogIfEnabled(LogLevel.Information)?.Log("载入字体, 数量: {count}", loader.Fonts.Count);
-        foreach (var font in loader.Fonts)
+        foreach (var file in loader.Fonts)
         {
             try
             {
-                Fonts.Add(new(font));
+                var font = new FontModel(file);
+                Fonts.Add(font);
                 this.LogIfEnabled(LogLevel.Debug)?.Log("添加字体成功, ID: {id}", font.Name);
             }
             catch (Exception ex)
             {
-                this.LogIfEnabled(LogLevel.Warning)?.Log(ex, "添加字体失败, ID: {id}", font.Name);
+                this.LogIfEnabled(LogLevel.Warning)
+                    ?.Log(ex, "添加字体失败, 文件路径: '{file}'", file);
             }
         }
     }
@@ -679,9 +681,10 @@ public sealed partial class ModInfoModel : ObservableModelBase, IDisposable
         this.LogIfEnabled(LogLevel.Information)?.Log("正在保存模组, 目标路径: '{path}'", path);
         SaveModInfo(path);
         SaveFoods(path);
-        SaveText(path);
+        SaveTexts(path);
+        SaveThemes(path);
         SavePets(path);
-        SaveImage(path);
+        SaveImages(path);
         SaveI18nData(path, I18nResource.Cultures);
         this.LogIfEnabled(LogLevel.Information)?.Log("模组保存完毕");
     }
@@ -778,15 +781,61 @@ public sealed partial class ModInfoModel : ObservableModelBase, IDisposable
         }
         this.LogIfEnabled(LogLevel.Information)?.Log("正在保存食物, 数量: {count}", Foods.Count);
         Directory.CreateDirectory(foodPath);
-        var foodFile = Path.Combine(foodPath, "food.lps");
-        if (File.Exists(foodFile) is false)
-            File.Create(foodFile).Close();
-        var lps = new LPS();
-        foreach (var food in Foods)
+
+        var foodGroups = Foods.GroupBy(x => x.Type);
+        foreach (var foodGroup in foodGroups)
         {
-            lps.Add(LPSConvert.SerializeObjectToLine<Line>(food.MapTo(_food), "food"));
+            var foodFile = Path.Combine(foodPath, $"{foodGroup.Key}.lps");
+            if (File.Exists(foodFile) is false)
+                File.Create(foodFile).Close();
+            var lps = new LPS();
+            foreach (var food in foodGroup)
+            {
+                lps.Add(LPSConvert.SerializeObjectToLine<Line>(food.MapTo(_food), "food"));
+            }
+            File.WriteAllText(foodFile, lps.ToString());
         }
-        File.WriteAllText(foodFile, lps.ToString());
+    }
+
+    private static readonly Theme _theme = new([new Line("", "") { new Sub("image", "") }]);
+
+    /// <summary>
+    /// 保存主题
+    /// </summary>
+    /// <param name="path">路径</param>
+    private void SaveThemes(string path)
+    {
+        var themePath = Path.Combine(path, "theme");
+        if (Themes.Count == 0 || Fonts.Count == 0)
+        {
+            if (Directory.Exists(themePath))
+                Directory.Delete(themePath, true);
+            return;
+        }
+        Directory.CreateDirectory(themePath);
+        this.LogIfEnabled(LogLevel.Information)?.Log("正在保存主题, 数量: {count}", Themes.Count);
+        foreach (var theme in Themes)
+        {
+            var file = Path.Combine(themePath, $"{theme.ID}.lps");
+            _theme.ThemeColor = [new Line(theme.ID, theme.ID) { new Sub("image", "default") }];
+            theme.MapTo(_theme);
+            File.WriteAllText(file, _theme.ThemeColor.ToString());
+        }
+
+        var fontPath = Path.Combine(themePath, "fonts");
+        if (Fonts.Count == 0)
+        {
+            if (Directory.Exists(fontPath))
+                Directory.Delete(fontPath, true);
+            return;
+        }
+        Directory.CreateDirectory(fontPath);
+        this.LogIfEnabled(LogLevel.Information)?.Log("正在保存字体, 数量: {count}", Themes.Count);
+        foreach (var font in Fonts)
+        {
+            var savePath = Path.Combine(fontPath, Path.GetFileName(font.FullName));
+            File.Copy(font.FullName, savePath, true);
+        }
     }
 
     #region SaveText
@@ -794,7 +843,7 @@ public sealed partial class ModInfoModel : ObservableModelBase, IDisposable
     /// 保存文本
     /// </summary>
     /// <param name="path">路径</param>
-    private void SaveText(string path)
+    private void SaveTexts(string path)
     {
         var textPath = Path.Combine(path, "text");
         if (LowTexts.Count == 0 && ClickTexts.Count == 0 && SelectTexts.Count == 0)
@@ -907,7 +956,7 @@ public sealed partial class ModInfoModel : ObservableModelBase, IDisposable
     /// 保存图片
     /// </summary>
     /// <param name="path">路径</param>
-    private void SaveImage(string path)
+    private void SaveImages(string path)
     {
         if (Foods.Count == 0)
             return;

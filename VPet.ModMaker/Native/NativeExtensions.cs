@@ -51,7 +51,8 @@ public static class NativeExtensions
     public static bool IsMultiTypeGraph(this GraphInfo.GraphType graphType)
     {
         return graphType
-            is GraphInfo.GraphType.Touch_Head
+            is GraphInfo.GraphType.Default
+                or GraphInfo.GraphType.Touch_Head
                 or GraphInfo.GraphType.Touch_Body
                 or GraphInfo.GraphType.Sleep
                 or GraphInfo.GraphType.Raised_Static

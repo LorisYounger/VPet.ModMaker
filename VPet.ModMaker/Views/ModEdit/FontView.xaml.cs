@@ -10,6 +10,8 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using VPet.ModMaker.Models;
+using VPet.ModMaker.ViewModels;
 
 namespace VPet.ModMaker.Views;
 
@@ -21,5 +23,17 @@ public partial class FontView : UserControl
     public FontView()
     {
         InitializeComponent();
+    }
+
+    /// <summary>
+    /// 视图模型
+    /// </summary>
+    public FontEditViewModel ViewModel => (FontEditViewModel)DataContext;
+
+    private void DataGrid_MouseDoubleClick(object? sender, MouseButtonEventArgs e)
+    {
+        if (sender is not DataGrid dataGrid || dataGrid.SelectedItem is not FontModel model)
+            return;
+        NativeUtils.OpenLink(model.FullName);
     }
 }

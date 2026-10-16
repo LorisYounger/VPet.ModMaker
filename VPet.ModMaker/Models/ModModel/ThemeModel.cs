@@ -13,7 +13,43 @@ namespace VPet.ModMaker.Models;
 [MapTarget(typeof(ThemeModel))]
 public sealed partial class ThemeModel : ObservableModelBase, IDisposable
 {
-    public ThemeModel() { }
+    public static readonly ThemeModel _default = new(
+        new Theme(
+            new(
+                """
+                default#原版默认:|image#default:|
+                Primary#FF81d4fa:|
+                PrimaryLight#FFA3E2FF:|
+                PrimaryLighter#FFC1EBFF:|
+                PrimaryDark#FF5CBEEA:|
+                PrimaryDarker#FF3CA9DB:|
+                PrimaryText#FF000000:|
+                Secondary#FF90caf9:|
+                SecondaryLight#FFADD7F9:|
+                SecondaryLighter#FFCBE4F9:|
+                SecondaryDark#FF6BB1E9:|
+                SecondaryDarker#FF4999DA:|
+                SecondaryText#FF000000:|
+                DARKPrimary#FF039be5:|
+                DARKPrimaryLight#FF1FA9EC:|
+                DARKPrimaryLighter#FF3DB8F4:|
+                DARKPrimaryDark#FF0290D5:|
+                DARKPrimaryDarker#FF0286C6:|
+                DARKPrimaryText#FFffffff:|
+                ShadowColor#90CAF9:|
+                """
+            )
+        )
+    )
+    {
+        I18nResource = new("default"),
+    };
+
+    public ThemeModel()
+    {
+        this.MapFrom(_default);
+        ID = "";
+    }
 
     public ThemeModel(ThemeModel theme)
     {
@@ -22,12 +58,11 @@ public sealed partial class ThemeModel : ObservableModelBase, IDisposable
 
     public ThemeModel(Theme theme)
     {
-        ID = theme.Name;
         this.MapFrom(theme);
     }
 
     [ObservableProperty]
-    [MapProperty(typeof(Theme), Ignore = true)]
+    [MapProperty(typeof(Theme), nameof(Theme.Name))]
     public string ID { get; set; } = string.Empty;
 
     /// <summary>
@@ -160,7 +195,13 @@ public sealed partial class ThemeModel : ObservableModelBase, IDisposable
     /// <inheritdoc/>
     public void Dispose()
     {
-        I18nObserver?.Dispose();
+        if (I18nObserver is not null)
+        {
+            I18nObserver.Resource = null!;
+            foreach (var reg in I18nObserver)
+                I18nResource.RemoveData(reg.OldKey);
+            I18nObserver.Dispose();
+        }
     }
 
     internal sealed class BrushToLPS : IMapConverter<SolidColorBrush, LinePutScript.LpsDocument>

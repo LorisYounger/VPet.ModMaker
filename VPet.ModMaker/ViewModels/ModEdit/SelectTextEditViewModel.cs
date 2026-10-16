@@ -34,6 +34,33 @@ public partial class SelectTextEditViewModel
     /// <inheritdoc/>
     public SelectTextEditViewModel()
     {
+        SelectTexts = new(
+            [],
+            [],
+            m =>
+            {
+                return CurrentSearchTarget.Value switch
+                {
+                    SelectTextSearchTarget.ID => m.ID.Contains(
+                        Search,
+                        StringComparison.CurrentCultureIgnoreCase
+                    ),
+                    SelectTextSearchTarget.Text => m.Text.Contains(
+                        Search,
+                        StringComparison.CurrentCultureIgnoreCase
+                    ),
+                    SelectTextSearchTarget.Tags => m.Tags.Contains(
+                        Search,
+                        StringComparison.CurrentCultureIgnoreCase
+                    ),
+                    SelectTextSearchTarget.ToTags => m.ToTags.Contains(
+                        Search,
+                        StringComparison.CurrentCultureIgnoreCase
+                    ),
+                    _ => false,
+                };
+            }
+        );
         this.WhenAnyValue(x => x.Search, x => x.CurrentSearchTarget)
             .Throttle(TimeSpan.FromSeconds(0.5), ObservableSchedulers.ThreadPool)
             .DistinctUntilChanged()
@@ -52,36 +79,10 @@ public partial class SelectTextEditViewModel
 
     partial void OnModInfoChanged(ModInfoModel oldValue, ModInfoModel newValue)
     {
-        SelectTexts = null!;
+        SelectTexts.SourceList = null!;
         if (newValue is not null)
         {
-            SelectTexts = new(
-                newValue.SelectTexts,
-                [],
-                m =>
-                {
-                    return CurrentSearchTarget.Value switch
-                    {
-                        SelectTextSearchTarget.ID => m.ID.Contains(
-                            Search,
-                            StringComparison.CurrentCultureIgnoreCase
-                        ),
-                        SelectTextSearchTarget.Text => m.Text.Contains(
-                            Search,
-                            StringComparison.CurrentCultureIgnoreCase
-                        ),
-                        SelectTextSearchTarget.Tags => m.Tags.Contains(
-                            Search,
-                            StringComparison.CurrentCultureIgnoreCase
-                        ),
-                        SelectTextSearchTarget.ToTags => m.ToTags.Contains(
-                            Search,
-                            StringComparison.CurrentCultureIgnoreCase
-                        ),
-                        _ => false,
-                    };
-                }
-            );
+            SelectTexts.SourceList = newValue.SelectTexts;
             newValue
                 .SelectTexts.WhenAnyValue(x => x.Count)
                 .Subscribe(_ => OnPropertyChanged(nameof(DisplayText)))
@@ -92,12 +93,11 @@ public partial class SelectTextEditViewModel
     /// <summary>
     /// 全部选择文本
     /// </summary>
-    [ObservableProperty]
-    public FilteredListWrapper<
+    public ObservableFilteredListWrapper<
         SelectTextModel,
         ObservableList<SelectTextModel>,
         ObservableList<SelectTextModel>
-    > SelectTexts { get; set; } = null!;
+    > SelectTexts { get; }
 
     /// <summary>
     /// 搜索

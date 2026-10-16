@@ -380,6 +380,10 @@ public sealed partial class AnimeTypeModel : ObservableModelBase, IAnimeModel
             is GraphInfo.GraphType.Default
                 or GraphInfo.GraphType.Shutdown
                 or GraphInfo.GraphType.StartUP
+                or GraphInfo.GraphType.SideHide_Left_Main
+                or GraphInfo.GraphType.SideHide_Left_Rise
+                or GraphInfo.GraphType.SideHide_Right_Main
+                or GraphInfo.GraphType.SideHide_Right_Rise
         )
             SaveDefault(path);
         else if (

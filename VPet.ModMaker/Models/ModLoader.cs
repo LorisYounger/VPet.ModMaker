@@ -89,7 +89,7 @@ public class ModLoader
     /// </summary>
     public List<SelectText> SelectTexts { get; } = [];
 
-    public List<IFont> Fonts { get; } = [];
+    public List<string> Fonts { get; } = [];
 
     public List<Theme> Themes { get; } = [];
     public List<Photo> Photos { get; } = [];
@@ -142,10 +142,10 @@ public class ModLoader
                     if (Directory.Exists(di.FullName + @"\fonts"))
                     {
                         foreach (
-                            var str in Directory.EnumerateFiles(di.FullName + @"\fonts", "*.ttf")
+                            var file in Directory.EnumerateFiles(di.FullName + @"\fonts", "*.ttf")
                         )
                         {
-                            Fonts.Add(new IFont(new FileInfo(str)));
+                            Fonts.Add(file);
                         }
                     }
 

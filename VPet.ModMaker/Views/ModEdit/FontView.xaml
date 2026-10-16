@@ -8,9 +8,92 @@
   xmlns:ll="clr-namespace:LinePutScript.Localization.WPF;assembly=LinePutScript.Localization.WPF"
   xmlns:pu="https://opensource.panuon.com/wpf-ui"
   xmlns:vm="clr-namespace:VPet.ModMaker.ViewModels"
+  xmlns:m="clr-namespace:VPet.ModMaker.Models"
   mc:Ignorable="d"
   d:DesignHeight="450"
   d:DesignWidth="800"
+  d:DataContext="{d:DesignInstance vm:FontEditViewModel}"
 >
-  <Grid></Grid>
+  <Grid>
+    <Grid.RowDefinitions>
+      <RowDefinition Height="Auto" />
+      <RowDefinition />
+    </Grid.RowDefinitions>
+    <Grid>
+      <TextBox
+        pu:TextBoxHelper.Watermark="{ll:Str 搜索}"
+        Style="{StaticResource StandardTextBoxStyle}"
+        Text="{Binding Search, UpdateSourceTrigger=PropertyChanged}"
+      />
+    </Grid>
+    <DataGrid
+      x:Name="DataGrid"
+      Grid.Row="1"
+      d:ItemsSource="{d:SampleData ItemCount=5}"
+      d:SelectedIndex="0"
+      pu:DataGridHelper.ColumnHeaderHorizontalContentAlignment="Center"
+      pu:DataGridHelper.RowSelectedBorderBrush="{StaticResource DARKPrimaryLight}"
+      pu:DataGridHelper.RowSelectedBorderThickness="3"
+      AutoGenerateColumns="False"
+      CanUserAddRows="False"
+      CanUserDeleteRows="False"
+      CanUserReorderColumns="False"
+      CanUserResizeRows="False"
+      GridLinesVisibility="Horizontal"
+      ItemsSource="{Binding Fonts.FilteredList}"
+      MouseDoubleClick="DataGrid_MouseDoubleClick"
+      RowDetailsVisibilityMode="Visible"
+      RowHeight="64"
+      VirtualizingStackPanel.IsVirtualizing="True"
+      VirtualizingStackPanel.VirtualizationMode="Recycling"
+      FrozenColumnCount="1"
+    >
+      <DataGrid.RowStyle>
+        <Style BasedOn="{StaticResource {x:Type DataGridRow}}" TargetType="DataGridRow">
+          <Setter Property="Height" Value="64" />
+          <Setter Property="Tag" Value="{Binding}" />
+          <Setter Property="ContextMenu" Value="{StaticResource DataGridRow_RemovesContextMenu}" />
+        </Style>
+      </DataGrid.RowStyle>
+      <DataGrid.Columns>
+        <DataGridTextColumn
+          MaxWidth="200"
+          Binding="{Binding Name}"
+          CanUserSort="True"
+          ElementStyle="{StaticResource TextBlock_LeftCenter}"
+          Header="{ll:Str 名称}"
+          IsReadOnly="True"
+          SortMemberPath="Name"
+        />
+        <DataGridTextColumn
+          Binding="{Binding SupportedCultures}"
+          CanUserSort="True"
+          ElementStyle="{StaticResource TextBlock_LeftCenter}"
+          Header="{ll:Str 支持的文化}"
+          IsReadOnly="True"
+        />
+        <DataGridTextColumn
+          Binding="{Binding Source={x:Static m:FontModel.SampleText}}"
+          CanUserSort="True"
+          FontSize="16"
+          Header="{ll:Str 示例文本}"
+          IsReadOnly="True"
+        >
+          <DataGridTextColumn.ElementStyle>
+            <Style TargetType="{x:Type TextBlock}" BasedOn="{StaticResource TextBlock_LeftCenter}">
+              <Setter Property="FontFamily" Value="{Binding Font}" />
+            </Style>
+          </DataGridTextColumn.ElementStyle>
+        </DataGridTextColumn>
+      </DataGrid.Columns>
+    </DataGrid>
+    <Button
+      Grid.Row="1"
+      HorizontalAlignment="Right"
+      VerticalAlignment="Bottom"
+      Command="{Binding AddCommand}"
+      Content="➕"
+      Style="{StaticResource AddButton}"
+    />
+  </Grid>
 </UserControl>

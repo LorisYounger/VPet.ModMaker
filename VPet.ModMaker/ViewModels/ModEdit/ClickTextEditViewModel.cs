@@ -33,6 +33,29 @@ public sealed partial class ClickTextEditViewModel
     /// <inheritdoc/>
     public ClickTextEditViewModel()
     {
+        ClickTexts = new(
+            [],
+            [],
+            x =>
+            {
+                return CurrentSearchTarget.Value switch
+                {
+                    ClickTextSearchTarget.ID => x.ID.Contains(
+                        Search,
+                        StringComparison.CurrentCultureIgnoreCase
+                    ),
+                    ClickTextSearchTarget.Text => x.Text.Contains(
+                        Search,
+                        StringComparison.CurrentCultureIgnoreCase
+                    ),
+                    ClickTextSearchTarget.Working => x.Working.Contains(
+                        Search,
+                        StringComparison.CurrentCultureIgnoreCase
+                    ),
+                    _ => false,
+                };
+            }
+        );
         this.WhenAnyValue(x => x.Search, x => x.CurrentSearchTarget)
             .Throttle(TimeSpan.FromSeconds(0.5), ObservableSchedulers.ThreadPool)
             .DistinctUntilChanged()
@@ -51,32 +74,10 @@ public sealed partial class ClickTextEditViewModel
 
     partial void OnModInfoChanged(ModInfoModel oldValue, ModInfoModel newValue)
     {
-        ClickTexts = null!;
+        ClickTexts.SourceList = null!;
         if (newValue is not null)
         {
-            ClickTexts = new(
-                newValue.ClickTexts,
-                [],
-                x =>
-                {
-                    return CurrentSearchTarget.Value switch
-                    {
-                        ClickTextSearchTarget.ID => x.ID.Contains(
-                            Search,
-                            StringComparison.CurrentCultureIgnoreCase
-                        ),
-                        ClickTextSearchTarget.Text => x.Text.Contains(
-                            Search,
-                            StringComparison.CurrentCultureIgnoreCase
-                        ),
-                        ClickTextSearchTarget.Working => x.Working.Contains(
-                            Search,
-                            StringComparison.CurrentCultureIgnoreCase
-                        ),
-                        _ => false,
-                    };
-                }
-            );
+            ClickTexts.SourceList = newValue.ClickTexts;
             newValue
                 .ClickTexts.WhenAnyValue(x => x.Count)
                 .Subscribe(_ => OnPropertyChanged(nameof(DisplayText)))
@@ -87,12 +88,11 @@ public sealed partial class ClickTextEditViewModel
     /// <summary>
     /// 显示的点击文本
     /// </summary>
-    [ObservableProperty]
-    public FilteredListWrapper<
+    public ObservableFilteredListWrapper<
         ClickTextModel,
         ObservableList<ClickTextModel>,
         ObservableList<ClickTextModel>
-    > ClickTexts { get; set; } = null!;
+    > ClickTexts { get; }
 
     /// <summary>
     /// 搜索

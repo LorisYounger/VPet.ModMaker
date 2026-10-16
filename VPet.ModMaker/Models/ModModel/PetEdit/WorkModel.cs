@@ -249,13 +249,27 @@ public sealed partial class WorkModel : ObservableModelBase, IDisposable
 
 public sealed class BrushToBrushConverter : IMapConverter<SolidColorBrush, SolidColorBrush>
 {
+    private static readonly SolidColorBrush _default = new(
+        new()
+        {
+            A = byte.MaxValue,
+            R = byte.MaxValue,
+            G = byte.MaxValue,
+            B = byte.MaxValue,
+        }
+    );
+
     public SolidColorBrush Convert(SolidColorBrush value, MapConvertArgs args)
     {
+        if (value is null)
+            return _default.Clone();
         return value.Clone();
     }
 
     public SolidColorBrush ConvertBack(SolidColorBrush value, MapConvertArgs args)
     {
+        if (value is null)
+            return _default.Clone();
         return value.Clone();
     }
 }

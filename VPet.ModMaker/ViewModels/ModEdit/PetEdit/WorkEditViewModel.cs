@@ -35,6 +35,25 @@ public sealed partial class WorkEditViewModel
     /// <inheritdoc/>
     public WorkEditViewModel()
     {
+        Works = new(
+            [],
+            [],
+            f =>
+            {
+                return CurrentSearchTarget.Value switch
+                {
+                    WorkSearchTarget.ID => f.ID.Contains(
+                        Search,
+                        StringComparison.CurrentCultureIgnoreCase
+                    ),
+                    WorkSearchTarget.Graph => f.Graph.Contains(
+                        Search,
+                        StringComparison.CurrentCultureIgnoreCase
+                    ),
+                    _ => false,
+                };
+            }
+        );
         this.WhenAnyValue(x => x.Search, x => x.CurrentSearchTarget)
             .Throttle(TimeSpan.FromSeconds(0.5), ObservableSchedulers.ThreadPool)
             .DistinctUntilChanged()
@@ -75,29 +94,11 @@ public sealed partial class WorkEditViewModel
 
     partial void OnCurrentPetChanged(PetModel? oldValue, PetModel? newValue)
     {
-        Works = null!;
+        Works.SourceList = null!;
         ModInfo?.CurrentPet = newValue;
         if (newValue is not null)
         {
-            Works = new(
-                newValue.Works,
-                [],
-                f =>
-                {
-                    return CurrentSearchTarget.Value switch
-                    {
-                        WorkSearchTarget.ID => f.ID.Contains(
-                            Search,
-                            StringComparison.CurrentCultureIgnoreCase
-                        ),
-                        WorkSearchTarget.Graph => f.Graph.Contains(
-                            Search,
-                            StringComparison.CurrentCultureIgnoreCase
-                        ),
-                        _ => false,
-                    };
-                }
-            );
+            Works.SourceList = newValue.Works;
         }
         CurrentSearchTarget = WorkSearchTarget.ID;
     }
@@ -105,12 +106,11 @@ public sealed partial class WorkEditViewModel
     /// <summary>
     /// 全部工作
     /// </summary>
-    [ObservableProperty]
-    public FilteredListWrapper<
+    public ObservableFilteredListWrapper<
         WorkModel,
         ObservableList<WorkModel>,
         ObservableList<WorkModel>
-    > Works { get; set; } = null!;
+    > Works { get; }
 
     /// <summary>
     /// 搜索

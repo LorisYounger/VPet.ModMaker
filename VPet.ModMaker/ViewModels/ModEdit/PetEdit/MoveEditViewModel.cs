@@ -35,6 +35,11 @@ public sealed partial class MoveEditViewModel
     /// <inheritdoc/>
     public MoveEditViewModel()
     {
+        Moves = new(
+            [],
+            [],
+            f => f.Graph.Contains(Search, StringComparison.CurrentCultureIgnoreCase)
+        );
         this.WhenAnyValue(x => x.Search)
             .Throttle(TimeSpan.FromSeconds(0.5), ObservableSchedulers.ThreadPool)
             .DistinctUntilChanged()
@@ -68,12 +73,11 @@ public sealed partial class MoveEditViewModel
     /// <summary>
     /// 全部移动
     /// </summary>
-    [ObservableProperty]
-    public FilteredListWrapper<
+    public ObservableFilteredListWrapper<
         MoveModel,
         ObservableList<MoveModel>,
         ObservableList<MoveModel>
-    > Moves { get; set; }
+    > Moves { get; }
 
     /// <summary>
     /// 当前宠物
@@ -83,15 +87,11 @@ public sealed partial class MoveEditViewModel
 
     partial void OnCurrentPetChanged(PetModel? oldValue, PetModel? newValue)
     {
-        Moves = null!;
+        Moves.SourceList = null!;
         ModInfo?.CurrentPet = newValue;
         if (newValue is not null)
         {
-            Moves = new(
-                newValue.Moves,
-                [],
-                f => f.Graph.Contains(Search, StringComparison.CurrentCultureIgnoreCase)
-            );
+            Moves.SourceList = newValue.Moves;
         }
     }
 

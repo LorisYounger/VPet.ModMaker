@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using System.Collections.Immutable;
 using System.ComponentModel;
 using System.Globalization;
 using System.IO;
@@ -365,6 +366,14 @@ internal static class MVVMDialogExtensions
 internal static class NativeUtils
 {
     public const char Underscore = '_';
+
+    //private static readonly ImmutableHashSet<string> _singleTypeCommonAnimes =
+    //    ImmutableHashSet.Create(StringComparer.CurrentCultureIgnoreCase, "BDay");
+
+    //public static bool IsSingleTypeCommonAnime(string animeName)
+    //{
+    //    return _singleTypeCommonAnimes.Contains(animeName);
+    //}
 
     /// <summary>
     /// 解码像素宽度

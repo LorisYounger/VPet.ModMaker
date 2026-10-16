@@ -134,24 +134,17 @@ public sealed partial class ModEditViewModel
         DialogService.ShowDialog(this, SaveTranslationModViewModel);
     }
 
-    /// <summary>
-    /// 可以进行I18n编辑
-    /// </summary>
-    [ObservableProperty]
-    public bool I18nEditCanExecute { get; set; } = true;
     private I18nEditViewModel I18nEditViewModel =>
         field ??= DialogService.CreateViewModel<I18nEditViewModel>();
 
     /// <summary>
     /// 编辑I18n数据
     /// </summary>
-    [RelayCommand(CanExecute = nameof(I18nEditCanExecute))]
+    [RelayCommand]
     private void EditI18n()
     {
-        I18nEditCanExecute = false;
         I18nEditViewModel.ModInfo = ModInfo;
-        DialogService.Show(null, I18nEditViewModel);
-        DialogService.WhenClosed(I18nEditViewModel, _ => I18nEditCanExecute = true);
+        DialogService.ShowDialog(this, I18nEditViewModel);
     }
 
     /// <summary>

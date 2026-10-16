@@ -10,16 +10,16 @@ namespace VPet.ModMaker.Views;
 /// </summary>
 public partial class LowTextView : UserControl
 {
-    /// <summary>
-    /// 视图模型
-    /// </summary>
-    public LowTextEditViewModel ViewModel => (LowTextEditViewModel)DataContext;
-
     /// <inheritdoc/>
     public LowTextView()
     {
         InitializeComponent();
     }
+
+    /// <summary>
+    /// 视图模型
+    /// </summary>
+    public LowTextEditViewModel ViewModel => (LowTextEditViewModel)DataContext;
 
     private void DataGrid_MouseDoubleClick(object? sender, MouseButtonEventArgs e)
     {

@@ -34,6 +34,25 @@ public partial class LowTextEditViewModel
     /// <inheritdoc/>
     public LowTextEditViewModel()
     {
+        LowTexts = new(
+            [],
+            [],
+            f =>
+            {
+                return CurrentSearchTarget.Value switch
+                {
+                    LowTextSearchTarget.ID => f.ID.Contains(
+                        Search,
+                        StringComparison.CurrentCultureIgnoreCase
+                    ),
+                    LowTextSearchTarget.Text => f.Text.Contains(
+                        Search,
+                        StringComparison.CurrentCultureIgnoreCase
+                    ),
+                    _ => false,
+                };
+            }
+        );
         this.WhenAnyValue(x => x.Search, x => x.CurrentSearchTarget)
             .Throttle(TimeSpan.FromSeconds(0.5), ObservableSchedulers.ThreadPool)
             .DistinctUntilChanged()
@@ -52,28 +71,10 @@ public partial class LowTextEditViewModel
 
     partial void OnModInfoChanged(ModInfoModel oldValue, ModInfoModel newValue)
     {
-        LowTexts = null!;
+        LowTexts.SourceList = null!;
         if (newValue is not null)
         {
-            LowTexts = new(
-                newValue.LowTexts,
-                [],
-                f =>
-                {
-                    return CurrentSearchTarget.Value switch
-                    {
-                        LowTextSearchTarget.ID => f.ID.Contains(
-                            Search,
-                            StringComparison.CurrentCultureIgnoreCase
-                        ),
-                        LowTextSearchTarget.Text => f.Text.Contains(
-                            Search,
-                            StringComparison.CurrentCultureIgnoreCase
-                        ),
-                        _ => false,
-                    };
-                }
-            );
+            LowTexts.SourceList = newValue.LowTexts;
             newValue
                 .LowTexts.WhenAnyValue(x => x.Count)
                 .Subscribe(_ => OnPropertyChanged(nameof(DisplayText)))
@@ -84,12 +85,11 @@ public partial class LowTextEditViewModel
     /// <summary>
     /// 低状态文本
     /// </summary>
-    [ObservableProperty]
-    public FilteredListWrapper<
+    public ObservableFilteredListWrapper<
         LowTextModel,
         ObservableList<LowTextModel>,
         ObservableList<LowTextModel>
-    > LowTexts { get; set; } = null!;
+    > LowTexts { get; }
 
     /// <summary>
     /// 搜索

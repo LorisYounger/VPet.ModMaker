@@ -34,6 +34,39 @@ public partial class PetEditViewModel
     /// <inheritdoc/>
     public PetEditViewModel()
     {
+        Pets = new(
+            [],
+            [],
+            f =>
+            {
+                if (ShowMainPet is false && f.FromMain)
+                    return false;
+                return CurrentSearchTarget.Value switch
+                {
+                    PetSearchTarget.ID => f.ID.Contains(
+                        Search,
+                        StringComparison.CurrentCultureIgnoreCase
+                    ),
+                    PetSearchTarget.Name => f.Name.Contains(
+                        Search,
+                        StringComparison.CurrentCultureIgnoreCase
+                    ),
+                    PetSearchTarget.PetName => f.PetName.Contains(
+                        Search,
+                        StringComparison.CurrentCultureIgnoreCase
+                    ),
+                    PetSearchTarget.Description => f.Description.Contains(
+                        Search,
+                        StringComparison.CurrentCultureIgnoreCase
+                    ),
+                    PetSearchTarget.Tags => f.Tags.Contains(
+                        Search,
+                        StringComparison.CurrentCultureIgnoreCase
+                    ),
+                    _ => false,
+                };
+            }
+        );
         this.WhenAnyValue(x => x.Search, x => x.CurrentSearchTarget)
             .Throttle(TimeSpan.FromSeconds(0.5), ObservableSchedulers.ThreadPool)
             .DistinctUntilChanged()
@@ -53,42 +86,10 @@ public partial class PetEditViewModel
 
     partial void OnModInfoChanged(ModInfoModel oldValue, ModInfoModel newValue)
     {
-        Pets = null!;
+        Pets.SourceList = null!;
         if (newValue is not null)
         {
-            Pets = new(
-                newValue.Pets.SourceList,
-                [],
-                f =>
-                {
-                    if (ShowMainPet is false && f.FromMain)
-                        return false;
-                    return CurrentSearchTarget.Value switch
-                    {
-                        PetSearchTarget.ID => f.ID.Contains(
-                            Search,
-                            StringComparison.CurrentCultureIgnoreCase
-                        ),
-                        PetSearchTarget.Name => f.Name.Contains(
-                            Search,
-                            StringComparison.CurrentCultureIgnoreCase
-                        ),
-                        PetSearchTarget.PetName => f.PetName.Contains(
-                            Search,
-                            StringComparison.CurrentCultureIgnoreCase
-                        ),
-                        PetSearchTarget.Description => f.Description.Contains(
-                            Search,
-                            StringComparison.CurrentCultureIgnoreCase
-                        ),
-                        PetSearchTarget.Tags => f.Tags.Contains(
-                            Search,
-                            StringComparison.CurrentCultureIgnoreCase
-                        ),
-                        _ => false,
-                    };
-                }
-            );
+            Pets.SourceList = newValue.Pets.FilteredList;
             newValue
                 .Pets.FilteredList.WhenAnyValue(x => x.Count)
                 .Subscribe(_ => OnPropertyChanged(nameof(DisplayText)))
@@ -99,12 +100,11 @@ public partial class PetEditViewModel
     /// <summary>
     /// 宠物
     /// </summary>
-    [ObservableProperty]
-    public FilteredListWrapper<
+    public ObservableFilteredListWrapper<
         PetModel,
         ObservableList<PetModel>,
         ObservableList<PetModel>
-    > Pets { get; set; }
+    > Pets { get; }
 
     /// <summary>
     /// 搜索

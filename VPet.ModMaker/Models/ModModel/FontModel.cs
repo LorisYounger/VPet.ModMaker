@@ -1,4 +1,5 @@
-﻿using System.Windows.Media;
+﻿using System.IO;
+using System.Windows.Media;
 using CommunityToolkit.Mvvm.ComponentModel;
 using VPet_Simulator.Windows.Interface;
 
@@ -6,17 +7,24 @@ namespace VPet.ModMaker.Models;
 
 public sealed partial class FontModel : ObservableModelBase
 {
-    public FontModel(IFont font)
+    public FontModel(string file)
     {
-        ID = font.Name;
-        Font = font.Font;
-        Path = font.Path;
+        Name = Path.GetFileNameWithoutExtension(file);
+        var familyName = Path.GetDirectoryName(file) + @"\#" + Name;
+        Font = new FontFamily(@"file:///" + familyName);
+        FullName = file;
+        SupportedCultures = string.Join(", ", Font.FamilyNames.Keys);
     }
 
     [ObservableProperty]
-    public string ID { get; set; }
+    public string Name { get; set; }
 
     public FontFamily Font { get; }
 
-    public string Path { get; }
+    public string FullName { get; }
+
+    public string SupportedCultures { get; }
+
+    public static string SampleText { get; } =
+        "abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890.:,; ' \" (!?) +-*/=";
 }

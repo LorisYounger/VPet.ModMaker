@@ -101,12 +101,16 @@
         RowHeight="50"
         VirtualizingStackPanel.IsVirtualizing="True"
         VirtualizingStackPanel.VirtualizationMode="Recycling"
+        FrozenColumnCount="1"
       >
         <DataGrid.RowStyle>
           <Style BasedOn="{StaticResource {x:Type DataGridRow}}" TargetType="DataGridRow">
             <Setter Property="Height" Value="50" />
             <Setter Property="Tag" Value="{Binding}" />
-            <Setter Property="ContextMenu" Value="{StaticResource ContextMenu_DataGridRow}" />
+            <Setter
+              Property="ContextMenu"
+              Value="{StaticResource DataGridRow_EditAndRemovesContextMenu}"
+            />
           </Style>
         </DataGrid.RowStyle>
         <DataGrid.Columns>
@@ -121,7 +125,7 @@
           <DataGridTextColumn
             Binding="{Binding HappyAnimes.Count}"
             CanUserSort="True"
-            ElementStyle="{StaticResource TextBlock_LeftCenter}"
+            ElementStyle="{StaticResource TextBlock_Center}"
             Header="{ll:Str 开心状态动画数量}"
             IsReadOnly="True"
             SortMemberPath="HappyAnimes.Count"
@@ -129,7 +133,7 @@
           <DataGridTextColumn
             Binding="{Binding NomalAnimes.Count}"
             CanUserSort="True"
-            ElementStyle="{StaticResource TextBlock_LeftCenter}"
+            ElementStyle="{StaticResource TextBlock_Center}"
             Header="{ll:Str 普通状态动画数量}"
             IsReadOnly="True"
             SortMemberPath="NomalAnimes.Count"
@@ -137,7 +141,7 @@
           <DataGridTextColumn
             Binding="{Binding PoorConditionAnimes.Count}"
             CanUserSort="True"
-            ElementStyle="{StaticResource TextBlock_LeftCenter}"
+            ElementStyle="{StaticResource TextBlock_Center}"
             Header="{ll:Str 不开心状态动画数量}"
             IsReadOnly="True"
             SortMemberPath="PoorConditionAnimes.Count"
@@ -145,7 +149,7 @@
           <DataGridTextColumn
             Binding="{Binding IllAnimes.Count}"
             CanUserSort="True"
-            ElementStyle="{StaticResource TextBlock_LeftCenter}"
+            ElementStyle="{StaticResource TextBlock_Center}"
             Header="{ll:Str 生病状态动画数量}"
             IsReadOnly="True"
             SortMemberPath="IllAnimes.Count"

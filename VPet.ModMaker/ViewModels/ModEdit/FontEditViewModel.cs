@@ -1,15 +1,9 @@
 ﻿using System;
 using System.Collections;
-using System.Collections.Generic;
-using System.Collections.Immutable;
-using System.ComponentModel;
-using System.Text;
-using System.Windows.Media;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using HanumanInstitute.MvvmDialogs;
 using HanumanInstitute.MvvmDialogs.FrameworkDialogs;
-using HKW.HKWUtils;
 using HKW.HKWUtils.Collections;
 using HKW.HKWUtils.Observable;
 using HKW.MVVM;
@@ -25,6 +19,11 @@ public sealed partial class FontEditViewModel : ViewModelBase, IEditViewModel, I
     /// <inheritdoc/>
     public FontEditViewModel()
     {
+        Fonts = new(
+            [],
+            [],
+            x => x.Name.Contains(Search, StringComparison.CurrentCultureIgnoreCase)
+        );
         this.WhenAnyValue(x => x.Search)
             .Throttle(TimeSpan.FromSeconds(0.5), ObservableSchedulers.ThreadPool)
             .DistinctUntilChanged()
@@ -43,14 +42,10 @@ public sealed partial class FontEditViewModel : ViewModelBase, IEditViewModel, I
 
     partial void OnModInfoChanged(ModInfoModel oldValue, ModInfoModel newValue)
     {
-        Fonts = null!;
+        Fonts.SourceList = null!;
         if (newValue is not null)
         {
-            Fonts = new(
-                newValue.Fonts,
-                [],
-                x => x.ID.Contains(Search, StringComparison.CurrentCultureIgnoreCase)
-            );
+            Fonts.SourceList = newValue.Fonts;
             newValue
                 .Fonts.WhenAnyValue(x => x.Count)
                 .Subscribe(_ => OnPropertyChanged(nameof(DisplayText)))
@@ -58,12 +53,11 @@ public sealed partial class FontEditViewModel : ViewModelBase, IEditViewModel, I
         }
     }
 
-    [ObservableProperty]
-    public FilteredListWrapper<
+    public ObservableFilteredListWrapper<
         FontModel,
         ObservableList<FontModel>,
         ObservableList<FontModel>
-    > Fonts { get; set; } = null!;
+    > Fonts { get; }
 
     /// <summary>
     /// 搜索
@@ -89,19 +83,22 @@ public sealed partial class FontEditViewModel : ViewModelBase, IEditViewModel, I
         );
         if (openFileDialog is null)
             return;
-        //Font = new() { I18nResource = ModInfo.TempI18nResource };
-        //var result = DialogService.ShowDialog(this, this);
-        //if (result is not true)
-        //{
-        //    Font.Dispose();
-        //}
-        //else
-        //{
-        //    Font.I18nResource.CopyDataTo(ModInfo.I18nResource);
-        //    Font.I18nResource = ModInfo.I18nResource;
-        //    Fonts.Add(Font);
-        //    this.LogIfEnabled(LogLevel.Information)?.Log("添加新字体 '{id}'", Font.ID);
-        //}
+        try
+        {
+            var font = new FontModel(openFileDialog.LocalPath);
+            Fonts.Add(font);
+            this.LogIfEnabled(LogLevel.Information)?.Log("添加新字体 '{id}'", font.Name);
+        }
+        catch (Exception ex)
+        {
+            this.LogIfEnabled(LogLevel.Warning)
+                ?.Log(ex, "添加新字体失败, 文件路径: '{file}'", openFileDialog.LocalPath);
+            DialogService.ShowMessageBox(
+                this,
+                "添加新字体失败, 详情请查看日志".Translate(),
+                "添加失败".Translate()
+            );
+        }
     }
 
     /// <summary>
@@ -123,7 +120,7 @@ public sealed partial class FontEditViewModel : ViewModelBase, IEditViewModel, I
         foreach (var model in models)
         {
             Fonts.Remove(model);
-            this.LogIfEnabled(LogLevel.Information)?.Log("删除字体 '{id}'", model.ID);
+            this.LogIfEnabled(LogLevel.Information)?.Log("删除字体 '{id}'", model.Name);
         }
     }
 }
