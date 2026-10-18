@@ -111,7 +111,7 @@
       </Grid>
     </Grid>
   </ControlTemplate>
-  <ControlTemplate x:Key="ListBox_ShowLangs" TargetType="ListBox">
+  <ControlTemplate x:Key="ModMaker_CultureList" TargetType="ListBox">
     <ListBox
       pu:ListBoxHelper.ItemsHoverBackground="{StaticResource SecondaryLight}"
       ItemsSource="{Binding ModInfo.I18nResource.ObservableCultures}"

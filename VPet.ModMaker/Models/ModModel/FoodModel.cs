@@ -25,31 +25,33 @@ namespace VPet.ModMaker.Models;
 public sealed partial class FoodModel : ObservableModelBase, IDisposable
 {
     /// <inheritdoc/>
-    public FoodModel() { }
+    public FoodModel(ObservableI18nResource<string, string> i18nResource)
+    {
+        I18nResource = i18nResource;
+    }
 
     /// <inheritdoc/>
     /// <param name="model">食物模型</param>
-    public FoodModel(FoodModel model)
+    public FoodModel(FoodModel model, ObservableI18nResource<string, string> i18nResource)
     {
         this.MapFrom(model);
+        I18nResource = i18nResource;
         Image = model.Image;
     }
 
     /// <inheritdoc/>
     /// <param name="food">食物</param>
     /// <param name="i18nResource">I18n资源</param>
-    [SetsRequiredMembers]
     public FoodModel(Food food, ObservableI18nResource<string, string> i18nResource)
     {
         this.MapFrom(food);
-        if (
-            food.Desc is not null
-            && food.Desc != DescriptionID
-            && i18nResource.RenameKey(food.Desc, DescriptionID, true) is false
-        )
-            i18nResource.SetData(DescriptionID, food.Desc);
-
         I18nResource = i18nResource;
+        if (
+            string.Equals(food.Desc, DescriptionID) is false
+            && I18nResource.RenameKey(food.Desc, DescriptionID) is false
+        )
+            I18nResource.SetData(DescriptionID, food.Desc);
+
         if (File.Exists(food.Image))
             Image = HKWImageUtils.LoadImageToMemory(food.Image);
         else
@@ -72,8 +74,9 @@ public sealed partial class FoodModel : ObservableModelBase, IDisposable
     /// <summary>
     /// 详情Id
     /// </summary>
-    [MapIgnoreProperty]
     [NotifyPropertyChangeFrom(nameof(ID))]
+    [MapProperty(typeof(FoodModel), Ignore = true)]
+    [MapProperty(typeof(Food), nameof(Food.Desc), Direction = MapDirections.To)]
     public string DescriptionID => $"{ID}_Description";
 
     /// <summary>
@@ -81,7 +84,7 @@ public sealed partial class FoodModel : ObservableModelBase, IDisposable
     /// </summary>
     [MapIgnoreProperty]
     [ObservableProperty]
-    public required ObservableI18nResource<string, string> I18nResource { get; set; }
+    public ObservableI18nResource<string, string> I18nResource { get; set; }
 
     partial void OnI18nResourceChanged(
         ObservableI18nResource<string, string> oldValue,

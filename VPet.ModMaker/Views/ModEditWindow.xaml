@@ -23,7 +23,12 @@
   <Window.Resources>
     <ResourceDictionary Source="/VPet-Simulator.Windows.Interface;component/ResourceStyle.xaml" />
   </Window.Resources>
-  <Grid>
+  <Grid
+    Margin="10"
+    x:Name="LayoutRoot"
+    MouseLeave="LayoutRoot_MouseLeave"
+    MouseMove="LayoutRoot_MouseMove"
+  >
     <Grid.ColumnDefinitions>
       <ColumnDefinition />
       <ColumnDefinition Width="Auto" />
@@ -33,41 +38,30 @@
         <ColumnDefinition Width="Auto" />
         <ColumnDefinition />
       </Grid.ColumnDefinitions>
-      <Grid.Style>
-        <Style TargetType="Grid">
-          <Setter Property="IsEnabled" Value="True" />
-          <Style.Triggers>
-            <DataTrigger
-              Binding="{Binding SelectedItem, ElementName=ListBox_Cultures}"
-              Value="{x:Null}"
-            >
-              <Setter Property="IsEnabled" Value="False" />
-            </DataTrigger>
-          </Style.Triggers>
-        </Style>
-      </Grid.Style>
-      <Grid MaxWidth="256">
+      <Grid x:Name="Grid_ModInfo" MaxWidth="256">
         <Grid.RowDefinitions>
           <RowDefinition Height="Auto" />
           <RowDefinition />
         </Grid.RowDefinitions>
-        <Image
-          x:Name="Image_ModImage"
-          Width="256"
-          Height="256"
-          Source="{Binding ModInfo.Image}"
-          Stretch="Uniform"
-        >
-          <Image.ContextMenu>
-            <ContextMenu>
-              <MenuItem
-                x:Name="MenuItem_ChangeModImage"
-                Command="{Binding ChangeImageCommand}"
-                Header="{ll:Str 修改图片}"
-              />
-            </ContextMenu>
-          </Image.ContextMenu>
-        </Image>
+        <Border Background="#04000000" CornerRadius="2">
+          <Image
+            x:Name="Image_ModImage"
+            Width="256"
+            Height="256"
+            Source="{Binding ModInfo.Image}"
+            Stretch="Uniform"
+          >
+            <Image.ContextMenu>
+              <ContextMenu>
+                <MenuItem
+                  x:Name="MenuItem_ChangeModImage"
+                  Command="{Binding ChangeImageCommand}"
+                  Header="{ll:Str 修改图片}"
+                />
+              </ContextMenu>
+            </Image.ContextMenu>
+          </Image>
+        </Border>
         <Button
           x:Name="Button_AddModImage"
           HorizontalAlignment="Center"
@@ -76,7 +70,7 @@
           Content="{ll:Str 添加图片}"
         >
           <Button.Style>
-            <Style BasedOn="{StaticResource MyThemedButtonStyle}" TargetType="Button">
+            <Style BasedOn="{StaticResource ModMaker_ButtonBaseStyle}" TargetType="Button">
               <Setter Property="Visibility" Value="Hidden" />
               <Style.Triggers>
                 <DataTrigger Binding="{Binding ModInfo.Image}" Value="{x:Null}">
@@ -86,7 +80,11 @@
             </Style>
           </Button.Style>
         </Button>
-        <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
+        <ScrollViewer
+          Grid.Row="1"
+          Style="{StaticResource ModMaker_ScrollViewerBaseStyle}"
+          VerticalScrollBarVisibility="Auto"
+        >
           <Grid>
             <Grid.ColumnDefinitions>
               <ColumnDefinition Width="Auto" />
@@ -101,14 +99,18 @@
               <RowDefinition Height="Auto" />
               <RowDefinition />
             </Grid.RowDefinitions>
-            <Label Content="ID" Style="{StaticResource Label_Left}" />
+            <Label Content="ID" Style="{StaticResource ModMaker_LabelThemedStyle}" />
             <TextBox
               Grid.Column="1"
               pu:TextBoxHelper.Watermark="ID"
               Style="{StaticResource StandardTextBoxStyle}"
               Text="{Binding ModInfo.ID, UpdateSourceTrigger=PropertyChanged}"
             />
-            <Label Grid.Row="1" Content="{ll:Str 作者}" Style="{StaticResource Label_Left}" />
+            <Label
+              Grid.Row="1"
+              Content="{ll:Str 作者}"
+              Style="{StaticResource ModMaker_LabelThemedStyle}"
+            />
             <TextBox
               x:Name="TextBox_Author"
               Grid.Row="1"
@@ -117,7 +119,11 @@
               Style="{StaticResource StandardTextBoxStyle}"
               Text="{Binding ModInfo.Author, UpdateSourceTrigger=PropertyChanged}"
             />
-            <Label Grid.Row="2" Content="{ll:Str 游戏版本}" Style="{StaticResource Label_Left}" />
+            <Label
+              Grid.Row="2"
+              Content="{ll:Str 游戏版本}"
+              Style="{StaticResource ModMaker_LabelThemedStyle}"
+            />
             <TextBox
               x:Name="TextBox_GameVersion"
               Grid.Row="2"
@@ -126,7 +132,11 @@
               Style="{StaticResource StandardTextBoxStyle}"
               Text="{Binding ModInfo.GameVersion, UpdateSourceTrigger=PropertyChanged}"
             />
-            <Label Grid.Row="3" Content="{ll:Str 模组版本}" Style="{StaticResource Label_Left}" />
+            <Label
+              Grid.Row="3"
+              Content="{ll:Str 模组版本}"
+              Style="{StaticResource ModMaker_LabelThemedStyle}"
+            />
             <TextBox
               x:Name="TextBox_ModVersion"
               Grid.Row="3"
@@ -135,7 +145,11 @@
               Style="{StaticResource StandardTextBoxStyle}"
               Text="{Binding ModInfo.ModVersion, UpdateSourceTrigger=PropertyChanged}"
             />
-            <Label Grid.Row="4" Content="{ll:Str 模组名称}" Style="{StaticResource Label_Left}" />
+            <Label
+              Grid.Row="4"
+              Content="{ll:Str 模组名称}"
+              Style="{StaticResource ModMaker_LabelThemedStyle}"
+            />
             <TextBox
               Grid.Row="4"
               Grid.Column="1"
@@ -148,7 +162,7 @@
               Grid.ColumnSpan="2"
               Content="{ll:Str 模组介绍}"
               MouseDoubleClick="Label_MouseDoubleClick"
-              Style="{StaticResource Label_Left}"
+              Style="{StaticResource ModMaker_LabelThemedStyle}"
             />
             <TextBox
               x:Name="TextBox_Description"
@@ -172,7 +186,7 @@
           <RowDefinition />
         </Grid.RowDefinitions>
         <ListBox
-          x:Name="EditorViews"
+          x:Name="Views"
           ItemsSource="{Binding ViewModels}"
           SelectedIndex="0"
           pu:ListBoxHelper.ItemsCornerRadius="0"
@@ -184,7 +198,15 @@
           ScrollViewer.HorizontalScrollBarVisibility="Hidden"
           ScrollViewer.VerticalScrollBarVisibility="Hidden"
           Style="{StaticResource SideMenuListBoxStyle}"
+          pu:ScrollBarHelper.Background="{DynamicResource SecondaryLight}"
+          pu:ScrollViewerHelper.ScrollBarThickness="5"
+          pu:ScrollViewerHelper.ScrollBarPosition="Inside"
         >
+          <ListBox.ItemContainerStyle>
+            <Style TargetType="ListBoxItem" BasedOn="{StaticResource {x:Type ListBoxItem}}">
+              <Setter Property="Content" Value="{Binding Value}" />
+            </Style>
+          </ListBox.ItemContainerStyle>
           <ListBox.ItemsPanel>
             <ItemsPanelTemplate>
               <StackPanel Orientation="Horizontal" />
@@ -193,19 +215,47 @@
         </ListBox>
         <Grid
           Grid.Row="1"
-          h:PanelHelper.ShowChildByIndex="{Binding SelectedIndex,ElementName=EditorViews}"
+          h:PanelHelper.ShowChildByIndex="{Binding SelectedIndex,ElementName=Views}"
         >
-          <v:FoodView DataContext="{Binding ViewModels[0]}" />
-          <v:ClickTextView DataContext="{Binding ViewModels[1]}" Visibility="Hidden" />
-          <v:LowTextView DataContext="{Binding ViewModels[2]}" Visibility="Hidden" />
-          <v:SelectTextView DataContext="{Binding ViewModels[3]}" Visibility="Hidden" />
-          <v:ThemeView DataContext="{Binding ViewModels[4]}" Visibility="Hidden" />
-          <v:FontView DataContext="{Binding ViewModels[5]}" Visibility="Hidden" />
-          <v:PetView DataContext="{Binding ViewModels[6]}" Visibility="Hidden" />
-          <v:WorkView DataContext="{Binding ViewModels[7]}" Visibility="Hidden" />
-          <v:MoveView DataContext="{Binding ViewModels[8]}" Visibility="Hidden" />
-          <v:AnimeView DataContext="{Binding ViewModels[9]}" Visibility="Hidden" />
+          <v:FoodView DataContext="{Binding ViewModels[Food]}" />
+          <v:ClickTextView DataContext="{Binding ViewModels[ClickText]}" Visibility="Hidden" />
+          <v:LowTextView DataContext="{Binding ViewModels[LowText]}" Visibility="Hidden" />
+          <v:SelectTextView DataContext="{Binding ViewModels[SelectText]}" Visibility="Hidden" />
+          <v:ThemeView DataContext="{Binding ViewModels[Theme]}" Visibility="Hidden" />
+          <v:FontView DataContext="{Binding ViewModels[Font]}" Visibility="Hidden" />
+          <v:PetView DataContext="{Binding ViewModels[Pet]}" Visibility="Hidden" />
+          <v:WorkView DataContext="{Binding ViewModels[Work]}" Visibility="Hidden" />
+          <v:MoveView DataContext="{Binding ViewModels[Move]}" Visibility="Hidden" />
+          <v:AnimeView DataContext="{Binding ViewModels[Anime]}" Visibility="Hidden" />
         </Grid>
+      </Grid>
+      <Grid
+        HorizontalAlignment="Right"
+        Margin="-15,0,-15,0"
+        x:Name="Grid_Collapse"
+        Height="150"
+        Width="30"
+      >
+        <ToggleButton
+          x:Name="ToggleButton_Collapse"
+          Width="20"
+          Height="100"
+          Opacity="0.2"
+          Padding="0"
+          d:IsChecked="False"
+          Foreground="{DynamicResource PrimaryText}"
+          ToolTip="{ll:Str '折叠模组信息'}"
+          pu:ToggleButtonHelper.CornerRadius="2"
+          Click="ToggleButton_Collapse_Click"
+          Style="{DynamicResource ThemedToggleButtonStyle}"
+        >
+          <ToggleButton.Content>
+            <TextBlock FontSize="16" Text="《" Width="20" Height="22" />
+          </ToggleButton.Content>
+          <pu:ToggleButtonHelper.CheckedContent>
+            <TextBlock FontSize="16" Text="》" Width="12" Height="22" />
+          </pu:ToggleButtonHelper.CheckedContent>
+        </ToggleButton>
       </Grid>
     </Grid>
     <Grid Grid.Column="1">
@@ -218,17 +268,20 @@
         Height="30"
         Command="{Binding AddCultureCommand}"
         Content="{ll:Str 添加文化}"
-        Style="{StaticResource MyThemedButtonStyle}"
+        Style="{StaticResource ModMaker_ButtonBaseStyle}"
       />
       <ListBox
         x:Name="ListBox_Cultures"
         Grid.Row="1"
+        pu:ScrollBarHelper.Background="{DynamicResource SecondaryLight}"
+        pu:ScrollViewerHelper.ScrollBarThickness="5"
+        pu:ScrollViewerHelper.ScrollBarPosition="Inside"
         d:ItemsSource="{d:SampleData ItemCount=5}"
         pu:ListBoxHelper.ItemsHoverBackground="{StaticResource SecondaryLight}"
         ItemsSource="{Binding ModInfo.I18nResource.ObservableCultures}"
         ScrollViewer.VerticalScrollBarVisibility="Auto"
         SelectedItem="{Binding ModInfo.I18nResource.CurrentCulture}"
-        Style="{StaticResource SideMenuListBoxStyle}"
+        Style="{DynamicResource SideMenuListBoxStyle}"
       >
         <ListBox.ItemContainerStyle>
           <Style BasedOn="{StaticResource {x:Type ListBoxItem}}" TargetType="ListBoxItem">
@@ -260,27 +313,27 @@
         <Button
           Command="{Binding OpenModPathCommand}"
           Content="{ll:Str 打开所在的文件夹}"
-          Style="{StaticResource MyThemedButtonStyle}"
+          Style="{StaticResource ModMaker_ButtonBaseStyle}"
         />
         <Button
           Command="{Binding EditI18nCommand}"
           Content="{ll:Str 编辑多语言内容}"
-          Style="{StaticResource MyThemedButtonStyle}"
+          Style="{StaticResource ModMaker_ButtonBaseStyle}"
         />
         <Button
           Command="{Binding SaveCommand}"
           Content="{ll:Str 保存}"
-          Style="{StaticResource MyThemedButtonStyle}"
+          Style="{StaticResource ModMaker_ButtonBaseStyle}"
         />
         <Button
           Command="{Binding SaveToCommand}"
           Content="{ll:Str 保存至}"
-          Style="{StaticResource MyThemedButtonStyle}"
+          Style="{StaticResource ModMaker_ButtonBaseStyle}"
         />
         <Button
           Command="{Binding SaveAsTranslationModCommand}"
           Content="{ll:Str 保存为翻译模组}"
-          Style="{StaticResource MyThemedButtonStyle}"
+          Style="{StaticResource ModMaker_ButtonBaseStyle}"
         />
       </StackPanel>
     </Grid>

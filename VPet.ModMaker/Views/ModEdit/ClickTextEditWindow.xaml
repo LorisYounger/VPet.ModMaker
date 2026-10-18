@@ -166,6 +166,6 @@
         />
       </Grid>
     </Grid>
-    <ListBox Grid.Column="2" Template="{StaticResource ListBox_ShowLangs}" />
+    <ListBox Grid.Column="2" Template="{StaticResource ModMaker_CultureList}" />
   </Grid>
 </pu:WindowX>

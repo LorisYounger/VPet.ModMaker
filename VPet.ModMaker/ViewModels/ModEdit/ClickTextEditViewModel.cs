@@ -128,7 +128,7 @@ public sealed partial class ClickTextEditViewModel
     [RelayCommand]
     private void Add()
     {
-        ClickText = new() { I18nResource = ModInfo.TempI18nResource };
+        ClickText = new(ModInfo.TempI18nResource);
         var result = DialogService.ShowDialog(this, this);
         if (result is not true)
         {
@@ -152,7 +152,7 @@ public sealed partial class ClickTextEditViewModel
     public void Edit(ClickTextModel model)
     {
         OldClickText = model;
-        var newModel = new ClickTextModel(model) { I18nResource = ModInfo.TempI18nResource };
+        var newModel = new ClickTextModel(model, ModInfo.TempI18nResource);
         model.I18nResource.CopyDataTo(newModel.I18nResource, model.ID);
         ClickText = newModel;
         var result = DialogService.ShowDialog(this, this);

@@ -20,20 +20,25 @@ namespace VPet.ModMaker.Models;
 public sealed partial class WorkModel : ObservableModelBase, IDisposable
 {
     /// <inheritdoc/>
-    public WorkModel() { }
+    public WorkModel(ObservableI18nResource<string, string> i18nResource)
+    {
+        I18nResource = i18nResource;
+    }
 
     /// <inheritdoc/>
     /// <param name="model">工作模型</param>
-    public WorkModel(WorkModel model)
+    public WorkModel(WorkModel model, ObservableI18nResource<string, string> i18nResource)
     {
         this.MapFrom(model);
+        I18nResource = i18nResource;
     }
 
     /// <inheritdoc/>
     /// <param name="work">工作</param>
-    public WorkModel(GraphHelper.Work work)
+    public WorkModel(GraphHelper.Work work, ObservableI18nResource<string, string> i18nResource)
     {
         this.MapFrom(work);
+        I18nResource = i18nResource;
     }
 
     /// <summary>
@@ -54,7 +59,7 @@ public sealed partial class WorkModel : ObservableModelBase, IDisposable
     /// </summary>
     [MapIgnoreProperty]
     [ObservableProperty]
-    public required ObservableI18nResource<string, string> I18nResource { get; set; }
+    public ObservableI18nResource<string, string> I18nResource { get; set; }
 
     partial void OnI18nResourceChanged(
         ObservableI18nResource<string, string> oldValue,

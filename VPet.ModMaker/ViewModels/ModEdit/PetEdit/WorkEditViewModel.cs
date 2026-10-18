@@ -278,7 +278,7 @@ public sealed partial class WorkEditViewModel
     [RelayCommand]
     private void Add()
     {
-        Work = new() { I18nResource = ModInfo.TempI18nResource };
+        Work = new(ModInfo.TempI18nResource);
         var result = DialogService.ShowDialog(this, this);
         if (result is not true)
         {
@@ -309,7 +309,7 @@ public sealed partial class WorkEditViewModel
     public void Edit(WorkModel model)
     {
         OldWork = model;
-        var newModel = new WorkModel(model) { I18nResource = ModInfo.TempI18nResource };
+        var newModel = new WorkModel(model, ModInfo.TempI18nResource);
         model.I18nResource.CopyDataTo(newModel.I18nResource, model.ID);
         Work = newModel;
         var result = DialogService.ShowDialog(this, this);

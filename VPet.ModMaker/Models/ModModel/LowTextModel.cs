@@ -17,22 +17,25 @@ namespace VPet.ModMaker.Models;
 public sealed partial class LowTextModel : ObservableModelBase, IDisposable
 {
     /// <inheritdoc/>
-    public LowTextModel() { }
+    public LowTextModel(ObservableI18nResource<string, string> i18nResource)
+    {
+        I18nResource = i18nResource;
+    }
 
     /// <inheritdoc/>
     /// <param name="lowText">低状态文本模型</param>
-    public LowTextModel(LowTextModel lowText)
-        : this()
+    public LowTextModel(LowTextModel lowText, ObservableI18nResource<string, string> i18nResource)
     {
         this.MapFrom(lowText);
+        I18nResource = i18nResource;
     }
 
     /// <inheritdoc/>
     /// <param name="lowText">低状态文本</param>
-    public LowTextModel(LowText lowText)
-        : this()
+    public LowTextModel(LowText lowText, ObservableI18nResource<string, string> i18nResource)
     {
         this.MapFrom(lowText);
+        I18nResource = i18nResource;
     }
 
     /// <summary>
@@ -65,7 +68,7 @@ public sealed partial class LowTextModel : ObservableModelBase, IDisposable
     /// </summary>
     [MapIgnoreProperty]
     [ObservableProperty]
-    public required ObservableI18nResource<string, string> I18nResource { get; set; }
+    public ObservableI18nResource<string, string> I18nResource { get; set; }
 
     partial void OnI18nResourceChanged(
         ObservableI18nResource<string, string> oldValue,

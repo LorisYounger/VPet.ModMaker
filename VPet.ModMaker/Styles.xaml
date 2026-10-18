@@ -3,6 +3,81 @@
   xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
   xmlns:pu="https://opensource.panuon.com/wpf-ui"
 >
+  <Style
+    x:Key="ModMaker_ButtonBaseStyle"
+    BasedOn="{StaticResource {x:Type Button}}"
+    TargetType="Button"
+  >
+    <Setter Property="Padding" Value="10,0,10,0" />
+    <Setter Property="Height" Value="30" />
+    <Setter Property="HorizontalAlignment" Value="Stretch" />
+    <Setter Property="VerticalAlignment" Value="Center" />
+    <Setter Property="pu:ButtonHelper.CornerRadius" Value="4" />
+    <Setter Property="Background" Value="{DynamicResource SecondaryLight}" />
+    <Setter Property="BorderBrush" Value="{DynamicResource SecondaryDark}" />
+    <Setter Property="BorderThickness" Value="2" />
+  </Style>
+  <Style
+    x:Key="ModMaker_LabelBaseStyle"
+    BasedOn="{StaticResource {x:Type Label}}"
+    TargetType="Label"
+  >
+    <Setter Property="Height" Value="30" />
+    <Setter Property="FontSize" Value="14" />
+    <Setter Property="Background" Value="Transparent" />
+  </Style>
+  <Style
+    x:Key="ModMaker_ScrollViewerBaseStyle"
+    BasedOn="{StaticResource {x:Type ScrollViewer}}"
+    TargetType="ScrollViewer"
+  >
+    <Setter
+      Property="pu:ScrollBarHelper.ThumbBackground"
+      Value="{DynamicResource SecondaryLight}"
+    />
+    <Setter Property="pu:ScrollViewerHelper.ScrollBarThickness" Value="5" />
+    <Setter Property="pu:ScrollViewerHelper.ScrollBarPosition" Value="Inside" />
+    <Setter Property="VerticalScrollBarVisibility" Value="Auto" />
+  </Style>
+  <Style
+    x:Key="ModMaker_LabelThemedStyle"
+    BasedOn="{StaticResource {x:Type Label}}"
+    TargetType="Label"
+  >
+    <Setter Property="Height" Value="30" />
+    <Setter Property="FontSize" Value="14" />
+    <Setter Property="Background" Value="{DynamicResource PrimaryDarker}" />
+    <Setter Property="Foreground" Value="{DynamicResource DARKPrimaryText}" />
+    <Setter Property="pu:LabelHelper.CornerRadius" Value="4" />
+  </Style>
+
+  <Style
+    x:Key="ModMaker_ModelsDataGrid"
+    BasedOn="{StaticResource {x:Type DataGrid}}"
+    TargetType="DataGrid"
+  >
+    <Setter
+      Property="pu:DataGridHelper.RowSelectedBackground"
+      Value="{DynamicResource SecondaryLighter}"
+    />
+    <Setter
+      Property="pu:DataGridHelper.RowHoverBackground"
+      Value="{DynamicResource SecondaryLight}"
+    />
+    <Setter Property="pu:DataGridHelper.ColumnHeaderHorizontalContentAlignment" Value="Center" />
+    <!--<Setter Property="pu:DataGridHelper.RowSelectedBorderThickness" Value="2" />-->
+    <Setter Property="AutoGenerateColumns" Value="False" />
+    <Setter Property="CanUserAddRows" Value="False" />
+    <Setter Property="CanUserDeleteRows" Value="False" />
+    <Setter Property="CanUserReorderColumns" Value="False" />
+    <Setter Property="CanUserResizeRows" Value="False" />
+    <Setter Property="GridLinesVisibility" Value="Horizontal" />
+    <Setter Property="RowDetailsVisibilityMode" Value="Visible" />
+    <Setter Property="RowHeight" Value="64" />
+    <Setter Property="VirtualizingStackPanel.IsVirtualizing" Value="True" />
+    <Setter Property="VirtualizingStackPanel.VirtualizationMode" Value="Recycling" />
+  </Style>
+
   <Style x:Key="ThemedLabelStyle" BasedOn="{StaticResource {x:Type Label}}" TargetType="Label">
     <Setter Property="Height" Value="30" />
     <Setter Property="FontSize" Value="14" />

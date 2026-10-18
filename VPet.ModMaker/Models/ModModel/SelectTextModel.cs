@@ -20,14 +20,20 @@ namespace VPet.ModMaker.Models;
 public sealed partial class SelectTextModel : ObservableModelBase, IDisposable
 {
     /// <inheritdoc/>
-    public SelectTextModel() { }
+    public SelectTextModel(ObservableI18nResource<string, string> i18nResource)
+    {
+        I18nResource = i18nResource;
+    }
 
     /// <inheritdoc/>
     /// <param name="model">选择文本模型</param>
-    public SelectTextModel(SelectTextModel model)
-        : this()
+    public SelectTextModel(
+        SelectTextModel model,
+        ObservableI18nResource<string, string> i18nResource
+    )
     {
         this.MapFrom(model);
+        I18nResource = i18nResource;
     }
 
     /// <inheritdoc/>
@@ -35,7 +41,6 @@ public sealed partial class SelectTextModel : ObservableModelBase, IDisposable
     /// <param name="i18nResource">I18n资源</param>
     [SetsRequiredMembers]
     public SelectTextModel(SelectText text, ObservableI18nResource<string, string> i18nResource)
-        : this()
     {
         this.MapFrom(text);
         I18nResource = i18nResource;
@@ -80,7 +85,7 @@ public sealed partial class SelectTextModel : ObservableModelBase, IDisposable
     /// </summary>
     [MapIgnoreProperty]
     [ObservableProperty]
-    public required ObservableI18nResource<string, string> I18nResource { get; set; }
+    public ObservableI18nResource<string, string> I18nResource { get; set; }
 
     partial void OnI18nResourceChanged(
         ObservableI18nResource<string, string> oldValue,

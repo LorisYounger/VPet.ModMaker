@@ -21,14 +21,17 @@ namespace VPet.ModMaker.Models;
 public sealed partial class PetModel : ObservableModelBase, IDisposable
 {
     /// <inheritdoc/>
-    public PetModel() { }
+    public PetModel(ObservableI18nResource<string, string> i18nResource)
+    {
+        I18nResource = i18nResource;
+    }
 
     /// <inheritdoc/>
     /// <param name="model">宠物模型</param>
-    public PetModel(PetModel model)
-        : this()
+    public PetModel(PetModel model, ObservableI18nResource<string, string> i18nResource)
     {
         this.MapFrom(model);
+        I18nResource = i18nResource;
     }
 
     /// <inheritdoc/>
@@ -43,10 +46,11 @@ public sealed partial class PetModel : ObservableModelBase, IDisposable
     )
     {
         ID = loader.Name;
+        I18nResource = i18nResource;
 
         if (loader.PetName != PetNameID)
         {
-            if (loader.PetName is null)
+            if (string.IsNullOrWhiteSpace(loader.PetName))
             {
                 i18nResource.SetData(PetNameID, loader.Name);
             }
@@ -55,18 +59,13 @@ public sealed partial class PetModel : ObservableModelBase, IDisposable
                 i18nResource.SetData(PetNameID, loader.PetName);
             }
         }
-        if (loader.Intor != DescriptionID)
+        if (
+            string.Equals(loader.Intor, DescriptionID) is false
+            && i18nResource.RenameKey(loader.Intor, DescriptionID) is false
+        )
         {
-            if (loader.Intor is null)
-            {
-                i18nResource.SetData(PetNameID, loader.Name);
-            }
-            else if (i18nResource.RenameKey(loader.Intor, DescriptionID) is false)
-            {
-                i18nResource.SetData(DescriptionID, loader.Intor);
-            }
+            i18nResource.SetData(DescriptionID, loader.Intor);
         }
-        I18nResource = i18nResource;
 
         Tags = loader.Config.Data["tag"].Info;
 
@@ -122,7 +121,7 @@ public sealed partial class PetModel : ObservableModelBase, IDisposable
             return;
 
         foreach (var work in loader.Config.Works)
-            Works.Add(new(work) { I18nResource = I18nResource });
+            Works.Add(new(work, i18nResource));
         foreach (var move in loader.Config.Moves)
             Moves.Add(new(move));
     }
@@ -158,7 +157,7 @@ public sealed partial class PetModel : ObservableModelBase, IDisposable
     /// </summary>
     [MapIgnoreProperty]
     [ObservableProperty]
-    public required ObservableI18nResource<string, string> I18nResource { get; set; }
+    public ObservableI18nResource<string, string> I18nResource { get; set; }
 
     partial void OnI18nResourceChanged(
         ObservableI18nResource<string, string> oldValue,

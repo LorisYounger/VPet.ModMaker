@@ -26,21 +26,8 @@
       <TextBox
         pu:TextBoxHelper.Watermark="{ll:Str 搜索动画}"
         Text="{Binding Search, UpdateSourceTrigger=PropertyChanged}"
-      >
-        <TextBox.Style>
-          <Style BasedOn="{StaticResource StandardTextBoxStyle}" TargetType="TextBox">
-            <Setter Property="IsEnabled" Value="True" />
-            <Style.Triggers>
-              <DataTrigger
-                Binding="{Binding SelectedItem, ElementName=ComboBox_Pet}"
-                Value="{x:Null}"
-              >
-                <Setter Property="IsEnabled" Value="False" />
-              </DataTrigger>
-            </Style.Triggers>
-          </Style>
-        </TextBox.Style>
-      </TextBox>
+        IsEnabled="{Binding CurrentPet, Converter={StaticResource NullToFalseConverter}}"
+      />
       <ComboBox
         x:Name="ComboBox_Pet"
         Grid.Column="2"
@@ -69,39 +56,17 @@
         </ComboBox.ItemTemplate>
       </ComboBox>
     </Grid>
-    <Grid Grid.Row="1">
-      <Grid.Style>
-        <Style TargetType="Grid">
-          <Setter Property="IsEnabled" Value="True" />
-          <Style.Triggers>
-            <DataTrigger
-              Binding="{Binding SelectedItem, ElementName=ComboBox_Pet}"
-              Value="{x:Null}"
-            >
-              <Setter Property="IsEnabled" Value="False" />
-            </DataTrigger>
-          </Style.Triggers>
-        </Style>
-      </Grid.Style>
+    <Grid
+      Grid.Row="1"
+      IsEnabled="{Binding CurrentPet, Converter={StaticResource NullToFalseConverter}}"
+    >
       <DataGrid
         d:ItemsSource="{d:SampleData ItemCount=5}"
         d:SelectedIndex="0"
-        pu:DataGridHelper.ColumnHeaderHorizontalContentAlignment="Center"
-        pu:DataGridHelper.RowSelectedBorderBrush="{StaticResource DARKPrimaryLight}"
-        pu:DataGridHelper.RowSelectedBorderThickness="3"
-        AutoGenerateColumns="False"
-        CanUserAddRows="False"
-        CanUserDeleteRows="False"
-        CanUserReorderColumns="False"
-        CanUserResizeRows="False"
-        GridLinesVisibility="Horizontal"
         ItemsSource="{Binding Moves.FilteredList}"
         MouseDoubleClick="DataGrid_MouseDoubleClick"
-        RowDetailsVisibilityMode="Visible"
-        RowHeight="50"
-        VirtualizingStackPanel.IsVirtualizing="True"
-        VirtualizingStackPanel.VirtualizationMode="Recycling"
         FrozenColumnCount="1"
+        Style="{DynamicResource ModMaker_ModelsDataGrid}"
       >
         <DataGrid.RowStyle>
           <Style BasedOn="{StaticResource {x:Type DataGridRow}}" TargetType="DataGridRow">

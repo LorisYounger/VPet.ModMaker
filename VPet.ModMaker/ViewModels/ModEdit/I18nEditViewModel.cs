@@ -99,12 +99,8 @@ public partial class I18nEditViewModel : ViewModelBase, IModalDialogViewModel, I
         else
         {
             // 如果是I18n数据则搜索对应文化
-            if (
-                ModInfo.I18nResource.IndexByCulture.TryGetValue(
-                    CultureInfo.GetCultureInfo(SearchTargets.SelectedItem),
-                    out var index
-                )
-            )
+            var index = ModInfo.I18nResource.GetCultureIndex(SearchTargets.SelectedItem);
+            if (index >= 0)
             {
                 return item[index]?.Contains(Search, StringComparison.CurrentCultureIgnoreCase)
                     is true;

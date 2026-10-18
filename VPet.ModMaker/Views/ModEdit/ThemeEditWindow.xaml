@@ -15,9 +15,9 @@
   Width="800"
   WindowStartupLocation="CenterScreen"
 >
-  <Grid ColumnDefinitions="*,Auto">
+  <Grid Margin="10" ColumnDefinitions="*,Auto">
     <Grid RowDefinitions="*,Auto">
-      <ScrollViewer VerticalScrollBarVisibility="Auto">
+      <ScrollViewer Style="{DynamicResource ModMaker_ScrollViewerBaseStyle}">
         <StackPanel>
           <Grid Height="30" ColumnDefinitions="Auto,*">
             <TextBlock Style="{DynamicResource TextBlock_LeftCenter}" Text="{ll:Str ID}" />
@@ -311,6 +311,6 @@
         />
       </Grid>
     </Grid>
-    <ListBox Grid.Column="1" Template="{StaticResource ListBox_ShowLangs}" />
+    <ListBox Grid.Column="1" Template="{StaticResource ModMaker_CultureList}" />
   </Grid>
 </pu:WindowX>

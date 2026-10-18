@@ -76,7 +76,7 @@ public partial class ModMakerViewModel : ViewModelBase
     {
         AppServices.SetDebugMode(LoggingConfiguration, newValue.Value == LogLevel.Debug);
         this.LogIfEnabled(LogLevel.Information)
-            ?.Log("最低日志级别 {oldValue} -> {newValue}", oldValue, newValue);
+            ?.Log("最低日志级别 '{oldValue}' -> '{newValue}'", oldValue, newValue);
     }
 
     #endregion
@@ -91,7 +91,7 @@ public partial class ModMakerViewModel : ViewModelBase
     {
         Histories.Remove(value);
         this.LogIfEnabled(LogLevel.Information)
-            ?.Log("已删除历史记录 {historyPath}", value.SourcePath);
+            ?.Log("已删除历史记录 '{historyPath}'", value.SourcePath);
         SaveHistory(ModMaker.HistoryFilePath);
     }
 
@@ -103,7 +103,7 @@ public partial class ModMakerViewModel : ViewModelBase
         if (File.Exists(historyFile) is false)
         {
             this.LogIfEnabled(LogLevel.Warning)
-                ?.Log("载入历史失败,历史文件 {file} 不存在", historyFile);
+                ?.Log("载入历史失败,历史文件 '{file}' 不存在", historyFile);
             File.Create(historyFile).Close();
             return;
         }
@@ -115,7 +115,7 @@ public partial class ModMakerViewModel : ViewModelBase
                 continue;
             history.ID ??= string.Empty;
             set.Add(history);
-            this.LogIfEnabled(LogLevel.Debug)?.Log("添加历史 {history}", history.SourcePath);
+            this.LogIfEnabled(LogLevel.Debug)?.Log("添加历史 '{history}'", history.SourcePath);
         }
         Histories.AddRange(set.OrderByDescending(h => h.LastTime));
         this.LogIfEnabled(LogLevel.Information)?.Log("载入历史, 数量: {count}", set.Count);
@@ -153,7 +153,7 @@ public partial class ModMakerViewModel : ViewModelBase
             Histories.Remove(history);
             Histories.Insert(0, history);
             this.LogIfEnabled(LogLevel.Information)
-                ?.Log("存在相同的历史 {history}, 更新最后修改时间", modInfo.SourcePath);
+                ?.Log("存在相同的历史 '{history}', 更新最后修改时间", modInfo.SourcePath);
         }
         else
         {
@@ -165,7 +165,8 @@ public partial class ModMakerViewModel : ViewModelBase
                     LastTime = DateTime.Now,
                 }
             );
-            this.LogIfEnabled(LogLevel.Information)?.Log("添加历史 {history}", modInfo.SourcePath);
+            this.LogIfEnabled(LogLevel.Information)
+                ?.Log("添加历史 '{history}'", modInfo.SourcePath);
         }
         SaveHistory(ModMaker.HistoryFilePath);
     }
@@ -183,7 +184,7 @@ public partial class ModMakerViewModel : ViewModelBase
             Histories.Remove(history);
             Histories.Insert(0, history);
             this.LogIfEnabled(LogLevel.Information)
-                ?.Log("存在相同的历史 {history}, 更新最后修改时间", modPath);
+                ?.Log("存在相同的历史 '{history}', 更新最后修改时间", modPath);
         }
         else
         {
@@ -195,7 +196,7 @@ public partial class ModMakerViewModel : ViewModelBase
                     LastTime = DateTime.Now,
                 }
             );
-            this.LogIfEnabled(LogLevel.Information)?.Log("添加历史 {history}", modPath);
+            this.LogIfEnabled(LogLevel.Information)?.Log("添加历史 '{history}'", modPath);
         }
         SaveHistory(ModMaker.HistoryFilePath);
     }

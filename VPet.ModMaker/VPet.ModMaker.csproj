@@ -35,12 +35,12 @@
     <PackageReference Include="VPet-Simulator.Windows.Interface" Version="1.1.0.71" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="NLog" Version="6.2.1" />
-    <PackageReference Include="NLog.Extensions.Logging" Version="6.2.1" />
+    <PackageReference Include="NLog" Version="6.2.2" />
+    <PackageReference Include="NLog.Extensions.Logging" Version="6.2.2" />
     <PackageReference Include="HanumanInstitute.MvvmDialogs" Version="2.4.0" />
     <PackageReference Include="HanumanInstitute.MvvmDialogs.Wpf" Version="2.4.0" />
-    <PackageReference Include="HKW.Mapper" Version="0.3.1" />
-    <PackageReference Include="HKW.Utils" Version="1.4.2" />
+    <PackageReference Include="HKW.Mapper" Version="0.3.5" />
+    <PackageReference Include="HKW.Utils" Version="1.4.3" />
     <PackageReference Include="HKW.CommonValueConverters" Version="0.2.0" />
     <PackageReference Include="HKW.WPF" Version="1.2.1" />
     <PackageReference Include="HKW.MVVM" Version="0.1.4" />

@@ -81,7 +81,7 @@ public partial class I18nEditWindow : WindowX
     /// <param name="culture">文化</param>
     public void AddCulture(CultureInfo culture)
     {
-        var index = ViewModel.ModInfo.I18nResource.GetIndexByCulture(culture);
+        var index = ViewModel.ModInfo.I18nResource.GetCultureIndex(culture);
         var dataPath = string.Format(ValueBindingFormat, index);
         // 文化数据列
         var column = CreateColumn(culture.Name, dataPath);

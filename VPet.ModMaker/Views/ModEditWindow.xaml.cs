@@ -33,7 +33,7 @@ public partial class ModEditWindow : WindowX
         if (e.Delta == 0)
             return;
 
-        var s = EditorViews.FindVisualChild<ScrollViewer>();
+        var s = Views.FindVisualChild<ScrollViewer>();
         s.ScrollToHorizontalOffset(s.HorizontalOffset - e.Delta);
         e.Handled = true;
     }
@@ -43,5 +43,30 @@ public partial class ModEditWindow : WindowX
 #if DEBUG
         GC.Collect();
 #endif
+    }
+
+    private void LayoutRoot_MouseMove(object sender, MouseEventArgs e)
+    {
+        var position = e.GetPosition(Grid_Collapse);
+
+        var isInCollapseArea =
+            position.X >= 0
+            && position.X <= Grid_Collapse.ActualWidth
+            && position.Y >= 0
+            && position.Y <= Grid_Collapse.ActualHeight;
+
+        ToggleButton_Collapse.Visibility = isInCollapseArea
+            ? Visibility.Visible
+            : Visibility.Collapsed;
+    }
+
+    private void LayoutRoot_MouseLeave(object sender, MouseEventArgs e)
+    {
+        ToggleButton_Collapse.Visibility = Visibility.Collapsed;
+    }
+
+    private void ToggleButton_Collapse_Click(object sender, RoutedEventArgs e)
+    {
+        Grid_ModInfo.Width = ToggleButton_Collapse.IsChecked is true ? 0 : 256;
     }
 }

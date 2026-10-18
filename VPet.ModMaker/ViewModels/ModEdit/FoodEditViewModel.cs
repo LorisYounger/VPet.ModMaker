@@ -243,7 +243,7 @@ public partial class FoodEditViewModel
     [RelayCommand]
     private void Add()
     {
-        Food = new() { I18nResource = ModInfo.TempI18nResource };
+        Food = new(ModInfo.TempI18nResource);
         var result = DialogService.ShowDialog(this, this);
         if (result is not true)
         {
@@ -269,20 +269,20 @@ public partial class FoodEditViewModel
     public void Edit(FoodModel model)
     {
         OldFood = model;
-        var newModel = new FoodModel(model) { I18nResource = ModInfo.TempI18nResource };
+        var newModel = new FoodModel(model, ModInfo.TempI18nResource);
         model.I18nResource.CopyDataTo(newModel.I18nResource, model.ID, model.DescriptionID);
         Food = newModel;
         var result = DialogService.ShowDialog(this, this);
         if (result is not true)
         {
             newModel.I18nResource.ClearData();
-            if (model.Image?.Equals(newModel.Image) is not true)
+            if (ReferenceEquals(model.Image, newModel.Image) is false)
                 newModel.Image?.CloseStream();
             newModel.I18nObserver.Dispose();
         }
         else
         {
-            if (model.Image?.Equals(newModel.Image) is not true)
+            if (ReferenceEquals(model.Image, newModel.Image) is false)
                 model.Image?.CloseStream();
             model.I18nObserver.Dispose();
 

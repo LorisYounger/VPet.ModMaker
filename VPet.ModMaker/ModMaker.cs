@@ -185,12 +185,7 @@ public class ModMaker : MainPlugin
         I18nResource.AddCulture(hant);
         I18nResource.CurrentCulture = en;
         // 本体宠物测试
-        var pet = new PetModel()
-        {
-            I18nResource = I18nResource,
-            ID = "TestMainPet",
-            FromMain = true,
-        };
+        var pet = new PetModel(I18nResource) { ID = "TestMainPet", FromMain = true };
         var res = pet.I18nResource;
 
         res.SetDatas(

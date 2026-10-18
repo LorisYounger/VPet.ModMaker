@@ -21,9 +21,10 @@
   WindowStartupLocation="CenterScreen"
   mc:Ignorable="d"
 >
-  <Grid>
+  <Grid Margin="10">
     <Grid.ColumnDefinitions>
       <ColumnDefinition MinWidth="500" />
+      <ColumnDefinition Width="Auto" />
       <ColumnDefinition Width="Auto" MinWidth="200" />
     </Grid.ColumnDefinitions>
     <Grid>
@@ -37,10 +38,11 @@
         Height="NaN"
         Margin="5"
         Padding="10"
+        Background="Transparent"
         Content="{ll:Str 最近的内容}"
         FontSize="20"
         FontWeight="Bold"
-        Style="{StaticResource Label_Left}"
+        Style="{StaticResource ModMaker_LabelBaseStyle}"
       />
       <Grid Grid.Row="1">
         <Grid.ColumnDefinitions>
@@ -60,20 +62,20 @@
           AutomationProperties.AutomationId="Button_ClearHistory"
           Command="{Binding ClearHistoryCommand}"
           Content="{ll:Str 清空历史}"
-          Style="{StaticResource MyThemedButtonStyle}"
+          MinWidth="100"
+          Style="{StaticResource ModMaker_ButtonBaseStyle}"
         />
       </Grid>
       <ListBox
         Grid.Row="2"
         HorizontalContentAlignment="Stretch"
         d:ItemsSource="{d:SampleData ItemCount=5}"
-        pu:ListBoxHelper.ItemsBackground="{StaticResource PrimaryDarker}"
         pu:ListBoxHelper.ItemsHeight="64"
-        pu:ListBoxHelper.ItemsHoverBackground="{StaticResource PrimaryDark}"
         pu:ListBoxHelper.ItemsMargin="5"
         pu:ListBoxHelper.ItemsPadding="5"
-        pu:ListBoxHelper.ItemsSelectedBackground="{StaticResource DARKPrimaryDarker}"
-        Foreground="{StaticResource DARKPrimaryText}"
+        pu:ListBoxHelper.ItemsBackground="#06000000"
+        pu:ListBoxHelper.ItemsHoverBackground="{StaticResource SecondaryLight}"
+        pu:ListBoxHelper.ItemsBorderThickness="2"
         ItemsSource="{Binding Histories.FilteredList}"
         Style="{StaticResource SideMenuListBoxStyle}"
       >
@@ -143,7 +145,8 @@
         </ListBox.ItemTemplate>
       </ListBox>
     </Grid>
-    <Grid Grid.Column="1">
+    <Rectangle Grid.Column="1" Width="2" Fill="#06000000" />
+    <Grid Grid.Column="2">
       <Grid.RowDefinitions>
         <RowDefinition Height="Auto" />
         <RowDefinition />
@@ -153,11 +156,12 @@
         Height="NaN"
         Margin="5"
         Padding="10"
+        Background="Transparent"
         Content="{ll:Str 开始使用}"
         FontSize="20"
         FontWeight="Bold"
         MouseDoubleClick="Label_MouseDoubleClick"
-        Style="{StaticResource Label_Left}"
+        Style="{StaticResource ModMaker_LabelBaseStyle}"
       />
       <StackPanel Grid.Row="1">
         <Button
@@ -166,21 +170,21 @@
           AutomationProperties.AutomationId="Button_CreateNewMod"
           Command="{Binding CreateNewModCommand}"
           Content="{ll:Str 创建新的模组}"
-          Style="{StaticResource MyThemedButtonStyle}"
+          Style="{DynamicResource ModMaker_ButtonBaseStyle}"
         />
         <Button
           x:Name="Button_LoadFromPath"
           Margin="5"
           Command="{Binding LoadModFromPathCommand}"
           Content="{ll:Str 从文件夹中载入模组}"
-          Style="{StaticResource MyThemedButtonStyle}"
+          Style="{StaticResource ModMaker_ButtonBaseStyle}"
         />
         <Button
           x:Name="Button_OpenModMakerPath"
           Margin="5"
           Command="{Binding OpenModMakerPathCommand}"
           Content="{ll:Str 打开模组制作器目录}"
-          Style="{StaticResource MyThemedButtonStyle}"
+          Style="{StaticResource ModMaker_ButtonBaseStyle}"
         />
       </StackPanel>
       <StackPanel Grid.Row="2">
@@ -191,10 +195,11 @@
           Content="{ll:Str 最小日志级别}"
           FontSize="16"
           FontWeight="Bold"
-          Style="{StaticResource  ThemedLabelStyle}"
+          Style="{StaticResource ModMaker_LabelBaseStyle}"
         />
         <ComboBox
           Height="30"
+          Margin="5"
           Style="{DynamicResource StandardComboBoxStyle}"
           ItemsSource="{x:Static vm:ModMakerViewModel.LogLevels}"
           SelectedItem="{Binding CurrentLogLevel}"
@@ -204,7 +209,7 @@
           Margin="5"
           Command="{Binding OpenLogFileCommand}"
           Content="{ll:Str 打开日志文件}"
-          Style="{StaticResource MyThemedButtonStyle}"
+          Style="{StaticResource ModMaker_ButtonBaseStyle}"
         />
         <TextBlock Grid.Row="3" Margin="5" HorizontalAlignment="Center">
           <Hyperlink Command="{Binding OpenWikiLinkCommand}">

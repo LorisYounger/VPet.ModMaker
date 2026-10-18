@@ -116,7 +116,7 @@ public sealed partial class ThemeEditViewModel
     [RelayCommand]
     private void Add()
     {
-        Theme = new() { I18nResource = ModInfo.TempI18nResource };
+        Theme = new(ModInfo.TempI18nResource);
         var result = DialogService.ShowDialog(this, this);
         if (result is not true)
         {
@@ -140,7 +140,7 @@ public sealed partial class ThemeEditViewModel
     public void Edit(ThemeModel model)
     {
         OldTheme = model;
-        var newModel = new ThemeModel(model) { I18nResource = ModInfo.TempI18nResource };
+        var newModel = new ThemeModel(model, ModInfo.TempI18nResource);
         model.I18nResource.CopyDataTo(newModel.I18nResource, model.ID);
         Theme = newModel;
         var result = DialogService.ShowDialog(this, this);

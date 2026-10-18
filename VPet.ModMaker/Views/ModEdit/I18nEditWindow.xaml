@@ -35,6 +35,7 @@
       />
       <ComboBox
         Grid.Column="1"
+        MinWidth="200"
         ItemsSource="{Binding SearchTargets}"
         SelectedItem="{Binding SearchTargets.SelectedItem}"
         Style="{StaticResource StandardComboBoxStyle}"

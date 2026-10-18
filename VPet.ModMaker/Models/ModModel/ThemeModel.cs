@@ -17,7 +17,7 @@ public sealed partial class ThemeModel : ObservableModelBase, IDisposable
         new Theme(
             new(
                 """
-                default#原版默认:|image#default:|
+                #:|image#default:|
                 Primary#FF81d4fa:|
                 PrimaryLight#FFA3E2FF:|
                 PrimaryLighter#FFC1EBFF:|
@@ -39,26 +39,26 @@ public sealed partial class ThemeModel : ObservableModelBase, IDisposable
                 ShadowColor#90CAF9:|
                 """
             )
-        )
-    )
-    {
-        I18nResource = new("default"),
-    };
+        ),
+        new("default")
+    );
 
-    public ThemeModel()
+    public ThemeModel(ObservableI18nResource<string, string> i18nResource)
     {
         this.MapFrom(_default);
-        ID = "";
+        I18nResource = i18nResource;
     }
 
-    public ThemeModel(ThemeModel theme)
+    public ThemeModel(ThemeModel theme, ObservableI18nResource<string, string> i18nResource)
     {
         this.MapFrom(theme);
+        I18nResource = i18nResource;
     }
 
-    public ThemeModel(Theme theme)
+    public ThemeModel(Theme theme, ObservableI18nResource<string, string> i18nResource)
     {
         this.MapFrom(theme);
+        I18nResource = i18nResource;
     }
 
     [ObservableProperty]
@@ -70,7 +70,7 @@ public sealed partial class ThemeModel : ObservableModelBase, IDisposable
     /// </summary>
     [MapIgnoreProperty]
     [ObservableProperty]
-    public required ObservableI18nResource<string, string> I18nResource { get; set; }
+    public ObservableI18nResource<string, string> I18nResource { get; set; }
 
     partial void OnI18nResourceChanged(
         ObservableI18nResource<string, string> oldValue,
@@ -190,7 +190,7 @@ public sealed partial class ThemeModel : ObservableModelBase, IDisposable
     [ObservableProperty]
     [MapProperty(typeof(Theme), nameof(Theme.ThemeColor), typeof(BrushToLPS))]
     [MapProperty(typeof(ThemeModel), typeof(BrushToBrushConverter))]
-    public SolidColorBrush ShadowColor { get; set; }
+    public SolidColorBrush ShadowColor { get; set; } = null!;
 
     /// <inheritdoc/>
     public void Dispose()

@@ -25,39 +25,37 @@
     <Grid>
       <Grid.ColumnDefinitions>
         <ColumnDefinition />
-        <ColumnDefinition Width="Auto" MinWidth="150" />
-        <ColumnDefinition Width="Auto" MinWidth="150" />
-        <ColumnDefinition Width="Auto" MinWidth="100" />
+        <ColumnDefinition Width="Auto" />
+        <ColumnDefinition Width="Auto" />
+        <ColumnDefinition Width="Auto" />
       </Grid.ColumnDefinitions>
       <TextBox
         pu:TextBoxHelper.Watermark="{ll:Str 搜索}"
+        IsEnabled="{Binding CurrentPet, Converter={StaticResource NullToFalseConverter}}"
         Text="{Binding Search, UpdateSourceTrigger=PropertyChanged}"
-      >
-        <TextBox.Style>
-          <Style BasedOn="{StaticResource StandardTextBoxStyle}" TargetType="TextBox">
-            <Setter Property="IsEnabled" Value="True" />
-            <Style.Triggers>
-              <DataTrigger
-                Binding="{Binding SelectedItem, ElementName=ComboBox_Pet}"
-                Value="{x:Null}"
-              >
-                <Setter Property="IsEnabled" Value="False" />
-              </DataTrigger>
-            </Style.Triggers>
-          </Style>
-        </TextBox.Style>
-      </TextBox>
+      />
+
       <ComboBox
         Grid.Column="1"
+        MinWidth="150"
         ItemsSource="{x:Static vm:WorkEditViewModel.SearchTargets}"
         SelectedItem="{Binding CurrentSearchTarget}"
         Style="{StaticResource StandardComboBoxStyle}"
         ToolTip="{ll:Str 搜索目标}"
+        IsEnabled="{Binding CurrentPet, Converter={StaticResource NullToFalseConverter}}"
+      />
+      <Button
+        Grid.Column="2"
+        MinWidth="100"
+        IsEnabled="{Binding CurrentPet, Converter={StaticResource NullToFalseConverter}}"
+        Command="{Binding FixOverLoadForAllWorkCommand}"
+        Content="{ll:Str 修复超模}"
+        Style="{StaticResource ModMaker_ButtonBaseStyle}"
       />
       <ComboBox
         x:Name="ComboBox_Pet"
-        Grid.Column="2"
-        MinWidth="100"
+        Grid.Column="3"
+        MinWidth="150"
         pu:ComboBoxHelper.Watermark="{ll:Str 选择宠物}"
         ItemsSource="{Binding ModInfo.Pets.FilteredList}"
         SelectedItem="{Binding ModInfo.CurrentPet}"
@@ -81,46 +79,18 @@
           </DataTemplate>
         </ComboBox.ItemTemplate>
       </ComboBox>
-      <Button
-        Grid.Column="3"
-        Command="{Binding FixOverLoadForAllWorkCommand}"
-        Content="{ll:Str 修复超模}"
-        Style="{StaticResource MyThemedButtonStyle}"
-      />
     </Grid>
-    <Grid Grid.Row="1">
-      <Grid.Style>
-        <Style TargetType="Grid">
-          <Setter Property="IsEnabled" Value="True" />
-          <Style.Triggers>
-            <DataTrigger
-              Binding="{Binding SelectedItem, ElementName=ComboBox_Pet}"
-              Value="{x:Null}"
-            >
-              <Setter Property="IsEnabled" Value="False" />
-            </DataTrigger>
-          </Style.Triggers>
-        </Style>
-      </Grid.Style>
+    <Grid
+      Grid.Row="1"
+      IsEnabled="{Binding CurrentPet, Converter={StaticResource NullToFalseConverter}}"
+    >
       <DataGrid
         d:ItemsSource="{d:SampleData ItemCount=5}"
         d:SelectedIndex="0"
-        pu:DataGridHelper.ColumnHeaderHorizontalContentAlignment="Center"
-        pu:DataGridHelper.RowSelectedBorderBrush="{StaticResource DARKPrimaryLight}"
-        pu:DataGridHelper.RowSelectedBorderThickness="3"
-        AutoGenerateColumns="False"
-        CanUserAddRows="False"
-        CanUserDeleteRows="False"
-        CanUserReorderColumns="False"
-        CanUserResizeRows="False"
-        GridLinesVisibility="Horizontal"
         ItemsSource="{Binding Works.FilteredList}"
         MouseDoubleClick="DataGrid_MouseDoubleClick"
-        RowDetailsVisibilityMode="Visible"
-        RowHeight="64"
-        VirtualizingStackPanel.IsVirtualizing="True"
-        VirtualizingStackPanel.VirtualizationMode="Recycling"
         FrozenColumnCount="1"
+        Style="{DynamicResource ModMaker_ModelsDataGrid}"
       >
         <DataGrid.RowStyle>
           <Style BasedOn="{StaticResource {x:Type DataGridRow}}" TargetType="DataGridRow">

@@ -8,6 +8,15 @@ namespace VPet.ModMaker.ViewModels;
 public enum EditType
 {
     Food,
+    ClickText,
+    LowText,
+    SelectText,
+    Theme,
+    Font,
+    Pet,
+    Work,
+    Move,
+    Anime,
 }
 
 public interface IEditViewModel

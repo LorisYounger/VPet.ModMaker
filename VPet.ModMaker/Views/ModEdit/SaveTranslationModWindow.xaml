@@ -5,6 +5,7 @@
   xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
   xmlns:ll="clr-namespace:LinePutScript.Localization.WPF;assembly=LinePutScript.Localization.WPF"
   xmlns:local="clr-namespace:VPet.ModMaker.Views"
+  xmlns:n="clr-namespace:VPet.ModMaker"
   xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
   xmlns:pu="https://opensource.panuon.com/wpf-ui"
   xmlns:vm="clr-namespace:VPet.ModMaker.ViewModels"
@@ -31,39 +32,21 @@
       Grid.Row="1"
       d:ItemsSource="{d:SampleData ItemCount=5}"
       ItemsSource="{Binding Cultures}"
-    >
-      <ListBox.ItemContainerStyle>
-        <Style BasedOn="{StaticResource {x:Type ListBoxItem}}" TargetType="{x:Type ListBoxItem}">
-          <Setter Property="Focusable" Value="False" />
-        </Style>
-      </ListBox.ItemContainerStyle>
-      <ListBox.ItemsPanel>
-        <ItemsPanelTemplate>
-          <WrapPanel />
-        </ItemsPanelTemplate>
-      </ListBox.ItemsPanel>
-      <ListBox.ItemTemplate>
-        <DataTemplate>
-          <CheckBox
-            d:Content="zh-CN"
-            d:IsChecked="True"
-            Content="{Binding Source}"
-            IsChecked="{Binding IsSelected}"
-          />
-        </DataTemplate>
-      </ListBox.ItemTemplate>
-    </ListBox>
+      n:ListBoxHelper.SelectedItems="{Binding SelectedCultures}"
+      SelectionMode="Multiple"
+      Style="{DynamicResource SideMenuListBoxStyle}"
+    ></ListBox>
     <Grid Grid.Row="2">
       <Grid.ColumnDefinitions>
         <ColumnDefinition Width="Auto" />
         <ColumnDefinition />
       </Grid.ColumnDefinitions>
-      <CheckBox
+      <!--<CheckBox
         Margin="5,0,5,0"
         Content="{ll:Str 全选}"
         IsChecked="{Binding CheckCultures.Leader.Value}"
         IsThreeState="True"
-      />
+      />-->
       <Button
         Grid.Column="1"
         Margin="10"

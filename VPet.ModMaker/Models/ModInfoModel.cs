@@ -98,8 +98,8 @@ public sealed partial class ModInfoModel : ObservableModelBase, IDisposable
 
         ID = loader.Name;
         if (
-            loader.Intro is not null
-            && loader.Intro != DescriptionID
+            I18nObserver is not null
+            && string.Equals(loader.Intro, DescriptionID) is false
             && I18nResource.RenameKey(loader.Intro, DescriptionID) is false
         )
             I18nResource.SetData(DescriptionID, loader.Intro);
@@ -120,13 +120,14 @@ public sealed partial class ModInfoModel : ObservableModelBase, IDisposable
         LoadPets(loader);
 
         CurrentPet = Pets.FilteredList.FirstOrDefault()!;
+        I18nResource.ClearUnobservedData();
     }
 
     /// <summary>
     /// I18n资源
     /// </summary>
     public ObservableI18nResource<string, string> I18nResource { get; } =
-        new("Main") { GetDefaultValue = (_, _) => string.Empty };
+        new("Main") { GetDefaultValue = (_, _) => string.Empty, RecordObserver = true };
     public I18nObserver<ModInfoModel, string, string> I18nObserver =>
         field ??= new(I18nResource, this, (s, p) => s.OnPropertyChanged(p))
         {
@@ -302,12 +303,13 @@ public sealed partial class ModInfoModel : ObservableModelBase, IDisposable
         {
             try
             {
-                Themes.Add(new(theme) { I18nResource = I18nResource });
-                this.LogIfEnabled(LogLevel.Debug)?.Log("添加主题成功, ID: {id}", theme.Name);
+                Themes.Add(new(theme, I18nResource));
+                this.LogIfEnabled(LogLevel.Debug)?.Log("添加主题成功, ID: '{id}'", theme.Name);
             }
             catch (Exception ex)
             {
-                this.LogIfEnabled(LogLevel.Warning)?.Log(ex, "添加主题失败, ID: {id}", theme.Name);
+                this.LogIfEnabled(LogLevel.Warning)
+                    ?.Log(ex, "添加主题失败, ID: '{id}'", theme.Name);
             }
         }
 
@@ -318,7 +320,7 @@ public sealed partial class ModInfoModel : ObservableModelBase, IDisposable
             {
                 var font = new FontModel(file);
                 Fonts.Add(font);
-                this.LogIfEnabled(LogLevel.Debug)?.Log("添加字体成功, ID: {id}", font.Name);
+                this.LogIfEnabled(LogLevel.Debug)?.Log("添加字体成功, ID: '{id}'", font.Name);
             }
             catch (Exception ex)
             {
@@ -343,12 +345,17 @@ public sealed partial class ModInfoModel : ObservableModelBase, IDisposable
                 foreach (var p in pet.path)
                     LoadAnime(petModel, p);
                 this.LogIfEnabled(LogLevel.Information)
-                    ?.Log("添加宠物成功, ID: {id}, 宠物名称: {name}", pet.Name, pet.PetName);
+                    ?.Log("添加宠物成功, ID: '{id}', 宠物名称: '{name}'", pet.Name, pet.PetName);
             }
             catch (Exception ex)
             {
                 this.LogIfEnabled(LogLevel.Warning)
-                    ?.Log(ex, "添加宠物失败, ID: {id}, 宠物名称: {name}", pet.Name, pet.PetName);
+                    ?.Log(
+                        ex,
+                        "添加宠物失败, ID: '{id}', 宠物名称: '{name}'",
+                        pet.Name,
+                        pet.PetName
+                    );
             }
         }
 
@@ -394,12 +401,12 @@ public sealed partial class ModInfoModel : ObservableModelBase, IDisposable
             {
                 SelectTexts.Add(new(selectText, I18nResource));
                 this.LogIfEnabled(LogLevel.Debug)
-                    ?.Log("添加选择文本成功, ID: {id}", selectText.Text);
+                    ?.Log("添加选择文本成功, ID: '{id}'", selectText.Text);
             }
             catch (Exception ex)
             {
                 this.LogIfEnabled(LogLevel.Warning)
-                    ?.Log(ex, "添加选择文本失败, ID: {id}", selectText.Text);
+                    ?.Log(ex, "添加选择文本失败, ID: '{id}'", selectText.Text);
             }
         }
     }
@@ -412,14 +419,14 @@ public sealed partial class ModInfoModel : ObservableModelBase, IDisposable
         {
             try
             {
-                LowTexts.Add(new(lowText) { I18nResource = I18nResource });
+                LowTexts.Add(new(lowText, I18nResource));
                 this.LogIfEnabled(LogLevel.Debug)
-                    ?.Log("添加低状态文本成功, ID: {id}", lowText.Text);
+                    ?.Log("添加低状态文本成功, ID: '{id}'", lowText.Text);
             }
             catch (Exception ex)
             {
                 this.LogIfEnabled(LogLevel.Warning)
-                    ?.Log(ex, "添加低状态文本失败, ID: {id}", lowText.Text);
+                    ?.Log(ex, "添加低状态文本失败, ID: '{id}'", lowText.Text);
             }
         }
     }
@@ -432,14 +439,14 @@ public sealed partial class ModInfoModel : ObservableModelBase, IDisposable
         {
             try
             {
-                ClickTexts.Add(new(clickText) { I18nResource = I18nResource });
+                ClickTexts.Add(new(clickText, I18nResource));
                 this.LogIfEnabled(LogLevel.Debug)
-                    ?.Log("添加点击文本成功, ID: {id}", clickText.Text);
+                    ?.Log("添加点击文本成功, ID: '{id}'", clickText.Text);
             }
             catch (Exception ex)
             {
                 this.LogIfEnabled(LogLevel.Warning)
-                    ?.Log(ex, "添加点击文本失败, ID: {id}", clickText.Text);
+                    ?.Log(ex, "添加点击文本失败, ID: '{id}'", clickText.Text);
             }
         }
     }
@@ -452,11 +459,11 @@ public sealed partial class ModInfoModel : ObservableModelBase, IDisposable
             try
             {
                 Foods.Add(new(food, I18nResource));
-                this.LogIfEnabled(LogLevel.Debug)?.Log("添加食物成功, ID: {id}", food.Name);
+                this.LogIfEnabled(LogLevel.Debug)?.Log("添加食物成功, ID: '{id}'", food.Name);
             }
             catch (Exception ex)
             {
-                this.LogIfEnabled(LogLevel.Warning)?.Log(ex, "添加食物失败, ID: {id}", food.Name);
+                this.LogIfEnabled(LogLevel.Warning)?.Log(ex, "添加食物失败, ID: '{id}'", food.Name);
             }
         }
     }
@@ -751,12 +758,17 @@ public sealed partial class ModInfoModel : ObservableModelBase, IDisposable
             {
                 pet.Save(petPath);
                 this.LogIfEnabled(LogLevel.Information)
-                    ?.Log("保存宠物成功, ID: {id}, 宠物名称: {petName}", pet.ID, pet.PetName);
+                    ?.Log("保存宠物成功, ID: '{id}', 宠物名称: '{petName}'", pet.ID, pet.PetName);
             }
             catch (Exception ex)
             {
                 this.LogIfEnabled(LogLevel.Information)
-                    ?.Log(ex, "保存宠物失败, ID: {id}, 宠物名称: {petName}", pet.ID, pet.PetName);
+                    ?.Log(
+                        ex,
+                        "保存宠物失败, ID: '{id}', 宠物名称: '{petName}'",
+                        pet.ID,
+                        pet.PetName
+                    );
             }
         }
         // 如果没有一个完成保存, 则删除文件夹
@@ -927,6 +939,7 @@ public sealed partial class ModInfoModel : ObservableModelBase, IDisposable
     /// <param name="cultures">文化</param>
     private void SaveI18nData(string path, IEnumerable<CultureInfo> cultures)
     {
+        I18nResource.ClearUnobservedData();
         this.LogIfEnabled(LogLevel.Information)
             ?.Log("正在保存本地化数据, 文化数量: {count}", I18nResource.Cultures.Count);
         var langPath = Path.Combine(path, "lang");

@@ -16,22 +16,28 @@ namespace VPet.ModMaker.Models;
 public sealed partial class ClickTextModel : ObservableModelBase, IDisposable
 {
     /// <inheritdoc/>
-    public ClickTextModel() { }
+    public ClickTextModel(ObservableI18nResource<string, string> i18nResource)
+    {
+        I18nResource = i18nResource;
+    }
 
     /// <inheritdoc/>
     /// <param name="clickText">点击文本模型</param>
-    public ClickTextModel(ClickTextModel clickText)
-        : this()
+    public ClickTextModel(
+        ClickTextModel clickText,
+        ObservableI18nResource<string, string> i18nResource
+    )
     {
         this.MapFrom(clickText);
+        I18nResource = i18nResource;
     }
 
     /// <inheritdoc/>
     /// <param name="clickText">点击文本</param>
-    public ClickTextModel(ClickText clickText)
-        : this()
+    public ClickTextModel(ClickText clickText, ObservableI18nResource<string, string> i18nResource)
     {
         this.MapFrom(clickText);
+        I18nResource = i18nResource;
     }
 
     /// <summary>
@@ -64,7 +70,7 @@ public sealed partial class ClickTextModel : ObservableModelBase, IDisposable
     /// </summary>
     [MapIgnoreProperty]
     [ObservableProperty]
-    public required ObservableI18nResource<string, string> I18nResource { get; set; }
+    public ObservableI18nResource<string, string> I18nResource { get; set; }
 
     partial void OnI18nResourceChanged(
         ObservableI18nResource<string, string> oldValue,

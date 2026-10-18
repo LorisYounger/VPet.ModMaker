@@ -13,7 +13,7 @@
   <c:BoolToVisibilityConverter x:Key="FalseToCollapsedConverter" />
   <c:FirstEqualsSecondMultiConverter x:Key="EqualsConverter" />
   <c:FirstEqualsSecondMultiConverter x:Key="NotEqualsConverter" IsInverted="True" />
-  <c:NullToBoolConverter x:Key="NullToFalseConverter" />
+  <local:NullToTrueConverter x:Key="NullToFalseConverter" IsInverted="True" />
   <c:AllBoolToVisibilityMultiConverter
     x:Key="AllTrueToCollapsedConverter"
     DefaultResult="Collapsed"

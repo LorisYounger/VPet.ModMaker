@@ -124,7 +124,7 @@ public partial class LowTextEditViewModel
     [RelayCommand]
     private void Add()
     {
-        LowText = new() { I18nResource = ModInfo.I18nResource };
+        LowText = new(ModInfo.TempI18nResource);
         var result = DialogService.ShowDialog(this, this);
         if (result is not true)
         {
@@ -158,7 +158,7 @@ public partial class LowTextEditViewModel
     public void Edit(LowTextModel model)
     {
         OldLowText = model;
-        var newModel = new LowTextModel(model) { I18nResource = ModInfo.TempI18nResource };
+        var newModel = new LowTextModel(model, ModInfo.TempI18nResource);
         model.I18nResource.CopyDataTo(newModel.I18nResource, model.ID);
         LowText = newModel;
         var result = DialogService.ShowDialog(this, this);

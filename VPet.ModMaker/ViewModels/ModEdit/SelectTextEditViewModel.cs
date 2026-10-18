@@ -134,7 +134,7 @@ public partial class SelectTextEditViewModel
     [RelayCommand]
     private void Add()
     {
-        SelectText = new() { I18nResource = ModInfo.I18nResource };
+        SelectText = new(ModInfo.TempI18nResource);
         var result = DialogService.ShowDialog(this, this);
         if (result is not true)
         {
@@ -168,7 +168,7 @@ public partial class SelectTextEditViewModel
     public void Edit(SelectTextModel model)
     {
         OldSelectText = model;
-        var newModel = new SelectTextModel(model) { I18nResource = ModInfo.TempI18nResource };
+        var newModel = new SelectTextModel(model, ModInfo.TempI18nResource);
         model.I18nResource.CopyDataTo(newModel.I18nResource, model.ID, model.ChooseID);
         SelectText = newModel;
         var result = DialogService.ShowDialog(this, this);

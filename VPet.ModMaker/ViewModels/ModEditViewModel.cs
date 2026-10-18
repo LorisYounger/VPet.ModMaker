@@ -99,23 +99,24 @@ public sealed partial class ModEditViewModel
                 }
             }
         }
-        foreach (var vm in ViewModels)
+        foreach (var vm in ViewModels.Values)
             vm.ModInfo = ModInfo;
     }
 
-    public ObservableCollection<IEditViewModel> ViewModels =>
-        field ??= [
-            DialogService.CreateViewModel<FoodEditViewModel>(),
-            DialogService.CreateViewModel<ClickTextEditViewModel>(),
-            DialogService.CreateViewModel<LowTextEditViewModel>(),
-            DialogService.CreateViewModel<SelectTextEditViewModel>(),
-            DialogService.CreateViewModel<ThemeEditViewModel>(),
-            DialogService.CreateViewModel<FontEditViewModel>(),
-            DialogService.CreateViewModel<PetEditViewModel>(),
-            DialogService.CreateViewModel<WorkEditViewModel>(),
-            DialogService.CreateViewModel<MoveEditViewModel>(),
-            DialogService.CreateViewModel<AnimeViewModel>(),
-        ];
+    public Dictionary<EditType, IEditViewModel> ViewModels =>
+        field ??= new()
+        {
+            [EditType.Food] = DialogService.CreateViewModel<FoodEditViewModel>(),
+            [EditType.ClickText] = DialogService.CreateViewModel<ClickTextEditViewModel>(),
+            [EditType.LowText] = DialogService.CreateViewModel<LowTextEditViewModel>(),
+            [EditType.SelectText] = DialogService.CreateViewModel<SelectTextEditViewModel>(),
+            [EditType.Theme] = DialogService.CreateViewModel<ThemeEditViewModel>(),
+            [EditType.Font] = DialogService.CreateViewModel<FontEditViewModel>(),
+            [EditType.Pet] = DialogService.CreateViewModel<PetEditViewModel>(),
+            [EditType.Work] = DialogService.CreateViewModel<WorkEditViewModel>(),
+            [EditType.Move] = DialogService.CreateViewModel<MoveEditViewModel>(),
+            [EditType.Anime] = DialogService.CreateViewModel<AnimeViewModel>(),
+        };
 
     public bool? DialogResult { get; }
     #endregion
@@ -143,6 +144,7 @@ public sealed partial class ModEditViewModel
     [RelayCommand]
     private void EditI18n()
     {
+        ModInfo.I18nResource.ClearUnobservedData();
         I18nEditViewModel.ModInfo = ModInfo;
         DialogService.ShowDialog(this, I18nEditViewModel);
     }
@@ -422,7 +424,7 @@ public sealed partial class ModEditViewModel
         DialogService.Close(I18nEditViewModel);
         ModInfo?.Dispose();
         ModInfo = null!;
-        foreach (var vm in ViewModels.OfType<IDisposable>())
+        foreach (var vm in ViewModels.Values.OfType<IDisposable>())
             vm.Dispose();
     }
 

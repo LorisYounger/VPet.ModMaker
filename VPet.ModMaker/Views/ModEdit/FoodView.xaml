@@ -47,22 +47,10 @@
       Grid.Row="1"
       d:ItemsSource="{d:SampleData ItemCount=5}"
       d:SelectedIndex="0"
-      pu:DataGridHelper.ColumnHeaderHorizontalContentAlignment="Center"
-      pu:DataGridHelper.RowSelectedBorderBrush="{StaticResource DARKPrimaryLight}"
-      pu:DataGridHelper.RowSelectedBorderThickness="3"
-      AutoGenerateColumns="False"
-      CanUserAddRows="False"
-      CanUserDeleteRows="False"
-      CanUserReorderColumns="False"
-      CanUserResizeRows="False"
-      GridLinesVisibility="Horizontal"
       ItemsSource="{Binding Foods.FilteredList}"
       MouseDoubleClick="DataGrid_MouseDoubleClick"
-      RowDetailsVisibilityMode="Visible"
-      RowHeight="64"
-      VirtualizingStackPanel.IsVirtualizing="True"
-      VirtualizingStackPanel.VirtualizationMode="Recycling"
       FrozenColumnCount="2"
+      Style="{DynamicResource ModMaker_ModelsDataGrid}"
     >
       <DataGrid.RowStyle>
         <Style BasedOn="{StaticResource {x:Type DataGridRow}}" TargetType="DataGridRow">
