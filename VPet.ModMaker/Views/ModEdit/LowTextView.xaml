@@ -77,7 +77,7 @@
         <DataGridTextColumn
           Binding="{Binding Mode, Converter={StaticResource EnumToEnumInfoConverter}}"
           CanUserSort="True"
-          ElementStyle="{StaticResource TextBlock_LeftCenter}"
+          ElementStyle="{StaticResource ModMaker_TextBlockLeftCenter}"
           Header="{ll:Str 状态}"
           IsReadOnly="True"
           SortMemberPath="Mode"
@@ -85,7 +85,7 @@
         <DataGridTextColumn
           Binding="{Binding Strength, Converter={StaticResource EnumToEnumInfoConverter}}"
           CanUserSort="True"
-          ElementStyle="{StaticResource TextBlock_LeftCenter}"
+          ElementStyle="{StaticResource ModMaker_TextBlockLeftCenter}"
           Header="{ll:Str 饥渴需求}"
           IsReadOnly="True"
           SortMemberPath="Strength"
@@ -93,7 +93,7 @@
         <DataGridTextColumn
           Binding="{Binding Like, Converter={StaticResource EnumToEnumInfoConverter}}"
           CanUserSort="True"
-          ElementStyle="{StaticResource TextBlock_LeftCenter}"
+          ElementStyle="{StaticResource ModMaker_TextBlockLeftCenter}"
           Header="{ll:Str 好感需求}"
           IsReadOnly="True"
           SortMemberPath="Like"
@@ -106,7 +106,7 @@
       VerticalAlignment="Bottom"
       Command="{Binding AddCommand}"
       Content="➕"
-      Style="{StaticResource AddButton}"
+      Style="{DynamicResource ModMaker_AddButton}"
     />
   </Grid>
 </UserControl>

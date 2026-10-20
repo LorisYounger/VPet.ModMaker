@@ -48,7 +48,7 @@
           MaxWidth="200"
           Binding="{Binding Name}"
           CanUserSort="True"
-          ElementStyle="{StaticResource TextBlock_LeftCenter}"
+          ElementStyle="{StaticResource ModMaker_TextBlockLeftCenter}"
           Header="{ll:Str 名称}"
           IsReadOnly="True"
           SortMemberPath="Name"
@@ -56,7 +56,7 @@
         <DataGridTextColumn
           Binding="{Binding SupportedCultures}"
           CanUserSort="True"
-          ElementStyle="{StaticResource TextBlock_LeftCenter}"
+          ElementStyle="{StaticResource ModMaker_TextBlockLeftCenter}"
           Header="{ll:Str 支持的文化}"
           IsReadOnly="True"
         />
@@ -68,7 +68,10 @@
           IsReadOnly="True"
         >
           <DataGridTextColumn.ElementStyle>
-            <Style TargetType="{x:Type TextBlock}" BasedOn="{StaticResource TextBlock_LeftCenter}">
+            <Style
+              TargetType="{x:Type TextBlock}"
+              BasedOn="{StaticResource ModMaker_TextBlockLeftCenter}"
+            >
               <Setter Property="FontFamily" Value="{Binding Font}" />
             </Style>
           </DataGridTextColumn.ElementStyle>
@@ -81,7 +84,7 @@
       VerticalAlignment="Bottom"
       Command="{Binding AddCommand}"
       Content="➕"
-      Style="{StaticResource AddButton}"
+      Style="{DynamicResource ModMaker_AddButton}"
     />
   </Grid>
 </UserControl>

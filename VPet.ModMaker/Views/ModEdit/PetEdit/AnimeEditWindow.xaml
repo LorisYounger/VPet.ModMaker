@@ -229,7 +229,7 @@
           Padding="5"
           d:Text="Type"
           FontSize="14"
-          Style="{StaticResource TextBlock_LeftCenter}"
+          Style="{StaticResource ModMaker_TextBlockLeftCenter}"
           Text="{Binding Anime.GraphType}"
         />
         <Label

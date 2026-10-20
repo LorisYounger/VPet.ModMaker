@@ -18,6 +18,7 @@
   d:Width="800"
   AutomationProperties.AutomationId="ModEditWindow"
   WindowStartupLocation="CenterScreen"
+  Style="{DynamicResource WindowXStyle}"
   mc:Ignorable="d"
 >
   <Window.Resources>

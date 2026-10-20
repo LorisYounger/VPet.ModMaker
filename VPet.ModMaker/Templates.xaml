@@ -5,6 +5,82 @@
   xmlns:pu="https://opensource.panuon.com/wpf-ui"
   xmlns:vm="clr-namespace:VPet.ModMaker.ViewModels"
 >
+  <ControlTemplate x:Key="ModMaker_ObservableRangeControlTemplate" TargetType="Control">
+    <Grid HorizontalAlignment="Right" Height="40" ColumnDefinitions="50,150,50,150">
+      <TextBlock
+        Text="{ll:Str 最小值}"
+        Margin="5"
+        Style="{DynamicResource ModMaker_TextBlockRightCenter}"
+      />
+      <pu:NumberInput
+        Grid.Column="1"
+        Height="30"
+        IsSnapToIntervalEnabled="False"
+        Style="{DynamicResource ModMaker_NumberInputBaseStyle}"
+        ToolTip="{Binding Value, RelativeSource={RelativeSource Mode=Self}}"
+        Value="{Binding Min}"
+      />
+      <TextBlock
+        Grid.Column="2"
+        Margin="5"
+        Text="{ll:Str 最大值}"
+        Style="{DynamicResource ModMaker_TextBlockRightCenter}"
+      />
+      <pu:NumberInput
+        Grid.Column="3"
+        Height="30"
+        IsSnapToIntervalEnabled="False"
+        Style="{DynamicResource ModMaker_NumberInputBaseStyle}"
+        ToolTip="{Binding Value, RelativeSource={RelativeSource Mode=Self}}"
+        Value="{Binding Max}"
+      />
+    </Grid>
+  </ControlTemplate>
+  <ControlTemplate x:Key="ModMaker_FlagableEnumControlTemplate" TargetType="Control">
+    <Grid Height="80" RowDefinitions="*,*">
+      <Grid HorizontalAlignment="Right" Height="40" ColumnDefinitions="Auto,Auto,Auto">
+        <ComboBox
+          Width="260"
+          x:Name="Enums"
+          ItemsSource="{Binding Info.Infos}"
+          SelectedIndex="0"
+          Style="{DynamicResource StandardComboBoxStyle}"
+          ToolTip="{ll:Str 选择枚举}"
+        />
+        <Button
+          Grid.Column="1"
+          Width="20"
+          Height="30"
+          Padding="0,0,0,3"
+          Command="{Binding AddFlagCommand}"
+          CommandParameter="{Binding SelectedItem.Value, ElementName=Enums}"
+          Content="+"
+          FontSize="20"
+          Style="{DynamicResource ThemedButtonStyle}"
+          ToolTip="{ll:Str 添加枚举}"
+        />
+        <Button
+          Grid.Column="2"
+          Width="20"
+          Height="30"
+          Padding="0,0,0,3"
+          Command="{Binding RemoveFlagCommand}"
+          CommandParameter="{Binding SelectedItem.Value, ElementName=Enums}"
+          Content="-"
+          FontSize="20"
+          Style="{DynamicResource ThemedButtonStyle}"
+          ToolTip="{ll:Str 去除枚举}"
+        />
+      </Grid>
+      <Border HorizontalAlignment="Right" Grid.Row="1" Height="40">
+        <TextBlock
+          Style="{DynamicResource ModMaker_TextBlockRightCenter}"
+          Text="{Binding Info}"
+          ToolTip="{Binding Info}"
+        />
+      </Border>
+    </Grid>
+  </ControlTemplate>
   <ControlTemplate x:Key="Grid_EnumCommand" TargetType="Control">
     <Grid>
       <Grid.ColumnDefinitions>
@@ -16,7 +92,7 @@
       <TextBlock
         Margin="5"
         FontSize="12"
-        Style="{StaticResource TextBlock_LeftCenter}"
+        Style="{StaticResource ModMaker_TextBlockLeftCenter}"
         Text="{Binding Info}"
         ToolTip="{Binding Info}"
       />
@@ -113,11 +189,12 @@
   </ControlTemplate>
   <ControlTemplate x:Key="ModMaker_CultureList" TargetType="ListBox">
     <ListBox
+      MinWidth="100"
       pu:ListBoxHelper.ItemsHoverBackground="{StaticResource SecondaryLight}"
       ItemsSource="{Binding ModInfo.I18nResource.ObservableCultures}"
       ScrollViewer.VerticalScrollBarVisibility="Auto"
       SelectedItem="{Binding ModInfo.I18nResource.CurrentCulture}"
-      Style="{StaticResource SideMenuListBoxStyle}"
+      Style="{DynamicResource SideMenuListBoxStyle}"
     >
       <ListBox.ItemContainerStyle>
         <Style BasedOn="{StaticResource {x:Type ListBoxItem}}" TargetType="ListBoxItem">

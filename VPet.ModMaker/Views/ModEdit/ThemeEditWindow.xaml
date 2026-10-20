@@ -15,288 +15,367 @@
   Width="800"
   WindowStartupLocation="CenterScreen"
 >
-  <Grid Margin="10" ColumnDefinitions="*,Auto">
+  <Grid ColumnDefinitions="*,Auto">
     <Grid RowDefinitions="*,Auto">
-      <ScrollViewer Style="{DynamicResource ModMaker_ScrollViewerBaseStyle}">
+      <ScrollViewer Padding="10" Style="{DynamicResource ModMaker_ScrollViewerBaseStyle}">
         <StackPanel>
-          <Grid Height="30" ColumnDefinitions="Auto,*">
-            <TextBlock Style="{DynamicResource TextBlock_LeftCenter}" Text="{ll:Str ID}" />
-            <TextBox
-              Style="{DynamicResource StandardTextBoxStyle}"
-              HorizontalAlignment="Right"
-              Width="200"
-              Grid.Column="1"
-              Text="{Binding Theme.ID}"
-            />
-          </Grid>
-          <Grid Height="30" ColumnDefinitions="Auto,*">
-            <TextBlock Style="{DynamicResource TextBlock_LeftCenter}" Text="{ll:Str Name}" />
-            <TextBox
-              Style="{DynamicResource StandardTextBoxStyle}"
-              HorizontalAlignment="Right"
-              Width="200"
-              Grid.Column="1"
-              Text="{Binding Theme.Name}"
-            />
-          </Grid>
-          <Grid Height="30" ColumnDefinitions="Auto,*">
-            <TextBlock Style="{DynamicResource TextBlock_LeftCenter}" Text="{ll:Str Primary}" />
-            <pu:ColorPicker
-              Width="200"
-              HorizontalAlignment="Right"
-              Grid.Column="1"
-              Grid.Row="2"
-              ColorChannels="RGB"
-              SelectedColor="{Binding Theme.Primary, Converter={StaticResource SolidColorBrushToMediaColorConverter}}"
-            />
-          </Grid>
-          <Grid Height="30" ColumnDefinitions="Auto,*">
-            <TextBlock
-              Style="{DynamicResource TextBlock_LeftCenter}"
-              Text="{ll:Str PrimaryLight}"
-            />
-            <pu:ColorPicker
-              Width="200"
-              HorizontalAlignment="Right"
-              Grid.Column="1"
-              Grid.Row="2"
-              ColorChannels="RGB"
-              SelectedColor="{Binding Theme.PrimaryLight, Converter={StaticResource SolidColorBrushToMediaColorConverter}}"
-            />
-          </Grid>
-          <Grid Height="30" ColumnDefinitions="Auto,*">
-            <TextBlock
-              Style="{DynamicResource TextBlock_LeftCenter}"
-              Text="{ll:Str PrimaryLighter}"
-            />
-            <pu:ColorPicker
-              Width="200"
-              HorizontalAlignment="Right"
-              Grid.Column="1"
-              Grid.Row="2"
-              ColorChannels="RGB"
-              SelectedColor="{Binding Theme.PrimaryLighter, Converter={StaticResource SolidColorBrushToMediaColorConverter}}"
-            />
-          </Grid>
-          <Grid Height="30" ColumnDefinitions="Auto,*">
-            <TextBlock Style="{DynamicResource TextBlock_LeftCenter}" Text="{ll:Str PrimaryDark}" />
-            <pu:ColorPicker
-              Width="200"
-              HorizontalAlignment="Right"
-              Grid.Column="1"
-              Grid.Row="2"
-              ColorChannels="RGB"
-              SelectedColor="{Binding Theme.PrimaryDark, Converter={StaticResource SolidColorBrushToMediaColorConverter}}"
-            />
-          </Grid>
-          <Grid Height="30" ColumnDefinitions="Auto,*">
-            <TextBlock
-              Style="{DynamicResource TextBlock_LeftCenter}"
-              Text="{ll:Str PrimaryDarker}"
-            />
-            <pu:ColorPicker
-              Width="200"
-              HorizontalAlignment="Right"
-              Grid.Column="1"
-              Grid.Row="2"
-              ColorChannels="RGB"
-              SelectedColor="{Binding Theme.PrimaryDarker, Converter={StaticResource SolidColorBrushToMediaColorConverter}}"
-            />
-          </Grid>
-          <Grid Height="30" ColumnDefinitions="Auto,*">
-            <TextBlock Style="{DynamicResource TextBlock_LeftCenter}" Text="{ll:Str PrimaryText}" />
-            <pu:ColorPicker
-              Width="200"
-              HorizontalAlignment="Right"
-              Grid.Column="1"
-              Grid.Row="2"
-              ColorChannels="RGB"
-              SelectedColor="{Binding Theme.PrimaryText, Converter={StaticResource SolidColorBrushToMediaColorConverter}}"
-            />
-          </Grid>
-          <Grid Height="30" ColumnDefinitions="Auto,*">
-            <TextBlock Style="{DynamicResource TextBlock_LeftCenter}" Text="{ll:Str Secondary}" />
-            <pu:ColorPicker
-              Width="200"
-              HorizontalAlignment="Right"
-              Grid.Column="1"
-              Grid.Row="2"
-              ColorChannels="RGB"
-              SelectedColor="{Binding Theme.Secondary, Converter={StaticResource SolidColorBrushToMediaColorConverter}}"
-            />
-          </Grid>
-          <Grid Height="30" ColumnDefinitions="Auto,*">
-            <TextBlock
-              Style="{DynamicResource TextBlock_LeftCenter}"
-              Text="{ll:Str SecondaryLight}"
-            />
-            <pu:ColorPicker
-              Width="200"
-              HorizontalAlignment="Right"
-              Grid.Column="1"
-              Grid.Row="2"
-              ColorChannels="RGB"
-              SelectedColor="{Binding Theme.SecondaryLight, Converter={StaticResource SolidColorBrushToMediaColorConverter}}"
-            />
-          </Grid>
-          <Grid Height="30" ColumnDefinitions="Auto,*">
-            <TextBlock
-              Style="{DynamicResource TextBlock_LeftCenter}"
-              Text="{ll:Str SecondaryLighter}"
-            />
-            <pu:ColorPicker
-              Width="200"
-              HorizontalAlignment="Right"
-              Grid.Column="1"
-              Grid.Row="2"
-              ColorChannels="RGB"
-              SelectedColor="{Binding Theme.SecondaryLighter, Converter={StaticResource SolidColorBrushToMediaColorConverter}}"
-            />
-          </Grid>
-          <Grid Height="30" ColumnDefinitions="Auto,*">
-            <TextBlock
-              Style="{DynamicResource TextBlock_LeftCenter}"
-              Text="{ll:Str SecondaryDark}"
-            />
-            <pu:ColorPicker
-              Width="200"
-              HorizontalAlignment="Right"
-              Grid.Column="1"
-              Grid.Row="2"
-              ColorChannels="RGB"
-              SelectedColor="{Binding Theme.SecondaryDark, Converter={StaticResource SolidColorBrushToMediaColorConverter}}"
-            />
-          </Grid>
-          <Grid Height="30" ColumnDefinitions="Auto,*">
-            <TextBlock
-              Style="{DynamicResource TextBlock_LeftCenter}"
-              Text="{ll:Str SecondaryDarker}"
-            />
-            <pu:ColorPicker
-              Width="200"
-              HorizontalAlignment="Right"
-              Grid.Column="1"
-              Grid.Row="2"
-              ColorChannels="RGB"
-              SelectedColor="{Binding Theme.SecondaryDarker, Converter={StaticResource SolidColorBrushToMediaColorConverter}}"
-            />
-          </Grid>
-          <Grid Height="30" ColumnDefinitions="Auto,*">
-            <TextBlock
-              Style="{DynamicResource TextBlock_LeftCenter}"
-              Text="{ll:Str SecondaryText}"
-            />
-            <pu:ColorPicker
-              Width="200"
-              HorizontalAlignment="Right"
-              Grid.Column="1"
-              Grid.Row="2"
-              ColorChannels="RGB"
-              SelectedColor="{Binding Theme.SecondaryText, Converter={StaticResource SolidColorBrushToMediaColorConverter}}"
-            />
-          </Grid>
-          <Grid Height="30" ColumnDefinitions="Auto,*">
-            <TextBlock Style="{DynamicResource TextBlock_LeftCenter}" Text="{ll:Str DARKPrimary}" />
-            <pu:ColorPicker
-              Width="200"
-              HorizontalAlignment="Right"
-              Grid.Column="1"
-              Grid.Row="2"
-              ColorChannels="RGB"
-              SelectedColor="{Binding Theme.DARKPrimary, Converter={StaticResource SolidColorBrushToMediaColorConverter}}"
-            />
-          </Grid>
-          <Grid Height="30" ColumnDefinitions="Auto,*">
-            <TextBlock
-              Style="{DynamicResource TextBlock_LeftCenter}"
-              Text="{ll:Str DARKPrimaryLight}"
-            />
-            <pu:ColorPicker
-              Width="200"
-              HorizontalAlignment="Right"
-              Grid.Column="1"
-              Grid.Row="2"
-              ColorChannels="RGB"
-              SelectedColor="{Binding Theme.DARKPrimaryLight, Converter={StaticResource SolidColorBrushToMediaColorConverter}}"
-            />
-          </Grid>
-          <Grid Height="30" ColumnDefinitions="Auto,*">
-            <TextBlock
-              Style="{DynamicResource TextBlock_LeftCenter}"
-              Text="{ll:Str DARKPrimaryLighter}"
-            />
-            <pu:ColorPicker
-              Width="200"
-              HorizontalAlignment="Right"
-              Grid.Column="1"
-              Grid.Row="2"
-              ColorChannels="RGB"
-              SelectedColor="{Binding Theme.DARKPrimaryLighter, Converter={StaticResource SolidColorBrushToMediaColorConverter}}"
-            />
-          </Grid>
-          <Grid Height="30" ColumnDefinitions="Auto,*">
-            <TextBlock
-              Style="{DynamicResource TextBlock_LeftCenter}"
-              Text="{ll:Str DARKPrimaryDark}"
-            />
-            <pu:ColorPicker
-              Width="200"
-              HorizontalAlignment="Right"
-              Grid.Column="1"
-              Grid.Row="2"
-              ColorChannels="RGB"
-              SelectedColor="{Binding Theme.DARKPrimaryDark, Converter={StaticResource SolidColorBrushToMediaColorConverter}}"
-            />
-          </Grid>
-          <Grid Height="30" ColumnDefinitions="Auto,*">
-            <TextBlock
-              Style="{DynamicResource TextBlock_LeftCenter}"
-              Text="{ll:Str DARKPrimaryDarker}"
-            />
-            <pu:ColorPicker
-              Width="200"
-              HorizontalAlignment="Right"
-              Grid.Column="1"
-              Grid.Row="2"
-              ColorChannels="RGB"
-              SelectedColor="{Binding Theme.DARKPrimaryDarker, Converter={StaticResource SolidColorBrushToMediaColorConverter}}"
-            />
-          </Grid>
-          <Grid Height="30" ColumnDefinitions="Auto,*">
-            <TextBlock
-              Style="{DynamicResource TextBlock_LeftCenter}"
-              Text="{ll:Str DARKPrimaryText}"
-            />
-            <pu:ColorPicker
-              Width="200"
-              HorizontalAlignment="Right"
-              Grid.Column="1"
-              Grid.Row="2"
-              ColorChannels="RGB"
-              SelectedColor="{Binding Theme.DARKPrimaryText, Converter={StaticResource SolidColorBrushToMediaColorConverter}}"
-            />
-          </Grid>
-          <Grid Height="30" ColumnDefinitions="Auto,*">
-            <TextBlock Style="{DynamicResource TextBlock_LeftCenter}" Text="{ll:Str ShadowColor}" />
-            <pu:ColorPicker
-              Width="200"
-              HorizontalAlignment="Right"
-              Grid.Column="1"
-              Grid.Row="2"
-              ColorChannels="RGB"
-              SelectedColor="{Binding Theme.ShadowColor, Converter={StaticResource SolidColorBrushToMediaColorConverter}}"
-            />
-          </Grid>
+          <Border Height="40" Style="{DynamicResource ModMaker_BorderItem}">
+            <Grid ColumnDefinitions="Auto,*">
+              <TextBlock Style="{DynamicResource ModMaker_TextBlockItemName}" Text="{ll:Str ID}" />
+              <TextBox
+                Style="{DynamicResource StandardTextBoxStyle}"
+                HorizontalAlignment="Right"
+                Width="300"
+                Grid.Column="1"
+                Text="{Binding Theme.ID}"
+              />
+            </Grid>
+          </Border>
+          <Border Height="40" Style="{DynamicResource ModMaker_BorderItem}">
+            <Grid ColumnDefinitions="Auto,*">
+              <TextBlock
+                Style="{DynamicResource ModMaker_TextBlockItemName}"
+                Text="{ll:Str Name}"
+              />
+              <TextBox
+                Style="{DynamicResource StandardTextBoxStyle}"
+                HorizontalAlignment="Right"
+                Width="300"
+                Grid.Column="1"
+                Text="{Binding Theme.Name}"
+              />
+            </Grid>
+          </Border>
+          <Border Height="40" Style="{DynamicResource ModMaker_BorderItem}">
+            <Grid ColumnDefinitions="Auto,*">
+              <TextBlock
+                Style="{DynamicResource ModMaker_TextBlockItemName}"
+                Text="{ll:Str Primary}"
+              />
+              <pu:ColorPicker
+                Style="{DynamicResource ModMaker_ColorPickerBaseStyle}"
+                Width="300"
+                HorizontalAlignment="Right"
+                Grid.Column="1"
+                Grid.Row="2"
+                ColorChannels="RGB"
+                SelectedColor="{Binding Theme.Primary, Converter={StaticResource SolidColorBrushToMediaColorConverter}}"
+              />
+            </Grid>
+          </Border>
+          <Border Height="40" Style="{DynamicResource ModMaker_BorderItem}">
+            <Grid ColumnDefinitions="Auto,*">
+              <TextBlock
+                Style="{DynamicResource ModMaker_TextBlockItemName}"
+                Text="{ll:Str PrimaryLight}"
+              />
+              <pu:ColorPicker
+                Style="{DynamicResource ModMaker_ColorPickerBaseStyle}"
+                Width="300"
+                HorizontalAlignment="Right"
+                Grid.Column="1"
+                Grid.Row="2"
+                ColorChannels="RGB"
+                SelectedColor="{Binding Theme.PrimaryLight, Converter={StaticResource SolidColorBrushToMediaColorConverter}}"
+              />
+            </Grid>
+          </Border>
+          <Border Height="40" Style="{DynamicResource ModMaker_BorderItem}">
+            <Grid ColumnDefinitions="Auto,*">
+              <TextBlock
+                Style="{DynamicResource ModMaker_TextBlockItemName}"
+                Text="{ll:Str PrimaryLighter}"
+              />
+              <pu:ColorPicker
+                Style="{DynamicResource ModMaker_ColorPickerBaseStyle}"
+                Width="300"
+                HorizontalAlignment="Right"
+                Grid.Column="1"
+                Grid.Row="2"
+                ColorChannels="RGB"
+                SelectedColor="{Binding Theme.PrimaryLighter, Converter={StaticResource SolidColorBrushToMediaColorConverter}}"
+              />
+            </Grid>
+          </Border>
+          <Border Height="40" Style="{DynamicResource ModMaker_BorderItem}">
+            <Grid ColumnDefinitions="Auto,*">
+              <TextBlock
+                Style="{DynamicResource ModMaker_TextBlockItemName}"
+                Text="{ll:Str PrimaryDark}"
+              />
+              <pu:ColorPicker
+                Style="{DynamicResource ModMaker_ColorPickerBaseStyle}"
+                Width="300"
+                HorizontalAlignment="Right"
+                Grid.Column="1"
+                Grid.Row="2"
+                ColorChannels="RGB"
+                SelectedColor="{Binding Theme.PrimaryDark, Converter={StaticResource SolidColorBrushToMediaColorConverter}}"
+              />
+            </Grid>
+          </Border>
+          <Border Height="40" Style="{DynamicResource ModMaker_BorderItem}">
+            <Grid ColumnDefinitions="Auto,*">
+              <TextBlock
+                Style="{DynamicResource ModMaker_TextBlockItemName}"
+                Text="{ll:Str PrimaryDarker}"
+              />
+              <pu:ColorPicker
+                Style="{DynamicResource ModMaker_ColorPickerBaseStyle}"
+                Width="300"
+                HorizontalAlignment="Right"
+                Grid.Column="1"
+                Grid.Row="2"
+                ColorChannels="RGB"
+                SelectedColor="{Binding Theme.PrimaryDarker, Converter={StaticResource SolidColorBrushToMediaColorConverter}}"
+              />
+            </Grid>
+          </Border>
+          <Border Height="40" Style="{DynamicResource ModMaker_BorderItem}">
+            <Grid ColumnDefinitions="Auto,*">
+              <TextBlock
+                Style="{DynamicResource ModMaker_TextBlockItemName}"
+                Text="{ll:Str PrimaryText}"
+              />
+              <pu:ColorPicker
+                Style="{DynamicResource ModMaker_ColorPickerBaseStyle}"
+                Width="300"
+                HorizontalAlignment="Right"
+                Grid.Column="1"
+                Grid.Row="2"
+                ColorChannels="RGB"
+                SelectedColor="{Binding Theme.PrimaryText, Converter={StaticResource SolidColorBrushToMediaColorConverter}}"
+              />
+            </Grid>
+          </Border>
+          <Border Height="40" Style="{DynamicResource ModMaker_BorderItem}">
+            <Grid ColumnDefinitions="Auto,*">
+              <TextBlock
+                Style="{DynamicResource ModMaker_TextBlockItemName}"
+                Text="{ll:Str Secondary}"
+              />
+              <pu:ColorPicker
+                Style="{DynamicResource ModMaker_ColorPickerBaseStyle}"
+                Width="300"
+                HorizontalAlignment="Right"
+                Grid.Column="1"
+                Grid.Row="2"
+                ColorChannels="RGB"
+                SelectedColor="{Binding Theme.Secondary, Converter={StaticResource SolidColorBrushToMediaColorConverter}}"
+              />
+            </Grid>
+          </Border>
+          <Border Height="40" Style="{DynamicResource ModMaker_BorderItem}">
+            <Grid ColumnDefinitions="Auto,*">
+              <TextBlock
+                Style="{DynamicResource ModMaker_TextBlockItemName}"
+                Text="{ll:Str SecondaryLight}"
+              />
+              <pu:ColorPicker
+                Style="{DynamicResource ModMaker_ColorPickerBaseStyle}"
+                Width="300"
+                HorizontalAlignment="Right"
+                Grid.Column="1"
+                Grid.Row="2"
+                ColorChannels="RGB"
+                SelectedColor="{Binding Theme.SecondaryLight, Converter={StaticResource SolidColorBrushToMediaColorConverter}}"
+              />
+            </Grid>
+          </Border>
+          <Border Height="40" Style="{DynamicResource ModMaker_BorderItem}">
+            <Grid ColumnDefinitions="Auto,*">
+              <TextBlock
+                Style="{DynamicResource ModMaker_TextBlockItemName}"
+                Text="{ll:Str SecondaryLighter}"
+              />
+              <pu:ColorPicker
+                Style="{DynamicResource ModMaker_ColorPickerBaseStyle}"
+                Width="300"
+                HorizontalAlignment="Right"
+                Grid.Column="1"
+                Grid.Row="2"
+                ColorChannels="RGB"
+                SelectedColor="{Binding Theme.SecondaryLighter, Converter={StaticResource SolidColorBrushToMediaColorConverter}}"
+              />
+            </Grid>
+          </Border>
+          <Border Height="40" Style="{DynamicResource ModMaker_BorderItem}">
+            <Grid ColumnDefinitions="Auto,*">
+              <TextBlock
+                Style="{DynamicResource ModMaker_TextBlockItemName}"
+                Text="{ll:Str SecondaryDark}"
+              />
+              <pu:ColorPicker
+                Style="{DynamicResource ModMaker_ColorPickerBaseStyle}"
+                Width="300"
+                HorizontalAlignment="Right"
+                Grid.Column="1"
+                Grid.Row="2"
+                ColorChannels="RGB"
+                SelectedColor="{Binding Theme.SecondaryDark, Converter={StaticResource SolidColorBrushToMediaColorConverter}}"
+              />
+            </Grid>
+          </Border>
+          <Border Height="40" Style="{DynamicResource ModMaker_BorderItem}">
+            <Grid ColumnDefinitions="Auto,*">
+              <TextBlock
+                Style="{DynamicResource ModMaker_TextBlockItemName}"
+                Text="{ll:Str SecondaryDarker}"
+              />
+              <pu:ColorPicker
+                Style="{DynamicResource ModMaker_ColorPickerBaseStyle}"
+                Width="300"
+                HorizontalAlignment="Right"
+                Grid.Column="1"
+                Grid.Row="2"
+                ColorChannels="RGB"
+                SelectedColor="{Binding Theme.SecondaryDarker, Converter={StaticResource SolidColorBrushToMediaColorConverter}}"
+              />
+            </Grid>
+          </Border>
+          <Border Height="40" Style="{DynamicResource ModMaker_BorderItem}">
+            <Grid ColumnDefinitions="Auto,*">
+              <TextBlock
+                Style="{DynamicResource ModMaker_TextBlockItemName}"
+                Text="{ll:Str SecondaryText}"
+              />
+              <pu:ColorPicker
+                Style="{DynamicResource ModMaker_ColorPickerBaseStyle}"
+                Width="300"
+                HorizontalAlignment="Right"
+                Grid.Column="1"
+                Grid.Row="2"
+                ColorChannels="RGB"
+                SelectedColor="{Binding Theme.SecondaryText, Converter={StaticResource SolidColorBrushToMediaColorConverter}}"
+              />
+            </Grid>
+          </Border>
+          <Border Height="40" Style="{DynamicResource ModMaker_BorderItem}">
+            <Grid ColumnDefinitions="Auto,*">
+              <TextBlock
+                Style="{DynamicResource ModMaker_TextBlockItemName}"
+                Text="{ll:Str DARKPrimary}"
+              />
+              <pu:ColorPicker
+                Style="{DynamicResource ModMaker_ColorPickerBaseStyle}"
+                Width="300"
+                HorizontalAlignment="Right"
+                Grid.Column="1"
+                Grid.Row="2"
+                ColorChannels="RGB"
+                SelectedColor="{Binding Theme.DARKPrimary, Converter={StaticResource SolidColorBrushToMediaColorConverter}}"
+              />
+            </Grid>
+          </Border>
+          <Border Height="40" Style="{DynamicResource ModMaker_BorderItem}">
+            <Grid ColumnDefinitions="Auto,*">
+              <TextBlock
+                Style="{DynamicResource ModMaker_TextBlockItemName}"
+                Text="{ll:Str DARKPrimaryLight}"
+              />
+              <pu:ColorPicker
+                Style="{DynamicResource ModMaker_ColorPickerBaseStyle}"
+                Width="300"
+                HorizontalAlignment="Right"
+                Grid.Column="1"
+                Grid.Row="2"
+                ColorChannels="RGB"
+                SelectedColor="{Binding Theme.DARKPrimaryLight, Converter={StaticResource SolidColorBrushToMediaColorConverter}}"
+              />
+            </Grid>
+          </Border>
+          <Border Height="40" Style="{DynamicResource ModMaker_BorderItem}">
+            <Grid ColumnDefinitions="Auto,*">
+              <TextBlock
+                Style="{DynamicResource ModMaker_TextBlockItemName}"
+                Text="{ll:Str DARKPrimaryLighter}"
+              />
+              <pu:ColorPicker
+                Style="{DynamicResource ModMaker_ColorPickerBaseStyle}"
+                Width="300"
+                HorizontalAlignment="Right"
+                Grid.Column="1"
+                Grid.Row="2"
+                ColorChannels="RGB"
+                SelectedColor="{Binding Theme.DARKPrimaryLighter, Converter={StaticResource SolidColorBrushToMediaColorConverter}}"
+              />
+            </Grid>
+          </Border>
+          <Border Height="40" Style="{DynamicResource ModMaker_BorderItem}">
+            <Grid ColumnDefinitions="Auto,*">
+              <TextBlock
+                Style="{DynamicResource ModMaker_TextBlockItemName}"
+                Text="{ll:Str DARKPrimaryDark}"
+              />
+              <pu:ColorPicker
+                Style="{DynamicResource ModMaker_ColorPickerBaseStyle}"
+                Width="300"
+                HorizontalAlignment="Right"
+                Grid.Column="1"
+                Grid.Row="2"
+                ColorChannels="RGB"
+                SelectedColor="{Binding Theme.DARKPrimaryDark, Converter={StaticResource SolidColorBrushToMediaColorConverter}}"
+              />
+            </Grid>
+          </Border>
+          <Border Height="40" Style="{DynamicResource ModMaker_BorderItem}">
+            <Grid ColumnDefinitions="Auto,*">
+              <TextBlock
+                Style="{DynamicResource ModMaker_TextBlockItemName}"
+                Text="{ll:Str DARKPrimaryDarker}"
+              />
+              <pu:ColorPicker
+                Style="{DynamicResource ModMaker_ColorPickerBaseStyle}"
+                Width="300"
+                HorizontalAlignment="Right"
+                Grid.Column="1"
+                Grid.Row="2"
+                ColorChannels="RGB"
+                SelectedColor="{Binding Theme.DARKPrimaryDarker, Converter={StaticResource SolidColorBrushToMediaColorConverter}}"
+              />
+            </Grid>
+          </Border>
+          <Border Height="40" Style="{DynamicResource ModMaker_BorderItem}">
+            <Grid ColumnDefinitions="Auto,*">
+              <TextBlock
+                Style="{DynamicResource ModMaker_TextBlockItemName}"
+                Text="{ll:Str DARKPrimaryText}"
+              />
+              <pu:ColorPicker
+                Style="{DynamicResource ModMaker_ColorPickerBaseStyle}"
+                Width="300"
+                HorizontalAlignment="Right"
+                Grid.Column="1"
+                Grid.Row="2"
+                ColorChannels="RGB"
+                SelectedColor="{Binding Theme.DARKPrimaryText, Converter={StaticResource SolidColorBrushToMediaColorConverter}}"
+              />
+            </Grid>
+          </Border>
+          <Border Height="40" Style="{DynamicResource ModMaker_BorderItem}">
+            <Grid ColumnDefinitions="Auto,*">
+              <TextBlock
+                Style="{DynamicResource ModMaker_TextBlockItemName}"
+                Text="{ll:Str ShadowColor}"
+              />
+              <pu:ColorPicker
+                Style="{DynamicResource ModMaker_ColorPickerBaseStyle}"
+                Width="300"
+                HorizontalAlignment="Right"
+                Grid.Column="1"
+                Grid.Row="2"
+                ColorChannels="RGB"
+                SelectedColor="{Binding Theme.ShadowColor, Converter={StaticResource SolidColorBrushToMediaColorConverter}}"
+              />
+            </Grid>
+          </Border>
         </StackPanel>
       </ScrollViewer>
-      <Grid Grid.Row="1">
-        <Grid.ColumnDefinitions>
-          <ColumnDefinition />
-          <ColumnDefinition />
-        </Grid.ColumnDefinitions>
+      <Grid Grid.Row="1" ColumnDefinitions="*,*">
         <Button
           x:Name="Button_Yes"
           Margin="10"
+          Width="300"
           Click="Button_Yes_Click"
           Content="{ll:Str 确定}"
           Style="{StaticResource MyThemedButtonStyle}"
@@ -304,6 +383,7 @@
         <Button
           x:Name="Button_Cancel"
           Grid.Column="1"
+          Width="300"
           Margin="10"
           Click="Button_Cancel_Click"
           Content="{ll:Str 取消}"

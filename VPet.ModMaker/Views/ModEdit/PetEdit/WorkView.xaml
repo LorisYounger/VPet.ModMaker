@@ -106,7 +106,7 @@
           <DataGridTextColumn
             Binding="{Binding ID}"
             CanUserSort="True"
-            ElementStyle="{StaticResource TextBlock_LeftCenter}"
+            ElementStyle="{StaticResource ModMaker_TextBlockLeftCenter}"
             Header="ID"
             IsReadOnly="True"
             SortMemberPath="ID"
@@ -114,7 +114,7 @@
           <DataGridTextColumn
             Binding="{Binding Name}"
             CanUserSort="True"
-            ElementStyle="{StaticResource TextBlock_LeftCenter}"
+            ElementStyle="{StaticResource ModMaker_TextBlockLeftCenter}"
             Header="{ll:Str 工作名称}"
             IsReadOnly="True"
             SortMemberPath="Name"
@@ -122,7 +122,7 @@
           <DataGridTextColumn
             Binding="{Binding Type, Converter={StaticResource EnumToEnumInfoConverter}}"
             CanUserSort="True"
-            ElementStyle="{StaticResource TextBlock_LeftCenter}"
+            ElementStyle="{StaticResource ModMaker_TextBlockLeftCenter}"
             Header="{ll:Str 工作类型}"
             IsReadOnly="True"
             SortMemberPath="WorkType"
@@ -130,7 +130,7 @@
           <DataGridTextColumn
             Binding="{Binding Graph}"
             CanUserSort="True"
-            ElementStyle="{StaticResource TextBlock_LeftCenter}"
+            ElementStyle="{StaticResource ModMaker_TextBlockLeftCenter}"
             Header="{ll:Str 动画名称}"
             IsReadOnly="True"
             SortMemberPath="Graph"
@@ -138,7 +138,7 @@
           <DataGridTextColumn
             Binding="{Binding IsOverLoad}"
             CanUserSort="True"
-            ElementStyle="{StaticResource TextBlock_LeftCenter}"
+            ElementStyle="{StaticResource ModMaker_TextBlockLeftCenter}"
             Header="{ll:Str 是否超模}"
             IsReadOnly="True"
             SortMemberPath="Graph"
@@ -146,7 +146,7 @@
           <DataGridTextColumn
             Binding="{Binding MoneyBase}"
             CanUserSort="True"
-            ElementStyle="{StaticResource TextBlock_LeftCenter}"
+            ElementStyle="{StaticResource ModMaker_TextBlockLeftCenter}"
             Header="{ll:Str 基本倍率}"
             IsReadOnly="True"
             SortMemberPath="MoneyBase"
@@ -154,14 +154,14 @@
           <!--<DataGridTextColumn
             Binding="{Binding MoneyLevel}"
             CanUserSort="True"
-            ElementStyle="{StaticResource TextBlock_LeftCenter}"
+            ElementStyle="{StaticResource ModMaker_TextBlockLeftCenter}"
             Header="{ll:Str 等级倍率}"
             IsReadOnly="True"
             SortMemberPath="MoneyLevel" />-->
           <DataGridTextColumn
             Binding="{Binding StrengthFood}"
             CanUserSort="True"
-            ElementStyle="{StaticResource TextBlock_LeftCenter}"
+            ElementStyle="{StaticResource ModMaker_TextBlockLeftCenter}"
             Header="{ll:Str 饱食度消耗倍率}"
             IsReadOnly="True"
             SortMemberPath="StrengthFood"
@@ -169,7 +169,7 @@
           <DataGridTextColumn
             Binding="{Binding StrengthDrink}"
             CanUserSort="True"
-            ElementStyle="{StaticResource TextBlock_LeftCenter}"
+            ElementStyle="{StaticResource ModMaker_TextBlockLeftCenter}"
             Header="{ll:Str 口渴度消耗倍率}"
             IsReadOnly="True"
             SortMemberPath="StrengthDrink"
@@ -177,7 +177,7 @@
           <DataGridTextColumn
             Binding="{Binding Feeling}"
             CanUserSort="True"
-            ElementStyle="{StaticResource TextBlock_LeftCenter}"
+            ElementStyle="{StaticResource ModMaker_TextBlockLeftCenter}"
             Header="{ll:Str 心情消耗倍率}"
             IsReadOnly="True"
             SortMemberPath="Feeling"
@@ -185,7 +185,7 @@
           <DataGridTextColumn
             Binding="{Binding LevelLimit}"
             CanUserSort="True"
-            ElementStyle="{StaticResource TextBlock_LeftCenter}"
+            ElementStyle="{StaticResource ModMaker_TextBlockLeftCenter}"
             Header="{ll:Str 等级限制}"
             IsReadOnly="True"
             SortMemberPath="LevelLimit"
@@ -193,7 +193,7 @@
           <DataGridTextColumn
             Binding="{Binding Time}"
             CanUserSort="True"
-            ElementStyle="{StaticResource TextBlock_LeftCenter}"
+            ElementStyle="{StaticResource ModMaker_TextBlockLeftCenter}"
             Header="{ll:Str 花费时间}"
             IsReadOnly="True"
             SortMemberPath="Time"
@@ -201,7 +201,7 @@
           <DataGridTextColumn
             Binding="{Binding FinishBonus}"
             CanUserSort="True"
-            ElementStyle="{StaticResource TextBlock_LeftCenter}"
+            ElementStyle="{StaticResource ModMaker_TextBlockLeftCenter}"
             Header="{ll:Str 奖励倍率}"
             IsReadOnly="True"
             SortMemberPath="FinishBonus"
@@ -214,7 +214,7 @@
         VerticalAlignment="Bottom"
         Command="{Binding AddCommand}"
         Content="➕"
-        Style="{StaticResource AddButton}"
+        Style="{DynamicResource ModMaker_AddButton}"
       />
     </Grid>
   </Grid>

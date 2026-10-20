@@ -171,7 +171,7 @@
             Padding="5"
             d:Text="True"
             FontSize="14"
-            Style="{StaticResource TextBlock_LeftCenter}"
+            Style="{StaticResource ModMaker_TextBlockLeftCenter}"
             Text="{Binding Work.IsOverLoad}"
           />
           <Button

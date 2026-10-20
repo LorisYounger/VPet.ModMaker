@@ -279,7 +279,7 @@ public sealed class BrushToBrushConverter : IMapConverter<SolidColorBrush, Solid
     }
 }
 
-public sealed class WorkModelToWorkMapConfig : MapperConfig<WorkModel, GraphHelper.Work>
+public sealed class WorkModelToWorkMapConfig : MapperConfigBase<WorkModel, GraphHelper.Work>
 {
     public WorkModelToWorkMapConfig(WorkModel source, GraphHelper.Work target)
         : base(source, target) { }

@@ -82,7 +82,7 @@
           <DataGridTextColumn
             Binding="{Binding Graph}"
             CanUserSort="True"
-            ElementStyle="{StaticResource TextBlock_LeftCenter}"
+            ElementStyle="{StaticResource ModMaker_TextBlockLeftCenter}"
             Header="{ll:Str 绑定动画}"
             IsReadOnly="True"
             SortMemberPath="Graph"
@@ -90,7 +90,7 @@
           <DataGridTextColumn
             Binding="{Binding LocateType.Value, Converter={StaticResource EnumToEnumInfoConverter}}"
             CanUserSort="True"
-            ElementStyle="{StaticResource TextBlock_LeftCenter}"
+            ElementStyle="{StaticResource ModMaker_TextBlockLeftCenter}"
             Header="{ll:Str 定位类型}"
             IsReadOnly="True"
             SortMemberPath="LocateType.Value"
@@ -98,7 +98,7 @@
           <DataGridTextColumn
             Binding="{Binding TriggerType.Value, Converter={StaticResource EnumToEnumInfoConverter}}"
             CanUserSort="True"
-            ElementStyle="{StaticResource TextBlock_LeftCenter}"
+            ElementStyle="{StaticResource ModMaker_TextBlockLeftCenter}"
             Header="{ll:Str 触发类型}"
             IsReadOnly="True"
             SortMemberPath="TriggerType.Value"
@@ -106,7 +106,7 @@
           <DataGridTextColumn
             Binding="{Binding ModeType.Value, Converter={StaticResource EnumToEnumInfoConverter}}"
             CanUserSort="True"
-            ElementStyle="{StaticResource TextBlock_LeftCenter}"
+            ElementStyle="{StaticResource ModMaker_TextBlockLeftCenter}"
             Header="{ll:Str 状态类型}"
             IsReadOnly="True"
             SortMemberPath="ModeType.Value"
@@ -114,7 +114,7 @@
           <DataGridTextColumn
             Binding="{Binding Distance}"
             CanUserSort="True"
-            ElementStyle="{StaticResource TextBlock_LeftCenter}"
+            ElementStyle="{StaticResource ModMaker_TextBlockLeftCenter}"
             Header="{ll:Str 移动距离}"
             IsReadOnly="True"
             SortMemberPath="Distance"
@@ -122,7 +122,7 @@
           <DataGridTextColumn
             Binding="{Binding Interval}"
             CanUserSort="True"
-            ElementStyle="{StaticResource TextBlock_LeftCenter}"
+            ElementStyle="{StaticResource ModMaker_TextBlockLeftCenter}"
             Header="{ll:Str 移动间隔}"
             IsReadOnly="True"
             SortMemberPath="Interval"
@@ -130,7 +130,7 @@
           <DataGridTextColumn
             Binding="{Binding LocateLength}"
             CanUserSort="True"
-            ElementStyle="{StaticResource TextBlock_LeftCenter}"
+            ElementStyle="{StaticResource ModMaker_TextBlockLeftCenter}"
             Header="{ll:Str 定位长度}"
             IsReadOnly="True"
             SortMemberPath="LocateLength"
@@ -143,7 +143,7 @@
         VerticalAlignment="Bottom"
         Command="{Binding AddCommand}"
         Content="➕"
-        Style="{StaticResource AddButton}"
+        Style="{DynamicResource ModMaker_AddButton}"
       />
     </Grid>
   </Grid>

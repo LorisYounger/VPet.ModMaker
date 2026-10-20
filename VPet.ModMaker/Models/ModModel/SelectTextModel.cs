@@ -44,6 +44,14 @@ public sealed partial class SelectTextModel : ObservableModelBase, IDisposable
     {
         this.MapFrom(text);
         I18nResource = i18nResource;
+        if (
+            string.IsNullOrWhiteSpace(text.Choose) is false
+            && string.Equals(text.Choose, ChooseID) is false
+        )
+        {
+            foreach (var c in I18nResource.Cultures)
+                I18nResource.SetData(ChooseID, I18nResource.GetData(text.Choose, c), c);
+        }
     }
 
     /// <summary>
@@ -76,9 +84,10 @@ public sealed partial class SelectTextModel : ObservableModelBase, IDisposable
     /// <summary>
     /// 选择ID
     /// </summary>
-    [ObservableProperty]
-    [MapProperty(typeof(SelectText), nameof(SelectText.Choose))]
-    public string ChooseID { get; set; } = string.Empty;
+    [NotifyPropertyChangeFrom(nameof(ID))]
+    [MapProperty(typeof(SelectTextModel), Ignore = true)]
+    [MapProperty(typeof(SelectText), nameof(SelectText.Choose), Direction = MapDirections.To)]
+    public string ChooseID => $"{ID}_ChooseID";
 
     /// <summary>
     /// I18n资源

@@ -71,9 +71,12 @@
           <DataGridTemplateColumn.CellTemplate>
             <DataTemplate>
               <StackPanel Orientation="Horizontal">
-                <TextBlock Style="{StaticResource TextBlock_LeftCenter}" Text="{Binding ID}" />
                 <TextBlock
-                  Style="{StaticResource TextBlock_LeftCenter}"
+                  Style="{StaticResource ModMaker_TextBlockLeftCenter}"
+                  Text="{Binding ID}"
+                />
+                <TextBlock
+                  Style="{StaticResource ModMaker_TextBlockLeftCenter}"
                   Text="{ll:Str ' (来自本体)'}"
                   Visibility="{Binding FromMain, Converter={StaticResource FalseToCollapsedConverter}}"
                 />
@@ -84,7 +87,7 @@
         <DataGridTextColumn
           Binding="{Binding Name}"
           CanUserSort="True"
-          ElementStyle="{StaticResource TextBlock_LeftCenter}"
+          ElementStyle="{StaticResource ModMaker_TextBlockLeftCenter}"
           Header="{ll:Str 名称}"
           IsReadOnly="True"
           SortMemberPath="Name"
@@ -92,7 +95,7 @@
         <DataGridTextColumn
           Binding="{Binding PetName}"
           CanUserSort="True"
-          ElementStyle="{StaticResource TextBlock_LeftCenter}"
+          ElementStyle="{StaticResource ModMaker_TextBlockLeftCenter}"
           Header="{ll:Str 宠物名称}"
           IsReadOnly="True"
           SortMemberPath="Name"
@@ -100,7 +103,7 @@
         <DataGridTextColumn
           Binding="{Binding Tags}"
           CanUserSort="True"
-          ElementStyle="{StaticResource TextBlock_LeftCenter}"
+          ElementStyle="{StaticResource ModMaker_TextBlockLeftCenter}"
           Header="{ll:Str 标签}"
           IsReadOnly="True"
           SortMemberPath="Tags"
@@ -108,7 +111,7 @@
         <DataGridTextColumn
           Binding="{Binding Description}"
           CanUserSort="True"
-          ElementStyle="{StaticResource TextBlock_LeftCenter}"
+          ElementStyle="{StaticResource ModMaker_TextBlockLeftCenter}"
           Header="{ll:Str 描述}"
           IsReadOnly="True"
           SortMemberPath="Description"
@@ -121,7 +124,7 @@
       VerticalAlignment="Bottom"
       Command="{Binding AddCommand}"
       Content="➕"
-      Style="{StaticResource AddButton}"
+      Style="{DynamicResource ModMaker_AddButton}"
     />
   </Grid>
 </UserControl>

@@ -78,7 +78,7 @@
           MaxWidth="200"
           Binding="{Binding ID}"
           CanUserSort="True"
-          ElementStyle="{StaticResource TextBlock_LeftCenter}"
+          ElementStyle="{StaticResource ModMaker_TextBlockLeftCenter}"
           Header="ID"
           IsReadOnly="True"
           SortMemberPath="ID"
@@ -87,7 +87,7 @@
           MaxWidth="300"
           Binding="{Binding Name}"
           CanUserSort="True"
-          ElementStyle="{StaticResource TextBlock_LeftCenter}"
+          ElementStyle="{StaticResource ModMaker_TextBlockLeftCenter}"
           Header="{ll:Str 名称}"
           IsReadOnly="True"
           SortMemberPath="Text"
@@ -290,7 +290,7 @@
       VerticalAlignment="Bottom"
       Command="{Binding AddCommand}"
       Content="➕"
-      Style="{StaticResource AddButton}"
+      Style="{DynamicResource ModMaker_AddButton}"
     />
   </Grid>
 </UserControl>

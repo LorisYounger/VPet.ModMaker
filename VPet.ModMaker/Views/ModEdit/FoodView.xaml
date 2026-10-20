@@ -66,7 +66,7 @@
         <DataGridTextColumn
           Binding="{Binding ID}"
           CanUserSort="True"
-          ElementStyle="{StaticResource TextBlock_LeftCenter}"
+          ElementStyle="{StaticResource ModMaker_TextBlockLeftCenter}"
           Header="ID"
           IsReadOnly="True"
           SortMemberPath="ID"
@@ -99,7 +99,7 @@
         <DataGridTextColumn
           Binding="{Binding Name}"
           CanUserSort="True"
-          ElementStyle="{StaticResource TextBlock_LeftCenter}"
+          ElementStyle="{StaticResource ModMaker_TextBlockLeftCenter}"
           Header="{ll:Str 食物名称}"
           IsReadOnly="True"
           SortMemberPath="Name"
@@ -116,7 +116,7 @@
         <DataGridTextColumn
           Binding="{Binding Type, Converter={StaticResource EnumToEnumInfoConverter}}"
           CanUserSort="True"
-          ElementStyle="{StaticResource TextBlock_LeftCenter}"
+          ElementStyle="{StaticResource ModMaker_TextBlockLeftCenter}"
           Header="{ll:Str 食物类型}"
           IsReadOnly="True"
           SortMemberPath="Type"
@@ -124,7 +124,7 @@
         <DataGridTextColumn
           Binding="{Binding Graph}"
           CanUserSort="True"
-          ElementStyle="{StaticResource TextBlock_LeftCenter}"
+          ElementStyle="{StaticResource ModMaker_TextBlockLeftCenter}"
           Header="{ll:Str 指定动画}"
           IsReadOnly="True"
           SortMemberPath="Type"
@@ -132,7 +132,7 @@
         <DataGridTextColumn
           Binding="{Binding StrengthFood}"
           CanUserSort="True"
-          ElementStyle="{StaticResource TextBlock_LeftCenter}"
+          ElementStyle="{StaticResource ModMaker_TextBlockLeftCenter}"
           Header="{ll:Str 饱腹值}"
           IsReadOnly="True"
           SortMemberPath="StrengthFood"
@@ -140,7 +140,7 @@
         <DataGridTextColumn
           Binding="{Binding StrengthDrink}"
           CanUserSort="True"
-          ElementStyle="{StaticResource TextBlock_LeftCenter}"
+          ElementStyle="{StaticResource ModMaker_TextBlockLeftCenter}"
           Header="{ll:Str 口渴值}"
           IsReadOnly="True"
           SortMemberPath="StrengthDrink"
@@ -148,7 +148,7 @@
         <DataGridTextColumn
           Binding="{Binding Health}"
           CanUserSort="True"
-          ElementStyle="{StaticResource TextBlock_LeftCenter}"
+          ElementStyle="{StaticResource ModMaker_TextBlockLeftCenter}"
           Header="{ll:Str 健康值}"
           IsReadOnly="True"
           SortMemberPath="Health"
@@ -156,7 +156,7 @@
         <DataGridTextColumn
           Binding="{Binding Strength}"
           CanUserSort="True"
-          ElementStyle="{StaticResource TextBlock_LeftCenter}"
+          ElementStyle="{StaticResource ModMaker_TextBlockLeftCenter}"
           Header="{ll:Str 体力值}"
           IsReadOnly="True"
           SortMemberPath="Strength"
@@ -164,7 +164,7 @@
         <DataGridTextColumn
           Binding="{Binding Feeling}"
           CanUserSort="True"
-          ElementStyle="{StaticResource TextBlock_LeftCenter}"
+          ElementStyle="{StaticResource ModMaker_TextBlockLeftCenter}"
           Header="{ll:Str 心情值}"
           IsReadOnly="True"
           SortMemberPath="Feeling"
@@ -172,7 +172,7 @@
         <DataGridTextColumn
           Binding="{Binding Likability}"
           CanUserSort="True"
-          ElementStyle="{StaticResource TextBlock_LeftCenter}"
+          ElementStyle="{StaticResource ModMaker_TextBlockLeftCenter}"
           Header="{ll:Str 好感值}"
           IsReadOnly="True"
           SortMemberPath="Likability"
@@ -180,7 +180,7 @@
         <DataGridTextColumn
           Binding="{Binding Exp}"
           CanUserSort="True"
-          ElementStyle="{StaticResource TextBlock_LeftCenter}"
+          ElementStyle="{StaticResource ModMaker_TextBlockLeftCenter}"
           Header="{ll:Str 经验值}"
           IsReadOnly="True"
           SortMemberPath="Exp"
@@ -188,7 +188,7 @@
         <DataGridTextColumn
           Binding="{Binding Price}"
           CanUserSort="True"
-          ElementStyle="{StaticResource TextBlock_LeftCenter}"
+          ElementStyle="{StaticResource ModMaker_TextBlockLeftCenter}"
           Header="{ll:Str 价格}"
           IsReadOnly="True"
           SortMemberPath="Price"
@@ -201,7 +201,7 @@
       VerticalAlignment="Bottom"
       Command="{Binding AddCommand}"
       Content="➕"
-      Style="{StaticResource AddButton}"
+      Style="{DynamicResource ModMaker_AddButton}"
     />
   </Grid>
 </UserControl>

@@ -82,7 +82,7 @@
           <DataGridTextColumn
             Binding="{Binding ID}"
             CanUserSort="True"
-            ElementStyle="{StaticResource TextBlock_LeftCenter}"
+            ElementStyle="{StaticResource ModMaker_TextBlockLeftCenter}"
             Header="{ll:Str 动画类型}"
             IsReadOnly="True"
             SortMemberPath="ID"
@@ -90,7 +90,7 @@
           <DataGridTextColumn
             Binding="{Binding HappyAnimes.Count}"
             CanUserSort="True"
-            ElementStyle="{StaticResource TextBlock_Center}"
+            ElementStyle="{StaticResource ModMaker_TextBlockCenter}"
             Header="{ll:Str 开心状态动画数量}"
             IsReadOnly="True"
             SortMemberPath="HappyAnimes.Count"
@@ -98,7 +98,7 @@
           <DataGridTextColumn
             Binding="{Binding NomalAnimes.Count}"
             CanUserSort="True"
-            ElementStyle="{StaticResource TextBlock_Center}"
+            ElementStyle="{StaticResource ModMaker_TextBlockCenter}"
             Header="{ll:Str 普通状态动画数量}"
             IsReadOnly="True"
             SortMemberPath="NomalAnimes.Count"
@@ -106,7 +106,7 @@
           <DataGridTextColumn
             Binding="{Binding PoorConditionAnimes.Count}"
             CanUserSort="True"
-            ElementStyle="{StaticResource TextBlock_Center}"
+            ElementStyle="{StaticResource ModMaker_TextBlockCenter}"
             Header="{ll:Str 不开心状态动画数量}"
             IsReadOnly="True"
             SortMemberPath="PoorConditionAnimes.Count"
@@ -114,7 +114,7 @@
           <DataGridTextColumn
             Binding="{Binding IllAnimes.Count}"
             CanUserSort="True"
-            ElementStyle="{StaticResource TextBlock_Center}"
+            ElementStyle="{StaticResource ModMaker_TextBlockCenter}"
             Header="{ll:Str 生病状态动画数量}"
             IsReadOnly="True"
             SortMemberPath="IllAnimes.Count"
@@ -127,7 +127,7 @@
         VerticalAlignment="Bottom"
         Command="{Binding AddCommand}"
         Content="➕"
-        Style="{StaticResource AddButton}"
+        Style="{DynamicResource ModMaker_AddButton}"
       />
     </Grid>
   </Grid>

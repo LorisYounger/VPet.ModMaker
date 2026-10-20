@@ -17,7 +17,7 @@
   d:Width="800"
   AutomationProperties.AutomationId="ModMakerWindow"
   FontSize="16"
-  Style="{StaticResource WindowXStyle}"
+  Style="{DynamicResource WindowXStyle}"
   WindowStartupLocation="CenterScreen"
   mc:Ignorable="d"
 >
@@ -27,7 +27,7 @@
       <ColumnDefinition Width="Auto" />
       <ColumnDefinition Width="Auto" MinWidth="200" />
     </Grid.ColumnDefinitions>
-    <Grid>
+    <Grid Margin="5">
       <Grid.RowDefinitions>
         <RowDefinition Height="Auto" />
         <RowDefinition Height="Auto" />
@@ -36,7 +36,6 @@
       </Grid.RowDefinitions>
       <Label
         Height="NaN"
-        Margin="5"
         Padding="10"
         Background="Transparent"
         Content="{ll:Str 最近的内容}"
@@ -67,6 +66,7 @@
         />
       </Grid>
       <ListBox
+        Margin="5"
         Grid.Row="2"
         HorizontalContentAlignment="Stretch"
         d:ItemsSource="{d:SampleData ItemCount=5}"
@@ -74,10 +74,13 @@
         pu:ListBoxHelper.ItemsMargin="5"
         pu:ListBoxHelper.ItemsPadding="5"
         pu:ListBoxHelper.ItemsBackground="#06000000"
-        pu:ListBoxHelper.ItemsHoverBackground="{StaticResource SecondaryLight}"
+        pu:ListBoxHelper.ItemsHoverBackground="{DynamicResource SecondaryLight}"
         pu:ListBoxHelper.ItemsBorderThickness="2"
         ItemsSource="{Binding Histories.FilteredList}"
-        Style="{StaticResource SideMenuListBoxStyle}"
+        pu:ScrollBarHelper.ThumbBackground="{DynamicResource SecondaryLight}"
+        pu:ScrollViewerHelper.ScrollBarThickness="5"
+        pu:ScrollViewerHelper.ScrollBarPosition="Inside"
+        Style="{DynamicResource SideMenuListBoxStyle}"
       >
         <ListBox.ItemContainerStyle>
           <Style BasedOn="{StaticResource {x:Type ListBoxItem}}" TargetType="ListBoxItem">
@@ -145,8 +148,14 @@
         </ListBox.ItemTemplate>
       </ListBox>
     </Grid>
-    <Rectangle Grid.Column="1" Width="2" Fill="#06000000" />
-    <Grid Grid.Column="2">
+    <Border
+      Grid.Column="1"
+      Width="2"
+      CornerRadius="2"
+      Background="{DynamicResource SecondaryLight}"
+      Opacity="0.3"
+    />
+    <Grid Margin="5" Grid.Column="2">
       <Grid.RowDefinitions>
         <RowDefinition Height="Auto" />
         <RowDefinition />
@@ -154,7 +163,6 @@
       </Grid.RowDefinitions>
       <Label
         Height="NaN"
-        Margin="5"
         Padding="10"
         Background="Transparent"
         Content="{ll:Str 开始使用}"
@@ -189,12 +197,11 @@
       </StackPanel>
       <StackPanel Grid.Row="2">
         <Label
-          Height="30"
-          Margin="5"
-          Padding="5"
+          Height="40"
           Content="{ll:Str 最小日志级别}"
           FontSize="16"
           FontWeight="Bold"
+          VerticalContentAlignment="Center"
           Style="{StaticResource ModMaker_LabelBaseStyle}"
         />
         <ComboBox

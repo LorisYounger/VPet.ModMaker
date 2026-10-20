@@ -219,7 +219,7 @@
             <TextBlock
               Padding="5"
               d:Text="111"
-              Style="{StaticResource TextBlock_LeftCenter}"
+              Style="{StaticResource ModMaker_TextBlockLeftCenter}"
               Text="{Binding Food.ReferencePrice}"
             />
             <Button
