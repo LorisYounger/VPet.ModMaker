@@ -56,7 +56,7 @@
               />
             </Grid>
           </Border>
-          <Border Height="200" Style="{DynamicResource ModMaker_BorderItem}">
+          <Border Height="120" Style="{DynamicResource ModMaker_BorderItem}">
             <Grid RowDefinitions="40,*">
               <TextBlock
                 Style="{DynamicResource ModMaker_TextBlockItemName}"

@@ -13,385 +13,452 @@
   Width="1280"
   Height="720"
   d:DataContext="{d:DesignInstance Type=vm:WorkEditViewModel}"
-  d:Height="500"
+  d:Height="2000"
   d:Width="800"
   WindowStartupLocation="CenterScreen"
+  Style="{DynamicResource WindowXStyle}"
   mc:Ignorable="d"
 >
-  <Grid>
+  <Grid Margin="10">
     <Grid.ColumnDefinitions>
-      <ColumnDefinition Width="Auto" />
       <ColumnDefinition />
       <ColumnDefinition Width="Auto" />
+      <ColumnDefinition Width="Auto" />
     </Grid.ColumnDefinitions>
-    <Grid>
-      <Grid.RowDefinitions>
-        <RowDefinition Height="Auto" />
-        <RowDefinition />
-      </Grid.RowDefinitions>
-      <Grid>
-        <Image Width="250" Height="250" Source="{Binding Image}" Stretch="Uniform">
-          <Image.ContextMenu>
-            <ContextMenu>
-              <MenuItem Command="{Binding ChangeImageCommand}" Header="{ll:Str 修改测试图片}" />
-            </ContextMenu>
-          </Image.ContextMenu>
-        </Image>
-        <Label
-          Padding="0"
-          HorizontalAlignment="Left"
-          VerticalAlignment="Top"
-          HorizontalContentAlignment="Stretch"
-          VerticalContentAlignment="Stretch"
-          pu:LabelHelper.CornerRadius="5"
-          Background="{Binding Work.Background}"
-          BorderBrush="{Binding Work.BorderBrush}"
-          BorderThickness="3"
-        >
-          <Label.Style>
-            <Style BasedOn="{StaticResource {x:Type Label}}" TargetType="Label">
-              <Setter Property="Width">
-                <Setter.Value>
-                  <MultiBinding
-                    Converter="{StaticResource DoubleCalculatorConverter}"
-                    ConverterParameter="*"
-                  >
-                    <Binding Path="Work.Width" />
-                    <Binding Path="LengthRatio" />
-                  </MultiBinding>
-                </Setter.Value>
-              </Setter>
-              <Setter Property="Height">
-                <Setter.Value>
-                  <MultiBinding
-                    Converter="{StaticResource DoubleCalculatorConverter}"
-                    ConverterParameter="*/*"
-                  >
-                    <Binding Path="Work.Width" />
-                    <Binding Path="LengthRatio" />
-                    <Binding Source="300" />
-                    <Binding Source="180" />
-                  </MultiBinding>
-                </Setter.Value>
-              </Setter>
-              <Setter Property="Margin">
-                <Setter.Value>
-                  <MultiBinding Converter="{StaticResource RatioMarginConverter}">
-                    <Binding Path="LengthRatio" />
-                    <Binding Path="Work.Left" />
-                    <Binding Path="Work.Top" />
-                  </MultiBinding>
-                </Setter.Value>
-              </Setter>
-            </Style>
-          </Label.Style>
-          <Label.Content>
-            <Grid>
-              <Label
-                HorizontalContentAlignment="Center"
-                VerticalContentAlignment="Center"
-                Background="{Binding Work.Background}"
-                Content="{ll:Str 工作中}"
-                Foreground="{Binding Work.Foreground}"
-              />
-              <Button
-                VerticalAlignment="Bottom"
-                Background="{Binding Work.ButtonBackground}"
-                Content="{ll:Str 停止工作}"
-                Foreground="{Binding Work.ButtonForeground}"
-              />
-            </Grid>
-          </Label.Content>
-        </Label>
-        <Button
-          HorizontalAlignment="Center"
-          VerticalAlignment="Center"
-          Command="{Binding ChangeImageCommand}"
-          Content="{ll:Str 添加测试图片}"
-        >
-          <Button.Style>
-            <Style BasedOn="{StaticResource MyThemedButtonStyle}" TargetType="Button">
-              <Setter Property="Visibility" Value="Hidden" />
-              <Style.Triggers>
-                <DataTrigger Binding="{Binding Image}" Value="{x:Null}">
-                  <Setter Property="Visibility" Value="Visible" />
-                </DataTrigger>
-              </Style.Triggers>
-            </Style>
-          </Button.Style>
-        </Button>
-      </Grid>
-      <Grid Grid.Row="1">
-        <Grid.ColumnDefinitions>
-          <ColumnDefinition Width="Auto" />
-          <ColumnDefinition />
-        </Grid.ColumnDefinitions>
-        <Grid.RowDefinitions>
-          <RowDefinition Height="Auto" />
-          <RowDefinition Height="Auto" />
-          <RowDefinition Height="Auto" />
-          <RowDefinition Height="Auto" />
-          <RowDefinition Height="Auto" />
-        </Grid.RowDefinitions>
-        <Label Content="ID" Style="{StaticResource ThemedLabelStyle}" />
-        <TextBox
-          Grid.Column="1"
-          Style="{StaticResource StandardTextBoxStyle}"
-          Text="{Binding Work.ID}"
-        />
-        <Label Grid.Row="1" Content="{ll:Str 名称}" Style="{StaticResource ThemedLabelStyle}" />
-        <TextBox
-          Grid.Row="1"
-          Grid.Column="1"
-          Style="{StaticResource StandardTextBoxStyle}"
-          Text="{Binding Work.Name}"
-        />
-        <Label Grid.Row="2" Content="{ll:Str 类型}" Style="{StaticResource ThemedLabelStyle}" />
-        <ComboBox
-          Grid.Row="2"
-          Grid.Column="1"
-          ItemsSource="{x:Static m:WorkModel.WorkTypes}"
-          SelectedItem="{Binding Work.Type}"
-          Style="{StaticResource StandardComboBoxStyle}"
-        />
-        <Label Grid.Row="3" Content="{ll:Str 指定动画}" Style="{StaticResource ThemedLabelStyle}" />
-        <TextBox
-          Grid.Row="3"
-          Grid.Column="1"
-          Style="{StaticResource StandardTextBoxStyle}"
-          Text="{Binding Work.Graph, UpdateSourceTrigger=PropertyChanged}"
-        />
-        <Label Grid.Row="4" Content="{ll:Str 是否超模}" Style="{StaticResource ThemedLabelStyle}" />
-        <Grid Grid.Row="4" Grid.Column="1">
-          <Grid.ColumnDefinitions>
-            <ColumnDefinition />
-            <ColumnDefinition Width="Auto" />
-          </Grid.ColumnDefinitions>
-          <TextBlock
-            Padding="5"
-            d:Text="True"
-            FontSize="14"
-            Style="{StaticResource ModMaker_TextBlockLeftCenter}"
-            Text="{Binding Work.IsOverLoad}"
-          />
-          <Button
-            Grid.Column="1"
-            Command="{Binding FixOverLoadCommand}"
-            Content="{ll:Str 修复超模}"
-            Style="{StaticResource MyThemedButtonStyle}"
-          />
-        </Grid>
-        <!--<Label Grid.Row="3" Content="{ll:Str 宠物描述}" />
-        <TextBox
-          Grid.Row="3"
-          Grid.Column="1"
-          Text="{Binding Pet.Description}" />-->
-      </Grid>
-    </Grid>
-    <Grid Grid.Column="1">
-      <Grid.RowDefinitions>
-        <RowDefinition />
-        <RowDefinition Height="Auto" />
-      </Grid.RowDefinitions>
-      <ScrollViewer VerticalScrollBarVisibility="Auto">
-        <Grid>
-          <Grid.RowDefinitions>
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
-          </Grid.RowDefinitions>
-          <Grid>
-            <Grid.ColumnDefinitions>
-              <ColumnDefinition Width="Auto" />
-              <ColumnDefinition />
-            </Grid.ColumnDefinitions>
-            <Grid.RowDefinitions>
-              <RowDefinition Height="Auto" />
-              <RowDefinition Height="Auto" />
-              <RowDefinition Height="Auto" />
-              <RowDefinition Height="Auto" />
-              <RowDefinition Height="Auto" />
-              <RowDefinition Height="Auto" />
-              <RowDefinition Height="Auto" />
-              <RowDefinition Height="Auto" />
-            </Grid.RowDefinitions>
-            <Label Content="{ll:Str 基础倍率}" Style="{StaticResource ThemedLabelStyle}" />
-            <pu:NumberInput
-              IsSnapToIntervalEnabled="False"
-              Grid.Column="1"
-              Value="{Binding Work.MoneyBase}"
-            />
-            <!--<Label Grid.Row="1" Content="{ll:Str 等级倍率}" />
-            <pu:NumberInput IsSnapToIntervalEnabled="False" 
-              Grid.Row="1"
-              Grid.Column="1"
-              Value="{Binding Work.MoneyLevel}" />-->
-            <Label
-              Grid.Row="2"
-              Content="{ll:Str 饱食度消耗倍率}"
-              Style="{StaticResource ThemedLabelStyle}"
-            />
-            <pu:NumberInput
-              IsSnapToIntervalEnabled="False"
-              Grid.Row="2"
-              Grid.Column="1"
-              Value="{Binding Work.StrengthFood}"
-            />
-            <Label
-              Grid.Row="3"
-              Content="{ll:Str 口渴度消耗倍率}"
-              Style="{StaticResource ThemedLabelStyle}"
-            />
-            <pu:NumberInput
-              IsSnapToIntervalEnabled="False"
-              Grid.Row="3"
-              Grid.Column="1"
-              Value="{Binding Work.StrengthDrink}"
-            />
-            <Label
-              Grid.Row="4"
-              Content="{ll:Str 心情消耗倍率}"
-              Style="{StaticResource ThemedLabelStyle}"
-            />
-            <pu:NumberInput
-              IsSnapToIntervalEnabled="False"
-              Grid.Row="4"
-              Grid.Column="1"
-              Value="{Binding Work.Feeling}"
-            />
-            <Label
-              Grid.Row="5"
-              Content="{ll:Str 完成奖励倍率}"
-              Style="{StaticResource ThemedLabelStyle}"
-            />
-            <pu:NumberInput
-              IsSnapToIntervalEnabled="False"
-              Grid.Row="5"
-              Grid.Column="1"
-              Value="{Binding Work.FinishBonus}"
-            />
-            <Label
-              Grid.Row="6"
-              Content="{ll:Str 等级限制}"
-              Style="{StaticResource ThemedLabelStyle}"
-            />
-            <pu:NumberInput
-              IsSnapToIntervalEnabled="False"
-              Grid.Row="6"
-              Grid.Column="1"
-              Value="{Binding Work.LevelLimit}"
-            />
-            <Label
-              Grid.Row="7"
-              Content="{ll:Str 花费时间(分钟)}"
-              Style="{StaticResource ThemedLabelStyle}"
-            />
-            <pu:NumberInput
-              IsSnapToIntervalEnabled="False"
-              Grid.Row="7"
-              Grid.Column="1"
-              Value="{Binding Work.Time}"
-            />
+    <Grid RowDefinitions="Auto,*,Auto">
+      <Expander Style="{DynamicResource ModMaker_ExpanderBaseStyle}" Header="{ll:Str 测试图片}">
+        <Border Style="{DynamicResource ModMaker_BorderItem}">
+          <Grid Grid.RowSpan="2" Grid.Column="1" HorizontalAlignment="Center">
+            <Border
+              BorderBrush="{DynamicResource DARKPrimaryLight}"
+              BorderThickness="1.5"
+              CornerRadius="4"
+              HorizontalAlignment="Center"
+              Background="Transparent"
+            >
+              <Border.ContextMenu>
+                <ContextMenu>
+                  <MenuItem Command="{Binding ChangeImageCommand}" Header="{ll:Str 修改测试图片}" />
+                </ContextMenu>
+              </Border.ContextMenu>
+              <Grid Margin="2">
+                <Image Width="250" Height="250" Source="{Binding Image}" Stretch="Uniform" />
+                <Label
+                  Padding="0"
+                  HorizontalAlignment="Left"
+                  VerticalAlignment="Top"
+                  HorizontalContentAlignment="Stretch"
+                  VerticalContentAlignment="Stretch"
+                  pu:LabelHelper.CornerRadius="4"
+                  Background="{Binding Work.Background}"
+                  BorderBrush="{Binding Work.BorderBrush}"
+                  BorderThickness="3"
+                >
+                  <Label.Style>
+                    <Style BasedOn="{StaticResource {x:Type Label}}" TargetType="Label">
+                      <Setter Property="Width">
+                        <Setter.Value>
+                          <MultiBinding
+                            Converter="{StaticResource DoubleCalculatorConverter}"
+                            ConverterParameter="*"
+                          >
+                            <Binding Path="Work.Width" />
+                            <Binding Path="LengthRatio" />
+                          </MultiBinding>
+                        </Setter.Value>
+                      </Setter>
+                      <Setter Property="Height">
+                        <Setter.Value>
+                          <MultiBinding
+                            Converter="{StaticResource DoubleCalculatorConverter}"
+                            ConverterParameter="*/*"
+                          >
+                            <Binding Path="Work.Width" />
+                            <Binding Path="LengthRatio" />
+                            <Binding Source="300" />
+                            <Binding Source="180" />
+                          </MultiBinding>
+                        </Setter.Value>
+                      </Setter>
+                      <Setter Property="Margin">
+                        <Setter.Value>
+                          <MultiBinding Converter="{StaticResource RatioMarginConverter}">
+                            <Binding Path="LengthRatio" />
+                            <Binding Path="Work.Left" />
+                            <Binding Path="Work.Top" />
+                          </MultiBinding>
+                        </Setter.Value>
+                      </Setter>
+                    </Style>
+                  </Label.Style>
+                  <Label.Content>
+                    <Grid>
+                      <Label
+                        HorizontalContentAlignment="Center"
+                        VerticalContentAlignment="Center"
+                        Background="{Binding Work.Background}"
+                        Content="{ll:Str 工作中}"
+                        Foreground="{Binding Work.Foreground}"
+                      />
+                      <Button
+                        VerticalAlignment="Bottom"
+                        Background="{Binding Work.ButtonBackground}"
+                        Content="{ll:Str 停止工作}"
+                        Foreground="{Binding Work.ButtonForeground}"
+                      />
+                    </Grid>
+                  </Label.Content>
+                </Label>
+                <Button
+                  HorizontalAlignment="Center"
+                  VerticalAlignment="Center"
+                  Command="{Binding ChangeImageCommand}"
+                  Content="{ll:Str 添加测试图片}"
+                  Style="{DynamicResource ModMaker_ButtonBaseStyle}"
+                  Visibility="{Binding Image, Converter={StaticResource NullToVisibleConverter}}"
+                />
+              </Grid>
+            </Border>
           </Grid>
-          <Expander Grid.Row="1" Header="{ll:Str 界面样式}">
-            <Grid>
-              <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="Auto" />
-                <ColumnDefinition />
-              </Grid.ColumnDefinitions>
-              <Grid.RowDefinitions>
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
-              </Grid.RowDefinitions>
-              <Label Content="{ll:Str 边框颜色}" Style="{StaticResource ThemedLabelStyle}" />
-              <pu:ColorPicker
+        </Border>
+      </Expander>
+      <ScrollViewer Grid.Row="1" Style="{DynamicResource ModMaker_ScrollViewerBaseStyle}">
+        <StackPanel>
+          <Border Height="40" Style="{DynamicResource ModMaker_BorderItem}">
+            <Grid ColumnDefinitions="Auto,*">
+              <TextBlock Style="{DynamicResource ModMaker_TextBlockItemName}" Text="ID" />
+              <TextBox
                 Grid.Column="1"
-                ColorChannels="RGB"
-                SelectedColor="{Binding Work.BorderBrush, Converter={StaticResource SolidColorBrushToMediaColorConverter}}"
-              />
-              <Label
-                Grid.Row="1"
-                Content="{ll:Str 背景颜色}"
-                Style="{StaticResource ThemedLabelStyle}"
-              />
-              <pu:ColorPicker
-                Grid.Row="1"
-                Grid.Column="1"
-                ColorChannels="RGB"
-                SelectedColor="{Binding Work.Background, Converter={StaticResource SolidColorBrushToMediaColorConverter}}"
-              />
-              <Label
-                Grid.Row="2"
-                Content="{ll:Str 字体颜色}"
-                Style="{StaticResource ThemedLabelStyle}"
-              />
-              <pu:ColorPicker
-                Grid.Row="2"
-                Grid.Column="1"
-                ColorChannels="RGB"
-                SelectedColor="{Binding Work.Foreground, Converter={StaticResource SolidColorBrushToMediaColorConverter}}"
-              />
-              <Label
-                Grid.Row="3"
-                Content="{ll:Str 按钮背景颜色}"
-                Style="{StaticResource ThemedLabelStyle}"
-              />
-              <pu:ColorPicker
-                Grid.Row="3"
-                Grid.Column="1"
-                ColorChannels="RGB"
-                SelectedColor="{Binding Work.ButtonBackground, Converter={StaticResource SolidColorBrushToMediaColorConverter}}"
-              />
-              <Label
-                Grid.Row="4"
-                Content="{ll:Str 按钮字体颜色}"
-                Style="{StaticResource ThemedLabelStyle}"
-              />
-              <pu:ColorPicker
-                Grid.Row="4"
-                Grid.Column="1"
-                ColorChannels="RGB"
-                SelectedColor="{Binding Work.ButtonForeground, Converter={StaticResource SolidColorBrushToMediaColorConverter}}"
-              />
-              <Label Grid.Row="5" Content="X" Style="{StaticResource ThemedLabelStyle}" />
-              <pu:NumberInput
-                IsSnapToIntervalEnabled="False"
-                Grid.Row="5"
-                Grid.Column="1"
-                Value="{Binding Work.Left}"
-              />
-              <Label Grid.Row="6" Content="Y" Style="{StaticResource ThemedLabelStyle}" />
-              <pu:NumberInput
-                IsSnapToIntervalEnabled="False"
-                Grid.Row="6"
-                Grid.Column="1"
-                Value="{Binding Work.Top}"
-              />
-              <Label Grid.Row="7" Content="{ll:Str 宽}" Style="{StaticResource ThemedLabelStyle}" />
-              <pu:NumberInput
-                IsSnapToIntervalEnabled="False"
-                Grid.Row="7"
-                Grid.Column="1"
-                Value="{Binding Work.Width}"
+                Width="300"
+                HorizontalAlignment="Right"
+                Style="{DynamicResource StandardTextBoxStyle}"
+                Text="{Binding Work.ID}"
               />
             </Grid>
-          </Expander>
-        </Grid>
+          </Border>
+          <Border Height="40" Style="{DynamicResource ModMaker_BorderItem}">
+            <Grid ColumnDefinitions="Auto,*">
+              <TextBlock
+                Style="{DynamicResource ModMaker_TextBlockItemName}"
+                Text="{ll:Str 名称}"
+              />
+              <TextBox
+                Grid.Column="1"
+                Width="300"
+                HorizontalAlignment="Right"
+                Style="{DynamicResource StandardTextBoxStyle}"
+                Text="{Binding Work.Name}"
+              />
+            </Grid>
+          </Border>
+          <Border Height="40" Style="{DynamicResource ModMaker_BorderItem}">
+            <Grid ColumnDefinitions="Auto,*">
+              <TextBlock
+                Style="{DynamicResource ModMaker_TextBlockItemName}"
+                Text="{ll:Str 类型}"
+              />
+              <ComboBox
+                Grid.Column="1"
+                Width="300"
+                HorizontalAlignment="Right"
+                ItemsSource="{x:Static m:WorkModel.WorkTypes}"
+                SelectedItem="{Binding Work.Type}"
+                Style="{DynamicResource StandardComboBoxStyle}"
+              />
+            </Grid>
+          </Border>
+          <Border Height="40" Style="{DynamicResource ModMaker_BorderItem}">
+            <Grid ColumnDefinitions="Auto,*">
+              <TextBlock
+                Style="{DynamicResource ModMaker_TextBlockItemName}"
+                Text="{ll:Str 指定动画}"
+              />
+              <TextBox
+                Grid.Column="1"
+                Width="300"
+                HorizontalAlignment="Right"
+                Style="{DynamicResource StandardTextBoxStyle}"
+                Text="{Binding Work.Graph, UpdateSourceTrigger=PropertyChanged}"
+              />
+            </Grid>
+          </Border>
+          <Border Height="40" Style="{DynamicResource ModMaker_BorderItem}">
+            <Grid ColumnDefinitions="Auto,*">
+              <TextBlock
+                Style="{DynamicResource ModMaker_TextBlockItemName}"
+                Text="{ll:Str 是否超模}"
+              />
+              <Grid
+                Grid.Column="1"
+                Width="300"
+                HorizontalAlignment="Right"
+                ColumnDefinitions="*,Auto"
+              >
+                <TextBlock
+                  Padding="5"
+                  d:Text="True"
+                  FontSize="14"
+                  Style="{StaticResource ModMaker_TextBlockLeftCenter}"
+                  Text="{Binding Work.IsOverLoad}"
+                />
+                <Button
+                  Grid.Column="1"
+                  Command="{Binding FixOverLoadCommand}"
+                  Content="{ll:Str 修复超模}"
+                  Style="{StaticResource ModMaker_ButtonBaseStyle}"
+                />
+              </Grid>
+            </Grid>
+          </Border>
+          <Border Height="40" Style="{DynamicResource ModMaker_BorderItem}">
+            <Grid ColumnDefinitions="Auto,*">
+              <TextBlock
+                Style="{DynamicResource ModMaker_TextBlockItemName}"
+                Text="{ll:Str 基础倍率}"
+              />
+              <pu:NumberInput
+                Grid.Column="1"
+                Width="300"
+                HorizontalAlignment="Right"
+                IsSnapToIntervalEnabled="False"
+                Value="{Binding Work.MoneyBase}"
+                Style="{DynamicResource ModMaker_NumberInputBaseStyle}"
+              />
+            </Grid>
+          </Border>
+          <Border Height="40" Style="{DynamicResource ModMaker_BorderItem}">
+            <Grid ColumnDefinitions="Auto,*">
+              <TextBlock
+                Style="{DynamicResource ModMaker_TextBlockItemName}"
+                Text="{ll:Str 饱食度消耗倍率}"
+              />
+              <pu:NumberInput
+                Style="{DynamicResource ModMaker_NumberInputBaseStyle}"
+                Grid.Column="1"
+                Width="300"
+                HorizontalAlignment="Right"
+                IsSnapToIntervalEnabled="False"
+                Value="{Binding Work.StrengthFood}"
+              />
+            </Grid>
+          </Border>
+          <Border Height="40" Style="{DynamicResource ModMaker_BorderItem}">
+            <Grid ColumnDefinitions="Auto,*">
+              <TextBlock
+                Style="{DynamicResource ModMaker_TextBlockItemName}"
+                Text="{ll:Str 口渴度消耗倍率}"
+              />
+              <pu:NumberInput
+                Style="{DynamicResource ModMaker_NumberInputBaseStyle}"
+                Grid.Column="1"
+                Width="300"
+                HorizontalAlignment="Right"
+                IsSnapToIntervalEnabled="False"
+                Value="{Binding Work.StrengthDrink}"
+              />
+            </Grid>
+          </Border>
+          <Border Height="40" Style="{DynamicResource ModMaker_BorderItem}">
+            <Grid ColumnDefinitions="Auto,*">
+              <TextBlock
+                Style="{DynamicResource ModMaker_TextBlockItemName}"
+                Text="{ll:Str 心情消耗倍率}"
+              />
+              <pu:NumberInput
+                Style="{DynamicResource ModMaker_NumberInputBaseStyle}"
+                Grid.Column="1"
+                Width="300"
+                HorizontalAlignment="Right"
+                IsSnapToIntervalEnabled="False"
+                Value="{Binding Work.Feeling}"
+              />
+            </Grid>
+          </Border>
+          <Border Height="40" Style="{DynamicResource ModMaker_BorderItem}">
+            <Grid ColumnDefinitions="Auto,*">
+              <TextBlock
+                Style="{DynamicResource ModMaker_TextBlockItemName}"
+                Text="{ll:Str 完成奖励倍率}"
+              />
+              <pu:NumberInput
+                Style="{DynamicResource ModMaker_NumberInputBaseStyle}"
+                Grid.Column="1"
+                Width="300"
+                HorizontalAlignment="Right"
+                IsSnapToIntervalEnabled="False"
+                Value="{Binding Work.FinishBonus}"
+              />
+            </Grid>
+          </Border>
+          <Border Height="40" Style="{DynamicResource ModMaker_BorderItem}">
+            <Grid ColumnDefinitions="Auto,*">
+              <TextBlock
+                Style="{DynamicResource ModMaker_TextBlockItemName}"
+                Text="{ll:Str 等级限制}"
+              />
+              <pu:NumberInput
+                Style="{DynamicResource ModMaker_NumberInputBaseStyle}"
+                Grid.Column="1"
+                Width="300"
+                HorizontalAlignment="Right"
+                IsSnapToIntervalEnabled="False"
+                Value="{Binding Work.LevelLimit}"
+              />
+            </Grid>
+          </Border>
+          <Border Height="40" Style="{DynamicResource ModMaker_BorderItem}">
+            <Grid ColumnDefinitions="Auto,*">
+              <TextBlock
+                Style="{DynamicResource ModMaker_TextBlockItemName}"
+                Text="{ll:Str 花费时间(分钟)}"
+              />
+              <pu:NumberInput
+                Style="{DynamicResource ModMaker_NumberInputBaseStyle}"
+                Grid.Column="1"
+                Width="300"
+                HorizontalAlignment="Right"
+                IsSnapToIntervalEnabled="False"
+                Value="{Binding Work.Time}"
+              />
+            </Grid>
+          </Border>
+          <GroupBox
+            Margin="0,5,0,0"
+            Header="{ll:Str 按钮样式}"
+            Style="{DynamicResource ModMaker_GroupBoxBaseStyle}"
+          >
+            <StackPanel>
+              <Border Height="40" Style="{DynamicResource ModMaker_BorderItem}">
+                <Grid ColumnDefinitions="Auto,*">
+                  <TextBlock
+                    Style="{DynamicResource ModMaker_TextBlockItemName}"
+                    Text="{ll:Str 边框颜色}"
+                  />
+                  <pu:ColorPicker
+                    Style="{DynamicResource ModMaker_ColorPickerBaseStyle}"
+                    Grid.Column="1"
+                    Width="300"
+                    HorizontalAlignment="Right"
+                    ColorChannels="RGB"
+                    SelectedColor="{Binding Work.BorderBrush, Converter={StaticResource SolidColorBrushToMediaColorConverter}}"
+                  />
+                </Grid>
+              </Border>
+              <Border Height="40" Style="{DynamicResource ModMaker_BorderItem}">
+                <Grid ColumnDefinitions="Auto,*">
+                  <TextBlock
+                    Style="{DynamicResource ModMaker_TextBlockItemName}"
+                    Text="{ll:Str 背景颜色}"
+                  />
+                  <pu:ColorPicker
+                    Style="{DynamicResource ModMaker_ColorPickerBaseStyle}"
+                    Grid.Column="1"
+                    Width="300"
+                    HorizontalAlignment="Right"
+                    ColorChannels="RGB"
+                    SelectedColor="{Binding Work.Background, Converter={StaticResource SolidColorBrushToMediaColorConverter}}"
+                  />
+                </Grid>
+              </Border>
+              <Border Height="40" Style="{DynamicResource ModMaker_BorderItem}">
+                <Grid ColumnDefinitions="Auto,*">
+                  <TextBlock
+                    Style="{DynamicResource ModMaker_TextBlockItemName}"
+                    Text="{ll:Str 字体颜色}"
+                  />
+                  <pu:ColorPicker
+                    Style="{DynamicResource ModMaker_ColorPickerBaseStyle}"
+                    Grid.Column="1"
+                    Width="300"
+                    HorizontalAlignment="Right"
+                    ColorChannels="RGB"
+                    SelectedColor="{Binding Work.Foreground, Converter={StaticResource SolidColorBrushToMediaColorConverter}}"
+                  />
+                </Grid>
+              </Border>
+              <Border Height="40" Style="{DynamicResource ModMaker_BorderItem}">
+                <Grid ColumnDefinitions="Auto,*">
+                  <TextBlock
+                    Style="{DynamicResource ModMaker_TextBlockItemName}"
+                    Text="{ll:Str 按钮背景颜色}"
+                  />
+                  <pu:ColorPicker
+                    Style="{DynamicResource ModMaker_ColorPickerBaseStyle}"
+                    Grid.Column="1"
+                    Width="300"
+                    HorizontalAlignment="Right"
+                    ColorChannels="RGB"
+                    SelectedColor="{Binding Work.ButtonBackground, Converter={StaticResource SolidColorBrushToMediaColorConverter}}"
+                  />
+                </Grid>
+              </Border>
+              <Border Height="40" Style="{DynamicResource ModMaker_BorderItem}">
+                <Grid ColumnDefinitions="Auto,*">
+                  <TextBlock
+                    Style="{DynamicResource ModMaker_TextBlockItemName}"
+                    Text="{ll:Str 按钮字体颜色}"
+                  />
+                  <pu:ColorPicker
+                    Style="{DynamicResource ModMaker_ColorPickerBaseStyle}"
+                    Grid.Column="1"
+                    Width="300"
+                    HorizontalAlignment="Right"
+                    ColorChannels="RGB"
+                    SelectedColor="{Binding Work.ButtonForeground, Converter={StaticResource SolidColorBrushToMediaColorConverter}}"
+                  />
+                </Grid>
+              </Border>
+              <Border Height="40" Style="{DynamicResource ModMaker_BorderItem}">
+                <Grid ColumnDefinitions="Auto,*">
+                  <TextBlock Style="{DynamicResource ModMaker_TextBlockItemName}" Text="X" />
+                  <pu:NumberInput
+                    Style="{DynamicResource ModMaker_NumberInputBaseStyle}"
+                    Grid.Column="1"
+                    Width="300"
+                    HorizontalAlignment="Right"
+                    IsSnapToIntervalEnabled="False"
+                    Value="{Binding Work.Left}"
+                  />
+                </Grid>
+              </Border>
+              <Border Height="40" Style="{DynamicResource ModMaker_BorderItem}">
+                <Grid ColumnDefinitions="Auto,*">
+                  <TextBlock Style="{DynamicResource ModMaker_TextBlockItemName}" Text="Y" />
+                  <pu:NumberInput
+                    Style="{DynamicResource ModMaker_NumberInputBaseStyle}"
+                    Grid.Column="1"
+                    Width="300"
+                    HorizontalAlignment="Right"
+                    IsSnapToIntervalEnabled="False"
+                    Value="{Binding Work.Top}"
+                  />
+                </Grid>
+              </Border>
+              <Border Height="40" Style="{DynamicResource ModMaker_BorderItem}">
+                <Grid ColumnDefinitions="Auto,*">
+                  <TextBlock
+                    Style="{DynamicResource ModMaker_TextBlockItemName}"
+                    Text="{ll:Str 宽}"
+                  />
+                  <pu:NumberInput
+                    Style="{DynamicResource ModMaker_NumberInputBaseStyle}"
+                    Grid.Column="1"
+                    Width="300"
+                    HorizontalAlignment="Right"
+                    IsSnapToIntervalEnabled="False"
+                    Value="{Binding Work.Width}"
+                  />
+                </Grid>
+              </Border>
+            </StackPanel>
+          </GroupBox>
+        </StackPanel>
       </ScrollViewer>
-      <Grid Grid.Row="1">
-        <Grid.ColumnDefinitions>
-          <ColumnDefinition />
-          <ColumnDefinition />
-        </Grid.ColumnDefinitions>
+      <Grid Grid.Row="2" ColumnDefinitions="*,*">
         <Button
           x:Name="Button_Yes"
           Margin="10"
+          Width="200"
           Click="Button_Yes_Click"
           Content="{ll:Str 确定}"
           Style="{StaticResource MyThemedButtonStyle}"
@@ -399,6 +466,7 @@
         <Button
           x:Name="Button_Cancel"
           Grid.Column="1"
+          Width="200"
           Margin="10"
           Click="Button_Cancel_Click"
           Content="{ll:Str 取消}"
@@ -406,6 +474,14 @@
         />
       </Grid>
     </Grid>
+    <Border
+      Margin="5,0,5,0"
+      Grid.Column="1"
+      Width="2"
+      CornerRadius="2"
+      Background="{DynamicResource SecondaryLight}"
+      Opacity="0.3"
+    />
     <ListBox Grid.Column="2" Template="{StaticResource ModMaker_CultureList}" />
   </Grid>
 </pu:WindowX>

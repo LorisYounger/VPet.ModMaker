@@ -15,7 +15,7 @@ namespace VPet.ModMaker.Models;
 /// <summary>
 /// 工作模型
 /// </summary>
-[MapTarget(typeof(GraphHelper.Work))]
+[MapTarget(typeof(GraphHelper.Work), typeof(WorkModelToWorkMapConfig))]
 [MapTarget(typeof(WorkModel))]
 public sealed partial class WorkModel : ObservableModelBase, IDisposable
 {

@@ -29,5 +29,10 @@
     DefaultResult="{x:Null}"
     ResultToString="True"
   />
-  <c:CollectionCountCompareByConverter x:Key="CollectionCountCompareByConverter" />
+  <c:EqualsToVisibilityConverter
+    x:Key="NullToVisibleConverter"
+    TrueValue="Hidden"
+    FalseValue="Hidden"
+    NullValue="Visible"
+  />
 </ResourceDictionary>

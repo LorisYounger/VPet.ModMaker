@@ -11,11 +11,11 @@
   mc:Ignorable="d"
   Title="ThemeEditWindow"
   d:DataContext="{d:DesignInstance vm:ThemeEditViewModel}"
-  Height="450"
-  Width="800"
+  Width="1280"
+  Height="720"
   WindowStartupLocation="CenterScreen"
 >
-  <Grid ColumnDefinitions="*,Auto">
+  <Grid ColumnDefinitions="*,Auto,Auto">
     <Grid RowDefinitions="*,Auto">
       <ScrollViewer Padding="10" Style="{DynamicResource ModMaker_ScrollViewerBaseStyle}">
         <StackPanel>
@@ -375,7 +375,7 @@
         <Button
           x:Name="Button_Yes"
           Margin="10"
-          Width="300"
+          Width="200"
           Click="Button_Yes_Click"
           Content="{ll:Str 确定}"
           Style="{StaticResource MyThemedButtonStyle}"
@@ -383,7 +383,7 @@
         <Button
           x:Name="Button_Cancel"
           Grid.Column="1"
-          Width="300"
+          Width="200"
           Margin="10"
           Click="Button_Cancel_Click"
           Content="{ll:Str 取消}"
@@ -391,6 +391,14 @@
         />
       </Grid>
     </Grid>
-    <ListBox Grid.Column="1" Template="{StaticResource ModMaker_CultureList}" />
+    <Border
+      Margin="5,0,5,0"
+      Grid.Column="1"
+      Width="2"
+      CornerRadius="2"
+      Background="{DynamicResource SecondaryLight}"
+      Opacity="0.3"
+    />
+    <ListBox Grid.Column="2" Template="{StaticResource ModMaker_CultureList}" />
   </Grid>
 </pu:WindowX>

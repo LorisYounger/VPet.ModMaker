@@ -1,4 +1,4 @@
-﻿<pu:WindowX
+<pu:WindowX
   x:Class="VPet.ModMaker.Views.MoveEditWindow"
   xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
   xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
@@ -12,303 +12,294 @@
   Width="1280"
   Height="720"
   d:DataContext="{d:DesignInstance Type=vm:MoveEditViewModel}"
-  d:Height="500"
+  d:Height="1000"
   d:Width="800"
   WindowStartupLocation="CenterScreen"
+  Style="{DynamicResource WindowXStyle}"
   mc:Ignorable="d"
 >
-  <Grid>
-    <Grid.ColumnDefinitions>
-      <ColumnDefinition Width="Auto" />
-      <ColumnDefinition />
-    </Grid.ColumnDefinitions>
-    <Grid>
-      <Grid.RowDefinitions>
-        <RowDefinition Height="Auto" />
-        <RowDefinition />
-      </Grid.RowDefinitions>
-      <Grid>
-        <Image Width="250" Height="250" Source="{Binding Image}" Stretch="Uniform">
-          <Image.ContextMenu>
+  <Grid Margin="10" RowDefinitions="Auto,*,Auto">
+    <!--<Expander Style="{DynamicResource ModMaker_ExpanderBaseStyle}" Header="{ll:Str 测试图片}">
+      <Border Style="{DynamicResource ModMaker_BorderItem}">
+        <Border
+          HorizontalAlignment="Center"
+          Background="Transparent"
+          BorderBrush="{DynamicResource DARKPrimaryLight}"
+          BorderThickness="1.5"
+          CornerRadius="4"
+        >
+          <Border.ContextMenu>
             <ContextMenu>
               <MenuItem Command="{Binding ChangeImageCommand}" Header="{ll:Str 修改测试图片}" />
             </ContextMenu>
-          </Image.ContextMenu>
-        </Image>
-        <Button
-          HorizontalAlignment="Center"
-          VerticalAlignment="Center"
-          Command="{Binding ChangeImageCommand}"
-          Content="{ll:Str 添加测试图片}"
-        >
-          <Button.Style>
-            <Style BasedOn="{StaticResource MyThemedButtonStyle}" TargetType="Button">
-              <Setter Property="Visibility" Value="Hidden" />
-              <Style.Triggers>
-                <DataTrigger Binding="{Binding Image}" Value="{x:Null}">
-                  <Setter Property="Visibility" Value="Visible" />
-                </DataTrigger>
-              </Style.Triggers>
-            </Style>
-          </Button.Style>
-        </Button>
-      </Grid>
-      <Grid Grid.Row="1">
-        <Grid.ColumnDefinitions>
-          <ColumnDefinition Width="Auto" />
-          <ColumnDefinition />
-        </Grid.ColumnDefinitions>
-        <Grid.RowDefinitions>
-          <RowDefinition Height="Auto" />
-          <RowDefinition Height="Auto" />
-          <RowDefinition Height="Auto" />
-          <RowDefinition Height="Auto" />
-        </Grid.RowDefinitions>
-        <Label Grid.Row="3" Content="{ll:Str 动画}" Style="{StaticResource ThemedLabelStyle}" />
-        <TextBox
-          Grid.Row="3"
-          Grid.Column="1"
-          Style="{StaticResource StandardTextBoxStyle}"
-          Text="{Binding Move.Graph}"
-        />
-        <!--<Label Grid.Row="3" Content="{ll:Str 宠物描述}" />
-      <TextBox
-        Grid.Row="3"
-        Grid.Column="1"
-        Text="{Binding Pet.Description}" />-->
-      </Grid>
-    </Grid>
-    <Grid Grid.Column="1">
-      <Grid.RowDefinitions>
-        <RowDefinition />
-        <RowDefinition Height="Auto" />
-      </Grid.RowDefinitions>
-      <ScrollViewer VerticalScrollBarVisibility="Auto">
-        <Grid>
-          <Grid.RowDefinitions>
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
-          </Grid.RowDefinitions>
-          <Grid>
-            <Grid.ColumnDefinitions>
-              <ColumnDefinition Width="Auto" />
-              <ColumnDefinition />
-            </Grid.ColumnDefinitions>
-            <Grid.RowDefinitions>
-              <RowDefinition Height="Auto" />
-              <RowDefinition Height="Auto" />
-              <RowDefinition Height="Auto" />
-              <RowDefinition Height="Auto" />
-              <RowDefinition Height="Auto" />
-              <RowDefinition Height="Auto" />
-              <RowDefinition Height="Auto" />
-              <RowDefinition Height="Auto" />
-            </Grid.RowDefinitions>
-            <Label Content="{ll:Str 定位类型}" Style="{StaticResource ThemedLabelStyle}" />
+          </Border.ContextMenu>
+          <Grid Margin="2">
+            <Image Width="250" Height="250" Source="{Binding Image}" Stretch="Uniform" />
+            <Button
+              HorizontalAlignment="Center"
+              VerticalAlignment="Center"
+              Command="{Binding ChangeImageCommand}"
+              Content="{ll:Str 添加测试图片}"
+              Style="{DynamicResource ModMaker_ButtonBaseStyle}"
+              Visibility="{Binding Image, Converter={StaticResource NullToVisibleConverter}}"
+            />
+          </Grid>
+        </Border>
+      </Border>
+    </Expander>-->
+    <ScrollViewer Grid.Row="1" Style="{DynamicResource ModMaker_ScrollViewerBaseStyle}">
+      <StackPanel>
+        <Border Height="40" Style="{DynamicResource ModMaker_BorderItem}">
+          <Grid ColumnDefinitions="Auto,*">
+            <TextBlock Style="{DynamicResource ModMaker_TextBlockItemName}" Text="{ll:Str 动画}" />
+            <TextBox
+              Grid.Column="1"
+              Width="300"
+              HorizontalAlignment="Right"
+              Style="{DynamicResource StandardTextBoxStyle}"
+              Text="{Binding Move.Graph}"
+            />
+          </Grid>
+        </Border>
+        <Border Height="80" Style="{DynamicResource ModMaker_BorderItem}">
+          <Grid ColumnDefinitions="Auto,*" RowDefinitions="*,*">
+            <TextBlock
+              Style="{DynamicResource ModMaker_TextBlockItemName}"
+              Text="{ll:Str 定位类型}"
+            />
             <Control
               Grid.Column="1"
+              Grid.RowSpan="2"
               DataContext="{Binding Move.LocateType}"
               Tag="{Binding DataContext.Move.DirectionTypes, RelativeSource={RelativeSource AncestorType=Window}}"
-              Template="{StaticResource Grid_EnumCommand}"
+              Template="{DynamicResource ModMaker_FlagableEnumControlTemplate}"
             />
-            <Label
-              Grid.Row="1"
-              Content="{ll:Str 触发类型}"
-              Style="{StaticResource ThemedLabelStyle}"
+          </Grid>
+        </Border>
+        <Border Height="80" Style="{DynamicResource ModMaker_BorderItem}">
+          <Grid ColumnDefinitions="Auto,*" RowDefinitions="*,*">
+            <TextBlock
+              Style="{DynamicResource ModMaker_TextBlockItemName}"
+              Text="{ll:Str 触发类型}"
             />
             <Control
-              Grid.Row="1"
               Grid.Column="1"
+              Grid.RowSpan="2"
               DataContext="{Binding Move.TriggerType}"
               Tag="{Binding DataContext.Move.DirectionTypes, RelativeSource={RelativeSource AncestorType=Window}}"
-              Template="{StaticResource Grid_EnumCommand}"
+              Template="{DynamicResource ModMaker_FlagableEnumControlTemplate}"
             />
-            <Label
-              Grid.Row="2"
-              Content="{ll:Str 状态类型}"
-              Style="{StaticResource ThemedLabelStyle}"
+          </Grid>
+        </Border>
+        <Border Height="80" Style="{DynamicResource ModMaker_BorderItem}">
+          <Grid ColumnDefinitions="Auto,*" RowDefinitions="*,*">
+            <TextBlock
+              Style="{DynamicResource ModMaker_TextBlockItemName}"
+              Text="{ll:Str 状态类型}"
             />
             <Control
-              Grid.Row="2"
               Grid.Column="1"
+              Grid.RowSpan="2"
               DataContext="{Binding Move.ModeType}"
               Tag="{Binding DataContext.Move.ModeTypes, RelativeSource={RelativeSource AncestorType=Window}}"
-              Template="{StaticResource Grid_EnumCommand}"
+              Template="{DynamicResource ModMaker_FlagableEnumControlTemplate}"
             />
-            <Label
-              Grid.Row="3"
-              Content="{ll:Str 移动距离}"
-              Style="{StaticResource ThemedLabelStyle}"
+          </Grid>
+        </Border>
+        <Border Height="40" Style="{DynamicResource ModMaker_BorderItem}">
+          <Grid ColumnDefinitions="Auto,*">
+            <TextBlock
+              Style="{DynamicResource ModMaker_TextBlockItemName}"
+              Text="{ll:Str 移动距离}"
             />
             <pu:NumberInput
-              IsSnapToIntervalEnabled="False"
-              Grid.Row="3"
               Grid.Column="1"
+              Width="300"
+              HorizontalAlignment="Right"
+              IsSnapToIntervalEnabled="False"
+              Style="{DynamicResource ModMaker_NumberInputBaseStyle}"
               Value="{Binding Move.Distance}"
             />
-            <Label
-              Grid.Row="4"
-              Content="{ll:Str 移动间隔(ms)}"
-              Style="{StaticResource ThemedLabelStyle}"
+          </Grid>
+        </Border>
+        <Border Height="40" Style="{DynamicResource ModMaker_BorderItem}">
+          <Grid ColumnDefinitions="Auto,*">
+            <TextBlock
+              Style="{DynamicResource ModMaker_TextBlockItemName}"
+              Text="{ll:Str 移动间隔(ms)}"
             />
             <pu:NumberInput
-              IsSnapToIntervalEnabled="False"
-              Grid.Row="4"
               Grid.Column="1"
+              Width="300"
+              HorizontalAlignment="Right"
+              IsSnapToIntervalEnabled="False"
+              Style="{DynamicResource ModMaker_NumberInputBaseStyle}"
               Value="{Binding Move.Interval}"
             />
-            <Label
-              Grid.Row="5"
-              Content="{ll:Str 定位长度}"
-              Style="{StaticResource ThemedLabelStyle}"
+          </Grid>
+        </Border>
+        <Border Height="40" Style="{DynamicResource ModMaker_BorderItem}">
+          <Grid ColumnDefinitions="Auto,*">
+            <TextBlock
+              Style="{DynamicResource ModMaker_TextBlockItemName}"
+              Text="{ll:Str 定位长度}"
             />
             <pu:NumberInput
-              IsSnapToIntervalEnabled="False"
-              Grid.Row="5"
               Grid.Column="1"
+              Width="300"
+              HorizontalAlignment="Right"
+              IsSnapToIntervalEnabled="False"
+              Style="{DynamicResource ModMaker_NumberInputBaseStyle}"
               Value="{Binding Move.LocateLength}"
             />
-            <Expander Grid.Row="6" Grid.ColumnSpan="2" Header="{ll:Str 触发距离}">
-              <Grid>
-                <Grid.ColumnDefinitions>
-                  <ColumnDefinition Width="Auto" />
-                  <ColumnDefinition />
-                </Grid.ColumnDefinitions>
-                <Grid.RowDefinitions>
-                  <RowDefinition Height="Auto" />
-                  <RowDefinition Height="Auto" />
-                  <RowDefinition Height="Auto" />
-                  <RowDefinition Height="Auto" />
-                </Grid.RowDefinitions>
-                <Label
-                  Grid.Row="0"
-                  Content="{ll:Str 左}"
-                  Style="{StaticResource ThemedLabelStyle}"
-                />
-                <pu:NumberInput
-                  IsSnapToIntervalEnabled="False"
-                  Grid.Row="0"
-                  Grid.Column="1"
-                  Value="{Binding Move.TriggerLeft}"
-                />
-                <Label
-                  Grid.Row="1"
-                  Content="{ll:Str 上}"
-                  Style="{StaticResource ThemedLabelStyle}"
-                />
-                <pu:NumberInput
-                  IsSnapToIntervalEnabled="False"
-                  Grid.Row="1"
-                  Grid.Column="1"
-                  Value="{Binding Move.TriggerTop}"
-                />
-                <Label
-                  Grid.Row="2"
-                  Content="{ll:Str 右}"
-                  Style="{StaticResource ThemedLabelStyle}"
-                />
-                <pu:NumberInput
-                  IsSnapToIntervalEnabled="False"
-                  Grid.Row="2"
-                  Grid.Column="1"
-                  Value="{Binding Move.TriggerRight}"
-                />
-                <Label
-                  Grid.Row="3"
-                  Content="{ll:Str 下}"
-                  Style="{StaticResource ThemedLabelStyle}"
-                />
-                <pu:NumberInput
-                  IsSnapToIntervalEnabled="False"
-                  Grid.Row="3"
-                  Grid.Column="1"
-                  Value="{Binding Move.TriggerBottom}"
-                />
-              </Grid>
-            </Expander>
-            <Expander Grid.Row="7" Grid.ColumnSpan="2" Header="{ll:Str 检测距离}">
-              <Grid>
-                <Grid.ColumnDefinitions>
-                  <ColumnDefinition Width="Auto" />
-                  <ColumnDefinition />
-                </Grid.ColumnDefinitions>
-                <Grid.RowDefinitions>
-                  <RowDefinition Height="Auto" />
-                  <RowDefinition Height="Auto" />
-                  <RowDefinition Height="Auto" />
-                  <RowDefinition Height="Auto" />
-                </Grid.RowDefinitions>
-                <Label
-                  Grid.Row="0"
-                  Content="{ll:Str 左}"
-                  Style="{StaticResource ThemedLabelStyle}"
-                />
-                <pu:NumberInput
-                  IsSnapToIntervalEnabled="False"
-                  Grid.Row="0"
-                  Grid.Column="1"
-                  Value="{Binding Move.CheckLeft}"
-                />
-                <Label
-                  Grid.Row="1"
-                  Content="{ll:Str 上}"
-                  Style="{StaticResource ThemedLabelStyle}"
-                />
-                <pu:NumberInput
-                  IsSnapToIntervalEnabled="False"
-                  Grid.Row="1"
-                  Grid.Column="1"
-                  Value="{Binding Move.CheckTop}"
-                />
-                <Label
-                  Grid.Row="2"
-                  Content="{ll:Str 右}"
-                  Style="{StaticResource ThemedLabelStyle}"
-                />
-                <pu:NumberInput
-                  IsSnapToIntervalEnabled="False"
-                  Grid.Row="2"
-                  Grid.Column="1"
-                  Value="{Binding Move.CheckRight}"
-                />
-                <Label
-                  Grid.Row="3"
-                  Content="{ll:Str 下}"
-                  Style="{StaticResource ThemedLabelStyle}"
-                />
-                <pu:NumberInput
-                  IsSnapToIntervalEnabled="False"
-                  Grid.Row="3"
-                  Grid.Column="1"
-                  Value="{Binding Move.CheckBottom}"
-                />
-              </Grid>
-            </Expander>
           </Grid>
-        </Grid>
-      </ScrollViewer>
-      <Grid Grid.Row="1">
-        <Grid.ColumnDefinitions>
-          <ColumnDefinition />
-          <ColumnDefinition />
-        </Grid.ColumnDefinitions>
-        <Button
-          x:Name="Button_Yes"
-          Margin="10"
-          Click="Button_Yes_Click"
-          Content="{ll:Str 确定}"
-          Style="{StaticResource MyThemedButtonStyle}"
-        />
-        <Button
-          x:Name="Button_Cancel"
-          Grid.Column="1"
-          Margin="10"
-          Click="Button_Cancel_Click"
-          Content="{ll:Str 取消}"
-          Style="{StaticResource Button_Cancel}"
-        />
-      </Grid>
+        </Border>
+        <Border Height="80" Style="{DynamicResource ModMaker_BorderItem}">
+          <Grid RowDefinitions="*,*" ColumnDefinitions="Auto,*">
+            <TextBlock
+              Style="{DynamicResource ModMaker_TextBlockItemName}"
+              Text="{ll:Str 触发距离}"
+            />
+            <Grid
+              Grid.Column="1"
+              Width="300"
+              Grid.RowSpan="2"
+              HorizontalAlignment="Right"
+              ColumnDefinitions="Auto,*,Auto,*"
+              RowDefinitions="*,*"
+            >
+              <Label Content="{ll:Str 左}" Style="{DynamicResource ModMaker_LabelCenterStyle}" />
+              <pu:NumberInput
+                Grid.Column="1"
+                IsSnapToIntervalEnabled="False"
+                Style="{DynamicResource ModMaker_NumberInputBaseStyle}"
+                Value="{Binding Move.TriggerLeft}"
+              />
+              <Label
+                Grid.Column="2"
+                Width="30"
+                Content="{ll:Str 上}"
+                Style="{DynamicResource ModMaker_LabelCenterStyle}"
+              />
+              <pu:NumberInput
+                Grid.Column="3"
+                IsSnapToIntervalEnabled="False"
+                Style="{DynamicResource ModMaker_NumberInputBaseStyle}"
+                Value="{Binding Move.TriggerTop}"
+              />
+              <Label
+                Grid.Row="1"
+                Width="30"
+                Content="{ll:Str 右}"
+                Style="{DynamicResource ModMaker_LabelCenterStyle}"
+              />
+              <pu:NumberInput
+                Grid.Row="1"
+                Grid.Column="1"
+                IsSnapToIntervalEnabled="False"
+                Style="{DynamicResource ModMaker_NumberInputBaseStyle}"
+                Value="{Binding Move.TriggerRight}"
+              />
+              <Label
+                Grid.Row="1"
+                Grid.Column="2"
+                Width="30"
+                Content="{ll:Str 下}"
+                Style="{DynamicResource ModMaker_LabelCenterStyle}"
+              />
+              <pu:NumberInput
+                Grid.Row="1"
+                Grid.Column="3"
+                IsSnapToIntervalEnabled="False"
+                Style="{DynamicResource ModMaker_NumberInputBaseStyle}"
+                Value="{Binding Move.TriggerBottom}"
+              />
+            </Grid>
+          </Grid>
+        </Border>
+        <Border Height="80" Style="{DynamicResource ModMaker_BorderItem}">
+          <Grid RowDefinitions="*,*" ColumnDefinitions="Auto,*">
+            <TextBlock
+              Style="{DynamicResource ModMaker_TextBlockItemName}"
+              Text="{ll:Str 检测距离}"
+            />
+            <Grid
+              Grid.RowSpan="2"
+              Grid.Column="1"
+              Width="300"
+              HorizontalAlignment="Right"
+              ColumnDefinitions="Auto,*,Auto,*"
+              RowDefinitions="*,*"
+            >
+              <Label Content="{ll:Str 左}" Style="{DynamicResource ModMaker_LabelCenterStyle}" />
+              <pu:NumberInput
+                Grid.Column="1"
+                IsSnapToIntervalEnabled="False"
+                Style="{DynamicResource ModMaker_NumberInputBaseStyle}"
+                Value="{Binding Move.CheckLeft}"
+              />
+              <Label
+                Grid.Column="2"
+                Width="30"
+                Content="{ll:Str 上}"
+                Style="{DynamicResource ModMaker_LabelCenterStyle}"
+              />
+              <pu:NumberInput
+                Grid.Column="3"
+                IsSnapToIntervalEnabled="False"
+                Style="{DynamicResource ModMaker_NumberInputBaseStyle}"
+                Value="{Binding Move.CheckTop}"
+              />
+              <Label
+                Grid.Row="1"
+                Width="30"
+                Content="{ll:Str 右}"
+                Style="{DynamicResource ModMaker_LabelCenterStyle}"
+              />
+              <pu:NumberInput
+                Grid.Row="1"
+                Grid.Column="1"
+                IsSnapToIntervalEnabled="False"
+                Style="{DynamicResource ModMaker_NumberInputBaseStyle}"
+                Value="{Binding Move.CheckRight}"
+              />
+              <Label
+                Grid.Row="1"
+                Grid.Column="2"
+                Width="30"
+                Content="{ll:Str 下}"
+                Style="{DynamicResource ModMaker_LabelCenterStyle}"
+              />
+              <pu:NumberInput
+                Grid.Row="1"
+                Grid.Column="3"
+                IsSnapToIntervalEnabled="False"
+                Style="{DynamicResource ModMaker_NumberInputBaseStyle}"
+                Value="{Binding Move.CheckBottom}"
+              />
+            </Grid>
+          </Grid>
+        </Border>
+      </StackPanel>
+    </ScrollViewer>
+    <Grid Grid.Row="2" ColumnDefinitions="*,*">
+      <Button
+        x:Name="Button_Yes"
+        Width="200"
+        Margin="10"
+        Click="Button_Yes_Click"
+        Content="{ll:Str 确定}"
+        Style="{StaticResource MyThemedButtonStyle}"
+      />
+      <Button
+        x:Name="Button_Cancel"
+        Grid.Column="1"
+        Width="200"
+        Margin="10"
+        Click="Button_Cancel_Click"
+        Content="{ll:Str 取消}"
+        Style="{StaticResource Button_Cancel}"
+      />
     </Grid>
   </Grid>
 </pu:WindowX>
