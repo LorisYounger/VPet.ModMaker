@@ -173,6 +173,7 @@ public sealed partial class WorkEditViewModel
     public BitmapImage? Image { get; set; }
 
     public bool? DialogResult { get; set; }
+    public bool IsChanged { get; private set; }
     #endregion
 
     /// <summary>
@@ -278,7 +279,9 @@ public sealed partial class WorkEditViewModel
     [RelayCommand]
     private void Add()
     {
+        IsChanged = false;
         Work = new(ModInfo.TempI18nResource);
+        using var dis = Work.Changed.Subscribe(_ => IsChanged = true);
         var result = DialogService.ShowDialog(this, this);
         if (result is not true)
         {
@@ -308,10 +311,12 @@ public sealed partial class WorkEditViewModel
     [RelayCommand]
     public void Edit(WorkModel model)
     {
+        IsChanged = false;
         OldWork = model;
         var newModel = new WorkModel(model, ModInfo.TempI18nResource);
         model.I18nResource.CopyDataTo(newModel.I18nResource, model.ID);
         Work = newModel;
+        using var dis = newModel.Changed.Subscribe(_ => IsChanged = true);
         var result = DialogService.ShowDialog(this, this);
         if (result is not true)
         {
@@ -385,6 +390,23 @@ public sealed partial class WorkEditViewModel
 
     public void OnClosing(CancelEventArgs e)
     {
+        if (IsChanged)
+        {
+            var result = DialogService.ShowMessageBox(
+                this,
+                "编辑完成, 是否保存?".Translate(),
+                "编辑完成".Translate(),
+                MessageBoxButton.YesNoCancel,
+                MessageBoxImage.Information
+            );
+            if (result is null)
+            {
+                e.Cancel = true;
+                return;
+            }
+            DialogResult = result;
+        }
+
         if (DialogResult is not true)
             return;
         if (string.IsNullOrWhiteSpace(Work.ID))

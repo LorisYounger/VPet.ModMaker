@@ -8,16 +8,459 @@
   xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
   xmlns:pu="https://opensource.panuon.com/wpf-ui"
   xmlns:vm="clr-namespace:VPet.ModMaker.ViewModels"
+  xmlns:m="clr-namespace:VPet.ModMaker.Models"
   Title="{ll:Str 编辑动画}"
   Width="1280"
   Height="720"
+  MinWidth="800"
+  MinHeight="600"
   d:DataContext="{d:DesignInstance Type=vm:AnimeEditViewModel}"
-  d:Height="500"
   d:Width="800"
+  d:Height="600"
   WindowStartupLocation="CenterScreen"
   mc:Ignorable="d"
 >
   <Window.Resources>
+    <Style
+      x:Key="Anime_ListBoxItemStyle"
+      BasedOn="{StaticResource {x:Type ListBoxItem}}"
+      TargetType="ListBoxItem"
+    >
+      <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+      <Setter Property="VerticalContentAlignment" Value="Stretch" />
+      <Setter
+        Property="Tag"
+        Value="{Binding DataContext, RelativeSource={RelativeSource AncestorType=Window, Mode=FindAncestor}}"
+      />
+      <Setter Property="ContentTemplate">
+        <Setter.Value>
+          <DataTemplate>
+            <Grid ColumnDefinitions="100,100">
+              <TextBlock
+                Text="{Binding ID}"
+                Style="{DynamicResource ModMaker_TextBlockLeftCenter}"
+              />
+              <TextBlock
+                Text="{Binding Images.Count}"
+                Grid.Column="1"
+                Style="{DynamicResource ModMaker_TextBlockLeftCenter}"
+              />
+            </Grid>
+          </DataTemplate>
+        </Setter.Value>
+      </Setter>
+      <Setter Property="ContextMenu">
+        <Setter.Value>
+          <ContextMenu Tag="{Binding Tag, RelativeSource={RelativeSource AncestorType=ListBoxItem, Mode=FindAncestor}}">
+            <MenuItem
+              Command="{Binding PlacementTarget.Tag.RemoveAnimeCommand, RelativeSource={RelativeSource AncestorType=ContextMenu, Mode=FindAncestor}}"
+              CommandParameter="{Binding}"
+              Header="{ll:Str 删除此项}"
+            />
+          </ContextMenu>
+        </Setter.Value>
+      </Setter>
+    </Style>
+  </Window.Resources>
+  <Grid Margin="10" RowDefinitions="Auto,Auto,*">
+    <Grid ColumnDefinitions="300,Auto,*">
+      <Grid RowDefinitions="*,Auto">
+        <Border
+          BorderBrush="{DynamicResource DARKPrimaryLight}"
+          BorderThickness="1.5"
+          CornerRadius="4"
+          VerticalAlignment="Center"
+          HorizontalAlignment="Center"
+          Background="Transparent"
+        >
+          <Image
+            Margin="1"
+            VerticalAlignment="Top"
+            Width="250"
+            Height="250"
+            Source="{Binding CurrentImageModel.Image}"
+          >
+            <Image.ToolTip>
+              <Image Width="500" Height="500" Source="{Binding CurrentImageModel.Image}" />
+            </Image.ToolTip>
+          </Image>
+        </Border>
+        <StackPanel Grid.Row="1">
+          <Grid Margin="0,5,0,5" Grid.Row="1">
+            <Grid.ColumnDefinitions>
+              <ColumnDefinition />
+              <ColumnDefinition />
+              <ColumnDefinition />
+            </Grid.ColumnDefinitions>
+            <Button
+              Width="100"
+              Command="{Binding StopCommand}"
+              Content="{ll:Str 停止}"
+              Style="{StaticResource ModMaker_ButtonBaseStyle}"
+            />
+            <Button
+              Grid.Column="1"
+              Width="100"
+              Command="{Binding StartCommand}"
+              Content="{ll:Str 播放}"
+              Style="{StaticResource ModMaker_ButtonBaseStyle}"
+            />
+            <ToggleButton
+              Grid.Column="2"
+              Width="100"
+              Content="{ll:Str 循环}"
+              IsChecked="{Binding Loop}"
+              Style="{StaticResource StandardToggleButtonStyle}"
+            />
+          </Grid>
+          <Grid Grid.Row="2" ColumnDefinitions="Auto,*" RowDefinitions="Auto,Auto">
+            <Label Content="{ll:Str 动画类型}" Style="{StaticResource ThemedLabelStyle}" />
+            <TextBlock
+              Grid.Column="1"
+              Padding="5"
+              d:Text="Type"
+              FontSize="14"
+              Style="{StaticResource ModMaker_TextBlockLeftCenter}"
+              Text="{Binding Anime.GraphType}"
+            />
+            <Label
+              Grid.Row="1"
+              Content="{ll:Str 动画名称}"
+              Style="{StaticResource ThemedLabelStyle}"
+              Visibility="{Binding HasAnimeName, Converter={StaticResource FalseToCollapsedConverter}}"
+            />
+            <TextBox
+              Grid.Row="1"
+              Grid.Column="1"
+              pu:TextBoxHelper.Watermark="{ll:Str 动画名称}"
+              Style="{StaticResource StandardTextBoxStyle}"
+              Text="{Binding Anime.Name, UpdateSourceTrigger=PropertyChanged}"
+              Visibility="{Binding HasAnimeName, Converter={StaticResource FalseToCollapsedConverter}}"
+            />
+          </Grid>
+        </StackPanel>
+      </Grid>
+      <Border
+        Margin="5,0,5,0"
+        Grid.Column="1"
+        Width="2"
+        CornerRadius="2"
+        Background="{DynamicResource SecondaryLight}"
+        Opacity="0.3"
+      />
+      <Grid Grid.Column="2" RowDefinitions="Auto,*">
+        <ListBox
+          x:Name="ModeTypes"
+          SelectedIndex="0"
+          PreviewMouseWheel="ListBox_HorizontalScrolling_PreviewMouseWheel"
+          Style="{DynamicResource SideMenuListBoxStyle}"
+        >
+          <ListBox.ItemsPanel>
+            <ItemsPanelTemplate>
+              <StackPanel Orientation="Horizontal" />
+            </ItemsPanelTemplate>
+          </ListBox.ItemsPanel>
+          <ListBoxItem Tag="{Binding Anime.HappyAnimes}">
+            <ListBoxItem.Content>
+              <TextBlock>
+                <Run Text="{ll:Str 'ModType_Happy'}" />
+                <Run Text="(" />
+                <Run Text="{Binding Anime.HappyAnimes.Count, Mode=OneWay}" />
+                <Run Text=")" />
+              </TextBlock>
+            </ListBoxItem.Content>
+          </ListBoxItem>
+          <ListBoxItem Tag="{Binding Anime.NomalAnimes}">
+            <ListBoxItem.Content>
+              <TextBlock>
+                <Run Text="{ll:Str 'ModeType_Nomal'}" />
+                <Run Text="(" />
+                <Run Text="{Binding Anime.NomalAnimes.Count, Mode=OneWay}" />
+                <Run Text=")" />
+              </TextBlock>
+            </ListBoxItem.Content>
+          </ListBoxItem>
+          <ListBoxItem Tag="{Binding Anime.PoorConditionAnimes}">
+            <ListBoxItem.Content>
+              <TextBlock>
+                <Run Text="{ll:Str 'ModeType_PoorCondition'}" />
+                <Run Text="(" />
+                <Run Text="{Binding Anime.PoorConditionAnimes.Count, Mode=OneWay}" />
+                <Run Text=")" />
+              </TextBlock>
+            </ListBoxItem.Content>
+          </ListBoxItem>
+          <ListBoxItem Tag="{Binding Anime.IllAnimes}">
+            <ListBoxItem.Content>
+              <TextBlock>
+                <Run Text="{ll:Str 'ModeType_Ill'}" />
+                <Run Text="(" />
+                <Run Text="{Binding Anime.IllAnimes.Count, Mode=OneWay}" />
+                <Run Text=")" />
+              </TextBlock>
+            </ListBoxItem.Content>
+          </ListBoxItem>
+        </ListBox>
+        <ListBox
+          Grid.Row="1"
+          x:Name="Animes"
+          d:ItemsSource="{d:SampleData ItemCount=5}"
+          d:SelectedIndex="0"
+          Style="{DynamicResource SideMenuListBoxStyle}"
+          ItemContainerStyle="{StaticResource Anime_ListBoxItemStyle}"
+          ItemsSource="{Binding SelectedItem.Tag, ElementName=ModeTypes}"
+          SelectedItem="{Binding CurrentAnimeModel}"
+        />
+        <!--<TabControl
+          pu:TabControlHelper.HeaderPanelCornerRadius="4"
+          pu:TabControlHelper.HeaderPanelShadowColor="Aqua"
+          pu:TabControlHelper.ItemsBackground="{StaticResource DARKPrimary}"
+          pu:TabControlHelper.ItemsHoverBackground="{StaticResource DARKPrimaryLight}"
+          pu:TabControlHelper.ItemsSelectedBackground="{StaticResource DARKPrimaryLighter}"
+          Foreground="{StaticResource DARKPrimaryText}"
+        >
+          <TabItem d:Header="Happy (0)" Tag="Happy">
+            <TabItem.Header>
+              <MultiBinding
+                Converter="{StaticResource StringFormatConverter}"
+                ConverterParameter="{}{0} ({1})"
+              >
+                <Binding Path="Tag" RelativeSource="{RelativeSource Mode=Self}" />
+                <Binding Path="Anime.HappyAnimes.Count" />
+              </MultiBinding>
+            </TabItem.Header>
+            <ListBox
+              d:ItemsSource="{d:SampleData ItemCount=5}"
+              d:SelectedIndex="0"
+              Style="{DynamicResource SideMenuListBoxStyle}"
+              ItemContainerStyle="{StaticResource Anime_ListBoxItemStyle}"
+              ItemsSource="{Binding Anime.HappyAnimes}"
+              SelectedItem="{Binding CurrentAnimeModel}"
+            />
+          </TabItem>
+          <TabItem d:Header="Nomal (0)" Tag="Nomal">
+            <TabItem.Header>
+              <MultiBinding
+                Converter="{StaticResource StringFormatConverter}"
+                ConverterParameter="{}{0} ({1})"
+              >
+                <Binding Path="Tag" RelativeSource="{RelativeSource Mode=Self}" />
+                <Binding Path="Anime.NomalAnimes.Count" />
+              </MultiBinding>
+            </TabItem.Header>
+            <ListBox
+              d:ItemsSource="{d:SampleData ItemCount=5}"
+              d:SelectedIndex="0"
+              Style="{DynamicResource SideMenuListBoxStyle}"
+              ItemContainerStyle="{StaticResource Anime_ListBoxItemStyle}"
+              ItemsSource="{Binding Anime.NomalAnimes}"
+              SelectedItem="{Binding CurrentAnimeModel}"
+            />
+          </TabItem>
+          <TabItem d:Header="PoorCondition (0)" Tag="PoorCondition">
+            <TabItem.Header>
+              <MultiBinding
+                Converter="{StaticResource StringFormatConverter}"
+                ConverterParameter="{}{0} ({1})"
+              >
+                <Binding Path="Tag" RelativeSource="{RelativeSource Mode=Self}" />
+                <Binding Path="Anime.PoorConditionAnimes.Count" />
+              </MultiBinding>
+            </TabItem.Header>
+            <ListBox
+              d:ItemsSource="{d:SampleData ItemCount=5}"
+              d:SelectedIndex="0"
+              Style="{DynamicResource SideMenuListBoxStyle}"
+              ItemContainerStyle="{StaticResource Anime_ListBoxItemStyle}"
+              ItemsSource="{Binding Anime.PoorConditionAnimes}"
+              SelectedItem="{Binding CurrentAnimeModel}"
+            />
+          </TabItem>
+          <TabItem d:Header="Ill (0)" Tag="Ill">
+            <TabItem.Header>
+              <MultiBinding
+                Converter="{StaticResource StringFormatConverter}"
+                ConverterParameter="{}{0} ({1})"
+              >
+                <Binding Path="Tag" RelativeSource="{RelativeSource Mode=Self}" />
+                <Binding Path="Anime.IllAnimes.Count" />
+              </MultiBinding>
+            </TabItem.Header>
+            <ListBox
+              d:ItemsSource="{d:SampleData ItemCount=5}"
+              d:SelectedIndex="0"
+              Style="{DynamicResource SideMenuListBoxStyle}"
+              ItemContainerStyle="{StaticResource Anime_ListBoxItemStyle}"
+              ItemsSource="{Binding Anime.IllAnimes}"
+              SelectedItem="{Binding CurrentAnimeModel}"
+            />
+          </TabItem>
+        </TabControl>-->
+        <Button
+          Grid.Row="1"
+          HorizontalAlignment="Right"
+          VerticalAlignment="Bottom"
+          Command="{Binding AddAnimeCommand}"
+          CommandParameter="{Binding CurrentMode}"
+          Content="➕"
+          Style="{DynamicResource ModMaker_AddButton}"
+        />
+      </Grid>
+    </Grid>
+    <Border
+      Margin="0,5,0,5"
+      Grid.Row="1"
+      Height="2"
+      CornerRadius="2"
+      Background="{DynamicResource SecondaryLight}"
+      Opacity="0.3"
+    />
+    <Grid
+      IsHitTestVisible="{Binding Playing, Converter={StaticResource BoolInverter}}"
+      IsEnabled="{Binding CurrentAnimeModel,Converter={StaticResource NullToFalseConverter}}"
+      Grid.Row="2"
+      RowDefinitions="Auto,*"
+    >
+      <Grid Margin="0,0,0,5" ColumnDefinitions="Auto,*">
+        <Grid ColumnDefinitions="Auto,Auto">
+          <TextBox
+            Grid.Column="0"
+            Width="200"
+            VerticalAlignment="Center"
+            pu:TextBoxHelper.Watermark="{ll:Str 动画ID(非必要)}"
+            FontSize="14"
+            Style="{StaticResource StandardTextBoxStyle}"
+            Text="{Binding CurrentAnimeModel.ID, UpdateSourceTrigger=PropertyChanged}"
+          />
+          <ComboBox
+            Grid.Column="1"
+            Width="200"
+            Margin="10,0,0,0"
+            ItemsSource="{Binding Source={x:Static m:AnimeTypeModel.AnimatTypes}, Converter={StaticResource EnumsToEnumInfosConverter}}"
+            SelectedItem="{Binding CurrentAnimeModel.AnimeType, Converter={StaticResource EnumToEnumInfoConverter}}"
+            Style="{StaticResource StandardComboBoxStyle}"
+            Visibility="{Binding DataContext.HasMultiType, RelativeSource={RelativeSource AncestorType=Window, Mode=FindAncestor}, Converter={StaticResource FalseToCollapsedConverter}}"
+          />
+        </Grid>
+        <Grid Grid.Column="1" HorizontalAlignment="Right" ColumnDefinitions="Auto,Auto">
+          <Button
+            Grid.Column="0"
+            Width="100"
+            Margin="5,0,5,0"
+            Style="{DynamicResource ModMaker_ButtonBaseStyle}"
+            Command="{Binding AddImageCommand}"
+            CommandParameter="{Binding CurrentAnimeModel}"
+            Content="{ll:Str 添加图片}"
+          />
+          <Button
+            Grid.Column="1"
+            Width="100"
+            Margin="5,0,5,0"
+            Style="{DynamicResource ModMaker_ButtonBaseStyle}"
+            Command="{Binding ClearImageCommand}"
+            CommandParameter="{Binding CurrentAnimeModel}"
+            Content="{ll:Str 清空图片}"
+          />
+        </Grid>
+      </Grid>
+      <ListBox
+        VerticalAlignment="Top"
+        x:Name="Images"
+        Height="190"
+        Grid.Row="1"
+        d:ItemsSource="{d:SampleData ItemCount=5}"
+        AllowDrop="True"
+        Drop="ListBox_Images_Drop"
+        ItemsSource="{Binding CurrentAnimeModel.Images}"
+        PreviewMouseMove="ListBox_Images_PreviewMouseMove"
+        PreviewMouseWheel="ListBox_HorizontalScrolling_PreviewMouseWheel"
+        ScrollViewer.HorizontalScrollBarVisibility="Auto"
+        ScrollViewer.VerticalScrollBarVisibility="Hidden"
+        pu:ScrollBarHelper.ThumbBackground="{DynamicResource SecondaryLight}"
+        pu:ScrollViewerHelper.ScrollBarPosition="Inside"
+        pu:ScrollViewerHelper.ScrollBarThickness="3"
+        SelectedItem="{Binding CurrentImageModel}"
+        SelectionChanged="ListBox_Images_SelectionChanged"
+        pu:ListBoxHelper.CornerRadius="4"
+        d:SelectedIndex="0"
+        BorderThickness="1.5"
+        pu:ListBoxHelper.ItemsSelectedBackground="{DynamicResource  PrimaryLighter}"
+        BorderBrush="{DynamicResource DARKPrimary}"
+      >
+        <ListBox.ItemsPanel>
+          <ItemsPanelTemplate>
+            <StackPanel Orientation="Horizontal" />
+          </ItemsPanelTemplate>
+        </ListBox.ItemsPanel>
+        <ListBox.ItemTemplate>
+          <DataTemplate>
+            <Grid
+              RowDefinitions="Auto,*"
+              Background="Transparent"
+              Tag="{Binding DataContext, RelativeSource={RelativeSource AncestorType=Window, Mode=FindAncestor}}"
+            >
+              <!--<Grid.ContextMenu>
+                <ContextMenu>
+                  <MenuItem
+                    d:Header="修改图片"
+                    Command="{Binding PlacementTarget.Tag.ChangeImageCommand, RelativeSource={RelativeSource AncestorType=ContextMenu, Mode=FindAncestor}}"
+                    CommandParameter="{Binding}"
+                    Header="{ll:Str 修改图片}"
+                  />
+                  <MenuItem
+                    d:Header="删除图片"
+                    Command="{Binding PlacementTarget.Tag.RemoveImageCommand, RelativeSource={RelativeSource AncestorType=ContextMenu, Mode=FindAncestor}}"
+                    CommandParameter="{Binding}"
+                    Header="{ll:Str 删除图片}"
+                  />
+                </ContextMenu>
+              </Grid.ContextMenu>-->
+              <Image Width="150" Height="150" d:DataContext="" Source="{Binding Image}">
+                <Image.ToolTip>
+                  <Image Width="250" Height="250" Source="{Binding Image}" />
+                </Image.ToolTip>
+              </Image>
+              <Grid Grid.Row="1" ColumnDefinitions="Auto,*">
+                <Label
+                  FontSize="12"
+                  Height="25"
+                  Padding="5,0,5,0"
+                  VerticalContentAlignment="Center"
+                  Style="{DynamicResource ModMaker_LabelCenterStyle}"
+                  Content="{ll:Str 持续时间}"
+                />
+                <pu:NumberInput
+                  Height="25"
+                  Grid.Column="1"
+                  Style="{DynamicResource ModMaker_NumberInputBaseStyle}"
+                  IsSnapToIntervalEnabled="False"
+                  Value="{Binding Duration}"
+                />
+              </Grid>
+            </Grid>
+          </DataTemplate>
+        </ListBox.ItemTemplate>
+      </ListBox>
+    </Grid>
+    <!--<Grid Margin="0,5,0,0" Grid.Row="3" ColumnDefinitions="*,*">
+      <Button
+        x:Name="Button_Yes"
+        Width="200"
+        Click="Button_Yes_Click"
+        Content="{ll:Str 确定}"
+        Style="{StaticResource MyThemedButtonStyle}"
+      />
+      <Button
+        x:Name="Button_Cancel"
+        Grid.Column="1"
+        Width=" 200"
+        Click="Button_Cancel_Click"
+        Content="{ll:Str 取消}"
+        Style="{StaticResource Button_Cancel}"
+      />
+    </Grid>-->
+  </Grid>
+  <!--<Window.Resources>
     <Style
       x:Key="ListBoxItem_Style"
       BasedOn="{StaticResource {x:Type ListBoxItem}}"
@@ -101,7 +544,7 @@
           d:ItemsSource="{d:SampleData ItemCount=5}"
           AllowDrop="True"
           Drop="ListBox_Drop"
-          ItemsSource="{Binding Images, IsAsync=True}"
+          ItemsSource="{Binding Images}"
           PreviewMouseMove="ListBox_PreviewMouseMove"
           PreviewMouseWheel="ListBox_PreviewMouseWheel"
           ScrollViewer.HorizontalScrollBarVisibility="Auto"
@@ -147,10 +590,10 @@
                   Height="150"
                   d:DataContext=""
                   DataContext="{Binding DataContext, RelativeSource={RelativeSource AncestorType=ListBoxItem, Mode=FindAncestor}}"
-                  Source="{Binding Image, IsAsync=True}"
+                  Source="{Binding Image}"
                 >
                   <Image.ToolTip>
-                    <Image Width="250" Height="250" Source="{Binding Image, IsAsync=True}" />
+                    <Image Width="250" Height="250" Source="{Binding Image}" />
                   </Image.ToolTip>
                 </Image>
                 <Grid Grid.Row="1">
@@ -183,35 +626,6 @@
         <RowDefinition Height="Auto" />
         <RowDefinition />
       </Grid.RowDefinitions>
-      <Image Width="250" Height="250" Source="{Binding CurrentImageModel.Image}">
-        <Image.ToolTip>
-          <Image Width="500" Height="500" Source="{Binding CurrentImageModel.Image}" />
-        </Image.ToolTip>
-      </Image>
-      <Grid Grid.Row="1">
-        <Grid.ColumnDefinitions>
-          <ColumnDefinition />
-          <ColumnDefinition />
-          <ColumnDefinition />
-        </Grid.ColumnDefinitions>
-        <Button
-          Command="{Binding StopCommand}"
-          Content="{ll:Str 停止}"
-          Style="{StaticResource MyThemedButtonStyle}"
-        />
-        <Button
-          Grid.Column="1"
-          Command="{Binding StartCommand}"
-          Content="{ll:Str 播放}"
-          Style="{StaticResource MyThemedButtonStyle}"
-        />
-        <ToggleButton
-          Grid.Column="2"
-          Content="{ll:Str 循环}"
-          IsChecked="{Binding Loop}"
-          Style="{StaticResource StandardToggleButtonStyle}"
-        />
-      </Grid>
       <Grid Grid.Row="2">
         <Grid.ColumnDefinitions>
           <ColumnDefinition Width="Auto" />
@@ -221,8 +635,10 @@
           <RowDefinition Height="Auto" />
           <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
-        <!--<Label Content="{ll:Str 动画ID}" />
+        -->
+  <!--<Label Content="{ll:Str 动画ID}" />
         <TextBox Grid.Column="1" />-->
+  <!--
         <Label Content="{ll:Str 动画类型}" Style="{StaticResource ThemedLabelStyle}" />
         <TextBlock
           Grid.Column="1"
@@ -278,7 +694,7 @@
             d:SelectedIndex="0"
             ItemContainerStyle="{StaticResource ListBoxItem_Style}"
             ItemTemplate="{StaticResource Expander_AnimeItem}"
-            ItemsSource="{Binding Anime.HappyAnimes, IsAsync=True}"
+            ItemsSource="{Binding Anime.HappyAnimes}"
           />
         </TabItem>
         <TabItem d:Header="Nomal (0)" Tag="Nomal">
@@ -296,7 +712,7 @@
             d:SelectedIndex="0"
             ItemContainerStyle="{StaticResource ListBoxItem_Style}"
             ItemTemplate="{StaticResource Expander_AnimeItem}"
-            ItemsSource="{Binding Anime.NomalAnimes, IsAsync=True}"
+            ItemsSource="{Binding Anime.NomalAnimes}"
           />
         </TabItem>
         <TabItem d:Header="PoorCondition (0)" Tag="PoorCondition">
@@ -314,7 +730,7 @@
             d:SelectedIndex="0"
             ItemContainerStyle="{StaticResource ListBoxItem_Style}"
             ItemTemplate="{StaticResource Expander_AnimeItem}"
-            ItemsSource="{Binding Anime.PoorConditionAnimes, IsAsync=True}"
+            ItemsSource="{Binding Anime.PoorConditionAnimes}"
           />
         </TabItem>
         <TabItem d:Header="Ill (0)" Tag="Ill">
@@ -332,7 +748,7 @@
             d:SelectedIndex="0"
             ItemContainerStyle="{StaticResource ListBoxItem_Style}"
             ItemTemplate="{StaticResource Expander_AnimeItem}"
-            ItemsSource="{Binding Anime.IllAnimes, IsAsync=True}"
+            ItemsSource="{Binding Anime.IllAnimes}"
           />
         </TabItem>
       </TabControl>
@@ -367,5 +783,5 @@
         />
       </Grid>
     </Grid>
-  </Grid>
+  </Grid>-->
 </pu:WindowX>

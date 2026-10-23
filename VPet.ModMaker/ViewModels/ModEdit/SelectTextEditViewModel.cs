@@ -127,6 +127,7 @@ public partial class SelectTextEditViewModel
     public SelectTextModel SelectText { get; set; } = null!;
 
     public bool? DialogResult { get; set; }
+    public bool IsChanged { get; private set; }
 
     /// <summary>
     /// 添加
@@ -134,7 +135,9 @@ public partial class SelectTextEditViewModel
     [RelayCommand]
     private void Add()
     {
+        IsChanged = false;
         SelectText = new(ModInfo.TempI18nResource);
+        using var dis = SelectText.Changed.Subscribe(_ => IsChanged = true);
         var result = DialogService.ShowDialog(this, this);
         if (result is not true)
         {
@@ -167,10 +170,12 @@ public partial class SelectTextEditViewModel
     [RelayCommand]
     public void Edit(SelectTextModel model)
     {
+        IsChanged = false;
         OldSelectText = model;
         var newModel = new SelectTextModel(model, ModInfo.TempI18nResource);
         model.I18nResource.CopyDataTo(newModel.I18nResource, model.ID, model.ChooseID);
         SelectText = newModel;
+        using var dis = newModel.Changed.Subscribe(_ => IsChanged = true);
         var result = DialogService.ShowDialog(this, this);
         if (result is not true)
         {
@@ -243,6 +248,23 @@ public partial class SelectTextEditViewModel
 
     public void OnClosing(CancelEventArgs e)
     {
+        if (IsChanged)
+        {
+            var result = DialogService.ShowMessageBox(
+                this,
+                "编辑完成, 是否保存?".Translate(),
+                "编辑完成".Translate(),
+                MessageBoxButton.YesNoCancel,
+                MessageBoxImage.Information
+            );
+            if (result is null)
+            {
+                e.Cancel = true;
+                return;
+            }
+            DialogResult = result;
+        }
+
         if (DialogResult is not true)
             return;
         if (string.IsNullOrWhiteSpace(SelectText.ID))

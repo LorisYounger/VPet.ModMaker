@@ -51,14 +51,14 @@ public sealed partial class FoodAnimeModel
     public string ID { get; set; } = string.Empty;
 
     /// <summary>
-    /// 后图像列表
-    /// </summary>
-    public ObservableList<ImageModel> BackImages { get; set; } = [];
-
-    /// <summary>
     /// 前图像列表
     /// </summary>
     public ObservableList<ImageModel> FrontImages { get; set; } = [];
+
+    /// <summary>
+    /// 后图像列表
+    /// </summary>
+    public ObservableList<ImageModel> BackImages { get; set; } = [];
 
     /// <summary>
     /// 食物定位列表

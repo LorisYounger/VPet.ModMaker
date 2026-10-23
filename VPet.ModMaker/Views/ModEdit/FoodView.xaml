@@ -40,7 +40,7 @@
         Grid.Column="2"
         Command="{Binding SetReferencePriceForAllFoodCommand}"
         Content="{ll:Str 设置推荐价格}"
-        Style="{StaticResource MyThemedButtonStyle}"
+        Style="{StaticResource ModMaker_ButtonBaseStyle}"
       />
     </Grid>
     <DataGrid

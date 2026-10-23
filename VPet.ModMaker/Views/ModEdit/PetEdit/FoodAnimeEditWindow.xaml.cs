@@ -27,52 +27,9 @@ public partial class FoodAnimeEditWindow : WindowX
     /// </summary>
     public FoodAnimeEditViewModel ViewModel => (FoodAnimeEditViewModel)DataContext;
 
-    private void Button_Cancel_Click(object? sender, RoutedEventArgs e)
-    {
-        Close();
-    }
-
-    private void Button_Yes_Click(object? sender, RoutedEventArgs e)
-    {
-        ViewModel.DialogResult = true;
-        Close();
-    }
-
-    private void TabControl_SelectionChanged(object? sender, SelectionChangedEventArgs e)
-    {
-        if (ViewModel is null)
-            return;
-        if (
-            sender is not TabControl tabControl
-            || tabControl.SelectedItem is not TabItem item
-            || item.Tag is not string str
-        )
-            return;
-        if (Enum.TryParse<ModeType>(str, true, out var mode))
-        {
-            ViewModel.CurrentMode = mode;
-            ViewModel.CurrentFrontImage = null!;
-            ViewModel.CurrentBackImage = null!;
-            ViewModel.CurrentFoodLocation = null!;
-            ViewModel.CurrentAnimeModel = null!;
-        }
-    }
-
-    private void ListBox_PreviewMouseWheel(object? sender, MouseWheelEventArgs e)
-    {
-        var eventArg = new MouseWheelEventArgs(e.MouseDevice, e.Timestamp, e.Delta)
-        {
-            RoutedEvent = MouseWheelEvent,
-            Source = sender,
-        };
-        var parent = ((Control)sender!).Parent as UIElement;
-        parent!.RaiseEvent(eventArg);
-        e.Handled = true;
-    }
-
     private object _dropSender = null!;
 
-    private void ListBox_PreviewMouseMove(object? sender, MouseEventArgs e)
+    private void ListBox_Images_PreviewMouseMove(object? sender, MouseEventArgs e)
     {
         if (sender is not ListBox listBox)
             return;
@@ -90,20 +47,20 @@ public partial class FoodAnimeEditWindow : WindowX
         DragDrop.DoDragDrop(listBox, dataObj, DragDropEffects.Move);
     }
 
-    private void ListBox_Drop(object? sender, DragEventArgs e)
+    private void ListBox_Images_Drop(object? sender, DragEventArgs e)
     {
         if (sender is not ListBox listBox)
             return;
         if (e.Data.GetData(DataFormats.FileDrop) is Array array)
         {
-            if (listBox.Name == "ListBox_FrontImages")
+            if (listBox.Name == FrontImages.Name)
             {
                 ViewModel.AddImages(
                     ((FoodAnimeModel)listBox.DataContext).FrontImages,
                     array.Cast<string>()
                 );
             }
-            else if (listBox.Name == "ListBox_BackImages")
+            else if (listBox.Name == BackImages.Name)
             {
                 ViewModel.AddImages(
                     ((FoodAnimeModel)listBox.DataContext).BackImages,
@@ -113,7 +70,11 @@ public partial class FoodAnimeEditWindow : WindowX
         }
         if (_dropSender is not null && sender.Equals(_dropSender) is false)
         {
-            MessageBox.Show("无法移动不同动画的图片".Translate());
+            ViewModel.DialogService.ShowMessageBox(
+                ViewModel,
+                "无法移动不同动画的图片".Translate(),
+                icon: HanumanInstitute.MvvmDialogs.FrameworkDialogs.MessageBoxImage.Warning
+            );
             return;
         }
         var pos = e.GetPosition(listBox);
@@ -121,23 +82,41 @@ public partial class FoodAnimeEditWindow : WindowX
         if (result == null)
             return;
         //查找元数据
-        if (e.Data.GetData(typeof(ImageModel)) is not ImageModel sourcePerson)
-            return;
-        //查找目标数据
-        var listBoxItem = result.VisualHit.FindVisuaParent<ListBoxItem>();
-        if (listBoxItem == null)
-            return;
-        var targetPerson = (ImageModel)listBoxItem.Content;
-        if (ReferenceEquals(targetPerson, sourcePerson))
-            return;
-        if (listBox.ItemsSource is not IList<ImageModel> list)
-            return;
-        var sourceIndex = list.IndexOf(sourcePerson);
-        var targetIndex = list.IndexOf(targetPerson);
-        (list[targetIndex], list[sourceIndex]) = (list[sourceIndex], list[targetIndex]);
+        if (e.Data.GetData(typeof(ImageModel)) is ImageModel sourceImage)
+        {
+            //查找目标数据
+            var listBoxItem = result.VisualHit.FindVisuaParent<ListBoxItem>();
+            if (listBoxItem == null)
+                return;
+            var targetImage = (ImageModel)listBoxItem.Content;
+            if (ReferenceEquals(targetImage, sourceImage))
+                return;
+            if (listBox.ItemsSource is not IList<ImageModel> list)
+                return;
+            var sourceIndex = list.IndexOf(sourceImage);
+            var targetIndex = list.IndexOf(targetImage);
+            (list[targetIndex], list[sourceIndex]) = (list[sourceIndex], list[targetIndex]);
+        }
+        else if (
+            e.Data.GetData(typeof(FoodAnimeLocationModel)) is FoodAnimeLocationModel sourceLocation
+        )
+        {
+            //查找目标数据
+            var listBoxItem = result.VisualHit.FindVisuaParent<ListBoxItem>();
+            if (listBoxItem == null)
+                return;
+            var targetLocation = (FoodAnimeLocationModel)listBoxItem.Content;
+            if (ReferenceEquals(targetLocation, sourceLocation))
+                return;
+            if (listBox.ItemsSource is not IList<FoodAnimeLocationModel> list)
+                return;
+            var sourceIndex = list.IndexOf(sourceLocation);
+            var targetIndex = list.IndexOf(targetLocation);
+            (list[targetIndex], list[sourceIndex]) = (list[sourceIndex], list[targetIndex]);
+        }
     }
 
-    private void ListBox_SelectionChanged(object? sender, SelectionChangedEventArgs e)
+    private void ListBox_Images_SelectionChanged(object? sender, SelectionChangedEventArgs e)
     {
         if (sender is not ListBox listBox)
             return;
@@ -147,8 +126,34 @@ public partial class FoodAnimeEditWindow : WindowX
         e.Handled = true;
     }
 
-    private void ListBox_Animes_SelectionChanged(object? sender, SelectionChangedEventArgs e)
+    private void ListBox_ModeTypes_SelectionChanged(object sender, SelectionChangedEventArgs e)
     {
+        if (sender is not ListBox listBox)
+            throw new NotImplementedException();
+        if (listBox.SelectedItem is null)
+            return;
+    }
+
+    private void ButtonShowContextMenu_Click(object sender, RoutedEventArgs e)
+    {
+        var button = (Button)sender;
+        button.ContextMenu.PlacementTarget = button;
+        button.ContextMenu.IsOpen = true;
+    }
+
+    private void ListBox_HorizontalScrolling_PreviewMouseWheel(object sender, MouseWheelEventArgs e)
+    {
+        var listBox = (ListBox)sender;
+        var scrollViewer = listBox.FindVisualChild<ScrollViewer>();
+
+        if (scrollViewer == null || scrollViewer.ScrollableWidth <= 0)
+            return;
+
+        if (e.Delta < 0)
+            scrollViewer.LineRight();
+        else
+            scrollViewer.LineLeft();
+
         e.Handled = true;
     }
 }

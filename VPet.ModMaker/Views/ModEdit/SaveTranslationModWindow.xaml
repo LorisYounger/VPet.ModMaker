@@ -16,6 +16,7 @@
   pu:WindowXCaption.Buttons="Close"
   WindowStartupLocation="CenterScreen"
   mc:Ignorable="d"
+  Style="{DynamicResource WindowXStyle}"
 >
   <Grid>
     <Grid.RowDefinitions>
@@ -24,9 +25,13 @@
       <RowDefinition Height="Auto" />
     </Grid.RowDefinitions>
     <Label
+      VerticalContentAlignment="Center"
       HorizontalContentAlignment="Center"
       Content="{ll:Str 选择文化}"
-      Style="{StaticResource ThemedLabelStyle}"
+      FontSize="16"
+      Height="40"
+      FontWeight="Bold"
+      Style="{StaticResource ModMaker_LabelBaseStyle}"
     />
     <ListBox
       Grid.Row="1"
@@ -50,9 +55,10 @@
       <Button
         Grid.Column="1"
         Margin="10"
+        Width="300"
         Command="{Binding SaveCommand}"
         Content="{ll:Str 保存}"
-        Style="{StaticResource MyThemedButtonStyle}"
+        Style="{StaticResource  ModMaker_ButtonBaseStyle}"
       />
     </Grid>
   </Grid>

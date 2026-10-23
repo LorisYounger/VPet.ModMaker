@@ -121,6 +121,7 @@ public sealed partial class ClickTextEditViewModel
     [ObservableProperty]
     public ClickTextModel ClickText { get; set; } = null!;
     public bool? DialogResult { get; set; }
+    public bool IsChanged { get; private set; }
 
     /// <summary>
     /// 添加
@@ -128,7 +129,9 @@ public sealed partial class ClickTextEditViewModel
     [RelayCommand]
     private void Add()
     {
+        IsChanged = false;
         ClickText = new(ModInfo.TempI18nResource);
+        using var dis = ClickText.Changed.Subscribe(_ => IsChanged = true);
         var result = DialogService.ShowDialog(this, this);
         if (result is not true)
         {
@@ -151,10 +154,12 @@ public sealed partial class ClickTextEditViewModel
     [RelayCommand]
     public void Edit(ClickTextModel model)
     {
+        IsChanged = false;
         OldClickText = model;
         var newModel = new ClickTextModel(model, ModInfo.TempI18nResource);
         model.I18nResource.CopyDataTo(newModel.I18nResource, model.ID);
         ClickText = newModel;
+        using var dis = newModel.Changed.Subscribe(_ => IsChanged = true);
         var result = DialogService.ShowDialog(this, this);
         if (result is not true)
         {
@@ -224,6 +229,23 @@ public sealed partial class ClickTextEditViewModel
 
     public void OnClosing(CancelEventArgs e)
     {
+        if (IsChanged)
+        {
+            var result = DialogService.ShowMessageBox(
+                this,
+                "编辑完成, 是否保存?".Translate(),
+                "编辑完成".Translate(),
+                MessageBoxButton.YesNoCancel,
+                MessageBoxImage.Information
+            );
+            if (result is null)
+            {
+                e.Cancel = true;
+                return;
+            }
+            DialogResult = result;
+        }
+
         if (DialogResult is not true)
             return;
         if (string.IsNullOrWhiteSpace(ClickText.ID))

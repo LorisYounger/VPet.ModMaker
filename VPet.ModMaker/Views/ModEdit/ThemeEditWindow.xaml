@@ -13,11 +13,13 @@
   d:DataContext="{d:DesignInstance vm:ThemeEditViewModel}"
   Width="1280"
   Height="720"
+  MinWidth="800"
+  MinHeight="600"
   WindowStartupLocation="CenterScreen"
 >
-  <Grid ColumnDefinitions="*,Auto,Auto">
+  <Grid Margin="10" ColumnDefinitions="*,Auto,Auto">
     <Grid RowDefinitions="*,Auto">
-      <ScrollViewer Padding="10" Style="{DynamicResource ModMaker_ScrollViewerBaseStyle}">
+      <ScrollViewer Style="{DynamicResource ModMaker_ScrollViewerBaseStyle}">
         <StackPanel>
           <Border Height="40" Style="{DynamicResource ModMaker_BorderItem}">
             <Grid ColumnDefinitions="Auto,*">
@@ -27,7 +29,7 @@
                 HorizontalAlignment="Right"
                 Width="300"
                 Grid.Column="1"
-                Text="{Binding Theme.ID}"
+                Text="{Binding Theme.ID, UpdateSourceTrigger=PropertyChanged}"
               />
             </Grid>
           </Border>
@@ -42,7 +44,7 @@
                 HorizontalAlignment="Right"
                 Width="300"
                 Grid.Column="1"
-                Text="{Binding Theme.Name}"
+                Text="{Binding Theme.Name, UpdateSourceTrigger=PropertyChanged}"
               />
             </Grid>
           </Border>
@@ -371,25 +373,6 @@
           </Border>
         </StackPanel>
       </ScrollViewer>
-      <Grid Grid.Row="1" ColumnDefinitions="*,*">
-        <Button
-          x:Name="Button_Yes"
-          Margin="10"
-          Width="200"
-          Click="Button_Yes_Click"
-          Content="{ll:Str 确定}"
-          Style="{StaticResource MyThemedButtonStyle}"
-        />
-        <Button
-          x:Name="Button_Cancel"
-          Grid.Column="1"
-          Width="200"
-          Margin="10"
-          Click="Button_Cancel_Click"
-          Content="{ll:Str 取消}"
-          Style="{StaticResource Button_Cancel}"
-        />
-      </Grid>
     </Grid>
     <Border
       Margin="5,0,5,0"

@@ -1,4 +1,5 @@
 ﻿using System.Collections.Specialized;
+using System.ComponentModel;
 using System.IO;
 using System.Windows.Media.Imaging;
 using CommunityToolkit.Mvvm.ComponentModel;
@@ -22,7 +23,8 @@ namespace VPet.ModMaker.ViewModels;
 public sealed partial class FoodAnimeEditViewModel
     : ViewModelBase,
         IModalDialogViewModel,
-        IDisposable
+        IDisposable,
+        IViewClosing
 {
     /// <inheritdoc/>
     public FoodAnimeEditViewModel()
@@ -439,6 +441,29 @@ public sealed partial class FoodAnimeEditViewModel
         value.FoodLocations.Clear();
     }
     #endregion
+
+    public void OnClosing(CancelEventArgs e)
+    {
+        var result = DialogService.ShowMessageBox(
+            this,
+            "编辑完成, 是否保存?".Translate(),
+            "编辑完成".Translate(),
+            MessageBoxButton.YesNoCancel,
+            MessageBoxImage.Information
+        );
+        if (result is null)
+        {
+            e.Cancel = true;
+            return;
+        }
+        DialogResult = result;
+    }
+
+    public Task OnClosingAsync(CancelEventArgs e)
+    {
+        return Task.CompletedTask;
+    }
+
     #region Player
     private void Images_CollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
     {
@@ -450,7 +475,9 @@ public sealed partial class FoodAnimeEditViewModel
 
     private CancellationTokenSource _cts = new();
     private Task? _playTask;
-    private bool _playing;
+
+    [ObservableProperty]
+    public bool Playing { get; private set; }
     private bool _disposed;
 
     private static TaskCompletionSource<bool> NewResumeSignal() =>
@@ -463,7 +490,7 @@ public sealed partial class FoodAnimeEditViewModel
     {
         lock (_playLock)
         {
-            _playing = playing;
+            Playing = playing;
 
             if (playing)
             {
@@ -487,7 +514,7 @@ public sealed partial class FoodAnimeEditViewModel
 
             lock (_playLock)
             {
-                if (_playing)
+                if (Playing)
                     return;
 
                 waitTask = _resumeSignal.Task;

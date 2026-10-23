@@ -1,4 +1,5 @@
 ﻿using System.Collections.Specialized;
+using System.ComponentModel;
 using System.IO;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
@@ -16,7 +17,11 @@ namespace VPet.ModMaker.ViewModels;
 /// <summary>
 /// 动画编辑视图模型
 /// </summary>
-public sealed partial class AnimeEditViewModel : ViewModelBase, IModalDialogViewModel, IDisposable
+public sealed partial class AnimeEditViewModel
+    : ViewModelBase,
+        IModalDialogViewModel,
+        IDisposable,
+        IViewClosing
 {
     /// <inheritdoc/>
     public AnimeEditViewModel() { }
@@ -37,12 +42,6 @@ public sealed partial class AnimeEditViewModel : ViewModelBase, IModalDialogView
     public AnimeTypeModel Anime { get; set; } = null!;
 
     /// <summary>
-    /// 当前图像模型
-    /// </summary>
-    [ObservableProperty]
-    public ImageModel CurrentImageModel { get; set; } = null!;
-
-    /// <summary>
     /// 当前动画模型
     /// </summary>
     [ObservableProperty]
@@ -54,8 +53,17 @@ public sealed partial class AnimeEditViewModel : ViewModelBase, IModalDialogView
         if (oldValue is not null)
             oldValue.Images.CollectionChanged -= Images_CollectionChanged;
         if (newValue is not null)
+        {
             newValue.Images.CollectionChanged += Images_CollectionChanged;
+            CurrentImageModel = newValue.Images.FirstOrDefault()!;
+        }
     }
+
+    /// <summary>
+    /// 当前图像模型
+    /// </summary>
+    [ObservableProperty]
+    public ImageModel CurrentImageModel { get; set; } = null!;
 
     /// <summary>
     /// 当前模式
@@ -84,15 +92,15 @@ public sealed partial class AnimeEditViewModel : ViewModelBase, IModalDialogView
     /// 添加动画
     /// </summary>
     [RelayCommand]
-    private void AddAnime()
+    private void AddAnime(ModeType animeMode)
     {
-        if (CurrentMode is ModeType.Happy)
+        if (animeMode is ModeType.Happy)
             Anime.HappyAnimes.Add(new());
-        else if (CurrentMode is ModeType.Nomal)
+        else if (animeMode is ModeType.Nomal)
             Anime.NomalAnimes.Add(new());
-        else if (CurrentMode is ModeType.PoorCondition)
+        else if (animeMode is ModeType.PoorCondition)
             Anime.PoorConditionAnimes.Add(new());
-        else if (CurrentMode is ModeType.Ill)
+        else if (animeMode is ModeType.Ill)
             Anime.IllAnimes.Add(new());
     }
 
@@ -248,6 +256,55 @@ public sealed partial class AnimeEditViewModel : ViewModelBase, IModalDialogView
             );
         }
     }
+
+    public void OnClosing(CancelEventArgs e)
+    {
+        var result = DialogService.ShowMessageBox(
+            this,
+            "编辑完成, 是否保存?".Translate(),
+            "编辑完成".Translate(),
+            MessageBoxButton.YesNoCancel,
+            MessageBoxImage.Information
+        );
+        if (result is null)
+        {
+            e.Cancel = true;
+            return;
+        }
+        DialogResult = result;
+    }
+
+    public Task OnClosingAsync(CancelEventArgs e)
+    {
+        return Task.CompletedTask;
+    }
+
+    public void Dispose()
+    {
+        if (_disposed)
+            return;
+
+        _disposed = true;
+        SetPlaying(false);
+
+        var cts = _cts;
+        cts.Cancel();
+
+        if (_playTask is { } task)
+        {
+            _ = task.ContinueWith(
+                _ => cts.Dispose(),
+                CancellationToken.None,
+                TaskContinuationOptions.ExecuteSynchronously,
+                TaskScheduler.Default
+            );
+        }
+        else
+        {
+            cts.Dispose();
+        }
+    }
+
     #endregion
     #region Player
 
@@ -261,7 +318,9 @@ public sealed partial class AnimeEditViewModel : ViewModelBase, IModalDialogView
 
     private CancellationTokenSource _cts = new();
     private Task? _playTask;
-    private bool _playing;
+
+    [ObservableProperty]
+    public bool Playing { get; private set; }
     private bool _disposed;
 
     private static TaskCompletionSource<bool> NewResumeSignal() =>
@@ -274,7 +333,7 @@ public sealed partial class AnimeEditViewModel : ViewModelBase, IModalDialogView
     {
         lock (_playLock)
         {
-            _playing = playing;
+            Playing = playing;
 
             if (playing)
             {
@@ -298,7 +357,7 @@ public sealed partial class AnimeEditViewModel : ViewModelBase, IModalDialogView
 
             lock (_playLock)
             {
-                if (_playing)
+                if (Playing)
                     return;
 
                 waitTask = _resumeSignal.Task;
@@ -405,30 +464,5 @@ public sealed partial class AnimeEditViewModel : ViewModelBase, IModalDialogView
         _playTask = null;
     }
 
-    public void Dispose()
-    {
-        if (_disposed)
-            return;
-
-        _disposed = true;
-        SetPlaying(false);
-
-        var cts = _cts;
-        cts.Cancel();
-
-        if (_playTask is { } task)
-        {
-            _ = task.ContinueWith(
-                _ => cts.Dispose(),
-                CancellationToken.None,
-                TaskContinuationOptions.ExecuteSynchronously,
-                TaskScheduler.Default
-            );
-        }
-        else
-        {
-            cts.Dispose();
-        }
-    }
     #endregion
 }

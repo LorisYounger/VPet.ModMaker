@@ -117,6 +117,7 @@ public partial class LowTextEditViewModel
     [ObservableProperty]
     public LowTextModel LowText { get; set; } = null!;
     public bool? DialogResult { get; set; }
+    public bool IsChanged { get; private set; }
 
     /// <summary>
     /// 添加
@@ -124,7 +125,9 @@ public partial class LowTextEditViewModel
     [RelayCommand]
     private void Add()
     {
+        IsChanged = false;
         LowText = new(ModInfo.TempI18nResource);
+        using var dis = LowText.Changed.Subscribe(_ => IsChanged = true);
         var result = DialogService.ShowDialog(this, this);
         if (result is not true)
         {
@@ -157,10 +160,12 @@ public partial class LowTextEditViewModel
     [RelayCommand]
     public void Edit(LowTextModel model)
     {
+        IsChanged = false;
         OldLowText = model;
         var newModel = new LowTextModel(model, ModInfo.TempI18nResource);
         model.I18nResource.CopyDataTo(newModel.I18nResource, model.ID);
         LowText = newModel;
+        using var dis = newModel.Changed.Subscribe(_ => IsChanged = true);
         var result = DialogService.ShowDialog(this, this);
         if (result is not true)
         {
@@ -229,6 +234,23 @@ public partial class LowTextEditViewModel
 
     public void OnClosing(CancelEventArgs e)
     {
+        if (IsChanged)
+        {
+            var result = DialogService.ShowMessageBox(
+                this,
+                "编辑完成, 是否保存?".Translate(),
+                "编辑完成".Translate(),
+                MessageBoxButton.YesNoCancel,
+                MessageBoxImage.Information
+            );
+            if (result is null)
+            {
+                e.Cancel = true;
+                return;
+            }
+            DialogResult = result;
+        }
+
         if (DialogResult is not true)
             return;
         if (string.IsNullOrWhiteSpace(LowText.ID))

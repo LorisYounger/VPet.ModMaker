@@ -110,13 +110,17 @@ public sealed partial class ThemeEditViewModel
     public ThemeModel Theme { get; set; } = null!;
     public bool? DialogResult { get; set; }
 
+    public bool IsChanged { get; private set; }
+
     /// <summary>
     /// 添加
     /// </summary>
     [RelayCommand]
     private void Add()
     {
+        IsChanged = false;
         Theme = new(ModInfo.TempI18nResource);
+        using var dis = Theme.Changed.Subscribe(_ => IsChanged = true);
         var result = DialogService.ShowDialog(this, this);
         if (result is not true)
         {
@@ -139,10 +143,12 @@ public sealed partial class ThemeEditViewModel
     [RelayCommand]
     public void Edit(ThemeModel model)
     {
+        IsChanged = false;
         OldTheme = model;
         var newModel = new ThemeModel(model, ModInfo.TempI18nResource);
         model.I18nResource.CopyDataTo(newModel.I18nResource, model.ID);
         Theme = newModel;
+        using var dis = newModel.Changed.Subscribe(_ => IsChanged = true);
         var result = DialogService.ShowDialog(this, this);
         if (result is not true)
         {
@@ -208,6 +214,23 @@ public sealed partial class ThemeEditViewModel
 
     public void OnClosing(CancelEventArgs e)
     {
+        if (IsChanged)
+        {
+            var result = DialogService.ShowMessageBox(
+                this,
+                "编辑完成, 是否保存?".Translate(),
+                "编辑完成".Translate(),
+                MessageBoxButton.YesNoCancel,
+                MessageBoxImage.Information
+            );
+            if (result is null)
+            {
+                e.Cancel = true;
+                return;
+            }
+            DialogResult = result;
+        }
+
         if (DialogResult is not true)
             return;
         if (string.IsNullOrWhiteSpace(Theme.ID))

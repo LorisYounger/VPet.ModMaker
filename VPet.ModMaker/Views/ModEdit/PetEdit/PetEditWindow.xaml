@@ -12,8 +12,10 @@
   Title="{ll:Str 编辑宠物}"
   Width="1280"
   Height="720"
+  MinWidth="800"
+  MinHeight="600"
   d:DataContext="{d:DesignInstance Type=vm:PetEditViewModel}"
-  d:Height="2000"
+  d:Height="1000"
   d:Width="800"
   WindowStartupLocation="CenterScreen"
   Style="{DynamicResource WindowXStyle}"
@@ -58,395 +60,10 @@
     </Grid.ColumnDefinitions>
     <Grid>
       <Grid.RowDefinitions>
-        <RowDefinition Height="Auto" />
         <RowDefinition Height="*" />
         <RowDefinition Height="Auto" />
       </Grid.RowDefinitions>
-      <Expander Style="{DynamicResource ModMaker_ExpanderBaseStyle}" Header="{ll:Str 测试图片}">
-        <Border Style="{DynamicResource ModMaker_BorderItem}">
-          <Border
-            BorderBrush="{DynamicResource DARKPrimaryLight}"
-            BorderThickness="1.5"
-            CornerRadius="4"
-            HorizontalAlignment="Center"
-            Background="Transparent"
-          >
-            <Border.ContextMenu>
-              <ContextMenu>
-                <MenuItem Command="{Binding ChangeImageCommand}" Header="{ll:Str 修改测试图片}" />
-              </ContextMenu>
-            </Border.ContextMenu>
-            <Grid Margin="2">
-              <Image Width="250" Height="250" Source="{Binding Image}" Stretch="Uniform" />
-              <Grid>
-                <Label
-                  Content="{ll:Str 头部触碰范围}"
-                  Tag="{Binding IsChecked, ElementName=ToggleButton_TouchHead}"
-                >
-                  <Label.Style>
-                    <Style
-                      BasedOn="{StaticResource Label_ThouchRectangleLocation}"
-                      TargetType="Label"
-                    >
-                      <Setter Property="Width">
-                        <Setter.Value>
-                          <MultiBinding
-                            Converter="{StaticResource DoubleCalculatorConverter}"
-                            ConverterParameter="*"
-                          >
-                            <Binding Path="Pet.TouchHeadRectangleLocation.Width" />
-                            <Binding Path="LengthRatio" />
-                          </MultiBinding>
-                        </Setter.Value>
-                      </Setter>
-                      <Setter Property="Height">
-                        <Setter.Value>
-                          <MultiBinding
-                            Converter="{StaticResource DoubleCalculatorConverter}"
-                            ConverterParameter="*"
-                          >
-                            <Binding Path="Pet.TouchHeadRectangleLocation.Height" />
-                            <Binding Path="LengthRatio" />
-                          </MultiBinding>
-                        </Setter.Value>
-                      </Setter>
-                      <Setter Property="Margin">
-                        <Setter.Value>
-                          <MultiBinding Converter="{StaticResource RatioMarginConverter}">
-                            <Binding Path="LengthRatio" />
-                            <Binding Path="Pet.TouchHeadRectangleLocation.X" />
-                            <Binding Path="Pet.TouchHeadRectangleLocation.Y" />
-                          </MultiBinding>
-                        </Setter.Value>
-                      </Setter>
-                    </Style>
-                  </Label.Style>
-                </Label>
-                <Label
-                  Content="{ll:Str 身体触碰范围}"
-                  Tag="{Binding IsChecked, ElementName=ToggleButton_TouchBody}"
-                >
-                  <Label.Style>
-                    <Style
-                      BasedOn="{StaticResource Label_ThouchRectangleLocation}"
-                      TargetType="Label"
-                    >
-                      <Setter Property="Width">
-                        <Setter.Value>
-                          <MultiBinding
-                            Converter="{StaticResource DoubleCalculatorConverter}"
-                            ConverterParameter="*"
-                          >
-                            <Binding Path="Pet.TouchBodyRectangleLocation.Width" />
-                            <Binding Path="LengthRatio" />
-                          </MultiBinding>
-                        </Setter.Value>
-                      </Setter>
-                      <Setter Property="Height">
-                        <Setter.Value>
-                          <MultiBinding
-                            Converter="{StaticResource DoubleCalculatorConverter}"
-                            ConverterParameter="*"
-                          >
-                            <Binding Path="Pet.TouchBodyRectangleLocation.Height" />
-                            <Binding Path="LengthRatio" />
-                          </MultiBinding>
-                        </Setter.Value>
-                      </Setter>
-                      <Setter Property="Margin">
-                        <Setter.Value>
-                          <MultiBinding Converter="{StaticResource RatioMarginConverter}">
-                            <Binding Path="LengthRatio" />
-                            <Binding Path="Pet.TouchBodyRectangleLocation.X" />
-                            <Binding Path="Pet.TouchBodyRectangleLocation.Y" />
-                          </MultiBinding>
-                        </Setter.Value>
-                      </Setter>
-                    </Style>
-                  </Label.Style>
-                </Label>
-                <Label
-                  Content="{ll:Str 开心状态提起范围}"
-                  Tag="{Binding IsChecked, ElementName=ToggleButton_TouchRaisedRectangleLocation_HappyState}"
-                >
-                  <Label.Style>
-                    <Style
-                      BasedOn="{StaticResource Label_ThouchRectangleLocation}"
-                      TargetType="Label"
-                    >
-                      <Setter Property="Width">
-                        <Setter.Value>
-                          <MultiBinding
-                            Converter="{StaticResource DoubleCalculatorConverter}"
-                            ConverterParameter="*"
-                          >
-                            <Binding Path="Pet.TouchRaisedRectangleLocation.Happy.Width" />
-                            <Binding Path="LengthRatio" />
-                          </MultiBinding>
-                        </Setter.Value>
-                      </Setter>
-                      <Setter Property="Height">
-                        <Setter.Value>
-                          <MultiBinding
-                            Converter="{StaticResource DoubleCalculatorConverter}"
-                            ConverterParameter="*"
-                          >
-                            <Binding Path="Pet.TouchRaisedRectangleLocation.Happy.Height" />
-                            <Binding Path="LengthRatio" />
-                          </MultiBinding>
-                        </Setter.Value>
-                      </Setter>
-                      <Setter Property="Margin">
-                        <Setter.Value>
-                          <MultiBinding Converter="{StaticResource RatioMarginConverter}">
-                            <Binding Path="LengthRatio" />
-                            <Binding Path="Pet.TouchRaisedRectangleLocation.Happy.X" />
-                            <Binding Path="Pet.TouchRaisedRectangleLocation.Happy.Y" />
-                          </MultiBinding>
-                        </Setter.Value>
-                      </Setter>
-                    </Style>
-                  </Label.Style>
-                </Label>
-                <Label
-                  Content="{ll:Str 普通状态提起范围}"
-                  Tag="{Binding IsChecked, ElementName=ToggleButton_TouchRaisedRectangleLocation_NomalState}"
-                >
-                  <Label.Style>
-                    <Style
-                      BasedOn="{StaticResource Label_ThouchRectangleLocation}"
-                      TargetType="Label"
-                    >
-                      <Setter Property="Width">
-                        <Setter.Value>
-                          <MultiBinding
-                            Converter="{StaticResource DoubleCalculatorConverter}"
-                            ConverterParameter="*"
-                          >
-                            <Binding Path="Pet.TouchRaisedRectangleLocation.Nomal.Width" />
-                            <Binding Path="LengthRatio" />
-                          </MultiBinding>
-                        </Setter.Value>
-                      </Setter>
-                      <Setter Property="Height">
-                        <Setter.Value>
-                          <MultiBinding
-                            Converter="{StaticResource DoubleCalculatorConverter}"
-                            ConverterParameter="*"
-                          >
-                            <Binding Path="Pet.TouchRaisedRectangleLocation.Nomal.Height" />
-                            <Binding Path="LengthRatio" />
-                          </MultiBinding>
-                        </Setter.Value>
-                      </Setter>
-                      <Setter Property="Margin">
-                        <Setter.Value>
-                          <MultiBinding Converter="{StaticResource RatioMarginConverter}">
-                            <Binding Path="LengthRatio" />
-                            <Binding Path="Pet.TouchRaisedRectangleLocation.Nomal.X" />
-                            <Binding Path="Pet.TouchRaisedRectangleLocation.Nomal.Y" />
-                          </MultiBinding>
-                        </Setter.Value>
-                      </Setter>
-                    </Style>
-                  </Label.Style>
-                </Label>
-                <Label
-                  Content="{ll:Str 低状态提起范围}"
-                  Tag="{Binding IsChecked, ElementName=ToggleButton_TouchRaisedRectangleLocation_PoorConditionState}"
-                >
-                  <Label.Style>
-                    <Style
-                      BasedOn="{StaticResource Label_ThouchRectangleLocation}"
-                      TargetType="Label"
-                    >
-                      <Setter Property="Width">
-                        <Setter.Value>
-                          <MultiBinding
-                            Converter="{StaticResource DoubleCalculatorConverter}"
-                            ConverterParameter="*"
-                          >
-                            <Binding Path="Pet.TouchRaisedRectangleLocation.PoorCondition.Width" />
-                            <Binding Path="LengthRatio" />
-                          </MultiBinding>
-                        </Setter.Value>
-                      </Setter>
-                      <Setter Property="Height">
-                        <Setter.Value>
-                          <MultiBinding
-                            Converter="{StaticResource DoubleCalculatorConverter}"
-                            ConverterParameter="*"
-                          >
-                            <Binding Path="Pet.TouchRaisedRectangleLocation.PoorCondition.Height" />
-                            <Binding Path="LengthRatio" />
-                          </MultiBinding>
-                        </Setter.Value>
-                      </Setter>
-                      <Setter Property="Margin">
-                        <Setter.Value>
-                          <MultiBinding Converter="{StaticResource RatioMarginConverter}">
-                            <Binding Path="LengthRatio" />
-                            <Binding Path="Pet.TouchRaisedRectangleLocation.PoorCondition.X" />
-                            <Binding Path="Pet.TouchRaisedRectangleLocation.PoorCondition.Y" />
-                          </MultiBinding>
-                        </Setter.Value>
-                      </Setter>
-                    </Style>
-                  </Label.Style>
-                </Label>
-                <Label
-                  Content="{ll:Str 生病状态提起范围}"
-                  Tag="{Binding IsChecked, ElementName=ToggleButton_TouchRaisedRectangleLocation_IllState}"
-                >
-                  <Label.Style>
-                    <Style
-                      BasedOn="{StaticResource Label_ThouchRectangleLocation}"
-                      TargetType="Label"
-                    >
-                      <Setter Property="Width">
-                        <Setter.Value>
-                          <MultiBinding
-                            Converter="{StaticResource DoubleCalculatorConverter}"
-                            ConverterParameter="*"
-                          >
-                            <Binding Path="Pet.TouchRaisedRectangleLocation.Ill.Width" />
-                            <Binding Path="LengthRatio" />
-                          </MultiBinding>
-                        </Setter.Value>
-                      </Setter>
-                      <Setter Property="Height">
-                        <Setter.Value>
-                          <MultiBinding
-                            Converter="{StaticResource DoubleCalculatorConverter}"
-                            ConverterParameter="*"
-                          >
-                            <Binding Path="Pet.TouchRaisedRectangleLocation.Ill.Height" />
-                            <Binding Path="LengthRatio" />
-                          </MultiBinding>
-                        </Setter.Value>
-                      </Setter>
-                      <Setter Property="Margin">
-                        <Setter.Value>
-                          <MultiBinding Converter="{StaticResource RatioMarginConverter}">
-                            <Binding Path="LengthRatio" />
-                            <Binding Path="Pet.TouchRaisedRectangleLocation.Ill.X" />
-                            <Binding Path="Pet.TouchRaisedRectangleLocation.Ill.Y" />
-                          </MultiBinding>
-                        </Setter.Value>
-                      </Setter>
-                    </Style>
-                  </Label.Style>
-                </Label>
-                <Label
-                  Width="5"
-                  Height="5"
-                  Background="Red"
-                  Content="{ll:Str 开心状态提起点位}"
-                  Tag="{Binding IsChecked, ElementName=ToggleButton_RaisePoint_Happy}"
-                >
-                  <Label.Style>
-                    <Style
-                      BasedOn="{StaticResource Label_ThouchRectangleLocation}"
-                      TargetType="Label"
-                    >
-                      <Setter Property="Margin">
-                        <Setter.Value>
-                          <MultiBinding Converter="{StaticResource RatioMarginConverter}">
-                            <Binding Path="LengthRatio" />
-                            <Binding Path="Pet.RaisePoint.Happy.X" />
-                            <Binding Path="Pet.RaisePoint.Happy.Y" />
-                          </MultiBinding>
-                        </Setter.Value>
-                      </Setter>
-                    </Style>
-                  </Label.Style>
-                </Label>
-                <Label
-                  Width="5"
-                  Height="5"
-                  Background="Red"
-                  Content="{ll:Str 普通状态提起点位}"
-                  Tag="{Binding IsChecked, ElementName=ToggleButton_RaisePoint_Nomal}"
-                >
-                  <Label.Style>
-                    <Style
-                      BasedOn="{StaticResource Label_ThouchRectangleLocation}"
-                      TargetType="Label"
-                    >
-                      <Setter Property="Margin">
-                        <Setter.Value>
-                          <MultiBinding Converter="{StaticResource RatioMarginConverter}">
-                            <Binding Path="LengthRatio" />
-                            <Binding Path="Pet.RaisePoint.Nomal.X" />
-                            <Binding Path="Pet.RaisePoint.Nomal.Y" />
-                          </MultiBinding>
-                        </Setter.Value>
-                      </Setter>
-                    </Style>
-                  </Label.Style>
-                </Label>
-                <Label
-                  Width="5"
-                  Height="5"
-                  Background="Red"
-                  Content="{ll:Str 低状态提起点位}"
-                  Tag="{Binding IsChecked, ElementName=ToggleButton_RaisePoint_PoorCondition}"
-                >
-                  <Label.Style>
-                    <Style
-                      BasedOn="{StaticResource Label_ThouchRectangleLocation}"
-                      TargetType="Label"
-                    >
-                      <Setter Property="Margin">
-                        <Setter.Value>
-                          <MultiBinding Converter="{StaticResource RatioMarginConverter}">
-                            <Binding Path="LengthRatio" />
-                            <Binding Path="Pet.RaisePoint.PoorCondition.X" />
-                            <Binding Path="Pet.RaisePoint.PoorCondition.Y" />
-                          </MultiBinding>
-                        </Setter.Value>
-                      </Setter>
-                    </Style>
-                  </Label.Style>
-                </Label>
-                <Label
-                  Width="5"
-                  Height="5"
-                  Background="Red"
-                  Content="{ll:Str 生病状态提起点位}"
-                  Tag="{Binding IsChecked, ElementName=ToggleButton_RaisePoint_Ill}"
-                >
-                  <Label.Style>
-                    <Style
-                      BasedOn="{StaticResource Label_ThouchRectangleLocation}"
-                      TargetType="Label"
-                    >
-                      <Setter Property="Margin">
-                        <Setter.Value>
-                          <MultiBinding Converter="{StaticResource RatioMarginConverter}">
-                            <Binding Path="LengthRatio" />
-                            <Binding Path="Pet.RaisePoint.Ill.X" />
-                            <Binding Path="Pet.RaisePoint.Ill.Y" />
-                          </MultiBinding>
-                        </Setter.Value>
-                      </Setter>
-                    </Style>
-                  </Label.Style>
-                </Label>
-              </Grid>
-              <Button
-                HorizontalAlignment="Center"
-                VerticalAlignment="Center"
-                Command="{Binding ChangeImageCommand}"
-                Content="{ll:Str 添加测试图片}"
-                Style="{DynamicResource ModMaker_ButtonBaseStyle}"
-                Visibility="{Binding Image, Converter={StaticResource NullToVisibleConverter}}"
-              />
-            </Grid>
-          </Border>
-        </Border>
-      </Expander>
-      <ScrollViewer Grid.Row="1" Style="{DynamicResource ModMaker_ScrollViewerBaseStyle}">
+      <ScrollViewer Style="{DynamicResource ModMaker_ScrollViewerBaseStyle}">
         <StackPanel>
           <Border Height="40" Style="{DynamicResource ModMaker_BorderItem}">
             <Grid ColumnDefinitions="Auto,*">
@@ -1165,25 +782,357 @@
           </GroupBox>
         </StackPanel>
       </ScrollViewer>
-      <Grid Grid.Row="2" ColumnDefinitions="*,*">
-        <Button
-          x:Name="Button_Yes"
-          Margin="10"
-          Width="200"
-          Click="Button_Yes_Click"
-          Content="{ll:Str 确定}"
-          Style="{StaticResource MyThemedButtonStyle}"
-        />
-        <Button
-          x:Name="Button_Cancel"
-          Grid.Column="1"
-          Margin="10"
-          Width="200"
-          Click="Button_Cancel_Click"
-          Content="{ll:Str 取消}"
-          Style="{StaticResource Button_Cancel}"
-        />
-      </Grid>
+      <Expander
+        Margin="5"
+        Header="{ll:Str 测试图片}"
+        VerticalAlignment="Top"
+        Width="255"
+        d:IsExpanded="True"
+        Style="{DynamicResource ModMaker_ExpanderBaseStyle}"
+      >
+        <Grid HorizontalAlignment="Center" VerticalAlignment="Center" Background="Transparent">
+          <Grid.ContextMenu>
+            <ContextMenu>
+              <MenuItem Command="{Binding ChangeImageCommand}" Header="{ll:Str 修改测试图片}" />
+            </ContextMenu>
+          </Grid.ContextMenu>
+          <Image Width="250" Height="250" Source="{Binding Image}" Stretch="Uniform" />
+          <Grid>
+            <Label
+              Content="{ll:Str 头部触碰范围}"
+              Tag="{Binding IsChecked, ElementName=ToggleButton_TouchHead}"
+            >
+              <Label.Style>
+                <Style BasedOn="{StaticResource Label_ThouchRectangleLocation}" TargetType="Label">
+                  <Setter Property="Width">
+                    <Setter.Value>
+                      <MultiBinding
+                        Converter="{StaticResource DoubleCalculatorConverter}"
+                        ConverterParameter="*"
+                      >
+                        <Binding Path="Pet.TouchHeadRectangleLocation.Width" />
+                        <Binding Path="LengthRatio" />
+                      </MultiBinding>
+                    </Setter.Value>
+                  </Setter>
+                  <Setter Property="Height">
+                    <Setter.Value>
+                      <MultiBinding
+                        Converter="{StaticResource DoubleCalculatorConverter}"
+                        ConverterParameter="*"
+                      >
+                        <Binding Path="Pet.TouchHeadRectangleLocation.Height" />
+                        <Binding Path="LengthRatio" />
+                      </MultiBinding>
+                    </Setter.Value>
+                  </Setter>
+                  <Setter Property="Margin">
+                    <Setter.Value>
+                      <MultiBinding Converter="{StaticResource RatioMarginConverter}">
+                        <Binding Path="LengthRatio" />
+                        <Binding Path="Pet.TouchHeadRectangleLocation.X" />
+                        <Binding Path="Pet.TouchHeadRectangleLocation.Y" />
+                      </MultiBinding>
+                    </Setter.Value>
+                  </Setter>
+                </Style>
+              </Label.Style>
+            </Label>
+            <Label
+              Content="{ll:Str 身体触碰范围}"
+              Tag="{Binding IsChecked, ElementName=ToggleButton_TouchBody}"
+            >
+              <Label.Style>
+                <Style BasedOn="{StaticResource Label_ThouchRectangleLocation}" TargetType="Label">
+                  <Setter Property="Width">
+                    <Setter.Value>
+                      <MultiBinding
+                        Converter="{StaticResource DoubleCalculatorConverter}"
+                        ConverterParameter="*"
+                      >
+                        <Binding Path="Pet.TouchBodyRectangleLocation.Width" />
+                        <Binding Path="LengthRatio" />
+                      </MultiBinding>
+                    </Setter.Value>
+                  </Setter>
+                  <Setter Property="Height">
+                    <Setter.Value>
+                      <MultiBinding
+                        Converter="{StaticResource DoubleCalculatorConverter}"
+                        ConverterParameter="*"
+                      >
+                        <Binding Path="Pet.TouchBodyRectangleLocation.Height" />
+                        <Binding Path="LengthRatio" />
+                      </MultiBinding>
+                    </Setter.Value>
+                  </Setter>
+                  <Setter Property="Margin">
+                    <Setter.Value>
+                      <MultiBinding Converter="{StaticResource RatioMarginConverter}">
+                        <Binding Path="LengthRatio" />
+                        <Binding Path="Pet.TouchBodyRectangleLocation.X" />
+                        <Binding Path="Pet.TouchBodyRectangleLocation.Y" />
+                      </MultiBinding>
+                    </Setter.Value>
+                  </Setter>
+                </Style>
+              </Label.Style>
+            </Label>
+            <Label
+              Content="{ll:Str 开心状态提起范围}"
+              Tag="{Binding IsChecked, ElementName=ToggleButton_TouchRaisedRectangleLocation_HappyState}"
+            >
+              <Label.Style>
+                <Style BasedOn="{StaticResource Label_ThouchRectangleLocation}" TargetType="Label">
+                  <Setter Property="Width">
+                    <Setter.Value>
+                      <MultiBinding
+                        Converter="{StaticResource DoubleCalculatorConverter}"
+                        ConverterParameter="*"
+                      >
+                        <Binding Path="Pet.TouchRaisedRectangleLocation.Happy.Width" />
+                        <Binding Path="LengthRatio" />
+                      </MultiBinding>
+                    </Setter.Value>
+                  </Setter>
+                  <Setter Property="Height">
+                    <Setter.Value>
+                      <MultiBinding
+                        Converter="{StaticResource DoubleCalculatorConverter}"
+                        ConverterParameter="*"
+                      >
+                        <Binding Path="Pet.TouchRaisedRectangleLocation.Happy.Height" />
+                        <Binding Path="LengthRatio" />
+                      </MultiBinding>
+                    </Setter.Value>
+                  </Setter>
+                  <Setter Property="Margin">
+                    <Setter.Value>
+                      <MultiBinding Converter="{StaticResource RatioMarginConverter}">
+                        <Binding Path="LengthRatio" />
+                        <Binding Path="Pet.TouchRaisedRectangleLocation.Happy.X" />
+                        <Binding Path="Pet.TouchRaisedRectangleLocation.Happy.Y" />
+                      </MultiBinding>
+                    </Setter.Value>
+                  </Setter>
+                </Style>
+              </Label.Style>
+            </Label>
+            <Label
+              Content="{ll:Str 普通状态提起范围}"
+              Tag="{Binding IsChecked, ElementName=ToggleButton_TouchRaisedRectangleLocation_NomalState}"
+            >
+              <Label.Style>
+                <Style BasedOn="{StaticResource Label_ThouchRectangleLocation}" TargetType="Label">
+                  <Setter Property="Width">
+                    <Setter.Value>
+                      <MultiBinding
+                        Converter="{StaticResource DoubleCalculatorConverter}"
+                        ConverterParameter="*"
+                      >
+                        <Binding Path="Pet.TouchRaisedRectangleLocation.Nomal.Width" />
+                        <Binding Path="LengthRatio" />
+                      </MultiBinding>
+                    </Setter.Value>
+                  </Setter>
+                  <Setter Property="Height">
+                    <Setter.Value>
+                      <MultiBinding
+                        Converter="{StaticResource DoubleCalculatorConverter}"
+                        ConverterParameter="*"
+                      >
+                        <Binding Path="Pet.TouchRaisedRectangleLocation.Nomal.Height" />
+                        <Binding Path="LengthRatio" />
+                      </MultiBinding>
+                    </Setter.Value>
+                  </Setter>
+                  <Setter Property="Margin">
+                    <Setter.Value>
+                      <MultiBinding Converter="{StaticResource RatioMarginConverter}">
+                        <Binding Path="LengthRatio" />
+                        <Binding Path="Pet.TouchRaisedRectangleLocation.Nomal.X" />
+                        <Binding Path="Pet.TouchRaisedRectangleLocation.Nomal.Y" />
+                      </MultiBinding>
+                    </Setter.Value>
+                  </Setter>
+                </Style>
+              </Label.Style>
+            </Label>
+            <Label
+              Content="{ll:Str 低状态提起范围}"
+              Tag="{Binding IsChecked, ElementName=ToggleButton_TouchRaisedRectangleLocation_PoorConditionState}"
+            >
+              <Label.Style>
+                <Style BasedOn="{StaticResource Label_ThouchRectangleLocation}" TargetType="Label">
+                  <Setter Property="Width">
+                    <Setter.Value>
+                      <MultiBinding
+                        Converter="{StaticResource DoubleCalculatorConverter}"
+                        ConverterParameter="*"
+                      >
+                        <Binding Path="Pet.TouchRaisedRectangleLocation.PoorCondition.Width" />
+                        <Binding Path="LengthRatio" />
+                      </MultiBinding>
+                    </Setter.Value>
+                  </Setter>
+                  <Setter Property="Height">
+                    <Setter.Value>
+                      <MultiBinding
+                        Converter="{StaticResource DoubleCalculatorConverter}"
+                        ConverterParameter="*"
+                      >
+                        <Binding Path="Pet.TouchRaisedRectangleLocation.PoorCondition.Height" />
+                        <Binding Path="LengthRatio" />
+                      </MultiBinding>
+                    </Setter.Value>
+                  </Setter>
+                  <Setter Property="Margin">
+                    <Setter.Value>
+                      <MultiBinding Converter="{StaticResource RatioMarginConverter}">
+                        <Binding Path="LengthRatio" />
+                        <Binding Path="Pet.TouchRaisedRectangleLocation.PoorCondition.X" />
+                        <Binding Path="Pet.TouchRaisedRectangleLocation.PoorCondition.Y" />
+                      </MultiBinding>
+                    </Setter.Value>
+                  </Setter>
+                </Style>
+              </Label.Style>
+            </Label>
+            <Label
+              Content="{ll:Str 生病状态提起范围}"
+              Tag="{Binding IsChecked, ElementName=ToggleButton_TouchRaisedRectangleLocation_IllState}"
+            >
+              <Label.Style>
+                <Style BasedOn="{StaticResource Label_ThouchRectangleLocation}" TargetType="Label">
+                  <Setter Property="Width">
+                    <Setter.Value>
+                      <MultiBinding
+                        Converter="{StaticResource DoubleCalculatorConverter}"
+                        ConverterParameter="*"
+                      >
+                        <Binding Path="Pet.TouchRaisedRectangleLocation.Ill.Width" />
+                        <Binding Path="LengthRatio" />
+                      </MultiBinding>
+                    </Setter.Value>
+                  </Setter>
+                  <Setter Property="Height">
+                    <Setter.Value>
+                      <MultiBinding
+                        Converter="{StaticResource DoubleCalculatorConverter}"
+                        ConverterParameter="*"
+                      >
+                        <Binding Path="Pet.TouchRaisedRectangleLocation.Ill.Height" />
+                        <Binding Path="LengthRatio" />
+                      </MultiBinding>
+                    </Setter.Value>
+                  </Setter>
+                  <Setter Property="Margin">
+                    <Setter.Value>
+                      <MultiBinding Converter="{StaticResource RatioMarginConverter}">
+                        <Binding Path="LengthRatio" />
+                        <Binding Path="Pet.TouchRaisedRectangleLocation.Ill.X" />
+                        <Binding Path="Pet.TouchRaisedRectangleLocation.Ill.Y" />
+                      </MultiBinding>
+                    </Setter.Value>
+                  </Setter>
+                </Style>
+              </Label.Style>
+            </Label>
+            <Label
+              Width="5"
+              Height="5"
+              Background="Red"
+              Content="{ll:Str 开心状态提起点位}"
+              Tag="{Binding IsChecked, ElementName=ToggleButton_RaisePoint_Happy}"
+            >
+              <Label.Style>
+                <Style BasedOn="{StaticResource Label_ThouchRectangleLocation}" TargetType="Label">
+                  <Setter Property="Margin">
+                    <Setter.Value>
+                      <MultiBinding Converter="{StaticResource RatioMarginConverter}">
+                        <Binding Path="LengthRatio" />
+                        <Binding Path="Pet.RaisePoint.Happy.X" />
+                        <Binding Path="Pet.RaisePoint.Happy.Y" />
+                      </MultiBinding>
+                    </Setter.Value>
+                  </Setter>
+                </Style>
+              </Label.Style>
+            </Label>
+            <Label
+              Width="5"
+              Height="5"
+              Background="Red"
+              Content="{ll:Str 普通状态提起点位}"
+              Tag="{Binding IsChecked, ElementName=ToggleButton_RaisePoint_Nomal}"
+            >
+              <Label.Style>
+                <Style BasedOn="{StaticResource Label_ThouchRectangleLocation}" TargetType="Label">
+                  <Setter Property="Margin">
+                    <Setter.Value>
+                      <MultiBinding Converter="{StaticResource RatioMarginConverter}">
+                        <Binding Path="LengthRatio" />
+                        <Binding Path="Pet.RaisePoint.Nomal.X" />
+                        <Binding Path="Pet.RaisePoint.Nomal.Y" />
+                      </MultiBinding>
+                    </Setter.Value>
+                  </Setter>
+                </Style>
+              </Label.Style>
+            </Label>
+            <Label
+              Width="5"
+              Height="5"
+              Background="Red"
+              Content="{ll:Str 低状态提起点位}"
+              Tag="{Binding IsChecked, ElementName=ToggleButton_RaisePoint_PoorCondition}"
+            >
+              <Label.Style>
+                <Style BasedOn="{StaticResource Label_ThouchRectangleLocation}" TargetType="Label">
+                  <Setter Property="Margin">
+                    <Setter.Value>
+                      <MultiBinding Converter="{StaticResource RatioMarginConverter}">
+                        <Binding Path="LengthRatio" />
+                        <Binding Path="Pet.RaisePoint.PoorCondition.X" />
+                        <Binding Path="Pet.RaisePoint.PoorCondition.Y" />
+                      </MultiBinding>
+                    </Setter.Value>
+                  </Setter>
+                </Style>
+              </Label.Style>
+            </Label>
+            <Label
+              Width="5"
+              Height="5"
+              Background="Red"
+              Content="{ll:Str 生病状态提起点位}"
+              Tag="{Binding IsChecked, ElementName=ToggleButton_RaisePoint_Ill}"
+            >
+              <Label.Style>
+                <Style BasedOn="{StaticResource Label_ThouchRectangleLocation}" TargetType="Label">
+                  <Setter Property="Margin">
+                    <Setter.Value>
+                      <MultiBinding Converter="{StaticResource RatioMarginConverter}">
+                        <Binding Path="LengthRatio" />
+                        <Binding Path="Pet.RaisePoint.Ill.X" />
+                        <Binding Path="Pet.RaisePoint.Ill.Y" />
+                      </MultiBinding>
+                    </Setter.Value>
+                  </Setter>
+                </Style>
+              </Label.Style>
+            </Label>
+          </Grid>
+          <Button
+            HorizontalAlignment="Center"
+            VerticalAlignment="Center"
+            Command="{Binding ChangeImageCommand}"
+            Content="{ll:Str 添加测试图片}"
+            Style="{DynamicResource ModMaker_ButtonBaseStyle}"
+            Visibility="{Binding Image, Converter={StaticResource NullToVisibleConverter}}"
+          />
+        </Grid>
+      </Expander>
     </Grid>
     <Border
       Grid.Column="1"

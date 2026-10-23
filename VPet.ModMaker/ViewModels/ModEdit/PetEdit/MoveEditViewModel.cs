@@ -118,6 +118,7 @@ public sealed partial class MoveEditViewModel
     [ObservableProperty]
     public BitmapImage? Image { get; set; }
     public bool? DialogResult { get; set; }
+    public bool IsChanged { get; private set; }
 
     /// <summary>
     /// 改变图片
@@ -156,6 +157,8 @@ public sealed partial class MoveEditViewModel
     [RelayCommand]
     private void Add()
     {
+        IsChanged = false;
+        using var dis = Move.Changed.Subscribe(_ => IsChanged = true);
         var result = DialogService.ShowDialog(this, this);
         if (result is not true)
             return;
@@ -179,9 +182,11 @@ public sealed partial class MoveEditViewModel
     [RelayCommand]
     public void Edit(MoveModel model)
     {
+        IsChanged = false;
         OldMove = model;
         var newModel = new MoveModel(model);
         Move = newModel;
+        using var dis = newModel.Changed.Subscribe(_ => IsChanged = true);
         var result = DialogService.ShowDialog(this, this);
         if (result is not true)
             return;
@@ -227,6 +232,23 @@ public sealed partial class MoveEditViewModel
 
     public void OnClosing(CancelEventArgs e)
     {
+        if (IsChanged)
+        {
+            var result = DialogService.ShowMessageBox(
+                this,
+                "编辑完成, 是否保存?".Translate(),
+                "编辑完成".Translate(),
+                MessageBoxButton.YesNoCancel,
+                MessageBoxImage.Information
+            );
+            if (result is null)
+            {
+                e.Cancel = true;
+                return;
+            }
+            DialogResult = result;
+        }
+
         if (DialogResult is not true)
             return;
         if (string.IsNullOrWhiteSpace(Move.Graph))

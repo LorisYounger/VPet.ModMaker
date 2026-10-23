@@ -11,6 +11,8 @@
   Title="{ll:Str 编辑低状态文本}"
   Width="1280"
   Height="720"
+  MinWidth="800"
+  MinHeight="600"
   d:DataContext="{d:DesignInstance Type=vm:LowTextEditViewModel}"
   d:Height="500"
   d:Width="800"
@@ -106,25 +108,6 @@
           </Border>
         </StackPanel>
       </ScrollViewer>
-      <Grid Grid.Row="1" ColumnDefinitions="*,*">
-        <Button
-          x:Name="Button_Yes"
-          Margin="10"
-          Width="200"
-          Click="Button_Yes_Click"
-          Content="{ll:Str 确定}"
-          Style="{StaticResource MyThemedButtonStyle}"
-        />
-        <Button
-          x:Name="Button_Cancel"
-          Grid.Column="1"
-          Width="200"
-          Margin="10"
-          Click="Button_Cancel_Click"
-          Content="{ll:Str 取消}"
-          Style="{StaticResource Button_Cancel}"
-        />
-      </Grid>
     </Grid>
     <Border
       Margin="5,0,5,0"

@@ -156,6 +156,7 @@ public partial class PetEditViewModel
     public static double LengthRatio { get; } = 0.5;
 
     public bool? DialogResult { get; set; }
+    public bool IsChanged { get; private set; }
     #endregion
 
 
@@ -196,7 +197,9 @@ public partial class PetEditViewModel
     [RelayCommand]
     private void Add()
     {
+        IsChanged = false;
         Pet = new(ModInfo.TempI18nResource);
+        using var dis = Pet.Changed.Subscribe(_ => IsChanged = true);
         var result = DialogService.ShowDialog(this, this);
         if (result is not true)
         {
@@ -220,6 +223,7 @@ public partial class PetEditViewModel
     [RelayCommand]
     public void Edit(PetModel model)
     {
+        IsChanged = false;
         if (
             model.FromMain
             && DialogService.ShowMessageBox(
@@ -240,6 +244,7 @@ public partial class PetEditViewModel
             model.DescriptionID
         );
         Pet = newModel;
+        using var dis = newModel.Changed.Subscribe(_ => IsChanged = true);
         var result = DialogService.ShowDialog(this, this);
         if (result is not true)
         {
@@ -299,6 +304,23 @@ public partial class PetEditViewModel
 
     public void OnClosing(CancelEventArgs e)
     {
+        if (IsChanged)
+        {
+            var result = DialogService.ShowMessageBox(
+                this,
+                "编辑完成, 是否保存?".Translate(),
+                "编辑完成".Translate(),
+                MessageBoxButton.YesNoCancel,
+                MessageBoxImage.Information
+            );
+            if (result is null)
+            {
+                e.Cancel = true;
+                return;
+            }
+            DialogResult = result;
+        }
+
         if (DialogResult is not true)
             return;
         if (string.IsNullOrWhiteSpace(Pet.ID))

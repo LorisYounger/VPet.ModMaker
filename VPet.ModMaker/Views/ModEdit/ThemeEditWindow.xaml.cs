@@ -23,20 +23,4 @@ public partial class ThemeEditWindow : WindowX
     {
         InitializeComponent();
     }
-
-    /// <summary>
-    /// 视图模型
-    /// </summary>
-    public ThemeEditViewModel ViewModel => (ThemeEditViewModel)DataContext;
-
-    private void Button_Cancel_Click(object? sender, RoutedEventArgs e)
-    {
-        Close();
-    }
-
-    private void Button_Yes_Click(object? sender, RoutedEventArgs e)
-    {
-        ViewModel.DialogResult = true;
-        Close();
-    }
 }

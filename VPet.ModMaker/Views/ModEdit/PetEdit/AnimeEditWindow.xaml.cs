@@ -27,48 +27,9 @@ public partial class AnimeEditWindow : WindowX
     /// </summary>
     public AnimeEditViewModel ViewModel => (AnimeEditViewModel)DataContext;
 
-    private void Button_Cancel_Click(object? sender, RoutedEventArgs e)
-    {
-        Close();
-    }
-
-    private void Button_Yes_Click(object? sender, RoutedEventArgs e)
-    {
-        ViewModel.DialogResult = true;
-        Close();
-    }
-
-    private void TabControl_SelectionChanged(object? sender, SelectionChangedEventArgs e)
-    {
-        if (
-            sender is not TabControl tabControl
-            || tabControl.SelectedItem is not TabItem item
-            || item.Tag is not string str
-        )
-            return;
-        if (Enum.TryParse<ModeType>(str, true, out var mode))
-        {
-            ViewModel.CurrentMode = mode;
-            ViewModel.CurrentImageModel = null!;
-            ViewModel.CurrentAnimeModel = null!;
-        }
-    }
-
-    private void ListBox_PreviewMouseWheel(object? sender, MouseWheelEventArgs e)
-    {
-        var eventArg = new MouseWheelEventArgs(e.MouseDevice, e.Timestamp, e.Delta)
-        {
-            RoutedEvent = MouseWheelEvent,
-            Source = sender,
-        };
-        var parent = ((Control)sender!).Parent as UIElement;
-        parent!.RaiseEvent(eventArg);
-        e.Handled = true;
-    }
-
     private object _dropSender = null!;
 
-    private void ListBox_PreviewMouseMove(object? sender, MouseEventArgs e)
+    private void ListBox_Images_PreviewMouseMove(object? sender, MouseEventArgs e)
     {
         if (sender is not ListBox listBox)
             return;
@@ -86,7 +47,7 @@ public partial class AnimeEditWindow : WindowX
         DragDrop.DoDragDrop(listBox, dataObj, DragDropEffects.Move);
     }
 
-    private void ListBox_Drop(object? sender, DragEventArgs e)
+    private void ListBox_Images_Drop(object? sender, DragEventArgs e)
     {
         if (sender is not ListBox listBox)
             return;
@@ -133,6 +94,22 @@ public partial class AnimeEditWindow : WindowX
         if (listBox.DataContext is AnimeModel model)
             ViewModel.CurrentAnimeModel = model;
         listBox.ScrollIntoView(listBox.SelectedItem);
+        e.Handled = true;
+    }
+
+    private void ListBox_HorizontalScrolling_PreviewMouseWheel(object sender, MouseWheelEventArgs e)
+    {
+        var listBox = (ListBox)sender;
+        var scrollViewer = listBox.FindVisualChild<ScrollViewer>();
+
+        if (scrollViewer == null || scrollViewer.ScrollableWidth <= 0)
+            return;
+
+        if (e.Delta < 0)
+            scrollViewer.LineRight();
+        else
+            scrollViewer.LineLeft();
+
         e.Handled = true;
     }
 }

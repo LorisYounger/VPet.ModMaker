@@ -26,6 +26,8 @@
     BasedOn="{StaticResource {x:Type Expander}}"
     TargetType="Expander"
   >
+    <Setter Property="pu:ExpanderHelper.HeaderPadding" Value="5,0,5,0" />
+    <Setter Property="pu:ExpanderHelper.HeaderHeight" Value="30" />
     <Setter Property="pu:ExpanderHelper.CornerRadius" Value="4" />
     <Setter Property="BorderBrush" Value="{DynamicResource DARKPrimary}" />
     <Setter Property="BorderThickness" Value="1.5" />
