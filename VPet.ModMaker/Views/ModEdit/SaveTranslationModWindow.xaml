@@ -16,7 +16,7 @@
   pu:WindowXCaption.Buttons="Close"
   WindowStartupLocation="CenterScreen"
   mc:Ignorable="d"
-  Style="{DynamicResource WindowXStyle}"
+  Style="{DynamicResource BaseWindowXStyle}"
 >
   <Grid>
     <Grid.RowDefinitions>

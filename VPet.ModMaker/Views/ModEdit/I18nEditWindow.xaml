@@ -63,7 +63,7 @@
           MaxWidth="500"
           Binding="{Binding Key}"
           CanUserSort="True"
-          ElementStyle="{StaticResource TextBlock_Wrap}"
+          ElementStyle="{StaticResource ModMaker_TextBlockWrapStyle}"
           Header="ID"
           IsReadOnly="True"
           SortMemberPath="Key"

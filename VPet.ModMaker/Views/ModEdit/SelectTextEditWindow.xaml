@@ -18,7 +18,7 @@
   d:Height="1000"
   d:Width="800"
   WindowStartupLocation="CenterScreen"
-  Style="{DynamicResource WindowXStyle}"
+  Style="{DynamicResource BaseWindowXStyle}"
   mc:Ignorable="d"
 >
   <Grid Margin="10">
@@ -69,7 +69,7 @@
                 Grid.Row="1"
                 d:Text="这是一个测试文本,这是一个测试文本,这是一个测试文本,这是一个测试文本,这是一个测试文本,这是一个测试文本,这是一个测试文本,"
                 pu:TextBoxHelper.Watermark="{ll:Str 显示在选项列表中的名称}"
-                Style="{DynamicResource StandardTextBoxWrapStyle}"
+                Style="{DynamicResource ModMaker_TextBoxWrapStyle}"
                 Grid.Column="1"
                 Text="{Binding SelectText.Text, UpdateSourceTrigger=PropertyChanged}"
               />

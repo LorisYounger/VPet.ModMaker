@@ -16,6 +16,7 @@
   MinWidth="800"
   MinHeight="600"
   WindowStartupLocation="CenterScreen"
+  Tag="{Binding}"
 >
   <Grid Margin="10" ColumnDefinitions="*,Auto,Auto">
     <Grid RowDefinitions="*,Auto">

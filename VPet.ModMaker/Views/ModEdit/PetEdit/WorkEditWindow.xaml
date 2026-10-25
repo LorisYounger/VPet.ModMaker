@@ -18,7 +18,7 @@
   d:Height="1000"
   d:Width="800"
   WindowStartupLocation="CenterScreen"
-  Style="{DynamicResource WindowXStyle}"
+  Style="{DynamicResource BaseWindowXStyle}"
   mc:Ignorable="d"
 >
   <Grid Margin="10">
