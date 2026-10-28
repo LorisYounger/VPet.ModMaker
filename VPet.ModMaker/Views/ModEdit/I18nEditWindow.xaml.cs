@@ -129,7 +129,7 @@ public partial class I18nEditWindow : WindowX
             MaxWidth = 500,
             Header = header,
             Binding = new Binding(dataPath) { Mode = BindingMode.TwoWay },
-            ElementStyle = (Style)ModMaker.NativeStyles["TextBlock_Wrap"],
+            ElementStyle = (Style)ModMaker.NativeStyles["ModMaker_TextBlockWrapStyle"],
             SortMemberPath = dataPath,
             CanUserSort = true,
         };

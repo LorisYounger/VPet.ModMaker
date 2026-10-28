@@ -40,7 +40,10 @@
         <Style BasedOn="{StaticResource {x:Type DataGridRow}}" TargetType="DataGridRow">
           <Setter Property="Height" Value="64" />
           <Setter Property="Tag" Value="{Binding}" />
-          <Setter Property="ContextMenu" Value="{StaticResource DataGridRow_RemovesContextMenu}" />
+          <Setter
+            Property="ContextMenu"
+            Value="{StaticResource ModMaker_DataGridRowRemovesContextMenu}"
+          />
         </Style>
       </DataGrid.RowStyle>
       <DataGrid.Columns>

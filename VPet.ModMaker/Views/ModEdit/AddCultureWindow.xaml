@@ -15,6 +15,7 @@
   pu:WindowXCaption.Buttons="Close"
   WindowStartupLocation="CenterScreen"
   mc:Ignorable="d"
+  Style="{DynamicResource BaseWindowXStyle}"
 >
   <Grid>
     <Grid.ColumnDefinitions>
@@ -37,7 +38,7 @@
             <ColumnDefinition Width="Auto" />
             <ColumnDefinition />
           </Grid.ColumnDefinitions>
-          <Label Content="{ll:Str 当前文化}" Style="{StaticResource ThemedLabelStyle}" />
+          <Label Content="{ll:Str 当前文化}" Style="{StaticResource ModMaker_ThemedLabelStyle}" />
           <TextBlock
             Grid.Column="1"
             Margin="10,0,0,0"
@@ -70,7 +71,7 @@
           Click="Button_Yes_Click"
           Content="{ll:Str 确定}"
           IsDefault="True"
-          Style="{StaticResource MyThemedButtonStyle}"
+          Style="{StaticResource ThemedButtonStyle}"
         />
         <Button
           x:Name="Button_Cancel"
@@ -80,7 +81,7 @@
           Click="Button_Cancel_Click"
           Content="{ll:Str 取消}"
           IsCancel="True"
-          Style="{StaticResource Button_Cancel}"
+          Style="{DynamicResource  ModMaker_BottonCancel}"
         />
       </Grid>
     </Grid>
@@ -93,7 +94,7 @@
         pu:TextBoxHelper.Watermark="{ll:Str 搜索}"
         Style="{StaticResource StandardTextBoxStyle}"
         Text="{Binding Search, UpdateSourceTrigger=PropertyChanged}" />-->
-      <Label Content="{ll:Str 本体的文化}" Style="{StaticResource ThemedLabelStyle}" />
+      <Label Content="{ll:Str 本体的文化}" Style="{StaticResource ModMaker_ThemedLabelStyle}" />
       <ListBox
         Grid.Row="1"
         ItemsSource="{Binding AllCultures.FilteredList}"

@@ -58,7 +58,7 @@
           <Setter Property="Tag" Value="{Binding}" />
           <Setter
             Property="ContextMenu"
-            Value="{StaticResource DataGridRow_EditAndRemovesContextMenu}"
+            Value="{StaticResource ModMaker_DataGridRowEditAndRemovesContextMenu}"
           />
         </Style>
       </DataGrid.RowStyle>
@@ -108,7 +108,7 @@
           MaxWidth="300"
           Binding="{Binding Description}"
           CanUserSort="True"
-          ElementStyle="{StaticResource TextBlock_Wrap}"
+          ElementStyle="{StaticResource ModMaker_TextBlockWrapStyle}"
           Header="{ll:Str 描述}"
           IsReadOnly="True"
           SortMemberPath="Description"

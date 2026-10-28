@@ -165,16 +165,16 @@
     <Setter Property="VirtualizingStackPanel.VirtualizationMode" Value="Recycling" />
   </Style>
 
-  <Style x:Key="ThemedLabelStyle" BasedOn="{StaticResource {x:Type Label}}" TargetType="Label">
+  <Style
+    x:Key="ModMaker_ThemedLabelStyle"
+    BasedOn="{StaticResource {x:Type Label}}"
+    TargetType="Label"
+  >
     <Setter Property="Height" Value="30" />
     <Setter Property="FontSize" Value="14" />
     <Setter Property="Background" Value="{DynamicResource PrimaryDarker}" />
     <Setter Property="Foreground" Value="{DynamicResource DARKPrimaryText}" />
     <Setter Property="pu:LabelHelper.CornerRadius" Value="4" />
-  </Style>
-  <Style x:Key="Label_Left" BasedOn="{StaticResource ThemedLabelStyle}" TargetType="Label">
-    <Setter Property="HorizontalContentAlignment" Value="Left" />
-    <Setter Property="VerticalContentAlignment" Value="Center" />
   </Style>
   <Style x:Key="ModMaker_AddButton" BasedOn="{StaticResource {x:Type Button}}" TargetType="Button">
     <Setter Property="Background" Value="{DynamicResource PrimaryDarker}" />
@@ -186,69 +186,20 @@
     <Setter Property="pu:ButtonHelper.CornerRadius" Value="24" />
   </Style>
   <Style
-    x:Key="MyThemedButtonStyle"
-    BasedOn="{StaticResource ThemedButtonStyle}"
-    TargetType="{x:Type Button}"
+    x:Key="ModMaker_BottonCancel"
+    BasedOn="{StaticResource {x:Type Button}}"
+    TargetType="Button"
   >
     <Setter Property="Height" Value="30" />
-    <Setter Property="Background" Value="{StaticResource DARKPrimary}" />
-    <Setter Property="Foreground" Value="{StaticResource DARKPrimaryText}" />
-    <Setter Property="Padding" Value="10,5" />
+    <Setter Property="Padding" Value="5" />
     <Setter Property="pu:ButtonHelper.CornerRadius" Value="4" />
     <Setter Property="BorderThickness" Value="0.5" />
-    <Setter Property="BorderBrush" Value="{StaticResource DARKPrimaryLighter}" />
-  </Style>
-  <Style x:Key="Button_Cancel" BasedOn="{StaticResource MyThemedButtonStyle}" TargetType="Button">
-    <Setter Property="Background" Value="{StaticResource PrimaryLight}" />
-    <Setter Property="Foreground" Value="{StaticResource SecondaryText}" />
+    <Setter Property="BorderBrush" Value="{DynamicResource DARKPrimaryLighter}" />
+    <Setter Property="Background" Value="{DynamicResource PrimaryLight}" />
+    <Setter Property="Foreground" Value="{DynamicResource SecondaryText}" />
   </Style>
   <Style
-    x:Key="ModMaker_ButtonHiddenOnTagNull"
-    BasedOn="{StaticResource MyThemedButtonStyle}"
-    TargetType="Button"
-  >
-    <Setter Property="Visibility" Value="Hidden" />
-    <Style.Triggers>
-      <DataTrigger
-        Binding="{Binding Tag, RelativeSource={RelativeSource Mode=Self}}"
-        Value="{x:Null}"
-      >
-        <Setter Property="Visibility" Value="Visible" />
-      </DataTrigger>
-    </Style.Triggers>
-  </Style>
-  <Style
-    x:Key="Button_HiddenOnTagNull"
-    BasedOn="{StaticResource MyThemedButtonStyle}"
-    TargetType="Button"
-  >
-    <Setter Property="Visibility" Value="Hidden" />
-    <Style.Triggers>
-      <DataTrigger
-        Binding="{Binding Tag, RelativeSource={RelativeSource Mode=Self}}"
-        Value="{x:Null}"
-      >
-        <Setter Property="Visibility" Value="Visible" />
-      </DataTrigger>
-    </Style.Triggers>
-  </Style>
-  <Style
-    x:Key="Button_CollapsedOnTagNull"
-    BasedOn="{StaticResource MyThemedButtonStyle}"
-    TargetType="Button"
-  >
-    <Setter Property="Visibility" Value="Collapsed" />
-    <Style.Triggers>
-      <DataTrigger
-        Binding="{Binding Tag, RelativeSource={RelativeSource Mode=Self}}"
-        Value="{x:Null}"
-      >
-        <Setter Property="Visibility" Value="Visible" />
-      </DataTrigger>
-    </Style.Triggers>
-  </Style>
-  <Style
-    x:Key="TextBlock_Wrap"
+    x:Key="ModMaker_TextBlockWrapStyle"
     BasedOn="{StaticResource {x:Type TextBlock}}"
     TargetType="TextBlock"
   >
@@ -289,85 +240,25 @@
   >
     <Setter Property="FontSize" Value="14" />
   </Style>
-  <Style x:Key="TextBox_Wrap" BasedOn="{StaticResource {x:Type TextBox}}" TargetType="TextBox">
-    <Setter Property="TextWrapping" Value="Wrap" />
-    <Setter Property="HorizontalContentAlignment" Value="Left" />
-    <Setter Property="VerticalContentAlignment" Value="Top" />
-    <Setter Property="ToolTip" Value="{Binding Text, RelativeSource={RelativeSource Mode=Self}}" />
-  </Style>
   <Style
-    x:Key="StandardTextBoxWrapStyle"
-    BasedOn="{StaticResource StandardTextBoxStyle}"
-    TargetType="TextBox"
-  >
-    <Setter Property="HorizontalContentAlignment" Value="Left" />
-    <Setter Property="VerticalContentAlignment" Value="Top" />
-    <Setter Property="Height" Value="NaN" />
-    <Setter Property="TextWrapping" Value="Wrap" />
-    <Setter Property="ToolTip" Value="{Binding Text, RelativeSource={RelativeSource Mode=Self}}" />
-  </Style>
-  <Style x:Key="TextBox_Center" BasedOn="{StaticResource {x:Type TextBox}}" TargetType="TextBox">
-    <Setter Property="VerticalAlignment" Value="Center" />
-    <Setter Property="HorizontalAlignment" Value="Center" />
-    <Setter Property="ToolTip" Value="{Binding Text, RelativeSource={RelativeSource Mode=Self}}" />
-  </Style>
-  <Style
-    x:Key="TextBox_LeftCenter"
+    x:Key="ModMaker_TextBoxWrapStyle"
     BasedOn="{StaticResource {x:Type TextBox}}"
     TargetType="TextBox"
   >
-    <Setter Property="VerticalAlignment" Value="Center" />
-    <Setter Property="HorizontalAlignment" Value="Left" />
+    <Setter Property="HorizontalContentAlignment" Value="Left" />
+    <Setter Property="VerticalContentAlignment" Value="Top" />
+    <Setter Property="Height" Value="NaN" />
+    <Setter Property="TextWrapping" Value="Wrap" />
     <Setter Property="ToolTip" Value="{Binding Text, RelativeSource={RelativeSource Mode=Self}}" />
-  </Style>
-  <Style x:Key="WindowXStyle" TargetType="pu:WindowX">
-    <Setter Property="pu:WindowXCaption.Background" Value="{StaticResource DARKPrimary}" />
-    <Setter Property="pu:WindowXCaption.Foreground" Value="{StaticResource DARKPrimaryText}" />
-  </Style>
-  <Style
-    x:Key="Menu_Style"
-    BasedOn="{StaticResource {x:Static pu:StyleKeys.MenuStyle}}"
-    TargetType="Menu"
-  >
-    <Setter Property="Height" Value="NaN" />
-    <Setter Property="Margin" Value="0" />
-    <Setter Property="BorderThickness" Value="0" />
-    <Setter Property="Foreground" Value="{StaticResource DARKPrimaryText}" />
-    <Setter Property="Background" Value="{StaticResource DARKPrimary}" />
-    <Setter Property="pu:MenuHelper.CornerRadius" Value="4" />
-
-    <Setter Property="pu:DropDownHelper.CornerRadius" Value="4" />
-    <!--    -->
-    <Setter Property="pu:MenuHelper.TopLevelItemsBorderThickness" Value="0" />
-    <Setter Property="pu:MenuHelper.TopLevelItemsPadding" Value="5,0,5,0" />
-    <Setter Property="pu:MenuHelper.TopLevelItemsMargin" Value="0" />
-    <Setter Property="pu:MenuHelper.TopLevelItemsHorizontalContentAlignment" Value="Center" />
-    <Setter Property="pu:MenuHelper.TopLevelItemsBackground" Value="{StaticResource DARKPrimary}" />
-    <Setter
-      Property="pu:MenuHelper.TopLevelItemsForeground"
-      Value="{StaticResource DARKPrimaryText}"
-    />
-    <!--    -->
-    <Setter Property="pu:MenuHelper.SubmenuItemsBorderThickness" Value="0" />
-    <Setter Property="pu:MenuHelper.SubmenuItemsBorderBrush" Value="{StaticResource DARKPrimary}" />
-    <Setter Property="pu:MenuHelper.SubmenuItemsWidth" Value="NaN" />
-    <Setter Property="pu:MenuHelper.SubmenuItemsHeight" Value="NaN" />
-    <Setter Property="pu:MenuHelper.SubmenuItemsPadding" Value="5" />
-    <Setter Property="pu:MenuHelper.SubmenuItemsMargin" Value="0" />
-    <!--<Setter Property="pu:MenuHelper.SubmenuItemsCornerRadius" Value="4" />-->
-    <Setter Property="pu:MenuHelper.SubmenuItemsBackground" Value="{StaticResource DARKPrimary}" />
-    <Setter
-      Property="pu:MenuHelper.SubmenuItemsForeground"
-      Value="{StaticResource DARKPrimaryText}"
-    />
-    <!--<Setter Property="Width" Value="NaN" />
-    <Setter Property="Height" Value="NaN" />
-    <Setter Property="Padding" Value="5" />
-    <Setter Property="Background" Value="{StaticResource BackgroundColor}" />
-    <Setter Property="Foreground" Value="{StaticResource ForegroundColor}" />
-    <Setter Property="FontSize" Value="{StaticResource BodyFontSize}" />
-    <Setter Property="pu:MenuItemHelper.HoverBackground" Value="{StaticResource HoverColor}" />
-    <Setter Property="pu:MenuItemHelper.ClickBackground" Value="{StaticResource ClickColor}" />
-    <Setter Property="pu:MenuItemHelper.CheckedBackground" Value="{StaticResource CheckedColor}" />-->
+    <Setter Property="FontSize" Value="14" />
+    <Setter Property="Height" Value="30" />
+    <Setter Property="Background" Value="{DynamicResource DARKPrimaryText}" />
+    <Setter Property="BorderThickness" Value="1.5" />
+    <Setter Property="BorderBrush" Value="{DynamicResource DARKPrimary}" />
+    <Setter Property="Padding" Value="7,0,15,0" />
+    <Setter Property="pu:TextBoxHelper.CornerRadius" Value="5" />
+    <Setter Property="pu:TextBoxHelper.WatermarkForeground" Value="#AAAAAA" />
+    <Setter Property="pu:ShadowHelper.BlurRadius" Value="15" />
+    <Setter Property="pu:ShadowHelper.Opacity" Value="0.5" />
   </Style>
 </ResourceDictionary>

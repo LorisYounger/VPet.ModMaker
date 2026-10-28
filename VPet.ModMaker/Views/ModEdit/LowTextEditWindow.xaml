@@ -17,7 +17,7 @@
   d:Height="500"
   d:Width="800"
   WindowStartupLocation="CenterScreen"
-  Style="{DynamicResource WindowXStyle}"
+  Style="{DynamicResource BaseWindowXStyle}"
   mc:Ignorable="d"
 >
   <Grid Margin="10">
@@ -37,7 +37,7 @@
                 HorizontalAlignment="Right"
                 Width="300"
                 pu:TextBoxHelper.Watermark="ID"
-                Style="{StaticResource StandardTextBoxWrapStyle}"
+                Style="{DynamicResource ModMaker_TextBoxWrapStyle}"
                 Text="{Binding LowText.ID, UpdateSourceTrigger=PropertyChanged}"
               />
             </Grid>
@@ -53,7 +53,7 @@
                 Margin="0,0,0,5"
                 d:Text="这是一个测试文本,这是一个测试文本,这是一个测试文本,这是一个测试文本,这是一个测试文本,这是一个测试文本,这是一个测试文本,"
                 pu:TextBoxHelper.Watermark="{ll:Str 文本}"
-                Style="{StaticResource StandardTextBoxWrapStyle}"
+                Style="{DynamicResource ModMaker_TextBoxWrapStyle}"
                 Text="{Binding LowText.Text, UpdateSourceTrigger=PropertyChanged}"
               />
             </Grid>

@@ -17,7 +17,7 @@
   d:Width="800"
   AutomationProperties.AutomationId="ModMakerWindow"
   FontSize="16"
-  Style="{DynamicResource WindowXStyle}"
+  Style="{DynamicResource BaseWindowXStyle}"
   WindowStartupLocation="CenterScreen"
   mc:Ignorable="d"
 >

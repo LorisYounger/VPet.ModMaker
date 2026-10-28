@@ -81,56 +81,7 @@
       </Border>
     </Grid>
   </ControlTemplate>
-  <ControlTemplate x:Key="Grid_EnumCommand" TargetType="Control">
-    <Grid>
-      <Grid.ColumnDefinitions>
-        <ColumnDefinition />
-        <ColumnDefinition Width="Auto" />
-        <ColumnDefinition Width="Auto" />
-        <ColumnDefinition Width="Auto" />
-      </Grid.ColumnDefinitions>
-      <TextBlock
-        Margin="5"
-        FontSize="12"
-        Style="{StaticResource ModMaker_TextBlockLeftCenter}"
-        Text="{Binding Info}"
-        ToolTip="{Binding Info}"
-      />
-      <ComboBox
-        x:Name="Enums"
-        Grid.Column="1"
-        ItemsSource="{Binding Info.Infos}"
-        SelectedIndex="0"
-        Style="{StaticResource StandardComboBoxStyle}"
-        ToolTip="{ll:Str 选择枚举}"
-      />
-      <Button
-        Grid.Column="2"
-        Width="20"
-        Height="30"
-        Padding="0,0,0,3"
-        Command="{Binding AddFlagCommand}"
-        CommandParameter="{Binding SelectedItem.Value, ElementName=Enums}"
-        Content="+"
-        FontSize="20"
-        Style="{StaticResource MyThemedButtonStyle}"
-        ToolTip="{ll:Str 添加枚举}"
-      />
-      <Button
-        Grid.Column="3"
-        Width="20"
-        Height="30"
-        Padding="0,0,0,3"
-        Command="{Binding RemoveFlagCommand}"
-        CommandParameter="{Binding SelectedItem.Value, ElementName=Enums}"
-        Content="-"
-        FontSize="20"
-        Style="{StaticResource MyThemedButtonStyle}"
-        ToolTip="{ll:Str 去除枚举}"
-      />
-    </Grid>
-  </ControlTemplate>
-  <ContextMenu x:Key="DataGridRow_EditAndRemovesContextMenu" x:Shared="false">
+  <ContextMenu x:Key="ModMaker_DataGridRowEditAndRemovesContextMenu" x:Shared="false">
     <MenuItem
       Command="{Binding DataContext.EditCommand, RelativeSource={RelativeSource AncestorType=UserControl, Mode=FindAncestor}}"
       CommandParameter="{Binding DataContext, RelativeSource={RelativeSource AncestorType=DataGridRow, Mode=FindAncestor}}"
@@ -142,51 +93,13 @@
       Header="{ll:Str 删除}"
     />
   </ContextMenu>
-  <ContextMenu x:Key="DataGridRow_RemovesContextMenu" x:Shared="false">
+  <ContextMenu x:Key="ModMaker_DataGridRowRemovesContextMenu" x:Shared="false">
     <MenuItem
       Command="{Binding DataContext.RemoveCommand, RelativeSource={RelativeSource AncestorType=UserControl, Mode=FindAncestor}}"
       CommandParameter="{Binding SelectedItems, RelativeSource={RelativeSource AncestorType=DataGrid, Mode=FindAncestor}}"
       Header="{ll:Str 删除}"
     />
   </ContextMenu>
-  <ControlTemplate x:Key="ListBoxItem_RangeData" TargetType="ListBoxItem">
-    <Grid>
-      <Grid.RowDefinitions>
-        <RowDefinition Height="Auto" />
-        <RowDefinition />
-      </Grid.RowDefinitions>
-      <Label
-        HorizontalContentAlignment="Center"
-        Content="{Binding Tag, RelativeSource={RelativeSource AncestorType=ListBoxItem, Mode=FindAncestor}}"
-        Style="{StaticResource ThemedLabelStyle}"
-      />
-      <Grid Grid.Row="1">
-        <Grid.RowDefinitions>
-          <RowDefinition Height="Auto" />
-          <RowDefinition Height="Auto" />
-        </Grid.RowDefinitions>
-        <Grid.ColumnDefinitions>
-          <ColumnDefinition Width="Auto" />
-          <ColumnDefinition />
-        </Grid.ColumnDefinitions>
-        <Label Content="{ll:Str 最小值}" Style="{StaticResource ThemedLabelStyle}" />
-        <pu:NumberInput
-          Grid.Column="1"
-          IsSnapToIntervalEnabled="False"
-          ToolTip="{Binding Value, RelativeSource={RelativeSource Mode=Self}}"
-          Value="{Binding DataContext.Min, RelativeSource={RelativeSource AncestorType=ListBoxItem}}"
-        />
-        <Label Grid.Row="1" Content="{ll:Str 最大值}" Style="{StaticResource ThemedLabelStyle}" />
-        <pu:NumberInput
-          Grid.Row="1"
-          Grid.Column="1"
-          IsSnapToIntervalEnabled="False"
-          ToolTip="{Binding Value, RelativeSource={RelativeSource Mode=Self}}"
-          Value="{Binding DataContext.Max, RelativeSource={RelativeSource AncestorType=ListBoxItem}}"
-        />
-      </Grid>
-    </Grid>
-  </ControlTemplate>
   <ControlTemplate x:Key="ModMaker_CultureList" TargetType="ListBox">
     <ListBox
       MinWidth="100"

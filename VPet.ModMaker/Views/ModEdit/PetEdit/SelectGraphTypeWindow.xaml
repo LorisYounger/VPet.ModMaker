@@ -11,9 +11,12 @@
   Title="{ll:Str 选择动画类型}"
   Width="500"
   Height="300"
+  MinWidth="500"
+  MinHeight="300"
   WindowStartupLocation="CenterScreen"
   d:DataContext="{d:DesignInstance Type=vm:SelectGraphTypeViewModel}"
   mc:Ignorable="d"
+  Style="{DynamicResource BaseWindowXStyle}"
 >
   <Window.Resources>
     <ResourceDictionary Source="/VPet-Simulator.Windows.Interface;component/ResourceStyle.xaml" />
@@ -24,35 +27,24 @@
       <RowDefinition />
       <RowDefinition Height="Auto" />
     </Grid.RowDefinitions>
-    <Grid Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center">
-      <Grid.ColumnDefinitions>
-        <ColumnDefinition Width="Auto" />
-        <ColumnDefinition />
-      </Grid.ColumnDefinitions>
-      <Grid.RowDefinitions>
-        <RowDefinition Height="Auto" />
-        <RowDefinition Height="Auto" />
-      </Grid.RowDefinitions>
-      <Label Content="{ll:Str 动画类型}" />
+    <StackPanel Width="300" Grid.Row="1" HorizontalAlignment="Stretch" VerticalAlignment="Center">
+      <Label Content="{ll:Str 动画类型}" Style="{DynamicResource ModMaker_LabelCenterStyle}" />
       <ComboBox
-        Grid.Column="1"
         ItemsSource="{Binding GraphTypes}"
         SelectedItem="{Binding GraphType}"
         Style="{StaticResource StandardComboBoxStyle}"
       />
       <Label
-        Grid.Row="1"
         Content="{ll:Str 动画名称}"
+        Style="{DynamicResource ModMaker_LabelCenterStyle}"
         Visibility="{Binding HasNameAnime, Converter={StaticResource FalseToCollapsedConverter}}"
       />
       <TextBox
-        Grid.Row="1"
-        Grid.Column="1"
         Style="{StaticResource StandardTextBoxStyle}"
         Text="{Binding AnimeName, UpdateSourceTrigger=PropertyChanged}"
         Visibility="{Binding HasNameAnime, Converter={StaticResource FalseToCollapsedConverter}}"
       />
-    </Grid>
+    </StackPanel>
     <Grid Grid.Row="2">
       <Grid.ColumnDefinitions>
         <ColumnDefinition />
@@ -63,7 +55,7 @@
         Margin="10"
         Click="Button_Yes_Click"
         Content="{ll:Str 确定}"
-        Style="{StaticResource MyThemedButtonStyle}"
+        Style="{DynamicResource ThemedButtonStyle}"
       />
       <Button
         x:Name="Button_Cancel"
@@ -71,7 +63,7 @@
         Margin="10"
         Click="Button_Cancel_Click"
         Content="{ll:Str 取消}"
-        Style="{StaticResource Button_Cancel}"
+        Style="{DynamicResource Button_Cancel}"
       />
     </Grid>
   </Grid>
