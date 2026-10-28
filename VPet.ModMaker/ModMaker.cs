@@ -1,17 +1,18 @@
-﻿using System.Globalization;
-using System.IO;
-using System.Windows;
-using System.Windows.Controls;
-using HanumanInstitute.MvvmDialogs;
+﻿using HanumanInstitute.MvvmDialogs;
 using HKW.HKWUtils;
 using HKW.HKWUtils.Collections;
 using HKW.WPF.Extensions;
 using LinePutScript.Localization.WPF;
 using Microsoft.Extensions.DependencyInjection;
-using VPet_Simulator.Windows.Interface;
+using Microsoft.Extensions.Logging;
+using System.Globalization;
+using System.IO;
+using System.Windows;
+using System.Windows.Controls;
 using VPet.ModMaker.Models;
 using VPet.ModMaker.ViewModels;
 using VPet.ModMaker.Views;
+using VPet_Simulator.Windows.Interface;
 
 namespace VPet.ModMaker;
 
@@ -40,6 +41,12 @@ public class ModMaker : MainPlugin
     public IServiceProvider Services => field ??= new AppServices().BuildServiceProvider();
 
     /// <summary>
+    /// 日志提供商
+    /// </summary>
+    public ILogger Logger =>
+    field ??= Services.GetService<ILoggerFactory>()!.CreateLogger<ModMaker>();
+
+    /// <summary>
     /// 载入插件
     /// </summary>
     public override void LoadPlugin()
@@ -61,15 +68,28 @@ public class ModMaker : MainPlugin
             };
             modset.Items.Add(menuset);
 
+            //载入本地化文化
+            foreach (var c in LocalizeCore.AvailableCultures)
+            {
+                try
+                {
+                    I18nResource.AddCulture(CultureInfo.GetCultureInfo(c));
+                }
+                catch { }
+            }
+            I18nResource.CurrentCulture = I18nResource.Cultures.FirstOrDefault();
+
             //载入本体宠物
             foreach (var pet in MW.Pets)
             {
                 try
                 {
                     MainPets.TryAdd(pet.Name, new(pet, I18nResource, true));
+                    Logger.LogInformation("载入本体宠物成功, PetID: {id}", pet.Name);
                 }
                 catch (Exception ex)
                 {
+                    Logger.LogWarning(ex, "载入本体宠物错误, PetID: {id}", pet.Name);
                     //this.LogX().Warn(ex, "载入本体宠物错误, PetID: {id}", pet.Name);
                 }
             }

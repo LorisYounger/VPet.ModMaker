@@ -206,8 +206,7 @@ public sealed partial class FoodModel : ObservableModelBase, IDisposable
     {
         get
         {
-            this.MapTo(_food);
-            var price = Math.Floor(_food.RealPrice);
+            var price = Math.Floor((Exp / 3 + Strength / 5 + StrengthDrink / 3 + StrengthFood / 2 + Feeling / 6) / 3 + Health + Likability * 10);
             if (AutoSetFoodPrice)
                 Price = price;
             return price;

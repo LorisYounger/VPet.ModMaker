@@ -32,7 +32,7 @@ public partial class AddCultureViewModel : ViewModelBase, IModalDialogViewModel,
         this.WhenAnyValue(x => x.Search)
             .Throttle(TimeSpan.FromSeconds(0.5), ObservableSchedulers.ThreadPool)
             .DistinctUntilChanged()
-            .ObserveOn(ObservableSchedulers.CurrentThread)
+            .ObserveOn(ObservableSchedulers.Current)
             .Subscribe(_ => AllCultures.Refresh());
     }
 
