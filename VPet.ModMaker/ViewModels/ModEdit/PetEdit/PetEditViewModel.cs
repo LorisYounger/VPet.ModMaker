@@ -89,7 +89,7 @@ public partial class PetEditViewModel
         Pets.SourceList = null!;
         if (newValue is not null)
         {
-            Pets.SourceList = newValue.Pets.FilteredList;
+            Pets.SourceList = newValue.Pets.SourceList;
             newValue
                 .Pets.FilteredList.WhenAnyValue(x => x.Count)
                 .Subscribe(_ => OnPropertyChanged(nameof(DisplayText)))

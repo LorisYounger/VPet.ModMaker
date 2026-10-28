@@ -69,12 +69,19 @@ public sealed partial class AnimeViewModel : ViewModelBase, IEditViewModel, IDis
     [ObservableProperty]
     public PetModel? CurrentPet { get; set; } = null!;
 
+    private IDisposable _disposable;
+
     partial void OnCurrentPetChanged(PetModel? oldValue, PetModel? newValue)
     {
         Animes.SourceList = null!;
+        _disposable?.Dispose();
         if (newValue is not null)
         {
             Animes.SourceList = newValue.Animes;
+
+            _disposable = newValue
+                .Animes.WhenAnyValue(x => x.Count)
+                .Subscribe(x => NotifyPropertyChanged(nameof(DisplayText)));
         }
     }
 

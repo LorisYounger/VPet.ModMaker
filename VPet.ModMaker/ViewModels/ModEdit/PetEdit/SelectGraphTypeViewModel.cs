@@ -19,10 +19,13 @@ public partial class SelectGraphTypeViewModel : ViewModelBase, IModalDialogViewM
     [ObservableProperty]
     public PetModel CurrentPet { get; set; } = null!;
 
+
     partial void OnCurrentPetChanged(PetModel oldValue, PetModel newValue)
     {
         if (newValue is not null)
         {
+            AnimeName = string.Empty;
+            DialogResult = false;
             GraphTypes = new(
                 AnimeTypeModel.GraphTypes.Except(CurrentPet.Animes.Select(m => m.GraphType))
             );

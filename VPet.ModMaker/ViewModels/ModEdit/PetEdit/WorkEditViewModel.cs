@@ -92,13 +92,17 @@ public sealed partial class WorkEditViewModel
     [ObservableProperty]
     public PetModel? CurrentPet { get; set; }
 
+    private IDisposable _disposable;
+
     partial void OnCurrentPetChanged(PetModel? oldValue, PetModel? newValue)
     {
         Works.SourceList = null!;
         ModInfo?.CurrentPet = newValue;
+        _disposable?.Dispose();
         if (newValue is not null)
         {
             Works.SourceList = newValue.Works;
+            _disposable = newValue.Works.WhenAnyValue(x => x.Count).Subscribe(x => NotifyPropertyChanged(nameof(DisplayText)));
         }
         CurrentSearchTarget = WorkSearchTarget.ID;
     }

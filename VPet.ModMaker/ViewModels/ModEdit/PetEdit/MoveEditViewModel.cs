@@ -85,13 +85,19 @@ public sealed partial class MoveEditViewModel
     [ObservableProperty]
     public PetModel? CurrentPet { get; set; }
 
+    private IDisposable _disposable;
+
     partial void OnCurrentPetChanged(PetModel? oldValue, PetModel? newValue)
     {
         Moves.SourceList = null!;
         ModInfo?.CurrentPet = newValue;
+        _disposable?.Dispose();
         if (newValue is not null)
         {
             Moves.SourceList = newValue.Moves;
+            _disposable = newValue
+                .Moves.WhenAnyValue(x => x.Count)
+                .Subscribe(x => NotifyPropertyChanged(nameof(DisplayText)));
         }
     }
 

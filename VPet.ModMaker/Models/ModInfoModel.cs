@@ -278,7 +278,7 @@ public sealed partial class ModInfoModel : ObservableModelBase, IDisposable
     /// <summary>
     /// 宠物
     /// </summary>
-    public FilteredListWrapper<
+    public ObservableFilteredListWrapper<
         PetModel,
         ObservableList<PetModel>,
         ObservableList<PetModel>
@@ -740,19 +740,24 @@ public sealed partial class ModInfoModel : ObservableModelBase, IDisposable
 
     private void SavePets(string path)
     {
+        var validPets = Pets.Where(x =>
+            x.FromMain is false
+            || (x.Moves.Count > 0 || x.Works.Count > 0 || x.Animes.Count > 0)
+        )
+        .ToArray();
         var petPath = Path.Combine(path, "pet");
-        if (Pets.Count == 0 || Pets.All(m => m.FromMain))
+        if (validPets.Count() == 0)
         {
             if (Directory.Exists(petPath))
                 Directory.Delete(petPath, true);
             return;
         }
         this.LogIfEnabled(LogLevel.Information)
-            ?.Log("正在保存宠物, 数量: {count}", Pets.Count(m => m.FromMain is false));
+            ?.Log("正在保存宠物, 数量: {count}", validPets.Count());
         Directory.CreateDirectory(petPath);
-        foreach (var pet in Pets)
+        foreach (var pet in validPets)
         {
-            if (pet.FromMain)
+            if (pet.Works.Count() == 0 && pet.Animes.Count() == 0 && pet.Moves.Count() == 0)
                 continue;
             try
             {
