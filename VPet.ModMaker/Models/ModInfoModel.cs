@@ -767,7 +767,7 @@ public sealed partial class ModInfoModel : ObservableModelBase, IDisposable
             }
             catch (Exception ex)
             {
-                this.LogIfEnabled(LogLevel.Information)
+                this.LogIfEnabled(LogLevel.Warning)
                     ?.Log(
                         ex,
                         "保存宠物失败, ID: '{id}', 宠物名称: '{petName}'",
