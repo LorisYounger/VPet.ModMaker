@@ -70,12 +70,12 @@ public sealed partial class FoodAnimeModel
     /// </summary>
     public void LoadAnime()
     {
-        if (BackImages.FirstOrDefault()?.Image is null)
+        if (BackImages.Count > 0 && BackImages.FirstOrDefault()?.Image is null)
         {
             foreach (var image in BackImages)
                 image.LoadImage();
         }
-        if (FrontImages.FirstOrDefault()?.Image is null)
+        if (FrontImages.Count > 0 && FrontImages.FirstOrDefault()?.Image is null)
         {
             foreach (var image in FrontImages)
                 image.LoadImage();

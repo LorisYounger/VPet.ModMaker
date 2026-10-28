@@ -102,7 +102,9 @@ public sealed partial class WorkEditViewModel
         if (newValue is not null)
         {
             Works.SourceList = newValue.Works;
-            _disposable = newValue.Works.WhenAnyValue(x => x.Count).Subscribe(x => NotifyPropertyChanged(nameof(DisplayText)));
+            _disposable = newValue
+                .Works.WhenAnyValue(x => x.Count)
+                .Subscribe(x => NotifyPropertyChanged(nameof(DisplayText)));
         }
         CurrentSearchTarget = WorkSearchTarget.ID;
     }
@@ -261,19 +263,27 @@ public sealed partial class WorkEditViewModel
             return;
         if (animeType.HappyAnimes.Count > 0)
         {
-            Image = animeType.HappyAnimes.Random().Images.Random().LoadImage().Clone();
+            Image = HKWImageUtils.LoadImageToMemory(
+                animeType.HappyAnimes.Random().Images.Random().ImageFile
+            );
         }
         else if (animeType.NomalAnimes.Count > 0)
         {
-            Image = animeType.NomalAnimes.Random().Images.Random().LoadImage().Clone();
+            Image = HKWImageUtils.LoadImageToMemory(
+                animeType.NomalAnimes.Random().Images.Random().ImageFile
+            );
         }
         else if (animeType.PoorConditionAnimes.Count > 0)
         {
-            Image = animeType.PoorConditionAnimes.Random().Images.Random().LoadImage().Clone();
+            Image = HKWImageUtils.LoadImageToMemory(
+                animeType.PoorConditionAnimes.Random().Images.Random().ImageFile
+            );
         }
         else if (animeType.IllAnimes.Count > 0)
         {
-            Image = animeType.IllAnimes.Random().Images.Random().LoadImage().Clone();
+            Image = HKWImageUtils.LoadImageToMemory(
+                animeType.IllAnimes.Random().Images.Random().ImageFile
+            );
         }
     }
 

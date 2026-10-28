@@ -218,6 +218,7 @@
         <ListBox
           x:Name="ModeTypes"
           SelectedIndex="0"
+          SelectionChanged="ModeTypes_SelectionChanged"
           PreviewMouseWheel="ListBox_HorizontalScrolling_PreviewMouseWheel"
           Style="{DynamicResource SideMenuListBoxStyle}"
         >
@@ -380,7 +381,6 @@
           PreviewMouseMove="ListBox_Images_PreviewMouseMove"
           PreviewMouseWheel="ListBox_HorizontalScrolling_PreviewMouseWheel"
           SelectedItem="{Binding CurrentFrontImage}"
-          SelectionChanged="ListBox_Images_SelectionChanged"
           ScrollViewer.HorizontalScrollBarVisibility="Auto"
           ScrollViewer.VerticalScrollBarVisibility="Hidden"
           pu:ScrollBarHelper.ThumbBackground="{DynamicResource SecondaryLight}"
@@ -396,7 +396,7 @@
         >
           <ListBox.ItemsPanel>
             <ItemsPanelTemplate>
-              <StackPanel Orientation="Horizontal" />
+              <VirtualizingStackPanel Orientation="Horizontal" />
             </ItemsPanelTemplate>
           </ListBox.ItemsPanel>
           <ListBox.ItemTemplate>
@@ -458,7 +458,6 @@
           PreviewMouseMove="ListBox_Images_PreviewMouseMove"
           PreviewMouseWheel="ListBox_HorizontalScrolling_PreviewMouseWheel"
           SelectedItem="{Binding CurrentBackImage}"
-          SelectionChanged="ListBox_Images_SelectionChanged"
           ScrollViewer.HorizontalScrollBarVisibility="Auto"
           ScrollViewer.VerticalScrollBarVisibility="Hidden"
           pu:ScrollBarHelper.ThumbBackground="{DynamicResource SecondaryLight}"
@@ -474,7 +473,7 @@
         >
           <ListBox.ItemsPanel>
             <ItemsPanelTemplate>
-              <StackPanel Orientation="Horizontal" />
+              <VirtualizingStackPanel Orientation="Horizontal" />
             </ItemsPanelTemplate>
           </ListBox.ItemsPanel>
           <ListBox.ItemTemplate>
@@ -536,7 +535,6 @@
           PreviewMouseMove="ListBox_Images_PreviewMouseMove"
           PreviewMouseWheel="ListBox_HorizontalScrolling_PreviewMouseWheel"
           SelectedItem="{Binding CurrentFoodLocation}"
-          SelectionChanged="ListBox_Images_SelectionChanged"
           ScrollViewer.HorizontalScrollBarVisibility="Auto"
           ScrollViewer.VerticalScrollBarVisibility="Hidden"
           pu:ScrollBarHelper.ThumbBackground="{DynamicResource SecondaryLight}"
@@ -552,7 +550,7 @@
         >
           <ListBox.ItemsPanel>
             <ItemsPanelTemplate>
-              <StackPanel Orientation="Horizontal" />
+              <VirtualizingStackPanel Orientation="Horizontal" />
             </ItemsPanelTemplate>
           </ListBox.ItemsPanel>
           <ListBox.ItemTemplate>

@@ -7,6 +7,7 @@ using HanumanInstitute.MvvmDialogs;
 using HanumanInstitute.MvvmDialogs.FrameworkDialogs;
 using HKW.HKWUtils.Observable;
 using HKW.WPF;
+using HKW.WPF.Extensions;
 using HKW.WPF.MVVMDialogs;
 using LinePutScript.Localization.WPF;
 using VPet.ModMaker.Models;
@@ -158,19 +159,18 @@ public sealed partial class AnimeEditViewModel
     /// </summary>
     /// <param name="value">动画模型</param>
     [RelayCommand]
-    private void RemoveImage(AnimeModel value)
+    private void RemoveImage(ImageModel value)
     {
-        CurrentImageModel.Dispose();
-        value.Images.Remove(CurrentImageModel);
+        value.Dispose();
+        CurrentAnimeModel.Images.Remove(value);
     }
 
     /// <summary>
     /// 替换图片
     /// </summary>
     /// <param name="value"></param>
-    /// <exception cref="NotImplementedException"></exception>
     [RelayCommand]
-    private void ChangeImage(AnimeModel value)
+    private void ChangeImage(ImageModel value)
     {
         var openFileDialog = DialogService.ShowOpenFileDialog(
             this,
@@ -193,8 +193,8 @@ public sealed partial class AnimeEditViewModel
             );
             return;
         }
-        CurrentImageModel.Dispose();
-        CurrentImageModel.Image = newImage;
+        value.Image.CloseStream();
+        value.Image = newImage;
     }
 
     /// <summary>
@@ -213,7 +213,6 @@ public sealed partial class AnimeEditViewModel
         if (result is not true)
             return;
         value.Dispose();
-        value.Images.Clear();
     }
 
     /// <summary>
@@ -232,7 +231,7 @@ public sealed partial class AnimeEditViewModel
                 if (image is null)
                     failCount++;
                 else
-                    images.Add(new(image));
+                    images.Add(new(path, image));
             }
             else if (Directory.Exists(path))
             {
@@ -242,7 +241,7 @@ public sealed partial class AnimeEditViewModel
                     if (image is null)
                         failCount++;
                     else
-                        images.Add(new(image));
+                        images.Add(new(path, image));
                 }
             }
         }

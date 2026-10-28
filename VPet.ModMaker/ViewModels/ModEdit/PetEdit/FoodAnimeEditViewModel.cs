@@ -227,10 +227,10 @@ public sealed partial class FoodAnimeEditViewModel
     /// </summary>
     /// <param name="value">动画模型</param>
     [RelayCommand]
-    private void RemoveFrontImage(FoodAnimeModel value)
+    private void RemoveFrontImage(ImageModel value)
     {
-        CurrentFrontImage.Dispose();
-        value.FrontImages.Remove(CurrentFrontImage);
+        value.Dispose();
+        CurrentAnimeModel.FrontImages.Remove(value);
     }
 
     /// <summary>
@@ -258,7 +258,7 @@ public sealed partial class FoodAnimeEditViewModel
     /// </summary>
     /// <param name="value">动画模型</param>
     [RelayCommand]
-    private void ChangeFrontImage(FoodAnimeModel value)
+    private void ChangeFrontImage(ImageModel value)
     {
         var openFileDialog = DialogService.ShowOpenFileDialog(
             this,
@@ -281,8 +281,8 @@ public sealed partial class FoodAnimeEditViewModel
             );
             return;
         }
-        CurrentFrontImage.Dispose();
-        CurrentFrontImage.Image = newImage;
+        value.Image.CloseStream();
+        value.Image = newImage;
     }
     #endregion
 
@@ -312,10 +312,10 @@ public sealed partial class FoodAnimeEditViewModel
     /// </summary>
     /// <param name="value">动画模型</param>
     [RelayCommand]
-    private void RemoveBackImage(FoodAnimeModel value)
+    private void RemoveBackImage(ImageModel value)
     {
-        CurrentBackImage.Dispose();
-        value.BackImages.Remove(CurrentBackImage);
+        value.Dispose();
+        CurrentAnimeModel.BackImages.Remove(value);
     }
 
     /// <summary>
@@ -344,7 +344,7 @@ public sealed partial class FoodAnimeEditViewModel
     /// <param name="value"></param>
     /// <exception cref="NotImplementedException"></exception>
     [RelayCommand]
-    private void ChangeBackImage(FoodAnimeModel value)
+    private void ChangeBackImage(ImageModel value)
     {
         var openFileDialog = DialogService.ShowOpenFileDialog(
             this,
@@ -367,8 +367,8 @@ public sealed partial class FoodAnimeEditViewModel
             );
             return;
         }
-        CurrentBackImage.Dispose();
-        CurrentBackImage.Image = newImage;
+        value.Image.CloseStream();
+        value.Image = newImage;
     }
     #endregion
 
@@ -388,7 +388,7 @@ public sealed partial class FoodAnimeEditViewModel
                 if (image is null)
                     failCount++;
                 else
-                    images.Add(new(image));
+                    images.Add(new(path, image));
             }
             else if (Directory.Exists(path))
             {
@@ -398,7 +398,7 @@ public sealed partial class FoodAnimeEditViewModel
                     if (image is null)
                         failCount++;
                     else
-                        images.Add(new(image));
+                        images.Add(new(path, image));
                 }
             }
         }
@@ -421,10 +421,9 @@ public sealed partial class FoodAnimeEditViewModel
     }
 
     [RelayCommand]
-    private void RemoveFoodLocation(FoodAnimeModel value)
+    private void RemoveFoodLocation(FoodAnimeLocationModel value)
     {
-        value.FoodLocations.Remove(CurrentFoodLocation);
-        CurrentFoodLocation = null!;
+        CurrentAnimeModel.FoodLocations.Remove(value);
     }
 
     [RelayCommand]

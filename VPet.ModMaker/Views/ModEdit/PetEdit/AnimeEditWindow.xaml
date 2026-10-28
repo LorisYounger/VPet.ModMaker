@@ -153,6 +153,7 @@
         <ListBox
           x:Name="ModeTypes"
           SelectedIndex="0"
+          SelectionChanged="ModeTypes_SelectionChanged"
           PreviewMouseWheel="ListBox_HorizontalScrolling_PreviewMouseWheel"
           Style="{DynamicResource SideMenuListBoxStyle}"
         >
@@ -296,7 +297,6 @@
         pu:ScrollViewerHelper.ScrollBarPosition="Inside"
         pu:ScrollViewerHelper.ScrollBarThickness="3"
         SelectedItem="{Binding CurrentImageModel}"
-        SelectionChanged="ListBox_Images_SelectionChanged"
         pu:ListBoxHelper.CornerRadius="4"
         d:SelectedIndex="0"
         BorderThickness="1.5"
@@ -305,7 +305,7 @@
       >
         <ListBox.ItemsPanel>
           <ItemsPanelTemplate>
-            <StackPanel Orientation="Horizontal" />
+            <VirtualizingStackPanel Orientation="Horizontal" />
           </ItemsPanelTemplate>
         </ListBox.ItemsPanel>
         <ListBox.ItemTemplate>
@@ -315,7 +315,7 @@
               Background="Transparent"
               Tag="{Binding DataContext, RelativeSource={RelativeSource AncestorType=Window, Mode=FindAncestor}}"
             >
-              <!--<Grid.ContextMenu>
+              <Grid.ContextMenu>
                 <ContextMenu>
                   <MenuItem
                     d:Header="修改图片"
@@ -330,7 +330,7 @@
                     Header="{ll:Str 删除图片}"
                   />
                 </ContextMenu>
-              </Grid.ContextMenu>-->
+              </Grid.ContextMenu>
               <Image Width="150" Height="150" d:DataContext="" Source="{Binding Image}">
                 <Image.ToolTip>
                   <Image Width="250" Height="250" Source="{Binding Image}" />

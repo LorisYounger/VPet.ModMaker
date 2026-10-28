@@ -51,6 +51,8 @@
       MouseDoubleClick="DataGrid_MouseDoubleClick"
       FrozenColumnCount="2"
       Style="{DynamicResource ModMaker_ModelsDataGrid}"
+      VirtualizingPanel.IsContainerVirtualizable="True"
+      VirtualizingPanel.VirtualizationMode="Recycling"
     >
       <DataGrid.RowStyle>
         <Style BasedOn="{StaticResource {x:Type DataGridRow}}" TargetType="DataGridRow">

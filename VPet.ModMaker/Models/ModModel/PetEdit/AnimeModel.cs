@@ -55,7 +55,7 @@ public sealed partial class AnimeModel : ObservableModelBase, ICloneable<AnimeMo
     /// </summary>
     public void LoadAnime()
     {
-        if (Images.Count > 0 || Images[0].Image is not null)
+        if (Images.FirstOrDefault()?.Image is not null)
             return;
         foreach (var image in Images)
             image.LoadImage();

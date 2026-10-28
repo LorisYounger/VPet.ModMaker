@@ -741,24 +741,22 @@ public sealed partial class ModInfoModel : ObservableModelBase, IDisposable
     private void SavePets(string path)
     {
         var validPets = Pets.Where(x =>
-            x.FromMain is false
-            || (x.Moves.Count > 0 || x.Works.Count > 0 || x.Animes.Count > 0)
-        )
-        .ToArray();
+                x.FromMain is false
+                || (x.Moves.Count > 0 || x.Works.Count > 0 || x.Animes.Count > 0)
+            )
+            .ToArray();
         var petPath = Path.Combine(path, "pet");
-        if (validPets.Count() == 0)
+        if (validPets.Length == 0)
         {
             if (Directory.Exists(petPath))
                 Directory.Delete(petPath, true);
             return;
         }
         this.LogIfEnabled(LogLevel.Information)
-            ?.Log("正在保存宠物, 数量: {count}", validPets.Count());
+            ?.Log("正在保存宠物, 数量: {count}", validPets.Length);
         Directory.CreateDirectory(petPath);
         foreach (var pet in validPets)
         {
-            if (pet.Works.Count() == 0 && pet.Animes.Count() == 0 && pet.Moves.Count() == 0)
-                continue;
             try
             {
                 pet.Save(petPath);

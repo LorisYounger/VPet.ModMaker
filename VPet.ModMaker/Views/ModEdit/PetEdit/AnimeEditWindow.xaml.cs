@@ -79,24 +79,6 @@ public partial class AnimeEditWindow : WindowX
         (list[targetIndex], list[sourceIndex]) = (list[sourceIndex], list[targetIndex]);
     }
 
-    private ListBox _lastListBox;
-
-    private void ListBox_Images_SelectionChanged(object? sender, SelectionChangedEventArgs e)
-    {
-        if (sender is not ListBox listBox || listBox.SelectedItem is null)
-            return;
-        if (listBox != _lastListBox)
-        {
-            _lastListBox?.SelectedItem = null;
-            _lastListBox = listBox;
-            _lastListBox?.SelectedItem = e.AddedItems[0];
-        }
-        if (listBox.DataContext is AnimeModel model)
-            ViewModel.CurrentAnimeModel = model;
-        listBox.ScrollIntoView(listBox.SelectedItem);
-        e.Handled = true;
-    }
-
     private void ListBox_HorizontalScrolling_PreviewMouseWheel(object sender, MouseWheelEventArgs e)
     {
         var listBox = (ListBox)sender;
@@ -111,5 +93,21 @@ public partial class AnimeEditWindow : WindowX
             scrollViewer.LineLeft();
 
         e.Handled = true;
+    }
+
+    private void ModeTypes_SelectionChanged(object sender, SelectionChangedEventArgs e)
+    {
+        var listBox = (ListBox)sender;
+        var tag = ((ListBoxItem)listBox.SelectedItem).Tag;
+        if (tag is null)
+            return;
+        if (ReferenceEquals(tag, ViewModel?.Anime?.HappyAnimes))
+            ViewModel.CurrentMode = ModeType.Happy;
+        else if (ReferenceEquals(tag, ViewModel?.Anime?.NomalAnimes))
+            ViewModel.CurrentMode = ModeType.Nomal;
+        else if (ReferenceEquals(tag, ViewModel?.Anime?.PoorConditionAnimes))
+            ViewModel.CurrentMode = ModeType.PoorCondition;
+        else if (ReferenceEquals(tag, ViewModel?.Anime?.IllAnimes))
+            ViewModel.CurrentMode = ModeType.Ill;
     }
 }

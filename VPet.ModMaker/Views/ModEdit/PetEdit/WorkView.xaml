@@ -60,6 +60,8 @@
         ItemsSource="{Binding ModInfo.Pets.FilteredList}"
         SelectedItem="{Binding ModInfo.CurrentPet}"
         Style="{StaticResource StandardComboBoxStyle}"
+        VirtualizingPanel.IsContainerVirtualizable="True"
+        VirtualizingPanel.VirtualizationMode="Recycling"
       >
         <ComboBox.ItemContainerStyle>
           <Style BasedOn="{StaticResource {x:Type ComboBoxItem}}" TargetType="ComboBoxItem">

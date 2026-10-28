@@ -69,7 +69,7 @@ public sealed partial class AnimeViewModel : ViewModelBase, IEditViewModel, IDis
     [ObservableProperty]
     public PetModel? CurrentPet { get; set; } = null!;
 
-    private IDisposable _disposable;
+    private IDisposable? _disposable;
 
     partial void OnCurrentPetChanged(PetModel? oldValue, PetModel? newValue)
     {
@@ -146,10 +146,10 @@ public sealed partial class AnimeViewModel : ViewModelBase, IEditViewModel, IDis
     [RelayCommand]
     public void Edit(IAnimeModel model)
     {
-        //var pendingHandler = PendingBox.Show("载入中".Translate());
         if (model is AnimeTypeModel animeTypeModel)
         {
             var newModel = new AnimeTypeModel(animeTypeModel);
+            newModel.LoadTypeAnime();
             AnimeEdit.Anime = newModel;
             AnimeEdit.CurrentPet = CurrentPet!;
             var editResult = DialogService.ShowDialog(this, AnimeEdit);
@@ -166,6 +166,7 @@ public sealed partial class AnimeViewModel : ViewModelBase, IEditViewModel, IDis
         else if (model is FoodAnimeTypeModel foodAnimeTypeModel)
         {
             var newModel = new FoodAnimeTypeModel(foodAnimeTypeModel);
+            newModel.LoadTypeAnime();
             FoodAnimeEdit.Anime = newModel;
             FoodAnimeEdit.CurrentPet = CurrentPet!;
             var editResult = DialogService.ShowDialog(this, FoodAnimeEdit);
@@ -179,6 +180,7 @@ public sealed partial class AnimeViewModel : ViewModelBase, IEditViewModel, IDis
                 Animes[Animes.IndexOf(foodAnimeTypeModel)] = newModel;
             }
         }
+        Reset();
     }
 
     /// <summary>
@@ -209,8 +211,10 @@ public sealed partial class AnimeViewModel : ViewModelBase, IEditViewModel, IDis
     public void Reset()
     {
         AnimeEdit.Anime = null!;
+        AnimeEdit.CurrentAnimeModel = null!;
         AnimeEdit.CurrentPet = null!;
         FoodAnimeEdit.Anime = null!;
+        FoodAnimeEdit.CurrentAnimeModel = null!;
         FoodAnimeEdit.CurrentPet = null!;
     }
 

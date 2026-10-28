@@ -251,7 +251,6 @@
     <Setter Property="TextWrapping" Value="Wrap" />
     <Setter Property="ToolTip" Value="{Binding Text, RelativeSource={RelativeSource Mode=Self}}" />
     <Setter Property="FontSize" Value="14" />
-    <Setter Property="Height" Value="30" />
     <Setter Property="Background" Value="{DynamicResource DARKPrimaryText}" />
     <Setter Property="BorderThickness" Value="1.5" />
     <Setter Property="BorderBrush" Value="{DynamicResource DARKPrimary}" />

@@ -116,24 +116,6 @@ public partial class FoodAnimeEditWindow : WindowX
         }
     }
 
-    private void ListBox_Images_SelectionChanged(object? sender, SelectionChangedEventArgs e)
-    {
-        if (sender is not ListBox listBox)
-            return;
-        if (listBox.DataContext is FoodAnimeModel model)
-            ViewModel.CurrentAnimeModel = model;
-        listBox.ScrollIntoView(listBox.SelectedItem);
-        e.Handled = true;
-    }
-
-    private void ListBox_ModeTypes_SelectionChanged(object sender, SelectionChangedEventArgs e)
-    {
-        if (sender is not ListBox listBox)
-            throw new NotImplementedException();
-        if (listBox.SelectedItem is null)
-            return;
-    }
-
     private void ButtonShowContextMenu_Click(object sender, RoutedEventArgs e)
     {
         var button = (Button)sender;
@@ -155,5 +137,21 @@ public partial class FoodAnimeEditWindow : WindowX
             scrollViewer.LineLeft();
 
         e.Handled = true;
+    }
+
+    private void ModeTypes_SelectionChanged(object sender, SelectionChangedEventArgs e)
+    {
+        var listBox = (ListBox)sender;
+        var tag = ((ListBoxItem)listBox.SelectedItem).Tag;
+        if (tag is null)
+            return;
+        if (ReferenceEquals(tag, ViewModel?.Anime?.HappyAnimes))
+            ViewModel.CurrentMode = ModeType.Happy;
+        else if (ReferenceEquals(tag, ViewModel?.Anime?.NomalAnimes))
+            ViewModel.CurrentMode = ModeType.Nomal;
+        else if (ReferenceEquals(tag, ViewModel?.Anime?.PoorConditionAnimes))
+            ViewModel.CurrentMode = ModeType.PoorCondition;
+        else if (ReferenceEquals(tag, ViewModel?.Anime?.IllAnimes))
+            ViewModel.CurrentMode = ModeType.Ill;
     }
 }

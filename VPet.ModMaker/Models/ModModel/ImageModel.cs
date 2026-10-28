@@ -26,8 +26,9 @@ public sealed partial class ImageModel : ObservableObjectEx, ICloneable<ImageMod
     /// <inheritdoc/>
     /// <param name="image">图像</param>
     /// <param name="duration">间隔</param>/>
-    public ImageModel(BitmapImage image, int duration = 100)
+    public ImageModel(string imageFile, BitmapImage image, int duration = 100)
     {
+        ImageFile = imageFile;
         Image = image;
         Duration = duration;
     }
@@ -35,7 +36,7 @@ public sealed partial class ImageModel : ObservableObjectEx, ICloneable<ImageMod
     /// <summary>
     /// 图片路径
     /// </summary>
-    public string ImageFile { get; set; } = string.Empty;
+    public string ImageFile { get; set; }
 
     /// <summary>
     /// 图像
@@ -64,14 +65,7 @@ public sealed partial class ImageModel : ObservableObjectEx, ICloneable<ImageMod
     /// <returns></returns>
     public ImageModel Clone()
     {
-        if (Image is not null)
-        {
-            return new ImageModel(Image.Clone(), Duration);
-        }
-        else
-        {
-            return new(HKWImageUtils.LoadImageToMemory(ImageFile)!, Duration);
-        }
+        return new(ImageFile, Duration);
     }
 
     object ICloneable.Clone() => Clone();

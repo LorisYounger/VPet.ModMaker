@@ -153,7 +153,6 @@ public sealed partial class AnimeTypeModel : ObservableModelBase, IAnimeModel
     /// </summary>
     public void Clear()
     {
-        //Close();
         HappyAnimes.Clear();
         NomalAnimes.Clear();
         PoorConditionAnimes.Clear();
@@ -598,7 +597,7 @@ public sealed partial class AnimeTypeModel : ObservableModelBase, IAnimeModel
     static void SaveImages(string imagesPath, AnimeModel model)
     {
         Directory.CreateDirectory(imagesPath);
-        foreach ((var image, var index) in model.Images.WithIndex())
+        foreach (var (image, index) in model.Images.WithIndex())
         {
             var path = Path.Combine(imagesPath, $"{model.ID}_{index:000}_{image.Duration}.png");
             if (image.Image is not null)
