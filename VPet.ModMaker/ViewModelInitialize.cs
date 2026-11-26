@@ -6,7 +6,9 @@ using System.IO;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using System.Windows.Media.Media3D;
 using System.Windows.Threading;
 using HanumanInstitute.MvvmDialogs;
 using HanumanInstitute.MvvmDialogs.Wpf;
@@ -170,7 +172,8 @@ internal class DialogManagerX : DialogManager
     )
         : base(viewLocator, dialogFactory, logger, dispatcher) { }
 
-    private static IEnumerable<Window> Windows => Application.Current.Windows.Cast<Window>();
+    private static IEnumerable<Window> Windows =>
+        Application.Current?.Windows.Cast<Window>() ?? [];
 
     public override IView? FindViewByViewModel(INotifyPropertyChanged viewModel)
     {
@@ -180,12 +183,38 @@ internal class DialogManagerX : DialogManager
         {
             return view;
         }
-        var window = Windows.FirstOrDefault(w => w.IsActive);
+        var window = Windows.FirstOrDefault(w =>
+            w.IsActive && w.GetType().Assembly == typeof(ModMaker).Assembly
+        );
         // 从激活的窗口寻找子视图
-        var c = window?.FindView(viewModel);
+        var c = FindView(window, viewModel);
         if (c is not null)
-            return window.AsWrapper();
+            return window!.AsWrapper();
         return view;
+    }
+
+    private static DependencyObject? FindView(
+        DependencyObject? obj,
+        INotifyPropertyChanged viewModel
+    )
+    {
+        if (obj is null || viewModel is null || obj is not (Visual or Visual3D))
+            return null;
+        var count = VisualTreeHelper.GetChildrenCount(obj);
+        for (var i = 0; i < count; i++)
+        {
+            var child = VisualTreeHelper.GetChild(obj, i);
+            if (child is null)
+                continue;
+            if (
+                child is UserControl or Page
+                && ((FrameworkElement)child).DataContext?.Equals(viewModel) is true
+            )
+                return child;
+            if (FindView(child, viewModel) is { } result)
+                return result;
+        }
+        return null;
     }
 }
 
