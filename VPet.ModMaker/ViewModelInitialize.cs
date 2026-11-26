@@ -41,6 +41,20 @@ internal partial class AppServices : DIConfigurationBase
 
         EnumInfo.DefaultToString = x =>
         {
+            if (x.Value is ValueChangeLevel level)
+            {
+                return level switch
+                {
+                    ValueChangeLevel.Minus3 => "---",
+                    ValueChangeLevel.Minus2 => "--",
+                    ValueChangeLevel.Minus1 => "-",
+                    ValueChangeLevel.None => "无".Translate(),
+                    ValueChangeLevel.Plus1 => "+",
+                    ValueChangeLevel.Plus2 => "++",
+                    ValueChangeLevel.Plus3 => "+++",
+                    _ => x.Value.ToString()!,
+                };
+            }
             if (x.IsFlaggable is false || x.IsNone)
             {
                 return $"{x.EnumType.Name}_{x.Value}".Translate();

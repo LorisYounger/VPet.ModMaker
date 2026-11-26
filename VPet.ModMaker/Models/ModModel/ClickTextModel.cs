@@ -59,6 +59,18 @@ public sealed partial class ClickTextModel : ObservableModelBase, IDisposable
         EnumInfo<VPet_Simulator.Core.Main.WorkingState>.StaticValues;
 
     /// <summary>
+    /// 常规改变档位
+    /// </summary>
+    public static ImmutableArray<ValueChangeLevel> ValueChangeLevels =>
+        ValueChangeLevelHelper.Levels;
+
+    /// <summary>
+    /// 好感度改变档位
+    /// </summary>
+    public static ImmutableArray<ValueChangeLevel> LikabilityChangeLevels =>
+        ValueChangeLevelHelper.LikabilityLevels;
+
+    /// <summary>
     /// ID
     /// </summary>
     [ObservableProperty]
@@ -135,7 +147,7 @@ public sealed partial class ClickTextModel : ObservableModelBase, IDisposable
         );
 
     /// <summary>
-    /// 好感度
+    /// 好感度范围
     /// </summary>
     [MapCompositeProperty(
         typeof(ClickText),
@@ -146,7 +158,7 @@ public sealed partial class ClickTextModel : ObservableModelBase, IDisposable
     public ObservableRange<double> Like { get; set; } = new(0, int.MaxValue);
 
     /// <summary>
-    /// 健康值
+    /// 健康值范围
     /// </summary>
     [MapCompositeProperty(
         typeof(ClickText),
@@ -157,7 +169,7 @@ public sealed partial class ClickTextModel : ObservableModelBase, IDisposable
     public ObservableRange<double> Health { get; set; } = new(0, int.MaxValue);
 
     /// <summary>
-    /// 等级
+    /// 等级范围
     /// </summary>
     [MapCompositeProperty(
         typeof(ClickText),
@@ -168,7 +180,7 @@ public sealed partial class ClickTextModel : ObservableModelBase, IDisposable
     public ObservableRange<double> Level { get; set; } = new(0, int.MaxValue);
 
     /// <summary>
-    /// 金钱
+    /// 金钱范围
     /// </summary>
     [MapCompositeProperty(
         typeof(ClickText),
@@ -179,7 +191,7 @@ public sealed partial class ClickTextModel : ObservableModelBase, IDisposable
     public ObservableRange<double> Money { get; set; } = new(int.MinValue, int.MaxValue);
 
     /// <summary>
-    /// 饱食度
+    /// 饱食度范围
     /// </summary>
     [MapCompositeProperty(
         typeof(ClickText),
@@ -190,7 +202,7 @@ public sealed partial class ClickTextModel : ObservableModelBase, IDisposable
     public ObservableRange<double> Food { get; set; } = new(0, int.MaxValue);
 
     /// <summary>
-    /// 口渴度
+    /// 口渴度范围
     /// </summary>
     [MapCompositeProperty(
         typeof(ClickText),
@@ -201,7 +213,7 @@ public sealed partial class ClickTextModel : ObservableModelBase, IDisposable
     public ObservableRange<double> Drink { get; set; } = new(0, int.MaxValue);
 
     /// <summary>
-    /// 心情
+    /// 心情范围
     /// </summary>
     [MapCompositeProperty(
         typeof(ClickText),
@@ -212,7 +224,7 @@ public sealed partial class ClickTextModel : ObservableModelBase, IDisposable
     public ObservableRange<double> Feel { get; set; } = new(0, int.MaxValue);
 
     /// <summary>
-    /// 体力
+    /// 体力范围
     /// </summary>
     [MapCompositeProperty(
         typeof(ClickText),
@@ -221,6 +233,94 @@ public sealed partial class ClickTextModel : ObservableModelBase, IDisposable
         nameof(ClickText.StrengthMax)
     )]
     public ObservableRange<double> Strength { get; set; } = new(0, int.MaxValue);
+
+    /// <summary>
+    /// 好感度改变值
+    /// </summary>
+    [ObservableProperty]
+    [MapProperty(
+        typeof(ClickText),
+        nameof(ClickText.Likability),
+        typeof(ValueChangeLevelToDoubleConverter)
+    )]
+    public ValueChangeLevel ChangeLikability { get; set; }
+
+    /// <summary>
+    /// 健康度改变值
+    /// </summary>
+    [ObservableProperty]
+    [MapProperty(
+        typeof(ClickText),
+        nameof(ClickText.Health),
+        typeof(ValueChangeLevelToDoubleConverter)
+    )]
+    public ValueChangeLevel ChangeHealth { get; set; }
+
+    /// <summary>
+    /// 经验改变值
+    /// </summary>
+    [ObservableProperty]
+    [MapProperty(
+        typeof(ClickText),
+        nameof(ClickText.Exp),
+        typeof(ValueChangeLevelToIntConverter)
+    )]
+    public ValueChangeLevel ChangeExp { get; set; }
+
+    /// <summary>
+    /// 金钱改变值
+    /// </summary>
+    [ObservableProperty]
+    [MapProperty(
+        typeof(ClickText),
+        nameof(ClickText.Money),
+        typeof(ValueChangeLevelToDoubleConverter)
+    )]
+    public ValueChangeLevel ChangeMoney { get; set; }
+
+    /// <summary>
+    /// 饱腹度改变值
+    /// </summary>
+    [ObservableProperty]
+    [MapProperty(
+        typeof(ClickText),
+        nameof(ClickText.StrengthFood),
+        typeof(ValueChangeLevelToDoubleConverter)
+    )]
+    public ValueChangeLevel ChangeStrengthFood { get; set; }
+
+    /// <summary>
+    /// 口渴度改变值
+    /// </summary>
+    [ObservableProperty]
+    [MapProperty(
+        typeof(ClickText),
+        nameof(ClickText.StrengthDrink),
+        typeof(ValueChangeLevelToDoubleConverter)
+    )]
+    public ValueChangeLevel ChangeStrengthDrink { get; set; }
+
+    /// <summary>
+    /// 心情改变值
+    /// </summary>
+    [ObservableProperty]
+    [MapProperty(
+        typeof(ClickText),
+        nameof(ClickText.Feeling),
+        typeof(ValueChangeLevelToDoubleConverter)
+    )]
+    public ValueChangeLevel ChangeFeeling { get; set; }
+
+    /// <summary>
+    /// 体力改变值
+    /// </summary>
+    [ObservableProperty]
+    [MapProperty(
+        typeof(ClickText),
+        nameof(ClickText.Strength),
+        typeof(ValueChangeLevelToDoubleConverter)
+    )]
+    public ValueChangeLevel ChangeStrength { get; set; }
 
     /// <inheritdoc/>
     public void Dispose()

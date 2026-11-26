@@ -235,6 +235,142 @@
               />
             </Grid>
           </Border>
+          <Border Height="40" Style="{DynamicResource ModMaker_BorderItem}">
+            <Grid ColumnDefinitions="Auto,*">
+              <TextBlock
+                Style="{DynamicResource ModMaker_TextBlockItemName}"
+                Text="{ll:Str 好感度改变}"
+              />
+              <ComboBox
+                Grid.Column="1"
+                HorizontalAlignment="Right"
+                Width="300"
+                IsEditable="False"
+                ItemsSource="{Binding SelectText.LikabilityChangeLevels, Converter={StaticResource EnumsToEnumInfosConverter}}"
+                SelectedItem="{Binding SelectText.ChangeLikability, Converter={StaticResource EnumToEnumInfoConverter}}"
+                Style="{StaticResource StandardComboBoxStyle}"
+              />
+            </Grid>
+          </Border>
+          <Border Height="40" Style="{DynamicResource ModMaker_BorderItem}">
+            <Grid ColumnDefinitions="Auto,*">
+              <TextBlock
+                Style="{DynamicResource ModMaker_TextBlockItemName}"
+                Text="{ll:Str 健康度改变}"
+              />
+              <ComboBox
+                Grid.Column="1"
+                HorizontalAlignment="Right"
+                Width="300"
+                IsEditable="False"
+                ItemsSource="{Binding SelectText.ValueChangeLevels, Converter={StaticResource EnumsToEnumInfosConverter}}"
+                SelectedItem="{Binding SelectText.ChangeHealth, Converter={StaticResource EnumToEnumInfoConverter}}"
+                Style="{StaticResource StandardComboBoxStyle}"
+              />
+            </Grid>
+          </Border>
+          <Border Height="40" Style="{DynamicResource ModMaker_BorderItem}">
+            <Grid ColumnDefinitions="Auto,*">
+              <TextBlock
+                Style="{DynamicResource ModMaker_TextBlockItemName}"
+                Text="{ll:Str 经验改变}"
+              />
+              <ComboBox
+                Grid.Column="1"
+                HorizontalAlignment="Right"
+                Width="300"
+                IsEditable="False"
+                ItemsSource="{Binding SelectText.ValueChangeLevels, Converter={StaticResource EnumsToEnumInfosConverter}}"
+                SelectedItem="{Binding SelectText.ChangeExp, Converter={StaticResource EnumToEnumInfoConverter}}"
+                Style="{StaticResource StandardComboBoxStyle}"
+              />
+            </Grid>
+          </Border>
+          <Border Height="40" Style="{DynamicResource ModMaker_BorderItem}">
+            <Grid ColumnDefinitions="Auto,*">
+              <TextBlock
+                Style="{DynamicResource ModMaker_TextBlockItemName}"
+                Text="{ll:Str 金钱改变}"
+              />
+              <ComboBox
+                Grid.Column="1"
+                HorizontalAlignment="Right"
+                Width="300"
+                IsEditable="False"
+                ItemsSource="{Binding SelectText.ValueChangeLevels, Converter={StaticResource EnumsToEnumInfosConverter}}"
+                SelectedItem="{Binding SelectText.ChangeMoney, Converter={StaticResource EnumToEnumInfoConverter}}"
+                Style="{StaticResource StandardComboBoxStyle}"
+              />
+            </Grid>
+          </Border>
+          <Border Height="40" Style="{DynamicResource ModMaker_BorderItem}">
+            <Grid ColumnDefinitions="Auto,*">
+              <TextBlock
+                Style="{DynamicResource ModMaker_TextBlockItemName}"
+                Text="{ll:Str 饱腹度改变}"
+              />
+              <ComboBox
+                Grid.Column="1"
+                HorizontalAlignment="Right"
+                Width="300"
+                IsEditable="False"
+                ItemsSource="{Binding SelectText.ValueChangeLevels, Converter={StaticResource EnumsToEnumInfosConverter}}"
+                SelectedItem="{Binding SelectText.ChangeStrengthFood, Converter={StaticResource EnumToEnumInfoConverter}}"
+                Style="{StaticResource StandardComboBoxStyle}"
+              />
+            </Grid>
+          </Border>
+          <Border Height="40" Style="{DynamicResource ModMaker_BorderItem}">
+            <Grid ColumnDefinitions="Auto,*">
+              <TextBlock
+                Style="{DynamicResource ModMaker_TextBlockItemName}"
+                Text="{ll:Str 口渴度改变}"
+              />
+              <ComboBox
+                Grid.Column="1"
+                HorizontalAlignment="Right"
+                Width="300"
+                IsEditable="False"
+                ItemsSource="{Binding SelectText.ValueChangeLevels, Converter={StaticResource EnumsToEnumInfosConverter}}"
+                SelectedItem="{Binding SelectText.ChangeStrengthDrink, Converter={StaticResource EnumToEnumInfoConverter}}"
+                Style="{StaticResource StandardComboBoxStyle}"
+              />
+            </Grid>
+          </Border>
+          <Border Height="40" Style="{DynamicResource ModMaker_BorderItem}">
+            <Grid ColumnDefinitions="Auto,*">
+              <TextBlock
+                Style="{DynamicResource ModMaker_TextBlockItemName}"
+                Text="{ll:Str 心情改变}"
+              />
+              <ComboBox
+                Grid.Column="1"
+                HorizontalAlignment="Right"
+                Width="300"
+                IsEditable="False"
+                ItemsSource="{Binding SelectText.ValueChangeLevels, Converter={StaticResource EnumsToEnumInfosConverter}}"
+                SelectedItem="{Binding SelectText.ChangeFeeling, Converter={StaticResource EnumToEnumInfoConverter}}"
+                Style="{StaticResource StandardComboBoxStyle}"
+              />
+            </Grid>
+          </Border>
+          <Border Height="40" Style="{DynamicResource ModMaker_BorderItem}">
+            <Grid ColumnDefinitions="Auto,*">
+              <TextBlock
+                Style="{DynamicResource ModMaker_TextBlockItemName}"
+                Text="{ll:Str 体力改变}"
+              />
+              <ComboBox
+                Grid.Column="1"
+                HorizontalAlignment="Right"
+                Width="300"
+                IsEditable="False"
+                ItemsSource="{Binding SelectText.ValueChangeLevels, Converter={StaticResource EnumsToEnumInfosConverter}}"
+                SelectedItem="{Binding SelectText.ChangeStrength, Converter={StaticResource EnumToEnumInfoConverter}}"
+                Style="{StaticResource StandardComboBoxStyle}"
+              />
+            </Grid>
+          </Border>
         </StackPanel>
       </ScrollViewer>
     </Grid>

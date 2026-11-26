@@ -247,6 +247,70 @@
             </MultiBinding>
           </DataGridTextColumn.Binding>
         </DataGridTextColumn>
+        <DataGridTextColumn
+          Binding="{Binding ChangeLikability, Converter={StaticResource EnumToEnumInfoConverter}}"
+          CanUserSort="True"
+          ElementStyle="{StaticResource ModMaker_TextBlockLeftCenter}"
+          Header="{ll:Str 好感度改变}"
+          IsReadOnly="True"
+          SortMemberPath="ChangeLikability"
+        />
+        <DataGridTextColumn
+          Binding="{Binding ChangeHealth, Converter={StaticResource EnumToEnumInfoConverter}}"
+          CanUserSort="True"
+          ElementStyle="{StaticResource ModMaker_TextBlockLeftCenter}"
+          Header="{ll:Str 健康度改变}"
+          IsReadOnly="True"
+          SortMemberPath="ChangeHealth"
+        />
+        <DataGridTextColumn
+          Binding="{Binding ChangeExp, Converter={StaticResource EnumToEnumInfoConverter}}"
+          CanUserSort="True"
+          ElementStyle="{StaticResource ModMaker_TextBlockLeftCenter}"
+          Header="{ll:Str 经验改变}"
+          IsReadOnly="True"
+          SortMemberPath="ChangeExp"
+        />
+        <DataGridTextColumn
+          Binding="{Binding ChangeMoney, Converter={StaticResource EnumToEnumInfoConverter}}"
+          CanUserSort="True"
+          ElementStyle="{StaticResource ModMaker_TextBlockLeftCenter}"
+          Header="{ll:Str 金钱改变}"
+          IsReadOnly="True"
+          SortMemberPath="ChangeMoney"
+        />
+        <DataGridTextColumn
+          Binding="{Binding ChangeStrengthFood, Converter={StaticResource EnumToEnumInfoConverter}}"
+          CanUserSort="True"
+          ElementStyle="{StaticResource ModMaker_TextBlockLeftCenter}"
+          Header="{ll:Str 饱腹度改变}"
+          IsReadOnly="True"
+          SortMemberPath="ChangeStrengthFood"
+        />
+        <DataGridTextColumn
+          Binding="{Binding ChangeStrengthDrink, Converter={StaticResource EnumToEnumInfoConverter}}"
+          CanUserSort="True"
+          ElementStyle="{StaticResource ModMaker_TextBlockLeftCenter}"
+          Header="{ll:Str 口渴度改变}"
+          IsReadOnly="True"
+          SortMemberPath="ChangeStrengthDrink"
+        />
+        <DataGridTextColumn
+          Binding="{Binding ChangeFeeling, Converter={StaticResource EnumToEnumInfoConverter}}"
+          CanUserSort="True"
+          ElementStyle="{StaticResource ModMaker_TextBlockLeftCenter}"
+          Header="{ll:Str 心情改变}"
+          IsReadOnly="True"
+          SortMemberPath="ChangeFeeling"
+        />
+        <DataGridTextColumn
+          Binding="{Binding ChangeStrength, Converter={StaticResource EnumToEnumInfoConverter}}"
+          CanUserSort="True"
+          ElementStyle="{StaticResource ModMaker_TextBlockLeftCenter}"
+          Header="{ll:Str 体力改变}"
+          IsReadOnly="True"
+          SortMemberPath="ChangeStrength"
+        />
       </DataGrid.Columns>
     </DataGrid>
     <Button
