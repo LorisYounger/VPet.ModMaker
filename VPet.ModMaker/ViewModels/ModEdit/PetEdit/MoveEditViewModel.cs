@@ -157,6 +157,27 @@ public sealed partial class MoveEditViewModel
         Image = newImage;
     }
 
+    private IDisposable SubscribeMoveChanged(MoveModel model)
+    {
+        var modelSub = model.Changed.Subscribe(_ => IsChanged = true);
+        PropertyChangedEventHandler enumChanged = (_, _) => IsChanged = true;
+        model.TriggerType.PropertyChanged += enumChanged;
+        model.CheckType.PropertyChanged += enumChanged;
+        model.ModeType.PropertyChanged += enumChanged;
+        return new ActionDisposable(() =>
+        {
+            modelSub.Dispose();
+            model.TriggerType.PropertyChanged -= enumChanged;
+            model.CheckType.PropertyChanged -= enumChanged;
+            model.ModeType.PropertyChanged -= enumChanged;
+        });
+    }
+
+    private sealed class ActionDisposable(Action disposeAction) : IDisposable
+    {
+        public void Dispose() => disposeAction();
+    }
+
     /// <summary>
     /// 添加
     /// </summary>
@@ -164,20 +185,21 @@ public sealed partial class MoveEditViewModel
     private void Add()
     {
         IsChanged = false;
-        using var dis = Move.Changed.Subscribe(_ => IsChanged = true);
+        Move = new();
+        using var dis = SubscribeMoveChanged(Move);
         var result = DialogService.ShowDialog(this, this);
-        if (result is not true)
-            return;
-
-        Moves.Add(Move);
-        this.LogIfEnabled(LogLevel.Information)?.Log("添加新移动 '{id}'", Move.Graph);
-        //if (this.LogX().Level is LogLevel.Info)
-        //else
-        //    this.LogX()
-        //        .Debug(
-        //            "添加新移动 {$move}",
-        //            LPSConvert.SerializeObjectToLine<Line>(Move.MapToMove(new()), "Move")
-        //        );
+        if (result is true)
+        {
+            Moves.Add(Move);
+            this.LogIfEnabled(LogLevel.Information)?.Log("添加新移动 '{id}'", Move.Graph);
+            //if (this.LogX().Level is LogLevel.Info)
+            //else
+            //    this.LogX()
+            //        .Debug(
+            //            "添加新移动 {$move}",
+            //            LPSConvert.SerializeObjectToLine<Line>(Move.MapToMove(new()), "Move")
+            //        );
+        }
         Reset();
     }
 
@@ -192,13 +214,14 @@ public sealed partial class MoveEditViewModel
         OldMove = model;
         var newModel = new MoveModel(model);
         Move = newModel;
-        using var dis = newModel.Changed.Subscribe(_ => IsChanged = true);
+        using var dis = SubscribeMoveChanged(newModel);
         var result = DialogService.ShowDialog(this, this);
-        if (result is not true)
-            return;
-        Moves[Moves.IndexOf(model)] = newModel;
-        this.LogIfEnabled(LogLevel.Information)
-            ?.Log("编辑移动 {oldMove} => {newMove}", OldMove.Graph, Move.Graph);
+        if (result is true)
+        {
+            Moves[Moves.IndexOf(model)] = newModel;
+            this.LogIfEnabled(LogLevel.Information)
+                ?.Log("编辑移动 {oldMove} => {newMove}", OldMove.Graph, Move.Graph);
+        }
         Reset();
     }
 
@@ -262,7 +285,31 @@ public sealed partial class MoveEditViewModel
             DialogService.ShowMessageBox(
                 this,
                 "指定动画不可为空".Translate(),
-                "数据错误".Translate()
+                "数据错误".Translate(),
+                MessageBoxButton.Ok,
+                MessageBoxImage.Warning
+            );
+            e.Cancel = true;
+        }
+        else if (Move.Distance <= 0)
+        {
+            DialogService.ShowMessageBox(
+                this,
+                "移动距离必须大于0".Translate(),
+                "数据错误".Translate(),
+                MessageBoxButton.Ok,
+                MessageBoxImage.Warning
+            );
+            e.Cancel = true;
+        }
+        else if (Move.Interval <= 0)
+        {
+            DialogService.ShowMessageBox(
+                this,
+                "移动间隔必须大于0".Translate(),
+                "数据错误".Translate(),
+                MessageBoxButton.Ok,
+                MessageBoxImage.Warning
             );
             e.Cancel = true;
         }

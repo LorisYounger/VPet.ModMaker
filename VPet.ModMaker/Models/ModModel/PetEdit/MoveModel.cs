@@ -1,19 +1,17 @@
-﻿using System.Collections.Frozen;
-using System.Collections.Immutable;
+﻿using System.Collections.Immutable;
+using System.Runtime.CompilerServices;
 using CommunityToolkit.Mvvm.ComponentModel;
 using HKW.HKWUtils;
 using HKW.HKWUtils.Observable;
 using HKW.Mapper;
-using HKW.MVVM;
 using VPet_Simulator.Core;
-using VPet.ModMaker.ViewModels;
 
 namespace VPet.ModMaker.Models;
 
 /// <summary>
 /// 移动模型
 /// </summary>
-[MapTarget(typeof(GraphHelper.Move))]
+[MapTarget(typeof(GraphHelper.Move), typeof(MoveModelToMoveMapConfig))]
 [MapTarget(typeof(MoveModel))]
 public partial class MoveModel : ObservableModelBase
 {
@@ -35,10 +33,22 @@ public partial class MoveModel : ObservableModelBase
     }
 
     /// <summary>
-    /// 移动类型
+    /// 移动方向类型（用于触发类型与检测类型）
     /// </summary>
     public static ImmutableArray<GraphHelper.Move.DirectionType> DirectionTypes =>
         EnumInfo<GraphHelper.Move.DirectionType>.StaticValidValues;
+
+    /// <summary>
+    /// 定位类型列表（仅包含本体支持的单一基础方向）
+    /// </summary>
+    public static ImmutableArray<EnumInfo<GraphHelper.Move.DirectionType>> LocateTypes { get; } =
+    [
+        EnumInfo<GraphHelper.Move.DirectionType>.GetInfo(GraphHelper.Move.DirectionType.None),
+        EnumInfo<GraphHelper.Move.DirectionType>.GetInfo(GraphHelper.Move.DirectionType.Left),
+        EnumInfo<GraphHelper.Move.DirectionType>.GetInfo(GraphHelper.Move.DirectionType.Right),
+        EnumInfo<GraphHelper.Move.DirectionType>.GetInfo(GraphHelper.Move.DirectionType.Top),
+        EnumInfo<GraphHelper.Move.DirectionType>.GetInfo(GraphHelper.Move.DirectionType.Bottom),
+    ];
 
     /// <summary>
     /// 模式类型
@@ -62,13 +72,13 @@ public partial class MoveModel : ObservableModelBase
     /// 移动距离
     /// </summary>
     [ObservableProperty]
-    public int Distance { get; set; }
+    public int Distance { get; set; } = 5;
 
     /// <summary>
     /// 间隔
     /// </summary>
     [ObservableProperty]
-    public int Interval { get; set; }
+    public int Interval { get; set; } = 125;
 
     /// <summary>
     /// 定位长度
@@ -92,56 +102,56 @@ public partial class MoveModel : ObservableModelBase
     /// 左侧检测距离
     /// </summary>
     [ObservableProperty]
-    public int CheckLeft { get; set; }
+    public int CheckLeft { get; set; } = 100;
 
     /// <summary>
     /// 右侧检测距离
     /// </summary>
     [ObservableProperty]
-    public int CheckRight { get; set; }
+    public int CheckRight { get; set; } = 100;
 
     /// <summary>
     /// 上方检测距离
     /// </summary>
     [ObservableProperty]
-    public int CheckTop { get; set; }
+    public int CheckTop { get; set; } = 100;
 
     /// <summary>
     /// 下方检测距离
     /// </summary>
     [ObservableProperty]
-    public int CheckBottom { get; set; }
+    public int CheckBottom { get; set; } = 100;
 
     /// <summary>
     /// 左侧触发距离
     /// </summary>
     [ObservableProperty]
-    public int TriggerLeft { get; set; }
+    public int TriggerLeft { get; set; } = 100;
 
     /// <summary>
     /// 右侧触发距离
     /// </summary>
     [ObservableProperty]
-    public int TriggerRight { get; set; }
+    public int TriggerRight { get; set; } = 100;
 
     /// <summary>
     /// 上方触发距离
     /// </summary>
     [ObservableProperty]
-    public int TriggerTop { get; set; }
+    public int TriggerTop { get; set; } = 100;
 
     /// <summary>
     /// 下方触发距离
     /// </summary>
     [ObservableProperty]
-    public int TriggerBottom { get; set; }
+    public int TriggerBottom { get; set; } = 100;
 
     /// <summary>
     /// 定位类型
     /// </summary>
-    [MapProperty(typeof(GraphHelper.Move), typeof(ObservableEnumConverter))]
-    public ObservableEnum<GraphHelper.Move.DirectionType> LocateType { get; set; } =
-        new(GraphHelper.Move.DirectionType.None);
+    [ObservableProperty]
+    public GraphHelper.Move.DirectionType LocateType { get; set; } =
+        GraphHelper.Move.DirectionType.None;
 
     /// <summary>
     /// 触发类型
@@ -151,13 +161,16 @@ public partial class MoveModel : ObservableModelBase
         new(GraphHelper.Move.DirectionType.None);
 
     /// <summary>
+    /// 检测类型
+    /// </summary>
+    [MapProperty(typeof(GraphHelper.Move), typeof(ObservableEnumConverter))]
+    public ObservableEnum<GraphHelper.Move.DirectionType> CheckType { get; set; } =
+        new(GraphHelper.Move.DirectionType.None);
+
+    /// <summary>
     /// 模式
     /// </summary>
-    [MapProperty(
-        typeof(GraphHelper.Move),
-        nameof(GraphHelper.Move.Mode),
-        typeof(ObservableEnumConverter)
-    )]
+    [MapProperty(typeof(GraphHelper.Move), Ignore = true)]
     public ObservableEnum<GraphHelper.Move.ModeType> ModeType { get; set; } =
         new(
             GraphHelper.Move.ModeType.Happy
@@ -165,4 +178,30 @@ public partial class MoveModel : ObservableModelBase
                 | GraphHelper.Move.ModeType.PoorCondition
                 | GraphHelper.Move.ModeType.Ill
         );
+}
+
+/// <summary>
+/// 移动模型映射配置
+/// <para>规避核心库中 <see cref="GraphHelper.Move.Mode"/> 赋值时误写入 <c>checkType</c> 的问题</para>
+/// </summary>
+public sealed class MoveModelToMoveMapConfig : MapperConfigBase<MoveModel, GraphHelper.Move>
+{
+    [UnsafeAccessor(UnsafeAccessorKind.Method, Name = "set_modeType")]
+    private static extern void SetModeType(GraphHelper.Move target, int value);
+
+    public MoveModelToMoveMapConfig(MoveModel source, GraphHelper.Move target)
+        : base(source, target) { }
+
+    [MapToConfigAction(MapConfigActionMode.End)]
+    public void MapToEnd()
+    {
+        Target.CheckType = Source.CheckType.Value;
+        SetModeType(Target, (int)Source.ModeType.Value);
+    }
+
+    [MapFromConfigAction(MapConfigActionMode.End)]
+    public void MapFromEnd()
+    {
+        Source.ModeType = new(Target.Mode);
+    }
 }

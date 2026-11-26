@@ -312,8 +312,6 @@ public sealed partial class PetModel : ObservableModelBase, IDisposable
             anime.Save(petAnimePath);
     }
 
-    private static readonly GraphHelper.Move _move = new();
-
     /// <summary>
     /// 保存移动信息
     /// </summary>
@@ -322,7 +320,9 @@ public sealed partial class PetModel : ObservableModelBase, IDisposable
     {
         foreach (var move in Moves)
         {
-            lps.Add(LPSConvert.SerializeObjectToLine<Line>(move.MapTo(_move), "move"));
+            lps.Add(
+                LPSConvert.SerializeObjectToLine<Line>(move.MapTo(new GraphHelper.Move()), "move")
+            );
         }
     }
 

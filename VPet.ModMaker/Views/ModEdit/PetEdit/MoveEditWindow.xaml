@@ -8,7 +8,7 @@
   xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
   xmlns:pu="https://opensource.panuon.com/wpf-ui"
   xmlns:vm="clr-namespace:VPet.ModMaker.ViewModels"
-  Title="MoveEditWindow"
+  Title="{ll:Str 编辑移动}"
   Width="1280"
   Height="720"
   MinWidth="800"
@@ -59,37 +59,7 @@
               Width="300"
               HorizontalAlignment="Right"
               Style="{DynamicResource StandardTextBoxStyle}"
-              Text="{Binding Move.Graph}"
-            />
-          </Grid>
-        </Border>
-        <Border Height="80" Style="{DynamicResource ModMaker_BorderItem}">
-          <Grid ColumnDefinitions="Auto,*" RowDefinitions="*,*">
-            <TextBlock
-              Style="{DynamicResource ModMaker_TextBlockItemName}"
-              Text="{ll:Str 定位类型}"
-            />
-            <Control
-              Grid.Column="1"
-              Grid.RowSpan="2"
-              DataContext="{Binding Move.LocateType}"
-              Tag="{Binding DataContext.Move.DirectionTypes, RelativeSource={RelativeSource AncestorType=Window}}"
-              Template="{DynamicResource ModMaker_FlagableEnumControlTemplate}"
-            />
-          </Grid>
-        </Border>
-        <Border Height="80" Style="{DynamicResource ModMaker_BorderItem}">
-          <Grid ColumnDefinitions="Auto,*" RowDefinitions="*,*">
-            <TextBlock
-              Style="{DynamicResource ModMaker_TextBlockItemName}"
-              Text="{ll:Str 触发类型}"
-            />
-            <Control
-              Grid.Column="1"
-              Grid.RowSpan="2"
-              DataContext="{Binding Move.TriggerType}"
-              Tag="{Binding DataContext.Move.DirectionTypes, RelativeSource={RelativeSource AncestorType=Window}}"
-              Template="{DynamicResource ModMaker_FlagableEnumControlTemplate}"
+              Text="{Binding Move.Graph, UpdateSourceTrigger=PropertyChanged}"
             />
           </Grid>
         </Border>
@@ -112,31 +82,15 @@
           <Grid ColumnDefinitions="Auto,*">
             <TextBlock
               Style="{DynamicResource ModMaker_TextBlockItemName}"
-              Text="{ll:Str 移动距离}"
+              Text="{ll:Str 定位类型}"
             />
-            <pu:NumberInput
+            <ComboBox
               Grid.Column="1"
               Width="300"
               HorizontalAlignment="Right"
-              IsSnapToIntervalEnabled="False"
-              Style="{DynamicResource ModMaker_NumberInputBaseStyle}"
-              Value="{Binding Move.Distance}"
-            />
-          </Grid>
-        </Border>
-        <Border Height="40" Style="{DynamicResource ModMaker_BorderItem}">
-          <Grid ColumnDefinitions="Auto,*">
-            <TextBlock
-              Style="{DynamicResource ModMaker_TextBlockItemName}"
-              Text="{ll:Str 移动间隔(ms)}"
-            />
-            <pu:NumberInput
-              Grid.Column="1"
-              Width="300"
-              HorizontalAlignment="Right"
-              IsSnapToIntervalEnabled="False"
-              Style="{DynamicResource ModMaker_NumberInputBaseStyle}"
-              Value="{Binding Move.Interval}"
+              ItemsSource="{Binding Move.LocateTypes}"
+              SelectedItem="{Binding Move.LocateType, Converter={StaticResource EnumToEnumInfoConverter}}"
+              Style="{StaticResource StandardComboBoxStyle}"
             />
           </Grid>
         </Border>
@@ -153,6 +107,97 @@
               IsSnapToIntervalEnabled="False"
               Style="{DynamicResource ModMaker_NumberInputBaseStyle}"
               Value="{Binding Move.LocateLength}"
+            />
+          </Grid>
+        </Border>
+        <Border Height="40" Style="{DynamicResource ModMaker_BorderItem}">
+          <Grid ColumnDefinitions="Auto,*">
+            <TextBlock
+              Style="{DynamicResource ModMaker_TextBlockItemName}"
+              Text="{ll:Str 移动速度}"
+            />
+            <Grid
+              Grid.Column="1"
+              Width="300"
+              HorizontalAlignment="Right"
+              ColumnDefinitions="Auto,*,Auto,*"
+            >
+              <Label
+                Width="30"
+                Content="X"
+                Style="{DynamicResource ModMaker_LabelCenterStyle}"
+                ToolTip="{ll:Str '向右为正，向左为负'}"
+              />
+              <pu:NumberInput
+                Grid.Column="1"
+                IsSnapToIntervalEnabled="False"
+                Style="{DynamicResource ModMaker_NumberInputBaseStyle}"
+                ToolTip="{ll:Str '向右为正，向左为负'}"
+                Value="{Binding Move.SpeedX}"
+              />
+              <Label
+                Grid.Column="2"
+                Width="30"
+                Content="Y"
+                Style="{DynamicResource ModMaker_LabelCenterStyle}"
+                ToolTip="{ll:Str '向下为正，向上为负'}"
+              />
+              <pu:NumberInput
+                Grid.Column="3"
+                IsSnapToIntervalEnabled="False"
+                Style="{DynamicResource ModMaker_NumberInputBaseStyle}"
+                ToolTip="{ll:Str '向下为正，向上为负'}"
+                Value="{Binding Move.SpeedY}"
+              />
+            </Grid>
+          </Grid>
+        </Border>
+        <Border Height="40" Style="{DynamicResource ModMaker_BorderItem}">
+          <Grid ColumnDefinitions="Auto,*">
+            <TextBlock
+              Style="{DynamicResource ModMaker_TextBlockItemName}"
+              Text="{ll:Str 移动距离}"
+            />
+            <pu:NumberInput
+              Grid.Column="1"
+              Width="300"
+              HorizontalAlignment="Right"
+              IsSnapToIntervalEnabled="False"
+              Minimum="1"
+              Style="{DynamicResource ModMaker_NumberInputBaseStyle}"
+              Value="{Binding Move.Distance}"
+            />
+          </Grid>
+        </Border>
+        <Border Height="40" Style="{DynamicResource ModMaker_BorderItem}">
+          <Grid ColumnDefinitions="Auto,*">
+            <TextBlock
+              Style="{DynamicResource ModMaker_TextBlockItemName}"
+              Text="{ll:Str 移动间隔(ms)}"
+            />
+            <pu:NumberInput
+              Grid.Column="1"
+              Width="300"
+              HorizontalAlignment="Right"
+              IsSnapToIntervalEnabled="False"
+              Minimum="1"
+              Style="{DynamicResource ModMaker_NumberInputBaseStyle}"
+              Value="{Binding Move.Interval}"
+            />
+          </Grid>
+        </Border>
+        <Border Height="80" Style="{DynamicResource ModMaker_BorderItem}">
+          <Grid ColumnDefinitions="Auto,*" RowDefinitions="*,*">
+            <TextBlock
+              Style="{DynamicResource ModMaker_TextBlockItemName}"
+              Text="{ll:Str 触发类型}"
+            />
+            <Control
+              Grid.Column="1"
+              Grid.RowSpan="2"
+              DataContext="{Binding Move.TriggerType}"
+              Tag="{Binding DataContext.Move.DirectionTypes, RelativeSource={RelativeSource AncestorType=Window}}"
+              Template="{DynamicResource ModMaker_FlagableEnumControlTemplate}"
             />
           </Grid>
         </Border>
@@ -217,6 +262,21 @@
                 Value="{Binding Move.TriggerBottom}"
               />
             </Grid>
+          </Grid>
+        </Border>
+        <Border Height="80" Style="{DynamicResource ModMaker_BorderItem}">
+          <Grid ColumnDefinitions="Auto,*" RowDefinitions="*,*">
+            <TextBlock
+              Style="{DynamicResource ModMaker_TextBlockItemName}"
+              Text="{ll:Str 检测类型}"
+            />
+            <Control
+              Grid.Column="1"
+              Grid.RowSpan="2"
+              DataContext="{Binding Move.CheckType}"
+              Tag="{Binding DataContext.Move.DirectionTypes, RelativeSource={RelativeSource AncestorType=Window}}"
+              Template="{DynamicResource ModMaker_FlagableEnumControlTemplate}"
+            />
           </Grid>
         </Border>
         <Border Height="80" Style="{DynamicResource ModMaker_BorderItem}">

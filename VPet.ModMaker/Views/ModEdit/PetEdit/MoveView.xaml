@@ -90,12 +90,20 @@
             SortMemberPath="Graph"
           />
           <DataGridTextColumn
-            Binding="{Binding LocateType.Value, Converter={StaticResource EnumToEnumInfoConverter}}"
+            Binding="{Binding LocateType, Converter={StaticResource EnumToEnumInfoConverter}}"
             CanUserSort="True"
             ElementStyle="{StaticResource ModMaker_TextBlockLeftCenter}"
             Header="{ll:Str 定位类型}"
             IsReadOnly="True"
-            SortMemberPath="LocateType.Value"
+            SortMemberPath="LocateType"
+          />
+          <DataGridTextColumn
+            Binding="{Binding LocateLength}"
+            CanUserSort="True"
+            ElementStyle="{StaticResource ModMaker_TextBlockLeftCenter}"
+            Header="{ll:Str 定位长度}"
+            IsReadOnly="True"
+            SortMemberPath="LocateLength"
           />
           <DataGridTextColumn
             Binding="{Binding TriggerType.Value, Converter={StaticResource EnumToEnumInfoConverter}}"
@@ -106,12 +114,36 @@
             SortMemberPath="TriggerType.Value"
           />
           <DataGridTextColumn
+            Binding="{Binding CheckType.Value, Converter={StaticResource EnumToEnumInfoConverter}}"
+            CanUserSort="True"
+            ElementStyle="{StaticResource ModMaker_TextBlockLeftCenter}"
+            Header="{ll:Str 检测类型}"
+            IsReadOnly="True"
+            SortMemberPath="CheckType.Value"
+          />
+          <DataGridTextColumn
             Binding="{Binding ModeType.Value, Converter={StaticResource EnumToEnumInfoConverter}}"
             CanUserSort="True"
             ElementStyle="{StaticResource ModMaker_TextBlockLeftCenter}"
             Header="{ll:Str 状态类型}"
             IsReadOnly="True"
             SortMemberPath="ModeType.Value"
+          />
+          <DataGridTextColumn
+            Binding="{Binding SpeedX}"
+            CanUserSort="True"
+            ElementStyle="{StaticResource ModMaker_TextBlockLeftCenter}"
+            Header="{ll:Str X速度}"
+            IsReadOnly="True"
+            SortMemberPath="SpeedX"
+          />
+          <DataGridTextColumn
+            Binding="{Binding SpeedY}"
+            CanUserSort="True"
+            ElementStyle="{StaticResource ModMaker_TextBlockLeftCenter}"
+            Header="{ll:Str Y速度}"
+            IsReadOnly="True"
+            SortMemberPath="SpeedY"
           />
           <DataGridTextColumn
             Binding="{Binding Distance}"
@@ -128,14 +160,6 @@
             Header="{ll:Str 移动间隔}"
             IsReadOnly="True"
             SortMemberPath="Interval"
-          />
-          <DataGridTextColumn
-            Binding="{Binding LocateLength}"
-            CanUserSort="True"
-            ElementStyle="{StaticResource ModMaker_TextBlockLeftCenter}"
-            Header="{ll:Str 定位长度}"
-            IsReadOnly="True"
-            SortMemberPath="LocateLength"
           />
         </DataGrid.Columns>
       </DataGrid>
