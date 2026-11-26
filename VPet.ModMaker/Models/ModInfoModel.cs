@@ -722,7 +722,7 @@ public sealed partial class ModInfoModel : ObservableModelBase, IDisposable
         foreach (var culture in I18nResource.Cultures)
         {
             lps.Add(
-                new Line("cultureDatas", culture.Name)
+                new Line("lang", culture.Name)
                 {
                     new Sub(ID, I18nResource.GetDataOrDefault(ID, string.Empty, culture)),
                     new Sub(
