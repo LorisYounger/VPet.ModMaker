@@ -72,8 +72,7 @@ public sealed partial class ModInfoModel : ObservableModelBase, IDisposable
         {
             foreach (var c in e.OldItems!.OfType<CultureInfo>())
             {
-                ModMaker.I18nResource.AddCulture(c);
-                TempI18nResource.AddCulture(c);
+                TempI18nResource.RemoveCulture(c);
             }
         }
         else if (e.Action is NotifyCollectionChangedAction.Replace)
@@ -414,14 +413,14 @@ public sealed partial class ModInfoModel : ObservableModelBase, IDisposable
     private void LoadLowTexts(ModLoader loader)
     {
         this.LogIfEnabled(LogLevel.Information)
-            ?.Log("载入低状态文本, 数量: {count}", loader.LowTexts.Count);
-        foreach (var lowText in loader.LowTexts.Where(x => x.Text is not null))
+            ?.Log("载入低状态文本, 数量: {count}", loader.LowTextItems.Count);
+        foreach (var (lowText, type) in loader.LowTextItems.Where(x => x.Text.Text is not null))
         {
             try
             {
-                LowTexts.Add(new(lowText, I18nResource));
+                LowTexts.Add(new(lowText, I18nResource, type));
                 this.LogIfEnabled(LogLevel.Debug)
-                    ?.Log("添加低状态文本成功, ID: '{id}'", lowText.Text);
+                    ?.Log("添加低状态文本成功, ID: '{id}', 类型: {type}", lowText.Text, type);
             }
             catch (Exception ex)
             {
@@ -646,17 +645,13 @@ public sealed partial class ModInfoModel : ObservableModelBase, IDisposable
             );
         foreach (var cultureDatas in modLoader.I18nDatas)
         {
-            CultureInfo? culture;
-            try
-            {
-                culture = CultureInfo.GetCultureInfo(cultureDatas.Key);
-            }
-            catch (Exception ex)
+            if (CultureInfoHelper.IsValidCultureName(cultureDatas.Key) is false)
             {
                 this.LogIfEnabled(LogLevel.Warning)
-                    ?.Log(ex, $"载入文化 {cultureDatas.Key} 错误, 请检查文化名称");
+                    ?.Log("载入文化 {culture} 错误, 文化名称不合法", cultureDatas.Key);
                 continue;
             }
+            var culture = CultureInfoHelper.GetOrCreateCultureInfo(cultureDatas.Key);
             I18nResource.AddCulture(culture);
             TempI18nResource.AddCulture(culture);
             I18nResource.SetDatas(cultureDatas.Value, culture);
@@ -821,7 +816,7 @@ public sealed partial class ModInfoModel : ObservableModelBase, IDisposable
     private void SaveThemes(string path)
     {
         var themePath = Path.Combine(path, "theme");
-        if (Themes.Count == 0 || Fonts.Count == 0)
+        if (Themes.Count == 0 && Fonts.Count == 0)
         {
             if (Directory.Exists(themePath))
                 Directory.Delete(themePath, true);
@@ -845,10 +840,18 @@ public sealed partial class ModInfoModel : ObservableModelBase, IDisposable
             return;
         }
         Directory.CreateDirectory(fontPath);
-        this.LogIfEnabled(LogLevel.Information)?.Log("正在保存字体, 数量: {count}", Themes.Count);
+        this.LogIfEnabled(LogLevel.Information)?.Log("正在保存字体, 数量: {count}", Fonts.Count);
         foreach (var font in Fonts)
         {
             var savePath = Path.Combine(fontPath, Path.GetFileName(font.FullName));
+            if (
+                string.Equals(
+                    Path.GetFullPath(font.FullName),
+                    Path.GetFullPath(savePath),
+                    StringComparison.OrdinalIgnoreCase
+                )
+            )
+                continue;
             File.Copy(font.FullName, savePath, true);
         }
     }
@@ -893,8 +896,6 @@ public sealed partial class ModInfoModel : ObservableModelBase, IDisposable
         File.WriteAllText(textFile, lps.ToString());
     }
 
-    private static readonly LowText _lowText = new();
-
     /// <summary>
     /// 保存低状态文本
     /// </summary>
@@ -909,11 +910,12 @@ public sealed partial class ModInfoModel : ObservableModelBase, IDisposable
         File.Create(textFile).Close();
         var lps = new LPS();
         foreach (var text in LowTexts)
-            lps.Add(LPSConvert.SerializeObjectToLine<Line>(text.MapTo(_lowText), "lowfoodtext"));
+        {
+            var lineName = text.Type is LowTextType.Drink ? "lowdrinktext" : "lowfoodtext";
+            lps.Add(LPSConvert.SerializeObjectToLine<Line>(text.MapTo(new LowText()), lineName));
+        }
         File.WriteAllText(textFile, lps.ToString());
     }
-
-    private static readonly ClickText _clickText = new();
 
     /// <summary>
     /// 保存点击文本
@@ -930,7 +932,9 @@ public sealed partial class ModInfoModel : ObservableModelBase, IDisposable
         var lps = new LPS();
         foreach (var text in ClickTexts)
         {
-            lps.Add(LPSConvert.SerializeObjectToLine<Line>(text.MapTo(_clickText), "clicktext"));
+            lps.Add(
+                LPSConvert.SerializeObjectToLine<Line>(text.MapTo(new ClickText()), "clicktext")
+            );
         }
         File.WriteAllText(textFile, lps.ToString());
     }

@@ -123,6 +123,25 @@ public sealed partial class ClickTextEditViewModel
     public bool? DialogResult { get; set; }
     public bool IsChanged { get; private set; }
 
+    private IDisposable SubscribeClickTextChanged(ClickTextModel model)
+    {
+        var modelSub = model.Changed.Subscribe(_ => IsChanged = true);
+        PropertyChangedEventHandler enumChanged = (_, _) => IsChanged = true;
+        model.Mode.PropertyChanged += enumChanged;
+        model.DayTime.PropertyChanged += enumChanged;
+        return new ActionDisposable(() =>
+        {
+            modelSub.Dispose();
+            model.Mode.PropertyChanged -= enumChanged;
+            model.DayTime.PropertyChanged -= enumChanged;
+        });
+    }
+
+    private sealed class ActionDisposable(Action disposeAction) : IDisposable
+    {
+        public void Dispose() => disposeAction();
+    }
+
     /// <summary>
     /// 添加
     /// </summary>
@@ -131,7 +150,7 @@ public sealed partial class ClickTextEditViewModel
     {
         IsChanged = false;
         ClickText = new(ModInfo.TempI18nResource);
-        using var dis = ClickText.Changed.Subscribe(_ => IsChanged = true);
+        using var dis = SubscribeClickTextChanged(ClickText);
         var result = DialogService.ShowDialog(this, this);
         if (result is not true)
         {
@@ -159,7 +178,7 @@ public sealed partial class ClickTextEditViewModel
         var newModel = new ClickTextModel(model, ModInfo.TempI18nResource);
         model.I18nResource.CopyDataTo(newModel.I18nResource, model.ID);
         ClickText = newModel;
-        using var dis = newModel.Changed.Subscribe(_ => IsChanged = true);
+        using var dis = SubscribeClickTextChanged(newModel);
         var result = DialogService.ShowDialog(this, this);
         if (result is not true)
         {

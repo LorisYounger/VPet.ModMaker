@@ -77,6 +77,14 @@
           SortMemberPath="Text"
         />
         <DataGridTextColumn
+          Binding="{Binding Type, Converter={StaticResource EnumToEnumInfoConverter}}"
+          CanUserSort="True"
+          ElementStyle="{StaticResource ModMaker_TextBlockLeftCenter}"
+          Header="{ll:Str 类型}"
+          IsReadOnly="True"
+          SortMemberPath="Type"
+        />
+        <DataGridTextColumn
           Binding="{Binding Mode, Converter={StaticResource EnumToEnumInfoConverter}}"
           CanUserSort="True"
           ElementStyle="{StaticResource ModMaker_TextBlockLeftCenter}"

@@ -78,9 +78,9 @@ public sealed partial class AnimeEditViewModel
     public bool Loop { get; set; }
 
     /// <summary>
-    /// 含有多个状态
+    /// 含有多个阶段（A_Start / B_Loop / C_End）
     /// </summary>
-    public bool HasMultiType => Anime?.GraphType.IsMultiTypeGraph() is true;
+    public bool HasMultiType => Anime?.GraphType.IsMultiStageGraph() is true;
 
     /// <summary>
     /// 含有动画名称
@@ -95,14 +95,30 @@ public sealed partial class AnimeEditViewModel
     [RelayCommand]
     private void AddAnime(ModeType animeMode)
     {
-        if (animeMode is ModeType.Happy)
-            Anime.HappyAnimes.Add(new());
-        else if (animeMode is ModeType.Nomal)
-            Anime.NomalAnimes.Add(new());
-        else if (animeMode is ModeType.PoorCondition)
-            Anime.PoorConditionAnimes.Add(new());
-        else if (animeMode is ModeType.Ill)
-            Anime.IllAnimes.Add(new());
+        var targetList = animeMode switch
+        {
+            ModeType.Happy => Anime.HappyAnimes,
+            ModeType.Nomal => Anime.NomalAnimes,
+            ModeType.PoorCondition => Anime.PoorConditionAnimes,
+            ModeType.Ill => Anime.IllAnimes,
+            _ => null,
+        };
+        if (targetList is null)
+            return;
+
+        var animeModel = new AnimeModel();
+        if (HasMultiType)
+        {
+            if (targetList.All(a => a.AnimeType is not VPet_Simulator.Core.GraphInfo.AnimatType.A_Start))
+                animeModel.AnimeType = VPet_Simulator.Core.GraphInfo.AnimatType.A_Start;
+            else if (targetList.All(a => a.AnimeType is not VPet_Simulator.Core.GraphInfo.AnimatType.B_Loop))
+                animeModel.AnimeType = VPet_Simulator.Core.GraphInfo.AnimatType.B_Loop;
+            else if (targetList.All(a => a.AnimeType is not VPet_Simulator.Core.GraphInfo.AnimatType.C_End))
+                animeModel.AnimeType = VPet_Simulator.Core.GraphInfo.AnimatType.C_End;
+            else
+                animeModel.AnimeType = VPet_Simulator.Core.GraphInfo.AnimatType.B_Loop;
+        }
+        targetList.Add(animeModel);
     }
 
     /// <summary>
@@ -271,6 +287,30 @@ public sealed partial class AnimeEditViewModel
             return;
         }
         DialogResult = result;
+
+        if (DialogResult is not true)
+            return;
+
+        if (HasMultiType)
+        {
+            var hasSingle = Anime
+                .HappyAnimes.Concat(Anime.NomalAnimes)
+                .Concat(Anime.PoorConditionAnimes)
+                .Concat(Anime.IllAnimes)
+                .Any(a => a.AnimeType is VPet_Simulator.Core.GraphInfo.AnimatType.Single);
+            if (hasSingle)
+            {
+                DialogService.ShowMessageBox(
+                    this,
+                    "多阶段动画不可包含 Single 类型，请先修改为 A_Start / B_Loop / C_End".Translate(),
+                    "数据错误".Translate(),
+                    MessageBoxButton.Ok,
+                    MessageBoxImage.Warning
+                );
+                e.Cancel = true;
+                DialogResult = false;
+            }
+        }
     }
 
     public Task OnClosingAsync(CancelEventArgs e)

@@ -69,18 +69,13 @@ public partial class AddCultureViewModel : ViewModelBase, IModalDialogViewModel,
             {
                 return UnknownCulture;
             }
-            CultureInfo info;
-            try
-            {
-                info = CultureInfo.GetCultureInfo(CultureName);
-            }
-            catch
-            {
-                return UnknownCulture;
-            }
-            if (info is not null)
+            if (CultureInfoHelper.TryGetStandardCultureInfo(CultureName, out var info))
             {
                 return info.FullName;
+            }
+            if (CultureInfoHelper.IsValidCultureName(CultureName))
+            {
+                return $"{CultureName.Trim()} ({"自定义文化".Translate()})";
             }
             return UnknownCulture;
         }
@@ -133,7 +128,8 @@ public partial class AddCultureViewModel : ViewModelBase, IModalDialogViewModel,
     {
         if (DialogResult is not true)
             return;
-        if (string.IsNullOrWhiteSpace(CultureName))
+        var trimmed = CultureName?.Trim() ?? string.Empty;
+        if (string.IsNullOrWhiteSpace(trimmed))
         {
             DialogService.ShowMessageBox(
                 this,
@@ -143,17 +139,21 @@ public partial class AddCultureViewModel : ViewModelBase, IModalDialogViewModel,
             );
             e.Cancel = true;
         }
-        else if (CultureInfo.TryGetCultureInfo(CultureName, out var culture) is false)
+        else if (CultureInfoHelper.IsValidCultureName(trimmed) is false)
         {
             DialogService.ShowMessageBox(
                 this,
-                "不支持的文化".Translate(),
+                "文化名称包含非法字符".Translate(),
                 "数据错误".Translate(),
                 icon: MessageBoxImage.Warning
             );
             e.Cancel = true;
         }
-        else if (ModInfo.I18nResource.Cultures.Contains(culture))
+        else if (
+            ModInfo.I18nResource.Cultures.Any(c =>
+                string.Equals(c.Name, trimmed, StringComparison.OrdinalIgnoreCase)
+            )
+        )
         {
             DialogService.ShowMessageBox(
                 this,
@@ -162,6 +162,10 @@ public partial class AddCultureViewModel : ViewModelBase, IModalDialogViewModel,
                 icon: MessageBoxImage.Warning
             );
             e.Cancel = true;
+        }
+        else
+        {
+            CultureName = trimmed;
         }
         DialogResult = e.Cancel is not true;
     }

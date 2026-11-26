@@ -253,7 +253,7 @@
             Grid.Column="1"
             Width="200"
             Margin="10,0,0,0"
-            ItemsSource="{Binding Source={x:Static m:AnimeTypeModel.AnimatTypes}, Converter={StaticResource EnumsToEnumInfosConverter}}"
+            ItemsSource="{x:Static m:AnimeTypeModel.MultiStageAnimatTypes}"
             SelectedItem="{Binding CurrentAnimeModel.AnimeType, Converter={StaticResource EnumToEnumInfoConverter}}"
             Style="{StaticResource StandardComboBoxStyle}"
             Visibility="{Binding DataContext.HasMultiType, RelativeSource={RelativeSource AncestorType=Window, Mode=FindAncestor}, Converter={StaticResource FalseToCollapsedConverter}}"

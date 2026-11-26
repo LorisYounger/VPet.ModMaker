@@ -32,11 +32,24 @@ public sealed partial class LowTextModel : ObservableModelBase, IDisposable
 
     /// <inheritdoc/>
     /// <param name="lowText">低状态文本</param>
-    public LowTextModel(LowText lowText, ObservableI18nResource<string, string> i18nResource)
+    /// <param name="i18nResource">I18n资源</param>
+    /// <param name="type">低状态类型</param>
+    public LowTextModel(
+        LowText lowText,
+        ObservableI18nResource<string, string> i18nResource,
+        LowTextType type = LowTextType.Food
+    )
     {
         this.MapFrom(lowText);
+        Type = type;
         I18nResource = i18nResource;
     }
+
+    /// <summary>
+    /// 低状态文本类型列表
+    /// </summary>
+    public static ImmutableArray<LowTextType> LowTextTypes =>
+        EnumInfo<LowTextType>.StaticValues;
 
     /// <summary>
     /// 状态类型
@@ -96,6 +109,13 @@ public sealed partial class LowTextModel : ObservableModelBase, IDisposable
     }
 
     /// <summary>
+    /// 低状态类型（食物 / 饮品）
+    /// </summary>
+    [ObservableProperty]
+    [MapProperty(typeof(LowText), Ignore = true)]
+    public LowTextType Type { get; set; } = LowTextType.Food;
+
+    /// <summary>
     /// 状态
     /// </summary>
     [ObservableProperty]
@@ -118,4 +138,20 @@ public sealed partial class LowTextModel : ObservableModelBase, IDisposable
     {
         I18nObserver?.Dispose();
     }
+}
+
+/// <summary>
+/// 低状态文本类型
+/// </summary>
+public enum LowTextType
+{
+    /// <summary>
+    /// 饱腹（lowfoodtext）
+    /// </summary>
+    Food,
+
+    /// <summary>
+    /// 口渴（lowdrinktext）
+    /// </summary>
+    Drink,
 }

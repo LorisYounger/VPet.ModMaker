@@ -69,6 +69,27 @@ public static class NativeExtensions
                 or GraphInfo.GraphType.SideHide_Right_Rise;
     }
 
+    /// <summary>
+    /// 是按 A/B/C 多阶段保存的动作类型
+    /// </summary>
+    /// <param name="graphType">动作类型</param>
+    /// <returns>是否是</returns>
+    public static bool IsMultiStageGraph(this GraphInfo.GraphType graphType)
+    {
+        return graphType
+            is GraphInfo.GraphType.Touch_Head
+                or GraphInfo.GraphType.Touch_Body
+                or GraphInfo.GraphType.Sleep
+                or GraphInfo.GraphType.Raised_Static
+                or GraphInfo.GraphType.StateONE
+                or GraphInfo.GraphType.StateTWO
+                or GraphInfo.GraphType.Common
+                or GraphInfo.GraphType.Work
+                or GraphInfo.GraphType.Idel
+                or GraphInfo.GraphType.Move
+                or GraphInfo.GraphType.Say;
+    }
+
     public static void SaveToPng(this BitmapImage image, string path)
     {
         if (image is null)

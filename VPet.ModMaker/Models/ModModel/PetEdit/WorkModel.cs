@@ -217,21 +217,21 @@ public sealed partial class WorkModel : ObservableModelBase, IDisposable
     /// </summary>
     [ObservableProperty]
     [MapProperty(typeof(GraphHelper.Work), Ignore = true)]
-    public double Left { get; set; }
+    public double Left { get; set; } = 100;
 
     /// <summary>
     /// Y位置
     /// </summary>
     [ObservableProperty]
     [MapProperty(typeof(GraphHelper.Work), Ignore = true)]
-    public double Top { get; set; }
+    public double Top { get; set; } = 160;
 
     /// <summary>
     /// 宽度
     /// </summary>
     [ObservableProperty]
     [MapProperty(typeof(GraphHelper.Work), Ignore = true)]
-    public double Width { get; set; }
+    public double Width { get; set; } = 300;
 
     private readonly GraphHelper.Work _work = new();
 

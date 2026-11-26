@@ -80,6 +80,11 @@ public class ModLoader
     public List<LowText> LowTexts { get; } = [];
 
     /// <summary>
+    /// 带类型标记的低状态文本列表（区分 lowfoodtext / lowdrinktext）
+    /// </summary>
+    public List<(LowText Text, LowTextType Type)> LowTextItems { get; } = [];
+
+    /// <summary>
     /// 点击文本列表
     /// </summary>
     public List<ClickText> ClickTexts { get; } = [];
@@ -249,10 +254,18 @@ public class ModLoader
                             switch (li.Name.ToLower())
                             {
                                 case "lowfoodtext":
-                                    LowTexts.Add(LPSConvert.DeserializeObject<LowText>(li));
+                                    {
+                                        var lowText = LPSConvert.DeserializeObject<LowText>(li);
+                                        LowTexts.Add(lowText);
+                                        LowTextItems.Add((lowText, LowTextType.Food));
+                                    }
                                     break;
                                 case "lowdrinktext":
-                                    LowTexts.Add(LPSConvert.DeserializeObject<LowText>(li));
+                                    {
+                                        var lowText = LPSConvert.DeserializeObject<LowText>(li);
+                                        LowTexts.Add(lowText);
+                                        LowTextItems.Add((lowText, LowTextType.Drink));
+                                    }
                                     break;
                                 case "clicktext":
                                     ClickTexts.Add(LPSConvert.DeserializeObject<ClickText>(li));

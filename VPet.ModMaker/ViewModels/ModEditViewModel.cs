@@ -197,11 +197,11 @@ public sealed partial class ModEditViewModel
             Reset();
             return;
         }
-        var currentInfo = CultureInfo.GetCultureInfo(AddCultureViewModel.CultureName);
+        var currentInfo = CultureInfoHelper.GetOrCreateCultureInfo(AddCultureViewModel.CultureName);
         ModInfo.I18nResource.AddCulture(currentInfo);
         if (ModInfo.I18nResource.CurrentCulture is null)
             ModInfo.I18nResource.CurrentCulture = currentInfo;
-        this.LogIfEnabled(LogLevel.Information)?.Log("添加文化 {culture}", currentInfo.FullName);
+        this.LogIfEnabled(LogLevel.Information)?.Log("添加文化 {culture}", currentInfo.Name);
         Reset();
     }
 
@@ -212,13 +212,14 @@ public sealed partial class ModEditViewModel
     [RelayCommand]
     private void EditCulture(CultureInfo oldCulture)
     {
+        AddCultureViewModel.ModInfo = ModInfo;
         var result = DialogService.ShowDialog(this, AddCultureViewModel);
         if (result is not true || oldCulture.Name == AddCultureViewModel.CultureName)
         {
             Reset();
             return;
         }
-        var currentInfo = CultureInfo.GetCultureInfo(AddCultureViewModel.CultureName);
+        var currentInfo = CultureInfoHelper.GetOrCreateCultureInfo(AddCultureViewModel.CultureName);
         ModInfo.I18nResource.ReplaceCulture(oldCulture, currentInfo);
         if (ModInfo.I18nResource.CurrentCulture is null)
             ModInfo.I18nResource.SetCurrentCulture(currentInfo);

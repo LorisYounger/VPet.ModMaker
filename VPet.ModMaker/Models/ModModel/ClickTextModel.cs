@@ -137,7 +137,7 @@ public sealed partial class ClickTextModel : ObservableModelBase, IDisposable
     /// <summary>
     /// 日期区间
     /// </summary>
-    [MapIgnoreProperty]
+    [MapProperty(typeof(ClickText), nameof(ClickText.DaiTime), typeof(ObservableEnumConverter))]
     public ObservableEnum<ClickText.DayTime> DayTime { get; set; } =
         new(
             ClickText.DayTime.Morning

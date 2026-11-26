@@ -69,6 +69,16 @@ public sealed partial class AnimeTypeModel : ObservableModelBase, IAnimeModel
         EnumInfo<GraphInfo.AnimatType>.StaticValues;
 
     /// <summary>
+    /// 多阶段动画类型（不含 Single）
+    /// </summary>
+    public static ImmutableArray<EnumInfo<GraphInfo.AnimatType>> MultiStageAnimatTypes { get; } =
+    [
+        EnumInfo<GraphInfo.AnimatType>.GetInfo(GraphInfo.AnimatType.A_Start),
+        EnumInfo<GraphInfo.AnimatType>.GetInfo(GraphInfo.AnimatType.B_Loop),
+        EnumInfo<GraphInfo.AnimatType>.GetInfo(GraphInfo.AnimatType.C_End),
+    ];
+
+    /// <summary>
     /// 模式类型
     /// </summary>
     public static ImmutableArray<ModeType> ModeTypes => EnumInfo<ModeType>.StaticValues;

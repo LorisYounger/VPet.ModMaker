@@ -73,7 +73,8 @@ public class ModMaker : MainPlugin
             {
                 try
                 {
-                    I18nResource.AddCulture(CultureInfo.GetCultureInfo(c));
+                    if (CultureInfoHelper.IsValidCultureName(c))
+                        I18nResource.AddCulture(CultureInfoHelper.GetOrCreateCultureInfo(c));
                 }
                 catch { }
             }
