@@ -248,7 +248,7 @@
                 IsEditable="False"
                 ItemsSource="{Binding SelectText.LikabilityChangeLevels, Converter={StaticResource EnumsToEnumInfosConverter}}"
                 SelectedItem="{Binding SelectText.ChangeLikability, Converter={StaticResource EnumToEnumInfoConverter}}"
-                Style="{StaticResource StandardComboBoxStyle}"
+                Style="{DynamicResource ModMaker_ComboBoxBaseStyle}"
               />
             </Grid>
           </Border>
@@ -265,7 +265,7 @@
                 IsEditable="False"
                 ItemsSource="{Binding SelectText.ValueChangeLevels, Converter={StaticResource EnumsToEnumInfosConverter}}"
                 SelectedItem="{Binding SelectText.ChangeHealth, Converter={StaticResource EnumToEnumInfoConverter}}"
-                Style="{StaticResource StandardComboBoxStyle}"
+                Style="{DynamicResource ModMaker_ComboBoxBaseStyle}"
               />
             </Grid>
           </Border>
@@ -282,7 +282,7 @@
                 IsEditable="False"
                 ItemsSource="{Binding SelectText.ValueChangeLevels, Converter={StaticResource EnumsToEnumInfosConverter}}"
                 SelectedItem="{Binding SelectText.ChangeExp, Converter={StaticResource EnumToEnumInfoConverter}}"
-                Style="{StaticResource StandardComboBoxStyle}"
+                Style="{DynamicResource ModMaker_ComboBoxBaseStyle}"
               />
             </Grid>
           </Border>
@@ -299,7 +299,7 @@
                 IsEditable="False"
                 ItemsSource="{Binding SelectText.ValueChangeLevels, Converter={StaticResource EnumsToEnumInfosConverter}}"
                 SelectedItem="{Binding SelectText.ChangeMoney, Converter={StaticResource EnumToEnumInfoConverter}}"
-                Style="{StaticResource StandardComboBoxStyle}"
+                Style="{DynamicResource ModMaker_ComboBoxBaseStyle}"
               />
             </Grid>
           </Border>
@@ -316,7 +316,7 @@
                 IsEditable="False"
                 ItemsSource="{Binding SelectText.ValueChangeLevels, Converter={StaticResource EnumsToEnumInfosConverter}}"
                 SelectedItem="{Binding SelectText.ChangeStrengthFood, Converter={StaticResource EnumToEnumInfoConverter}}"
-                Style="{StaticResource StandardComboBoxStyle}"
+                Style="{DynamicResource ModMaker_ComboBoxBaseStyle}"
               />
             </Grid>
           </Border>
@@ -333,7 +333,7 @@
                 IsEditable="False"
                 ItemsSource="{Binding SelectText.ValueChangeLevels, Converter={StaticResource EnumsToEnumInfosConverter}}"
                 SelectedItem="{Binding SelectText.ChangeStrengthDrink, Converter={StaticResource EnumToEnumInfoConverter}}"
-                Style="{StaticResource StandardComboBoxStyle}"
+                Style="{DynamicResource ModMaker_ComboBoxBaseStyle}"
               />
             </Grid>
           </Border>
@@ -350,7 +350,7 @@
                 IsEditable="False"
                 ItemsSource="{Binding SelectText.ValueChangeLevels, Converter={StaticResource EnumsToEnumInfosConverter}}"
                 SelectedItem="{Binding SelectText.ChangeFeeling, Converter={StaticResource EnumToEnumInfoConverter}}"
-                Style="{StaticResource StandardComboBoxStyle}"
+                Style="{DynamicResource ModMaker_ComboBoxBaseStyle}"
               />
             </Grid>
           </Border>
@@ -367,7 +367,7 @@
                 IsEditable="False"
                 ItemsSource="{Binding SelectText.ValueChangeLevels, Converter={StaticResource EnumsToEnumInfosConverter}}"
                 SelectedItem="{Binding SelectText.ChangeStrength, Converter={StaticResource EnumToEnumInfoConverter}}"
-                Style="{StaticResource StandardComboBoxStyle}"
+                Style="{DynamicResource ModMaker_ComboBoxBaseStyle}"
               />
             </Grid>
           </Border>

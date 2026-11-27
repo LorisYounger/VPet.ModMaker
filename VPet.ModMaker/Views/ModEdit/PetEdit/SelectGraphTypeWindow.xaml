@@ -32,7 +32,7 @@
       <ComboBox
         ItemsSource="{Binding GraphTypes}"
         SelectedItem="{Binding GraphType}"
-        Style="{StaticResource StandardComboBoxStyle}"
+        Style="{DynamicResource ModMaker_ComboBoxBaseStyle}"
       />
       <Label
         Content="{ll:Str 动画名称}"

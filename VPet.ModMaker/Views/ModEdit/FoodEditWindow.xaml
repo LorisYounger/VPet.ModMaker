@@ -131,7 +131,7 @@
                 HorizontalAlignment="Right"
                 ItemsSource="{Binding Food.FoodTypes, Converter={StaticResource EnumsToEnumInfosConverter}}"
                 SelectedItem="{Binding Food.Type, Converter={StaticResource EnumToEnumInfoConverter}}"
-                Style="{DynamicResource StandardComboBoxStyle}"
+                Style="{DynamicResource ModMaker_ComboBoxBaseStyle}"
               />
             </Grid>
           </Border>

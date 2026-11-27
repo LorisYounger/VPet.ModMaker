@@ -44,7 +44,7 @@
           x:Name="Enums"
           ItemsSource="{Binding Info.Infos}"
           SelectedIndex="0"
-          Style="{DynamicResource StandardComboBoxStyle}"
+          Style="{DynamicResource ModMaker_ComboBoxBaseStyle}"
           ToolTip="{ll:Str 选择枚举}"
         />
         <Button

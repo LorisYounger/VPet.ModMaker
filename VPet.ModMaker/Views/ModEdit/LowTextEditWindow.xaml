@@ -70,7 +70,7 @@
                 Width="300"
                 ItemsSource="{Binding LowText.LowTextTypes, Converter={StaticResource EnumsToEnumInfosConverter}}"
                 SelectedItem="{Binding LowText.Type, Converter={StaticResource EnumToEnumInfoConverter}}"
-                Style="{StaticResource StandardComboBoxStyle}"
+                Style="{DynamicResource ModMaker_ComboBoxBaseStyle}"
               />
             </Grid>
           </Border>
@@ -86,7 +86,7 @@
                 Width="300"
                 ItemsSource="{Binding LowText.ModeTypes, Converter={StaticResource EnumsToEnumInfosConverter}}"
                 SelectedItem="{Binding LowText.Mode, Converter={StaticResource EnumToEnumInfoConverter}}"
-                Style="{StaticResource StandardComboBoxStyle}"
+                Style="{DynamicResource ModMaker_ComboBoxBaseStyle}"
               />
             </Grid>
           </Border>
@@ -102,7 +102,7 @@
                 Width="300"
                 ItemsSource="{Binding LowText.StrengthTypes, Converter={StaticResource EnumsToEnumInfosConverter}}"
                 SelectedItem="{Binding LowText.Strength, Converter={StaticResource EnumToEnumInfoConverter}}"
-                Style="{StaticResource StandardComboBoxStyle}"
+                Style="{DynamicResource ModMaker_ComboBoxBaseStyle}"
               />
             </Grid>
           </Border>
@@ -118,7 +118,7 @@
                 Width="300"
                 ItemsSource="{Binding LowText.LikeTypes, Converter={StaticResource EnumsToEnumInfosConverter}}"
                 SelectedItem="{Binding LowText.Like, Converter={StaticResource EnumToEnumInfoConverter}}"
-                Style="{StaticResource StandardComboBoxStyle}"
+                Style="{DynamicResource ModMaker_ComboBoxBaseStyle}"
               />
             </Grid>
           </Border>

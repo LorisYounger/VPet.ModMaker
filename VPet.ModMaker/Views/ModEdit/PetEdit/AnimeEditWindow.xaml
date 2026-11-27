@@ -255,7 +255,7 @@
             Margin="10,0,0,0"
             ItemsSource="{x:Static m:AnimeTypeModel.MultiStageAnimatTypes}"
             SelectedItem="{Binding CurrentAnimeModel.AnimeType, Converter={StaticResource EnumToEnumInfoConverter}}"
-            Style="{StaticResource StandardComboBoxStyle}"
+            Style="{DynamicResource ModMaker_ComboBoxBaseStyle}"
             Visibility="{Binding DataContext.HasMultiType, RelativeSource={RelativeSource AncestorType=Window, Mode=FindAncestor}, Converter={StaticResource FalseToCollapsedConverter}}"
           />
         </Grid>

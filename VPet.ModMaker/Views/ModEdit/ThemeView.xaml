@@ -50,7 +50,7 @@
         Grid.Column="1"
         ItemsSource="{x:Static vm:LowTextEditViewModel.SearchTargets}"
         SelectedItem="{Binding CurrentSearchTarget}"
-        Style="{StaticResource StandardComboBoxStyle}"
+        Style="{DynamicResource ModMaker_ComboBoxBaseStyle}"
         ToolTip="{ll:Str 搜索目标}"
       />
     </Grid>

@@ -90,7 +90,7 @@
               HorizontalAlignment="Right"
               ItemsSource="{Binding Move.LocateTypes}"
               SelectedItem="{Binding Move.LocateType, Converter={StaticResource EnumToEnumInfoConverter}}"
-              Style="{StaticResource StandardComboBoxStyle}"
+              Style="{DynamicResource ModMaker_ComboBoxBaseStyle}"
             />
           </Grid>
         </Border>

@@ -207,7 +207,7 @@
         <ComboBox
           Height="30"
           Margin="5"
-          Style="{DynamicResource StandardComboBoxStyle}"
+          Style="{DynamicResource ModMaker_ComboBoxBaseStyle}"
           ItemsSource="{x:Static vm:ModMakerViewModel.LogLevels}"
           SelectedItem="{Binding CurrentLogLevel}"
         />

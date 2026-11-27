@@ -98,6 +98,13 @@
     <Setter Property="BorderThickness" Value="2" />
   </Style>
   <Style
+    x:Key="ModMaker_ComboBoxBaseStyle"
+    BasedOn="{StaticResource StandardComboBoxStyle}"
+    TargetType="ComboBox"
+  >
+    <Setter Property="VirtualizingPanel.ScrollUnit" Value="Item" />
+  </Style>
+  <Style
     x:Key="ModMaker_LabelBaseStyle"
     BasedOn="{StaticResource {x:Type Label}}"
     TargetType="Label"

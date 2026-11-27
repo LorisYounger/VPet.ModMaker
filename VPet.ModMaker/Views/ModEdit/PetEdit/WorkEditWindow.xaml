@@ -165,7 +165,7 @@
                 HorizontalAlignment="Right"
                 ItemsSource="{x:Static m:WorkModel.WorkTypes}"
                 SelectedItem="{Binding Work.Type}"
-                Style="{DynamicResource StandardComboBoxStyle}"
+                Style="{DynamicResource ModMaker_ComboBoxBaseStyle}"
               />
             </Grid>
           </Border>
