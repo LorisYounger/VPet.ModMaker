@@ -47,6 +47,8 @@ public sealed partial class PetModel : ObservableModelBase, IDisposable
     {
         ID = loader.Name;
         I18nResource = i18nResource;
+        OriginalPetName = loader.PetName;
+        OriginalIntor = loader.Intor;
 
         if (loader.PetName != PetNameID)
         {
@@ -131,6 +133,16 @@ public sealed partial class PetModel : ObservableModelBase, IDisposable
     /// </summary>
     [ObservableProperty]
     public bool FromMain { get; set; }
+
+    /// <summary>
+    /// 原始 petname（用于本体桌宠保存时套用原本的内容）
+    /// </summary>
+    public string? OriginalPetName { get; set; }
+
+    /// <summary>
+    /// 原始 intor（用于本体桌宠保存时套用原本的内容）
+    /// </summary>
+    public string? OriginalIntor { get; set; }
 
     /// <summary>
     /// Id
@@ -291,9 +303,17 @@ public sealed partial class PetModel : ObservableModelBase, IDisposable
         if (File.Exists(petFile) is false)
             File.Create(petFile).Close();
         var lps = new LPS();
-        // 如果本体中存在相同的宠物, 则不保存 touchhead/touchbody/touchraised/raisepoint 以免干扰本体桌宠参数
-        if (FromMain || ModMaker.MainPets.ContainsKey(ID))
-            SavePetBasicInfo(lps);
+        // 如果本体中存在相同的宠物, 则套用原本的 petname/intor 且不保存 touchhead/touchbody/touchraised/raisepoint 以免干扰本体桌宠参数
+        if (TryGetMainPet(ID, out var mainPet))
+            SaveMainPetBasicInfo(lps, mainPet);
+        else if (
+            FromMain
+            || (
+                IsEmptyPetLayout()
+                && (OriginalPetName is not null || OriginalIntor is not null)
+            )
+        )
+            SaveMainPetBasicInfo(lps, null);
         else
             SavePetInfo(lps);
         SaveWorksInfo(lps);
@@ -420,6 +440,42 @@ public sealed partial class PetModel : ObservableModelBase, IDisposable
             SavePetTouchRaisedInfo(lps);
         if (IsEmptyMultiStatePoint(RaisePoint) is false)
             SavePetRaisePointInfo(lps);
+    }
+
+    internal static bool TryGetMainPet(string id, [NotNullWhen(true)] out PetModel? mainPet)
+    {
+        if (ModMaker.MainPets.TryGetValue(id, out mainPet))
+            return true;
+        foreach (var pair in ModMaker.MainPets)
+        {
+            if (string.Equals(pair.Key, id, StringComparison.OrdinalIgnoreCase))
+            {
+                mainPet = pair.Value;
+                return true;
+            }
+        }
+        mainPet = null;
+        return false;
+    }
+
+    private bool IsEmptyPetLayout() =>
+        IsEmptyRectangle(TouchHeadRectangleLocation)
+        && IsEmptyRectangle(TouchBodyRectangleLocation)
+        && IsEmptyMultiStateRectangle(TouchRaisedRectangleLocation)
+        && IsEmptyMultiStatePoint(RaisePoint);
+
+    private void SaveMainPetBasicInfo(LPS lps, PetModel? mainPet)
+    {
+        var petLine = new Line("pet", ID) { new Sub("path", ID) };
+        var petName = mainPet?.OriginalPetName ?? OriginalPetName;
+        var intor = mainPet?.OriginalIntor ?? OriginalIntor;
+        if (string.IsNullOrWhiteSpace(petName) is false)
+            petLine.Add(new Sub("petname", petName));
+        if (string.IsNullOrWhiteSpace(intor) is false)
+            petLine.Add(new Sub("intor", intor));
+        lps.Add(petLine);
+        if (string.IsNullOrWhiteSpace(Tags) is false)
+            lps.Add(new Line("tag", Tags));
     }
 
     private void SavePetBasicInfo(LPS lps)

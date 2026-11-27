@@ -346,9 +346,29 @@ public sealed partial class ModInfoModel : ObservableModelBase, IDisposable
         {
             try
             {
-                var petModel = new PetModel(pet, I18nResource);
-                // 如果检测到本体存在同名宠物
-                CheckPetIsMainPet(petModel);
+                PetModel petModel;
+                if (PetModel.TryGetMainPet(pet.Name, out var mainPet))
+                {
+                    // 本体宠物套用原本的元数据与 I18n，仅载入模组中的工作、移动、标签与动画
+                    petModel = CloneMainPet(mainPet);
+                    petModel.FromMain = false;
+                    var tags = pet.Config.Data["tag"].Info;
+                    if (string.IsNullOrWhiteSpace(tags) is false)
+                        petModel.Tags = tags;
+                    if (petModel.OriginalPetName is null)
+                        petModel.OriginalPetName = pet.PetName;
+                    if (petModel.OriginalIntor is null)
+                        petModel.OriginalIntor = pet.Intor;
+                    foreach (var work in pet.Config.Works)
+                        petModel.Works.Add(new(work, I18nResource));
+                    foreach (var move in pet.Config.Moves)
+                        petModel.Moves.Add(new(move));
+                }
+                else
+                {
+                    petModel = new PetModel(pet, I18nResource);
+                }
+
                 var existingMainPet = Pets.FirstOrDefault(x =>
                     x.FromMain && string.Equals(x.ID, petModel.ID, StringComparison.OrdinalIgnoreCase)
                 );
@@ -372,55 +392,6 @@ public sealed partial class ModInfoModel : ObservableModelBase, IDisposable
                         pet.Name,
                         pet.PetName
                     );
-            }
-        }
-
-        static void CheckPetIsMainPet(PetModel petModel)
-        {
-            if (ModMaker.MainPets.TryGetValue(petModel.ID, out var mainPet))
-            {
-                // 若宠物的值为默认值或全0(未配置), 则把本体宠物的值作为模组宠物的默认值
-                if (
-                    (
-                        petModel.TouchHeadRectangleLocation
-                            == PetModel.DefaultTouchHeadRectangleLocation
-                        || PetModel.IsEmptyRectangle(petModel.TouchHeadRectangleLocation)
-                    )
-                    && petModel.TouchHeadRectangleLocation != mainPet.TouchHeadRectangleLocation
-                )
-                    petModel.TouchHeadRectangleLocation =
-                        mainPet.TouchHeadRectangleLocation.Clone();
-                if (
-                    (
-                        petModel.TouchBodyRectangleLocation
-                            == PetModel.DefaultTouchBodyRectangleLocation
-                        || PetModel.IsEmptyRectangle(petModel.TouchBodyRectangleLocation)
-                    )
-                    && petModel.TouchBodyRectangleLocation != mainPet.TouchBodyRectangleLocation
-                )
-                    petModel.TouchBodyRectangleLocation =
-                        mainPet.TouchBodyRectangleLocation.Clone();
-                if (
-                    (
-                        petModel.TouchRaisedRectangleLocation
-                            == PetModel.DefaultTouchRaisedRectangleLocation
-                        || PetModel.IsEmptyMultiStateRectangle(
-                            petModel.TouchRaisedRectangleLocation
-                        )
-                    )
-                    && petModel.TouchRaisedRectangleLocation
-                        != mainPet.TouchRaisedRectangleLocation
-                )
-                    petModel.TouchRaisedRectangleLocation =
-                        mainPet.TouchRaisedRectangleLocation.Clone();
-                if (
-                    (
-                        petModel.RaisePoint == PetModel.DefaultRaisePoint
-                        || PetModel.IsEmptyMultiStatePoint(petModel.RaisePoint)
-                    )
-                    && petModel.RaisePoint != mainPet.RaisePoint
-                )
-                    petModel.RaisePoint = mainPet.RaisePoint.Clone();
             }
         }
     }
