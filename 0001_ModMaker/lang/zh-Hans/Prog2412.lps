@@ -40,7 +40,7 @@ AnimatType_C_End#动画类型_C_结束:|
 选择文化#选择文化:|
 历史为空,不需要清空#历史为空,不需要清空:|
 未添加任何文化,请添加文化#未添加任何文化,请添加文化:|
-未设置文化, 将退出编辑#未設定文化, 將退出編輯:|
+未设置文化, 将退出编辑#未设置文化, 将退出编辑:|
 设置推荐价格#设置推荐价格:|
 设置全部食物为参考价格#设置全部食物为参考价格:|
 将所有食物设置为参考价格,你确定吗?#将所有食物设置为参考价格,你确定吗?:|
@@ -60,3 +60,223 @@ ModEditWindowW_900#900:|
 口渴度改变#口渴度改变:|
 心情改变#心情改变:|
 体力改变#体力改变:|
+按钮样式#按钮样式:|
+保存模组至文件夹#保存模组至文件夹:|
+保存失败#保存失败:|
+保存失败, 详情请查看日志#保存失败, 详情请查看日志:|
+本体的文化#本体的文化:|
+编辑#编辑:|
+编辑完成#编辑完成:|
+编辑完成, 是否保存?#编辑完成, 是否保存?:|
+编辑移动#编辑移动:|
+播放失败#播放失败:|
+测试图片#测试图片:|
+持续时间#持续时间:|
+宠物名称不可为空#宠物名称不可为空:|
+打开链接失败#打开链接失败:|
+打开日志文件#打开日志文件:|
+打开所在的文件夹失败#打开所在的文件夹失败:|
+动画ID#动画ID:|
+多阶段动画不可包含 Single 类型，请先修改为 A_Start / B_Loop / C_End#多阶段动画不可包含 Single 类型，请先修改为 A_Start / B_Loop / C_End:|
+翻译模组保存成功#翻译模组保存成功:|
+翻译模组保存失败, 详情请查看日志#翻译模组保存失败, 详情请查看日志:|
+更新成功更新至版本 {0}, 请手动保存#更新成功更新至版本 {0}, 请手动保存:|
+工作中#工作中:|
+检测类型#检测类型:|
+经验值#经验值:|
+历史路径不存在, 是否删除?#历史路径不存在, 是否删除?:|
+路径#路径:|
+模组编辑时出现错误, 详情请查看日志#模组编辑时出现错误, 详情请查看日志:|
+模组更新失败, 详情请查看日志#模组更新失败, 详情请查看日志:|
+模组信息文件夹#模组信息文件夹:|
+模组载入失败, 详情请查看日志#模组载入失败, 详情请查看日志:|
+你不能删除最后一个文化#你不能删除最后一个文化:|
+清空#清空:|
+清空后图像#清空后图像:|
+清空前图像#清空前图像:|
+清空食物位置#清空食物位置:|
+清空图像#清空图像:|
+去除枚举#去除枚举:|
+全选#全选:|
+缺少文化#缺少文化:|
+确定清空图片吗#确定清空图片吗:|
+确定清空图像吗#确定清空图像吗:|
+确定删除动画 '{0}'#确定删除动画 '{0}':|
+确定删除文化 '{0}' 吗, 这将删除文化及其所有文化数据#确定删除文化 '{0}' 吗, 这将删除文化及其所有文化数据:|
+确定删除已选中的 {0} 个宠物吗#确定删除已选中的 {0} 个宠物吗:|
+确定删除已选中的 {0} 个低状态文本吗#确定删除已选中的 {0} 个低状态文本吗:|
+确定删除已选中的 {0} 个点击文本吗#确定删除已选中的 {0} 个点击文本吗:|
+确定删除已选中的 {0} 个动画吗#确定删除已选中的 {0} 个动画吗:|
+确定删除已选中的 {0} 个工作吗#确定删除已选中的 {0} 个工作吗:|
+确定删除已选中的 {0} 个食物吗#确定删除已选中的 {0} 个食物吗:|
+确定删除已选中的 {0} 个选择文本吗#确定删除已选中的 {0} 个选择文本吗:|
+确定删除已选中的 {0} 个移动吗#确定删除已选中的 {0} 个移动吗:|
+确定删除已选中的 {0} 个主题吗#确定删除已选中的 {0} 个主题吗:|
+确定删除已选中的 {0} 个字体吗#确定删除已选中的 {0} 个字体吗:|
+确认删除动画 '{0}'#确认删除动画 '{0}':|
+删除#删除:|
+删除宠物#删除宠物:|
+删除低状态文本#删除低状态文本:|
+删除点击文本#删除点击文本:|
+删除动画#删除动画:|
+删除工作#删除工作:|
+删除食物#删除食物:|
+删除食物定位#删除食物定位:|
+删除文化#删除文化:|
+删除选择文本#删除选择文本:|
+删除移动#删除移动:|
+删除主题#删除主题:|
+删除字体#删除字体:|
+设置#设置:|
+示例文本#示例文本:|
+搜索动画类型#搜索动画类型:|
+替换测试食物图片#替换测试食物图片:|
+添加#添加:|
+添加后图像#添加后图像:|
+添加枚举#添加枚举:|
+添加前图像#添加前图像:|
+添加失败#添加失败:|
+添加食物位置#添加食物位置:|
+添加新字体失败, 详情请查看日志#添加新字体失败, 详情请查看日志:|
+停止#停止:|
+停止工作#停止工作:|
+透明度#透明度:|
+图片#图片:|
+图片载入失败#图片载入失败:|
+图片载入失败, 数量 {0}, 详情请查看日志#图片载入失败, 数量 {0}, 详情请查看日志:|
+图片载入失败, 详情请查看日志#图片载入失败, 详情请查看日志:|
+退出编辑#退出编辑:|
+未知文化#未知文化:|
+文化名称包含非法字符#文化名称包含非法字符:|
+无法打开链接,需要复制自行访问吗#无法打开链接,需要复制自行访问吗:|
+显示位置#显示位置:|
+向下为正，向上为负#向下为正，向上为负:|
+向右为正，向左为负#向右为正，向左为负:|
+信息文件不存在#信息文件不存在:|
+修改#修改:|
+旋转角度#旋转角度:|
+选择保存的文件夹#选择保存的文件夹:|
+选择动画类型#选择动画类型:|
+选择枚举#选择枚举:|
+选择字体#选择字体:|
+移动间隔必须大于0#移动间隔必须大于0:|
+移动距离必须大于0#移动距离必须大于0:|
+移动速度#移动速度:|
+已复制到剪贴板#已复制到剪贴板:|
+隐藏位置#隐藏位置:|
+游戏版本#游戏版本:|
+源路径为空, 请使用 '保存至'#源路径为空, 请使用 '保存至':|
+源路径为空, 请先保存模组#源路径为空, 请先保存模组:|
+长度#长度:|
+折叠模组信息#折叠模组信息:|
+这是本体自带的宠物, 确定要编辑吗?#这是本体自带的宠物, 确定要编辑吗?:|
+支持的文化#支持的文化:|
+指定动画不可为空#指定动画不可为空:|
+重置测试食物图片#重置测试食物图片:|
+字体#字体:|
+自定义文化#自定义文化:|
+自动设置参考价格#自动设置参考价格:|
+最小日志级别#最小日志级别:|
+AnimatType_Single#动画类型_单一:|
+Anime ({0})#动画 ({0}):|
+ClickText ({0})#点击文本 ({0}):|
+DARKPrimary#深色主色:|
+DARKPrimaryDark#深色主色-深:|
+DARKPrimaryDarker#深色主色-更深:|
+DARKPrimaryLight#深色主色-浅:|
+DARKPrimaryLighter#深色主色-更浅:|
+DARKPrimaryText#深色主色-文字:|
+DayTime_Afternoon#下午:|
+DayTime_Midnight#午夜:|
+DayTime_Morning#早晨:|
+DayTime_Night#夜晚:|
+DirectionType_Bottom#下:|
+DirectionType_BottomGreater#下大于:|
+DirectionType_Left#左:|
+DirectionType_LeftGreater#左大于:|
+DirectionType_None#无:|
+DirectionType_Right#右:|
+DirectionType_RightGreater#右大于:|
+DirectionType_Top#上:|
+DirectionType_TopGreater#上大于:|
+Fonts ({0})#字体 ({0}):|
+Food ({0})#食物 ({0}):|
+GraphType_Common#通用:|
+GraphType_Default#默认:|
+GraphType_Idel#空闲:|
+GraphType_Move#移动:|
+GraphType_Raised_Dynamic#被提起(动态):|
+GraphType_Raised_Static#被提起(静态):|
+GraphType_Say#说话:|
+GraphType_Shutdown#关机:|
+GraphType_SideHide_Left_Main#左侧躲藏:|
+GraphType_SideHide_Left_Rise#左侧躲藏显示:|
+GraphType_SideHide_Right_Main#右侧躲藏:|
+GraphType_SideHide_Right_Rise#右侧躲藏显示:|
+GraphType_Sleep#睡觉:|
+GraphType_StartUP#开机:|
+GraphType_StateONE#待机1:|
+GraphType_StateTWO#待机2:|
+GraphType_Switch_Down#向下切换状态:|
+GraphType_Switch_Hunger#饥饿:|
+GraphType_Switch_Thirsty#口渴:|
+GraphType_Switch_Up#向上切换状态:|
+GraphType_Touch_Body#摸身体:|
+GraphType_Touch_Head#摸头:|
+GraphType_Work#工作:|
+ID#ID:|
+LikeType_L#高:|
+LikeType_M#中:|
+LikeType_N#无:|
+LikeType_S#低:|
+LowText ({0})#低状态文本 ({0}):|
+LowTextType_Drink#口渴:|
+LowTextType_Food#饥饿:|
+Mod名称#Mod名称:|
+ModeType_H#高状态:|
+ModeType_Happy#高兴:|
+ModeType_Ill#生病:|
+ModeType_L#低状态:|
+ModeType_Nomal#普通:|
+ModeType_PoorCondition#状态不佳:|
+ModType_Happy#高兴:|
+Move ({0})#移动 ({0}):|
+Name#名称:|
+Pet ({0})#宠物 ({0}):|
+Primary#主色:|
+PrimaryDark#主色-深:|
+PrimaryDarker#主色-更深:|
+PrimaryLight#主色-浅:|
+PrimaryLighter#主色-更浅:|
+PrimaryText#主色-文字:|
+Secondary#次要色:|
+SecondaryDark#次要色-深:|
+SecondaryDarker#次要色-更深:|
+SecondaryLight#次要色-浅:|
+SecondaryLighter#次要色-更浅:|
+SecondaryText#次要色-文字:|
+SelectText ({0})#选择文本 ({0}):|
+SelectTextSearchTarget_Text#搜索_选择说话文本:|
+ShadowColor#阴影颜色:|
+StrengthType_L#一般:|
+StrengthType_M#有点:|
+StrengthType_S#非常:|
+Themes ({0})#主题 ({0}):|
+ThemeSearchTarget_ID#搜索_主题ID:|
+ThemeSearchTarget_Name#搜索_主题名称:|
+Work ({0})#工作 ({0}):|
+WorkingState_Empty#空闲:|
+WorkingState_Nomal#普通:|
+WorkingState_Sleep#睡觉:|
+WorkingState_Travel#旅行:|
+WorkingState_Work#工作:|
+X速度#X速度:|
+Y速度#Y速度:|
+编辑主题#编辑主题:|
+LogLevel_Trace#跟踪:|
+LogLevel_Debug#调试:|
+LogLevel_Information#信息:|
+LogLevel_Warning#警告:|
+LogLevel_Error#错误:|
+LogLevel_Critical#严重:|
+LogLevel_None#无:|

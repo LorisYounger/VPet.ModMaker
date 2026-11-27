@@ -60,3 +60,223 @@ ModEditWindowW_900#900:|
 口渴度改变#Thirst Change:|
 心情改变#Mood Change:|
 体力改变#Stamina Change:|
+按钮样式#Button Style:|
+保存模组至文件夹#Save Mod to Folder:|
+保存失败#Save Failed:|
+保存失败, 详情请查看日志#Save failed, please check the log for details:|
+本体的文化#Base Game Cultures:|
+编辑#Edit:|
+编辑完成#Editing Complete:|
+编辑完成, 是否保存?#Editing is complete, save changes?:|
+编辑移动#Edit Move:|
+播放失败#Playback Failed:|
+测试图片#Test Image:|
+持续时间#Duration:|
+宠物名称不可为空#Pet name cannot be empty:|
+打开链接失败#Failed to Open Link:|
+打开日志文件#Open Log File:|
+打开所在的文件夹失败#Failed to open the containing folder:|
+动画ID#Animation ID:|
+多阶段动画不可包含 Single 类型，请先修改为 A_Start / B_Loop / C_End#Multi-stage animations cannot contain the Single type. Please change it to A_Start / B_Loop / C_End first:|
+翻译模组保存成功#Translation mod saved successfully:|
+翻译模组保存失败, 详情请查看日志#Failed to save the translation mod, please check the log for details:|
+更新成功更新至版本 {0}, 请手动保存#Updated to version {0}, please save manually:|
+工作中#Working:|
+检测类型#Detection Type:|
+经验值#Experience:|
+历史路径不存在, 是否删除?#The history path does not exist. Delete it?:|
+路径#Path:|
+模组编辑时出现错误, 详情请查看日志#An error occurred while editing the mod, please check the log for details:|
+模组更新失败, 详情请查看日志#Failed to update the mod, please check the log for details:|
+模组信息文件夹#Mod Info Folder:|
+模组载入失败, 详情请查看日志#Failed to load the mod, please check the log for details:|
+你不能删除最后一个文化#You cannot delete the last culture:|
+清空#Clear:|
+清空后图像#Clear Back Image:|
+清空前图像#Clear Front Image:|
+清空食物位置#Clear Food Locations:|
+清空图像#Clear Images:|
+去除枚举#Remove Enum:|
+全选#Select All:|
+缺少文化#Missing Culture:|
+确定清空图片吗#Are you sure you want to clear the images?:|
+确定清空图像吗#Are you sure you want to clear the images?:|
+确定删除动画 '{0}'#Are you sure you want to delete animation '{0}'?:|
+确定删除文化 '{0}' 吗, 这将删除文化及其所有文化数据#Are you sure you want to delete culture '{0}'? This will delete the culture and all its data:|
+确定删除已选中的 {0} 个宠物吗#Are you sure you want to delete the {0} selected pets?:|
+确定删除已选中的 {0} 个低状态文本吗#Are you sure you want to delete the {0} selected low status texts?:|
+确定删除已选中的 {0} 个点击文本吗#Are you sure you want to delete the {0} selected click texts?:|
+确定删除已选中的 {0} 个动画吗#Are you sure you want to delete the {0} selected animations?:|
+确定删除已选中的 {0} 个工作吗#Are you sure you want to delete the {0} selected jobs?:|
+确定删除已选中的 {0} 个食物吗#Are you sure you want to delete the {0} selected foods?:|
+确定删除已选中的 {0} 个选择文本吗#Are you sure you want to delete the {0} selected select texts?:|
+确定删除已选中的 {0} 个移动吗#Are you sure you want to delete the {0} selected moves?:|
+确定删除已选中的 {0} 个主题吗#Are you sure you want to delete the {0} selected themes?:|
+确定删除已选中的 {0} 个字体吗#Are you sure you want to delete the {0} selected fonts?:|
+确认删除动画 '{0}'#Confirm deleting animation '{0}':|
+删除#Delete:|
+删除宠物#Delete Pet:|
+删除低状态文本#Delete Low Status Text:|
+删除点击文本#Delete Click Text:|
+删除动画#Delete Animation:|
+删除工作#Delete Job:|
+删除食物#Delete Food:|
+删除食物定位#Delete Food Location:|
+删除文化#Delete Culture:|
+删除选择文本#Delete Select Text:|
+删除移动#Delete Move:|
+删除主题#Delete Theme:|
+删除字体#Delete Font:|
+设置#Set:|
+示例文本#Sample Text:|
+搜索动画类型#Search Animation Type:|
+替换测试食物图片#Replace Test Food Image:|
+添加#Add:|
+添加后图像#Add Back Image:|
+添加枚举#Add Enum:|
+添加前图像#Add Front Image:|
+添加失败#Add Failed:|
+添加食物位置#Add Food Location:|
+添加新字体失败, 详情请查看日志#Failed to add the new font, please check the log for details:|
+停止#Stop:|
+停止工作#Stop Working:|
+透明度#Opacity:|
+图片#Image:|
+图片载入失败#Failed to load image:|
+图片载入失败, 数量 {0}, 详情请查看日志#Failed to load {0} image(s), please check the log for details:|
+图片载入失败, 详情请查看日志#Failed to load images, please check the log for details:|
+退出编辑#Exit Editing:|
+未知文化#Unknown Culture:|
+文化名称包含非法字符#Culture name contains invalid characters:|
+无法打开链接,需要复制自行访问吗#Unable to open the link. Copy it and visit manually?:|
+显示位置#Display Position:|
+向下为正，向上为负#Positive is down, negative is up:|
+向右为正，向左为负#Positive is right, negative is left:|
+信息文件不存在#Info file does not exist:|
+修改#Modify:|
+旋转角度#Rotation:|
+选择保存的文件夹#Select a folder to save:|
+选择动画类型#Select Animation Type:|
+选择枚举#Select Enum:|
+选择字体#Select Font:|
+移动间隔必须大于0#Move interval must be greater than 0:|
+移动距离必须大于0#Move distance must be greater than 0:|
+移动速度#Move Speed:|
+已复制到剪贴板#Copied to clipboard:|
+隐藏位置#Hide Position:|
+游戏版本#Game Version:|
+源路径为空, 请使用 '保存至'#Source path is empty, please use 'Save To':|
+源路径为空, 请先保存模组#Source path is empty, please save the mod first:|
+长度#Width:|
+折叠模组信息#Collapse Mod Info:|
+这是本体自带的宠物, 确定要编辑吗?#This pet comes with the base game. Are you sure you want to edit it?:|
+支持的文化#Supported Cultures:|
+指定动画不可为空#The specified animation cannot be empty:|
+重置测试食物图片#Reset Test Food Image:|
+字体#Font:|
+自定义文化#Custom Culture:|
+自动设置参考价格#Auto-set Reference Price:|
+最小日志级别#Minimum Log Level:|
+AnimatType_Single#Animation Type_Single:|
+Anime ({0})#Anime ({0}):|
+ClickText ({0})#Click Text ({0}):|
+DARKPrimary#Dark Primary:|
+DARKPrimaryDark#Dark Primary Dark:|
+DARKPrimaryDarker#Dark Primary Darker:|
+DARKPrimaryLight#Dark Primary Light:|
+DARKPrimaryLighter#Dark Primary Lighter:|
+DARKPrimaryText#Dark Primary Text:|
+DayTime_Afternoon#Afternoon:|
+DayTime_Midnight#Midnight:|
+DayTime_Morning#Morning:|
+DayTime_Night#Night:|
+DirectionType_Bottom#Bottom:|
+DirectionType_BottomGreater#Bottom Greater:|
+DirectionType_Left#Left:|
+DirectionType_LeftGreater#Left Greater:|
+DirectionType_None#None:|
+DirectionType_Right#Right:|
+DirectionType_RightGreater#Right Greater:|
+DirectionType_Top#Top:|
+DirectionType_TopGreater#Top Greater:|
+Fonts ({0})#Fonts ({0}):|
+Food ({0})#Food ({0}):|
+GraphType_Common#Common:|
+GraphType_Default#Default:|
+GraphType_Idel#Idle:|
+GraphType_Move#Move:|
+GraphType_Raised_Dynamic#Raised (Dynamic):|
+GraphType_Raised_Static#Raised (Static):|
+GraphType_Say#Say:|
+GraphType_Shutdown#Shutdown:|
+GraphType_SideHide_Left_Main#Side Hide (Left):|
+GraphType_SideHide_Left_Rise#Side Hide (Left Rise):|
+GraphType_SideHide_Right_Main#Side Hide (Right):|
+GraphType_SideHide_Right_Rise#Side Hide (Right Rise):|
+GraphType_Sleep#Sleep:|
+GraphType_StartUP#Startup:|
+GraphType_StateONE#Idle State 1:|
+GraphType_StateTWO#Idle State 2:|
+GraphType_Switch_Down#Switch Down:|
+GraphType_Switch_Hunger#Hungry:|
+GraphType_Switch_Thirsty#Thirsty:|
+GraphType_Switch_Up#Switch Up:|
+GraphType_Touch_Body#Touch Body:|
+GraphType_Touch_Head#Touch Head:|
+GraphType_Work#Work:|
+ID#ID:|
+LikeType_L#High:|
+LikeType_M#Medium:|
+LikeType_N#None:|
+LikeType_S#Low:|
+LowText ({0})#Low Status Text ({0}):|
+LowTextType_Drink#Thirsty:|
+LowTextType_Food#Hungry:|
+Mod名称#Mod Name:|
+ModeType_H#High:|
+ModeType_Happy#Happy:|
+ModeType_Ill#Ill:|
+ModeType_L#Low:|
+ModeType_Nomal#Normal:|
+ModeType_PoorCondition#Poor Condition:|
+ModType_Happy#Happy:|
+Move ({0})#Move ({0}):|
+Name#Name:|
+Pet ({0})#Pet ({0}):|
+Primary#Primary:|
+PrimaryDark#Primary Dark:|
+PrimaryDarker#Primary Darker:|
+PrimaryLight#Primary Light:|
+PrimaryLighter#Primary Lighter:|
+PrimaryText#Primary Text:|
+Secondary#Secondary:|
+SecondaryDark#Secondary Dark:|
+SecondaryDarker#Secondary Darker:|
+SecondaryLight#Secondary Light:|
+SecondaryLighter#Secondary Lighter:|
+SecondaryText#Secondary Text:|
+SelectText ({0})#Select Text ({0}):|
+SelectTextSearchTarget_Text#Search_Select_Speaking_Text:|
+ShadowColor#Shadow Color:|
+StrengthType_L#Normal:|
+StrengthType_M#Slight:|
+StrengthType_S#Severe:|
+Themes ({0})#Themes ({0}):|
+ThemeSearchTarget_ID#Search_Theme_ID:|
+ThemeSearchTarget_Name#Search_Theme_Name:|
+Work ({0})#Job ({0}):|
+WorkingState_Empty#Empty:|
+WorkingState_Nomal#Normal:|
+WorkingState_Sleep#Sleep:|
+WorkingState_Travel#Travel:|
+WorkingState_Work#Work:|
+X速度#X Speed:|
+Y速度#Y Speed:|
+编辑主题#Edit Theme:|
+LogLevel_Trace#Trace:|
+LogLevel_Debug#Debug:|
+LogLevel_Information#Information:|
+LogLevel_Warning#Warning:|
+LogLevel_Error#Error:|
+LogLevel_Critical#Critical:|
+LogLevel_None#None:|

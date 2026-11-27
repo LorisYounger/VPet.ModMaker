@@ -9,7 +9,7 @@
   xmlns:vm="clr-namespace:VPet.ModMaker.ViewModels"
   xmlns:local="clr-namespace:VPet.ModMaker.Views"
   mc:Ignorable="d"
-  Title="ThemeEditWindow"
+  Title="{ll:Str 编辑主题}"
   d:DataContext="{d:DesignInstance vm:ThemeEditViewModel}"
   Width="1280"
   Height="720"
