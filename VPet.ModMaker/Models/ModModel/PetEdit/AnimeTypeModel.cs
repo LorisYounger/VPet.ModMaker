@@ -382,7 +382,8 @@ public sealed partial class AnimeTypeModel : ObservableModelBase, IAnimeModel
     /// 保存至指定路径
     /// </summary>
     /// <param name="path">路径</param>
-    public void Save(string path)
+    /// <param name="onImageSaved">图片保存完成回调</param>
+    public void Save(string path, Action<ImageModel, string>? onImageSaved = null)
     {
         if (
             GraphType
@@ -394,14 +395,14 @@ public sealed partial class AnimeTypeModel : ObservableModelBase, IAnimeModel
                 or GraphInfo.GraphType.SideHide_Right_Main
                 or GraphInfo.GraphType.SideHide_Right_Rise
         )
-            SaveDefault(path);
+            SaveDefault(path, onImageSaved);
         else if (
             GraphType
             is GraphInfo.GraphType.Touch_Head
                 or GraphInfo.GraphType.Touch_Body
                 or GraphInfo.GraphType.Sleep
         )
-            SaveMultiType(path);
+            SaveMultiType(path, onImageSaved);
         else if (
             GraphType
             is GraphInfo.GraphType.Switch_Up
@@ -409,130 +410,134 @@ public sealed partial class AnimeTypeModel : ObservableModelBase, IAnimeModel
                 or GraphInfo.GraphType.Switch_Thirsty
                 or GraphInfo.GraphType.Switch_Hunger
         )
-            SaveSwitch(path);
+            SaveSwitch(path, onImageSaved);
         else if (
             GraphType is GraphInfo.GraphType.Raised_Dynamic or GraphInfo.GraphType.Raised_Static
         )
-            SaveRaised(path);
+            SaveRaised(path, onImageSaved);
         else if (GraphType is GraphInfo.GraphType.StateONE or GraphInfo.GraphType.StateTWO)
-            SaveState(path);
+            SaveState(path, onImageSaved);
         else if (GraphType is GraphInfo.GraphType.Common)
-            SaveCommon(path);
+            SaveCommon(path, onImageSaved);
         else if (GraphType.IsNamedGraph())
-            SaveNamedAnime(path);
+            SaveNamedAnime(path, onImageSaved);
     }
 
     /// <summary>
     /// 保存为带有名称的动画样式
     /// </summary>
     /// <param name="path">路径</param>
-    void SaveNamedAnime(string path)
+    void SaveNamedAnime(string path, Action<ImageModel, string>? onImageSaved)
     {
         var animeTypePath = Path.Combine(path, GraphType.ToString());
         Directory.CreateDirectory(animeTypePath);
         var animePath = Path.Combine(animeTypePath, Name);
         Directory.CreateDirectory(animePath);
-        SaveWithModeType(animePath);
+        SaveWithModeType(animePath, onImageSaved);
     }
 
     /// <summary>
     /// 保存为通用样式
     /// </summary>
     /// <param name="path">路径</param>
-    void SaveCommon(string path)
+    void SaveCommon(string path, Action<ImageModel, string>? onImageSaved)
     {
         var animePath = Path.Combine(path, Name);
         Directory.CreateDirectory(animePath);
-        SaveWithModeType(animePath);
+        SaveWithModeType(animePath, onImageSaved);
     }
 
     /// <summary>
     /// 保存为 <see cref="GraphInfo.GraphType.StateONE"/> 或 <see cref="GraphInfo.GraphType.StateTWO"/> 样式
     /// </summary>
     /// <param name="path">路径</param>
-    void SaveState(string path)
+    void SaveState(string path, Action<ImageModel, string>? onImageSaved)
     {
         var animePath = Path.Combine(path, "State");
         Directory.CreateDirectory(animePath);
-        SaveMultiType(animePath);
+        SaveMultiType(animePath, onImageSaved);
     }
 
     /// <summary>
     /// 保存为 <see cref="GraphInfo.GraphType.Raised_Dynamic"/> 或 <see cref="GraphInfo.GraphType.Raised_Static"/> 样式
     /// </summary>
     /// <param name="path">路径</param>
-    void SaveRaised(string path)
+    void SaveRaised(string path, Action<ImageModel, string>? onImageSaved)
     {
         var animePath = Path.Combine(path, "Raise");
         Directory.CreateDirectory(animePath);
         if (GraphType is GraphInfo.GraphType.Raised_Dynamic)
-            SaveDefault(animePath);
+            SaveDefault(animePath, onImageSaved);
         else if (GraphType is GraphInfo.GraphType.Raised_Static)
-            SaveMultiType(animePath);
+            SaveMultiType(animePath, onImageSaved);
     }
 
     /// <summary>
     /// 保存为 <see cref="GraphInfo.GraphType.Switch_Up"/> 或 <see cref="GraphInfo.GraphType.Switch_Down"/> 或 <see cref="GraphInfo.GraphType.Switch_Thirsty"/> 或 <see cref="GraphInfo.GraphType.Switch_Hunger"/>
     /// </summary>
     /// <param name="path">路径</param>
-    void SaveSwitch(string path)
+    void SaveSwitch(string path, Action<ImageModel, string>? onImageSaved)
     {
         var animePath = Path.Combine(path, "Switch");
         Directory.CreateDirectory(animePath);
         var switchName = GraphType.ToString().Split(NativeUtils.Underscore).Last();
-        SaveWithAnimeType(Path.Combine(animePath, switchName));
+        SaveWithAnimeType(Path.Combine(animePath, switchName), onImageSaved);
     }
 
     /// <summary>
     /// 保存成默认样式
     /// </summary>
     /// <param name="path"></param>
-    void SaveDefault(string path)
+    void SaveDefault(string path, Action<ImageModel, string>? onImageSaved)
     {
         var animePath = Path.Combine(path, GraphType.ToString());
         Directory.CreateDirectory(animePath);
-        SaveWithAnimeType(animePath);
+        SaveWithAnimeType(animePath, onImageSaved);
     }
 
     /// <summary>
     /// 保存成多类型样式
     /// </summary>
     /// <param name="path"></param>
-    void SaveMultiType(string path)
+    void SaveMultiType(string path, Action<ImageModel, string>? onImageSaved)
     {
         var animePath = Path.Combine(path, GraphType.ToString());
         Directory.CreateDirectory(animePath);
-        SaveWithModeType(animePath);
+        SaveWithModeType(animePath, onImageSaved);
     }
 
     /// <summary>
     /// 保存为 Happy/A/0 的路径样式
     /// </summary>
     /// <param name="path"></param>
-    void SaveWithModeType(string path)
+    void SaveWithModeType(string path, Action<ImageModel, string>? onImageSaved)
     {
         if (HappyAnimes.Count > 0)
         {
             var modePath = Path.Combine(path, nameof(ModeType.Happy));
-            SaveAnimes(modePath, HappyAnimes);
+            SaveAnimes(modePath, HappyAnimes, onImageSaved);
         }
         if (NomalAnimes.Count > 0)
         {
             var modePath = Path.Combine(path, nameof(ModeType.Nomal));
-            SaveAnimes(modePath, NomalAnimes);
+            SaveAnimes(modePath, NomalAnimes, onImageSaved);
         }
         if (PoorConditionAnimes.Count > 0)
         {
             var modePath = Path.Combine(path, nameof(ModeType.PoorCondition));
-            SaveAnimes(modePath, PoorConditionAnimes);
+            SaveAnimes(modePath, PoorConditionAnimes, onImageSaved);
         }
         if (IllAnimes.Count > 0)
         {
             var modePath = Path.Combine(path, nameof(ModeType.Ill));
-            SaveAnimes(modePath, IllAnimes);
+            SaveAnimes(modePath, IllAnimes, onImageSaved);
         }
 
-        static void SaveAnimes(string animePath, ObservableList<AnimeModel> animes)
+        static void SaveAnimes(
+            string animePath,
+            ObservableList<AnimeModel> animes,
+            Action<ImageModel, string>? onImageSaved
+        )
         {
             Directory.CreateDirectory(animePath);
             var countA = 0;
@@ -544,21 +549,33 @@ public sealed partial class AnimeTypeModel : ObservableModelBase, IAnimeModel
                 {
                     var animatTypePath = Path.Combine(animePath, "A");
                     Directory.CreateDirectory(animatTypePath);
-                    SaveImages(Path.Combine(animatTypePath, countA.ToString()), anime);
+                    SaveImages(
+                        Path.Combine(animatTypePath, countA.ToString()),
+                        anime,
+                        onImageSaved
+                    );
                     countA++;
                 }
                 else if (anime.AnimeType is GraphInfo.AnimatType.B_Loop)
                 {
                     var animatTypePath = Path.Combine(animePath, "B");
                     Directory.CreateDirectory(animatTypePath);
-                    SaveImages(Path.Combine(animatTypePath, countB.ToString()), anime);
+                    SaveImages(
+                        Path.Combine(animatTypePath, countB.ToString()),
+                        anime,
+                        onImageSaved
+                    );
                     countB++;
                 }
                 else if (anime.AnimeType is GraphInfo.AnimatType.C_End)
                 {
                     var animatTypePath = Path.Combine(animePath, "C");
                     Directory.CreateDirectory(animatTypePath);
-                    SaveImages(Path.Combine(animatTypePath, countC.ToString()), anime);
+                    SaveImages(
+                        Path.Combine(animatTypePath, countC.ToString()),
+                        anime,
+                        onImageSaved
+                    );
                     countC++;
                 }
             }
@@ -569,33 +586,37 @@ public sealed partial class AnimeTypeModel : ObservableModelBase, IAnimeModel
     /// 保存为 Happy/0 的路径样式
     /// </summary>
     /// <param name="animePath"></param>
-    void SaveWithAnimeType(string animePath)
+    void SaveWithAnimeType(string animePath, Action<ImageModel, string>? onImageSaved)
     {
         if (HappyAnimes.Count > 0)
         {
             var modePath = Path.Combine(animePath, nameof(ModeType.Happy));
-            SaveAnimes(modePath, HappyAnimes);
+            SaveAnimes(modePath, HappyAnimes, onImageSaved);
         }
         if (NomalAnimes.Count > 0)
         {
             var modePath = Path.Combine(animePath, nameof(ModeType.Nomal));
-            SaveAnimes(modePath, NomalAnimes);
+            SaveAnimes(modePath, NomalAnimes, onImageSaved);
         }
         if (PoorConditionAnimes.Count > 0)
         {
             var modePath = Path.Combine(animePath, nameof(ModeType.PoorCondition));
-            SaveAnimes(modePath, PoorConditionAnimes);
+            SaveAnimes(modePath, PoorConditionAnimes, onImageSaved);
         }
         if (IllAnimes.Count > 0)
         {
             var modePath = Path.Combine(animePath, nameof(ModeType.Ill));
-            SaveAnimes(modePath, IllAnimes);
+            SaveAnimes(modePath, IllAnimes, onImageSaved);
         }
-        static void SaveAnimes(string animePath, ObservableList<AnimeModel> animes)
+        static void SaveAnimes(
+            string animePath,
+            ObservableList<AnimeModel> animes,
+            Action<ImageModel, string>? onImageSaved
+        )
         {
             Directory.CreateDirectory(animePath);
             foreach ((var anime, var index) in animes.WithIndex())
-                SaveImages(Path.Combine(animePath, index.ToString()), anime);
+                SaveImages(Path.Combine(animePath, index.ToString()), anime, onImageSaved);
         }
     }
 
@@ -604,7 +625,12 @@ public sealed partial class AnimeTypeModel : ObservableModelBase, IAnimeModel
     /// </summary>
     /// <param name="imagesPath"></param>
     /// <param name="model"></param>
-    static void SaveImages(string imagesPath, AnimeModel model)
+    /// <param name="onImageSaved"></param>
+    static void SaveImages(
+        string imagesPath,
+        AnimeModel model,
+        Action<ImageModel, string>? onImageSaved
+    )
     {
         Directory.CreateDirectory(imagesPath);
         foreach (var (image, index) in model.Images.WithIndex())
@@ -613,10 +639,12 @@ public sealed partial class AnimeTypeModel : ObservableModelBase, IAnimeModel
             if (image.Image is not null)
             {
                 image.Image.SaveToPng(path);
+                onImageSaved?.Invoke(image, path);
             }
-            else if (Path.Exists(image.ImageFile))
+            else if (!string.IsNullOrWhiteSpace(image.ImageFile) && File.Exists(image.ImageFile))
             {
                 File.Copy(image.ImageFile, path, true);
+                onImageSaved?.Invoke(image, path);
             }
         }
     }

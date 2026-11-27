@@ -30,6 +30,7 @@ public interface IAnimeModel : IDisposable
     /// <summary>
     /// 保存
     /// </summary>
-    /// <param name="path"></param>
-    void Save(string path);
+    /// <param name="path">目标路径</param>
+    /// <param name="onImageSaved">图片保存完成回调</param>
+    void Save(string path, Action<ImageModel, string>? onImageSaved = null);
 }

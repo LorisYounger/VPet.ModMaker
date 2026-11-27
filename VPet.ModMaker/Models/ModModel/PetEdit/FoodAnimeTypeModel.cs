@@ -279,30 +279,31 @@ public sealed partial class FoodAnimeTypeModel : ObservableModelBase, IAnimeMode
     /// 保存
     /// </summary>
     /// <param name="path">路径</param>
-    public void Save(string path)
+    /// <param name="onImageSaved">图片保存完成回调</param>
+    public void Save(string path, Action<ImageModel, string>? onImageSaved = null)
     {
         try
         {
             var animePath = Path.Combine(path, Name);
             if (
-                Directory.Exists(animePath)
-                && HappyAnimes.Count > 0
-                && NomalAnimes.Count > 0
-                && PoorConditionAnimes.Count > 0
-                && IllAnimes.Count > 0
+                HappyAnimes.Count == 0
+                && NomalAnimes.Count == 0
+                && PoorConditionAnimes.Count == 0
+                && IllAnimes.Count == 0
             )
             {
-                Directory.Delete(animePath, true);
+                if (Directory.Exists(animePath))
+                    Directory.Delete(animePath, true);
                 return;
             }
             if (HappyAnimes.Count > 0)
-                SaveAnimeInfo(animePath, HappyAnimes, ModeType.Happy);
+                SaveAnimeInfo(animePath, HappyAnimes, ModeType.Happy, onImageSaved);
             if (NomalAnimes.Count > 0)
-                SaveAnimeInfo(animePath, NomalAnimes, ModeType.Nomal);
+                SaveAnimeInfo(animePath, NomalAnimes, ModeType.Nomal, onImageSaved);
             if (PoorConditionAnimes.Count > 0)
-                SaveAnimeInfo(animePath, PoorConditionAnimes, ModeType.PoorCondition);
+                SaveAnimeInfo(animePath, PoorConditionAnimes, ModeType.PoorCondition, onImageSaved);
             if (IllAnimes.Count > 0)
-                SaveAnimeInfo(animePath, IllAnimes, ModeType.Ill);
+                SaveAnimeInfo(animePath, IllAnimes, ModeType.Ill, onImageSaved);
         }
         catch (Exception ex)
         {
@@ -317,10 +318,12 @@ public sealed partial class FoodAnimeTypeModel : ObservableModelBase, IAnimeMode
     /// <param name="animePath">路径</param>
     /// <param name="animes">动画</param>
     /// <param name="mode">模式</param>
+    /// <param name="onImageSaved">图片保存完成回调</param>
     private void SaveAnimeInfo(
         string animePath,
         ObservableList<FoodAnimeModel> animes,
-        ModeType mode
+        ModeType mode,
+        Action<ImageModel, string>? onImageSaved
     )
     {
         var modeAnimePath = Path.Combine(animePath, mode.ToString());
@@ -332,7 +335,7 @@ public sealed partial class FoodAnimeTypeModel : ObservableModelBase, IAnimeMode
             var frontLayName = $"{Name.ToLower()}_{FrontLayName}_{index}";
             var backLayName = $"{Name.ToLower()}_{BackLayName}_{index}";
             SaveInfoFile(infoFile, frontLayName, backLayName, anime, mode);
-            SaveImages(anime, indexPath);
+            SaveImages(anime, indexPath, onImageSaved);
         }
     }
 
@@ -341,7 +344,12 @@ public sealed partial class FoodAnimeTypeModel : ObservableModelBase, IAnimeMode
     /// </summary>
     /// <param name="anime">动画</param>
     /// <param name="indexPath">索引路径</param>
-    private static void SaveImages(FoodAnimeModel anime, string indexPath)
+    /// <param name="onImageSaved">图片保存完成回调</param>
+    private static void SaveImages(
+        FoodAnimeModel anime,
+        string indexPath,
+        Action<ImageModel, string>? onImageSaved
+    )
     {
         var frontLayPath = Path.Combine(indexPath, FrontLayName);
         var backLayPath = Path.Combine(indexPath, BackLayName);
@@ -353,10 +361,12 @@ public sealed partial class FoodAnimeTypeModel : ObservableModelBase, IAnimeMode
             if (image.Image is not null)
             {
                 image.Image.SaveToPng(path);
+                onImageSaved?.Invoke(image, path);
             }
-            else if (Path.Exists(image.ImageFile))
+            else if (!string.IsNullOrWhiteSpace(image.ImageFile) && File.Exists(image.ImageFile))
             {
                 File.Copy(image.ImageFile, path, true);
+                onImageSaved?.Invoke(image, path);
             }
         }
         foreach (var (image, index) in anime.BackImages.WithIndex())
@@ -365,10 +375,12 @@ public sealed partial class FoodAnimeTypeModel : ObservableModelBase, IAnimeMode
             if (image.Image is not null)
             {
                 image.Image.SaveToPng(path);
+                onImageSaved?.Invoke(image, path);
             }
-            else if (Path.Exists(image.ImageFile))
+            else if (!string.IsNullOrWhiteSpace(image.ImageFile) && File.Exists(image.ImageFile))
             {
                 File.Copy(image.ImageFile, path, true);
+                onImageSaved?.Invoke(image, path);
             }
         }
     }

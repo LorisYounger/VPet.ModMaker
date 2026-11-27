@@ -291,9 +291,9 @@ public sealed partial class PetModel : ObservableModelBase, IDisposable
         if (File.Exists(petFile) is false)
             File.Create(petFile).Close();
         var lps = new LPS();
-        // 如果本体中存在相同的宠物, 则只保存差异信息
-        if (ModMaker.MainPets.TryGetValue(ID, out var mainPet))
-            SaveDifferentPetInfo(lps, mainPet);
+        // 如果本体中存在相同的宠物, 则不保存 touchhead/touchbody/touchraised/raisepoint 以免干扰本体桌宠参数
+        if (FromMain || ModMaker.MainPets.ContainsKey(ID))
+            SavePetBasicInfo(lps);
         else
             SavePetInfo(lps);
         SaveWorksInfo(lps);
@@ -306,10 +306,50 @@ public sealed partial class PetModel : ObservableModelBase, IDisposable
     private void SaveAnime(string path)
     {
         var petAnimePath = Path.Combine(path, ID);
-        if (Directory.Exists(petAnimePath))
-            Directory.Delete(petAnimePath, true);
-        foreach (var anime in Animes)
-            anime.Save(petAnimePath);
+        if (Animes.Count == 0)
+        {
+            if (Directory.Exists(petAnimePath))
+                Directory.Delete(petAnimePath, true);
+            return;
+        }
+
+        // 先写入临时目录再替换，避免原地保存时先删除目录导致源图片丢失
+        var tempAnimePath = Path.Combine(path, $".{ID}_{Guid.NewGuid():N}.tmp");
+        var savedImages = new List<(ImageModel Image, string RelativePath)>();
+        try
+        {
+            Directory.CreateDirectory(tempAnimePath);
+            foreach (var anime in Animes)
+            {
+                anime.Save(
+                    tempAnimePath,
+                    (image, savedPath) =>
+                        savedImages.Add((image, Path.GetRelativePath(tempAnimePath, savedPath)))
+                );
+            }
+
+            if (Directory.Exists(petAnimePath))
+                Directory.Delete(petAnimePath, true);
+
+            if (Directory.Exists(tempAnimePath))
+            {
+                if (Directory.EnumerateFileSystemEntries(tempAnimePath).Any())
+                    Directory.Move(tempAnimePath, petAnimePath);
+                else
+                    Directory.Delete(tempAnimePath, true);
+            }
+
+            foreach (var (image, relativePath) in savedImages)
+            {
+                image.ImageFile = Path.Combine(petAnimePath, relativePath);
+            }
+        }
+        catch
+        {
+            if (Directory.Exists(tempAnimePath))
+                Directory.Delete(tempAnimePath, true);
+            throw;
+        }
     }
 
     /// <summary>
@@ -341,6 +381,30 @@ public sealed partial class PetModel : ObservableModelBase, IDisposable
     }
 
     #region SavePetInfo
+    internal static bool IsEmptyRectangle(ObservableRectangle<double>? rect) =>
+        rect is null || (rect.X == 0 && rect.Y == 0 && rect.Width == 0 && rect.Height == 0);
+
+    internal static bool IsEmptyMultiStateRectangle(ObservableMultiStateRectangleLocation? rects) =>
+        rects is null
+        || (
+            IsEmptyRectangle(rects.Happy)
+            && IsEmptyRectangle(rects.Nomal)
+            && IsEmptyRectangle(rects.PoorCondition)
+            && IsEmptyRectangle(rects.Ill)
+        );
+
+    internal static bool IsEmptyPoint(ObservablePoint<double>? point) =>
+        point is null || (point.X == 0 && point.Y == 0);
+
+    internal static bool IsEmptyMultiStatePoint(ObservableMultiStatePoint? points) =>
+        points is null
+        || (
+            IsEmptyPoint(points.Happy)
+            && IsEmptyPoint(points.Nomal)
+            && IsEmptyPoint(points.PoorCondition)
+            && IsEmptyPoint(points.Ill)
+        );
+
     /// <summary>
     /// 保存宠物信息
     /// </summary>
@@ -348,40 +412,13 @@ public sealed partial class PetModel : ObservableModelBase, IDisposable
     private void SavePetInfo(LPS lps)
     {
         SavePetBasicInfo(lps);
-        SavePetTouchHeadInfo(lps);
-        SavePetTouchBodyInfo(lps);
-        SavePetTouchRaisedInfo(lps);
-        SavePetRaisePointInfo(lps);
-    }
-
-    /// <summary>
-    /// 保存差异宠物信息
-    /// <para>
-    /// 用于本体存在同名宠物的情况下
-    /// </para>
-    /// </summary>
-    /// <param name="lps"></param>
-    /// <param name="mainPet">本体宠物</param>
-    private void SaveDifferentPetInfo(LPS lps, PetModel mainPet)
-    {
-        SavePetBasicInfo(lps);
-        // 如果值不为默认并且不与本体值相同, 则保存
-        if (
-            TouchHeadRectangleLocation != DefaultTouchHeadRectangleLocation
-            && TouchHeadRectangleLocation != mainPet.TouchHeadRectangleLocation
-        )
+        if (IsEmptyRectangle(TouchHeadRectangleLocation) is false)
             SavePetTouchHeadInfo(lps);
-        if (
-            TouchBodyRectangleLocation != DefaultTouchBodyRectangleLocation
-            && TouchBodyRectangleLocation != mainPet.TouchBodyRectangleLocation
-        )
+        if (IsEmptyRectangle(TouchBodyRectangleLocation) is false)
             SavePetTouchBodyInfo(lps);
-        if (
-            TouchRaisedRectangleLocation != DefaultTouchRaisedRectangleLocation
-            && TouchRaisedRectangleLocation != mainPet.TouchRaisedRectangleLocation
-        )
+        if (IsEmptyMultiStateRectangle(TouchRaisedRectangleLocation) is false)
             SavePetTouchRaisedInfo(lps);
-        if (RaisePoint != DefaultRaisePoint && RaisePoint != mainPet.RaisePoint)
+        if (IsEmptyMultiStatePoint(RaisePoint) is false)
             SavePetRaisePointInfo(lps);
     }
 

@@ -2,6 +2,7 @@
 using System.Collections.Frozen;
 using System.Collections.Immutable;
 using System.ComponentModel;
+using System.IO;
 using System.Windows.Media.Imaging;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
@@ -250,40 +251,38 @@ public sealed partial class WorkEditViewModel
     /// <param name="workModel">工作模型</param>
     private void SetGraphImage(WorkModel workModel)
     {
+        Image?.CloseStream();
+        Image = null;
         if (CurrentPet is null)
             return;
         var graph = workModel.Graph;
-        Image?.CloseStream();
-        // 随机挑一张图片
-        var anime = CurrentPet.Animes.FirstOrDefault(
-            a => a.Name.Equals(graph, StringComparison.CurrentCultureIgnoreCase),
-            null!
-        );
-        if (anime is not AnimeTypeModel animeType)
+        if (string.IsNullOrWhiteSpace(graph))
             return;
-        if (animeType.HappyAnimes.Count > 0)
+        // 随机挑一张图片
+        var matchedAnimes = CurrentPet
+            .Animes.OfType<AnimeTypeModel>()
+            .Where(a => string.Equals(a.Name, graph, StringComparison.CurrentCultureIgnoreCase));
+        foreach (var animeType in matchedAnimes)
         {
-            Image = HKWImageUtils.LoadImageToMemory(
-                animeType.HappyAnimes.Random().Images.Random().ImageFile
-            );
-        }
-        else if (animeType.NomalAnimes.Count > 0)
-        {
-            Image = HKWImageUtils.LoadImageToMemory(
-                animeType.NomalAnimes.Random().Images.Random().ImageFile
-            );
-        }
-        else if (animeType.PoorConditionAnimes.Count > 0)
-        {
-            Image = HKWImageUtils.LoadImageToMemory(
-                animeType.PoorConditionAnimes.Random().Images.Random().ImageFile
-            );
-        }
-        else if (animeType.IllAnimes.Count > 0)
-        {
-            Image = HKWImageUtils.LoadImageToMemory(
-                animeType.IllAnimes.Random().Images.Random().ImageFile
-            );
+            ObservableList<AnimeModel>[] animeGroups =
+            [
+                animeType.HappyAnimes,
+                animeType.NomalAnimes,
+                animeType.PoorConditionAnimes,
+                animeType.IllAnimes,
+            ];
+            foreach (var animes in animeGroups)
+            {
+                var validImages = animes
+                    .SelectMany(a => a.Images)
+                    .Where(i => !string.IsNullOrWhiteSpace(i.ImageFile) && File.Exists(i.ImageFile))
+                    .ToList();
+                if (validImages.Count > 0)
+                {
+                    Image = HKWImageUtils.LoadImageToMemory(validImages.Random().ImageFile);
+                    return;
+                }
+            }
         }
     }
 

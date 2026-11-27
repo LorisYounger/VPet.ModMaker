@@ -44,7 +44,7 @@ public sealed partial class ModInfoModel : ObservableModelBase, IDisposable
             // 确保ID不重复
             if (Pets.All(i => i.ID != pet.Key))
             {
-                Pets.Add(pet.Value);
+                Pets.Add(CloneMainPet(pet.Value));
                 this.LogIfEnabled(LogLevel.Information)?.Log("载入本体宠物 {pet}", pet.Key);
             }
             else
@@ -53,6 +53,15 @@ public sealed partial class ModInfoModel : ObservableModelBase, IDisposable
                     ?.Log("载入本体宠物失败,已存在相同ID的宠物 {pet}", pet.Key);
             }
         }
+    }
+
+    private static PetModel CloneMainPet(PetModel mainPet)
+    {
+        var clone = new PetModel(mainPet, mainPet.I18nResource) { FromMain = true };
+        clone.Works.Clear();
+        clone.Moves.Clear();
+        clone.Animes.Clear();
+        return clone;
     }
 
     private void ObservableCultures_CollectionChanged(
@@ -340,6 +349,14 @@ public sealed partial class ModInfoModel : ObservableModelBase, IDisposable
                 var petModel = new PetModel(pet, I18nResource);
                 // 如果检测到本体存在同名宠物
                 CheckPetIsMainPet(petModel);
+                var existingMainPet = Pets.FirstOrDefault(x =>
+                    x.FromMain && string.Equals(x.ID, petModel.ID, StringComparison.OrdinalIgnoreCase)
+                );
+                if (existingMainPet is not null)
+                {
+                    Pets.Remove(existingMainPet);
+                    existingMainPet.DisposeAll();
+                }
                 Pets.Add(petModel);
                 foreach (var p in pet.path)
                     LoadAnime(petModel, p);
@@ -362,30 +379,48 @@ public sealed partial class ModInfoModel : ObservableModelBase, IDisposable
         {
             if (ModMaker.MainPets.TryGetValue(petModel.ID, out var mainPet))
             {
-                // 若宠物的值为默认值并且本体同名宠物不为默认值, 则把本体宠物的值作为模组宠物的默认值
+                // 若宠物的值为默认值或全0(未配置), 则把本体宠物的值作为模组宠物的默认值
                 if (
-                    petModel.TouchHeadRectangleLocation
-                        == PetModel.DefaultTouchHeadRectangleLocation
+                    (
+                        petModel.TouchHeadRectangleLocation
+                            == PetModel.DefaultTouchHeadRectangleLocation
+                        || PetModel.IsEmptyRectangle(petModel.TouchHeadRectangleLocation)
+                    )
                     && petModel.TouchHeadRectangleLocation != mainPet.TouchHeadRectangleLocation
                 )
-                    petModel.TouchHeadRectangleLocation = mainPet.TouchHeadRectangleLocation;
+                    petModel.TouchHeadRectangleLocation =
+                        mainPet.TouchHeadRectangleLocation.Clone();
                 if (
-                    petModel.TouchBodyRectangleLocation
-                        == PetModel.DefaultTouchBodyRectangleLocation
+                    (
+                        petModel.TouchBodyRectangleLocation
+                            == PetModel.DefaultTouchBodyRectangleLocation
+                        || PetModel.IsEmptyRectangle(petModel.TouchBodyRectangleLocation)
+                    )
                     && petModel.TouchBodyRectangleLocation != mainPet.TouchBodyRectangleLocation
                 )
-                    petModel.TouchBodyRectangleLocation = mainPet.TouchBodyRectangleLocation;
+                    petModel.TouchBodyRectangleLocation =
+                        mainPet.TouchBodyRectangleLocation.Clone();
                 if (
-                    petModel.TouchRaisedRectangleLocation
-                        == PetModel.DefaultTouchRaisedRectangleLocation
-                    && petModel.TouchRaisedRectangleLocation != mainPet.TouchRaisedRectangleLocation
+                    (
+                        petModel.TouchRaisedRectangleLocation
+                            == PetModel.DefaultTouchRaisedRectangleLocation
+                        || PetModel.IsEmptyMultiStateRectangle(
+                            petModel.TouchRaisedRectangleLocation
+                        )
+                    )
+                    && petModel.TouchRaisedRectangleLocation
+                        != mainPet.TouchRaisedRectangleLocation
                 )
-                    petModel.TouchRaisedRectangleLocation = mainPet.TouchRaisedRectangleLocation;
+                    petModel.TouchRaisedRectangleLocation =
+                        mainPet.TouchRaisedRectangleLocation.Clone();
                 if (
-                    petModel.RaisePoint == PetModel.DefaultRaisePoint
+                    (
+                        petModel.RaisePoint == PetModel.DefaultRaisePoint
+                        || PetModel.IsEmptyMultiStatePoint(petModel.RaisePoint)
+                    )
                     && petModel.RaisePoint != mainPet.RaisePoint
                 )
-                    petModel.RaisePoint = mainPet.RaisePoint;
+                    petModel.RaisePoint = mainPet.RaisePoint.Clone();
             }
         }
     }
@@ -1062,7 +1097,7 @@ public sealed partial class ModInfoModel : ObservableModelBase, IDisposable
                 text.Dispose();
             foreach (var text in SelectTexts)
                 text.Dispose();
-            foreach (var pet in Pets.Where(x => x.FromMain is false))
+            foreach (var pet in Pets)
                 pet.DisposeAll();
             I18nObserver.Dispose();
             I18nResource.Dispose();
