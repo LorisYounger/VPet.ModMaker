@@ -100,6 +100,47 @@ public sealed partial class AnimeViewModel : ViewModelBase, IEditViewModel, IDis
     private FoodAnimeEditViewModel FoodAnimeEdit =>
         field ??= DialogService?.CreateViewModel<FoodAnimeEditViewModel>()!;
 
+    private AnimeTypeModel CommitAnime(AnimeTypeModel source, AnimeTypeModel? oldModel)
+    {
+        var savedModel = new AnimeTypeModel(source);
+        if (oldModel is null)
+        {
+            Animes.Add(savedModel);
+        }
+        else
+        {
+            oldModel.Dispose();
+            var index = Animes.IndexOf(oldModel);
+            if (index >= 0)
+                Animes[index] = savedModel;
+            else
+                Animes.Add(savedModel);
+        }
+        return savedModel;
+    }
+
+    private FoodAnimeTypeModel CommitFoodAnime(
+        FoodAnimeTypeModel source,
+        FoodAnimeTypeModel? oldModel
+    )
+    {
+        var savedModel = new FoodAnimeTypeModel(source);
+        if (oldModel is null)
+        {
+            Animes.Add(savedModel);
+        }
+        else
+        {
+            oldModel.Dispose();
+            var index = Animes.IndexOf(oldModel);
+            if (index >= 0)
+                Animes[index] = savedModel;
+            else
+                Animes.Add(savedModel);
+        }
+        return savedModel;
+    }
+
     /// <summary>
     /// 添加
     /// </summary>
@@ -117,26 +158,42 @@ public sealed partial class AnimeViewModel : ViewModelBase, IEditViewModel, IDis
             && FoodAnimeTypeModel.FoodAnimeNames.Contains(animeName)
         )
         {
-            FoodAnimeEdit.Anime = new() { Name = animeName };
+            var newModel = new FoodAnimeTypeModel() { Name = animeName };
+            FoodAnimeEdit.OldAnime = null;
+            FoodAnimeEdit.Anime = newModel;
             FoodAnimeEdit.CurrentPet = CurrentPet!;
+            FoodAnimeEdit.CommitAction = anime =>
+                FoodAnimeEdit.OldAnime = CommitFoodAnime(anime, FoodAnimeEdit.OldAnime);
+            using var dis = FoodAnimeEdit.BeginEditSession();
             var editResult = DialogService.ShowDialog(this, FoodAnimeEdit);
-            if (editResult is not true)
-                return;
-            Animes.Add(FoodAnimeEdit.Anime);
+            if (editResult is true)
+            {
+                FoodAnimeEdit.OldAnime = CommitFoodAnime(newModel, FoodAnimeEdit.OldAnime);
+            }
+            Reset();
+            newModel.Dispose();
         }
         else
         {
-            AnimeEdit.Anime = new()
+            var newModel = new AnimeTypeModel()
             {
                 GraphType = graphType,
                 Name = string.IsNullOrWhiteSpace(animeName) ? graphType.ToString() : animeName,
             };
+            AnimeEdit.OldAnime = null;
+            AnimeEdit.Anime = newModel;
+            AnimeEdit.CurrentPet = CurrentPet!;
+            AnimeEdit.CommitAction = anime =>
+                AnimeEdit.OldAnime = CommitAnime(anime, AnimeEdit.OldAnime);
+            using var dis = AnimeEdit.BeginEditSession();
             var editResult = DialogService.ShowDialog(this, AnimeEdit);
-            if (editResult is not true)
-                return;
-            Animes.Add(AnimeEdit.Anime);
+            if (editResult is true)
+            {
+                AnimeEdit.OldAnime = CommitAnime(newModel, AnimeEdit.OldAnime);
+            }
+            Reset();
+            newModel.Dispose();
         }
-        Reset();
     }
 
     /// <summary>
@@ -150,37 +207,38 @@ public sealed partial class AnimeViewModel : ViewModelBase, IEditViewModel, IDis
         {
             var newModel = new AnimeTypeModel(animeTypeModel);
             newModel.LoadTypeAnime();
+            AnimeEdit.OldAnime = animeTypeModel;
             AnimeEdit.Anime = newModel;
             AnimeEdit.CurrentPet = CurrentPet!;
+            AnimeEdit.CommitAction = anime =>
+                AnimeEdit.OldAnime = CommitAnime(anime, AnimeEdit.OldAnime);
+            using var dis = AnimeEdit.BeginEditSession();
             var editResult = DialogService.ShowDialog(this, AnimeEdit);
-            if (editResult is not true)
+            if (editResult is true)
             {
-                newModel.Dispose();
+                AnimeEdit.OldAnime = CommitAnime(newModel, AnimeEdit.OldAnime);
             }
-            else
-            {
-                animeTypeModel.Dispose();
-                Animes[Animes.IndexOf(animeTypeModel)] = newModel;
-            }
+            Reset();
+            newModel.Dispose();
         }
         else if (model is FoodAnimeTypeModel foodAnimeTypeModel)
         {
             var newModel = new FoodAnimeTypeModel(foodAnimeTypeModel);
             newModel.LoadTypeAnime();
+            FoodAnimeEdit.OldAnime = foodAnimeTypeModel;
             FoodAnimeEdit.Anime = newModel;
             FoodAnimeEdit.CurrentPet = CurrentPet!;
+            FoodAnimeEdit.CommitAction = anime =>
+                FoodAnimeEdit.OldAnime = CommitFoodAnime(anime, FoodAnimeEdit.OldAnime);
+            using var dis = FoodAnimeEdit.BeginEditSession();
             var editResult = DialogService.ShowDialog(this, FoodAnimeEdit);
-            if (editResult is not true)
+            if (editResult is true)
             {
-                newModel.Dispose();
+                FoodAnimeEdit.OldAnime = CommitFoodAnime(newModel, FoodAnimeEdit.OldAnime);
             }
-            else
-            {
-                model.Dispose();
-                Animes[Animes.IndexOf(foodAnimeTypeModel)] = newModel;
-            }
+            Reset();
+            newModel.Dispose();
         }
-        Reset();
     }
 
     /// <summary>
@@ -211,11 +269,17 @@ public sealed partial class AnimeViewModel : ViewModelBase, IEditViewModel, IDis
     public void Reset()
     {
         AnimeEdit.Anime = null!;
+        AnimeEdit.OldAnime = null;
         AnimeEdit.CurrentAnimeModel = null!;
         AnimeEdit.CurrentPet = null!;
+        AnimeEdit.CommitAction = null;
+        AnimeEdit.DialogResult = false;
         FoodAnimeEdit.Anime = null!;
+        FoodAnimeEdit.OldAnime = null;
         FoodAnimeEdit.CurrentAnimeModel = null!;
         FoodAnimeEdit.CurrentPet = null!;
+        FoodAnimeEdit.CommitAction = null;
+        FoodAnimeEdit.DialogResult = false;
     }
 
     /// <inheritdoc/>

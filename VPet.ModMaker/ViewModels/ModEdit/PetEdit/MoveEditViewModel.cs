@@ -179,6 +179,78 @@ public sealed partial class MoveEditViewModel
     }
 
     /// <summary>
+    /// 保存
+    /// </summary>
+    [RelayCommand]
+    private void Save()
+    {
+        if (Validate() is false)
+            return;
+        Commit();
+        DialogService.ShowMessageBox(this, "保存成功".Translate());
+    }
+
+    private bool Validate()
+    {
+        if (string.IsNullOrWhiteSpace(Move.Graph))
+        {
+            DialogService.ShowMessageBox(
+                this,
+                "指定动画不可为空".Translate(),
+                "数据错误".Translate(),
+                MessageBoxButton.Ok,
+                MessageBoxImage.Warning
+            );
+            return false;
+        }
+        if (Move.Distance <= 0)
+        {
+            DialogService.ShowMessageBox(
+                this,
+                "移动距离必须大于0".Translate(),
+                "数据错误".Translate(),
+                MessageBoxButton.Ok,
+                MessageBoxImage.Warning
+            );
+            return false;
+        }
+        if (Move.Interval <= 0)
+        {
+            DialogService.ShowMessageBox(
+                this,
+                "移动间隔必须大于0".Translate(),
+                "数据错误".Translate(),
+                MessageBoxButton.Ok,
+                MessageBoxImage.Warning
+            );
+            return false;
+        }
+        return true;
+    }
+
+    private void Commit()
+    {
+        var savedModel = new MoveModel(Move);
+        if (OldMove is null)
+        {
+            Moves.Add(savedModel);
+            this.LogIfEnabled(LogLevel.Information)?.Log("添加新移动 '{id}'", savedModel.Graph);
+        }
+        else
+        {
+            var index = Moves.IndexOf(OldMove);
+            if (index >= 0)
+                Moves[index] = savedModel;
+            else
+                Moves.Add(savedModel);
+            this.LogIfEnabled(LogLevel.Information)
+                ?.Log("编辑移动 {oldMove} => {newMove}", OldMove.Graph, savedModel.Graph);
+        }
+        OldMove = savedModel;
+        IsChanged = false;
+    }
+
+    /// <summary>
     /// 添加
     /// </summary>
     [RelayCommand]
@@ -190,15 +262,7 @@ public sealed partial class MoveEditViewModel
         var result = DialogService.ShowDialog(this, this);
         if (result is true)
         {
-            Moves.Add(Move);
-            this.LogIfEnabled(LogLevel.Information)?.Log("添加新移动 '{id}'", Move.Graph);
-            //if (this.LogX().Level is LogLevel.Info)
-            //else
-            //    this.LogX()
-            //        .Debug(
-            //            "添加新移动 {$move}",
-            //            LPSConvert.SerializeObjectToLine<Line>(Move.MapToMove(new()), "Move")
-            //        );
+            Commit();
         }
         Reset();
     }
@@ -218,9 +282,7 @@ public sealed partial class MoveEditViewModel
         var result = DialogService.ShowDialog(this, this);
         if (result is true)
         {
-            Moves[Moves.IndexOf(model)] = newModel;
-            this.LogIfEnabled(LogLevel.Information)
-                ?.Log("编辑移动 {oldMove} => {newMove}", OldMove.Graph, Move.Graph);
+            Commit();
         }
         Reset();
     }
@@ -280,39 +342,8 @@ public sealed partial class MoveEditViewModel
 
         if (DialogResult is not true)
             return;
-        if (string.IsNullOrWhiteSpace(Move.Graph))
-        {
-            DialogService.ShowMessageBox(
-                this,
-                "指定动画不可为空".Translate(),
-                "数据错误".Translate(),
-                MessageBoxButton.Ok,
-                MessageBoxImage.Warning
-            );
+        if (Validate() is false)
             e.Cancel = true;
-        }
-        else if (Move.Distance <= 0)
-        {
-            DialogService.ShowMessageBox(
-                this,
-                "移动距离必须大于0".Translate(),
-                "数据错误".Translate(),
-                MessageBoxButton.Ok,
-                MessageBoxImage.Warning
-            );
-            e.Cancel = true;
-        }
-        else if (Move.Interval <= 0)
-        {
-            DialogService.ShowMessageBox(
-                this,
-                "移动间隔必须大于0".Translate(),
-                "数据错误".Translate(),
-                MessageBoxButton.Ok,
-                MessageBoxImage.Warning
-            );
-            e.Cancel = true;
-        }
         DialogResult = e.Cancel is not true;
     }
 

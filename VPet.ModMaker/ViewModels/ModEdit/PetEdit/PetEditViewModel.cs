@@ -192,6 +192,95 @@ public partial class PetEditViewModel
     }
 
     /// <summary>
+    /// 保存
+    /// </summary>
+    [RelayCommand]
+    private void Save()
+    {
+        if (Validate() is false)
+            return;
+        Commit();
+        DialogService.ShowMessageBox(this, "保存成功".Translate());
+    }
+
+    private bool Validate()
+    {
+        if (string.IsNullOrWhiteSpace(Pet.ID))
+        {
+            DialogService.ShowMessageBox(
+                this,
+                "ID不可为空".Translate(),
+                "数据错误".Translate(),
+                MessageBoxButton.Ok,
+                MessageBoxImage.Warning
+            );
+            return false;
+        }
+        if (Pet.Name is null)
+        {
+            DialogService.ShowMessageBox(
+                this,
+                "名称不可为空".Translate(),
+                "数据错误".Translate(),
+                MessageBoxButton.Ok,
+                MessageBoxImage.Warning
+            );
+            return false;
+        }
+        if (Pet.PetName is null)
+        {
+            DialogService.ShowMessageBox(
+                this,
+                "宠物名称不可为空".Translate(),
+                "数据错误".Translate(),
+                MessageBoxButton.Ok,
+                MessageBoxImage.Warning
+            );
+            return false;
+        }
+        if (OldPet?.ID != Pet.ID && ModInfo.Pets.Any(i => i.ID == Pet.ID))
+        {
+            DialogService.ShowMessageBox(
+                this,
+                "此ID已存在".Translate(),
+                "数据错误".Translate(),
+                MessageBoxButton.Ok,
+                MessageBoxImage.Warning
+            );
+            return false;
+        }
+        return true;
+    }
+
+    private void Commit()
+    {
+        Pet.I18nResource.CopyDataTo(ModInfo.I18nResource);
+        var savedModel = new PetModel(Pet, ModInfo.I18nResource);
+        if (OldPet is null)
+        {
+            Pets.Add(savedModel);
+            ModInfo.Pets.Refresh();
+            this.LogIfEnabled(LogLevel.Information)?.Log("添加新宠物 '{id}'", savedModel.ID);
+        }
+        else
+        {
+            var temp = ModInfo.CurrentPet;
+            OldPet.Dispose();
+            var index = Pets.IndexOf(OldPet);
+            if (index >= 0)
+                Pets[index] = savedModel;
+            else
+                Pets.Add(savedModel);
+            if (temp == OldPet)
+                ModInfo.CurrentPet = savedModel;
+            this.LogIfEnabled(LogLevel.Information)
+                ?.Log("编辑宠物 {oldPet} => {newPet}", OldPet.ID, savedModel.ID);
+        }
+        OldPet = savedModel;
+        IsChanged = false;
+    }
+
+    /// <summary>
     /// 添加
     /// </summary>
     [RelayCommand]
@@ -201,18 +290,11 @@ public partial class PetEditViewModel
         Pet = new(ModInfo.TempI18nResource);
         using var dis = Pet.Changed.Subscribe(_ => IsChanged = true);
         var result = DialogService.ShowDialog(this, this);
-        if (result is not true)
+        if (result is true)
         {
-            Pet.Dispose();
+            Commit();
         }
-        else
-        {
-            Pet.I18nResource.CopyDataTo(ModInfo.I18nResource);
-            Pet.I18nResource = ModInfo.I18nResource;
-            Pets.Add(Pet);
-            ModInfo.Pets.Refresh();
-            this.LogIfEnabled(LogLevel.Information)?.Log("添加新宠物 '{id}'", Pet.ID);
-        }
+        Pet.Dispose();
         Reset();
     }
 
@@ -246,22 +328,11 @@ public partial class PetEditViewModel
         Pet = newModel;
         using var dis = newModel.Changed.Subscribe(_ => IsChanged = true);
         var result = DialogService.ShowDialog(this, this);
-        if (result is not true)
+        if (result is true)
         {
-            newModel.Dispose();
+            Commit();
         }
-        else
-        {
-            OldPet.Dispose();
-            newModel.I18nResource.CopyDataTo(ModInfo.I18nResource);
-            newModel.I18nResource = ModInfo.I18nResource;
-            var temp = ModInfo.CurrentPet;
-            Pets[Pets.IndexOf(model)] = newModel;
-            if (temp == OldPet)
-                ModInfo.CurrentPet = newModel;
-            this.LogIfEnabled(LogLevel.Information)
-                ?.Log("编辑宠物 {oldPet} => {newPet}", OldPet.ID, Pet.ID);
-        }
+        newModel.Dispose();
         Reset();
     }
 
@@ -323,50 +394,8 @@ public partial class PetEditViewModel
 
         if (DialogResult is not true)
             return;
-        if (string.IsNullOrWhiteSpace(Pet.ID))
-        {
-            DialogService.ShowMessageBox(
-                this,
-                "ID不可为空".Translate(),
-                "数据错误".Translate(),
-                MessageBoxButton.Ok,
-                MessageBoxImage.Warning
-            );
+        if (Validate() is false)
             e.Cancel = true;
-        }
-        else if (Pet.Name is null)
-        {
-            DialogService.ShowMessageBox(
-                this,
-                "名称不可为空".Translate(),
-                "数据错误".Translate(),
-                MessageBoxButton.Ok,
-                MessageBoxImage.Warning
-            );
-            e.Cancel = true;
-        }
-        else if (Pet.PetName is null)
-        {
-            DialogService.ShowMessageBox(
-                this,
-                "宠物名称不可为空".Translate(),
-                "数据错误".Translate(),
-                MessageBoxButton.Ok,
-                MessageBoxImage.Warning
-            );
-            e.Cancel = true;
-        }
-        else if (OldPet?.ID != Pet.ID && ModInfo.Pets.Any(i => i.ID == Pet.ID))
-        {
-            DialogService.ShowMessageBox(
-                this,
-                "此ID已存在".Translate(),
-                "数据错误".Translate(),
-                MessageBoxButton.Ok,
-                MessageBoxImage.Warning
-            );
-            e.Cancel = true;
-        }
         DialogResult = e.Cancel is not true;
     }
 

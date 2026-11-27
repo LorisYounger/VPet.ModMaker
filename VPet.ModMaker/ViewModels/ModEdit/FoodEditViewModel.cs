@@ -230,8 +230,85 @@ public partial class FoodEditViewModel
             );
             return;
         }
-        Food.Image?.CloseStream();
+        if (ReferenceEquals(OldFood?.Image, Food.Image) is false)
+            Food.Image?.CloseStream();
         Food.Image = newImage;
+    }
+
+    /// <summary>
+    /// 保存
+    /// </summary>
+    [RelayCommand]
+    private void Save()
+    {
+        if (Validate() is false)
+            return;
+        Commit();
+        DialogService.ShowMessageBox(this, "保存成功".Translate());
+    }
+
+    private bool Validate()
+    {
+        if (string.IsNullOrWhiteSpace(Food.ID))
+        {
+            DialogService.ShowMessageBox(
+                this,
+                "ID不可为空".Translate(),
+                "数据错误".Translate(),
+                MessageBoxButton.Ok,
+                MessageBoxImage.Warning
+            );
+            return false;
+        }
+        if (Food.Image is null)
+        {
+            DialogService.ShowMessageBox(
+                this,
+                "图像不可为空".Translate(),
+                "数据错误".Translate(),
+                MessageBoxButton.Ok,
+                MessageBoxImage.Warning
+            );
+            return false;
+        }
+        if (OldFood?.ID != Food.ID && ModInfo.Foods.Any(i => i.ID == Food.ID))
+        {
+            DialogService.ShowMessageBox(
+                this,
+                "此ID已存在".Translate(),
+                "数据错误".Translate(),
+                MessageBoxButton.Ok,
+                MessageBoxImage.Warning
+            );
+            return false;
+        }
+        return true;
+    }
+
+    private void Commit()
+    {
+        Food.I18nResource.CopyDataTo(ModInfo.I18nResource);
+        var savedModel = new FoodModel(Food, ModInfo.I18nResource);
+        if (OldFood is null)
+        {
+            Foods.Add(savedModel);
+            this.LogIfEnabled(LogLevel.Information)?.Log("添加新食物 '{id}'", savedModel.ID);
+        }
+        else
+        {
+            if (ReferenceEquals(OldFood.Image, savedModel.Image) is false)
+                OldFood.Image?.CloseStream();
+            OldFood.I18nObserver.Dispose();
+            var index = Foods.IndexOf(OldFood);
+            if (index >= 0)
+                Foods[index] = savedModel;
+            else
+                Foods.Add(savedModel);
+            this.LogIfEnabled(LogLevel.Information)
+                ?.Log("编辑食物 {oldFood} => {newFood}", OldFood.ID, savedModel.ID);
+        }
+        OldFood = savedModel;
+        IsChanged = false;
     }
 
     /// <summary>
@@ -244,19 +321,13 @@ public partial class FoodEditViewModel
         Food = new(ModInfo.TempI18nResource);
         using var dis = Food.Changed.Subscribe(_ => IsChanged = true);
         var result = DialogService.ShowDialog(this, this);
-        if (result is not true)
+        if (result is true)
         {
+            Commit();
+        }
+        if (ReferenceEquals(OldFood?.Image, Food.Image) is false)
             Food.Image?.CloseStream();
-            Food.I18nObserver.Dispose();
-            Food = null!;
-        }
-        else
-        {
-            Food.I18nResource.CopyDataTo(ModInfo.I18nResource);
-            Food.I18nResource = ModInfo.I18nResource;
-            Foods.Add(Food);
-            this.LogIfEnabled(LogLevel.Information)?.Log("添加新食物 '{id}'", Food.ID);
-        }
+        Food.I18nObserver.Dispose();
         Reset();
     }
 
@@ -274,25 +345,14 @@ public partial class FoodEditViewModel
         Food = newModel;
         using var dis = newModel.Changed.Subscribe(_ => IsChanged = true);
         var result = DialogService.ShowDialog(this, this);
-        if (result is not true)
+        if (result is true)
         {
-            newModel.I18nResource.ClearData();
-            if (ReferenceEquals(model.Image, newModel.Image) is false)
-                newModel.Image?.CloseStream();
-            newModel.I18nObserver.Dispose();
+            Commit();
         }
-        else
-        {
-            if (ReferenceEquals(model.Image, newModel.Image) is false)
-                model.Image?.CloseStream();
-            model.I18nObserver.Dispose();
-
-            newModel.I18nResource.CopyDataTo(ModInfo.I18nResource);
-            newModel.I18nResource = ModInfo.I18nResource;
-            Foods[Foods.IndexOf(model)] = newModel;
-            this.LogIfEnabled(LogLevel.Information)
-                ?.Log("编辑食物 {oldFood} => {newFood}", model.ID, newModel.ID);
-        }
+        newModel.I18nResource.ClearData();
+        if (ReferenceEquals(OldFood?.Image, newModel.Image) is false)
+            newModel.Image?.CloseStream();
+        newModel.I18nObserver.Dispose();
         Reset();
     }
 
@@ -353,39 +413,8 @@ public partial class FoodEditViewModel
 
         if (DialogResult is not true)
             return;
-        if (string.IsNullOrWhiteSpace(Food.ID))
-        {
-            DialogService.ShowMessageBox(
-                this,
-                "ID不可为空".Translate(),
-                "数据错误".Translate(),
-                MessageBoxButton.Ok,
-                MessageBoxImage.Warning
-            );
+        if (Validate() is false)
             e.Cancel = true;
-        }
-        else if (Food.Image is null)
-        {
-            DialogService.ShowMessageBox(
-                this,
-                "图像不可为空".Translate(),
-                "数据错误".Translate(),
-                MessageBoxButton.Ok,
-                MessageBoxImage.Warning
-            );
-            e.Cancel = true;
-        }
-        else if (OldFood?.ID != Food.ID && ModInfo.Foods.Any(i => i.ID == Food.ID))
-        {
-            DialogService.ShowMessageBox(
-                this,
-                "此ID已存在".Translate(),
-                "数据错误".Translate(),
-                MessageBoxButton.Ok,
-                MessageBoxImage.Warning
-            );
-            e.Cancel = true;
-        }
         DialogResult = e.Cancel is not true;
     }
 

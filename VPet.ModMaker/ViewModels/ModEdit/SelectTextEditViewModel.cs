@@ -130,6 +130,87 @@ public partial class SelectTextEditViewModel
     public bool IsChanged { get; private set; }
 
     /// <summary>
+    /// 保存
+    /// </summary>
+    [RelayCommand]
+    private void Save()
+    {
+        if (Validate() is false)
+            return;
+        Commit();
+        DialogService.ShowMessageBox(this, "保存成功".Translate());
+    }
+
+    private bool Validate()
+    {
+        if (string.IsNullOrWhiteSpace(SelectText.ID))
+        {
+            DialogService.ShowMessageBox(
+                this,
+                "ID不可为空".Translate(),
+                "数据错误".Translate(),
+                MessageBoxButton.Ok,
+                MessageBoxImage.Warning
+            );
+            return false;
+        }
+        if (SelectText.Text is null)
+        {
+            DialogService.ShowMessageBox(
+                this,
+                "文本不可为空".Translate(),
+                "数据错误".Translate(),
+                MessageBoxButton.Ok,
+                MessageBoxImage.Warning
+            );
+            return false;
+        }
+        if (
+            OldSelectText?.ID != SelectText.ID
+            && ModInfo.SelectTexts.Any(i => i.ID == SelectText.ID)
+        )
+        {
+            DialogService.ShowMessageBox(
+                this,
+                "此ID已存在".Translate(),
+                "数据错误".Translate(),
+                MessageBoxButton.Ok,
+                MessageBoxImage.Warning
+            );
+            return false;
+        }
+        return true;
+    }
+
+    private void Commit()
+    {
+        SelectText.I18nResource.CopyDataTo(ModInfo.I18nResource);
+        var savedModel = new SelectTextModel(SelectText, ModInfo.I18nResource);
+        if (OldSelectText is null)
+        {
+            SelectTexts.Add(savedModel);
+            this.LogIfEnabled(LogLevel.Information)?.Log("添加新选择文本 '{id}'", savedModel.ID);
+        }
+        else
+        {
+            OldSelectText.Dispose();
+            var index = SelectTexts.IndexOf(OldSelectText);
+            if (index >= 0)
+                SelectTexts[index] = savedModel;
+            else
+                SelectTexts.Add(savedModel);
+            this.LogIfEnabled(LogLevel.Information)
+                ?.Log(
+                    "编辑选择文本 {oldSelectText} => {newSelectText}",
+                    OldSelectText.ID,
+                    savedModel.ID
+                );
+        }
+        OldSelectText = savedModel;
+        IsChanged = false;
+    }
+
+    /// <summary>
     /// 添加
     /// </summary>
     [RelayCommand]
@@ -139,27 +220,11 @@ public partial class SelectTextEditViewModel
         SelectText = new(ModInfo.TempI18nResource);
         using var dis = SelectText.Changed.Subscribe(_ => IsChanged = true);
         var result = DialogService.ShowDialog(this, this);
-        if (result is not true)
+        if (result is true)
         {
-            SelectText.Dispose();
+            Commit();
         }
-        else
-        {
-            SelectText.I18nResource.CopyDataTo(ModInfo.I18nResource);
-            SelectText.I18nResource = ModInfo.I18nResource;
-            SelectTexts.Add(SelectText);
-            this.LogIfEnabled(LogLevel.Information)?.Log("添加新选择文本 '{id}'", SelectText.ID);
-            //if (this.LogX().Level is LogLevel.Info)
-            //else
-            //    this.LogX()
-            //        .Debug(
-            //            "添加新选择文本 {$selectText}",
-            //            LPSConvert.SerializeObjectToLine<Line>(
-            //                SelectText.MapToSelectText(new()),
-            //                "SelectText"
-            //            )
-            //        );
-        }
+        SelectText.Dispose();
         Reset();
     }
 
@@ -177,37 +242,11 @@ public partial class SelectTextEditViewModel
         SelectText = newModel;
         using var dis = newModel.Changed.Subscribe(_ => IsChanged = true);
         var result = DialogService.ShowDialog(this, this);
-        if (result is not true)
+        if (result is true)
         {
-            newModel.Dispose();
+            Commit();
         }
-        else
-        {
-            OldSelectText.Dispose();
-            newModel.I18nResource.CopyDataTo(ModInfo.I18nResource);
-            newModel.I18nResource = ModInfo.I18nResource;
-            SelectTexts[SelectTexts.IndexOf(model)] = newModel;
-            this.LogIfEnabled(LogLevel.Information)
-                ?.Log(
-                    "编辑选择文本 {oldSelectText} => {newSelectText}",
-                    OldSelectText.ID,
-                    SelectText.ID
-                );
-            //if (this.LogX().Level is LogLevel.Info)
-            //else
-            //    this.LogX()
-            //        .Debug(
-            //            "编辑选择文本\n {$oldSelectText} => {$newSelectText}",
-            //            LPSConvert.SerializeObjectToLine<Line>(
-            //                OldSelectText.MapToSelectText(new()),
-            //                "SelectText"
-            //            ),
-            //            LPSConvert.SerializeObjectToLine<Line>(
-            //                SelectText.MapToSelectText(new()),
-            //                "SelectText"
-            //            )
-            //        );
-        }
+        newModel.Dispose();
         Reset();
     }
 
@@ -267,42 +306,8 @@ public partial class SelectTextEditViewModel
 
         if (DialogResult is not true)
             return;
-        if (string.IsNullOrWhiteSpace(SelectText.ID))
-        {
-            DialogService.ShowMessageBox(
-                this,
-                "ID不可为空".Translate(),
-                "数据错误".Translate(),
-                MessageBoxButton.Ok,
-                MessageBoxImage.Warning
-            );
+        if (Validate() is false)
             e.Cancel = true;
-        }
-        else if (SelectText.Text is null)
-        {
-            DialogService.ShowMessageBox(
-                this,
-                "文本不可为空".Translate(),
-                "数据错误".Translate(),
-                MessageBoxButton.Ok,
-                MessageBoxImage.Warning
-            );
-            e.Cancel = true;
-        }
-        else if (
-            OldSelectText?.ID != SelectText.ID
-            && ModInfo.SelectTexts.Any(i => i.ID == SelectText.ID)
-        )
-        {
-            DialogService.ShowMessageBox(
-                this,
-                "此ID已存在".Translate(),
-                "数据错误".Translate(),
-                MessageBoxButton.Ok,
-                MessageBoxImage.Warning
-            );
-            e.Cancel = true;
-        }
         DialogResult = e.Cancel is not true;
     }
 

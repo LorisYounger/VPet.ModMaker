@@ -143,6 +143,87 @@ public sealed partial class ClickTextEditViewModel
     }
 
     /// <summary>
+    /// 保存
+    /// </summary>
+    [RelayCommand]
+    private void Save()
+    {
+        if (Validate() is false)
+            return;
+        Commit();
+        DialogService.ShowMessageBox(this, "保存成功".Translate());
+    }
+
+    private bool Validate()
+    {
+        if (string.IsNullOrWhiteSpace(ClickText.ID))
+        {
+            DialogService.ShowMessageBox(
+                this,
+                "ID不可为空".Translate(),
+                "数据错误".Translate(),
+                MessageBoxButton.Ok,
+                MessageBoxImage.Warning
+            );
+            return false;
+        }
+        if (ClickText.Text is null)
+        {
+            DialogService.ShowMessageBox(
+                this,
+                "文本不可为空".Translate(),
+                "数据错误".Translate(),
+                MessageBoxButton.Ok,
+                MessageBoxImage.Warning
+            );
+            return false;
+        }
+        if (
+            OldClickText?.ID != ClickText.ID
+            && ModInfo.ClickTexts.Any(i => i.ID == ClickText.ID)
+        )
+        {
+            DialogService.ShowMessageBox(
+                this,
+                "此ID已存在".Translate(),
+                "数据错误".Translate(),
+                MessageBoxButton.Ok,
+                MessageBoxImage.Warning
+            );
+            return false;
+        }
+        return true;
+    }
+
+    private void Commit()
+    {
+        ClickText.I18nResource.CopyDataTo(ModInfo.I18nResource);
+        var savedModel = new ClickTextModel(ClickText, ModInfo.I18nResource);
+        if (OldClickText is null)
+        {
+            ClickTexts.Add(savedModel);
+            this.LogIfEnabled(LogLevel.Information)?.Log("添加新点击文本 '{id}'", savedModel.ID);
+        }
+        else
+        {
+            OldClickText.Dispose();
+            var index = ClickTexts.IndexOf(OldClickText);
+            if (index >= 0)
+                ClickTexts[index] = savedModel;
+            else
+                ClickTexts.Add(savedModel);
+            this.LogIfEnabled(LogLevel.Information)
+                ?.Log(
+                    "编辑点击文本 {oldClickText} => {newClickText}",
+                    OldClickText.ID,
+                    savedModel.ID
+                );
+        }
+        OldClickText = savedModel;
+        IsChanged = false;
+    }
+
+    /// <summary>
     /// 添加
     /// </summary>
     [RelayCommand]
@@ -152,17 +233,11 @@ public sealed partial class ClickTextEditViewModel
         ClickText = new(ModInfo.TempI18nResource);
         using var dis = SubscribeClickTextChanged(ClickText);
         var result = DialogService.ShowDialog(this, this);
-        if (result is not true)
+        if (result is true)
         {
-            ClickText.Dispose();
+            Commit();
         }
-        else
-        {
-            ClickText.I18nResource.CopyDataTo(ModInfo.I18nResource);
-            ClickText.I18nResource = ModInfo.I18nResource;
-            ClickTexts.Add(ClickText);
-            this.LogIfEnabled(LogLevel.Information)?.Log("添加新点击文本 '{id}'", ClickText.ID);
-        }
+        ClickText.Dispose();
         Reset();
     }
 
@@ -180,34 +255,11 @@ public sealed partial class ClickTextEditViewModel
         ClickText = newModel;
         using var dis = SubscribeClickTextChanged(newModel);
         var result = DialogService.ShowDialog(this, this);
-        if (result is not true)
+        if (result is true)
         {
-            newModel.Dispose();
+            Commit();
         }
-        else
-        {
-            OldClickText.Dispose();
-            newModel.I18nResource.CopyDataTo(ModInfo.I18nResource);
-            newModel.I18nResource = ModInfo.I18nResource;
-            ClickTexts[ClickTexts.IndexOf(model)] = newModel;
-            this.LogIfEnabled(LogLevel.Information)
-                ?.Log(
-                    "编辑点击文本 {oldClickText} => {newClickText}",
-                    OldClickText.ID,
-                    ClickText.ID
-                );
-            //if (this.LogX().Level is LogLevel.Info)
-            //else
-            //    this.LogX()
-            //        .Debug(
-            //            "编辑点击文本\n {$oldClickText} => {$newClickText}",
-            //            LPSConvert.SerializeObjectToLine<Line>(
-            //                OldClickText.ToClickText(),
-            //                "ClickText"
-            //            ),
-            //            LPSConvert.SerializeObjectToLine<Line>(ClickText.ToClickText(), "ClickText")
-            //        );
-        }
+        newModel.Dispose();
         Reset();
     }
 
@@ -267,42 +319,8 @@ public sealed partial class ClickTextEditViewModel
 
         if (DialogResult is not true)
             return;
-        if (string.IsNullOrWhiteSpace(ClickText.ID))
-        {
-            DialogService.ShowMessageBox(
-                this,
-                "ID不可为空".Translate(),
-                "数据错误".Translate(),
-                MessageBoxButton.Ok,
-                MessageBoxImage.Warning
-            );
+        if (Validate() is false)
             e.Cancel = true;
-        }
-        else if (ClickText.Text is null)
-        {
-            DialogService.ShowMessageBox(
-                this,
-                "文本不可为空".Translate(),
-                "数据错误".Translate(),
-                MessageBoxButton.Ok,
-                MessageBoxImage.Warning
-            );
-            e.Cancel = true;
-        }
-        else if (
-            OldClickText?.ID != ClickText.ID
-            && ModInfo.ClickTexts.Any(i => i.ID == ClickText.ID)
-        )
-        {
-            DialogService.ShowMessageBox(
-                this,
-                "此ID已存在".Translate(),
-                "数据错误".Translate(),
-                MessageBoxButton.Ok,
-                MessageBoxImage.Warning
-            );
-            e.Cancel = true;
-        }
         DialogResult = e.Cancel is not true;
     }
 

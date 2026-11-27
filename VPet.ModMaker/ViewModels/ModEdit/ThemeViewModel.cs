@@ -113,6 +113,69 @@ public sealed partial class ThemeEditViewModel
     public bool IsChanged { get; private set; }
 
     /// <summary>
+    /// 保存
+    /// </summary>
+    [RelayCommand]
+    private void Save()
+    {
+        if (Validate() is false)
+            return;
+        Commit();
+        DialogService.ShowMessageBox(this, "保存成功".Translate());
+    }
+
+    private bool Validate()
+    {
+        if (string.IsNullOrWhiteSpace(Theme.ID))
+        {
+            DialogService.ShowMessageBox(
+                this,
+                "ID不可为空".Translate(),
+                "数据错误".Translate(),
+                MessageBoxButton.Ok,
+                MessageBoxImage.Warning
+            );
+            return false;
+        }
+        if (OldTheme?.ID != Theme.ID && ModInfo.Themes.Any(i => i.ID == Theme.ID))
+        {
+            DialogService.ShowMessageBox(
+                this,
+                "此ID已存在".Translate(),
+                "数据错误".Translate(),
+                MessageBoxButton.Ok,
+                MessageBoxImage.Warning
+            );
+            return false;
+        }
+        return true;
+    }
+
+    private void Commit()
+    {
+        Theme.I18nResource.CopyDataTo(ModInfo.I18nResource);
+        var savedModel = new ThemeModel(Theme, ModInfo.I18nResource);
+        if (OldTheme is null)
+        {
+            Themes.Add(savedModel);
+            this.LogIfEnabled(LogLevel.Information)?.Log("添加新主题 '{id}'", savedModel.ID);
+        }
+        else
+        {
+            OldTheme.Dispose();
+            var index = Themes.IndexOf(OldTheme);
+            if (index >= 0)
+                Themes[index] = savedModel;
+            else
+                Themes.Add(savedModel);
+            this.LogIfEnabled(LogLevel.Information)
+                ?.Log("编辑主题 {oldModel} => {newModel}", OldTheme.ID, savedModel.ID);
+        }
+        OldTheme = savedModel;
+        IsChanged = false;
+    }
+
+    /// <summary>
     /// 添加
     /// </summary>
     [RelayCommand]
@@ -122,17 +185,11 @@ public sealed partial class ThemeEditViewModel
         Theme = new(ModInfo.TempI18nResource);
         using var dis = Theme.Changed.Subscribe(_ => IsChanged = true);
         var result = DialogService.ShowDialog(this, this);
-        if (result is not true)
+        if (result is true)
         {
-            Theme.Dispose();
+            Commit();
         }
-        else
-        {
-            Theme.I18nResource.CopyDataTo(ModInfo.I18nResource);
-            Theme.I18nResource = ModInfo.I18nResource;
-            Themes.Add(Theme);
-            this.LogIfEnabled(LogLevel.Information)?.Log("添加新主题 '{id}'", Theme.ID);
-        }
+        Theme.Dispose();
         Reset();
     }
 
@@ -150,30 +207,11 @@ public sealed partial class ThemeEditViewModel
         Theme = newModel;
         using var dis = newModel.Changed.Subscribe(_ => IsChanged = true);
         var result = DialogService.ShowDialog(this, this);
-        if (result is not true)
+        if (result is true)
         {
-            newModel.Dispose();
+            Commit();
         }
-        else
-        {
-            OldTheme.Dispose();
-            newModel.I18nResource.CopyDataTo(ModInfo.I18nResource);
-            newModel.I18nResource = ModInfo.I18nResource;
-            Themes[Themes.IndexOf(model)] = newModel;
-            this.LogIfEnabled(LogLevel.Information)
-                ?.Log("编辑主题 {oldModel} => {newModel}", OldTheme.ID, Theme.ID);
-            //if (this.LogX().Level is LogLevel.Info)
-            //else
-            //    this.LogX()
-            //        .Debug(
-            //            "编辑主题\n {$oldTheme} => {$newTheme}",
-            //            LPSConvert.SerializeObjectToLine<Line>(
-            //                OldTheme.ToTheme(),
-            //                "Theme"
-            //            ),
-            //            LPSConvert.SerializeObjectToLine<Line>(Theme.ToTheme(), "Theme")
-            //        );
-        }
+        newModel.Dispose();
         Reset();
     }
 
@@ -233,28 +271,8 @@ public sealed partial class ThemeEditViewModel
 
         if (DialogResult is not true)
             return;
-        if (string.IsNullOrWhiteSpace(Theme.ID))
-        {
-            DialogService.ShowMessageBox(
-                this,
-                "ID不可为空".Translate(),
-                "数据错误".Translate(),
-                MessageBoxButton.Ok,
-                MessageBoxImage.Warning
-            );
+        if (Validate() is false)
             e.Cancel = true;
-        }
-        else if (OldTheme?.ID != Theme.ID && ModInfo.Themes.Any(i => i.ID == Theme.ID))
-        {
-            DialogService.ShowMessageBox(
-                this,
-                "此ID已存在".Translate(),
-                "数据错误".Translate(),
-                MessageBoxButton.Ok,
-                MessageBoxImage.Warning
-            );
-            e.Cancel = true;
-        }
         DialogResult = e.Cancel is not true;
     }
 

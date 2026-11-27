@@ -120,6 +120,80 @@ public partial class LowTextEditViewModel
     public bool IsChanged { get; private set; }
 
     /// <summary>
+    /// 保存
+    /// </summary>
+    [RelayCommand]
+    private void Save()
+    {
+        if (Validate() is false)
+            return;
+        Commit();
+        DialogService.ShowMessageBox(this, "保存成功".Translate());
+    }
+
+    private bool Validate()
+    {
+        if (string.IsNullOrWhiteSpace(LowText.ID))
+        {
+            DialogService.ShowMessageBox(
+                this,
+                "ID不可为空".Translate(),
+                "数据错误".Translate(),
+                MessageBoxButton.Ok,
+                MessageBoxImage.Warning
+            );
+            return false;
+        }
+        if (LowText.Text is null)
+        {
+            DialogService.ShowMessageBox(
+                this,
+                "文本不可为空".Translate(),
+                "数据错误".Translate(),
+                MessageBoxButton.Ok,
+                MessageBoxImage.Warning
+            );
+            return false;
+        }
+        if (OldLowText?.ID != LowText.ID && ModInfo.LowTexts.Any(i => i.ID == LowText.ID))
+        {
+            DialogService.ShowMessageBox(
+                this,
+                "此ID已存在".Translate(),
+                "数据错误".Translate(),
+                MessageBoxButton.Ok,
+                MessageBoxImage.Warning
+            );
+            return false;
+        }
+        return true;
+    }
+
+    private void Commit()
+    {
+        LowText.I18nResource.CopyDataTo(ModInfo.I18nResource);
+        var savedModel = new LowTextModel(LowText, ModInfo.I18nResource);
+        if (OldLowText is null)
+        {
+            LowTexts.Add(savedModel);
+            this.LogIfEnabled(LogLevel.Information)?.Log("添加低状态文本 '{id}'", savedModel.ID);
+        }
+        else
+        {
+            OldLowText.Dispose();
+            var index = LowTexts.IndexOf(OldLowText);
+            if (index >= 0)
+                LowTexts[index] = savedModel;
+            else
+                LowTexts.Add(savedModel);
+            this.LogIfEnabled(LogLevel.Information)
+                ?.Log("编辑低状态文本 {oldLowText} => {newLowText}", OldLowText.ID, savedModel.ID);
+        }
+        OldLowText = savedModel;
+        IsChanged = false;
+    }
+
+    /// <summary>
     /// 添加
     /// </summary>
     [RelayCommand]
@@ -129,27 +203,11 @@ public partial class LowTextEditViewModel
         LowText = new(ModInfo.TempI18nResource);
         using var dis = LowText.Changed.Subscribe(_ => IsChanged = true);
         var result = DialogService.ShowDialog(this, this);
-        if (result is not true)
+        if (result is true)
         {
-            LowText.Dispose();
+            Commit();
         }
-        else
-        {
-            LowText.I18nResource.CopyDataTo(ModInfo.I18nResource);
-            LowText.I18nResource = ModInfo.I18nResource;
-            LowTexts.Add(LowText);
-            this.LogIfEnabled(LogLevel.Information)?.Log("添加低状态文本 '{id}'", LowText.ID);
-            //if (this.LogX().Level is LogLevel.Info)
-            //else
-            //    this.LogX()
-            //        .Debug(
-            //            "添加新低状态文本 {$lowText}",
-            //            LPSConvert.SerializeObjectToLine<Line>(
-            //                LowText.MapToLowText(new()),
-            //                "LowText"
-            //            )
-            //        );
-        }
+        LowText.Dispose();
         Reset();
     }
 
@@ -167,33 +225,11 @@ public partial class LowTextEditViewModel
         LowText = newModel;
         using var dis = newModel.Changed.Subscribe(_ => IsChanged = true);
         var result = DialogService.ShowDialog(this, this);
-        if (result is not true)
+        if (result is true)
         {
-            newModel.Dispose();
+            Commit();
         }
-        else
-        {
-            OldLowText.Dispose();
-            newModel.I18nResource.CopyDataTo(ModInfo.I18nResource);
-            newModel.I18nResource = ModInfo.I18nResource;
-            LowTexts[LowTexts.IndexOf(model)] = newModel;
-            this.LogIfEnabled(LogLevel.Information)
-                ?.Log("编辑低状态文本 {oldLowText} => {newLowText}", OldLowText.ID, LowText.ID);
-            //if (this.LogX().Level is LogLevel.Info)
-            //else
-            //    this.LogX()
-            //        .Debug(
-            //            "编辑低状态文本\n {$oldLowText} => {$newLowText}",
-            //            LPSConvert.SerializeObjectToLine<Line>(
-            //                OldLowText.MapToLowText(new()),
-            //                "LowText"
-            //            ),
-            //            LPSConvert.SerializeObjectToLine<Line>(
-            //                LowText.MapToLowText(new()),
-            //                "LowText"
-            //            )
-            //        );
-        }
+        newModel.Dispose();
         Reset();
     }
 
@@ -253,39 +289,8 @@ public partial class LowTextEditViewModel
 
         if (DialogResult is not true)
             return;
-        if (string.IsNullOrWhiteSpace(LowText.ID))
-        {
-            DialogService.ShowMessageBox(
-                this,
-                "ID不可为空".Translate(),
-                "数据错误".Translate(),
-                MessageBoxButton.Ok,
-                MessageBoxImage.Warning
-            );
+        if (Validate() is false)
             e.Cancel = true;
-        }
-        else if (LowText.Text is null)
-        {
-            DialogService.ShowMessageBox(
-                this,
-                "文本不可为空".Translate(),
-                "数据错误".Translate(),
-                MessageBoxButton.Ok,
-                MessageBoxImage.Warning
-            );
-            e.Cancel = true;
-        }
-        else if (OldLowText?.ID != LowText.ID && ModInfo.LowTexts.Any(i => i.ID == LowText.ID))
-        {
-            DialogService.ShowMessageBox(
-                this,
-                "此ID已存在".Translate(),
-                "数据错误".Translate(),
-                MessageBoxButton.Ok,
-                MessageBoxImage.Warning
-            );
-            e.Cancel = true;
-        }
         DialogResult = e.Cancel is not true;
     }
 

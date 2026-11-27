@@ -87,6 +87,152 @@ public sealed partial class AnimeEditViewModel
     /// </summary>
     public bool HasAnimeName => Anime?.GraphType.IsNamedGraph() is true;
     public bool? DialogResult { get; set; }
+    public bool IsChanged { get; private set; }
+    public Action<AnimeTypeModel>? CommitAction { get; set; }
+
+    public IDisposable BeginEditSession()
+    {
+        IsChanged = false;
+        var anime = Anime;
+        if (anime is null)
+            return new ActionDisposable(() => { });
+
+        PropertyChangedEventHandler propChanged = (_, _) => IsChanged = true;
+        var trackedAnimes = new HashSet<AnimeModel>();
+        var trackedImages = new HashSet<ImageModel>();
+
+        void UntrackImage(ImageModel img)
+        {
+            if (trackedImages.Remove(img))
+                img.PropertyChanged -= propChanged;
+        }
+
+        void TrackImage(ImageModel img)
+        {
+            if (trackedImages.Add(img))
+                img.PropertyChanged += propChanged;
+        }
+
+        NotifyCollectionChangedEventHandler imagesChanged = (_, e) =>
+        {
+            IsChanged = true;
+            if (e.OldItems is not null)
+            {
+                foreach (ImageModel img in e.OldItems)
+                    UntrackImage(img);
+            }
+            if (e.NewItems is not null)
+            {
+                foreach (ImageModel img in e.NewItems)
+                    TrackImage(img);
+            }
+        };
+
+        void UntrackAnime(AnimeModel model)
+        {
+            if (trackedAnimes.Remove(model))
+            {
+                model.PropertyChanged -= propChanged;
+                model.Images.CollectionChanged -= imagesChanged;
+                foreach (var img in model.Images)
+                    UntrackImage(img);
+            }
+        }
+
+        void TrackAnime(AnimeModel model)
+        {
+            if (trackedAnimes.Add(model))
+            {
+                model.PropertyChanged += propChanged;
+                model.Images.CollectionChanged += imagesChanged;
+                foreach (var img in model.Images)
+                    TrackImage(img);
+            }
+        }
+
+        NotifyCollectionChangedEventHandler listChanged = (_, e) =>
+        {
+            IsChanged = true;
+            if (e.OldItems is not null)
+            {
+                foreach (AnimeModel model in e.OldItems)
+                    UntrackAnime(model);
+            }
+            if (e.NewItems is not null)
+            {
+                foreach (AnimeModel model in e.NewItems)
+                    TrackAnime(model);
+            }
+        };
+
+        anime.PropertyChanged += propChanged;
+        ObservableList<AnimeModel>[] lists =
+        [
+            anime.HappyAnimes,
+            anime.NomalAnimes,
+            anime.PoorConditionAnimes,
+            anime.IllAnimes,
+        ];
+        foreach (var list in lists)
+        {
+            list.CollectionChanged += listChanged;
+            foreach (var model in list)
+                TrackAnime(model);
+        }
+
+        return new ActionDisposable(() =>
+        {
+            anime.PropertyChanged -= propChanged;
+            foreach (var list in lists)
+                list.CollectionChanged -= listChanged;
+            foreach (var model in trackedAnimes.ToArray())
+                UntrackAnime(model);
+            foreach (var img in trackedImages.ToArray())
+                UntrackImage(img);
+        });
+    }
+
+    private sealed class ActionDisposable(Action disposeAction) : IDisposable
+    {
+        public void Dispose() => disposeAction();
+    }
+
+    /// <summary>
+    /// 保存
+    /// </summary>
+    [RelayCommand]
+    private void Save()
+    {
+        if (Validate() is false)
+            return;
+        CommitAction?.Invoke(Anime);
+        IsChanged = false;
+        DialogService.ShowMessageBox(this, "保存成功".Translate());
+    }
+
+    private bool Validate()
+    {
+        if (HasMultiType)
+        {
+            var hasSingle = Anime
+                .HappyAnimes.Concat(Anime.NomalAnimes)
+                .Concat(Anime.PoorConditionAnimes)
+                .Concat(Anime.IllAnimes)
+                .Any(a => a.AnimeType is VPet_Simulator.Core.GraphInfo.AnimatType.Single);
+            if (hasSingle)
+            {
+                DialogService.ShowMessageBox(
+                    this,
+                    "多阶段动画不可包含 Single 类型，请先修改为 A_Start / B_Loop / C_End".Translate(),
+                    "数据错误".Translate(),
+                    MessageBoxButton.Ok,
+                    MessageBoxImage.Warning
+                );
+                return false;
+            }
+        }
+        return true;
+    }
 
     #region AnimeCommand
     /// <summary>
@@ -209,7 +355,8 @@ public sealed partial class AnimeEditViewModel
             );
             return;
         }
-        value.Image.CloseStream();
+        value.Image?.CloseStream();
+        value.ImageFile = openFileDialog.LocalPath;
         value.Image = newImage;
     }
 
@@ -257,7 +404,7 @@ public sealed partial class AnimeEditViewModel
                     if (image is null)
                         failCount++;
                     else
-                        images.Add(new(path, image));
+                        images.Add(new(file, image));
                 }
             }
         }
@@ -274,42 +421,30 @@ public sealed partial class AnimeEditViewModel
 
     public void OnClosing(CancelEventArgs e)
     {
-        var result = DialogService.ShowMessageBox(
-            this,
-            "编辑完成, 是否保存?".Translate(),
-            "编辑完成".Translate(),
-            MessageBoxButton.YesNoCancel,
-            MessageBoxImage.Information
-        );
-        if (result is null)
+        if (IsChanged)
         {
-            e.Cancel = true;
-            return;
+            var result = DialogService.ShowMessageBox(
+                this,
+                "编辑完成, 是否保存?".Translate(),
+                "编辑完成".Translate(),
+                MessageBoxButton.YesNoCancel,
+                MessageBoxImage.Information
+            );
+            if (result is null)
+            {
+                e.Cancel = true;
+                return;
+            }
+            DialogResult = result;
         }
-        DialogResult = result;
 
         if (DialogResult is not true)
             return;
 
-        if (HasMultiType)
+        if (Validate() is false)
         {
-            var hasSingle = Anime
-                .HappyAnimes.Concat(Anime.NomalAnimes)
-                .Concat(Anime.PoorConditionAnimes)
-                .Concat(Anime.IllAnimes)
-                .Any(a => a.AnimeType is VPet_Simulator.Core.GraphInfo.AnimatType.Single);
-            if (hasSingle)
-            {
-                DialogService.ShowMessageBox(
-                    this,
-                    "多阶段动画不可包含 Single 类型，请先修改为 A_Start / B_Loop / C_End".Translate(),
-                    "数据错误".Translate(),
-                    MessageBoxButton.Ok,
-                    MessageBoxImage.Warning
-                );
-                e.Cancel = true;
-                DialogResult = false;
-            }
+            e.Cancel = true;
+            DialogResult = false;
         }
     }
 

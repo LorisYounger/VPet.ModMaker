@@ -344,5 +344,14 @@
         </Border>
       </StackPanel>
     </ScrollViewer>
+    <Button
+      Grid.Row="2"
+      MinWidth="100"
+      Margin="0,5,0,0"
+      HorizontalAlignment="Right"
+      Command="{Binding SaveCommand}"
+      Content="{ll:Str 保存}"
+      Style="{StaticResource ModMaker_ButtonBaseStyle}"
+    />
   </Grid>
 </pu:WindowX>

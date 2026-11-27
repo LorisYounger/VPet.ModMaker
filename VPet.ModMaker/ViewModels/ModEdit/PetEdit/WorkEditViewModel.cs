@@ -288,6 +288,80 @@ public sealed partial class WorkEditViewModel
     }
 
     /// <summary>
+    /// 保存
+    /// </summary>
+    [RelayCommand]
+    private void Save()
+    {
+        if (Validate() is false)
+            return;
+        Commit();
+        DialogService.ShowMessageBox(this, "保存成功".Translate());
+    }
+
+    private bool Validate()
+    {
+        if (string.IsNullOrWhiteSpace(Work.ID))
+        {
+            DialogService.ShowMessageBox(
+                this,
+                "ID不可为空".Translate(),
+                "数据错误".Translate(),
+                MessageBoxButton.Ok,
+                MessageBoxImage.Warning
+            );
+            return false;
+        }
+        if (Work.Graph is null)
+        {
+            DialogService.ShowMessageBox(
+                this,
+                "指定动画不可为空".Translate(),
+                "数据错误".Translate(),
+                MessageBoxButton.Ok,
+                MessageBoxImage.Warning
+            );
+            return false;
+        }
+        if (OldWork?.ID != Work.ID && CurrentPet?.Works.Any(i => i.ID == Work.ID) is true)
+        {
+            DialogService.ShowMessageBox(
+                this,
+                "此ID已存在".Translate(),
+                "数据错误".Translate(),
+                MessageBoxButton.Ok,
+                MessageBoxImage.Warning
+            );
+            return false;
+        }
+        return true;
+    }
+
+    private void Commit()
+    {
+        Work.I18nResource.CopyDataTo(ModInfo.I18nResource);
+        var savedModel = new WorkModel(Work, ModInfo.I18nResource);
+        if (OldWork is null)
+        {
+            Works.Add(savedModel);
+            this.LogIfEnabled(LogLevel.Information)?.Log("添加新工作 '{id}'", savedModel.ID);
+        }
+        else
+        {
+            OldWork.Dispose();
+            var index = Works.IndexOf(OldWork);
+            if (index >= 0)
+                Works[index] = savedModel;
+            else
+                Works.Add(savedModel);
+            this.LogIfEnabled(LogLevel.Information)
+                ?.Log("编辑工作 {oldWork} => {newWork}", OldWork.ID, savedModel.ID);
+        }
+        OldWork = savedModel;
+        IsChanged = false;
+    }
+
+    /// <summary>
     /// 添加
     /// </summary>
     [RelayCommand]
@@ -297,24 +371,11 @@ public sealed partial class WorkEditViewModel
         Work = new(ModInfo.TempI18nResource);
         using var dis = Work.Changed.Subscribe(_ => IsChanged = true);
         var result = DialogService.ShowDialog(this, this);
-        if (result is not true)
+        if (result is true)
         {
-            Work.Dispose();
+            Commit();
         }
-        else
-        {
-            Work.I18nResource.CopyDataTo(ModInfo.I18nResource);
-            Work.I18nResource = ModInfo.I18nResource;
-            Works.Add(Work);
-            this.LogIfEnabled(LogLevel.Information)?.Log("添加新工作 '{id}'", Work.ID);
-            //if (this.LogX().Level is LogLevel.Info)
-            //else
-            //    this.LogX()
-            //        .Debug(
-            //            "添加新工作 {$work}",
-            //            LPSConvert.SerializeObjectToLine<Line>(Work.MapToWork(new()), "Work")
-            //        );
-        }
+        Work.Dispose();
         Reset();
     }
 
@@ -332,27 +393,11 @@ public sealed partial class WorkEditViewModel
         Work = newModel;
         using var dis = newModel.Changed.Subscribe(_ => IsChanged = true);
         var result = DialogService.ShowDialog(this, this);
-        if (result is not true)
+        if (result is true)
         {
-            newModel.Dispose();
+            Commit();
         }
-        else
-        {
-            OldWork.Dispose();
-            newModel.I18nResource.CopyDataTo(ModInfo.I18nResource);
-            newModel.I18nResource = ModInfo.I18nResource;
-            Works[Works.IndexOf(model)] = newModel;
-            this.LogIfEnabled(LogLevel.Information)
-                ?.Log("编辑工作 {oldWork} => {newWork}", OldWork.ID, Work.ID);
-            //if (this.LogX().Level is LogLevel.Info)
-            //else
-            //    this.LogX()
-            //        .Debug(
-            //            "编辑工作\n {$oldWork} => {$newWork}",
-            //            LPSConvert.SerializeObjectToLine<Line>(OldWork.MapToWork(new()), "Work"),
-            //            LPSConvert.SerializeObjectToLine<Line>(Work.MapToWork(new()), "Work")
-            //        );
-        }
+        newModel.Dispose();
         Reset();
     }
 
@@ -423,39 +468,8 @@ public sealed partial class WorkEditViewModel
 
         if (DialogResult is not true)
             return;
-        if (string.IsNullOrWhiteSpace(Work.ID))
-        {
-            DialogService.ShowMessageBox(
-                this,
-                "ID不可为空".Translate(),
-                "数据错误".Translate(),
-                MessageBoxButton.Ok,
-                MessageBoxImage.Warning
-            );
+        if (Validate() is false)
             e.Cancel = true;
-        }
-        else if (Work.Graph is null)
-        {
-            DialogService.ShowMessageBox(
-                this,
-                "指定动画不可为空".Translate(),
-                "数据错误".Translate(),
-                MessageBoxButton.Ok,
-                MessageBoxImage.Warning
-            );
-            e.Cancel = true;
-        }
-        else if (OldWork?.ID != Work.ID && CurrentPet?.Works.Any(i => i.ID == Work.ID) is true)
-        {
-            DialogService.ShowMessageBox(
-                this,
-                "此ID已存在".Translate(),
-                "数据错误".Translate(),
-                MessageBoxButton.Ok,
-                MessageBoxImage.Warning
-            );
-            e.Cancel = true;
-        }
         DialogResult = e.Cancel is not true;
     }
 

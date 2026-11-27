@@ -63,7 +63,7 @@
       </Setter>
     </Style>
   </Window.Resources>
-  <Grid Margin="10" RowDefinitions="Auto,Auto,*">
+  <Grid Margin="10" RowDefinitions="Auto,Auto,*,Auto">
     <Grid ColumnDefinitions="300,Auto,*">
       <Grid RowDefinitions="*,Auto">
         <Border
@@ -358,5 +358,14 @@
         </ListBox.ItemTemplate>
       </ListBox>
     </Grid>
+    <Button
+      Grid.Row="3"
+      MinWidth="100"
+      Margin="0,5,0,0"
+      HorizontalAlignment="Right"
+      Command="{Binding SaveCommand}"
+      Content="{ll:Str 保存}"
+      Style="{StaticResource ModMaker_ButtonBaseStyle}"
+    />
   </Grid>
 </pu:WindowX>

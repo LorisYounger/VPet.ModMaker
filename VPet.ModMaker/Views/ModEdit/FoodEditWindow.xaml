@@ -320,7 +320,7 @@
       CornerRadius="2"
       Opacity="0.3"
     />
-    <Grid Grid.Column="2" RowDefinitions="*,Auto">
+    <Grid Grid.Column="2" RowDefinitions="*,Auto,Auto">
       <ListBox Template="{StaticResource ModMaker_CultureList}" />
       <Grid Grid.Row="1" RowDefinitions="*,*">
         <Label
@@ -343,6 +343,13 @@
           IsChecked="{Binding ModInfo.AutoSetFoodPrice}"
         />
       </Grid>
+      <Button
+        Grid.Row="2"
+        Margin="0,5,0,0"
+        Command="{Binding SaveCommand}"
+        Content="{ll:Str 保存}"
+        Style="{StaticResource ModMaker_ButtonBaseStyle}"
+      />
     </Grid>
   </Grid>
 </pu:WindowX>
